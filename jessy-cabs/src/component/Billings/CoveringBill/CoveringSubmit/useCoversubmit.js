@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../../url";
+import Excel from 'exceljs';
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -46,11 +47,93 @@ const useCoversubmit = () => {
         const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
         return [header, ...rows].join("\n");
     };
-    const handleExcelDownload = () => {
-        const csvData = convertToCSV(rows);
-        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-        saveAs(blob, "Cover.csv");
+    // const handleExcelDownload = () => {
+        
+    //     const csvData = convertToCSV(rows);
+    //     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    //     saveAs(blob, "Cover.csv");
+    //     console.log(rows,'row of cover submit')
+    // };
+
+    const handleExcelDownload = async () => {
+        const workbook = new Excel.Workbook();
+        const workSheetName = 'Worksheet-1';
+        try {
+            const fileName = "cover_submit";
+            const worksheet = workbook.addWorksheet(workSheetName);
+    
+            // Define only the headers you need
+            const headers = [
+                "id",
+                "Status",
+                "ReferenceNo",
+                "InvoiceDate",
+                "Customer",  
+                "State",
+                "FromDate",
+                "ToDate",
+                "Trips",   
+               "Trip_id", 
+                "Amount",     ];
+    
+            const formattedRows = rows.map(row => {
+                const formattedRow = {};
+                headers.forEach(header => {
+                    formattedRow[header] = row[header] !== undefined ? row[header] : ''; 
+                    if (header === 'FromDate' || header === 'InvoiceDate' || header === 'ToDate') {
+                        formattedRow[header] = dayjs(formattedRow[header]).format('DD-MM-YYYY');
+                    }
+                });
+                return formattedRow;
+            });
+            const columns = headers.map(key => ({ key, header: key }));
+            worksheet.columns = columns;
+
+            worksheet.getRow(1).font = { bold: true };
+            worksheet.getRow(1).eachCell((cell) => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '9BB0C1' }
+                };
+            });
+            
+            worksheet.getRow(1).height = 30;
+            worksheet.columns.forEach((column) => {
+                column.width = column.header.length + 5;
+                column.alignment = { horizontal: 'center', vertical: 'middle' };
+            });
+    
+            formattedRows.forEach((singleData) => {
+                worksheet.addRow(singleData);
+                worksheet.columns.forEach((column) => {
+                    const cellValue = singleData[column.key] || '';
+                    const cellLength = cellValue.toString().length;
+                    const currentColumnWidth = column.width || 0;
+                    column.width = Math.max(currentColumnWidth, cellLength + 5);
+                });
+            });
+            worksheet.eachRow({ includeEmpty: false }, (row) => {
+                row.eachCell((cell) => {
+                    cell.border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                });
+            });
+            const buf = await workbook.xlsx.writeBuffer();
+            saveAs(new Blob([buf]), `${fileName}.xlsx`);
+        } catch (error) {
+            console.error('<<<ERROR>>>', error);
+        } finally {
+            workbook.removeWorksheet(workSheetName);
+        }
     };
+    
+    
+   
     // const handlePdfDownload = () => {
     //     const pdf = new jsPDF();
     //     pdf.setFontSize(12);

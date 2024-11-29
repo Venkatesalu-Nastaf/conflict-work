@@ -801,74 +801,383 @@ const useGroupbilling = () => {
         let withoutaxValue = total-toll-parking-permit;
         return withoutaxValue;
     }
-    const handleExcelDownload = async (customerData) => {
+    // const handleExcelDownload = async (customerData) => {
      
-          if(rows.length === 0){
+    //       if(rows.length === 0){
+    //         setError(true);
+    //         setErrorMessage("Data is Empty");
+    //         return
+    //       }
+
+
+
+
+    //     const workbook = new Excel.Workbook();
+    //     const workSheetName = 'Group Billing';
+    
+    //     try {
+    //         const fileName = "Group Billing";
+    //         const worksheet = workbook.addWorksheet(workSheetName);
+
+    //         const columns = [
+    //             { key: "SNo", header: "Ref" },
+    //             { key:"customer", header: 'c.Name' },
+    //             { key: 'tripid', header: 'DS NO' },
+    //             { key: "duty", header: "Route Type"},
+    //             { key: 'Vendor', header: 'Vendor' },
+    //             { key: "vehicleName2", header: "Vehicle Name", width: 120 },
+    //             { key: "vehRegNo", header: "Vehicle No", width: 120 },
+    //             // { key: 'vehType', header: 'Vehicle Type (Requested)'},
+    //             { key: "tripsheetdate", header: "Date" },
+    //             { key: "employeeno", header: "Employee SAP Code"},
+    //             { key: "guestname", header: "Travelled Employee Name"},
+    //             { key: "address1", header: "Pickup Point / Shed" },
+    //             { key: "useage", header: "Drop Point"},
+    //             { key: "remark", header: "Route Type (Pick/Drop)"},
+    //             { key: "starttime", header: "Garage Initial Time" },
+    //             { key: "shedintime", header: "Garage End Time"},
+    //             { key: "totaltime", header: "Total Hrs."},
+    //             { key: "shedout", header: "Garage Initial Km" },
+    //             { key: "shedin", header: "Garage End Km"},
+    //             { key: "totalkm1", header: "Total Km"},
+    //             { key: "calcPackage", header: "Package"},
+    //             { key: "package_amount", header: "Base Amount"},
+    //             { key: "extraKM", header: "Extra KMs"},
+    //             { key: "extraHR", header: "Extra HRs"},
+    //             { key: "ex_kmAmount", header: "Extra KMs Amount"},
+    //             { key: "ex_hrAmount", header: "Extra HRs Amount"},
+        
+    //             { key: "night_totalAmount", header: "Night Charges"},
+    //             { key: "driverBeta", header: "Driver Bhatta"},
+    //             { key: "OutstationCharges", header: "Outstation Charges"},
+    //             { key: "withoutTaxes", header: "Total Amount"},
+    //             { key: "gsttaxdata", header: "GST%"},
+    //             { key: "permit", header: "Permit"},
+    //             { key: "parking", header: "Parking"},
+    //             { key: "toll", header: "Toll"},
+    //             { key: "driverBeta_amount", header: "DND/Toll/Parking Amount"},
+    //             { key: "totalcalcAmount", header: "Amount With All Taxes"},
+
+    //         ];
+    
+    //         worksheet.columns = columns;
+    
+    //         // Style the header row
+    //         worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } }; // White text
+    //         worksheet.getRow(1).eachCell((cell) => {
+    //             cell.fill = {
+    //                 type: 'pattern',
+    //                 pattern: 'solid',
+    //                 fgColor: { argb: '9BB0C1' }, // Light blue
+    //             };
+    //             cell.border = {
+    //                 top: { style: 'thin' },
+    //                 left: { style: 'thin' },
+    //                 bottom: { style: 'thin' },
+    //                 right: { style: 'thin' },
+    //             };
+    //             cell.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
+    
+    //         worksheet.getRow(1).height = 30; // Adjust header row height
+
+    //         worksheet.columns.forEach((column) => {
+    //             column.width = column.header.length + 5;
+    //             column.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
+
+    //         rows.forEach((singleData, index) => {
+             
+            
+    //             singleData["SNo"] = index + 1;
+    //             // singleData["duty1"]=singleData["duty"]
+    //             singleData["toll"] =  singleData["toll"] || 0
+    //             singleData["parking"] = singleData["parking"] || 0
+    //             singleData["permit"] =  singleData["permit"]  || 0
+
+    //             singleData["Vendor"] = " Jessy Cabs"
+    //             singleData["gsttaxdata"] =`${customerData[0]?.gstTax|| 0}%`
+    //              singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
+        
+    //             singleData["withoutTaxes"]=  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"] || 0,singleData["parking"] || 0,singleData["permit"] || 0)
+    //             singleData["totalcalcAmount"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] || 0: addPercentage(singleData["totalcalcAmount"] || 0,customerData[0]?.gstTax)
+    //             worksheet.addRow(singleData);
+
+    //             // Adjust column width based on the length of the cell values in the added row
+    //             worksheet.columns.forEach((column) => {
+    //                 const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+    //                 const cellLength = cellValue.toString().length; // Get length of cell value as a string
+    //                 const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+    //                 // Set column width to the maximum of current width and cell length plus extra space
+    //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
+    //             });
+    //         });
+    
+    //         // Add rows to the worksheet
+    //         // rows.forEach((row, index) => {
+    //         //     const formattedRow = {
+    //         //         SNo: index + 1,
+    //         //         id: row.id || 'N/A',
+    //         //         billingno: row.billingno || 'N/A',
+    //         //         bookingno: row.bookingno || 'N/A',
+    //         //         vendor: "Jessy",
+    //         //         customer: row.customer || 'N/A',
+    //         //         guestname: row.guestname || 'N/A',
+    //         //         tripid: row.tripid || 'N/A',
+    //         //         vehRegNo: row.vehRegNo || 'N/A',
+    //         //         vehicleName: row.vehicleName || 'N/A',
+    //         //         shedOutDate: row.shedOutDate ? dayjs(row.shedOutDate).format("DD-MM-YYYY") : 'N/A',
+    //         //         driverName: row.driverName || 'N/A',
+    //         //         mobileNo: row.mobileNo || 'N/A',
+    //         //         startdate: row.startdate ? dayjs(row.startdate).format("DD-MM-YYYY") : 'N/A',
+    //         //         closedate: row.closedate ? dayjs(row.closedate).format("DD-MM-YYYY") : 'N/A',
+    //         //         Groups: row.Groups || 'N/A',
+    //         //         address1: row.address1 || 'N/A',
+    //         //         apps: row.apps || 'N/A',
+    //         //         starttime: row.starttime ? dayjs(row.starttime, "HH:mm:ss").format("HH:mm") : 'N/A',
+    //         //         closetime: row.closetime ? dayjs(row.closetime, "HH:mm:ss").format("HH:mm") : 'N/A',
+    //         //         totalcalcAmount: row.totalcalcAmount || 0,
+    //         //         Vendor_Bata: row.Vendor_Bata || 0,
+    //         //         status: row.status || 'N/A',
+    //         //         shedInDate: row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : 'N/A',
+    //         //         tripsheetdate: row.tripsheetdate ? dayjs(row.tripsheetdate).format("DD-MM-YYYY") : 'N/A',
+    //         //         department: row.department || 'N/A',
+    //         //         pickup: row.pickup || 'N/A',
+    //         //     };
+
+          
+    
+    //         // Adjust column width dynamically based on content
+    //         worksheet.eachRow({ includeEmpty: false }, (row) => {
+    //             // store each cell to currentCell
+    //             const currentCell = row._cells;
+
+    //             // loop through currentCell to apply border only for the non-empty cell of excel
+    //             currentCell.forEach((singleCell) => {
+    //                 const cellAddress = singleCell._address;
+
+    //                 // apply border
+    //                 worksheet.getCell(cellAddress).border = {
+    //                     top: { style: 'thin' },
+    //                     left: { style: 'thin' },
+    //                     bottom: { style: 'thin' },
+    //                     right: { style: 'thin' },
+    //                 };
+    //             });
+    //         });
+
+    
+    //         // Save the workbook
+    //         const buffer = await workbook.xlsx.writeBuffer();
+    //         const blob = new Blob([buffer], { type: "application/octet-stream" });
+    //         const link = document.createElement("a");
+    //         link.href = URL.createObjectURL(blob);
+    //         link.download = `${fileName}.xlsx`;
+    //         link.click();
+    //     } catch (error) {
+    //         console.error("Error generating Excel file:", error);
+    //     }
+    // };
+
+    // const handleExcelDownload = async (customerData) => {
+    //     if (rows.length === 0) {
+    //         setError(true);
+    //         setErrorMessage("Data is Empty");
+    //         return;
+    //     }
+    
+    //     const workbook = new Excel.Workbook();
+    //     const workSheetName = 'Group Billing';
+    
+    //     try {
+    //         const fileName = "Group Billing";
+    //         const worksheet = workbook.addWorksheet(workSheetName);
+    
+    //         const columns = [
+    //             { key: "SNo", header: "Ref" },
+    //             { key: "customer", header: 'c.Name' },
+    //             { key: 'tripid', header: 'DS NO' },
+    //             { key: "duty", header: "Route Type" },
+    //             { key: 'Vendor', header: 'Vendor' },
+    //             { key: "vehicleName2", header: "Vehicle Name", width: 120 },
+    //             { key: "vehRegNo", header: "Vehicle No", width: 120 },
+    //             { key: "tripsheetdate", header: "Date" },
+    //             { key: "employeeno", header: "Employee SAP Code" },
+    //             { key: "guestname", header: "Travelled Employee Name" },
+    //             { key: "address1", header: "Pickup Point / Shed" },
+    //             { key: "useage", header: "Drop Point" },
+    //             { key: "remark", header: "Route Type (Pick/Drop)" },
+    //             { key: "starttime", header: "Garage Initial Time" },
+    //             { key: "shedintime", header: "Garage End Time" },
+    //             { key: "totaltime", header: "Total Hrs." },
+    //             { key: "shedout", header: "Garage Initial Km" },
+    //             { key: "shedin", header: "Garage End Km" },
+    //             { key: "totalkm1", header: "Total Km" },
+    //             { key: "calcPackage", header: "Package" },
+    //             { key: "package_amount", header: "Base Amount" },
+    //             { key: "extraKM", header: "Extra KMs" },
+    //             { key: "extraHR", header: "Extra HRs" },
+    //             { key: "ex_kmAmount", header: "Extra KMs Amount" },
+    //             { key: "ex_hrAmount", header: "Extra HRs Amount" },
+    //             { key: "night_totalAmount", header: "Night Charges" },
+    //             { key: "driverBeta", header: "Driver Bhatta" },
+    //             { key: "OutstationCharges", header: "Outstation Charges" },
+    //             { key: "withoutTaxes", header: "Total Amount" },
+    //             { key: "gsttaxdata", header: "GST%" },
+    //             { key: "permit", header: "Permit" },
+    //             { key: "parking", header: "Parking" },
+    //             { key: "toll", header: "Toll" },
+    //             { key: "driverBeta_amount", header: "DND/Toll/Parking Amount" },
+    //             { key: "totalcalcAmount", header: "Amount With All Taxes" },
+    //         ];
+    
+    //         worksheet.columns = columns;
+    
+    //         // Style the header row
+    //         worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } }; // White text
+    //         worksheet.getRow(1).eachCell((cell) => {
+    //             cell.fill = {
+    //                 type: 'pattern',
+    //                 pattern: 'solid',
+    //                 fgColor: { argb: '9BB0C1' }, // Light blue
+    //             };
+    //             cell.border = {
+    //                 top: { style: 'thin' },
+    //                 left: { style: 'thin' },
+    //                 bottom: { style: 'thin' },
+    //                 right: { style: 'thin' },
+    //             };
+    //             cell.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
+    
+    //         worksheet.getRow(1).height = 30; // Adjust header row height
+    
+    //         worksheet.columns.forEach((column) => {
+    //             column.width = column.header.length + 5;
+    //             column.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
+    
+    //         rows.forEach((singleData, index) => {
+    //             singleData["SNo"] = index + 1;
+    //             singleData["toll"] = singleData["toll"] || 0;
+    //             singleData["parking"] = singleData["parking"] || 0;
+    //             singleData["permit"] = singleData["permit"] || 0;
+    //             singleData["Vendor"] = "Jessy Cabs";
+    //             singleData["gsttaxdata"] = `${customerData[0]?.gstTax || 0}%`;
+    //             singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : "00:00";
+                
+    //             // Format date fields using dayjs
+    //             if (singleData["tripsheetdate"]) {
+    //                 singleData["tripsheetdate"] = dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY");
+    //             }
+    //             if (singleData["starttime"]) {
+    //                 singleData["starttime"] = dayjs(singleData["starttime"], "HH:mm:ss").format("HH:mm");
+    //             }
+    //             if (singleData["shedintime"]) {
+    //                 singleData["shedintime"] = dayjs(singleData["shedintime"], "HH:mm:ss").format("HH:mm");
+    //             }
+    //             singleData["withoutTaxes"] = withoutTaxesdata(singleData["totalcalcAmount"], singleData["toll"] || 0, singleData["parking"] || 0, singleData["permit"] || 0);
+    //             singleData["totalcalcAmount"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] || 0 : addPercentage(singleData["totalcalcAmount"] || 0, customerData[0]?.gstTax);
+    //             worksheet.addRow(singleData);
+    
+    //             // Adjust column width dynamically based on content
+    //             worksheet.columns.forEach((column) => {
+    //                 const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+    //                 const cellLength = cellValue.toString().length; // Get length of cell value as a string
+    //                 const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+    
+    //                 // Set column width to the maximum of current width and cell length plus extra space
+    //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
+    //             });
+    //         });
+    
+    //         // Adjust column width dynamically based on content
+    //         worksheet.eachRow({ includeEmpty: false }, (row) => {
+    //             const currentCell = row._cells;
+    //             currentCell.forEach((singleCell) => {
+    //                 const cellAddress = singleCell._address;
+    //                 worksheet.getCell(cellAddress).border = {
+    //                     top: { style: 'thin' },
+    //                     left: { style: 'thin' },
+    //                     bottom: { style: 'thin' },
+    //                     right: { style: 'thin' },
+    //                 };
+    //             });
+    //         });
+    
+    //         // Save the workbook
+    //         const buffer = await workbook.xlsx.writeBuffer();
+    //         const blob = new Blob([buffer], { type: "application/octet-stream" });
+    //         const link = document.createElement("a");
+    //         link.href = URL.createObjectURL(blob);
+    //         link.download = `${fileName}.xlsx`;
+    //         link.click();
+    //     } catch (error) {
+    //         console.error("Error generating Excel file:", error);
+    //     }
+    // };
+
+    const handleExcelDownload = async (customerData) => {
+        if (rows.length === 0) {
             setError(true);
             setErrorMessage("Data is Empty");
-            return
-          }
-
-
-
-
+            return;
+        }
+    
         const workbook = new Excel.Workbook();
         const workSheetName = 'Group Billing';
     
         try {
             const fileName = "Group Billing";
             const worksheet = workbook.addWorksheet(workSheetName);
-
+    
             const columns = [
                 { key: "SNo", header: "Ref" },
-                { key:"customer", header: 'c.Name' },
+                { key: "customer", header: 'c.Name' },
                 { key: 'tripid', header: 'DS NO' },
-                { key: "duty", header: "Route Type"},
+                { key: "duty", header: "Route Type" },
                 { key: 'Vendor', header: 'Vendor' },
                 { key: "vehicleName2", header: "Vehicle Name", width: 120 },
                 { key: "vehRegNo", header: "Vehicle No", width: 120 },
-                // { key: 'vehType', header: 'Vehicle Type (Requested)'},
                 { key: "tripsheetdate", header: "Date" },
-                { key: "employeeno", header: "Employee SAP Code"},
-                { key: "guestname", header: "Travelled Employee Name"},
+                { key: "employeeno", header: "Employee SAP Code" },
+                { key: "guestname", header: "Travelled Employee Name" },
                 { key: "address1", header: "Pickup Point / Shed" },
-                { key: "useage", header: "Drop Point"},
-                { key: "remark", header: "Route Type (Pick/Drop)"},
+                { key: "useage", header: "Drop Point" },
+                { key: "remark", header: "Route Type (Pick/Drop)" },
                 { key: "starttime", header: "Garage Initial Time" },
-                { key: "shedintime", header: "Garage End Time"},
-                { key: "totaltime", header: "Total Hrs."},
+                { key: "shedintime", header: "Garage End Time" },
+                { key: "totaltime", header: "Total Hrs." },
                 { key: "shedout", header: "Garage Initial Km" },
-                { key: "shedin", header: "Garage End Km"},
-                { key: "totalkm1", header: "Total Km"},
-                { key: "calcPackage", header: "Package"},
-                { key: "package_amount", header: "Base Amount"},
-                { key: "extraKM", header: "Extra KMs"},
-                { key: "extraHR", header: "Extra HRs"},
-                { key: "ex_kmAmount", header: "Extra KMs Amount"},
-                { key: "ex_hrAmount", header: "Extra HRs Amount"},
-        
-                { key: "night_totalAmount", header: "Night Charges"},
-                { key: "driverBeta", header: "Driver Bhatta"},
-                { key: "OutstationCharges", header: "Outstation Charges"},
-                { key: "withoutTaxes", header: "Total Amount"},
-                { key: "gsttaxdata", header: "GST%"},
-                { key: "permit", header: "Permit"},
-                { key: "parking", header: "Parking"},
-                { key: "toll", header: "Toll"},
-                { key: "driverBeta_amount", header: "DND/Toll/Parking Amount"},
-                { key: "totalcalcAmount", header: "Amount With All Taxes"},
-
+                { key: "shedin", header: "Garage End Km" },
+                { key: "totalkm1", header: "Total Km" },
+                { key: "calcPackage", header: "Package" },
+                { key: "package_amount", header: "Base Amount" },
+                { key: "extraKM", header: "Extra KMs" },
+                { key: "extraHR", header: "Extra HRs" },
+                { key: "ex_kmAmount", header: "Extra KMs Amount" },
+                { key: "ex_hrAmount", header: "Extra HRs Amount" },
+                { key: "night_totalAmount", header: "Night Charges" },
+                { key: "driverBeta", header: "Driver Bhatta" },
+                { key: "OutstationCharges", header: "Outstation Charges" },
+                { key: "withoutTaxes", header: "Total Amount" },
+                { key: "gsttaxdata", header: "GST%" },
+                { key: "permit", header: "Permit" },
+                { key: "parking", header: "Parking" },
+                { key: "toll", header: "Toll" },
+                { key: "driverBeta_amount", header: "DND/Toll/Parking Amount" },
+                { key: "totalcalcAmount", header: "Amount With All Taxes" },
             ];
     
             worksheet.columns = columns;
     
-            // Style the header row
-            worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } }; // White text
+            worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
             worksheet.getRow(1).eachCell((cell) => {
                 cell.fill = {
                     type: 'pattern',
                     pattern: 'solid',
-                    fgColor: { argb: '9BB0C1' }, // Light blue
+                    fgColor: { argb: '9BB0C1' },
                 };
                 cell.border = {
                     top: { style: 'thin' },
@@ -879,85 +1188,57 @@ const useGroupbilling = () => {
                 cell.alignment = { horizontal: 'center', vertical: 'middle' };
             });
     
-            worksheet.getRow(1).height = 30; // Adjust header row height
-
+            worksheet.getRow(1).height = 30;
+    
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
                 column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-
+    
             rows.forEach((singleData, index) => {
-             
-            
                 singleData["SNo"] = index + 1;
-                // singleData["duty1"]=singleData["duty"]
-                singleData["toll"] =  singleData["toll"] || 0
-                singleData["parking"] = singleData["parking"] || 0
-                singleData["permit"] =  singleData["permit"]  || 0
-
-                singleData["Vendor"] = " Jessy Cabs"
-                singleData["gsttaxdata"] =`${customerData[0]?.gstTax|| 0}%`
-                 singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
-        
-                singleData["withoutTaxes"]=  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"] || 0,singleData["parking"] || 0,singleData["permit"] || 0)
-                singleData["totalcalcAmount"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] || 0: addPercentage(singleData["totalcalcAmount"] || 0,customerData[0]?.gstTax)
+                singleData["toll"] = singleData["toll"] || 0;
+                singleData["parking"] = singleData["parking"] || 0;
+                singleData["permit"] = singleData["permit"] || 0;
+                singleData["Vendor"] = "Jessy Cabs";
+                singleData["gsttaxdata"] = `${customerData[0]?.gstTax || 0}%`;
+                singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : "";
+    
+                if (singleData["tripsheetdate"] && dayjs(singleData["tripsheetdate"]).isValid()) {
+                    singleData["tripsheetdate"] = dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY");
+                } else {
+                    singleData["tripsheetdate"] = "";
+                }
+    
+                if (singleData["starttime"] && dayjs(singleData["starttime"], "HH:mm:ss").isValid()) {
+                    singleData["starttime"] = dayjs(singleData["starttime"], "HH:mm:ss").format("HH:mm");
+                } else {
+                    singleData["starttime"] = "";
+                }
+    
+                if (singleData["shedintime"] && dayjs(singleData["shedintime"], "HH:mm:ss").isValid()) {
+                    singleData["shedintime"] = dayjs(singleData["shedintime"], "HH:mm:ss").format("HH:mm");
+                } else {
+                    singleData["shedintime"] = "";
+                }
+    
+                singleData["withoutTaxes"] = withoutTaxesdata(singleData["totalcalcAmount"], singleData["toll"] || 0, singleData["parking"] || 0, singleData["permit"] || 0);
+                singleData["totalcalcAmount"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] || 0 : addPercentage(singleData["totalcalcAmount"] || 0, customerData[0]?.gstTax);
+    
                 worksheet.addRow(singleData);
-
-                // Adjust column width based on the length of the cell values in the added row
+    
                 worksheet.columns.forEach((column) => {
-                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
-                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
-                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-
-                    // Set column width to the maximum of current width and cell length plus extra space
+                    const cellValue = singleData[column.key] || '';
+                    const cellLength = cellValue.toString().length;
+                    const currentColumnWidth = column.width || 0;
                     column.width = Math.max(currentColumnWidth, cellLength + 5);
                 });
             });
     
-            // Add rows to the worksheet
-            // rows.forEach((row, index) => {
-            //     const formattedRow = {
-            //         SNo: index + 1,
-            //         id: row.id || 'N/A',
-            //         billingno: row.billingno || 'N/A',
-            //         bookingno: row.bookingno || 'N/A',
-            //         vendor: "Jessy",
-            //         customer: row.customer || 'N/A',
-            //         guestname: row.guestname || 'N/A',
-            //         tripid: row.tripid || 'N/A',
-            //         vehRegNo: row.vehRegNo || 'N/A',
-            //         vehicleName: row.vehicleName || 'N/A',
-            //         shedOutDate: row.shedOutDate ? dayjs(row.shedOutDate).format("DD-MM-YYYY") : 'N/A',
-            //         driverName: row.driverName || 'N/A',
-            //         mobileNo: row.mobileNo || 'N/A',
-            //         startdate: row.startdate ? dayjs(row.startdate).format("DD-MM-YYYY") : 'N/A',
-            //         closedate: row.closedate ? dayjs(row.closedate).format("DD-MM-YYYY") : 'N/A',
-            //         Groups: row.Groups || 'N/A',
-            //         address1: row.address1 || 'N/A',
-            //         apps: row.apps || 'N/A',
-            //         starttime: row.starttime ? dayjs(row.starttime, "HH:mm:ss").format("HH:mm") : 'N/A',
-            //         closetime: row.closetime ? dayjs(row.closetime, "HH:mm:ss").format("HH:mm") : 'N/A',
-            //         totalcalcAmount: row.totalcalcAmount || 0,
-            //         Vendor_Bata: row.Vendor_Bata || 0,
-            //         status: row.status || 'N/A',
-            //         shedInDate: row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : 'N/A',
-            //         tripsheetdate: row.tripsheetdate ? dayjs(row.tripsheetdate).format("DD-MM-YYYY") : 'N/A',
-            //         department: row.department || 'N/A',
-            //         pickup: row.pickup || 'N/A',
-            //     };
-
-          
-    
-            // Adjust column width dynamically based on content
             worksheet.eachRow({ includeEmpty: false }, (row) => {
-                // store each cell to currentCell
                 const currentCell = row._cells;
-
-                // loop through currentCell to apply border only for the non-empty cell of excel
                 currentCell.forEach((singleCell) => {
                     const cellAddress = singleCell._address;
-
-                    // apply border
                     worksheet.getCell(cellAddress).border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -966,9 +1247,7 @@ const useGroupbilling = () => {
                     };
                 });
             });
-
     
-            // Save the workbook
             const buffer = await workbook.xlsx.writeBuffer();
             const blob = new Blob([buffer], { type: "application/octet-stream" });
             const link = document.createElement("a");
@@ -979,6 +1258,8 @@ const useGroupbilling = () => {
             console.error("Error generating Excel file:", error);
         }
     };
+    
+    
         
     
 
@@ -1346,11 +1627,15 @@ const useGroupbilling = () => {
                 TotalAmount += li;
             });
             // const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
-            const FromDate = dayjs(fromDate).format('DD-MM-YYYY')
+            // const FromDate = dayjs(fromDate).format('DD-MM-YYYY')
+            const FromDate = dayjs(refPdfData[0]?.startdate).format('YYYY-MM-DD')
+
             // const ToDate = dayjs(toDate).format('YYYY-MM-DD')
-            const ToDate = dayjs(toDate).format('DD-MM-YYYY')
+            // const ToDate = dayjs(toDate).format('DD-MM-YYYY')
+            const ToDate = dayjs(refPdfData[refPdfData.length-1]?.startdate).format('YYYY-MM-DD')
             // const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
-            const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
+            // const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
+            const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
             if (rowSelectionModel.length === 0) {
                 setError(true);
                 setisSaveload(false)
@@ -1419,9 +1704,12 @@ const useGroupbilling = () => {
             const groupTotal = (groupAmount || []).reduce((sum, value) => sum + value, 0);
             console.log('groupbill22s', groupAmount, selectedTotal, 'tot', groupTotal + selectedTotal,'TotalAmount',TotalAmount);
 
-            const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
-            const ToDate = dayjs(toDate).format('YYYY-MM-DD')
-            const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
+            // const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
+            // const ToDate = dayjs(toDate).format('YYYY-MM-DD')
+            // const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
+            const FromDate = dayjs(refPdfData[0]?.startdate).format('DD-MM-YYYY')
+            const ToDate = dayjs(refPdfData[refPdfData.length-1]?.startdate).format('DD-MM-YYYY')
+            const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
             console.log(fromDate, ToDate, InvoiceDate, TripsCount, TotalAmount, 'usegroup');
 
             if (rowSelectionModel.length === 0) {

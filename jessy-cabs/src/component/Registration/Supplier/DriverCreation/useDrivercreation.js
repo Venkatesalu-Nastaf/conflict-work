@@ -235,7 +235,83 @@ const useDrivercreation = () => {
 
     // }
   // changes with date format
-  const handleExcelDownload = async () => {
+//   const handleExcelDownload = async () => {
+//     const workbook = new Excel.Workbook();
+//     const workSheetName = 'Worksheet-1';
+
+//     try {
+//         const fileName = "Drivercreation Reports";
+//         const worksheet = workbook.addWorksheet(workSheetName);
+//         const headers = Object.keys(rows[0]);
+//         const columnsExcel = headers.map(key => ({ key, header: key }));
+//         worksheet.columns = columnsExcel;
+
+//         // Style the header row
+//         worksheet.getRow(1).font = { bold: true };
+//         worksheet.getRow(1).eachCell((cell) => {
+//             cell.fill = {
+//                 type: 'pattern',
+//                 pattern: 'solid',
+//                 fgColor: { argb: '9BB0C1' }
+//             };
+//         });
+//         worksheet.getRow(1).height = 30;
+//         worksheet.columns.forEach((column) => {
+//             column.width = column.header.length + 5;
+//             column.alignment = { horizontal: 'center', vertical: 'middle' };
+//         });
+
+//         // Transform rows data
+//         const transformedRows = rows.map(singleData => {
+
+//             console.log(rows,'drivers date')
+//             const transformedData = { ...singleData };
+
+//             const formatDate = (dateStr) => {
+//                 return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+//             };
+
+//             transformedData.badgeexpdate = formatDate(transformedData.badgeexpdate);
+//             transformedData.created_at = formatDate(transformedData.created_at);
+//             transformedData.joiningdate = formatDate(transformedData.joiningdate);
+//             transformedData.licenseexpdate = formatDate(transformedData.licenseexpdate);
+
+//             return transformedData;
+//         });
+
+//         transformedRows.forEach((singleData) => {
+//             worksheet.addRow(singleData);
+//             worksheet.columns.forEach((column) => {
+//                 const cellValue = singleData[column.key] || '';
+//                 const cellLength = cellValue.toString().length;
+//                 const currentColumnWidth = column.width || 0;
+//                 column.width = Math.max(currentColumnWidth, cellLength + 5);
+//             });
+//         });
+
+//         worksheet.eachRow({ includeEmpty: false }, (row) => {
+//             row._cells.forEach((singleCell) => {
+//                 const cellAddress = singleCell._address;
+//                 worksheet.getCell(cellAddress).border = {
+//                     top: { style: 'thin' },
+//                     left: { style: 'thin' },
+//                     bottom: { style: 'thin' },
+//                     right: { style: 'thin' },
+//                 };
+//             });
+//         });
+
+//         const buf = await workbook.xlsx.writeBuffer();
+//         saveAs(new Blob([buf]), `${fileName}.xlsx`);
+//     } catch (error) {
+//         console.error('<<<ERRROR>>>', error);
+//         console.error('Something Went Wrong', error.message);
+//     } finally {
+//         workbook.removeWorksheet(workSheetName);
+//     }
+// };
+
+const handleExcelDownload = async () => {
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
 
@@ -263,10 +339,13 @@ const useDrivercreation = () => {
 
         // Transform rows data
         const transformedRows = rows.map(singleData => {
+
+            // console.log(rows,'drivers date')
             const transformedData = { ...singleData };
 
             const formatDate = (dateStr) => {
-                return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+                const formattedDate = dayjs(dateStr);
+                return formattedDate.isValid() ? formattedDate.format('DD-MM-YYYY') : ""; // Check if valid date
             };
 
             transformedData.badgeexpdate = formatDate(transformedData.badgeexpdate);
@@ -302,12 +381,13 @@ const useDrivercreation = () => {
         const buf = await workbook.xlsx.writeBuffer();
         saveAs(new Blob([buf]), `${fileName}.xlsx`);
     } catch (error) {
-        console.error('<<<ERRROR>>>', error);
+        console.error('<<<ERROR>>>', error);
         console.error('Something Went Wrong', error.message);
     } finally {
         workbook.removeWorksheet(workSheetName);
     }
 };
+
     
 // const handlePdfDownload = () => {
 //         const pdf = new jsPDF({
@@ -395,6 +475,80 @@ const useDrivercreation = () => {
 //         saveAs(pdfBlob, 'drivercreationReports.pdf');
 //       };
 
+// const handlePdfDownload = () => {
+//     const pdf = new jsPDF({
+//         orientation: "landscape",
+//         unit: "mm",
+//         format: "tabloid"
+//     });
+
+//     pdf.setFontSize(10);
+//     pdf.setFont('helvetica', 'normal');
+//     pdf.text("Driver Details", 10, 10);
+
+//     const header = Object.keys(rows[0]);
+
+//     // Preprocessing rows to handle empty keys and format dates
+//     const transformedRows = rows.map(row => {
+//         const transformDate = (dateStr) => {
+//             return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+//         };
+
+//         const transformedRow = {};
+//         for (const key in row) {
+//             if (row[key] === null || row[key] === '' || row[key] === undefined) {
+//                 transformedRow[key] = null;
+//             } else if (['badgeexpdate', 'created_at', 'joiningdate', 'licenseexpdate'].includes(key)) {
+//                 transformedRow[key] = transformDate(row[key]);
+//             } else {
+//                 transformedRow[key] = row[key];
+//             }
+//         }
+//         return transformedRow;
+//     });
+
+//     // Extracting body
+//     const body = transformedRows.map(row => Object.values(row));
+
+//     // Adjust font size based on the number of columns
+//     let fontdata = 1;
+//     if (header.length <= 13) fontdata = 16;
+//     else if (header.length <= 17) fontdata = 11;
+//     else if (header.length <= 20) fontdata = 10;
+//     else if (header.length <= 23) fontdata = 9;
+//     else if (header.length <= 26) fontdata = 7;
+//     else if (header.length <= 30) fontdata = 6;
+//     else if (header.length <= 35) fontdata = 4;
+//     else fontdata = 2;
+
+//     console.log(fontdata, "font size");
+
+//     // Adding table to PDF
+//     pdf.autoTable({
+//         head: [header],
+//         body: body,
+//         startY: 20,
+//         headStyles: {
+//             fontSize: fontdata,
+//             cellPadding: 1.5,
+//             minCellHeight: 8,
+//             valign: 'middle',
+//             font: 'helvetica',
+//             cellWidth: 'wrap',
+//         },
+//         bodyStyles: {
+//             fontSize: fontdata - 1,
+//             valign: 'middle',
+//             cellWidth: 'auto',
+//         },
+//         columnWidth: 'auto',
+//     });
+
+//     // Save the PDF
+//     const pdfBlob = pdf.output('blob');
+//     saveAs(pdfBlob, 'drivercreationReports.pdf');
+// };
+
 const handlePdfDownload = () => {
     const pdf = new jsPDF({
         orientation: "landscape",
@@ -411,13 +565,14 @@ const handlePdfDownload = () => {
     // Preprocessing rows to handle empty keys and format dates
     const transformedRows = rows.map(row => {
         const transformDate = (dateStr) => {
-            return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+            const formattedDate = dayjs(dateStr);
+            return formattedDate.isValid() ? formattedDate.format('DD-MM-YYYY') : ""; // Check if valid date
         };
 
         const transformedRow = {};
         for (const key in row) {
             if (row[key] === null || row[key] === '' || row[key] === undefined) {
-                transformedRow[key] = null;
+                transformedRow[key] = ""; // Empty string for null or undefined fields
             } else if (['badgeexpdate', 'created_at', 'joiningdate', 'licenseexpdate'].includes(key)) {
                 transformedRow[key] = transformDate(row[key]);
             } else {

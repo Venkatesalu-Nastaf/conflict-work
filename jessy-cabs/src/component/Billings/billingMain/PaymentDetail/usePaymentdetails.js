@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { saveAs } from "file-saver";
 // import { Organization } from "./PaymentDetailData";
 import { APIURL } from "../../../url";
-
+import Excel from 'exceljs';
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "Trip_id", headerName: "TripSheet No", width: 130 },
@@ -44,11 +44,101 @@ const usePaymentdetails = () => {
     );
     return [header, ...rows].join("\n");
   };
-  const handleExcelDownload = () => {
-    const csvData = convertToCSV(rows);
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "Individual_billing.csv");
-  };
+  // const handleExcelDownload = () => {
+  //   const csvData = convertToCSV(rows);
+  //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+  //   saveAs(blob, "Individual_billing.csv");
+
+  //   console.log(rows,'dats of individal bill')
+  // };
+
+const handleExcelDownload = async () => {
+    const workbook = new Excel.Workbook();
+    const workSheetName = 'Worksheet-1';
+    try {
+        const fileName = "Individual_billing";
+        const worksheet = workbook.addWorksheet(workSheetName);
+
+        // Define only the headers you need
+        const headers = [
+            "id",
+            "Trip_id",
+            "State",
+            "Status",
+            "Invoice_No",
+            "billing_no",
+            "Customer",
+            "Bill_Date",
+            "guestname",
+            "Trips",
+            "Amount",
+            
+            
+        ];
+
+        const formattedRows = rows.map(row => {
+            const formattedRow = {};
+            headers.forEach(header => {
+                if (header === 'Bill_Date') {
+                    formattedRow[header] = dayjs(row[header]).format('DD-MM-YYYY');
+                } else {
+                    formattedRow[header] = row[header] !== undefined ? row[header] : '';
+                }
+            });
+            return formattedRow;
+        });
+
+        const columns = headers.map(key => ({ key, header: key }));
+        worksheet.columns = columns;
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '9BB0C1' },
+            };
+        });
+
+        worksheet.getRow(1).height = 30;
+
+        // Set default column width based on header length
+        worksheet.columns.forEach((column) => {
+            column.width = column.header.length + 5;
+            column.alignment = { horizontal: 'center', vertical: 'middle' };
+        });
+
+        // Add rows of data
+        formattedRows.forEach((singleData) => {
+            const row = worksheet.addRow(singleData);
+            worksheet.columns.forEach((column) => {
+                const cellValue = singleData[column.key] || '';
+                const cellLength = cellValue.toString().length;
+                const currentColumnWidth = column.width || 0;
+                column.width = Math.max(currentColumnWidth, cellLength + 5);
+            });
+
+            // Apply borders for each cell
+            row.eachCell((cell) => {
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' },
+                };
+            });
+        });
+
+        // Write to buffer and save the file
+        const buf = await workbook.xlsx.writeBuffer();
+        saveAs(new Blob([buf]), `${fileName}.xlsx`);
+
+    } catch (error) {
+        console.error('<<<ERROR>>>', error);
+    } finally {
+        workbook.removeWorksheet(workSheetName);  // Clean up the worksheet
+    }
+};
+
   // const handlePdfDownload = () => {
   //   const pdf = new jsPDF();
   //   pdf.setFontSize(12);

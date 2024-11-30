@@ -503,7 +503,7 @@ const TransferReport = ({ stationName }) => {
     }
   };
 
-  const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
+  const handleBothDownload = (misformat1, invoicedata1, invoiceDate1,customerData) => {    
     if (!misformat) {
       setError(true)
       setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
@@ -514,7 +514,7 @@ const TransferReport = ({ stationName }) => {
       setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
       return
     }
-    handleExcelDownload(misformat1, invoicedata1, invoiceDate1);
+    handleExcelDownload(misformat1, invoicedata1, invoiceDate1,customerData);
     handleDownloadPdf();
   };
   const tripheaderIndex = pdfzipdata?.map(li => li?.tripid)
@@ -849,7 +849,7 @@ const TransferReport = ({ stationName }) => {
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={() => handleExcelDownload(misformat, invoicedata, invoiceDate, customerData)}>Excel</MenuItem>
                             <MenuItem onClick={() => handleDownloadPdf()}>PDF</MenuItem>
-                            <MenuItem onClick={() => handleBothDownload(misformat, invoicedata, invoiceDate)}>Both</MenuItem>
+                            <MenuItem onClick={() => handleBothDownload(misformat, invoicedata, invoiceDate,customerData)}>Both</MenuItem>
                           </Menu>
                         </React.Fragment>
                       )}

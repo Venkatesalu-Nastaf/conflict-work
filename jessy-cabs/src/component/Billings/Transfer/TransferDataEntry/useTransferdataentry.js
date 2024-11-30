@@ -317,9 +317,7 @@ const useTransferdataentry = () => {
         });
         // setFormData(updatedFormData); // Update formData state with the new object
         // Other state updates remain the same
-        console.log(updatedFormData, "kkkk")
         const transferlist = updatedFormData.Trip_id?.split(',').filter(item => item.trim() !== '');
-        console.log(transferlist, 'idddddddd');
         setTransferId(transferlist);
         setInvoiceno(updatedFormData.Invoice_no);
         setGroupId(updatedFormData.Groupid);
@@ -1729,9 +1727,10 @@ const useTransferdataentry = () => {
 
                 const OrganizationName = selectedCustomerDatas.customer || customer;
                 // const OrganizationName =  await customerMotherdatagroupstation(selectedCustomerDatas.customer || customer);
-                const Trips = validTrips.length;
+                const Trips = rowSelectionModel.length;
                 const billstatus = "notbilled";
                 // Construct the transfer list with valid trips and their amounts
+                
                 const transferlist = {
                     Status: billstatus,
                     Billdate: billDate,
@@ -1749,10 +1748,6 @@ const useTransferdataentry = () => {
 
                 // Log the valid trips and transfer list for debugging
                 console.log(validTrips, 'Valid Trips for posting');
-                console.log(transferlist, 'Transfer List to be posted');
-
-
-
 
 
                 // console.log(tripDetails, 'Selected Trip IDs and Amounts');
@@ -1865,7 +1860,6 @@ const useTransferdataentry = () => {
                     Amount: totalamount,
                     grouptripid: grouptripid
                 }
-                console.log(transferlist, 'adddtrans');
 
                 const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
                 setSuccess(true)

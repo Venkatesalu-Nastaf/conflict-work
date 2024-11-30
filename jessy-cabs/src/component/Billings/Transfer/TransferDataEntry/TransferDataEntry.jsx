@@ -25,10 +25,10 @@ import useTransferdataentry from './useTransferdataentry';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Box } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
-import {  CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-const TransferDataEntry = ({stationName, organizationNames }) => {
+const TransferDataEntry = ({ stationName, organizationNames }) => {
   const {
     rows,
     error,
@@ -78,9 +78,9 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
     setLoading,
     setServiceStation,
     setInfo,
-     setINFOMessage,
-     handlecustomer,isbtnloading , setisbtnloading, iseditloading , setiseditloading,isbillloading , setisbillloading,
-     addEditTrigger, setAddEditTrigger
+    setINFOMessage,
+    handlecustomer, isbtnloading, setisbtnloading, iseditloading, setiseditloading, isbillloading, setisbillloading,
+    addEditTrigger, setAddEditTrigger
     //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
@@ -96,11 +96,12 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
   const Transfer_read = permissions[6]?.read;
   const Transfer_new = permissions[6]?.new;
   const Transfer_delete = permissions[6]?.new;
-  const groupdisable =groupId ? true : false
-//  const ddd = groupId ? "uedd" : "moo"
-//   console.log(servicestation ,"stst",selectedCustomerDatas.station,"stationnsnsnnnns")
-//   console.log(ddd,"sttenary",groupstation)
+  const groupdisable = groupId ? true : false
+  //  const ddd = groupId ? "uedd" : "moo"
+  //   console.log(servicestation ,"stst",selectedCustomerDatas.station,"stationnsnsnnnns")
+  //   console.log(ddd,"sttenary",groupstation)
 
+const invoiceNoCheck = invoiceno==="" || invoiceno===null || invoiceno===undefined
 
   return (
     <div className="TransferDataEntry-form main-content-form Scroll-Style-hide">
@@ -159,7 +160,7 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
                       autoComplete='off'
                       // onKeyDown={handleKeyenter}
                       disabled={groupdisable}
-                     
+
                     />
                   </div>
                   <div className="input">
@@ -174,16 +175,16 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
                       size="small"
                       value={customer || ''}
                       options={organizationNames}
-                     
+
                       onChange={(event, value) => handlecustomer(value)}
 
                       //  onChange={(event, value) => {
                       //   if (!groupId) {
                       //     setCustomer(value)
-                          
+
                       //   }
                       //    else {
-                        
+
                       //     setInfo(true)
                       //     setINFOMessage("not change customer ")
                       //   }
@@ -308,39 +309,39 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
 
 
 
-                   <TextField
+                    <TextField
                       size="small"
-                       id="freet-station"
+                      id="freet-station"
                       className='full-width'
-                    
-                      label="State" 
+
+                      label="State"
                       name='station'
                       value={servicestation || ""}
-  
+
                       autoComplete='off'
                     />
                   </div>
                   <div className="input">
-                    <Button variant="contained" disabled={!Transfer_read} onClick={()=>handleShow()} >List</Button>
+                    <Button variant="contained" disabled={!Transfer_read} onClick={() => handleShow()} >List</Button>
                   </div>
                   <div className="input">
                     <Button variant="contained" onClick={handleCancel}>Cancel</Button>
                   </div>
-                  {invoiceno ? <></>:
-                  <div className="input">
-                    {/* <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button> */}
-                    <LoadingButton loading={isbillloading} variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</LoadingButton>
-                  </div>
-}
-                  {groupId && customer && !addEditTrigger? <div className="input">
+                  {invoiceno ? <></> :
+                    <div className="input">
+                      {/* <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button> */}
+                      <LoadingButton loading={isbillloading} variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</LoadingButton>
+                    </div>
+                  }
+                  {groupId && customer && !addEditTrigger ? <div className="input">
                     {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</Button> */}
                     <LoadingButton loading={isbtnloading} variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</LoadingButton>
-                  </div>:
-                  <div className="input">
-                    {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</Button> */}
-                    <LoadingButton loading={isbtnloading} variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</LoadingButton>
-                  </div>
-}
+                  </div> :
+                    <div className="input">
+                      {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</Button> */}
+                      <LoadingButton loading={isbtnloading} variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</LoadingButton>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
@@ -357,7 +358,7 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
                   <Menu {...bindMenu(popupState)}>
                     <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
                     <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                  </Menu> 
+                  </Menu>
                 </>
               )}
             </PopupState>
@@ -444,59 +445,78 @@ const TransferDataEntry = ({stationName, organizationNames }) => {
               />
             </Box> */}
             <Box
-  sx={{
-    height: 400, // Adjust this value to fit your needs
-    position: 'relative', // Necessary for absolute positioning of the loading indicator
-    '& .MuiDataGrid-virtualScroller': {
-      '&::-webkit-scrollbar': {
-        width: '8px',
-        height: '8px',
-      },
-      '&::-webkit-scrollbar-track': {
-        backgroundColor: '#f1f1f1',
-      },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#457cdc',
-        borderRadius: '20px',
-        minHeight: '60px',
-      },
-      '&::-webkit-scrollbar-thumb:hover': {
-        backgroundColor: '#3367d6',
-      },
-    },
-  }}
->
-  {loading && (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 56,
-        left: 0,
-        right: 0,
-        bottom: 0, // Cover the entire DataGrid area
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center', // Center vertically
-        alignItems: 'center', // Center horizontally
-        zIndex: 1,
-        bgcolor: 'rgba(255, 255, 255, 0.8)', // Optional: add a slight background to distinguish loading
-      }}
-    >
-     <CircularProgress />
-    </Box>
-  )}
-  <DataGrid
-    rows={rows}
-    columns={columns}
-    onRowSelectionModelChange={(newRowSelectionModel) => {
-      setRowSelectionModel(newRowSelectionModel);
-      handleRowSelection(newRowSelectionModel);
-    }}
-    checkboxSelection
-    disableRowSelectionOnClick
-    sx={{ height: '100%', width: '100%' }} // Ensure DataGrid takes up full box size
-  />
-</Box>
+              sx={{
+                height: 400, // Adjust this value to fit your needs
+                position: 'relative', // Necessary for absolute positioning of the loading indicator
+                '& .MuiDataGrid-virtualScroller': {
+                  '&::-webkit-scrollbar': {
+                    width: '8px',
+                    height: '8px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                    minHeight: '60px',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
+                },
+              }}
+            >
+              {loading && (
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 56,
+                    left: 0,
+                    right: 0,
+                    bottom: 0, // Cover the entire DataGrid area
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center', // Center vertically
+                    alignItems: 'center', // Center horizontally
+                    zIndex: 1,
+                    bgcolor: 'rgba(255, 255, 255, 0.8)', // Optional: add a slight background to distinguish loading
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              )}
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                onRowSelectionModelChange={(newRowSelectionModel) => {
+                  setRowSelectionModel(newRowSelectionModel);
+                  handleRowSelection(newRowSelectionModel);
+                }}
+                checkboxSelection
+                disableRowSelectionOnClick
+                // sx={{ height: '100%', width: '100%' }}
+                sx={{
+                  height: '100%',
+                  width: '100%',
+                  '& .MuiDataGrid-row': {
+                    backgroundColor: invoiceNoCheck ? "red" : "green",
+                    color: 'white', // Optional for text visibility
+                    '&:hover': {
+                      backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Highlight on hover
+                    },
+                  },
+                  '& .Mui-selected': {
+                    // backgroundColor: invoiceno === "" ? 'red' : 'green', // Same color for selected row
+                    backgroundColor: invoiceNoCheck ? 'red !important' : 'green !important', // Prevent lighter selected row color
+
+                    '&:hover': {
+                      backgroundColor: invoiceNoCheck  ? 'darkred' : 'darkgreen', // Same hover effect for selected row
+                    },
+                  },
+       }}
+              />
+            </Box>
 
           </div>
           <div className='alert-popup-main'>

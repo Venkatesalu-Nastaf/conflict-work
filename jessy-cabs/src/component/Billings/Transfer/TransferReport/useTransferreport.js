@@ -117,7 +117,7 @@ const useTransferreport = () => {
     const header = ["Sno", "Tripsheet No", "VCode", "Status", "Guest Name"];
     const csvData = [
       header,
-      ...tableData.map((row) => row.map((value) => `"${value}"`)),
+      ...tableData?.map((row) => row.map((value) => `"${value}"`)),
     ]
       .map((row) => row.join(","))
       .join("\n");

@@ -151,12 +151,27 @@ const useExeclpage = () => {
 
     };
     function addPercentage(amount, percent) {
-     
+    
+        amount = parseFloat(amount) || 0;
+        percent = parseFloat(percent) || 0;
+    
         let percentageValue = (amount * percent) / 100;
-      
-        const datapercent = amount + percentageValue
-        return datapercent.toFixed(2)
+    
+        const datapercent = amount + percentageValue;
+    
+        return datapercent.toFixed(2);
     }
+    
+
+    // function addPercentage(amount, percent) {
+    //     console.log(amount,percent,'zippppppppppppppppppppp');
+
+    //     let percentageValue = (amount * percent) / 100 || 0;
+      
+    //     const datapercent = amount + percentageValue
+    //     return datapercent.toFixed(2)
+    // }
+    
     function withoutTaxesdata(total,toll,parking,permit) {
         let withoutaxValue = total-toll-parking-permit;
         return withoutaxValue;
@@ -183,8 +198,7 @@ const useExeclpage = () => {
       }
 
     const handleExcelDownload = async (misformat, invoice, invoicedate,customerData) => {
-        console.log(misformat, invoice, invoicedate, "zipexcel")
-        console.log(customerData,"llll",customerData[0].gstTax)
+        console.log(misformat, invoice, invoicedate,customerData, "zipexcel")
         const data = invoice;
         const data2 = invoice;
 
@@ -222,7 +236,7 @@ const useExeclpage = () => {
                     column.alignment = { horizontal: 'center', vertical: 'middle' };
                 });
 
-                data.forEach((singleData, index) => {
+                data.map((singleData, index) => {
                     console.log(data,'datas of excel datss')
                 
                     singleData["SNo"] = index + 1;
@@ -243,12 +257,12 @@ const useExeclpage = () => {
                      singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
                     singleData["starttime1"]= removeSeconds(singleData["starttime1"])
-                    singleData["gstTax"] = customerData[0].gstTax
+                    singleData["gstTax"] = customerData[0]?.gstTax
                     
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):"00:00"
                     singleData["withoutTaxes"]=  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"],singleData["parking"],singleData["permit"])
                     // singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
-                    singleData["totalcalcAmount"]= customerData[0].gstTax === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],customerData[0].gstTax)
+                    singleData["totalcalcAmount"]= customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],customerData[0]?.gstTax)
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -287,7 +301,7 @@ const useExeclpage = () => {
 
                 // write the content using writeBuffer
                 const buf = await workbook.xlsx.writeBuffer();
-
+                 
                 // download the processed file
 
                 saveAs(new Blob([buf]), `${fileName}.xlsx`);
@@ -295,12 +309,13 @@ const useExeclpage = () => {
 
 
             } catch (error) {
-                console.error('<<<ERRROR>>>', error);
-                console.error('Something Went Wrong', error.message);
-            } finally {
-                // removing worksheet's instance to create new one
-                workbook.removeWorksheet(workSheetName);
+                console.log('<<<ERRROR>>>', error);
+                console.log('Something Went Wrong', error.message);
             }
+            //  finally {
+            //     // removing worksheet's instance to create new one
+            //     workbook.removeWorksheet(workSheetName);
+            // }
         }
 
         else if (misformat === "New MIS") {
@@ -394,10 +409,11 @@ const useExeclpage = () => {
             } catch (error) {
                 console.error('<<<ERRROR>>>', error);
                 console.error('Something Went Wrong', error.message);
-            } finally {
-                // removing worksheet's instance to create new one
-                workbook.removeWorksheet(workSheetName);
-            }
+            } 
+            // finally {
+            //     // removing worksheet's instance to create new one
+            //     workbook.removeWorksheet(workSheetName);
+            // }
 
 
         }

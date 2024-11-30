@@ -120,7 +120,6 @@ const GroupBilling = ({ stationName, organizationNames }) => {
       }, [apiUrl, customer])
 
 
-
     useEffect(() => {
         const fetchStateDetails = async () => {
             try {
@@ -230,7 +229,9 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         }
     }, [viewGroupBill]);
   
-  
+//   const invoiceNoCheck = rows[0]?.InvoiceNo[0] === ""  || rows[0]?.InvoiceNo[0] === undefined || rows[0]?.InvoiceNo[0] === null
+const invoiceNoCheck = !rows[0]?.InvoiceNo || rows[0]?.InvoiceNo[0] == null || rows[0]?.InvoiceNo[0] === "";
+
     return (
         <div className="main-content-form Scroll-Style-hide">
             <form >
@@ -504,6 +505,25 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                 getRowId={(row) => row.id}
                                 checkboxSelection
                                 disableRowSelectionOnClick
+                                sx={{
+                                    height: '100%',
+                                    width: '100%',
+                                    '& .MuiDataGrid-row': {
+                                      backgroundColor: invoiceNoCheck ? "red" : "green",
+                                      color: 'white', // Optional for text visibility
+                                      '&:hover': {
+                                        backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Highlight on hover
+                                      },
+                                    },
+                                    '& .Mui-selected': {
+                                        // backgroundColor: invoiceno === "" ? 'red' : 'green', // Same color for selected row
+                                        backgroundColor: invoiceNoCheck ? 'red !important' : 'green !important', // Prevent lighter selected row color
+                    
+                                        '&:hover': {
+                                          backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Same hover effect for selected row
+                                        },
+                                      },
+                                  }}
                             />
                         </Box>
                     </div>

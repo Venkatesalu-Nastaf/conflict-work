@@ -760,13 +760,11 @@ WHERE apps = "Closed"
 
   // Execute query with parameterized values
   db.query(query, [decodedCustomer, fromDate, toDate], (err, result) => {
-    console.log('4444444444');
 
     if (err) {
       console.log('Failed to retrieve booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
-    console.log(result, '222222224444444444');
 
     return res.status(200).json(result);
   });
@@ -955,25 +953,11 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
 //   })
 // });
 //--------------------------------------------
-router.get("/trpisheetlogdetailst/:tripid", (req, res) => {
-  const tripid = req.params.tripid;
-  console.log(tripid, "tripplog")
-  // booking.customer, booking.guestname, booking.guestmobilno, booking.address1, booking.duty, booking.useage,TripsheetLog_Details.Log_id,TripsheetLog_Details.Log_Date,TripsheetLog_Details.Log_Time,TripsheetLog_Details.mode
-  // TripsheetLog_Details.tripsheet_no,TripsheetLog_Details.status,TripsheetLog_Details.apps,TripsheetLog_Details.shedOutDate ,TripsheetLog_Details.startdate as Reportdate,TripsheetLog_Details.closedate,TripsheetLog_Details.shedInDate,TripsheetLog_Details.reporttime as Shed Out Time,TripsheetLog_Details.starttime,TripsheetLog_Details.closetime,TripsheetLog_Details.shedintime,TripsheetLog_Details.totaltime,
-  // TripsheetLog_Details.additionaltime,TripsheetLog_Details.shedout,TripsheetLog_Details.startkm,TripsheetLog_Details.closekm,TripsheetLog_Details.shedin,TripsheetLog_Details.totalkm1,TripsheetLog_Details.shedkm,TripsheetLog_Details.vehRegNo,TripsheetLog_Details.vehicleName,TripsheetLog_Details.driverName,TripsheetLog_Details.mobileNo
-  // const sqlQuery = `
-  //   SELECT 
-  //     TripsheetLog_Details.*, booking.customer, booking.guestname, booking.guestmobilno, booking.address1, booking.duty, booking.useage
+router.get("/trpisheetlogdetailst", (req, res) => {
+  const { selectType, selectbookingId, fromDate, toDate, userName } = req.query;
 
-  //   FROM
-  //       booking
-  //   LEFT JOIN 
-  //       TripsheetLog_Details   ON TripsheetLog_Details.tripsheet_no = booking.bookingno
-  //   WHERE 
-  //      TripsheetLog_Details.tripsheet_no = ?
-
-  // `;
-  const sqlQuery = `
+  // SQL queries
+  const sqlWithIdQuery = `
     SELECT 
       TripsheetLog_Details.*, 
       booking.customer, 
@@ -989,20 +973,49 @@ router.get("/trpisheetlogdetailst/:tripid", (req, res) => {
     ON 
       TripsheetLog_Details.tripsheet_no = booking.bookingno
     WHERE 
-      TripsheetLog_Details.tripsheet_no = ?
+      TripsheetLog_Details.tripsheet_no = ? AND 
+      TripsheetLog_Details.tripsheet_date >= ? AND 
+      TripsheetLog_Details.tripsheet_date < DATE_ADD(?, INTERVAL 1 DAY)
   `;
 
-  db.query(sqlQuery, [tripid], (err, result) => {
-    if (err) {
+  const sqlWithoutIdQuery = `
+    SELECT 
+      TripsheetLog_Details.*, 
+      booking.customer, 
+      booking.guestname, 
+      booking.guestmobileno, 
+      booking.address1, 
+      booking.duty, 
+      booking.useage
+    FROM
+      booking
+    LEFT JOIN 
+      TripsheetLog_Details 
+    ON 
+      TripsheetLog_Details.tripsheet_no = booking.bookingno
+    WHERE 
+      TripsheetLog_Details.username = ? AND 
+      TripsheetLog_Details.tripsheet_date >= ? AND 
+      TripsheetLog_Details.tripsheet_date < DATE_ADD(?, INTERVAL 1 DAY)
+  `;
 
+  // Choose query and parameters
+  const query = selectbookingId ? sqlWithIdQuery : sqlWithoutIdQuery;
+  const params = selectbookingId
+    ? [selectbookingId, fromDate, toDate]
+    : [userName, fromDate, toDate];
+
+  // Execute the query
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error(err, 'Database Error');
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
 
-    // Assuming there is only one matching booking
     return res.status(200).json(result);
   });
-
 });
+
 
 
 router.post("/TripsheetlogDetailslogged", (req, res) => {

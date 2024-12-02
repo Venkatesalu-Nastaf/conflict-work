@@ -8,6 +8,7 @@ const path = require('path');
 
 //its for to use aysn/await 
 const util = require('util');
+const { error } = require('console');
 const query = util.promisify(db.query).bind(db)
 
 const attachedmailDirectory = path.join(__dirname, 'uploads');
@@ -24,7 +25,7 @@ router.post('/booking', async (req, res) => {
         }
 
         // Check if the insertion was successful (affectedRows > 0)
-       
+
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: "Data inserted successfully", data: result });
         } else {
@@ -38,16 +39,16 @@ router.post('/bookinglogDetails', async (req, res) => {
 
     db.query('INSERT INTO BookingLogDetails SET ?', bookData, (err, result) => {
         if (err) {
-          console.log(err)
+            console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
 
         // Check if the insertion was successful (affectedRows > 0)
-        if (result.affectedRows ===  0) {
+        if (result.affectedRows === 0) {
             return res.status(400).json("data not inserted succefully")
-        } 
-            return res.status(200).json("data  inserted succefully")
-        
+        }
+        return res.status(200).json("data  inserted succefully")
+
     });
 })
 
@@ -84,7 +85,7 @@ router.get('/booking/:bookingno', (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
         if (result.length > 0) {
-            
+
 
             db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
                 if (err) {
@@ -98,7 +99,7 @@ router.get('/booking/:bookingno', (req, res) => {
                 console.log("arryData", arryData)
                 if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
                     // its for fetch by All
-                    await db.query(`SELECT * FROM booking WHERE bookingno = ? `,bookingno, (err, result) => {
+                    await db.query(`SELECT * FROM booking WHERE bookingno = ? `, bookingno, (err, result) => {
                         if (err) {
                             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
                         }
@@ -120,27 +121,27 @@ router.get('/booking/:bookingno', (req, res) => {
 
                             return res.status(404).json({ error: 'u dont have accesss the page of stations' });
                         }
-                       
+
                         const bookingDetails = result[0]; // Assuming there is only one matching booking
                         return res.status(200).json(bookingDetails);
 
                     });
                 }
-     
+
             });
         }
     })
 });
 
 router.get('/drivernamedrivercreation', (req, res) => {
-  const sql = 'SELECT drivername,Mobileno FROM drivercreation';
-  db.query(sql, (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
-    }
-    // Assuming your `result` contains a field `drivername` and `Mobileno`
-    return res.status(200).json(result);
-  });
+    const sql = 'SELECT drivername,Mobileno FROM drivercreation';
+    db.query(sql, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
+        }
+        // Assuming your `result` contains a field `drivername` and `Mobileno`
+        return res.status(200).json(result);
+    });
 });
 
 router.get('/vehicleinfodatavehcile', (req, res) => {
@@ -162,7 +163,7 @@ router.get('/last-booking-no', (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
         const lastBooking = result[0];
-        return res.status(200).json(lastBooking);  
+        return res.status(200).json(lastBooking);
     });
 });
 
@@ -435,7 +436,7 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
         return res.status(200).json(result);
     });
 });
-  
+
 // -------------------------------------------------------------end of tripsheet code api travrls name-------------------------
 
 
@@ -671,7 +672,7 @@ router.post('/send-email', async (req, res) => {
           `,
             };
 
-            
+
             await transporter.sendMail(customerMailOptions);
             // await transporter.sendMail(ownerMailOptions);
             res.status(200).json({ message: 'Email sent successfully' });
@@ -750,7 +751,7 @@ router.post('/send-email', async (req, res) => {
             }
             // await transporter.sendMail(ownerMailOptions1);
 
-            
+
             await transporter.sendMail(customerMailOptions1);
             res.status(200).json({ message: 'Email sent successfully' });
 
@@ -923,12 +924,12 @@ router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req
     const booking_id = req.params.id;
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
-    const {created_at}=req.body;
-    console.log("booking_id", booking_id, fileType, fileName,created_at)
+    const { created_at } = req.body;
+    console.log("booking_id", booking_id, fileType, fileName, created_at)
     console.log("id", booking_id)
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;
-    db.query(sql, [booking_id, fileName, fileType,created_at], (err, result) => {
+    db.query(sql, [booking_id, fileName, fileType, created_at], (err, result) => {
         if (err) {
             return res.json({ Message: "Error" });
         }
@@ -942,11 +943,11 @@ router.post('/upload-booking-image', booking_uploadfile.single("file"), async (r
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
     const path = req.file.path;
-    const {created_at}=req.body;
-    console.log(booking_id,"ll", fileName,"ll", fileType,path)
+    const { created_at } = req.body;
+    console.log(booking_id, "ll", fileName, "ll", fileType, path)
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;
-    db.query(sql, [booking_id, fileName, fileType,created_at], (err, result) => {
+    db.query(sql, [booking_id, fileName, fileType, created_at], (err, result) => {
         if (err) {
             return res.json({ Message: "Error" });
         }
@@ -986,14 +987,41 @@ router.get('/booking-docPDFView/:bookingno', (req, res) => {
     });
 });
 
-router.get('/bookinglogdetailsget/:bookno', (req, res) => {
-    const id = req.params.bookno
-    const sql = 'select * from BookingLogDetails where bookingno=?';
-    db.query(sql, [id], (err, result) => {
-        if (err) return res.json({ Message: "error" })
+router.get('/bookinglogdetailsget', (req, res) => {
+    const { selectType, selectbookingId, fromDate, toDate, userName } = req.query;
+
+    console.log(selectType, selectbookingId, fromDate, toDate, userName, 'loggggg');
+
+    const AllDataQuery = `
+        SELECT * FROM BookingLogDetails 
+        WHERE bookingno = ? 
+        AND username = ?  
+        AND bookingdate >= ? 
+        AND bookingdate < DATE_ADD(?, INTERVAL 1 DAY)
+    `;
+    const withoutBookingNoQuery = `
+        SELECT * FROM BookingLogDetails 
+        WHERE username = ?  
+        AND bookingdate >= ? 
+        AND bookingdate < DATE_ADD(?, INTERVAL 1 DAY)
+    `;
+
+    const query = selectbookingId ? AllDataQuery : withoutBookingNoQuery;
+    const params = selectbookingId
+        ? [selectbookingId, userName, fromDate, toDate]
+        : [userName, fromDate, toDate];
+
+    db.query(query, params, (err, result) => {
+        if (err) {
+            console.error(err, 'Database Error');
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        console.log(result,'log resultsss');
+        
         return res.json(result);
-    })
-})
+    });
+});
+
 
 
 

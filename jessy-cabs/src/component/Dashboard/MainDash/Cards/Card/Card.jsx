@@ -366,7 +366,7 @@ const title = param.title
     ? dayjs(item.BillDate).format("DD/MM/YYYY") // Format as DD/MM/YYYY
     : "N/A",
     amount: item.TotalAmount || 0, 
-    collected: item.Collected || 0, 
+    collected: item.TotalCollected || 0, 
     pending: item.TotalBalance || 0, 
   }));
 

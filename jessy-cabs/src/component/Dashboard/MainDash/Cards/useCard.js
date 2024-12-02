@@ -70,7 +70,7 @@ const useCard = () => {
             try {
                 let data = [];
 
-                if (selectedMonth2 === "All") {
+                if (selectedMonths === "All") {
                     const response = await axios.get(`${apiUrl}/getFullBillWisedReport`);
                     data = response.data;
                     console.log(response,'response')
@@ -78,14 +78,14 @@ const useCard = () => {
 
                 } else if (selectedMonth2 !== "All") {
                     const response = await axios.post(`${apiUrl}/getMonthWiseTotal`, {
-                        selectMonth: selectedMonth2,
+                        selectMonth: selectedMonths,
                     });
                     // console.log(response.data, 'select month response');
                     data = response.data;
                 }
-
+                
                 const totalAmount = data.reduce((acc, item) => acc + parseFloat(item.TotalAmount), 0);
-                const totalCollected = data.reduce((acc, item) => acc + parseFloat(item.Collected), 0);
+                const totalCollected = data.reduce((acc, item) => acc + parseFloat(item.TotalCollected), 0);
                 const totalBalance = data.reduce((acc, item) => acc + parseFloat(item.TotalBalance), 0);
 
                 setTotalAmountSum(totalAmount);
@@ -103,7 +103,7 @@ const useCard = () => {
             }
         };
         fetchBillAmount();
-    }, [apiUrl, selectedMonth2]);
+    }, [apiUrl, selectedMonth2,selectedMonths]);    
      
    // my code for all data 
 

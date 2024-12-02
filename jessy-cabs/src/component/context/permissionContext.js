@@ -25,8 +25,7 @@ export const PermissionProvider = ({ children }) => {
     
     const userid = localStorage.getItem('useridno') || user_id;
     // const token=localStorage.getItem("tokensdata")
-    
-
+ 
     useEffect(() => {
         const fetchPermission = async () => {
             try {
@@ -37,6 +36,7 @@ export const PermissionProvider = ({ children }) => {
 
                     const response = await axios.get(`${apiurl}/use-permissions/${userid}`)
                     const data = response.data;
+                    
                     setPermission(data);
                 }
                 else {

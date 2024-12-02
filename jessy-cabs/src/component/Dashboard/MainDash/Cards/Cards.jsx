@@ -155,7 +155,11 @@ const Cards = () => {
   const storedSums = JSON.parse(localStorage.getItem('sumValues'));
   const TotalValueNumber = TotalNumber(storedSums?.totalAmountSum);
   const PendingValueNumber = PendingNumber(storedSums?.totalBalanceSum);
-  const CollectedValueNumber = CollectedNumber(storedSums?.totalCollectedSum)
+  const CollectedValueNumber = CollectedNumber(storedSums?.totalCollectedSum);
+
+  const TotalValueAmount = storedSums?.totalAmountSum;
+  const PendingValueAmount = storedSums?.totalBalanceSum;
+  const CollectedValueAmout = storedSums?.totalCollectedSum;
 
   const salesData = billinggraph.map(item => ({
     date: item.Billingdate,
@@ -213,7 +217,7 @@ const Cards = () => {
       value: lastMonthTotalAmount.toLocaleString(),
       png: FaRupeeSign,
       series: [{ name: "Sales", data: salesData.map(data => data.value), categories: salesData.map(data => data.date) }],
-      totalamount: TotalValueNumber || 0
+      totalamount: TotalValueAmount || 0
     },
     {
       title: "Recived",
@@ -225,7 +229,7 @@ const Cards = () => {
       value: lastMonthTotalPaid.toLocaleString(),
       png: FaRegMoneyBillAlt,
       series: [{ name: "Revenue", data: revenueData.map(data => data.value), categories: revenueData.map(data => data.date) }],
-      totalamount: CollectedValueNumber || 0
+      totalamount: CollectedValueAmout || 0
     },
     {
       title: "Pending",
@@ -237,7 +241,7 @@ const Cards = () => {
       value: lastMonthTotalPending.toLocaleString(),
       png: BiPaste,
       series: [{ name: "Pending", data: pendingData.map(data => data.value), categories: pendingData.map(data => data.date) }],
-      totalamount: PendingValueNumber || 0
+      totalamount: PendingValueAmount || 0
     },
   ];
 

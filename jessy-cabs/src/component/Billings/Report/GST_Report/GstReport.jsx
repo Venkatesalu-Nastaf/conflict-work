@@ -28,7 +28,7 @@ export const GstReport = ({ stationName, Statename }) => {
   const { organization, gstReport, setGstReport, department, handleShow, hidePopup, handleShowAll, rows, columns,
     taxReport, handleDownloadPdf, handleDownloadExcel, success, successMessage, error, errorMessage,isGstbtnloading,setisGstbtnloading } = useGstReport();
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const apiUrl = APIURL
+  const apiUrl = APIURL;
 
   const handleDateChange = (field, date) => {
     setGstReport(prevGstReport => ({
@@ -40,7 +40,7 @@ export const GstReport = ({ stationName, Statename }) => {
   const handleDepartmentChange = (event, value) => {
     setGstReport(prevGstReport => ({
       ...prevGstReport,
-      department: value || '', // Ensure value is not undefined
+      department: value || '', 
     }));
   };
 

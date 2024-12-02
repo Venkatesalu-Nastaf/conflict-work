@@ -24,33 +24,33 @@ const upload = multer({
 })
 
 router.get('/TemplateUser--Creation', async (req, res) => {
-    const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "UserCreation"'
-    db.query(query,(err, results) => {
-      if (err) {
-        console.log(err,'errorrrr')
-        return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-      }
-      // console.log(results,"reesss")
-      return res.status(200).json(results);
-})  
+  const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "UserCreation"'
+  db.query(query, (err, results) => {
+    if (err) {
+      console.log(err, 'errorrrr')
+      return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+    }
+    // console.log(results,"reesss")
+    return res.status(200).json(results);
+  })
 })
 
 router.post('/usercreation-add', async (req, res) => {
   const { book, permissionsData, organistaionsendmail, created_at, templateMessageData } = req.body;
-  const { username, stationname, designation, organizationname,employeeid,EmailApp_Password,Sender_Mail, userpassword, active, email, mobileno, superAdmin } = book;
+  const { username, stationname, designation, organizationname, employeeid, EmailApp_Password, Sender_Mail, userpassword, active, email, mobileno, superAdmin } = book;
   const { Sender_Email, Email_Password } = organistaionsendmail;
   const themesdata = "theme1";
 
   console.log(templateMessageData, 'ghjk', `${templateMessageData}`);
-  console.log(Sender_Email,Email_Password, 'emilllllllllll');
-  
-  console.log(username, stationname, designation, organizationname,employeeid, userpassword, active, email, mobileno, created_at,);
+  console.log(Sender_Email, Email_Password, 'emilllllllllll');
+
+  console.log(username, stationname, designation, organizationname, employeeid, userpassword, active, email, mobileno, created_at,);
   const idString = stationname.join(',');
   console.log(idString, "ff");
 
   try {
     await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname,employeeid,userpassword,EmailApp_Password,Sender_Mail,active,email,mobileno,theme,created_at,superAdmin)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, [username, idString, designation, organizationname,employeeid, userpassword,EmailApp_Password,Sender_Mail,active, email, mobileno, themesdata, created_at, superAdmin]);
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, [username, idString, designation, organizationname, employeeid, userpassword, EmailApp_Password, Sender_Mail, active, email, mobileno, themesdata, created_at, superAdmin]);
 
     // Set up the mail transporter
     var transporter = nodemailer.createTransport({
@@ -208,8 +208,8 @@ router.delete('/usercreation-delete/:userid', (req, res) => {
 router.put('/usercreation-edit/:userid', async (req, res) => {
 
   const { updatedCustomer, permissionsData } = req.body;
-    
-  const { userid, username, stationname, designation, organizationname,employeeid, userpassword, active, mobileno, email,created_at } = updatedCustomer;
+
+  const { userid, username, stationname, designation, organizationname, employeeid, userpassword, active, mobileno, email, created_at } = updatedCustomer;
 
 
   if (updatedCustomer.stationname && Array.isArray(updatedCustomer.stationname)) {
@@ -225,7 +225,7 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
     for (const permission of permissionsData) {
       await db.query(
         'INSERT INTO user_permissions(user_id, name, `read`, `new`, `modify`, `delete`,`created_at`) VALUES (?, ?, ?, ?, ?, ?,?)',
-        [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete,created_at]
+        [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete, created_at]
       );
     }
 
@@ -274,7 +274,7 @@ router.get('/user-permissionget/:userid', (req, res) => {
 
 router.get('/usercreation', (req, res) => {
   // const filterValue = req.query.filter; // Assuming you want to filter based on a query parameter 'filter'
-  const  query = 'SELECT * FROM usercreation';
+  const query = 'SELECT * FROM usercreation';
 
 
   db.query(query, (err, results) => {
@@ -379,14 +379,24 @@ router.get('/usercreationgetdata/:value', (req, res) => {
 //   })
 // })
 
+// get All usernames
+router.get("/getAllUserNames", (req, res) => {
+  db.query("SELECT username FROM usercreation", (error, result) => {
+    if (error) {
+      console.log(error);
+    }
+    return res.status(200).json(result)
+  })
+})
+
 
 router.put("/usercreationdataupdate/:editid", (req, res) => {
   const editid = req.params.editid
   const updatedata = req.body
 
-  const { username, designation,employeeid, userpassword, email, mobileno } = updatedata
+  const { username, designation, employeeid, userpassword, email, mobileno } = updatedata
 
-  db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,EmailApp_Password=?,Sender_Mail=?,email=?,mobileno=? where userid=?", [username, designation,employeeid, userpassword, email, mobileno, editid], (err, results) => {
+  db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,EmailApp_Password=?,Sender_Mail=?,email=?,mobileno=? where userid=?", [username, designation, employeeid, userpassword, email, mobileno, editid], (err, results) => {
     if (err) {
       return res.status(500).json({ Message: "Error updating data", err });
     }

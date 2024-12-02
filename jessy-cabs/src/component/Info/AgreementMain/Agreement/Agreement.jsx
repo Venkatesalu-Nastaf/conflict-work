@@ -83,13 +83,14 @@ const Agreement = ({organizationNames}) => {
     success,
     info,
     warning,
-    selectedCustomerDatas,
+    // selectedCustomerDatas,
     successMessage,
     customer,
     setCustomer,
     handlecustomer,
     errorMessage,
     warningMessage,
+    setSelectedCustomerData,
     infoMessage,
     book,
     handleClick,
@@ -156,7 +157,7 @@ const Agreement = ({organizationNames}) => {
         <div className="detail-container-main-Employe">
           <div className="container-Employe">
             <div className="input-field employee-input-feilds">
-            <div className="input input-transferlist">
+            {/* <div className="input input-transferlist">
                             <div className="icone">
                                 <HailOutlinedIcon color="action" />
                             </div>
@@ -176,7 +177,33 @@ const Agreement = ({organizationNames}) => {
                                     <TextField {...params} label="Organization" inputRef={params.inputRef} />
                                 )}
                             />
+                        </div> */}
+                      <div className="input input-transferlist">
+                        <div className="icone">
+                          <HailOutlinedIcon color="action" />
                         </div>
+                        <Autocomplete
+                          fullWidth
+                          id="free-solo-Organization"
+                          className="full-width"
+                          freeSolo
+                          size="small"
+                          name="customer"
+                          value={selectedCustomerData?.customer || book.customer}
+                          options={organizationNames.map((option) =>
+                            typeof option === "string" ? { label: option } : option
+                          )} // Map options to have a label
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "customer")}
+                          onInputChange={(event, value) => handleAutocompleteChange(event, value, "customer")}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Organization"
+                              inputRef={params.inputRef}
+                            />
+                          )}
+                        />
+                      </div>
                                 <div className="input">
                               <div className="icone">
                                   <CalendarMonthIcon color="action" />
@@ -188,7 +215,7 @@ const Agreement = ({organizationNames}) => {
                                           className="full-width"
                                           label="From Date"
                                           name="fromdate"
-                                          value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : dayjs(fromDate)}
+                                          value={selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : dayjs(fromDate)}
                                           format="DD/MM/YYYY"
                                           onChange={(date) => {
                                               handleDateChange(date, 'fromdate');
@@ -209,7 +236,7 @@ const Agreement = ({organizationNames}) => {
                                               className="full-width"
                                               label="To Date"
                                               name="toDate"
-                                              value={selectedCustomerDatas.toDate ? dayjs(selectedCustomerDatas.toDate) : dayjs(toDate)}
+                                              value={selectedCustomerData.toDate ? dayjs(selectedCustomerData.toDate) : dayjs(toDate)}
                                               format="DD/MM/YYYY"
                                               onChange={(date) => {
                                                   handleDateChange(date, 'toDate');
@@ -221,7 +248,6 @@ const Agreement = ({organizationNames}) => {
                                   </LocalizationProvider>
                               </div>
                                 
-
               <div className="input">
                 <div className="icone">
                   <EmailIcon color="action" />
@@ -243,12 +269,12 @@ const Agreement = ({organizationNames}) => {
                 </div>
                 <TextField
                   size="small"
-                  id="mobileno"
+                  id="mobileno1"
                   className="full-width"
                   label="Mobile"
                   name="mobileno"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.mobileno || book.mobileno}
+                  // autoComplete="new-password"
+                  value={selectedCustomerData?.mobileno || book.mobileno || ''}
                   onChange={handleChange}
                 />
               </div>
@@ -299,11 +325,32 @@ const Agreement = ({organizationNames}) => {
                 {/* {fileName && <p>Selected file: {fileName}</p>} */}
               </div>
 
+              {/* <div className="employee-file-upload-division">
+                  {selectedCustomerData?.empid || book.empid ? (
+                    <Button component="label">
+                      <UploadFileIcon />
+                      <input
+                        id="empid_file"
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={(e) => setFile(e.target.files[0])}
+                      />
+                    </Button>
+                  ) : (
+                    <Button color="primary" onClick={() => {
+                      setError(true);
+                      setErrorMessage("Please Enter Booking No");
+                    }}>
+                      <UploadFileIcon />
+                    </Button>
+                  )}
+                </div> */}
+
               <div className="input">
                 {isEditMode ? (
-                  <Button variant="contained" disabled={!Employee_new} onClick={handleEdit}>Edit</Button>
-                ) : (
-                  <Button variant="contained" disabled={!Employee_modify} onClick={handleAdd}>Add</Button>
+                  <Button variant="contained" disabled={!Employee_modify} onClick={handleEdit}>Edit</Button>
+                ) : ( 
+                  <Button variant="contained" disabled={!Employee_new} onClick={handleAdd}>Add</Button>
                 )}
               </div>
             </div>
@@ -427,7 +474,6 @@ const Agreement = ({organizationNames}) => {
                 )}
               </PopupState>
             </div>
-
 
             <div className="Employe-search-container">
               <div className="input-field Employe-search-input">

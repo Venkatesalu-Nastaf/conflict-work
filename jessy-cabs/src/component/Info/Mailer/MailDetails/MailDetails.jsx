@@ -565,23 +565,25 @@ useEffect(() => {
             </div>
           </div>
 
-          <div className="input-field full-width" style={{marginLeft:'60px'}}>
-            <div className="inputs sms-format-keyword-input">
-            <span className="Title-Name" style={{ fontWeight: 600 }}>Key-Words</span>
-                <TextField
-                    className="sms-box"
-                    fullWidth
-                    id="outlined-7"
-                    multiline
-                    sx={{ mt: 1, width: "100%" }}
-                    rows={4}
-                    defaultValue=""
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                />
-            </div>
-        </div>
+          <div className="input-field full-width" style={{ marginLeft: '60px' }}>
+    <div className="inputs sms-format-keyword-input">
+        <span className="Title-Name" style={{ fontWeight: 600 }}>Key-Words</span>
+        <TextField
+            className="sms-box"
+            fullWidth
+            id="outlined-7"
+            multiline
+            sx={{ mt: 1, width: "100%" }}
+            rows={4}
+            defaultValue="USER CREATION : ${username} - Username , ${userpassword} - Password
+DRIVER INFO : ${Drivername} - Driver Name , ${userid} - Driver UserID, ${UserName} - Driver Username , ${password} -Driver App Password"
+            InputProps={{
+                readOnly: true,
+            }}
+        />
+    </div>
+</div>
+
 
           {/* <Box className='common-speed-dail'>
             <StyledSpeedDial

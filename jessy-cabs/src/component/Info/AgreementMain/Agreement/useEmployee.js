@@ -12,7 +12,8 @@ import { toDate } from 'validator';
 const useEmployee = () => {
     const apiUrl = APIURL;
     // const user_id = localStorage.getItem('useridno');
-    const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
+    // const [selectedCustomerData, setSelectedCustomerDatas] = useState({});
+    const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
@@ -20,6 +21,7 @@ const useEmployee = () => {
     const [formData] = useState({});
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [organizationNames, setOrganizationNames] = useState([]);
     const [info, setInfo] = useState(false);
     const [warning, setWarning] = useState(false);
     const [fromDate, setFromDate] = useState(dayjs());
@@ -35,19 +37,19 @@ const useEmployee = () => {
     const [loading, setLoading] = useState(false);
 
     const handleButtonClick = (params) => {
-        const { empid } = params.row;
-        if (!empid) {
+        const { email } = params.row;
+        if (!email) {
             setError(true);
             setErrorMessage("PLease Enter Booking No");
             return;
         }
         setDeleteFile([])
-        showPdf(empid);
+        showPdf(email);
     };
 
     // TABLE STRAT
     const columns = [
-        { field: "id", headerName: "Sno", width: 50 },
+        { field: "id4", headerName: "Sno", width: 50 },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -262,19 +264,17 @@ const useEmployee = () => {
     }, [error, success, warning, info]);
 
 
-
     const [book, setBook] = useState({
-        customer:'',
-        fromdate:'',
-        toDate:'',
-        email:'',
-        mobileno:'',
-        address:'',
-        gstno:'',
-
+        customer: '',
+        fromdate: dayjs().format("DD-MM-YYYY"),
+        toDate: dayjs().format("DD-MM-YYYY"),
+        email: '',
+        mobileno: '',
+        address: '',
+        gstno: '',
     });
+    
 
-    console.log(book, 'rrrrrrrrrrrr')
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
 
@@ -283,7 +283,7 @@ const useEmployee = () => {
                 ...prevBook,
                 [name]: checked,
             }));
-            setSelectedCustomerDatas((prevData) => ({
+            setSelectedCustomerData((prevData) => ({
                 ...prevData,
                 [name]: checked,
             }));
@@ -292,7 +292,7 @@ const useEmployee = () => {
                 ...prevBook,
                 [name]: value,
             }));
-            setSelectedCustomerDatas((prevData) => ({
+            setSelectedCustomerData((prevData) => ({
                 ...prevData,
                 [name]: value,
             }));
@@ -300,25 +300,44 @@ const useEmployee = () => {
     };
 
     const handleAutocompleteChange = (event, value, name) => {
-        const selectedOption = value?.label || value || ""; // Handle both string and object options
-        setBook(prevState => ({
+        const manualInput = typeof value === "string" ? value : value?.label || "";
+        console.log("Manual Input:", manualInput);
+        if (name === "customer") {
+          const selectedOrganization = organizationNames?.find(
+            (option) => option.customer === manualInput
+          );
+          console.log("Selected Organization:", selectedOrganization);
+          setBook((prevState) => ({
             ...prevState,
-            [name]: selectedOption, // Dynamically set the key
-        }));
-    };
-    
+            customer: manualInput,
+            address: selectedOrganization?.address1,
+            gstno: selectedOrganization?.gstnumber,
+            email:selectedOrganization?.orderByEmail,
+            mobileno:selectedOrganization?.orderByMobileNo,
+          }));
+          setSelectedCustomerData((prevState) => ({
+            ...prevState,
+            customer: manualInput,
+            address: selectedOrganization?.address1,
+            gstno: selectedOrganization?.gstnumber,
+            email:selectedOrganization?.orderByEmail,
+            mobileno:selectedOrganization?.orderByMobileNo
+          }));
+        }
+      };
+      
 
-    const handleDateChange = (date, name) => {
+      const handleDateChange = (date, name) => {
         if (!date || !dayjs(date).isValid()) {
             console.error("Invalid date selected");
             return;
         }
-        const formattedDate = dayjs(date).format('DD-MM-YYYY');
+        const formattedDate = dayjs(date).format("DD-MM-YYYY");
         setBook((prevBook) => ({
             ...prevBook,
             [name]: formattedDate,
         }));
-        setSelectedCustomerDatas((prevData) => ({
+        setSelectedCustomerData((prevData) => ({
             ...prevData,
             [name]: formattedDate,
         }));
@@ -336,17 +355,20 @@ const useEmployee = () => {
         address:'',
         gstno:'',
         }));
-        setSelectedCustomerDatas({});
+        setSelectedCustomerData({});
         setIsEditMode(false);
     };
 
+    
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
-        setSelectedCustomerDatas(customerData);
-        setSelectedCustomerId(params.row.customerId);
+        console.log(customerData,"kkkkkkkkkkkkkkkkkkkkkkk")
+        setSelectedCustomerData(customerData);
+        // setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
+        console.log(customerData,'ddddddddddddddddddddd');
     }, []);
-
+   
     //--------show pdf---------------
     const [allFile, setAllFile] = useState([]);
 
@@ -370,7 +392,7 @@ const useEmployee = () => {
 
     ///--------------------------------------------
 
-    const empid = selectedCustomerDatas?.empid || book.empid
+    const empid = selectedCustomerData?.empid || book.empid
     const [file, setFile] = useState(null);
 
     const addPdf = async () => {
@@ -421,7 +443,7 @@ const useEmployee = () => {
             
             const rowsWithUniqueId = data.map((row, index) => ({
                 ...row,
-                id: index + 1,
+                id4: index + 1,
             }));
             
             setRows(rowsWithUniqueId);
@@ -444,18 +466,18 @@ const useEmployee = () => {
         handleList();
     }, [handleList]);
 
-    //----------------------------------------------
+    //---------------------------------------------
 
- 
+
     const handleAdd = async () => {
-        const email  = book.email  || selectedCustomerDatas.email ;
+        const email  = book.email  || selectedCustomerData.email ;
         if (!email ) {
             setError(true);
             setErrorMessage("Fill your Email ID");
             return;
         }
         
-        console.log(email, 'dhbdd')
+        console.log(email, 'dhbdd',book)
         try {
             await axios.post(`${apiUrl}/agreementdatas`, book); 
             handleCancel();
@@ -490,19 +512,52 @@ const useEmployee = () => {
         }
     };
 
-    const handleEdit = async (email) => {
-        const selectedCustomer = rows.find((row) => row.email === email);
-        const { id, ...rest } = selectedCustomerDatas;
+    const handleEdit = async() => {
+        console.log("edited")
+        // const selectedCustomer = rows.find((row) => row.email === email);
+        const { id4,id, ...rest } = selectedCustomerData;
+        console.log(id4,"value",selectedCustomerData)
         const updatedCustomer = { ...rest };
-        await axios.put(`${apiUrl}/agreementedit/${selectedCustomer.empid}`, updatedCustomer);
+        await axios.put(`${apiUrl}/agreementedit/${id}`, updatedCustomer);
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
-        addPdf();
+        addPdf();   
         setRows([]);
         handleList()
     };
 
+    // const handleEdit = async () => {
+    //     console.log("Editing data...");
+    //     const { id4, ...rest } = selectedCustomerData;
+    //     if (!id4) {
+    //         setError(true);
+    //         setErrorMessage("No valid customer ID provided for editing.");
+    //         return;
+    //     }
+    //     const updatedCustomer = { ...rest };
+    //     try {
+    //         await axios.put(`${apiUrl}/agreementedit/${id4}`, updatedCustomer);
+    //         setSuccess(true);
+    //         setSuccessMessage("Successfully updated");
+    //         handleCancel();
+    //         addPdf();
+    //         setRows([]);
+    //         handleList();
+    //     } catch (error) {
+    //         if (error.message) {
+    //             setError(true);
+    //             setErrorMessage("Check your Network Connection");
+    //         } else if (error.response) {
+    //             setError(true);
+    //             setErrorMessage("Failed to Update Data: " + (error.response.data.message || error.message));
+    //         } else {
+    //             setError(true);
+    //             setErrorMessage("An unexpected error occurred: " + error.message);
+    //         }
+    //     }
+    // };
+    
 
     const handleClick = async (event, actionName, empid) => {
         event.preventDefault();
@@ -537,34 +592,73 @@ const useEmployee = () => {
             }
 
             else if (actionName === 'Delete') {
-                await axios.delete(`${apiUrl}/employees/${book.empid || selectedCustomerDatas.empid}`);
-                setSelectedCustomerDatas(null);
-                setSuccess(true);
-                setSuccessMessage("Successfully Deleted");
-                handleCancel();
-                setRows([]);
+                const { id, ...rest } = selectedCustomerData; // Use only 'id' for delete
+                console.log(id, "value", selectedCustomerData);
+            
+                try {
+                    await axios.delete(`${apiUrl}/aggreementdeleteid/${id}`); // Pass only 'id' in the endpoint
+                    setSelectedCustomerData(null);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully Deleted");
+                    handleCancel();
+                    setRows([]);
+                    handleList(); // Refresh the list after deletion
+                } catch (error) {
+                    console.error('Error deleting data:', error);
+                    setSuccess(false);
+                    setSuccessMessage("Failed to delete data");
+                }
             }
+            
 
             else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.empid === empid);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerDatas };
-                await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerDatas.empid}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
-                addPdf();
-                setRows([]);
+          
+                const { id4,id, ...rest } = selectedCustomerData;
+        console.log(id4,"value",selectedCustomerData)
+        const updatedCustomer = { ...rest };
+        await axios.put(`${apiUrl}/agreementedit/${id}`, updatedCustomer);
+        setSuccess(true);
+        setSuccessMessage("Successfully updated");
+        handleCancel();
+        addPdf();   
+        setRows([]);
+        handleList()   
             }
-
-        
         //  catch {
         //     setError(true);
         //     setErrorMessage("Check your Network Connection");
         // }
     };
+    // useEffect(() => {
+    //     const fetchOrganizationnames = async () => {
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/drivernamedrivercreation`);
+    //             const data = response.data
+    //             setDrivername(data)
+    //         }
+    //         catch (error) {
+    //             console.log(error, "error");
+    //         }
+    //     };
+    //     fetchOrganizationnames()
+    // }, [apiUrl])
 
-  
-
+    useEffect(() => {
+        const fetchOrganizationNames = async () => {
+          try {
+            const response = await axios.get(`${apiUrl}/Customerdatasfetch`);
+            const data = response.data;
+            setOrganizationNames(data);
+          } catch (error) {
+            console.error("Error fetching organization names:", error);
+          }
+        };
+      
+        fetchOrganizationNames();
+      }, [apiUrl]);
+      console.log(organizationNames,'dghjkkkkkkkkkkkk');
+      
+      
     const handleShowAll = async () => {
         try {
             const response = await fetch(`${apiUrl}/table-for-employee?searchText=${searchText}`);
@@ -689,7 +783,7 @@ const useEmployee = () => {
     };
 
     return {
-        selectedCustomerDatas,
+        selectedCustomerData,
         selectedCustomerId,
         rows,
         actionName,
@@ -704,6 +798,8 @@ const useEmployee = () => {
         book,
         handleClick,
         handleChange,
+        setSelectedCustomerData,
+        selectedCustomerData,
         setBook,
         handleRowClick,
         handleAdd,
@@ -719,6 +815,8 @@ const useEmployee = () => {
         ToDate,
         setToDate,
         handleShowAll,
+        organizationNames,
+        setOrganizationNames,
         allFile,
         handleCloseDialog,
         dialogOpen,

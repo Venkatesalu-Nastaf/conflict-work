@@ -1536,12 +1536,38 @@ const TripSheet = ({ stationName, logoImage }) => {
                     />
                   </div>
                 </div>
+
+                <div className="input" style={{ position: 'relative', top: '10px' }}>
+                    <div className="icone icone-margin-adjust" style={{marginBottom:'16px'}}>
+                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                    </div>
+                    <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center' ,marginBottom:'15px'}}>
+                      <label>Add Time</label>
+                      <div style={{ position: 'relative', top: '-4px' }}>
+                        <TextField
+                          name="additionaltime"
+                          value={
+                            formData.additionaltime || 
+                            book.additionaltime || 
+                            selectedCustomerData.additionaltime || 
+                            additionalTime.additionaltime || 
+                            ''
+                          }
+                          onChange={handleChange}
+                          id="additionaltime"
+                          size="small"
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                 <div className="input">
                   <div className="icone icone-margin-adjust">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
-                  <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center' }}>
-                    <label>Total Time</label>
+                   <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center',marginTop:'5px' }}>
+                  <label>Total Time</label>
                     <div style={{ position: 'relative', top: '-4px' }}>
                       <TextField
                         name="totaltime"
@@ -1559,22 +1585,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </div>
                   </div>
-                </div>
-
-                <div className="input" style={{ position: 'relative', top: '10px' }}>
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
-                  </div>
-                  <TextField
-                    name="additionaltime"
-                    value={formData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || additionalTime.additionaltime || ''}
-                    onChange={handleChange}
-                    label="Add Time"
-                    id="additionaltime"
-                    // variant="standard"
-                    size='small'
-                    autoComplete="password"
-                  />
                 </div>
 
                 <div className="input" style={{ display: "grid" }} >
@@ -1714,22 +1724,6 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
                   <TextField
-                    name="totalkm1"
-                    value={calculateTotalKilometers()}
-                    onChange={handleChange}
-                    label="Total KM"
-                    id="totalkm1"
-                    type="number"
-                    size='small'
-                    autoComplete="password"
-                  />
-                </div>
-
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faRoad} size="lg" />
-                  </div>
-                  <TextField
                     name="shedkm"
                     value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
                     onChange={(e) => {
@@ -1745,6 +1739,24 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                   />
                 </div>
+
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faRoad} size="lg" />
+                  </div>
+                  <TextField
+                    name="totalkm1"
+                    value={calculateTotalKilometers()}
+                    onChange={handleChange}
+                    label="Total KM"
+                    id="totalkm1"
+                    type="number"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div>
+
+               
 
                 <div className="input">
                   <div className="icone">

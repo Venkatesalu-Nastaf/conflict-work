@@ -1590,14 +1590,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </label>
                     )
                   )}
-                  {data === undefined && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
+                  {data === undefined && tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
                     <label className='invalid-km'>
                       Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
                     </label>
 
                   )}
                   <div style={{ display: "flex" }}>
-                    <div className="icone">
+                    <div className="icone"> 
                       <FontAwesomeIcon icon={faRoad} size="lg" />
                     </div>
                     <TextField

@@ -139,7 +139,9 @@ router.post('/tripsheet-add', (req, res) => {
         TotalTimeWithoutAddHours,
         Hybriddata,
         TimeToggleData,
-        VendorTimeToggle
+        VendorTimeToggle,
+        HclMaxConflctdata,
+        Hcldatakmvalue
 
     } = req.body
 
@@ -272,7 +274,8 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_FULLTotalAmount,
         TotalTimeWithoutAddHours,
         Hybriddata,
-        TimeToggleData,VendorTimeToggle
+        TimeToggleData,VendorTimeToggle,HclMaxConflctdata,
+        Hcldatakmvalue
     }
     // Assuming 'startdate' is in ISO 8601 format
     const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
@@ -474,7 +477,8 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_Bata,
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
-        Vendor_FULLTotalAmount,TotalTimeWithoutAddHours,Hybriddata,TimeToggleData,VendorTimeToggle } = req.body
+        Vendor_FULLTotalAmount,TotalTimeWithoutAddHours,Hybriddata,TimeToggleData,VendorTimeToggle,HclMaxConflctdata,
+        Hcldatakmvalue } = req.body
 
 
     const updatedCustomerData = {
@@ -604,7 +608,8 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
-        TotalTimeWithoutAddHours,Hybriddata,TimeToggleData,VendorTimeToggle
+        TotalTimeWithoutAddHours,Hybriddata,TimeToggleData,VendorTimeToggle,HclMaxConflctdata,
+        Hcldatakmvalue
     }
     // console.log(updatedCustomerData,"llll")
 
@@ -2137,7 +2142,8 @@ router.get('/get-CancelTripDataforHcl/:VehicleNo', (req, res) => {
     // const status = 'Transfer_Closed';
     // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
 //  sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
-    sql = `SELECT  COALESCE(SUM(closekm), 0) AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1`
+    // sql = `SELECT  COALESCE(MAX(Hcldatakmvalue), 0)  AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1`
+        sql = `SELECT  MAX(CAST(Hcldatakmvalue AS UNSIGNED))  AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1`
     db.query(sql, [vehicleNo], (err, result) => {
         if (err) {
             console.log("err", err)

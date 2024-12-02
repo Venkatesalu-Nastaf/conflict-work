@@ -84,6 +84,11 @@ const useTripsheet = () => {
     const [manualTripID, setManualTripID] = useState([])
     const [editMap, setEditMap] = useState(false)
     const [mapPopUp, setMapPopUp] = useState(false)
+    // const [conflicthcldatavalue, setConflictHCLDataValue] = useState([])
+    const [conflicthcldatavalue, setConflictHCLDataValue] = useState({
+        Hcldatakmvalue: 0,
+        HclMaxConflctdata: 0
+      });
 
     // Loading//
 
@@ -813,7 +818,7 @@ const useTripsheet = () => {
             maxconflictdata: 0,
             maxTripid: "",
         })
-        setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
+        // setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
         setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
         localStorage.removeItem('selectedTripid');
     };
@@ -980,6 +985,87 @@ const useTripsheet = () => {
     }
 
 
+    console.log(book.closekm,"close",typeof(formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm),formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm ,maxconflict)
+ 
+
+    // const hybridatahcldatakm = ()=>{
+    //     const hybridatahcl1 = hybridhclcustomer || hybridhclnavigate
+    //     const hclconfict = Number(formData.Hcldatakmvalue || selectedCustomerData.Hcldatakmvalue || selectedCustomerDatas.Hcldatakmvalue || book.Hcldatakmvalue) || 0
+    //     const hclconfict2 = Number(formData.HclMaxConflctdata || selectedCustomerData.HclMaxConflctdata || selectedCustomerDatas.HclMaxConflctdata || book.HclMaxConflctdata) || 0
+    //     const kmmax = maxconflict?.maxconflictdata
+    //     const addkmvaluedata = Number(hclconfict) + Number(kmmax) 
+
+    //     // Hcldatakmvalue
+    //         // HclMaxConflctdata
+    //   const datakm =  formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm
+    //     if(hybridatahcl1 === 1){
+    //         if(datakm !== "" ){
+    //         if(hclconfict === 0){
+    //           setConflictHCLDataValue({Hcldatakmvalue :addkmvaluedata,HclMaxConflctdata:kmmax})
+    //         }
+    //         else{
+    //             setConflictHCLDataValue({Hcldatakmvalue : hclconfict,HclMaxConflctdata:hclconfict2}) 
+    //         }
+                
+    //         }
+    //         else{
+    //             setConflictHCLDataValue({Hcldatakmvalue :0,HclMaxConflctdata:0})
+    //         }
+    //     }
+    //     else{
+    //         setConflictHCLDataValue({Hcldatakmvalue :0,HclMaxConflctdata:0})
+      
+    //     }
+    // }
+    const datakm1 = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
+
+    const hybridatahcldatakm = async() => {
+        const hybridatahcl1 = hybridhclcustomer || hybridhclnavigate;
+        const hclconfict = Number(
+            formData.Hcldatakmvalue || 
+            selectedCustomerData.Hcldatakmvalue || 
+            selectedCustomerDatas.Hcldatakmvalue || 
+            book.Hcldatakmvalue
+        ) || 0;
+    
+        const hclconfict2 = Number(
+            formData.HclMaxConflctdata || 
+            selectedCustomerData.HclMaxConflctdata || 
+            selectedCustomerDatas.HclMaxConflctdata || 
+            book.HclMaxConflctdata
+        ) || 0;
+    
+        const kmmax = maxconflict?.maxconflictdata || 0;
+        // const addkmvaluedata = hclconfict + kmmax;
+    
+        const datakm = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
+        // const addkmvaluedata = Number(datakm) || 0 + kmmax 
+        const addkmvaluedata = (Number(datakm) || 0) + kmmax;
+
+        console.log(hclconfict,"hcl",hclconfict2)
+        console.log(datakm,"datakmmmm",addkmvaluedata,"add",kmmax,typeof(kmmax),Number(datakm) || 0 ,";;;;",(Number(datakm) || 0) + kmmax )
+    
+        if (hybridatahcl1 === 1) {
+            if (datakm) {
+                console.log(datakm,"enter")
+                setConflictHCLDataValue({
+                    Hcldatakmvalue: hclconfict === 0 ? addkmvaluedata : hclconfict,
+                    HclMaxConflctdata: hclconfict === 0 ? kmmax : hclconfict2
+                });
+            } else {
+                setConflictHCLDataValue({ Hcldatakmvalue: 0, HclMaxConflctdata: 0 });
+            }
+        } else {
+            setConflictHCLDataValue({ Hcldatakmvalue: 0, HclMaxConflctdata: 0 });
+        }
+    };
+    
+    console.log(conflicthcldatavalue.Hcldatakmvalue,"con",conflicthcldatavalue.HclMaxConflctdata)
+    useEffect(()=>{
+        hybridatahcldatakm()
+    },[datakm1])
+    // console.log(hybridatahcldatakm(),"call")
+
     const handleEdit = async () => {
 
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
@@ -999,6 +1085,7 @@ const useTripsheet = () => {
             setisEditload(true)
             try {
                 await getSignatureImage()
+                await hybridatahcldatakm()
 
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
@@ -1082,7 +1169,10 @@ const useTripsheet = () => {
                     Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
                     Hybriddata: hybridhclcustomer || 0,
                     TimeToggleData: timeToggle,
-                    VendorTimeToggle: timeTogglevendor
+                    VendorTimeToggle: timeTogglevendor,
+                    Hcldatakmvalue :conflicthcldatavalue.Hcldatakmvalue,
+                    HclMaxConflctdata :conflicthcldatavalue.HclMaxConflctdata,
+
                 };
                 const tripsheetlogtripid = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
 
@@ -1203,7 +1293,9 @@ const useTripsheet = () => {
     //         setErrorMessage("Check your Network Connection");
     //     }
     // };
+   
 
+   
     const handleAdd = async () => {
 
         const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
@@ -1341,7 +1433,9 @@ const useTripsheet = () => {
                 Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
                 Hybriddata: hybridhclcustomer || 0,
                 TimeToggleData: timeToggle,
-                VendorTimeToggle: timeTogglevendor
+                VendorTimeToggle: timeTogglevendor,
+                HclMaxConflctdata: 0 ,
+                Hcldatakmvalue : 0
             };
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
@@ -4506,52 +4600,52 @@ const useTripsheet = () => {
     }
 
     const vehicleRegisterNo = formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo || '';
-    const [checkCloseKM, setCheckCloseKM] = useState({ maxShedInkm: '', maxTripId: "" })
-    const [hybridCheckCus, setHybridCheckCus] = useState([])
-    useEffect(() => {
-        const getCustomer = async () => {
-            const response = await axios.get(`${apiUrl}/get-customer`)
-            const data = response.data.map(el => ({ customer: el.customer, hybrid: el.hybrid }))
-            setHybridCheckCus(data)
-        }
-        getCustomer()
-    }, [apiUrl])
+    // const [checkCloseKM, setCheckCloseKM] = useState({ maxShedInkm: '', maxTripId: "" })
+    // const [hybridCheckCus, setHybridCheckCus] = useState([])
+    // useEffect(() => {
+    //     const getCustomer = async () => {
+    //         const response = await axios.get(`${apiUrl}/get-customer`)
+    //         const data = response.data.map(el => ({ customer: el.customer, hybrid: el.hybrid }))
+    //         setHybridCheckCus(data)
+    //     }
+    //     getCustomer()
+    // }, [apiUrl])
 
-    const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
-    const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
-    const transformFun = (data) => {
-        const hybridcheck = hybridCheckCus.find((el) => customer === el.customer)
+    // const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
+    // const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+    // const transformFun = (data) => {
+    //     const hybridcheck = hybridCheckCus.find((el) => customer === el.customer)
 
-        if (hybridcheck && hybridcheck.hybrid) {
-            return { shedOutkm: null, shedInKm: null, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
-        }
-        return { shedOutkm: data.shedout, shedInKm: data.shedin, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
-    }
+    //     if (hybridcheck && hybridcheck.hybrid) {
+    //         return { shedOutkm: null, shedInKm: null, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
+    //     }
+    //     return { shedOutkm: data.shedout, shedInKm: data.shedin, tripid: data.tripid, shedInDate: data.shedInDate, shedintime: data.shedintime }
+    // }
 
     // to fetch closed tripdata for valiation
-    const [ClosedTripData, setClosedTripData] = useState([])
+    // const [ClosedTripData, setClosedTripData] = useState([])
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (!vehicleRegisterNo) return
-            const data = await axios.get(`${apiUrl}/get-CancelTripData/${vehicleRegisterNo}`)
-            const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun)
-            setClosedTripData(mapdata);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         if (!vehicleRegisterNo) return
+    //         const data = await axios.get(`${apiUrl}/get-CancelTripData/${vehicleRegisterNo}`)
+    //         const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun)
+    //         setClosedTripData(mapdata);
 
-            //to get KM
-            let maxShedInkm = -Infinity;
-            let maxTripId = null;
-            mapdata && Array.isArray(mapdata) && mapdata.forEach((el) => {
-                let shedInKm = el.shedInKm
-                if (shedInKm > maxShedInkm) {
-                    maxShedInkm = shedInKm;
-                    maxTripId = el.tripid;
-                }
-            })
-            setCheckCloseKM({ maxShedInkm: maxShedInkm, maxTripId: maxTripId })
-        }
-        fetchData()
-    }, [apiUrl, vehicleRegisterNo])
+    //         //to get KM
+    //         let maxShedInkm = -Infinity;
+    //         let maxTripId = null;
+    //         mapdata && Array.isArray(mapdata) && mapdata.forEach((el) => {
+    //             let shedInKm = el.shedInKm
+    //             if (shedInKm > maxShedInkm) {
+    //                 maxShedInkm = shedInKm;
+    //                 maxTripId = el.tripid;
+    //             }
+    //         })
+    //         setCheckCloseKM({ maxShedInkm: maxShedInkm, maxTripId: maxTripId })
+    //     }
+    //     fetchData()
+    // }, [apiUrl, vehicleRegisterNo])
 
     function removeSeconds(time) {
         // Split the time string by colon (:)
@@ -4643,7 +4737,9 @@ const useTripsheet = () => {
                     );
                 });
                 const hclcustomerhybrid = Number(hclkmdatas[0].totalCloseKm)
-                const datamaxhybrid = maxValue + hclcustomerhybrid
+                const datamaxhybrid = maxValue > hclcustomerhybrid ? maxValue : hclcustomerhybrid
+                // console.log(datamaxhybrid,"hclaclllll")
+                // console.log(hclcustomerhybrid,"hclhybridhcllllll",maxValue)
                 // Find the maximum value 
                 // setMaxConflict({ maxconflictdata: maxValue || 0, maxTripid: maxTrip.tripid })
                 setMaxConflict({ maxconflictdata: datamaxhybrid, maxTripid: maxTrip.tripid })
@@ -4685,14 +4781,16 @@ const useTripsheet = () => {
                     const result = getTripWithValueInRange(mapdata, shedoutkm1);
                     if (result !== undefined) {
                         const hclcustomertotalkm = Number(hclkmdatas[0].totalCloseKm)
+                       
                         const ggg = Number(result.shedin || result?.closekm || result.startkm || result.shedout || 0)
-                        console.log(ggg,"hybridtotalkmwithout hybrid")
-                        console.log(hclcustomertotalkm,"hybridwithhybrid")
+                        // console.log(ggg,"hybridtotalkmwithout hybrid")
+                        // console.log(hclcustomertotalkm,"hybridwithhybrid")
                         const dattt = ggg + hclcustomertotalkm
-                        console.log(dattt,"hybridfulllkmm")
+                        const datamaxhybrid = ggg > hclcustomerhybrid ? ggg : hclcustomerhybrid
+                        // console.log(dattt,"hybridfulllkmm")
                         // console.log(dattt,"s",ggg)
                         // setConflictKMData({ maximumkm: result.shedin || result?.closekm || result.startkm || result.shedout || 0, maxtripid: result?.tripid })
-                        setConflictKMData({ maximumkm: dattt, maxtripid: result?.tripid })
+                        setConflictKMData({ maximumkm: datamaxhybrid, maxtripid: result?.tripid })
                         // setConflictKMData({ maximumkm: result.shedin || result?.closekm || result.startkm || result.shedout || 0, maxtripid: result?.tripid })
                     }
                     else {
@@ -5362,7 +5460,8 @@ const useTripsheet = () => {
         vehileNames, handleEscortChange, handleClickOpen, open,
         handleClose,
         handleSignaturePopUpOpen,
-        rows, ClosedTripData,
+        rows,
+        //  ClosedTripData,
         error,
         // isHybridCustomer,
         success,
@@ -5458,7 +5557,8 @@ const useTripsheet = () => {
         selectedStatus,
         setSelectedStatus,
         link,
-        isSignatureSubmitted, checkCloseKM,
+        isSignatureSubmitted,
+        //  checkCloseKM,
         isEditMode,
         handleEdit, setFormValues,
         // SignPage,

@@ -209,7 +209,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
       book.guestmobileno ||
       formData.guestmobileno,
     email: formValues.email || selectedCustomerData.email || book.email,
-    pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
+    // pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
     useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
     starttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime || "",
     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || dayjs() || "",

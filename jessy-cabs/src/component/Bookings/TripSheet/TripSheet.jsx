@@ -1496,10 +1496,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                         ? (<label>Shed In Time</label>)
                         : (<label style={{ color: "red" }}>Invalid Time</label>)
                       ))
-                      || (!closeTimeVar && <label>Shed In Time</label>)
+                      || ( <label>Shed In Time</label>)
                     }
 
-                    {calculateTotalDay() > 1 ? (<label>Shed In Time</label>) : ""}
+                    {/* {calculateTotalDay() > 1 ? (<label>Shed In Time</label>) : ""} */}
 
                     {/* Time input field */}
                     <input

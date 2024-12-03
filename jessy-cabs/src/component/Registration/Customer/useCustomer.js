@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../url";
 import 'jspdf-autotable'
-import { Organization ,stateToStations} from './Customerdata';
+import { Organization ,stateToStations,allStations } from './Customerdata';
 import { useData1 } from '../../Dashboard/Maindashboard/DataContext'
 
 // TABLE START
@@ -468,32 +468,61 @@ const useCustomer = () => {
     //         }
     //     }
 
-    const handleAutocompleteChange = async (event, newValue, name) => {
-        const selectedOption = newValue ? newValue.label : '';
-        // if(name === "rateType"){
+    // const handleAutocompleteChange = async (event, newValue, name) => {
+    //     const selectedOption = newValue ? newValue.label : '';
+    //     // if(name === "rateType"){
 
-        //         setBook((prevBook) => ({
-        //             ...prevBook,
-        //             servicestation: '', // Clear the servicestation
-        //             [name]: selectedOption, // Update the ratetype
-        //         }));
-        //         setSelectedCustomerData((prevData) => ({
-        //             ...prevData,
-        //             servicestation: '', // Clear the servicestation
-        //             [name]: selectedOption, // Update the ratetype
-        //         }));
-        //     }
-        // else{
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: selectedOption,
-        }));
-        setSelectedCustomerData((prevData) => ({
-            ...prevData,
-            [name]: selectedOption,
-        }));
-        // }
-    };
+    //     //         setBook((prevBook) => ({
+    //     //             ...prevBook,
+    //     //             servicestation: '', // Clear the servicestation
+    //     //             [name]: selectedOption, // Update the ratetype
+    //     //         }));
+    //     //         setSelectedCustomerData((prevData) => ({
+    //     //             ...prevData,
+    //     //             servicestation: '', // Clear the servicestation
+    //     //             [name]: selectedOption, // Update the ratetype
+    //     //         }));
+    //     //     }
+    //     // else{
+    //     setBook((prevBook) => ({
+    //         ...prevBook,
+    //         [name]: selectedOption,
+    //     }));
+    //     setSelectedCustomerData((prevData) => ({
+    //         ...prevData,
+    //         [name]: selectedOption,
+    //     }));
+    //     // }
+    // };
+
+
+  const handleAutocompleteChange = (event, newValue, name) => {
+    const selectedOption = newValue ? newValue.label : "";
+    setBook((prev) => ({
+      ...prev,
+      [name]: selectedOption,
+      ...(name === "servicestation" && {
+        state: newValue ? getStateByStation(selectedOption) : "",
+        
+      }),
+    }));
+    setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: selectedOption,
+        ...(name === "servicestation" && {
+          state: newValue ? getStateByStation(selectedOption) : "",
+        }),
+      }));
+  };
+
+  const getStateByStation = (station) => {
+    for (const [state, stations] of Object.entries(stateToStations)) {
+      if (stations.includes(station)) {
+        return state;
+      }
+    }
+    return "";
+  };
     const handleAutocompleteChangebilling = (event, newValue, name) => {
 
         setBook((prevBook) => ({
@@ -870,6 +899,7 @@ const useCustomer = () => {
         //     return;
         // }
         const { id, orderByEmail, orderedby, orderByMobileNo, customerId, ...restselectedcustomerdata } = selectedCustomerData
+        console.log(selectedCustomerData,'datacustomer of datas 111111')
         const updatedCustomer = {
             ...restselectedcustomerdata,
             date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
@@ -881,8 +911,11 @@ const useCustomer = () => {
         }
         // const datasets = addCustomerToObjects(customerfieldSets, selectedCustomerData?.customer || book.customer);
         await axios.put(`${apiUrl}/customers/${selectedCustomerData.customerId}`, updatedCustomer);
+        console.log(selectedCustomerData,'datacustomer of datas 22222')
         if (datasets.length > 0) {
             await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
+
+            console.log(selectedCustomerData,'datacustomer of datas333333333333333')
         }
         // setIsInputVisible(!isInputVisible);
         setTriggerCustomerAdd(prev => !prev);

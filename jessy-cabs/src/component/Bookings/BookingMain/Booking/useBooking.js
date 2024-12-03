@@ -510,8 +510,8 @@ const handleAirportTransferChange = (event) => {
   };
 
   const handleDateChange = (date, name) => {
-    const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
+    const formattedDate = dayjs(date).format("DD-MM-YYYY");
+    const parsedDate = dayjs(formattedDate).format("DD-MM-YYYY");
     setBook((prevBook) => ({
       ...prevBook,
       [name]: parsedDate,
@@ -604,7 +604,7 @@ const handleAirportTransferChange = (event) => {
   const addPdf = async (lastbookid, fileData) => {
     const uploadFile = fileData || file
     if (uploadFile !== null) {
-      const createddata = dayjs().format('YYYY-MM-DD')
+      const createddata = dayjs().format('DD-MM-YYYY')
       const formData = new FormData();
       formData.append("file", uploadFile);
       formData.append("created_at", createddata);
@@ -752,7 +752,7 @@ const handleAirportTransferChange = (event) => {
         travelsname: logupdatabookdetails.travelsname,
         vehRegNo: logupdatabookdetails.vehRegNo,
         customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
-        Log_Date: dayjs().format("yyyy-MM-DD"),
+        Log_Date: dayjs().format("DD-MM-YYYY"),
         Log_Time: getCurrentTime(),
         mode: modedata,
         bookingno: lastBookinglogno,

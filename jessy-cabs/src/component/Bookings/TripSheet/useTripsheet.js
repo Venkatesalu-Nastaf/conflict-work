@@ -221,6 +221,9 @@ const useTripsheet = () => {
     const [signimageUrl, setSignImageUrl] = useState('');
     const [attachedImage, setAttachedImage] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
+
+    const [isentertripID,setisenterTripid] = useState(false)
+
     const [routeData, setRouteData] = useState('');
     const [tripSheetData, setTripSheetData] = useState({
         customer: '',
@@ -867,6 +870,10 @@ const useTripsheet = () => {
         if (!tripid) {
             setError(true);
             setErrorMessage("please enter the tripid");
+        }
+        if(!isentertripID){
+           
+            return
         }
         else {
             localStorage.setItem('selectedTripid', tripid);
@@ -3284,10 +3291,12 @@ const useTripsheet = () => {
                             setDriverSMS(false)
                             setSuccess(true);
                             setSuccessMessage("Successfully listed");
+                            setisenterTripid(true)
                             setIsEditMode(true);
                             setLockData(false)
                             setLockDatavendorBill(false)
                             setLockDatacustomerBill(false)
+                            localStorage.setItem('selectedTripid', tripid);
                         }
                     } else {
                         setError(true);
@@ -4539,6 +4548,9 @@ const useTripsheet = () => {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = async () => {
+        if(!isentertripID){
+            return
+        }
 
         setOpen(true);
         

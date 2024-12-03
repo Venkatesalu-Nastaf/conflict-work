@@ -18,7 +18,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import { UnderGroup, states, Customertype, Select } from "./Customerdata";
+import { UnderGroup, states, Customertype, Select,stateToStations,allStations } from "./Customerdata";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { FaPercent } from "react-icons/fa";
 // ICONS
@@ -462,7 +462,7 @@ const Customer = ({ stationName }) => {
                   <div className="icone">
                     <DomainAddIcon color="action" />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     size="small"
                     id="servicestation"
@@ -480,7 +480,21 @@ const Customer = ({ stationName }) => {
                       )
                     }
                     }
-                  />
+                  /> */}
+                  
+                   <Autocomplete
+        fullWidth
+        size="small"
+        id="servicestation"
+        freeSolo
+        onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
+        value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
+        options={allStations.map((Stationname) => ({ label: Stationname }))}
+        getOptionLabel={(option) => option.label || selectedCustomerData.servicestation || book.servicestation || ''}
+        renderInput={(params) => (
+          <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
+        )}
+      />
                 </div>
                 <div className="input">
                   <div className='icone'>
@@ -526,7 +540,7 @@ const Customer = ({ stationName }) => {
                   <div className='icone'>
                     <GrSelect />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-state"
@@ -543,7 +557,19 @@ const Customer = ({ stationName }) => {
                       )
                     }
                     }
-                  />
+                  /> */}
+                  <Autocomplete
+        fullWidth
+        size="small"
+        id="free-solo-demo-state"
+        freeSolo
+        onChange={(event, value) => handleAutocompleteChange(event, value, "state")}
+        value={ book.state || selectedCustomerData?.state || ''}
+        options={Object.keys(stateToStations).map((state) => ({ label: state }))}
+        renderInput={(params) => ( 
+          <TextField {...params} label="State" name="state" inputRef={params.inputRef}/>
+        )}
+      />
                 </div>
                 <div className="input">
                   <div className='icone'>

@@ -8,8 +8,26 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
 
 
   const startkm = tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin
-  const endkm = tripSheetData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm
+  const endkm = tripSheetData.shedout || selectedCustomerData.shedout  || selectedCustomerDatas.shedout || book.shedout 
+  const startdata = tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate
+  // const enddata =
   const Totalkm =Number(startkm) - Number(endkm)
+
+  function removeSeconds(time) {
+    // Split the time string by colon (:)
+    if(time !== "undefined"){
+    const timeParts = time.split(':');
+
+    // Check if there are seconds (length 3), return hours:minutes
+    if (timeParts.length === 3) {
+        return `${timeParts[0]}:${timeParts[1]}`;
+    }
+
+    // If there's only hours:minutes, return it as is
+    return time;
+}
+
+}
 
   const targetRef = useRef();
   return (
@@ -70,7 +88,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                 </tr>
                 <tr>
                   <th id='table-header'>Date:</th>
-                  <td id='table-data'>{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate ? dayjs(tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate).format("YYYY-MM-DD"):""}</td>
+                  <td id='table-data'>{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate ? dayjs(tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate).format("DD-MM-YYYY"):""}</td>
                 </tr>
                 <tr>
                   <th id='table-header'>Duty Type:</th>
@@ -114,15 +132,16 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                  
 
                       <td id='table-datas'><span >Closing</span></td>
-                      <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td>
-                      <td id='table-datas'><span >{tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime}</span></td>
+                      {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
+                      <td id='table-datas'><span >{dayjs(startdata).format('DD-MM-YYYY')}</span></td>
+                      <td id='table-datas'><span >{removeSeconds(tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime)}</span></td>
                       <td id='table-datas'><span >{tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin}</span></td>
                     </tr>
                   
                     <tr>
                       <td id='table-datas'><span >Starting</span></td>
-                      <td id='table-datas'><span >{tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate ? dayjs(tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate).format("YYYY-MM-DD"):""}</span></td>
-                      <td id='table-datas'><span >{tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime}</span></td>
+                      <td id='table-datas'><span >{tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate ? dayjs(tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate).format("DD-MM-YYYY"):""}</span></td>
+                      <td id='table-datas'><span >{ removeSeconds(tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime)}</span></td>
                       <td id='table-datas'><span >{tripSheetData.shedout || selectedCustomerData.shedout || selectedCustomerDatas.shedout || book.shedout}</span></td>
 
                       

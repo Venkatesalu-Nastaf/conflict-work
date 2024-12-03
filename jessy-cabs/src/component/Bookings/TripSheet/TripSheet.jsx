@@ -2223,6 +2223,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     size="small"
                                     id="free-solo-vendor_vehicle"
                                     freeSolo
+                                    disabled={!lockdata}
                                     onChange={(event, value) => {
                                       if (lockdata) {
                                         handleAutocompleteVendor(event, value, "vendor_vehicle");
@@ -2247,6 +2248,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     id="free-solo-duty"
                                     freeSolo
                                     sx={{ width: "100%" }}
+                                    disabled={!lockdata}
                                     onChange={(event, value) => {
                                       if (lockdata) {
                                         handleAutocompleteVendor(event, value, "vendor_duty")
@@ -2287,6 +2289,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                                       value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                                       format="DD/MM/YYYY"
+                                      disabled={!lockdata}
                                       // onChange={(date) => {
                                       onChange={(date) => {
                                         if (lockdata) {
@@ -2310,7 +2313,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <DatePicker
                                       label="CloseDate"
                                       id="vendorshedInDate"
-
+                                      disabled={!lockdata}
 
                                       // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
                                       value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
@@ -2354,6 +2357,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         type="time"
                                         name="venodrreporttime"
                                         value={vendorinfo?.vendorreporttime}
+                                        disabled={!lockdata}
                                         onChange={(event) => {
                                           if (lockdata) {
                                             setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
@@ -2378,6 +2382,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       type="time"
                                       name="vendorshedintime"
                                       value={vendorinfo?.vendorshedintime}
+                                      disabled={!lockdata}
                                       onChange={(event) => {
                                         if (lockdata) {
                                           setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
@@ -2411,6 +2416,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name="vendorshedoutkm"
                                     value={vendorinfo?.vendorshedoutkm || ""}
                                     onChange={handlevendorinfofata}
+                                    disabled={!lockdata}
                                     label="starting Kilometers"
                                     id="vendorshedoutkm"
                                     size="small"
@@ -2424,6 +2430,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     value={vendorinfo?.vendorshedinkm || ""}
                                     label="closing Kilometers"
                                     onChange={handlevendorinfofata}
+                                    disabled={!lockdata}
                                     id="vendorshedinkm"
                                     size="small"
                                     sx={{ my: 1, width: "100%" }}
@@ -2469,7 +2476,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <div className="input-g">
                                   <TextField
                                     name="Vendor_Calcpackage"
-                                    value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                    // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                    value={vendorinfo?.vendor_duty === "Transfer" || vendorinfo?.vendor_duty === "Outstation"  ?    vendorinfo?.vendor_duty : vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                    // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
                                     label="Package"
                                     id="Vendor_Calcpackage"
                                     size="small"
@@ -2660,7 +2669,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       </div>
                                       <TextField
                                         name="pack"
-                                        value={selectedCustomerData?.duty === "Transfer" ? "Transfer" : calcPackage || formData.calcPackage || ratepackage || ''}
+                                        // value={selectedCustomerData?.duty === "Transfer" ? "Transfer" : calcPackage || formData.calcPackage || ratepackage || ''}
+                                        value={selectedCustomerData?.duty === "Transfer" || selectedCustomerData?.duty === "Outstation" ? selectedCustomerData?.duty : calcPackage || formData.calcPackage || ratepackage || ''}
                                         label="Pack"
                                         id="pack"
                                         size="small"
@@ -3412,6 +3422,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             size="small"
                             id="free-solo-vendor_vehicle"
                             freeSolo
+
                             onChange={(event, value) => {
                               if (lockdata) {
                                 handleAutocompleteVendor(event, value, "vendor_vehicle");
@@ -3420,6 +3431,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 setWarningMessage("IS not locked,locked Enter Again");
                               }
                             }}
+                            
+                            disabled={!lockdata}
                             value={vendorinfo?.vendor_vehicle}
                             options={vehileNames?.map((option) => ({
                               label: option,
@@ -3436,6 +3449,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                             id="free-solo-duty"
                             freeSolo
                             sx={{ width: "100%" }}
+                            
+                            disabled={!lockdata}
                             onChange={(event, value) => {
                               if (lockdata) {
                                 handleAutocompleteVendor(event, value, "vendor_duty")
@@ -3472,6 +3487,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             <DatePicker
                               label="StartDate"
                               id="vendorshedOutDate"
+                              disabled={!lockdata}
                               // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                               value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                               format="DD/MM/YYYY"
@@ -3498,6 +3514,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             <DatePicker
                               label="CloseDate"
                               id="vendorshedInDate"
+                              disabled={!lockdata}
 
 
                               // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
@@ -3541,6 +3558,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               <input
                                 type="time"
                                 name="venodrreporttime"
+                                disabled={!lockdata}
                                 value={vendorinfo?.vendorreporttime}
                                 onChange={(event) => {
                                   if (lockdata) {
@@ -3565,6 +3583,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             <input
                               type="time"
                               name="vendorshedintime"
+                              disabled={!lockdata}
                               value={vendorinfo?.vendorshedintime}
                               onChange={(event) => {
                                 if (lockdata) {
@@ -3597,6 +3616,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <TextField
                             name="vendorshedoutkm"
                             value={vendorinfo?.vendorshedoutkm || ""}
+                            disabled={!lockdata}
                             onChange={handlevendorinfofata}
                             label="starting Kilometers"
                             id="vendorshedoutkm"
@@ -3609,6 +3629,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           <TextField
                             name="vendorshedinkm"
                             value={vendorinfo?.vendorshedinkm || ""}
+                            disabled={!lockdata}
                             label="closing Kilometers"
                             onChange={handlevendorinfofata}
                             id="vendorshedinkm"

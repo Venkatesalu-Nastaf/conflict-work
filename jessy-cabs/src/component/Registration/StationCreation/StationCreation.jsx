@@ -330,12 +330,12 @@ const StationCreation = () => {
                   </div>
 
 
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     size="small"
                     id="state-autocomplete"
                     freeSolo
-                    value={selectedState ||selectedCustomerData?.state || book.state || ""}
+                    value={selectedState || ""}
                     options={Object.keys(stateToStations)}
                     onChange={handleStateChange} 
                     renderInput={(params) => (
@@ -348,7 +348,20 @@ const StationCreation = () => {
                         autoComplete="new-password"
                       />
                     )}
-                  />
+                  /> */}
+                                        <TextField
+                          fullWidth
+                          size="small"
+                          id="state-textfield"
+                          value={selectedState || ""}
+                          onChange={handleStateChange}
+                          label="State"
+                          margin="normal"
+                          name="state"
+                          autoComplete="new-password"
+                          disabled={true}
+                      />
+
 
                 </div>
 

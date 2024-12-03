@@ -60,14 +60,14 @@ const LogDetails = () => {
       let valueFormatter = null;
   
       // Apply date formatting for specific fields
-      if (["Log_Date", "bookingdate", "startdate", "tripsheet_date", "shedInDate", "shedOutDate", "Reportdate","closedate"].includes(key)) {
+      if (["Log_Time", "Log_Date","bookingdate", "startdate", "tripsheet_date", "shedInDate", "shedOutDate", "Reportdate","closedate"].includes(key)) {
         valueFormatter = (params) => {
           return params.value ? dayjs(params.value).format('DD-MM-YYYY') : '';
         };
       }
   
       // Apply time formatting for specific time fields
-      if (["Log_Time", "bookingtime", "starttime", "Reporttime", "ShedOutTime",].includes(key)) {
+      if (["Log_Date","Log_Time", "bookingtime", "starttime", "Reporttime", "ShedOutTime",].includes(key)) {
         valueFormatter = (params) => {
           return params.value ? dayjs(params.value, 'HH:mm').format('HH:mm') : '';
         };

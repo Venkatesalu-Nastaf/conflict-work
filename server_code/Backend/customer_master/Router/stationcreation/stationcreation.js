@@ -56,11 +56,16 @@ router.delete('/stationcreation/:stationid', (req, res) => {
 // update  Station Creation details
 router.put('/stationcreation/:stationid', (req, res) => {
   const stationid = req.params.stationid;
+  console.log(stationid,'stationid');
+  
   const updatedCustomerData = req.body;
+  console.log(stationid,'stationid',updatedCustomerData);
 
   db.query('UPDATE stationcreation SET ? WHERE stationid = ?', [updatedCustomerData, stationid], (err, result) => {
     if (err) {
+      console.log(err,'error from station')
       return res.status(500).json({ error: "Failed to update data in MySQL" });
+
     }
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Customer not found" });

@@ -222,7 +222,7 @@ const useTripsheet = () => {
     const [attachedImage, setAttachedImage] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
 
-    const [isentertripID,setisenterTripid] = useState(false)
+    // const [isentertripID,setisenterTripid] = useState(false)
 
     const [routeData, setRouteData] = useState('');
     const [tripSheetData, setTripSheetData] = useState({
@@ -871,7 +871,7 @@ const useTripsheet = () => {
             setError(true);
             setErrorMessage("please enter the tripid");
         }
-        if(!isentertripID){
+        if(!isEditMode){
            
             return
         }
@@ -3291,7 +3291,7 @@ const useTripsheet = () => {
                             setDriverSMS(false)
                             setSuccess(true);
                             setSuccessMessage("Successfully listed");
-                            setisenterTripid(true)
+                            // setisenterTripid(true)
                             setIsEditMode(true);
                             setLockData(false)
                             setLockDatavendorBill(false)
@@ -4548,8 +4548,11 @@ const useTripsheet = () => {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = async () => {
-        if(!isentertripID){
-            return
+        // if(!isentertripID){
+        //     return
+        // }
+        if(!isEditMode){
+          return
         }
 
         setOpen(true);

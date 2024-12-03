@@ -1709,7 +1709,6 @@ export const states = [
       "Dindigul",
       "Erode",
       "Kanchipuram",
-      "Kanyakumari",
       "Karur",
       "Krishnagiri",
       "Madurai",

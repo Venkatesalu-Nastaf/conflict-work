@@ -49,6 +49,9 @@ const useCustomer = () => {
     const [cerendentialdata, setCredentialData] = useState()
     const [deletedialogbox, setDeletedDialog] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [selectedStation, setSelectedStation] = useState('');
+    const [selectedState, setSelectedState] = useState('');
+    const [btnloading, setbtnLoading] = useState(false)
     // const [cerendentialdataforstations,setCredentialDataforstations]=useState()
 
     //---------------------------------------
@@ -498,11 +501,13 @@ const useCustomer = () => {
 
   const handleAutocompleteChange = (event, newValue, name) => {
     const selectedOption = newValue ? newValue.label : "";
+    console.log(selectedOption,' function acll  111', newValue)
     setBook((prev) => ({
       ...prev,
       [name]: selectedOption,
       ...(name === "servicestation" && {
         state: newValue ? getStateByStation(selectedOption) : "",
+        
         
       }),
     }));
@@ -516,13 +521,18 @@ const useCustomer = () => {
   };
 
   const getStateByStation = (station) => {
+    console.log('function acll 222')
+    console.log(station ,'function acll 333')
     for (const [state, stations] of Object.entries(stateToStations)) {
       if (stations.includes(station)) {
+        setSelectedState(state)
         return state;
       }
     }
     return "";
   };
+  console.log(getStateByStation(),'function acll ------------',book);
+  
     const handleAutocompleteChangebilling = (event, newValue, name) => {
 
         setBook((prevBook) => ({
@@ -634,13 +644,18 @@ const useCustomer = () => {
     const handleRowClick = (params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
+         
+         console.log("Selected State after update:", customerData?.state || "Empty");
         // const datta = customerData.billingGroup.split(',')
         // if (datta.length >= 2) {
         //     setIsInputVisible(!isInputVisible);
         // }
         setSelectedCustomerId(params.row.customerId);
         getcustomerdata(customerData.customer)
+        setSelectedStation(customerData?.servicestation || "");
+         setSelectedState(customerData?.state || ""); 
         setIsEditMode(true);
+        console.log(customerData,'customer datatatat')
     }
     //search with date
     const handleSearch = async () => {
@@ -830,7 +845,9 @@ const useCustomer = () => {
         //   console.log(removeEmptyObjects(customerfieldSets),"ppp")
         const dataordereddata = removeEmptyObjects(customerfieldSets)
         console.log(dataordereddata, "datat")
+       
         try {
+            setbtnLoading(true)
             let datasets = [];
             if (dataordereddata.length > 0) {
                 console.log(dataordereddata, "enetrr")
@@ -853,10 +870,16 @@ const useCustomer = () => {
                 setSuccess(true);
                 setSuccessMessage(response.data.message);
                 setCredentialData()
+                setbtnLoading(false)
+                setSelectedCustomerId('');
+                getcustomerdata("")
+                setSelectedStation( "");
+                 setSelectedState("");
                 // setCredentialDataforstations()
             } else {
                 setError(true);
                 setErrorMessage(response.data.message);
+                setbtnLoading(false)
                 // }
             }
         }
@@ -871,58 +894,110 @@ const useCustomer = () => {
             if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
+                setbtnLoading(false)
                 // console.log('Network error');
             } else if (error.response) {
                 setError(true);
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+                setbtnLoading(false)
             } else {
                 // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
+                setbtnLoading(false)
             }
         }
     };
 
-    const handleEdit = async () => {
-        // const hasEmptyFields = customerfieldSets.some(fieldSet =>
-        //     !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
-        // );
-        // if (hasEmptyFields) {
-        //     setError(true);
-        //     setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
-        //     return;
-        // }
-        // if(cerendentialdataforstations === true){
-        //     setError(true);
-        //     setErrorMessage('RateType stations not registered ');
-        //     return;
-        // }
-        const { id, orderByEmail, orderedby, orderByMobileNo, customerId, ...restselectedcustomerdata } = selectedCustomerData
-        console.log(selectedCustomerData,'datacustomer of datas 111111')
-        const updatedCustomer = {
-            ...restselectedcustomerdata,
-            date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
-        };
-        const dataordereddata = removeEmptyObjects(customerfieldSets)
-        let datasets = [];
-        if (dataordereddata.length > 0) {
-            datasets = addCustomerToObjects(dataordereddata, selectedCustomerData?.customer || book.customer);
-        }
-        // const datasets = addCustomerToObjects(customerfieldSets, selectedCustomerData?.customer || book.customer);
-        await axios.put(`${apiUrl}/customers/${selectedCustomerData.customerId}`, updatedCustomer);
-        console.log(selectedCustomerData,'datacustomer of datas 22222')
-        if (datasets.length > 0) {
-            await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
+    // const handleEdit = async () => {
+    //     // const hasEmptyFields = customerfieldSets.some(fieldSet =>
+    //     //     !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
+    //     // );
+    //     // if (hasEmptyFields) {
+    //     //     setError(true);
+    //     //     setErrorMessage('Fill mantatory orderedBy,orderByEmail,orderByMobileNo .');
+    //     //     return;
+    //     // }
+    //     // if(cerendentialdataforstations === true){
+    //     //     setError(true);
+    //     //     setErrorMessage('RateType stations not registered ');
+    //     //     return;
+    //     // }
+    //     const { id, orderByEmail, orderedby, orderByMobileNo, customerId, ...restselectedcustomerdata } = selectedCustomerData
+    //     const updatedCustomer = {
+    //         ...restselectedcustomerdata,
+    //         date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
+    //     };
+    //     const dataordereddata = removeEmptyObjects(customerfieldSets)
+    //     let datasets = [];
+    //     if (dataordereddata.length > 0) {
+    //         datasets = addCustomerToObjects(dataordereddata, selectedCustomerData?.customer || book.customer);
+    //     }
+    //     // const datasets = addCustomerToObjects(customerfieldSets, selectedCustomerData?.customer || book.customer);
+    //     await axios.put(`${apiUrl}/customers/${selectedCustomerData.customerId}`, updatedCustomer);
 
-            console.log(selectedCustomerData,'datacustomer of datas333333333333333')
+    //     if (datasets.length > 0) {
+    //         await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
+
+    //     }
+    //     // setIsInputVisible(!isInputVisible);
+    //     setTriggerCustomerAdd(prev => !prev);
+    //     handleCancel();
+    //     setRows([]);
+    //     handleList();
+    // };
+
+
+    const handleEdit = async () => {
+
+        try {
+            setbtnLoading(true)
+            const { id, orderByEmail, orderedby, orderByMobileNo, customerId, ...restselectedcustomerdata } = selectedCustomerData;
+            const updatedCustomer = {
+                ...restselectedcustomerdata,
+                date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
+            };
+            const dataordereddata = removeEmptyObjects(customerfieldSets);
+            let datasets = [];
+            if (dataordereddata.length > 0) {
+                datasets = addCustomerToObjects(dataordereddata, selectedCustomerData?.customer || book.customer);
+            }
+            await axios.put(`${apiUrl}/customers/${selectedCustomerData.customerId}`, updatedCustomer);
+    
+            if (datasets.length > 0) {
+                await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
+            }
+    
+            setTriggerCustomerAdd(prev => !prev);
+            handleCancel();
+            setbtnLoading(false)
+            setSuccess(true);
+            setSuccessMessage("Edited Sucessfully");
+            setRows([]);
+            setSelectedCustomerId('');
+                getcustomerdata("")
+                setSelectedStation( "");
+                 setSelectedState("");
+            handleList();
+        } catch (error) {
+            if (error.message) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+                setbtnLoading(false)
+            } else if (error.response) {
+                setError(true);
+                setErrorMessage("Failed to Edit Customer: " + (error.response.data.message || error.message));
+                setbtnLoading(false)
+            } else {
+                setError(true);
+                setErrorMessage("An unexpected error occurred: " + error.message);
+                setbtnLoading(false)
+            }
         }
-        // setIsInputVisible(!isInputVisible);
-        setTriggerCustomerAdd(prev => !prev);
-        handleCancel();
-        setRows([]);
-        handleList();
     };
+    
+
     const deletedatecustomerorder = async (id) => {
         try {
             await axios.delete(`${apiUrl}/deletecustomerorderdatasdata/${id}`);
@@ -1071,7 +1146,9 @@ const useCustomer = () => {
         customerfieldSets, setBook, deletedialogbox, setDeletedDialog,loading,
         // handleAutocompleteChangestations,
         setInfo, setInfoMessage,
-        handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
+        handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove,
+         customerratetype, handleChangeuniquecustomer, cerendentialdata, selectedStation, setSelectedStation, selectedState, setSelectedState,
+         btnloading, setbtnLoading
     };
 };
 

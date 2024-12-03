@@ -381,10 +381,12 @@ const handleStationChange = async (event, value) => {
     }
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
+        setSelectedStation(customerData?.Stationname || "");
+        setSelectedState(customerData?.state || ""); 
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+     
         setIsEditMode(true);
-        console.log(customerData, "Customer data")
     }, []);
 
     // const handleAdd = async () => {
@@ -497,43 +499,80 @@ const handleStationChange = async (event, value) => {
     
 
 
+    // const handleEdit = async () => {
+        
+    //     try {
+    //         // const selectedCustomer = rows.find((row) => row.stationid === stationid);
+    //         // console.log(selectedCustomer,"slecu")
+    //         // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+    //         const {id,...restdata} = selectedCustomerData
+    //         // const updatedCustomer = {...restdata};
+    //         console.log(restdata,"rest")
+    //         console.log('editstation',selectedCustomerData?.stationid);
+            
+
+    //         await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`,restdata);
+    //         setSuccess(true);
+    //         setSuccessMessage("Successfully updated");
+    //         setstationUpdate(true);
+    //         setSelectedState(''); // Clear the selected state
+    //         setSelectedStation('');
+    //         setSelectedCustomerData({});
+    //         handleCancel();
+
+    //     }
+    //     //  catch {
+    //     //     setError(true);
+    //     //     setErrorMessage("Failed to Edit StationS");
+    //     // }
+    //     catch (error) {
+    //         // console.error("Error occurredddddd:", error);
+
+    //         // Check if there's no response, indicating a network error
+    //         if (error.message) {
+    //             setError(true);
+    //             setErrorMessage("Check your Network Connection");
+    //             // console.log('Network error');
+    //         } else if (error.response) {
+    //             setError(true);
+    //             // Handle other Axios errors (like 4xx or 5xx responses)
+    //             setErrorMessage("Failed to Edit Stations: " + (error.response.data.message || error.message));
+    //         } else {
+    //             // Fallback for other errors
+    //             setError(true);
+    //             setErrorMessage("An unexpected error occurred: " + error.message);
+    //         }
+    //     }
+    // };
+    // console.log(selectedCustomerData?.state, 'mainbranchstate===',selectedCustomerData);
+
     const handleEdit = async () => {
         try {
-            // const selectedCustomer = rows.find((row) => row.stationid === stationid);
-            // console.log(selectedCustomer,"slecu")
-            // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            const updatedCustomer = { ...selectedCustomerData };
-
-            await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`, updatedCustomer);
+            const { id, ...restdata } = selectedCustomerData;
+            await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`, restdata);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
+            setstationUpdate(true);
+            setSelectedState('');
+            setSelectedStation('');
+            setSelectedCustomerData({});
+            setError(false);
+            setErrorMessage('');
             handleCancel();
-
-        }
-        //  catch {
-        //     setError(true);
-        //     setErrorMessage("Failed to Edit StationS");
-        // }
-        catch (error) {
-            // console.error("Error occurredddddd:", error);
-
-            // Check if there's no response, indicating a network error
+        } catch (error) {
             if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
-                // console.log('Network error');
             } else if (error.response) {
                 setError(true);
-                // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Edit Stations: " + (error.response.data.message || error.message));
             } else {
-                // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
             }
         }
     };
-    // console.log(selectedCustomerData?.state, 'mainbranchstate===',selectedCustomerData);
+    
 
     // get particular statedetails 
     useEffect(() => {
@@ -596,6 +635,7 @@ const handleStationChange = async (event, value) => {
                     if (stationUpdate) {
                         localStorage.setItem("stationValue", "stationupadted");
                         console.log("Station updated and value set in localStorage.");
+                        
                       }
                     
 

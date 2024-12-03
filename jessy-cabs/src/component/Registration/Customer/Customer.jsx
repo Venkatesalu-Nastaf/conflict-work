@@ -48,6 +48,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { FaHashtag } from "react-icons/fa";
 import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -103,7 +104,8 @@ const Customer = ({ stationName }) => {
     customerfieldSets,
     handleChangecustomer, deletedialogbox, setDeletedDialog,
      setInfo, setInfoMessage,loading,
-    handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
+    handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer, 
+    cerendentialdata ,selectedStation, setSelectedStation, selectedState, setSelectedState,handleStationChange,btnloading, setbtnLoading
   } = useCustomer();
 
   useEffect(() => {
@@ -482,19 +484,37 @@ const Customer = ({ stationName }) => {
                     }
                   /> */}
                   
-                   <Autocomplete
+                   {/* <Autocomplete
         fullWidth
         size="small"
         id="servicestation"
         freeSolo
         onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
-        value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
+        value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || selectedStation ||''}
         options={allStations.map((Stationname) => ({ label: Stationname }))}
         getOptionLabel={(option) => option.label || selectedCustomerData.servicestation || book.servicestation || ''}
         renderInput={(params) => (
           <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
         )}
-      />
+      /> */}
+      <Autocomplete
+  fullWidth
+  size="small"
+  id="servicestation"
+  freeSolo
+  onChange={(event, value) => {
+    handleAutocompleteChange(event, value, "servicestation");
+    if (!value) {
+      setSelectedState(''); // Clear selectedState if servicestation is empty
+    }
+  }}
+  value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || selectedStation || ''}
+  options={allStations.map((Stationname) => ({ label: Stationname }))}
+  getOptionLabel={(option) => option.label || selectedCustomerData.servicestation || book.servicestation || ''}
+  renderInput={(params) => (
+    <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
+  )}
+/>
                 </div>
                 <div className="input">
                   <div className='icone'>
@@ -558,18 +578,55 @@ const Customer = ({ stationName }) => {
                     }
                     }
                   /> */}
-                  <Autocomplete
+                  {/* <Autocomplete
         fullWidth
         size="small"
         id="free-solo-demo-state"
         freeSolo
         onChange={(event, value) => handleAutocompleteChange(event, value, "state")}
-        value={ book.state || selectedCustomerData?.state || ''}
+        value={ book.state || selectedState || ''}
         options={Object.keys(stateToStations).map((state) => ({ label: state }))}
         renderInput={(params) => ( 
           <TextField {...params} label="State" name="state" inputRef={params.inputRef}/>
         )}
-      />
+      /> */}
+      {/* <Autocomplete
+    fullWidth
+    size="small"
+    id="free-solo-demo-state"
+    freeSolo
+    value={selectedState ||book.state || ""}  // Make sure selectedState is used here
+    onChange={(event, value) => handleAutocompleteChange(event, value, "state")}
+    options={Object.keys(stateToStations)}  // List of available states
+    renderInput={(params) => (
+        <TextField {...params} label="State" name="state" inputRef={params.inputRef} />
+    )}
+/> */}
+{/* <TextField
+    fullWidth
+    size="small"
+    id="state-input"
+    value={selectedState || book.state || ""}
+    onChange={(event) => handleAutocompleteChange(event, event.target.value, "state")}
+    label="State"
+    name="state"
+    disabled
+/> */}
+<TextField
+  fullWidth
+  size="small"
+  id="state-input"
+  value={selectedState || book.state || ""}
+  onChange={(event) => handleAutocompleteChange(event, event.target.value, "state")}
+  label="State"
+  name="state"
+  disabled
+/>
+
+
+
+
+
                 </div>
                 <div className="input">
                   <div className='icone'>
@@ -700,16 +757,25 @@ const Customer = ({ stationName }) => {
 
                 <div className="input">
                   {isEditMode ? (
-                    <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
+                    // <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
+                    <LoadingButton loading={btnloading} variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</LoadingButton>
                   ) : (
-                    <Button
-                      variant="contained"
-                      disabled={!Customer_new}
-                      onClick={handleAdd}
-                      style={{ marginRight: "100px" }}
-                    >
-                      Add
-                    </Button>
+                    // <Button
+                    //   variant="contained"
+                    //   disabled={!Customer_new}
+                    //   onClick={handleAdd}
+                    //   style={{ marginRight: "100px" }}
+                    // >
+                    //   Add
+                    // </Button>
+                    <LoadingButton loading={btnloading}
+                    variant="contained"
+                    disabled={!Customer_new}
+                    onClick={handleAdd}
+                    style={{ marginRight: "100px" }}
+                  >
+                    Add
+                  </LoadingButton>
                   )}
                 </div>
               </div>

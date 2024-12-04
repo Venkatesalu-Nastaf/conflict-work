@@ -66,7 +66,6 @@ import Agreement from "./component/Info/AgreementMain/Agreement/Agreement";
 import AgreementMain from "./component/Info/AgreementMain/AgreementMain";
 
 
-
 function App() {
   const apiUrl = APIURL;
   const [isLoading, setIsLoading] = useState(true);
@@ -175,7 +174,7 @@ function App() {
   const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read
 
 
-
+  const { orgName, logo, setLogo, setLogoTrigger, logotrigger,isstationtrigger } = useData() 
   //--------   fetch station name ------------------------------------------------------------
 
 
@@ -195,7 +194,7 @@ function App() {
 
 
   useEffect(() => {
-    const auth = localStorage.getItem("auth") === 'true';
+    const auth = localStorage.getItem("auth");
     if (auth === null || auth === undefined) {
       setIsLoading(false)
       navigate('/', { replace: true });
@@ -275,12 +274,14 @@ function App() {
         const response = await axios.get(`${apiUrl}/getStation-name`, { params: { username: loginUserName } })
         const resData = response.data;
         setStationName(resData);
+        // localStorage.removeItem("stationValue");
       } catch (error) {
         console.log("error occur ", error);
       }
     }
     fetchSattionName();
-  }, [apiUrl, loginUserName,stationvalue])
+  
+  }, [apiUrl, loginUserName,stationvalue,isstationtrigger])
 
 // console.log(permissions,'permissinon datas come')
 //     const auth = localStorage.getItem("auth") === 'true';
@@ -344,7 +345,7 @@ function App() {
 
   //--------------------------------------------------------
   //fetch org logo
-  const { orgName, logo, setLogo, setLogoTrigger, logotrigger } = useData() // its for logo
+ // its for logo
 
   const ref = useRef(false)
   const organizationname = orgName || localStorage.getItem('usercompany');

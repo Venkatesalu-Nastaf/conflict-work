@@ -12,6 +12,7 @@ export const DataProvider2 = ({ children }) => {
     const [logotrigger, setLogoTrigger] = useState(false) //for logo trigger 
     const [logo, setLogo] = useState("")
     const [orgName, setOrgName] = useState('')
+    const [isstationtrigger,setisStationtrigger] = useState(null)
 
 
     // const fetchOrgLogo = async () => {
@@ -38,7 +39,7 @@ export const DataProvider2 = ({ children }) => {
     //-------------------
 
     return (
-        <DataContext.Provider value={{ logotrigger, setLogoTrigger, logo, setLogo, orgName, setOrgName }}>
+        <DataContext.Provider value={{ logotrigger, setLogoTrigger, logo, setLogo, orgName, setOrgName,isstationtrigger,setisStationtrigger }}>
             {children}
         </DataContext.Provider>
     );

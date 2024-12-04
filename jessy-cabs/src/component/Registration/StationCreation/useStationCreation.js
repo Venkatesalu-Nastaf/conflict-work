@@ -4,6 +4,7 @@ import axios from 'axios';
 import { APIURL } from "../../url";
 import dayjs from 'dayjs';
 import { stateToStations,allStations } from "../Customer/Customerdata";
+import { useData } from '../../Dashboard/MainDash/Sildebar/DataContext2';
 
 const useStationCreation = () => {
     const apiUrl = APIURL;
@@ -23,13 +24,14 @@ const useStationCreation = () => {
     const [loading, setLoading] = useState(false)
     // const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
-    const [cerendentialdata, setCredentialData] = useState()
+    const [cerendentialdata, setCredentialData] = useState(false)
 
     const [selectedStation, setSelectedStation] = useState('');
     const [selectedState, setSelectedState] = useState('');
     const [stationUpdate,setstationUpdate] = useState(false)
     const [isDisabled,setisDisabled] = useState(false)
 
+    const {isstationtrigger,setisStationtrigger} = useData()
     //-----------------popup---------------------
 
     const hidePopup = () => {
@@ -400,8 +402,7 @@ const handleStationChange = async (event, value) => {
             ...prevBook,
             Stationname:station,
             State:foundState,
-            // address:book.address,
-            // gstno: book.gstno,
+            
         }))
 
         try {
@@ -415,7 +416,7 @@ const handleStationChange = async (event, value) => {
             if (matchingStateData) {
                 const hasDetails = matchingStateData.address && matchingStateData.gstno;
                 console.log('Setting isDisabled to:', hasDetails);
-                setisDisabled(hasDetails);
+                setisDisabled(true);
                 
             } else {
                 setisDisabled(false);
@@ -428,7 +429,8 @@ const handleStationChange = async (event, value) => {
         setBook(prevBook => ({
             ...prevBook,
             Stationname: station,
-            state: ''
+            state: '',
+            address:book.address
         }));
         setSelectedStation('');
         setSelectedState('');
@@ -462,7 +464,9 @@ const handleStationChange = async (event, value) => {
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
      
-        setIsEditMode(true);
+        setIsEditMode(true)
+        
+        
     }, []);
 
     // const handleAdd = async () => {
@@ -554,9 +558,10 @@ const handleStationChange = async (event, value) => {
             setSelectedStation('');
             setSelectedCustomerData({});
             setIsEditMode(false);
-            setRows([]); // Optionally clear rows if needed
+            setRows([]); 
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            setCredentialData(false)
             setstationUpdate(true);
             uniquestation(Stationname)
         } catch (error) {
@@ -628,9 +633,12 @@ const handleStationChange = async (event, value) => {
             console.log(selectedCustomerData,'customer datas',restdata)
             await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`, restdata);
             console.log(selectedCustomerData,'customer datas2',restdata)
+            setisStationtrigger(!isstationtrigger)
             setSuccess(true);
             setSuccessMessage("Successfully updated");
+            setCredentialData(false)
             setstationUpdate(true);
+            setRows([]); 
             setSelectedState('');
             setSelectedStation('');
             setSelectedCustomerData({});
@@ -641,9 +649,11 @@ const handleStationChange = async (event, value) => {
             if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
+                setCredentialData(false)
             } else if (error.response) {
                 setError(true);
                 setErrorMessage("Failed to Edit Stations: " + (error.response.data.message || error.message));
+                setCredentialData(false)
             } else {
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
@@ -710,6 +720,7 @@ const handleStationChange = async (event, value) => {
                     }));
                     setRows(rowsWithUniqueId);
                     setLoading(false);
+                    setCredentialData(false)
                     if (stationUpdate) {
                         localStorage.setItem("stationValue", "stationupadted");
                         console.log("Station updated and value set in localStorage.");
@@ -737,7 +748,8 @@ const handleStationChange = async (event, value) => {
         };
 
         handleList();
-    }, [apiUrl,stationUpdate]);
+    }, [apiUrl,stationUpdate,isstationtrigger]);
+    
 
     // useEffect(() => {
     //     const handlelist = async () => {
@@ -790,6 +802,9 @@ const handleStationChange = async (event, value) => {
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
                 setRows([]);
+                setSelectedState('');
+                setSelectedStation('');
+                setstationUpdate(true);
 
             }
 
@@ -836,7 +851,7 @@ const handleStationChange = async (event, value) => {
         setLoading,
         getStateFromStation,
         handleStationChange,
-        selectedStation, setSelectedStation,selectedState, setSelectedState,isDisabled,setisDisabled
+        selectedStation, setSelectedStation,selectedState, setSelectedState,isDisabled,setisDisabled,cerendentialdata, setCredentialData
     };
 };
 

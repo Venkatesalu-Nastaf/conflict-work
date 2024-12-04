@@ -86,7 +86,7 @@ const StationCreation = () => {
     loading,
     setLoading,
     getStateFromStation,
-    handleStationChange, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStateChange, isDisabled, setisDisabled
+    handleStationChange, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStateChange, isDisabled, setisDisabled,
   } = useStationCreation();
 
   useEffect(() => {
@@ -389,7 +389,8 @@ const StationCreation = () => {
                       className='textarea-input'
                       name="address"
                       rows="3"
-                      disabled={getMainBrachDetails.length > 0 || isDisabled}
+                      // disabled={getMainBrachDetails.length > 0 || isDisabled}
+                      disabled={(getMainBrachDetails.length > 0 || isDisabled) && !isEditMode}
                       value={selectedCustomerData?.address || book.address}
                       onChange={handleChange}
                       placeholder="Address"
@@ -403,11 +404,16 @@ const StationCreation = () => {
                       }}
                     />
                   </div>
-                  {isDisabled && (
+                  {/* {isDisabled &&   (
                     <span style={{ color: 'red', fontSize: '12px', textAlign: 'left', marginLeft: '32px' }}>
                       Already registered
                     </span>
-                  )}
+                  )} */}
+                  {isDisabled && !isEditMode && (
+  <span style={{ color: 'red', fontSize: '12px', textAlign: 'left', marginLeft: '32px' }}>
+    Already registered
+  </span>
+)}
                 </div>
 
 
@@ -439,18 +445,24 @@ const StationCreation = () => {
                       id="gstno"
                       label="GST No"
                       name="gstno"
-                      disabled={getMainBrachDetails.length > 0 || isDisabled}
+                      // disabled={getMainBrachDetails.length > 0 || isDisabled}
+                      disabled={(getMainBrachDetails.length > 0 || isDisabled) && !isEditMode}
                       value={selectedCustomerData?.gstno || book.gstno}
                       autoComplete="new-password"
                       onChange={handleChange}
                       style={{ flex: 1 }}
                     />
                   </div>
-                  {isDisabled && (
+                  {/* {isDisabled && (
                     <span style={{ color: 'red', fontSize: '12px', textAlign: 'left', marginLeft: '32px' }}>
                       Already registered
                     </span>
-                  )}
+                  )} */}
+                   {isDisabled && !isEditMode && (
+  <span style={{ color: 'red', fontSize: '12px', textAlign: 'left', marginLeft: '32px' }}>
+    Already registered
+  </span>
+)}
                 </div>
 
                 <div className="input radio input-station-creaton">

@@ -294,19 +294,93 @@ const useStationCreation = () => {
 //     }
 // };
 
+// const handleStationChange = async (event, value) => {
+
+//     console.log('onChange event:', event);
+//     console.log('Selected value:', value);
+//     const station = value ? value.label : '';
+//     setSelectedStation(station);
+
+//     // If the input field is empty, reset states and enable the field
+//     if (!station) {
+//         setSelectedState('');
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: '',
+//             state: ''
+//         }));
+//         setisDisabled(false); // Enable the field when the input is empty
+//         return;
+//     }
+
+//     const foundState = Object.keys(stateToStations).find(state => 
+//         stateToStations[state].includes(station)
+//     );
+
+//     if (foundState) {
+//         setSelectedState(foundState);
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: foundState
+//         }));
+
+//         try {
+//             // Call the API to check if the state already has address and GST number
+//             const response = await axios.get(`${apiUrl}/stationcreation`);
+//             const stateData = response.data; // Assuming response data is an array of station details
+        
+//             // Find the matching state details based on the selected state
+//             const matchingStateData = stateData.find(
+//                 data => data.state === foundState
+//             );
+        
+//             if (matchingStateData) {
+//                 if (matchingStateData.address && matchingStateData.gstno) {
+//                     console.log('State has address and GST number:', matchingStateData);
+//                     setisDisabled(true); // Disable the field if address and GST exist
+//                 } else {
+//                     console.log('No address and GST found for the state:', matchingStateData.state);
+//                     setisDisabled(false); // Enable the field if no address or GST exists
+//                 }
+//             } else {
+//                 console.log('No data found for the selected state.');
+//                 setisDisabled(false); // Enable the field if no matching state data is found
+//             }
+//         } catch (error) {
+//             console.error('Error fetching data from API:', error);
+//         }
+
+//     } else {
+//         setSelectedState('');
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: ''
+//         }));
+//         setSelectedStation('');
+//         setSelectedState('');
+//         setisDisabled(false); // Enable the field if no state is found
+//     }
+// };
+
 const handleStationChange = async (event, value) => {
+ 
     const station = value ? value.label : '';
     setSelectedStation(station);
+   
 
-    // If the input field is empty, reset states and enable the field
     if (!station) {
+
         setSelectedState('');
         setBook(prevBook => ({
             ...prevBook,
             Stationname: '',
-            state: ''
+            state: '',
+            address:'',
+            gstno:''
         }));
-        setisDisabled(false); // Enable the field when the input is empty
+        setisDisabled(false);
         return;
     }
 
@@ -319,35 +393,36 @@ const handleStationChange = async (event, value) => {
         setBook(prevBook => ({
             ...prevBook,
             Stationname: station,
-            state: foundState
+            state: foundState,
+            
         }));
+        setSelectedCustomerData(prevBook =>({
+            ...prevBook,
+            Stationname:station,
+            State:foundState,
+            // address:book.address,
+            // gstno: book.gstno,
+        }))
 
         try {
-            // Call the API to check if the state already has address and GST number
             const response = await axios.get(`${apiUrl}/stationcreation`);
-            const stateData = response.data; // Assuming response data is an array of station details
-        
-            // Find the matching state details based on the selected state
+            const stateData = response.data;
+
             const matchingStateData = stateData.find(
                 data => data.state === foundState
             );
-        
+
             if (matchingStateData) {
-                if (matchingStateData.address && matchingStateData.gstno) {
-                    console.log('State has address and GST number:', matchingStateData);
-                    setisDisabled(true); // Disable the field if address and GST exist
-                } else {
-                    console.log('No address and GST found for the state:', matchingStateData.state);
-                    setisDisabled(false); // Enable the field if no address or GST exists
-                }
+                const hasDetails = matchingStateData.address && matchingStateData.gstno;
+                console.log('Setting isDisabled to:', hasDetails);
+                setisDisabled(hasDetails);
+                
             } else {
-                console.log('No data found for the selected state.');
-                setisDisabled(false); // Enable the field if no matching state data is found
+                setisDisabled(false);
             }
         } catch (error) {
             console.error('Error fetching data from API:', error);
         }
-
     } else {
         setSelectedState('');
         setBook(prevBook => ({
@@ -357,9 +432,10 @@ const handleStationChange = async (event, value) => {
         }));
         setSelectedStation('');
         setSelectedState('');
-        setisDisabled(false); // Enable the field if no state is found
+        setisDisabled(false);
     }
 };
+
 
 
  
@@ -549,7 +625,9 @@ const handleStationChange = async (event, value) => {
     const handleEdit = async () => {
         try {
             const { id, ...restdata } = selectedCustomerData;
+            console.log(selectedCustomerData,'customer datas',restdata)
             await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`, restdata);
+            console.log(selectedCustomerData,'customer datas2',restdata)
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             setstationUpdate(true);

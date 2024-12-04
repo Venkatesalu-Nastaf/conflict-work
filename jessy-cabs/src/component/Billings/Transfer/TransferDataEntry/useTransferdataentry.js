@@ -322,12 +322,12 @@ const useTransferdataentry = () => {
         setInvoiceno(updatedFormData.Invoice_no);
         setGroupId(updatedFormData.Groupid);
         setCustomer(updatedFormData.Organization_name);
-        setFromDate(updatedFormData.FromDate);
+        setFromDate(updatedFormData.FromDate || dayjs());
         setEndDate(updatedFormData.EndDate);
         setBillingdate(updatedFormData.Billdate);
         setServiceStation(updatedFormData.Stations);
         setTotalValue(parseInt(updatedFormData.Amount));
-        setBillingPage(updatedFormData?.billingsheet)
+        setBillingPage(updatedFormData?.billingsheet)        
         return () => {
             // setFormData({}); // Reset formData state to an empty object
         };
@@ -346,6 +346,7 @@ const useTransferdataentry = () => {
             setBook('')
             setSelectedCustomerDatas('');
             setServiceStation('');
+            setFromDate(dayjs())
             // setFormData({});
             setRows([])
             setRowSelectionModel([])
@@ -1075,7 +1076,6 @@ const useTransferdataentry = () => {
         setRows(updatedRows);
         setSelectedRow([]);
     };
-    console.log(dayjs('2024-11-23T10:4').format('DD/MM/YYYY'), '-----------------------');
 
     // const handleKeyenter = useCallback(async (event) => {
 
@@ -2010,10 +2010,10 @@ const useTransferdataentry = () => {
                     console.log(response.data, "repondedata", transferTripId)
                     setMatchTripID(transferTripId)
 
-                    const fromDate = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
+                    const fromDate1 = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
                     const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
 
-                    setFromDate(fromDate);
+                    setFromDate(fromDate1);                    
                     setToDate(toDate);
 
                     setCustomer(response.data[0].Organization_name);

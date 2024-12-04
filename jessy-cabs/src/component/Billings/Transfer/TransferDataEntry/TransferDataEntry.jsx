@@ -101,7 +101,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
   //   console.log(servicestation ,"stst",selectedCustomerDatas.station,"stationnsnsnnnns")
   //   console.log(ddd,"sttenary",groupstation)
 
-const invoiceNoCheck = invoiceno==="" || invoiceno===null || invoiceno===undefined
+  const invoiceNoCheck = invoiceno === "" || invoiceno === null || invoiceno === undefined
 
   return (
     <div className="TransferDataEntry-form main-content-form Scroll-Style-hide">
@@ -212,11 +212,11 @@ const invoiceNoCheck = invoiceno==="" || invoiceno===null || invoiceno===undefin
                               ? dayjs(fromDate || selectedCustomerDatas?.fromdate)
                               : fromDate || formDataTransfer?.FromDate
                                 ? dayjs(formDataTransfer?.FromDate)
-                                : dayjs() // Set today's date if no value is available
+                                : ""
                           }
                           format="DD/MM/YYYY"
                           onChange={(date) => {
-                            handleDateChange(date, 'fromdate');
+                            // handleDateChange(date, 'fromdate');
                             const formattedDate = dayjs(date).format('YYYY-MM-DD');
                             setFromDate(formattedDate);
                           }}
@@ -511,10 +511,10 @@ const invoiceNoCheck = invoiceno==="" || invoiceno===null || invoiceno===undefin
                     backgroundColor: invoiceNoCheck ? 'red !important' : 'green !important', // Prevent lighter selected row color
 
                     '&:hover': {
-                      backgroundColor: invoiceNoCheck  ? 'darkred' : 'darkgreen', // Same hover effect for selected row
+                      backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Same hover effect for selected row
                     },
                   },
-       }}
+                }}
               />
             </Box>
 

@@ -805,6 +805,7 @@ const handleStationChange = async (event, value) => {
                 setSelectedState('');
                 setSelectedStation('');
                 setstationUpdate(true);
+                setisStationtrigger(!isstationtrigger)
 
             }
 
@@ -822,7 +823,7 @@ const handleStationChange = async (event, value) => {
         if (actionName === 'List') {
             handleClick(null, 'List');
         }
-    });
+    },[isstationtrigger]);
 
     return {
         selectedCustomerData,

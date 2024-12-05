@@ -408,8 +408,8 @@ const useRatype = () => {
             });
         });
     
-        console.log(rows, 'datas of pdf ratype');
-        console.log(header.length, "len");
+        // console.log(rows, 'datas of pdf ratype');
+        // console.log(header.length, "len");
     
         let fontdata = 1;
         if (header.length <= 13) {
@@ -637,10 +637,10 @@ const useRatype = () => {
             return;
         }
         try {
-            console.log(book.starttime,book.closetime)
+            // console.log(book.starttime,book.closetime)
             const starttime=book.starttime || selectedCustomerData.starttime||dayjs();
            const  closetime=  book.closetime || selectedCustomerData.closetime|| dayjs();
-           console.log(starttime,"start",closetime,"clos")
+        //    console.log(starttime,"start",closetime,"clos")
             const updatedBook = {
                 // stations: book.stations || selectedCustomerData.stations,
                 ratetype:book.ratetype || selectedCustomerData.ratetype,

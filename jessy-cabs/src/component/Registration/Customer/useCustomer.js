@@ -395,7 +395,7 @@ const useCustomer = () => {
         rateType: '',
         opBalance: '',
         underGroup: '',
-        gstTax: '',
+        gstTax: '0',
         acType: '',
         entity: '',
         selectOption: '',
@@ -501,7 +501,7 @@ const useCustomer = () => {
 
   const handleAutocompleteChange = (event, newValue, name) => {
     const selectedOption = newValue ? newValue.label : "";
-    console.log(selectedOption,' function acll  111', newValue)
+    // console.log(selectedOption,' function acll  111', newValue)
     setBook((prev) => ({
       ...prev,
       [name]: selectedOption,
@@ -521,8 +521,8 @@ const useCustomer = () => {
   };
 
   const getStateByStation = (station) => {
-    console.log('function acll 222')
-    console.log(station ,'function acll 333')
+    // console.log('function acll 222')
+    // console.log(station ,'function acll 333')
     for (const [state, stations] of Object.entries(stateToStations)) {
       if (stations.includes(station)) {
         setSelectedState(state)
@@ -531,7 +531,7 @@ const useCustomer = () => {
     }
     return "";
   };
-  console.log(getStateByStation(),'function acll ------------',book);
+//   console.log(getStateByStation(),'function acll ------------',book);
   
     const handleAutocompleteChangebilling = (event, newValue, name) => {
 
@@ -572,7 +572,7 @@ const useCustomer = () => {
             opBalance: '',
             // phoneno: '',
             underGroup: '',
-            gstTax: '',
+            gstTax:'0',
             acType: '',
             selectOption: '',
             // active: '',
@@ -596,6 +596,10 @@ const useCustomer = () => {
         // setIsInputVisible(!isInputVisible)
         setSelectedCustomerData({});
         setIsEditMode(false);
+        setSelectedCustomerId('');
+        // getcustomerdata("")
+        setSelectedStation( "");
+         setSelectedState("");
     };
     const getcustomerdata = async (customerdata) => {
         const datacustomer = customerdata
@@ -645,7 +649,7 @@ const useCustomer = () => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
          
-         console.log("Selected State after update:", customerData?.state || "Empty");
+        //  console.log("Selected State after update:", customerData?.state || "Empty");
         // const datta = customerData.billingGroup.split(',')
         // if (datta.length >= 2) {
         //     setIsInputVisible(!isInputVisible);
@@ -844,20 +848,20 @@ const useCustomer = () => {
 
         //   console.log(removeEmptyObjects(customerfieldSets),"ppp")
         const dataordereddata = removeEmptyObjects(customerfieldSets)
-        console.log(dataordereddata, "datat")
+        // console.log(dataordereddata, "datat")
        
         try {
             setbtnLoading(true)
             let datasets = [];
             if (dataordereddata.length > 0) {
-                console.log(dataordereddata, "enetrr")
+                // console.log(dataordereddata, "enetrr")
 
                 datasets = addCustomerToObjects(dataordereddata, book.customer);
             }
 
 
-            console.log(book, "booked",)
-            console.log(datasets, "ppppp")
+            // console.log(book, "booked",)
+            // console.log(datasets, "ppppp")
             const response = await axios.post(`${apiUrl}/customers`, book);
             if (response.data.success) {
                 if (datasets.length > 0) {
@@ -871,10 +875,10 @@ const useCustomer = () => {
                 setSuccessMessage(response.data.message);
                 setCredentialData()
                 setbtnLoading(false)
-                setSelectedCustomerId('');
-                getcustomerdata("")
-                setSelectedStation( "");
-                 setSelectedState("");
+                // setSelectedCustomerId('');
+                // getcustomerdata("")
+                // setSelectedStation( "");
+                //  setSelectedState("");
                 // setCredentialDataforstations()
             } else {
                 setError(true);
@@ -888,7 +892,8 @@ const useCustomer = () => {
         //     setErrorMessage("Check your Network Connection");
         // }
         catch (error) {
-            // console.error("Error occurredddddd:", error);
+            console.error("Error occurredddddd:", error);
+
 
             // Check if there's no response, indicating a network error
             if (error.message) {
@@ -974,12 +979,14 @@ const useCustomer = () => {
             setbtnLoading(false)
             setSuccess(true);
             setSuccessMessage("Edited Sucessfully");
-            setRows([]);
-            setSelectedCustomerId('');
-                getcustomerdata("")
-                setSelectedStation( "");
-                 setSelectedState("");
             handleList();
+            // setRows([]);
+            
+            // setSelectedCustomerId('');
+                // getcustomerdata("")
+                // setSelectedStation( "");
+                //  setSelectedState("");
+            // handleList();
         } catch (error) {
             if (error.message) {
                 setError(true);

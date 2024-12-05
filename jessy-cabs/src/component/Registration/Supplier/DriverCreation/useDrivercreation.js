@@ -811,7 +811,7 @@ const handlePdfDownload = () => {
 
     // licence
     // const [licencepdf, setLicencepdf] = useState(null)
-    console.log(licencepdf,"pdf",file)
+    // console.log(licencepdf,"pdf",file)
 
 
     const licenceSubmit = async (driveruserid) => {
@@ -894,7 +894,7 @@ const handlePdfDownload = () => {
                 const response = await fetch(`${apiUrl}/TemplateForDriverCreation`);
                 if (response.status === 200) {
                     const userDataArray = await response.json();    
-                    console.log("Fetched data:", userDataArray);
+                    // console.log("Fetched data:", userDataArray);
     
                     if (userDataArray.length > 0) {
                         setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly

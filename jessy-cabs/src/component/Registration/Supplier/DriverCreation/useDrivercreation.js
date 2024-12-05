@@ -49,6 +49,8 @@ const useDrivercreation = () => {
     // venkat
 
     const [loading, setLoading] = useState(false)
+    const [isDButtonLoading,setisDbuttonLoading] = useState(false)
+
 
 
 
@@ -1025,7 +1027,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
         }
 
         try {
-
+            setisDbuttonLoading(true)
             const formData = new FormData();
             for (const key in book) {
                 console.log(key,book[key])
@@ -1043,6 +1045,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
             setRows([]);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            setisDbuttonLoading(false)
             // addPdf(lastdriveridno);
             handleList()
             handleCancel();
@@ -1059,14 +1062,17 @@ const handlecheckmaildriver = async (lastBookingno) => {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
+                setisDbuttonLoading(false)
             } else if (error.response) {
                 setError(true);
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+                setisDbuttonLoading(false)
             } else {
                 // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
+                setisDbuttonLoading(false)
             }
         }
     }
@@ -1435,7 +1441,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
             }));
     
             setRows(rowsWithUniqueId);  
-    
+            setLoading(true); 
             if (data.length > 0) {
                 setLoading(false);  
             } else {
@@ -1561,7 +1567,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
         handlePdfDownload,
         handleExcelDownload,
         handleFileChange,handleFileUpload, handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2,
-        loading,setLoading
+        loading,setLoading,isDButtonLoading,setisDbuttonLoading
         
         // venkat
     };

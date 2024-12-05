@@ -57,6 +57,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Tooltip from '@mui/material/Tooltip';
 import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -117,7 +118,7 @@ const DriverCreation = ({ stationName }) => {
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll,
         handleFileChange, handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2,
-        loading, setLoading
+        loading, setLoading,isDButtonLoading,setisDbuttonLoading
         
     } = useDrivercreation();
 
@@ -520,9 +521,13 @@ const DriverCreation = ({ stationName }) => {
                             </div>
                             <div className="input">
                                 {isEditMode ? (
-                                    <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
+                                    // <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
+                                    <LoadingButton  loading={isDButtonLoading}variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</LoadingButton>
+
                                 ) : (
-                                    <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd}>Add</Button>
+                                    // <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd}>Add</Button>
+                                    <LoadingButton  loading={isDButtonLoading}variant="contained" disabled={!Supllier_modify} onClick={handleAdd}>Add</LoadingButton>
+
                                 )}
                             </div>
                         </div>

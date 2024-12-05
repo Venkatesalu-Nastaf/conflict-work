@@ -52,9 +52,9 @@ const columns = [
   { field: "Stationname", headerName: "Station_Name", width: 120 },
   { field: "state", headerName: "State", width: 120 },
   { field: "active", headerName: "Active", width: 60 },
-  { field: "shortname", headerName: "Station", width: 100 },
+  // { field: "shortname", headerName: "Station", width: 100 },
   { field: "ownbranch", headerName: "Own Branch", width: 100 },
-  { field: "address", headerName: "address", width: 230 },
+  { field: "address", headerName: "address", width: 300 },
 
 ];
 // TABLE END

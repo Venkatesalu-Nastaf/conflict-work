@@ -478,7 +478,6 @@ const useEmplyeecreation = () => {
         };
         fetchData();
     }, [apiUrl]);   
-    console.log(templateMessageData,"shh")
 
     // useEffect(() => {
     //     const fetchTemplateMessage = async () => {

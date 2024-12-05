@@ -33,6 +33,7 @@ const useVehicleinfo = () => {
     const [cerendentialdata,setCredentialData]=useState()
 
     const [loading, setLoading] = useState(false)
+    const [isVButonLoading,setisVButtonLoading]= useState(false)
 
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -879,6 +880,7 @@ const useVehicleinfo = () => {
             setWarningMessage("Enter Groups");
             return;
         }
+        
         if (!book.vehType) {
             setWarning(true);
             setWarningMessage("Choose vehicletype");
@@ -915,7 +917,9 @@ const useVehicleinfo = () => {
             setWarningMessage(" VehicleRegNo Already Exists");
             return;
         }
+        setisVButtonLoading(true)
         try {
+            
             const data = { ...book }
             await axios.post(`${apiUrl}/vehicleinfo`, data);
             const response = await axios.get(`${apiUrl}/lastvechileinfogetid`);
@@ -931,6 +935,7 @@ const useVehicleinfo = () => {
             handleList();
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            setisVButtonLoading(false)
         }
         //  catch {
         //     setError(true);
@@ -944,14 +949,17 @@ const useVehicleinfo = () => {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
+                setisVButtonLoading(false)
             } else if (error.response) {
                 setError(true);
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+                setisVButtonLoading(false)
             } else {
                 // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
+                setisVButtonLoading(false)
             }
         }
     };
@@ -997,7 +1005,9 @@ const useVehicleinfo = () => {
     };
 
     const handleEdit = async () => {
+        setisVButtonLoading(true)
         try {
+            
             const { id, vehicleId, ...restselectedcustomerdata } = selectedCustomerData
             await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`, restselectedcustomerdata);
             addFcCopy_copy(selectedCustomerData.vehicleId);
@@ -1011,6 +1021,7 @@ const useVehicleinfo = () => {
             setRows([])
             setSuccess(true);
             setSuccessMessage("Successfully Updated");
+            setisVButtonLoading(false)
             handleList();
         } 
         // catch {
@@ -1025,14 +1036,17 @@ const useVehicleinfo = () => {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
+                setisVButtonLoading(false)
             } else if (error.response) {
                 setError(true);
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Edit Vehicle Details: " + (error.response.data.message || error.message));
+                setisVButtonLoading(false)
             } else {
                 // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
+                setisVButtonLoading(false)
             }
         }
     };
@@ -1072,6 +1086,7 @@ const useVehicleinfo = () => {
                 setRows1([]);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
+                handleList();
             }
             else if (actionName === 'Edit') {
                 handleEdit()
@@ -1337,7 +1352,7 @@ const useVehicleinfo = () => {
         selectAll,
         handleSelectAll,
         handleDocumentDownload, drivername, handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit,handleChangecredent,cerendentialdata,
-        vehiclenames,setVehilcNames,loading,setLoading
+        vehiclenames,setVehilcNames,loading,setLoading,isVButonLoading,setisVButtonLoading
     };
 };
 

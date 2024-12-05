@@ -114,11 +114,11 @@ const EmployeeCreation = ({ stationName }) => {
   useEffect(() => {
 
     // console.log("stationName--", stationName)
-    if (stationName?.length > 1) {
+    if (stationName?.length > 0) {
     //   // const data = stationName?.map(el => el.map(el => el.Stationname));
       const data = stationName?.map(el => el.Stationname);
 
-      setSationNameforUser([...data, "ALL"]);
+      setSationNameforUser(data);
     // }
     //  else {
       // const data = stationName.map(el => el.Stationname)

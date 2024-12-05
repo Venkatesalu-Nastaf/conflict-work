@@ -205,7 +205,8 @@ const SignatureGenerate = () => {
                 <div className='signature-generate-input'>
                     <p>Starting Date :</p>
                     {/* <input value={fulldetails[0]?.startdate?dayjs(fulldetails[0]?.startdate).format("YYYY-MM-DD"): ""} /> */}
-                    <input value={fulldetails[0]?.startdate ? datefunsdata(new Date(fulldetails[0].startdate), 'yyyy-MM-dd') : null} />
+                    {/* <input value={fulldetails[0]?.startdate ? datefunsdata(new Date(fulldetails[0].startdate), 'yyyy-MM-dd') : null} /> */}
+                    <input value={fulldetails[0]?.startdate ? datefunsdata(new Date(fulldetails[0].startdate), 'dd-MM-yyyy') : null} />
                 </div>
                 <div className='signature-generate-input'>
                     <p>Starting Time :</p>
@@ -218,7 +219,8 @@ const SignatureGenerate = () => {
                 <div className='signature-generate-input'>
                     <p>Closing Date </p>
                     {/* <input value={fulldetails[0]?.closedate ? dayjs(fulldetails[0]?.closedate).format("YYYY-MM-DD") : ""} /> */}
-                    <input value={fulldetails[0]?.closedate ? datefunsdata(new Date(fulldetails[0].closedate), 'yyyy-MM-dd') : null} />
+                    {/* <input value={fulldetails[0]?.closedate ? datefunsdata(new Date(fulldetails[0].closedate), 'yyyy-MM-dd') : null} /> */}
+                    <input value={fulldetails[0]?.closedate ? datefunsdata(new Date(fulldetails[0].closedate), 'dd-MM-yyyy') : null} />
                 </div>
                 <div className='signature-generate-input'>
                     <p>Closing Time </p>

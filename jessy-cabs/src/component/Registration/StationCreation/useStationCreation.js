@@ -641,6 +641,7 @@ const handleStationChange = async (event, value) => {
             setCredentialData(false)
             setstationUpdate(true);
             setRows([]); 
+            setisDisabled(false)
             setSelectedState('');
             setSelectedStation('');
             setSelectedCustomerData({});
@@ -808,6 +809,7 @@ const handleStationChange = async (event, value) => {
                 setSelectedStation('');
                 setstationUpdate(true);
                 setisStationtrigger(!isstationtrigger)
+                setisDisabled(false)
 
             }
 

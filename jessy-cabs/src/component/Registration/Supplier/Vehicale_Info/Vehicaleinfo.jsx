@@ -64,6 +64,7 @@ import { FaBuilding } from "react-icons/fa";
 import VehicleAddData from './VehicleAdddata';
 import axios from 'axios'
 import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -192,7 +193,7 @@ const Vehicaleinfo = ({ stationName }) => {
     handleDocumentDownload,
     drivername,
     handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
-    loading,setLoading
+    loading,isVButonLoading,
   } = useVehicleinfo();
   const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1
   } = VehicleAddData()
@@ -1071,9 +1072,11 @@ const Vehicaleinfo = ({ stationName }) => {
             </div>
             <div className="input">
               {isEditMode ? (
-                <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
+                // <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
+                <LoadingButton loading={isVButonLoading} variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</LoadingButton>
               ) : (
-                <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
+                // <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
+                <LoadingButton loading={isVButonLoading} variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</LoadingButton>
               )}
             </div>
           </div>

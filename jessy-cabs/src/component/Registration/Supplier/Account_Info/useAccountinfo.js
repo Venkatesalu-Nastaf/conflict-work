@@ -33,6 +33,7 @@ const useAccountinfo = () => {
   const [cerendentialdataforstations, setCredentialDataforstations] = useState()
 
   const [loading, setLoading] = useState(false)
+  const [isAButtonLoading,setisAButtonLoading] = useState(false)
 
 
 
@@ -765,7 +766,7 @@ const useAccountinfo = () => {
   //     setErrorMessage('RateType stations not registered ');
   //     return;
   // }
-
+  setisAButtonLoading(true)
     try {
      
       await axios.post(`${apiUrl}/accountinfo`, book);
@@ -776,6 +777,7 @@ const useAccountinfo = () => {
       setRows([]);
       setSuccessMessage("Successfully Added");
       setCredentialData()
+      setisAButtonLoading(false)
       // setCredentialDataforstations()
     }
     // catch {
@@ -790,14 +792,17 @@ const useAccountinfo = () => {
           setError(true);
           setErrorMessage("Check your Network Connection");
           // console.log('Network error');
+          setisAButtonLoading(false)
       } else if (error.response) {
           setError(true);
           // Handle other Axios errors (like 4xx or 5xx responses)
           setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+          setisAButtonLoading(false)
       } else {
           // Fallback for other errors
           setError(true);
           setErrorMessage("An unexpected error occurred: " + error.message);
+          setisAButtonLoading(false)
       }
   }
   };
@@ -813,6 +818,7 @@ const useAccountinfo = () => {
   //     setErrorMessage('RateType stations not registered ');
   //     return;
   // }
+  setisAButtonLoading(true)
     try {
     
       const { id, ...restselectedcustomer } = selectedCustomerData
@@ -820,6 +826,7 @@ const useAccountinfo = () => {
       await axios.put(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`, updatedCustomer);
       setSuccess(true);
       setSuccessMessage("Successfully updated");
+      setisAButtonLoading(false)
       handleCancel();
       setCredentialData()
       // setCredentialDataforstations()
@@ -839,14 +846,17 @@ const useAccountinfo = () => {
           setError(true);
           setErrorMessage("Check your Network Connection");
           // console.log('Network error');
+          setisAButtonLoading(false)
       } else if (error.response) {
           setError(true);
           // Handle other Axios errors (like 4xx or 5xx responses)
           setErrorMessage("Failed to Edit Account Info: " + (error.response.data.message || error.message));
+          setisAButtonLoading(false)
       } else {
           // Fallback for other errors
           setError(true);
           setErrorMessage("An unexpected error occurred: " + error.message);
+          setisAButtonLoading(false)
       }
   }
   };
@@ -1017,7 +1027,7 @@ const useAccountinfo = () => {
     handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, cerendentialdata, 
     // handleAutocompleteChangestations, 
     infoMessage,
-    loading,setLoading
+    loading,setLoading,isAButtonLoading,setisAButtonLoading
   };
 };
 

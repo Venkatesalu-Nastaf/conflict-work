@@ -491,6 +491,7 @@ const useRatype = () => {
                 // return false;
             }
         } }
+        
 
        const  handleChangecredent=(event)=>{
         const { name, value } = event.target;
@@ -568,6 +569,8 @@ const useRatype = () => {
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
+        // console.log(selectedOption,"pppp")
+        uniqueRatetype(selectedOption)
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
@@ -576,6 +579,15 @@ const useRatype = () => {
             ...prevData,
             [name]: selectedOption,
         }));
+        setBook((prevBook) => ({
+            ...prevBook,
+            ["ratename"]:"",
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            ["ratename"]: "",
+        }));
+        setCredentialData(false)
     };
     
     const handleCancel = () => {
@@ -729,6 +741,7 @@ const useRatype = () => {
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
+        handlelist();
     }
     catch(err){
         setError(true);

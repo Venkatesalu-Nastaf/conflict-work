@@ -427,9 +427,9 @@ const DriverCreation = ({ stationName }) => {
                                         type="file"
                                         style={{ display: "none" }}
                                         onChange={(e) => {
-                                            setLicencepdf(e.target.files[0]);
-                                            console.log('File selected:', e.target.files[0]);
-                                            handleFileUpload(e);
+                                            // setLicencepdf(e.target.files[0]);
+                                            // console.log('File selected:', e.target.files[0]);
+                                            handleFileUpload(e,"licencepdf");
                                         }}
                                     />
                                 </Button>
@@ -459,11 +459,11 @@ const DriverCreation = ({ stationName }) => {
                                             type="file"
                                             style={{ display: "none" }}
                                             onChange={(e) => {
-                                                if (e.target.files[0]) {
-                                                    setFile(e.target.files[0]);
-                                                    console.log('File selected:', e.target.files[0]);
-                                                    handleFileUpload(e);
-                                                }
+                                                // if (e.target.files[0]) {
+                                                //     setFile(e.target.files[0]);
+                                                //     console.log('File selected:', e.target.files[0]);
+                                                    handleFileUpload(e,"file");
+                                                // }
                                             }}
                                         />
 

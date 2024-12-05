@@ -118,7 +118,7 @@ const useDrivercreation = () => {
         stations: '',
         Mobileno: '',
         userpassword: '',
-        joiningdate: dayjs(),
+        joiningdate:dayjs().format("YYYY-MM-DD"),
         active: "yes",
         address1: '',
         licenseno: '',
@@ -130,6 +130,8 @@ const useDrivercreation = () => {
         Profile_image:null,
         created_at:dayjs().format("YYYY-MM-DD")
     });
+    const [licencepdf, setLicencepdf] = useState(null)
+    const [file, setFile] = useState(null);
 
     const handleFileChange = (e) => {
         setBook({
@@ -776,17 +778,19 @@ const handlePdfDownload = () => {
     };
 
     // const user__id = selectedCustomerData?.driverid || book.driverid;
-    const [file, setFile] = useState(null);
+    // const [file, setFile] = useState(null);
 
     const addPdf = async (driveruserid) => {
         if (file !== null) {
             const formData = new FormData();
             formData.append("file", file);
             formData.append("created_at", create_atdata); // assuming create_atdata is defined elsewhere
+            console.log(file,"filee")
 
             try {
                 await axios.post(`${apiUrl}/driver-pdf/${driveruserid}`, formData);
                 setFile(null); // Reset the file after successful upload
+                setLicencepdf(null)
 
                 // Set success state and message
                 // setSuccess(true);
@@ -806,7 +810,9 @@ const handlePdfDownload = () => {
 
 
     // licence
-    const [licencepdf, setLicencepdf] = useState(null)
+    // const [licencepdf, setLicencepdf] = useState(null)
+    console.log(licencepdf,"pdf",file)
+
 
     const licenceSubmit = async (driveruserid) => {
         if (licencepdf !== null) {
@@ -817,6 +823,7 @@ const handlePdfDownload = () => {
             try {
                 await axios.post(`${apiUrl}/driver-licencepdf/${driveruserid}`, formData);
                 setFile(null);
+                setLicencepdf(null)
             }
             catch {
                 setError(true);
@@ -826,15 +833,26 @@ const handlePdfDownload = () => {
             return
         }
         setFile(null);
+        setLicencepdf(null)
+        
     };
-    const handleFileUpload = (e) => {
+    const handleFileUpload = (e,name) => {
+        if(name === "licencepdf"){
         setLicencepdf(e.target.files[0]);
+        setSuccess(true);  // Assuming you have success state
+        setSuccessMessage("Uploaded successfully"); 
+        }
+        else{
+            setFile(e.target.files[0]);
+            setSuccess(true);  // Assuming you have success state
+        setSuccessMessage("Uploaded successfully"); 
+        }
 
         // If needed, update other states like book or selected customer data
         // setBook({ ...book, Licencepdf: e.target.files[0] });
 
-        setSuccess(true);  // Assuming you have success state
-        setSuccessMessage("Uploaded successfully");  // Set the success message
+        // setSuccess(true);  // Assuming you have success state
+        // setSuccessMessage("Uploaded successfully");  // Set the success message
     };
     const [allFile, setAllFile] = useState([]);
 
@@ -896,7 +914,7 @@ const handlePdfDownload = () => {
     
 
 //   useEffect(() => {
-//     const fetchData = async () => {
+//     const fetchData = asetLicencepdf(null)sync () => {
 //       try {
 //         const response = await fetch(`${apiUrl}/organizationdata`);
 //         if (response.status === 200) {
@@ -989,18 +1007,12 @@ const handlecheckmaildriver = async (lastBookingno) => {
             return
         }
 
-        if (!book.Mobileno 
-            // && !book.licenseno
-        ) {
+        if (!book.Mobileno) {
             setWarning(true);
             setWarningMessage("All fields are mandatory");
             return
         }
-        // if (!book.licenseexpdate) {
-        //     setWarning(true);
-        //     setWarningMessage("All fields are mandatory");
-        //     return
-        // }
+       
         if (cerendentialdata === true) {
             setWarning(true);
             setWarningMessage(" Drivername Already Exists");
@@ -1032,6 +1044,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
             setSuccess(true);
             setSuccessMessage("Successfully Added");
             // addPdf(lastdriveridno);
+            handleList()
             handleCancel();
         }
         //  catch (error) {

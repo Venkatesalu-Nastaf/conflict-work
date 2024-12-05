@@ -115,6 +115,7 @@ const Agreement = ({organizationNames}) => {
     toDate,
     setToDate,
     setBook,
+    handleFileChange,
     fromDate,
     isEditMode,
     handleEdit,
@@ -141,15 +142,15 @@ const Agreement = ({organizationNames}) => {
   const Employee_modify = permissions[20]?.modify;
   const Employee_delete = permissions[20]?.delete;
 
-  const [fileName, setFileName] = useState("");
+  // const [fileName, setFileName] = useState("");
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFileName(file.name);
-      console.log("Selected file:", file);
-    }
-  };
+  // const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     setFileName(file.name);
+  //     console.log("Selected file:", file);
+  //   }
+  // };
 
   return (
     <div className="main-content-form Scroll-Style-hide">
@@ -311,8 +312,8 @@ const Agreement = ({organizationNames}) => {
 
               <div className="input">
                 <input
-                  accept="image/*"
                   id="file-upload"
+                  name="Agreement_Image"
                   type="file"
                   style={{ display: "none" }}
                   onChange={handleFileChange}
@@ -322,7 +323,6 @@ const Agreement = ({organizationNames}) => {
                     Upload
                   </Button>
                 </label>
-                {/* {fileName && <p>Selected file: {fileName}</p>} */}
               </div>
 
               {/* <div className="employee-file-upload-division">
@@ -555,7 +555,7 @@ const Agreement = ({organizationNames}) => {
                 )}
               </Box>
             </div>
-            <Dialog open={dialogOpen} onClose={handleCloseDialog} >
+            {/* <Dialog open={dialogOpen} onClose={handleCloseDialog} >
               <DialogContent>
                 <div className="employee-dialogbox-div1">
                   {Array.isArray(allFile) && allFile.map((img, index) => (
@@ -565,8 +565,7 @@ const Agreement = ({organizationNames}) => {
                         onClick={(event) => {
                           handlecheckbox(img.fileName)
                         }} />
-                      <img src={`${apiUrl}/public/employee_doc/` + img.fileName} type="application/pdf" width="350" height="300" alt="" />
-
+                      <img src={`${apiUrl}/public/agreement_doc/`+ img.Agreement_Image} width="350" height="300" alt="" />
                     </div>
                   ))}
                 </div>
@@ -576,7 +575,58 @@ const Agreement = ({organizationNames}) => {
                   <Button variant='contained' onClick={() => handleDocumentDownload()} style={{ marginLeft: '20px' }}>Print</Button>
                 </div>
               </DialogContent>
-            </Dialog>
+            </Dialog> */}
+            <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+                  <DialogContent>
+                    <div className="employee-dialogbox-div1">
+                      {Array.isArray(allFile) &&
+                        allFile.map((file, index) => (
+                          <div key={index} className="employee-dialogbox-div2">
+                            <Checkbox
+                              type="checkbox"
+                              checked={deletefile.includes(file.fileName)}
+                              onClick={() => handlecheckbox(file.fileName)}
+                            />
+                            {file.Agreement_Image.endsWith('.pdf') ? (
+                              <iframe
+                                src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
+                                width="350"
+                                height="300"
+                                title={`PDF ${index}`}
+                                style={{ border: "none" }}
+                              />
+                            ) : (
+                              <img
+                                src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
+                                width="350"
+                                height="300"
+                                alt=""
+                              />
+                            )}
+                          </div>
+                        ))}
+                    </div>
+                    <div style={{ height: 1, backgroundColor: 'black', marginTop: 5, marginBottom: 10 }}></div>
+                    <div style={{ display: 'flex' }}>
+                      <Button
+                        disabled={!Employee_delete}
+                        variant="contained"
+                        onClick={() => handleimagedelete(deletefile)}
+                      >
+                        Delete
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleDocumentDownload()}
+                        style={{ marginLeft: '20px' }}
+                      >
+                        Print
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+
             <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
               <DialogContent>
                 <div>

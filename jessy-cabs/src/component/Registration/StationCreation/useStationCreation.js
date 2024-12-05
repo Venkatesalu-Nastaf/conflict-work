@@ -554,6 +554,7 @@ const handleStationChange = async (event, value) => {
                 gstno: '',
                 created_at: dayjs(),
             });
+            setisStationtrigger(!isstationtrigger)
             setSelectedState(''); // Clear the selected state
             setSelectedStation('');
             setSelectedCustomerData({});
@@ -561,6 +562,7 @@ const handleStationChange = async (event, value) => {
             setRows([]); 
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            setisDisabled(false)
             setCredentialData(false)
             setstationUpdate(true);
             uniquestation(Stationname)

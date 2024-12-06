@@ -163,7 +163,7 @@ const Customer = ({ stationName }) => {
 
                   />
                 </div>
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -182,7 +182,32 @@ const Customer = ({ stationName }) => {
                     {cerendentialdata ?
                       <p style={{ color: 'red' }}>customer Adlready exist</p> : ""}
                   </>
+                </div> */}
+
+                
+<div className="input">
+                <div className='full-width' style={{ display: 'grid' }}>
+                  <span className='full-width' style={{ display: 'flex' }}>
+                  <div className="icone">
+                    <BadgeIcon color="action" />
+                  </div>
+                    <TextField
+                    size="small"
+                    id="customer"
+                    className='full-width'
+                    label="Organization Name"
+                    value={selectedCustomerData?.customer || book.customer}
+                    autoComplete="new-password"
+                    // onChange={handleChange}
+                    onChange={handleChangeuniquecustomer}
+                    name="customer"
+                  />
+                  </span>
+                  <span style={{ textAlign: 'center' }}>
+                    <span style={{ color: "red" }}>{cerendentialdata ? `customer Adlready exist` : ""}</span>
+                  </span>
                 </div>
+              </div>
                 <div className="input">
                   <div className="icone">
                     <PermIdentityIcon color="action" />

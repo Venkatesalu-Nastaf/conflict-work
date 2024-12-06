@@ -565,7 +565,7 @@ const useCustomer = () => {
             customer: '',
             customerType: '',
             servicestation: '',
-            date: '',
+            date: dayjs(),
             address1: '',
             // customeremail: '',
             rateType: '',
@@ -760,6 +760,7 @@ const useCustomer = () => {
                 ...row,
                 id: index + 1,
             }));
+            console.log(rowsWithUniqueId,"iiiii")
             setRows(rowsWithUniqueId);
             if (data.length > 0) {
                 setLoading(false)
@@ -773,6 +774,7 @@ const useCustomer = () => {
             setLoading(false); // Set loading to false once the request is done, whether successful or not
         }
     }, [apiUrl]); // Add dependencies like apiUrl
+    console.log(rows,"row")
 
     useEffect(() => {
         handleList(); // Call the handleList function
@@ -834,24 +836,14 @@ const useCustomer = () => {
             setErrorMessage('customer aldrreay exist.');
             return;
         }
-        // if(cerendentialdataforstations === true){
-        //     setError(true);
-        //     setErrorMessage('RateType stations not registered ');
-        //     return;
-        // }
-        // const removeEmptyObjects = (arr) => {
-        //     return arr.filter(obj => {
-        //         // Check if all specified fields are empty
-        //         return obj.orderedby !== "" && obj.orderByEmail !== "" && obj.orderByMobileNo !== "";
-        //     });
-        // };
-
-        //   console.log(removeEmptyObjects(customerfieldSets),"ppp")
+       
         const dataordereddata = removeEmptyObjects(customerfieldSets)
-        // console.log(dataordereddata, "datat")
+     
        
         try {
             setbtnLoading(true)
+            console.log(book, "booked",)
+            const response = await axios.post(`${apiUrl}/customers`, book);
             let datasets = [];
             if (dataordereddata.length > 0) {
                 // console.log(dataordereddata, "enetrr")
@@ -862,7 +854,7 @@ const useCustomer = () => {
 
             // console.log(book, "booked",)
             // console.log(datasets, "ppppp")
-            const response = await axios.post(`${apiUrl}/customers`, book);
+            // const response = await axios.post(`${apiUrl}/customers`, book);
             if (response.data.success) {
                 if (datasets.length > 0) {
                     await axios.post(`${apiUrl}/customerorderdbydata`, datasets)
@@ -1063,9 +1055,12 @@ const useCustomer = () => {
     // Use handleList as a dependency
     const handleClick = async (event, actionName, customerId) => {
         event.preventDefault();
+        console.log(actionName,"jj")
+        const dataordereddata = removeEmptyObjects(customerfieldSets);
         try {
             if (actionName === 'List') {
                 const response = await axios.get(`${apiUrl}/customers`);
+                console.log(response,"ppp")
                 const data = response.data;
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -1089,12 +1084,19 @@ const useCustomer = () => {
             }
 
             else if (actionName === 'Delete') {
-                await axios.delete(`${apiUrl}/customers/${selectedCustomerData.customerId}`);
-                await axios.delete(`${apiUrl}/deletecustomerorderdata/${selectedCustomerData.customer || book.customer}`);
+              const response1 =  await axios.delete(`${apiUrl}/customers/${selectedCustomerData.customerId}`);
+              console.log(response1,"res11")
+              if (dataordereddata.length > 0) {
+               await axios.delete(`${apiUrl}/deletecustomerorderdata/${selectedCustomerData.customer || book.customer}`);
+              }
+            //   console.log(response2,"res12")
+            setSuccess(true);
+            setSuccessMessage("Deleted Sucessfully");
                 setSelectedCustomerData(null);
                 handleCancel();
                 setTriggerCustomerAdd(prev => !prev)
                 setRows([]);
+                handleList()
             }
 
             else if (actionName === 'Edit') {
@@ -1104,7 +1106,8 @@ const useCustomer = () => {
             else if (actionName === 'Add') {
                 handleAdd();
             }
-        } catch {
+        } catch(err) {
+           
             setError(true);
             setErrorMessage("Check Network connection");
         }

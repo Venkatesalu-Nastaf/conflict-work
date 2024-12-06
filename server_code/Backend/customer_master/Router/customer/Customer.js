@@ -38,6 +38,7 @@ router.delete('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   db.query('DELETE FROM customers WHERE customerId = ?', customerId, (err, result) => {
     if (err) {
+      console.log(err,"oo")
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }
     if (result.affectedRows === 0) {
@@ -82,7 +83,6 @@ router.get('/searchCustomer', (req, res) => {
   // Filter by search text
   if (searchText) {
     const columnsToSearch = [
-      'customerId',
       'name',
       'customer',
       'customerType',
@@ -141,25 +141,39 @@ router.get('/customeraddress/:customername', (req, res) => {
 })
 
 router.get('/customersgroup', (req, res) => {
+  // const query = `
+  //    SELECT
+  //     c.*,
+  //     GROUP_CONCAT(co.orderedby) AS orderedby,
+  //     GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
+  //     GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
+  //   FROM
+  //     customers c
+  //   INNER JOIN
+  //     customerOrderdata co ON c.customer = co.customer
+  //   GROUP BY
+  //     c.customer;
+  // `;
   const query = `
-     SELECT
-      c.*,
-      GROUP_CONCAT(co.orderedby) AS orderedby,
-      GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
-      GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
-    FROM
-      customers c
-    INNER JOIN
-      customerOrderdata co ON c.customer = co.customer
-    GROUP BY
-      c.customer;
-  `;
+ SELECT
+  c.*,
+  GROUP_CONCAT(co.orderedby) AS orderedby,
+  GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
+  GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
+FROM
+  customers c
+INNER JOIN
+  customerOrderdata co ON c.customer = co.customer
+GROUP BY
+  c.customerId, c.customer
+`;
 
   db.query(query, (err, results) => {
     if (err) {
       console.log(err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
+    console.log(results,"kk")
     return res.status(200).json(results);
   });
 });
@@ -314,6 +328,7 @@ router.delete("/deletecustomerorderdatasdata/:id", (req, res) => {
 
   db.query("delete from customerOrderdata where id=?", [deleteid], (err, results) => {
     if (err) {
+      console.log("ordercustomer",err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
 

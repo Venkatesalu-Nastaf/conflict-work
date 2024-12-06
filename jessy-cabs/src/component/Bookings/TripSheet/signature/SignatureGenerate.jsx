@@ -169,11 +169,13 @@ const SignatureGenerate = () => {
 
 
     const timeformtdata = (datatime) => {
+        console.log(datatime)
         const time = parse(datatime, 'HH:mm:ss', new Date());
 
         // Format to get hours and minutes
         return datefunsdata(time, 'HH:mm');
     }
+    console.log(fulldetails,"full")
 
     return (
        

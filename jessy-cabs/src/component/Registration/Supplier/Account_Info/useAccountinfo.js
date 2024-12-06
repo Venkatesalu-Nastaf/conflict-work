@@ -402,20 +402,22 @@ const useAccountinfo = () => {
   // TABLE START
   const columns = [
     { field: "id", headerName: "Sno", width: 100 },
-    { field: "cperson", headerName: "Supplier_Name", width: 160 },
+    // { field: "cperson", headerName: "Supplier_Name", width: 160 },
+    { field: "accountNo", headerName: "ACC_ID", width: 160 },
     { field: "travelsname", headerName: "Travel_Name", width: 160 },
     // { field: "stations", headerName: "Stations", width: 160 },
     { field: "Accdate", headerName: "Acc_Date", width: 160 , valueFormatter: (params) => {
       // Format the date to DD-MM-YYYY
       return params.value ? dayjs(params.value).format('DD-MM-YYYY') : '';
     },},
-    { field: "accountNo", headerName: "Vehicle_No", width: 160 },
+    { field: "vehRegNo", headerName: "Vehicle_No", width: 160 },
     { field: "address1", headerName: "Address", width: 160 },
     { field: "phone", headerName: "Phone", width: 160 },
     { field: "vehicleInfo", headerName: "Owner_Type", width: 160 },
     { field: "vehCommission", headerName: "Percentage", width: 160 },
     { field: "rateType", headerName: "Rate_Type", width: 160 },
-    { field: "acType", headerName: "Driver", width: 160 },
+    { field: "driverName", headerName: "Driver", width: 160 },
+    { field: "cperson", headerName: "Supplier_Name", width: 160 },
   ];
   // TABLE END
   const [book, setBook] = useState({

@@ -191,8 +191,10 @@ const useBooking = () => {
     report: "",
     vehicleName: "",
     paymenttype: "",
-    shedOutDate: '',
-    startdate: "",
+    // shedOutDate: '',
+    // startdate: "",
+    shedOutDate:dayjs(),
+    startdate: dayjs(),
     starttime: "",
     reporttime: "",
     duty: "",
@@ -816,6 +818,11 @@ useEffect(() => {
     if (!selectedCustomerData.guestmobileno) {
       setError(true);
       setErrorMessage("Enter Guest Mobile Number");
+      return;
+    }
+    if (!selectedCustomerData.servicestation) {
+      setError(true);
+      setErrorMessage("Enter Station");
       return;
     }
     if (!reportdate) {

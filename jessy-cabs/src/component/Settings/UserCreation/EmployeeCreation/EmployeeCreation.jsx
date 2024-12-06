@@ -117,8 +117,11 @@ const EmployeeCreation = ({ stationName }) => {
     if (stationName?.length > 0) {
       //   // const data = stationName?.map(el => el.map(el => el.Stationname));
       const data = stationName?.map(el => el.Stationname);
+      const updatedData = [...data,"All"];
 
-      setSationNameforUser(data);
+setSationNameforUser(updatedData);
+
+      // setSationNameforUser(data);
       // }
       //  else {
       // const data = stationName.map(el => el.Stationname)

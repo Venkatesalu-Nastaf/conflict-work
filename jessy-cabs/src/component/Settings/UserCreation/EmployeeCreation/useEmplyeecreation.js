@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 import dayjs from 'dayjs';
-import EmployeeCreation from './EmployeeCreation';
+// import EmployeeCreation from './EmployeeCreation';
 // import { faMobilePhone } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -465,7 +465,7 @@ const useEmplyeecreation = () => {
                     if (userDataArray.length > 0) {
                         setTemplateMessageData(userDataArray[0].TemplateMessageData);
                     } else {
-                        setErrorMessage('User data not found.');
+                        setErrorMessage('User data not found.',"fortempl");
                         setError(true);
                     }
 

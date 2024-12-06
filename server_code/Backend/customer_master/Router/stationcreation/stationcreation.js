@@ -104,7 +104,8 @@ router.get('/getStation-name', (req, res) => {
 
       const data = stationArr.map(el => ({ Stationname: el }))
 
-      if (station?.toLowerCase() === "all" || stationArr.includes("ALL")) {
+      // if (station?.toLowerCase() === "all" || stationArr.includes("ALL")) {
+        if (station === "All") {
 
         db.query('SELECT Stationname FROM stationcreation', (err, results) => {
           if (err) {

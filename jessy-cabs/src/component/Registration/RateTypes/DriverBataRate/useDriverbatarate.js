@@ -36,6 +36,8 @@ const useDriverbatarate = () => {
     const [isEditMode, setIsEditMode] = useState(false);
 
     const [loading, setLoading] = useState(false)
+    const [isDBRButtonLoading,setisDBRButtonLoading] = useState(false)
+    const [islist,setislist] = useState(null)
 
     // -------popup--------------------------
     const hidePopup = () => {
@@ -146,20 +148,25 @@ const useDriverbatarate = () => {
             setErrorMessage("Check your Network Connection");
             return;
         }
+        setisDBRButtonLoading(true)
         try {
             await axios.post(`${apiUrl}/driverbatarate`, book);
             handleCancel();
             setRows([]);
             setSuccess(true);
+            setisDBRButtonLoading(false)
             setSuccessMessage("Successfully Added");
+            setislist(!islist)
         } catch {
             setError(true);
+            setisDBRButtonLoading(false)
             setErrorMessage("Check your Network Connection");
         }
     };
 
 
     const handleEdit = async () => {
+        setisDBRButtonLoading(true)
         try {
 
             const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
@@ -171,11 +178,14 @@ const useDriverbatarate = () => {
             await axios.put(`${apiUrl}/driverbatarate/${selectedCustomerData.id}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
+            setisDBRButtonLoading(false)
             handleCancel();
             setRows([]);
+            setislist(!islist)
 
         } catch {
             setError(true);
+            setisDBRButtonLoading(false)
             setErrorMessage("Check your Network Connection");
         }
     };
@@ -249,7 +259,7 @@ const useDriverbatarate = () => {
         };
     
         handleList();
-    }, [apiUrl]);  
+    }, [apiUrl,islist]);  
     
     
 
@@ -282,6 +292,7 @@ const useDriverbatarate = () => {
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
                 setRows([]);
+                setislist(!islist)
 
             }
 
@@ -335,7 +346,7 @@ const useDriverbatarate = () => {
         columns,
         isEditMode,
         handleEdit,
-        setLoading,loading
+        setLoading,loading,isDBRButtonLoading,setisDBRButtonLoading
     };
 };
 

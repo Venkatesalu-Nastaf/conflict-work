@@ -39,6 +39,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { RateTypevendor } from '../RateType/RateTypeData.js';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -81,7 +82,7 @@ const RateType = () => {
         isEditMode,
         handleEdit,
         handleDateChange, cerendentialdata, handleChangecredent,
-        loading
+        loading,isRateButtonLoading
     } = useRatype();
 
     // Permission ------------
@@ -292,13 +293,20 @@ const RateType = () => {
                                 </div>
                                 <div className="add-edit-ratetype input">
                                     {isEditMode ? (
-                                        <Button variant="contained"
-                                            disabled={!INFO_modify} 
-                                            onClick={handleEdit}>Edit</Button>
+                                        // <Button variant="contained"
+                                        //     disabled={!INFO_modify} 
+                                        //     onClick={handleEdit}>Edit</Button>
+                                        <LoadingButton  loading={isRateButtonLoading} variant="contained"
+                                        disabled={!INFO_modify} 
+                                        onClick={handleEdit}>Edit</LoadingButton>
                                     ) : (
-                                        <Button variant="contained"
-                                            disabled={!INFO_new}
-                                            onClick={handleAdd} >Add</Button>
+                                        // <Button variant="contained"
+                                        //     disabled={!INFO_new}
+                                        //     onClick={handleAdd} >Add</Button>
+                                        <LoadingButton  loading={isRateButtonLoading} variant="contained"
+                                        disabled={!INFO_new}
+                                        onClick={handleAdd} >Add</LoadingButton>
+                                            
                                     )}
                                 </div>
                             </div>

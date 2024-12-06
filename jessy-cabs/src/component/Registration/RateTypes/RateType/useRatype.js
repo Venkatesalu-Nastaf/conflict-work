@@ -39,6 +39,7 @@ const useRatype = () => {
     const [infoMessage, setInfoMessage] = useState({});
     const [cerendentialdata,setCredentialData]=useState()
     const [loading, setLoading] = useState(false)
+    const [isRateButtonLoading,setisRateButtonLoading]= useState(false)
     
     // handlechange-----------------
     const handleDateChange = (date, name) => {
@@ -636,6 +637,7 @@ const useRatype = () => {
             setWarningMessage(" Ratename Already Exists");
             return;
         }
+        setisRateButtonLoading(true)
         try {
             // console.log(book.starttime,book.closetime)
             const starttime=book.starttime || selectedCustomerData.starttime||dayjs();
@@ -659,6 +661,7 @@ const useRatype = () => {
 
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            setisRateButtonLoading(false)
         } 
         // catch {
         //     setError(true);
@@ -672,14 +675,17 @@ const useRatype = () => {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
+                setisRateButtonLoading(false)
             } else if (error.response) {
                 setError(true);
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+                setisRateButtonLoading(false)
             } else {
                 // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
+                setisRateButtonLoading(false)
             }
         }
     };
@@ -725,6 +731,7 @@ const useRatype = () => {
             setWarningMessage(" Ratename Already Exists");
             return;
         }
+        setisRateButtonLoading(true)
         try{
         const selectedCustomer = rows.find((row) => row.driverid === driverid);
         const updatedCustomer = {
@@ -740,12 +747,14 @@ const useRatype = () => {
         await axios.put(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
         setSuccess(true);
         setSuccessMessage("Successfully updated");
+        setisRateButtonLoading(false)
         handleCancel();
         handlelist();
     }
     catch(err){
         setError(true);
         setErrorMessage("Check your Network Connection");
+        setisRateButtonLoading(false)
     }
     };
 
@@ -836,7 +845,7 @@ const useRatype = () => {
         columns,
         isEditMode,
         handleEdit,
-        handleDateChange,cerendentialdata,handleChangecredent,loading
+        handleDateChange,cerendentialdata,handleChangecredent,loading,isRateButtonLoading,setisRateButtonLoading
 
     };
 };

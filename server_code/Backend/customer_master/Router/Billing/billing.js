@@ -706,7 +706,7 @@ router.get('/All-Transfer-Billing', (req, res) => {
   // Execute query with parameterized values
   db.query(query, [decodedCustomer, fromDate, toDate], (err, result) => {
     if (err) {
-      console.error('Failed to retrieve booking details from MySQL:', err);
+      console.log('Failed to retrieve booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
     return res.status(200).json(result);

@@ -144,7 +144,6 @@ router.post('/tripsheet-add', (req, res) => {
         Hcldatakmvalue
 
     } = req.body
-
     const addCustomerData = {
         tripid,
         bookingno,
@@ -177,11 +176,11 @@ router.post('/tripsheet-add', (req, res) => {
         startdate,
         closedate,
         shedInDate,
-        totaldays,
+        totaldays:parseInt(totaldays) || 0,
         employeeno,
         reporttime,
-        starttime,
-        closetime,
+        starttime:starttime || null,
+        closetime:closetime || null,
         additionaltime,
         advancepaidtovendor,
         customercode,
@@ -212,18 +211,18 @@ router.post('/tripsheet-add', (req, res) => {
         minHour,
         minKM,
         calcPackage,
-        extraHR,
-        extraKM,
-        package_amount,
-        extrakm_amount,
-        extrahr_amount,
+        extraHR:parseInt(extraHR || 0) || 0,
+        extraKM:parseInt(extraKM || 0) || 0,
+        package_amount:parseInt(package_amount || 0) || 0,
+        extrakm_amount:parseInt(extrakm_amount || 0) || 0,
+        extrahr_amount:parseInt(extrahr_amount || 0) || 0,
         ex_kmAmount,
         ex_hrAmount,
-        nightBta,
-        nightCount,
+        nightBta:parseInt(nightBta || 0) || 0,
+        nightCount:parseInt(nightCount || 0) || 0,
         night_totalAmount,
-        driverBeta,
-        driverbeta_Count,
+        driverBeta:parseInt(driverBeta || 0) || 0,
+        driverbeta_Count:parseInt(driverbeta_Count || 0) || 0,
         driverBeta_amount,
         totalcalcAmount,
         nightThrs,
@@ -258,7 +257,7 @@ router.post('/tripsheet-add', (req, res) => {
         vendortotalkm,
         vendorRemarks,
         Vendor_Calcpackage,
-        Vendor_rateAmount,
+        Vendor_rateAmount:parseInt(Vendor_rateAmount || 0) || 0,
         Vendor_ExtraKms,
         Vendor_ExtraAmountKms,
         Vendor_totalAmountKms,
@@ -277,6 +276,8 @@ router.post('/tripsheet-add', (req, res) => {
         TimeToggleData,VendorTimeToggle,HclMaxConflctdata,
         Hcldatakmvalue
     }
+    console.log(addCustomerData,'tripsheetadddata');
+    
     // Assuming 'startdate' is in ISO 8601 format
     const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
     const driverTripAssign = {
@@ -290,7 +291,8 @@ router.post('/tripsheet-add', (req, res) => {
     db.query('INSERT INTO tripsheet SET ?', addCustomerData, (err, result) => {
 
         if (err) {
-
+            console.log(err,'error');
+            
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
         if (result.affectedRows > 0) {

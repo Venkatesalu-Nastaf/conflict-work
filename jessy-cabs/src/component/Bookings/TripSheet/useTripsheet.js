@@ -88,12 +88,12 @@ const useTripsheet = () => {
     const [conflicthcldatavalue, setConflictHCLDataValue] = useState({
         Hcldatakmvalue: 0,
         HclMaxConflctdata: 0
-      });
+    });
 
     // Loading//
 
-    const [isAddload,setisAddload] = useState(false)
-    const [isEditload,setisEditload] = useState(false)
+    const [isAddload, setisAddload] = useState(false)
+    const [isEditload, setisEditload] = useState(false)
 
     //-------------------------calc-------------------
     let [calcPackage, setcalcPackage] = useState('')
@@ -871,8 +871,8 @@ const useTripsheet = () => {
             setError(true);
             setErrorMessage("please enter the tripid");
         }
-        if(!isEditMode){
-           
+        if (!isEditMode) {
+
             return
         }
         else {
@@ -992,8 +992,8 @@ const useTripsheet = () => {
     }
 
 
-    console.log(book.closekm,"close",typeof(formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm),formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm ,maxconflict)
- 
+    console.log(book.closekm, "close", typeof (formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm), formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm, maxconflict)
+
 
     // const hybridatahcldatakm = ()=>{
     //     const hybridatahcl1 = hybridhclcustomer || hybridhclnavigate
@@ -1013,7 +1013,7 @@ const useTripsheet = () => {
     //         else{
     //             setConflictHCLDataValue({Hcldatakmvalue : hclconfict,HclMaxConflctdata:hclconfict2}) 
     //         }
-                
+
     //         }
     //         else{
     //             setConflictHCLDataValue({Hcldatakmvalue :0,HclMaxConflctdata:0})
@@ -1021,40 +1021,40 @@ const useTripsheet = () => {
     //     }
     //     else{
     //         setConflictHCLDataValue({Hcldatakmvalue :0,HclMaxConflctdata:0})
-      
+
     //     }
     // }
     const datakm1 = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
 
-    const hybridatahcldatakm = async() => {
+    const hybridatahcldatakm = async () => {
         const hybridatahcl1 = hybridhclcustomer || hybridhclnavigate;
         const hclconfict = Number(
-            formData.Hcldatakmvalue || 
-            selectedCustomerData.Hcldatakmvalue || 
-            selectedCustomerDatas.Hcldatakmvalue || 
+            formData.Hcldatakmvalue ||
+            selectedCustomerData.Hcldatakmvalue ||
+            selectedCustomerDatas.Hcldatakmvalue ||
             book.Hcldatakmvalue
         ) || 0;
-    
+
         const hclconfict2 = Number(
-            formData.HclMaxConflctdata || 
-            selectedCustomerData.HclMaxConflctdata || 
-            selectedCustomerDatas.HclMaxConflctdata || 
+            formData.HclMaxConflctdata ||
+            selectedCustomerData.HclMaxConflctdata ||
+            selectedCustomerDatas.HclMaxConflctdata ||
             book.HclMaxConflctdata
         ) || 0;
-    
+
         const kmmax = maxconflict?.maxconflictdata || 0;
         // const addkmvaluedata = hclconfict + kmmax;
-    
+
         const datakm = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
         // const addkmvaluedata = Number(datakm) || 0 + kmmax 
         const addkmvaluedata = (Number(datakm) || 0) + kmmax;
 
-        console.log(hclconfict,"hcl",hclconfict2)
-        console.log(datakm,"datakmmmm",addkmvaluedata,"add",kmmax,typeof(kmmax),Number(datakm) || 0 ,";;;;",(Number(datakm) || 0) + kmmax )
-    
+        console.log(hclconfict, "hcl", hclconfict2)
+        console.log(datakm, "datakmmmm", addkmvaluedata, "add", kmmax, typeof (kmmax), Number(datakm) || 0, ";;;;", (Number(datakm) || 0) + kmmax)
+
         if (hybridatahcl1 === 1) {
             if (datakm) {
-                console.log(datakm,"enter")
+                console.log(datakm, "enter")
                 setConflictHCLDataValue({
                     Hcldatakmvalue: hclconfict === 0 ? addkmvaluedata : hclconfict,
                     HclMaxConflctdata: hclconfict === 0 ? kmmax : hclconfict2
@@ -1066,15 +1066,14 @@ const useTripsheet = () => {
             setConflictHCLDataValue({ Hcldatakmvalue: 0, HclMaxConflctdata: 0 });
         }
     };
-    
-    console.log(conflicthcldatavalue.Hcldatakmvalue,"con",conflicthcldatavalue.HclMaxConflctdata)
-    useEffect(()=>{
+
+    console.log(conflicthcldatavalue.Hcldatakmvalue, "con", conflicthcldatavalue.HclMaxConflctdata)
+    useEffect(() => {
         hybridatahcldatakm()
-    },[datakm1])
+    }, [datakm1])
     // console.log(hybridatahcldatakm(),"call")
 
     const handleEdit = async () => {
-
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
         const checkdata = statusdata[0];
         const superpower = localStorage.getItem("SuperAdmin")
@@ -1122,7 +1121,7 @@ const useTripsheet = () => {
                     shedkm: shedKilometers.shedkm || book.shedkm || formData.shedkm || selectedCustomerData.shedkm,
                     vehicleName2: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
                     orderbyemail: formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail,
-                    totaldays: calculateTotalDay(),
+                    totaldays: parseInt(calculateTotalDay() || 0) || 0,
                     totalkm1: calculateTotalKilometers(),
                     totaltime: calculateTotalTimes(),
                     netamount: calculateTotalAmount(),
@@ -1144,7 +1143,7 @@ const useTripsheet = () => {
                     minhrs: packageDetails[0]?.Hours,
                     minkm: packageDetails[0]?.KMS,
                     vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
-                    calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport,
+                    calcPackage, extraHR: parseInt(extraHR || 0) || 0, extraKM: parseFloat(extraKM || 0) || 0, package_amount: parseInt(package_amount || 0) || 0, extrakm_amount: parseFloat(extrakm_amount || 0) || 0, extrahr_amount: parseInt(extrahr_amount || 0) || 0, ex_kmAmount, ex_hrAmount, nightBta: parseInt(nightBta || 0) || 0, nightCount: parseInt(nightCount || 0) || 0, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport,
                     // -------------------------vendor--------------------------------------------------------
                     vendor_vehicle: vendorinfo.vendor_vehicle || "",
                     vendor_duty: vendorinfo.vendor_duty || ratename || "",
@@ -1175,10 +1174,10 @@ const useTripsheet = () => {
                     Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
                     Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
                     Hybriddata: hybridhclcustomer || 0,
-                    TimeToggleData: timeToggle,
+                    TimeToggleData: timeToggle || null,
                     VendorTimeToggle: timeTogglevendor,
-                    Hcldatakmvalue :conflicthcldatavalue.Hcldatakmvalue,
-                    HclMaxConflctdata :conflicthcldatavalue.HclMaxConflctdata,
+                    Hcldatakmvalue: conflicthcldatavalue.Hcldatakmvalue,
+                    HclMaxConflctdata: conflicthcldatavalue.HclMaxConflctdata,
 
                 };
                 const tripsheetlogtripid = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
@@ -1221,7 +1220,7 @@ const useTripsheet = () => {
                 setError(true);
                 setisEditload(false)
                 setErrorMessage("Check your Network Connection");
-                
+
             }
         } catch (err) {
             // console.log(err, "errrdit2")
@@ -1300,9 +1299,9 @@ const useTripsheet = () => {
     //         setErrorMessage("Check your Network Connection");
     //     }
     // };
-   
 
-   
+
+
     const handleAdd = async () => {
 
         const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
@@ -1441,8 +1440,8 @@ const useTripsheet = () => {
                 Hybriddata: hybridhclcustomer || 0,
                 TimeToggleData: timeToggle,
                 VendorTimeToggle: timeTogglevendor,
-                HclMaxConflctdata: 0 ,
-                Hcldatakmvalue : 0
+                HclMaxConflctdata: 0,
+                Hcldatakmvalue: 0
             };
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
@@ -1676,13 +1675,18 @@ const useTripsheet = () => {
             try {
 
                 await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
-
+                setSuccess(true)
+                setSuccessMessage("Sucessfully Added")
                 if (documentType === 'Toll' || documentType === 'Parking') {
                     await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
                     //   await axios.post(`http://localhost:7000/uploadfolrderapp/${data}`, formData);
+                    setSuccess(true)
+                    setSuccessMessage("Sucessfully Added")
                 }
             } catch (error) {
                 console.error('Error uploading file:', error);
+                setError(true)
+                setErrorMessage('Failled to upload')
             }
 
 
@@ -1892,7 +1896,7 @@ const useTripsheet = () => {
                 const data = response.data;
                 if (data.length > 0) {
                     const res = data[0].TimeToggle;
-                    
+
 
                     setTimeToggle(res); // Update state with the fetched result
                 } else {
@@ -2646,7 +2650,7 @@ const useTripsheet = () => {
                     vehType: selectedVehicle?.vehType || prevState.vehType,  // Ensure key is "vehType" here
                     Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
                     hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes,
-                    vehicleName2:selectedVehicle?.vehicleName || prevState.vehicleName2  
+                    vehicleName2: selectedVehicle?.vehicleName || prevState.vehicleName2
                 }));
 
                 setSelectedCustomerData(prevState => ({
@@ -2655,7 +2659,7 @@ const useTripsheet = () => {
                     vehType: selectedVehicle?.vehType || prevState.vehType,  // Consistently use "vehType"
                     Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
                     hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes,
-                    vehicleName2:selectedVehicle?.vehicleName || prevState.vehicleName2  
+                    vehicleName2: selectedVehicle?.vehicleName || prevState.vehicleName2
                 }));
             }
         }
@@ -3317,6 +3321,11 @@ const useTripsheet = () => {
             } catch (error) {
                 if (error.response && error.response.status === 404) {
                     setError(true);
+                    setSelectedCustomerData({})
+                    setSelectedCustomerDatas({})
+                    setFormData({})
+                    setFormValues({})
+                    // setBook({})
                     setErrorMessage(`${error.response.data.error}`);
                 } else {
                     setError(true);
@@ -3492,14 +3501,14 @@ const useTripsheet = () => {
                     const imageUrl = URL.createObjectURL(await response.blob());
                     setSignImageUrl(imageUrl);
                     setSuccess(true)
-                setSuccessMessage('Signature Added Sucessfully')
+                    setSuccessMessage('Signature Added Sucessfully')
 
                 }
             }
         } catch (err) {
             console.log(err, 'error');
             setWarning(true);
-                setWarningMessage("Failed to fetch signature image. Please try again.");
+            setWarningMessage("Failed to fetch signature image. Please try again.");
 
         }
     };
@@ -3784,9 +3793,9 @@ const useTripsheet = () => {
     useEffect(() => {
         const totalAmountCalc = () => {
             // const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll);
-            
+
             const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount || 0) + Number(driverBeta_amount) + Number(permit) + Number(parking) + Number(toll);
-      
+
             const total = totalcalc - Number(customer_advance)
             const convetTotal = Math.ceil(total)
             setTotalcalcAmount(Number(convetTotal));
@@ -3802,13 +3811,13 @@ const useTripsheet = () => {
         const extraHR11 = extraHR111 || 0
         const datatimetoggle = timeToggle || timetogglenavigate
 
-        console.log(extraHR11, "kk",typeof(extraHR11),ex_hrAmount11,datatimetoggle)
-        
-      
+        console.log(extraHR11, "kk", typeof (extraHR11), ex_hrAmount11, datatimetoggle)
+
+
         if (datatimetoggle === 1) {
-            console.log(extraHR11,"enetr111111111111")
+            console.log(extraHR11, "enetr111111111111")
             if (extraHR11) {
-            // if (extraHR11 !== 0 && extraHR11 !== null && !extraHR11) {
+                // if (extraHR11 !== 0 && extraHR11 !== null && !extraHR11) {
                 console.log(extraHR, "lldaaa", typeof (extraHR))
                 const [hrda, mida = 0] = extraHR11.toString().split('.').map(Number);
                 console.log(hrda, "Hour part", mida, "Minute part", ex_hrAmount11);
@@ -3822,8 +3831,8 @@ const useTripsheet = () => {
                 // const totalamounthrmin = Math.round(totalamountwithmin)
                 // console.log(onehrdata,"ooooomnedd",result,etrxamin,totalamountwithmin,totalamounthrmin)
             }
-            else{
-                console.log(extraHR11,"enetroooooooooo")
+            else {
+                console.log(extraHR11, "enetroooooooooo")
                 return 0
             }
         }
@@ -3842,8 +3851,8 @@ const useTripsheet = () => {
         const extraClac = () => {
             // let extraAbout_hr = Number(extraHR) * Number(extrahr_amount);
             const daghr = datatimeminutescahrges(extraHR, extrahr_amount)
-             console.log(daghr,"datagr")
-           
+            console.log(daghr, "datagr")
+
             // const extarhour = Math.round(extraAbout_hr)
             const extarhour = Math.round(daghr)
             setEx_HrAmount(extarhour)
@@ -3875,7 +3884,7 @@ const useTripsheet = () => {
 
     const vendordatatimeminutescahrges = (vendorhr, vendorhramount) => {
 
-          console.log(vendorhr,"kkkkkkkhrrrven",typeof(vendorhr))
+        console.log(vendorhr, "kkkkkkkhrrrven", typeof (vendorhr))
         const datatimetoggle = timeTogglevendor || timetogglevendornavigate
         if (datatimetoggle === 1) {
             if (vendorhr !== 0) {
@@ -3891,8 +3900,8 @@ const useTripsheet = () => {
                 return totalamounthrmin
 
             }
-            else{
-                return 0 
+            else {
+                return 0
             }
         }
         else {
@@ -3906,7 +3915,7 @@ const useTripsheet = () => {
         const VendorextraClac = () => {
             // let extraAbout_hr = Math.round(Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) * Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours))
             const extravendorhr = Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) || 0
-            console.log(extravendorhr,typeof(extravendorhr),"extratratimechanges")
+            console.log(extravendorhr, typeof (extravendorhr), "extratratimechanges")
             const extraTotslhramount = Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours)
             const vendorTotalfullamount = vendordatatimeminutescahrges(extravendorhr, extraTotslhramount)
             // setVendorExtrahrTotaldataAmount(extraAbout_hr)
@@ -4095,7 +4104,7 @@ const useTripsheet = () => {
 
             const consvertedTotalHour = vendortotalHours
             console.log(consvertedTotalHour, "totalfffffffffffffh")
-   
+
             const response = await axios.get(`${apiUrl}/totalhrsuppiler-pack`, {
                 params: {
                     totkm: vendortotkm,
@@ -4138,7 +4147,7 @@ const useTripsheet = () => {
                 const matches = consvertedTotalHour
                 if (matches) {
                     console.log(matches, "mmaaa")
-                 
+
                     let time = matches - Hours.toFixed(2);
                     const convertedTime = Number(time.toFixed(2))
 
@@ -4148,15 +4157,15 @@ const useTripsheet = () => {
 
 
             }
-            else{
+            else {
                 dataextrahous = 0
             }
-           
+
 
             if (vendortotkm > KMS && vendorduty !== "Outstation") {
 
                 let KM = (Number(vendortotkm) - Number(KMS))
-                console.log(Number(vendortotkm),Number(KMS),"kmmmmmmmmmmmmmmmmm",KM)
+                console.log(Number(vendortotkm), Number(KMS), "kmmmmmmmmmmmmmmmmm", KM)
                 let kmfixed = Number(KM.toFixed(2))
 
                 // dataextrakms = KM
@@ -4286,7 +4295,7 @@ const useTripsheet = () => {
     }
 
 
-   
+
 
 
 
@@ -4551,12 +4560,12 @@ const useTripsheet = () => {
         // if(!isentertripID){
         //     return
         // }
-        if(!isEditMode){
-          return
+        if (!isEditMode) {
+            return
         }
 
         setOpen(true);
-        
+
     };
 
     const handleClose = () => {
@@ -4593,8 +4602,12 @@ const useTripsheet = () => {
         try {
             const path = imagepath?.path
             await axios.delete(`${apiUrl}/tripsheet-imagedelete`, { params: { path } })
+            setSuccess(true)
+            setSuccessMessage('Successfully Deleted')
+            console.log('deleted sucessfully')
         } catch (err) {
-
+            setError(true)
+            setErrorMessage('Failed to Delete')
         }
     }
 
@@ -4796,7 +4809,7 @@ const useTripsheet = () => {
                     const result = getTripWithValueInRange(mapdata, shedoutkm1);
                     if (result !== undefined) {
                         const hclcustomertotalkm = Number(hclkmdatas[0].totalCloseKm)
-                       
+
                         const ggg = Number(result.shedin || result?.closekm || result.startkm || result.shedout || 0)
                         // console.log(ggg,"hybridtotalkmwithout hybrid")
                         // console.log(hclcustomertotalkm,"hybridwithhybrid")
@@ -5597,7 +5610,7 @@ const useTripsheet = () => {
         handleEditMap,
         handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate, groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
-        isAddload,setisAddload,isEditload,setisEditload
+        isAddload, setisAddload, isEditload, setisEditload
 
     };
 };

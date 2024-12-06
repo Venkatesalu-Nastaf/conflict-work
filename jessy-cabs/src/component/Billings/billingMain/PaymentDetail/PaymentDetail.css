@@ -221,7 +221,7 @@
 @media screen and (min-width:320px) and (max-width:379.99px) {
     .copy-title-btn-PaymentDetail {
         width: 75% !important;
-        margin-top: 30px;
+        /* margin-top: 30px; */
         background: none !important;
         padding: 10px 20px 10px;
         border: none;

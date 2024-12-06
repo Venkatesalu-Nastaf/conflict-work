@@ -722,9 +722,9 @@ const TransferReport = ({ stationName }) => {
                   />
                 </div>
                 <div className="input input-transfer-report" >
-                  {/* <div className="icone">
+                  <div className="icone">
                     <FontAwesomeIcon icon={faBuilding} size="xl" />
-                  </div> */}
+                  </div>
 
                   <TextField
                     size="small"

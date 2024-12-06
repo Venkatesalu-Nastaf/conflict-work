@@ -12,14 +12,17 @@
   flex-direction: column;
   color: #000;
 }
+
 .green-button {
-  background-color: rgb(1, 147, 1) !important; /* Override default styles */
+  background-color: rgb(1, 147, 1) !important;
+  /* Override default styles */
   color: white;
 }
 
 .green-button:hover {
   background-color: rgb(2, 116, 2) !important;
 }
+
 .Tripsheet-header {
   border-top: solid 1px #ccc;
   /* background: var(--glass); */
@@ -316,6 +319,7 @@
 }
 
 @media screen and (min-width: 565px) and (max-width: 704.99px) {
+
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
@@ -325,6 +329,7 @@
 }
 
 @media screen and (min-width: 705px) and (max-width: 768.99px) {
+
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
@@ -334,6 +339,7 @@
 }
 
 @media screen and (min-width: 320px) and (max-width: 565.99px) {
+
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
@@ -671,6 +677,7 @@
 .tripsheet-top-division-status-main .MuiOutlinedInput-root.MuiInputBase-sizeSmall {
   padding: 0px !important;
   font-size: 14px;
+  width: 137px;
 }
 
 .icone-margin-adjust {
@@ -775,35 +782,37 @@
   width: 200px;
 }
 
-.in-feild{
+.in-feild {
   display: flex;
-    align-items: center;
-    gap: 10px;
+  align-items: center;
+  gap: 10px;
   flex-wrap: nowrap;
 }
 
 @media screen and (min-width:744px) and (max-width:1125px) {
-  .in-feild{
+  .in-feild {
     display: flex;
-      align-items: center;
-      gap: 10px;
+    align-items: center;
+    gap: 10px;
     flex-wrap: wrap;
   }
 }
 
-.left-buttons{
+.left-buttons {
   width: 39%;
 }
-.right-buttons{
+
+.right-buttons {
   width: 55%;
 }
 
-@media screen  and (max-width:743.99px) {
-  .left-buttons{
+@media screen and (max-width:743.99px) {
+  .left-buttons {
     width: 100%;
     width: 39%;
   }
-  .right-buttons{
+
+  .right-buttons {
     width: 100%;
     width: 55%;
   }
@@ -845,7 +854,7 @@
     width: 125px !important;
   }
 
-  .tripsheet-vendor-info-main-popup .input-field .input-g{
+  .tripsheet-vendor-info-main-popup .input-field .input-g {
     width: 125px !important;
   }
 

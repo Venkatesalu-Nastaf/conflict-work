@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext,useMemo} from 'react';
+import React, { useEffect, useState, useContext, useMemo } from 'react';
 import "./EmployeeCreation.css";
 import Box from "@mui/material/Box";
 import Input from '@mui/material/Input';
@@ -13,7 +13,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox,Switch } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch } from "@mui/material";
 // import Avatar from "../../../../assets/img/avatar.png"
 import { UserPermission } from '../../../UserPermission/UserPermission'
 import { PermissionContext } from '../../../context/permissionContext';
@@ -96,9 +96,9 @@ const EmployeeCreation = ({ stationName }) => {
     handleClickShowPasswords,
     handleMouseDownPasswords, handleAutocompleteChangeStationName, handleChangeuniquecreation, cerendentialdata,
     isEditMode,
-    handleEdit,showPermission, setShowPermission,handleCheckboxChangealldata,
+    handleEdit, showPermission, setShowPermission, handleCheckboxChangealldata,
 
-    permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,handleSwitchforthatrow,handleSwitchforallrows
+    permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
   } = useEmplyeecreation();
 
   useEffect(() => {
@@ -115,17 +115,17 @@ const EmployeeCreation = ({ stationName }) => {
 
     // console.log("stationName--", stationName)
     if (stationName?.length > 0) {
-    //   // const data = stationName?.map(el => el.map(el => el.Stationname));
+      //   // const data = stationName?.map(el => el.map(el => el.Stationname));
       const data = stationName?.map(el => el.Stationname);
 
       setSationNameforUser(data);
-    // }
-    //  else {
+      // }
+      //  else {
       // const data = stationName.map(el => el.Stationname)
       // setSationNameforUser(data); // Set the original array when length is not greater than 1
     }
   }, [stationName]);
- 
+
   const handleClickOpen = () => {
     setIsOpenvehicle(true)
   }
@@ -157,10 +157,10 @@ const EmployeeCreation = ({ stationName }) => {
   const handleSearchUser = (e) => {
     setSearchUser(e.target.value);
   }
-  
+
 
   const filteruser = useMemo(() => {
-    return rows.filter(user => 
+    return rows.filter(user =>
       user.username.toLowerCase().includes(searchUser.toLowerCase())
     );
   }, [rows, searchUser]);
@@ -188,7 +188,7 @@ const EmployeeCreation = ({ stationName }) => {
                     style={{ width: '100%' }}
                   />
                 </div>
-           
+
                 <div className="input">
                   <div className='full-width' style={{ display: 'grid' }}>
                     <span className='full-width' style={{ display: 'flex' }}>
@@ -204,7 +204,7 @@ const EmployeeCreation = ({ stationName }) => {
                         className='full-width'
                         value={book.username || ''}
                         // onChange={handleChange}
-                        style={{width:'183px'}}
+                        style={{ width: '183px' }}
                         onChange={handleChangeuniquecreation}
                       />
                     </span>
@@ -254,15 +254,15 @@ const EmployeeCreation = ({ stationName }) => {
                     id="designation"
                   />
                 </div>
-              
+
                 <div className="input" style={{ paddingRight: '15px' }}>
-                <FormLabel htmlFor='SuperAdmin'>SuperAdmin</FormLabel>
-                <Switch
+                  <FormLabel htmlFor='SuperAdmin'>SuperAdmin</FormLabel>
+                  <Switch
                     label='label'
                     id="superAdmin"
                     name="superAdmin"
                     onChange={handleChange}
-                  
+
 
                     checked={book.superAdmin}
                   />
@@ -299,25 +299,25 @@ const EmployeeCreation = ({ stationName }) => {
                     )}
                     // style={{ width: 170 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Station Name" placeholder="Organization" style={{ width: '185px' ,marginRight:'150px'}} />
+                      <TextField {...params} label="Station Name" placeholder="Organization" style={{ width: '185px' }} />
                     )}
                   />
                 </div>
 
-                <div className="input" style={{ paddingRight: '18px', marginLeft: '-150px' }}>
-                        <div className="icone">
-                          <ListAltIcon color="action" />
-                        </div>
-                        <TextField
-                          size="small"
-                          name="employeeid"   
-                          value={book.employeeid || ''}
-                          onChange={handleChange}
-                          label="Employee ID"
-                          id="employeeid"
-                          style={{ width: '185px' }}
-                        />
+                <div className="input" style={{ paddingRight: '18px' }}>
+                  <div className="icone">
+                    <ListAltIcon color="action" />
                   </div>
+                  <TextField
+                    size="small"
+                    name="employeeid"
+                    value={book.employeeid || ''}
+                    onChange={handleChange}
+                    label="Employee ID"
+                    id="employeeid"
+                    style={{ width: '185px' }}
+                  />
+                </div>
 
                 <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
@@ -385,7 +385,7 @@ const EmployeeCreation = ({ stationName }) => {
                     </RadioGroup>
                   </FormControl>
                 </div>
-                <div className="input" style={{ width: "160px",marginRight:'30px' }}>
+                <div className="input" style={{ width: "160px", marginRight: '30px' }}>
                   {isEditMode ? (
                     <Button variant="contained" disabled={!UserCreation_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
@@ -397,11 +397,11 @@ const EmployeeCreation = ({ stationName }) => {
                     <div style={{ display: "flex", justifyContent: "end" }}>
                       <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
                     </div>
-                  } 
-                </div> 
-                                           
+                  }
+                </div>
+
                 <div>
-                  <Button disabled={!UserCreation_new} variant="outlined" onClick={handleClickOpen} style={{marginLeft:'30px'}}>
+                  <Button disabled={!UserCreation_new} variant="outlined" onClick={handleClickOpen} style={{ marginLeft: '30px' }}>
                     Email Info
                   </Button>
 
@@ -416,7 +416,7 @@ const EmployeeCreation = ({ stationName }) => {
                           <TextField
                             sx={{
                               width: '100%',
-                              filter: isEditable ? 'none' : 'blur(1px)', 
+                              filter: isEditable ? 'none' : 'blur(1px)',
                             }}
                             size="small"
                             id="Sender_Mail"
@@ -465,7 +465,7 @@ const EmployeeCreation = ({ stationName }) => {
                       </div>
                     </DialogContent>
                   </Dialog>
-                </div> 
+                </div>
 
               </div>
             </div>
@@ -513,7 +513,7 @@ const EmployeeCreation = ({ stationName }) => {
                     onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                   />
                 )}
-                {UserCreation_modify === 1 && isEditMode &&(
+                {UserCreation_modify === 1 && isEditMode && (
                   <SpeedDialAction
                     key="edit"
                     icon={<ModeEditIcon />}
@@ -521,7 +521,7 @@ const EmployeeCreation = ({ stationName }) => {
                     onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                   />
                 )}
-                {UserCreation_delete === 1 && isEditMode &&(
+                {UserCreation_delete === 1 && isEditMode && (
                   <SpeedDialAction
                     key="delete"
                     icon={<DeleteIcon />}

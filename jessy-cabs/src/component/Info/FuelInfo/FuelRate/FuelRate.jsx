@@ -76,10 +76,10 @@ const FuelRate = () => {
                 setLoading(false);
                 if (error.message === 'Network Error') {
                     setErrorMessage("Check network connection.");
-                  } 
+                }
             })
             .finally(() => {
-                setLoading(false); 
+                setLoading(false);
             });
     };
 
@@ -154,8 +154,8 @@ const FuelRate = () => {
 
                         <Box
                             sx={{
-                                height: 400, 
-                                width:900,
+                                height: 400,
+                                width: '100%',
                                 position: 'relative',
                                 '& .MuiDataGrid-virtualScroller': {
                                     '&::-webkit-scrollbar': {
@@ -177,22 +177,22 @@ const FuelRate = () => {
                                 },
                             }}
                         >
-                             {loading ? ( 
+                            {loading ? (
                                 <Box
                                     sx={{
-                                        position: 'absolute', 
+                                        position: 'absolute',
                                         top: '50%',
-                                        left: '50%', 
-                                        transform: 'translate(-50%, -50%)', 
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',
                                     }}
                                 >
                                     <CircularProgress />
                                 </Box>
                             ) : (
-                            <DataGrid
-                                rows={rows}
-                                columns={columns}
-                            />
+                                <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                />
                             )}
                         </Box>
                     </div>

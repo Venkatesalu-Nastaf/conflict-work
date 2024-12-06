@@ -3675,7 +3675,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                   <div>
                     {selectedStatus !== "Temporary Closed" && (
-                      <div className="tripsheet-table1">
+                      <div className="tripsheet-table1 Scroll-Style">
                         <table className="table-condensed table-striped fixed_header">
                           <thead className="BI_tablehead">
                             <tr>

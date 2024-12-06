@@ -22,7 +22,8 @@ body {
   height: 100%;
   /* margin-top: 7px; */
 }
-.loading-spinners{
+
+.loading-spinners {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -765,14 +766,14 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-  .main-content-container {
-    width: 98vw;
-    margin-top: 20px;
-    height: 78vh;
-  }
-
   .Android .main-content-container {
     margin-top: -35px;
+  }
+
+  .main-content-container {
+    width: 98vw;
+    margin-top: 20px !important;
+    height: 78vh;
   }
 
   .iPhone-responsive .main-content-container {
@@ -863,7 +864,8 @@ body {
   }
 }
 
-.head-tab-all .css-k008qs {
+.head-tab-all .css-k008qs,
+.map-vehicle-table-tabs .css-k008qs {
   overflow: auto;
 }
 
@@ -878,7 +880,7 @@ body {
   height: 320px;
   top: -75px;
   right: 30px;
-  z-index: 1;
+  z-index: 9;
 }
 
 

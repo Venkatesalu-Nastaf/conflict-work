@@ -658,7 +658,7 @@ const Customer = ({ stationName }) => {
                 <div className="input dropdown">
                   <label htmlFor="gstTax">GST</label>
                   <select id="gstTax" className='full-width' name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange}>
-                    <option value="0" >None</option>
+                    <option value="" >None</option>
                     <option value="5">5%</option>
                     <option value="12">12%</option>
                   </select>

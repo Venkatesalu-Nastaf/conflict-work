@@ -417,7 +417,7 @@ const invoiceNoCheck = !rows[0]?.InvoiceNo || rows[0]?.InvoiceNo[0] == null || r
                     </div>
                 </div>
                 <div className="download-container-groupbilling">
-                    <div className="Download-btn">
+                    <div className="">
                         <PopupState variant="popover" popupId="demo-popup-menu">
                             {(popupState) => (
                                 <React.Fragment>

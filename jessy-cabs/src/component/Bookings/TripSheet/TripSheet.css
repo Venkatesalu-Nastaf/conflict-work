@@ -315,12 +315,29 @@
   }
 }
 
-@media screen and (min-width: 320px) and (max-width: 768.99px) {
-
+@media screen and (min-width: 565px) and (max-width: 704.99px) {
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 93vw;
+    width: 97vw;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 705px) and (max-width: 768.99px) {
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    width: 99vw;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 565.99px) {
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    width: 92vw;
     justify-content: center;
   }
 }

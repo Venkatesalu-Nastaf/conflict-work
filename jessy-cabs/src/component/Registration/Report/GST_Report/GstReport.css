@@ -7,13 +7,22 @@
   margin-top: 15px;
 }
 
-.gst-report-input-field{
+.gst-report-input-field {
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
 
 @media screen and (max-width: 768px) {
-  .gst-report-input-field{
+  .gst-report-input-field {
     justify-content: center;
   }
+}
+
+.gst-report-table-input-field {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.gst-report-table-input-field .css-1tl47u6 {
+  width: 180px;
 }

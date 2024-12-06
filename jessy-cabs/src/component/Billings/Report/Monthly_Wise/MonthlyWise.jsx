@@ -46,7 +46,7 @@ const MonthlyWise = () => {
         <div className="MonthlyWise-main">
             <form >
                 <div className='main-content-form'>
-                    <div className='input-field' style={{ flexWrap: 'wrap' }}>
+                    <div className='input-field monthly-wise-input-field' style={{ flexWrap: 'wrap' }}>
                         <div className="input">
                             <div className="icone">
                                 <MdOutlineCalendarMonth color="action" />
@@ -101,7 +101,7 @@ const MonthlyWise = () => {
                             />
                         </div>
  
-                        <div className='show-all-button'>
+                        <div className='show-all-button monthly-wise-show-all-btn'>
                             <div className="input" >
                                 <Button variant="outlined" onClick={handleShow} >Show</Button>
                             </div>

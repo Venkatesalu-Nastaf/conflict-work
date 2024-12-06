@@ -35,7 +35,7 @@ export const PendingBills = () => {
 
         <>
             <div className='main-content-form'>
-                <div className='input-field pending-bills-input-field'>
+                <div className='input-field pending-bills-input-field' style={{ marginBottom: '15px' }}>
 
                     <div className="inut" style={{ display: "flex", alignItems: "center" }}>
                         <div className="icone">

@@ -8,6 +8,12 @@
     zoom: 85%;
 }
 
+@media screen and (max-width: 388.95px) {
+    .FuelLog-history-btns {
+        justify-content: center;
+    }
+}
+
 .Fuellog-total-history {
     display: block;
     width: 100%;

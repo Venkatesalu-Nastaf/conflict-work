@@ -1442,16 +1442,15 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
             </div>
           </div>
           <div className="sub-section2-driver">
-            <div className="second-table-driver">
+            {/* <div className="second-table-driver">
               <div className="booking-update-main driver-table">
                 <div className="booking-update">
                  
-
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div class="booking-table-new">
+            <div class="booking-table-new Scroll-Style">
               <table class="table-condensed table-striped fixed_header">
                 <thead class="BI_tablehead">
                   <tr>

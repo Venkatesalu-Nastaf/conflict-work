@@ -427,7 +427,7 @@ export const Vehicle = () => {
 
           <Box sx={{ width: 'auto', typography: 'body1', padding: "20px" }}>
             <TabContext value={valuedetailstabs}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className='map-vehicle-table-tabs'>
                 <TabList onChange={handleChangedetailstabs} aria-label="lab API tabs example">
                   <Tab label="Vehicles" value="1" />
                   <Tab label="Driving" value="2" />

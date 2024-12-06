@@ -23,6 +23,9 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Autocomplete } from "@mui/material";
 import { TextField } from '@mui/material';
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+
+
 const LogDetails = () => {
   const apiurl = APIURL
   const [logdetails, setLogDetails] = useState([])
@@ -55,25 +58,25 @@ const LogDetails = () => {
   // }
   const handlecolumnvalues = (data) => {
     const headers = Object.keys(data[0]);
-  
+
     const columns = headers.map((key) => {
       let valueFormatter = null;
-  
+
       // Apply date formatting for specific fields
-      if (["Log_Time", "Log_Date","bookingdate", "startdate", "tripsheet_date", "shedInDate", "shedOutDate", "Reportdate","closedate"].includes(key)) {
+      if (["Log_Time", "Log_Date", "bookingdate", "startdate", "tripsheet_date", "shedInDate", "shedOutDate", "Reportdate", "closedate"].includes(key)) {
         valueFormatter = (params) => {
           return params.value ? dayjs(params.value).format('DD-MM-YYYY') : '';
         };
       }
-  
+
       // Apply time formatting for specific time fields
-      if (["Log_Date","Log_Time", "bookingtime", "starttime", "Reporttime", "ShedOutTime",].includes(key)) {
+      if (["Log_Date", "Log_Time", "bookingtime", "starttime", "Reporttime", "ShedOutTime",].includes(key)) {
         valueFormatter = (params) => {
           return params.value ? dayjs(params.value, 'HH:mm').format('HH:mm') : '';
         };
       }
-      
-  
+
+
       return {
         field: key,
         headerName: key,
@@ -81,7 +84,7 @@ const LogDetails = () => {
         valueFormatter, // Attach the valueFormatter if it's a date or time field
       };
     });
-  
+
     setSelectedColumns(columns);
   };
 
@@ -339,6 +342,9 @@ const LogDetails = () => {
             </LocalizationProvider>
           </div>
           <div className="input">
+            <div className="icone">
+              <PermIdentityIcon color="action" />
+            </div>
             <Autocomplete
               fullWidth
               id="free-solo-customer"
@@ -350,7 +356,7 @@ const LogDetails = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="UserNames"
+                  label="Usernames"
                   name="usernamedata"
                   inputRef={params.inputRef}
                 />

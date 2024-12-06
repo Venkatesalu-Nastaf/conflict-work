@@ -77,7 +77,7 @@ const Organization = ({ logoImage }) => {
                                                     objectFit: 'fill',
                                                     color: 'transparent',
                                                     textIndent: '10000px'
-                                                  }}
+                                                }}
                                                 alt="logoimage"
                                                 src={logoImage}
                                             >
@@ -136,7 +136,7 @@ const Organization = ({ logoImage }) => {
                                                 disabled={!editMode}
                                             />
                                         </div>
-                                        
+
                                         {/* </div>
                                 <div className="input-field organisation-details-input-feilds"> */}
                                         <div className="input input-buttons-small">
@@ -178,7 +178,7 @@ const Organization = ({ logoImage }) => {
                                             <ModeEditIcon />
                                         </IconButton>
                                     </div>
-                                 
+
                                     <div className='alert-popup-main'>
                                         {error &&
                                             <div className='alert-popup Error' >
@@ -358,7 +358,7 @@ const Organization = ({ logoImage }) => {
                                     />
                                 </div>
                                 <div className="input organization-input">
-                                    <div>
+                                    <div style={{ display: 'grid', justifyContent: 'center' }}>
                                         <label htmlFor="">Bank Details:</label>
                                         <TextField
                                             sx={{ width: "225px" }}
@@ -392,9 +392,9 @@ const Organization = ({ logoImage }) => {
                                 </div>
                             ) : (
                                 <div></div>
-                             
+
                             )}
-        
+
                         </div>
                         <div className='alert-popup-main'>
                             {info &&

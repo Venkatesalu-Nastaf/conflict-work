@@ -112,7 +112,8 @@ else{
 async function tripguestsendSMS(dataToSend) {
     const { guestname, guestmobileno, vehRegNo, vehType, driverName,tripid, mobileNo, reporttime, startdate, ofclanno } = dataToSend;
     console.log(guestname, guestmobileno, vehRegNo, vehType, driverName,tripid, mobileNo, reporttime, startdate, ofclanno,"guestsms")
-    const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
+    // const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
+    const formattedFromDate = moment(startdate).format('DD-MM-YYYY');
         console.log(formattedFromDate,"date")
 
     // const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
@@ -183,7 +184,7 @@ else{
 async function tripdriversendSMS(dataSend) {
     const {tripid, guestname,guestmobileno ,mobileNo, reporttime, startdate, address1} = dataSend;
     console.log(tripid, guestname,guestmobileno, mobileNo, reporttime, startdate,address1,"driversms")
-    const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
+    const formattedFromDate = moment(startdate).format('DD-MM-YYYY');
     console.log(formattedFromDate,"date")
     // const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
     const apiUrl = process.env.SMS_APIURL;

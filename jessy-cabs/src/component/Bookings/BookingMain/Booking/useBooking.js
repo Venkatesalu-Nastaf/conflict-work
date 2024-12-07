@@ -90,6 +90,9 @@ const useBooking = () => {
     const stationValue = params.get("servicestation");
     const payValue = params.get("paymenttype") || "BTC";
     const dispath = params.get("dispatchcheck");
+    const shedOutDate = params.get("shedOutDate")|| dayjs()
+    const startdate = params.get("startdate")|| dayjs()
+   
     if (dispath) {
       setSendEmail(false)
       setIsEditMode(dispath)
@@ -159,11 +162,14 @@ const useBooking = () => {
     // console.log(formData,'form datas')
     formData["servicestation"] = stationValue;
     formData["paymenttype"] = payValue;
+    formData["shedOutDate"] = shedOutDate;
+    formData["startdate"] = startdate;
     const ratetye = formData["ratenamebook"]
     setRate_name(ratetye)
     setBookingStatus(formData["status"])
     setBook(formData);
     setFormData(formData);
+    console.log(formData,"ll")
   }, [location]);
 
   useEffect(() => {
@@ -512,19 +518,40 @@ const handleAirportTransferChange = (event) => {
   };
 
   const handleDateChange = (date, name) => {
-    const formattedDate = dayjs(date).format("DD-MM-YYYY");
-    const parsedDate = dayjs(formattedDate).format("DD-MM-YYYY");
+    // const formattedDate = dayjs(date).format("DD-MM-YYYY");
+    // const parsedDate = dayjs(formattedDate).format("DD-MM-YYYY");
+
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+        const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
+    // console.log(parsedDate,"pp",formattedDate)
+    let data = parsedDate
+    if(data === "Invalid Date")
+    {
+     data = formattedDate
+    }
+    // setBook((prevBook) => ({
+    //   ...prevBook,
+    //   [name]: parsedDate || formattedDate,
+    // }));
+    // setFormValues((prevValues) => ({
+    //   ...prevValues,
+    //   [name]: parsedDate || formattedDate,
+    // }));
+    // setSelectedCustomerData((prevValues) => ({
+    //   ...prevValues,
+    //   [name]: parsedDate || ,
+    // }));
     setBook((prevBook) => ({
       ...prevBook,
-      [name]: parsedDate,
+      [name]: data,
     }));
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: parsedDate,
+      [name]: data,
     }));
     setSelectedCustomerData((prevValues) => ({
       ...prevValues,
-      [name]: parsedDate,
+      [name]: data,
     }));
   };
 
@@ -901,8 +928,8 @@ useEffect(() => {
         username: storedUsername,
         Groups: selectedCustomerData.Groups || book.Groups || formData.Groups || selectedCustomerdriver.Groups,
         customer: restSelectedCustomerData.customer,
-        escort:formData.escort || selectedCustomerData.escort || book.escort,
-        transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport,
+        escort:formData.escort || selectedCustomerData.escort || book.escort || escort,
+        transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport || transferreport,
         hybridhcldata:hybdridatabooking
 
       };

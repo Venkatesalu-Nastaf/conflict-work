@@ -7,14 +7,16 @@ import { APIURL } from "../../../url";
 import Excel from 'exceljs';
 
 const columns = [
-  { field: "id5", headerName: "Sno", width: 50 },
+  { field: "id", headerName: "Sno", width: 50 },
   { field: "bookingno", headerName: "Booking No", width: 110 },
   { field: "tripid", headerName: "Tripsheet No", width: 110 },
   { field: "status", headerName: "Status", width: 110 },
   { field: "customer", headerName: "Customer", width: 130 },
   { field: "servicestation", headerName: "Service Station", width: 130 },
+  { field: "department", headerName: "TripsheetStation", width: 130 },
   { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
   { field: "bookingdate", headerName: "Booking Date", width: 120, valueFormatter: (params) => params.value ? dayjs(params.value).format('DD/MM/YYYY') : "" },
+  { field: "tripsheetdate", headerName: "Tripsheet Date", width: 120, valueFormatter: (params) => params.value ? dayjs(params.value).format('DD/MM/YYYY') : "" },
   { field: "shedOutDate", headerName: "ShedOut Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "startdate", headerName: "Start Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "reporttime", headerName: "ShedOut Time", width: 110 },
@@ -43,6 +45,8 @@ const columns = [
   { field: "parking", headerName: "Parking", width: 80 },
   { field: "totalcalcAmount", headerName: "TotalAmount", width: 100 },
 ];
+
+
 
 const useDispatched = () => {
   const apiUrl = APIURL;
@@ -611,7 +615,8 @@ console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
         if (data.length > 0) {
           const rowsWithUniqueId = data.map((row, index) => ({
             ...row,
-            id5: index + 1,
+            // id5: index + 1,
+            id1: index + 1,
           }));
           setRows(rowsWithUniqueId);
           setColumnShowall(false);
@@ -638,7 +643,9 @@ console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
           // const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
           const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId].map((row, index) => ({
             ...row,
-            id5: index + 1, // S.No for combined rows
+            // id5: index + 1, 
+            id: index + 1,
+            // S.No for combined rows
           }))
           setRows(combinedRows);
           setColumnShowall(false);
@@ -769,22 +776,25 @@ console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
       const response = await axios.get(`${apiUrl}/tripsheet-showall?isStation=${stationQueryString}`);
   
       const data = response.data;
+      console.log(data,"statiom")
   
       if (data && data.length > 0) {
         setLoading(false); // Stop loading
       }
-  
+      // if (data && data.tripsheet.length > 0 || data.booking.length > 0) {
       if (data && data.tripsheet && data.booking) {
         // Process tripsheet data
+        console.log("hello enter")
         const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
           ...row,
-          id1: index + 1,
+          // id1: index + 1,
+          //  tripsheetdate1 :row.tripsheetdate
         }));
   
         // Process booking data
         const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
           ...row,
-          id1: index + 1,
+          // id1: index + 1,
         }));
   
         // Combine both sets of data
@@ -792,8 +802,9 @@ console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
   
         const tripsheetRowsWithUniqueId2 = combinedRows.map((row, index) => ({
           ...row,
-          id5: index + 1,
+          id: index + 1,
         }));
+        console.log(tripsheetRowsWithUniqueId2,)
   
         setRows(tripsheetRowsWithUniqueId2);
         setSuccess(true);

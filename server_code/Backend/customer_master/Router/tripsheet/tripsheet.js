@@ -1194,7 +1194,8 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
         const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass, requestno } = req.body;
-        const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
+        // const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
+        const formattedFromDate = moment(startdate).format('DD-MM-YYYY');
         console.log(formattedFromDate, "date")
 
         // Create a Nodemailer transporter

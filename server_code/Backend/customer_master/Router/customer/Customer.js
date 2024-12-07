@@ -154,18 +154,32 @@ router.get('/customersgroup', (req, res) => {
   //   GROUP BY
   //     c.customer;
   // `;
-  const query = `
- SELECT
-  c.*,
-  GROUP_CONCAT(co.orderedby) AS orderedby,
-  GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
-  GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
+//   const query = `
+//  SELECT
+//   c.*,
+//   GROUP_CONCAT(co.orderedby) AS orderedby,
+//   GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
+//   GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
+// FROM
+//   customers c
+// INNER JOIN
+//   customerOrderdata co ON c.customer = co.customer
+// GROUP BY
+//   c.customerId, c.customer
+// `;
+
+const query = `
+SELECT
+ c.*,
+ GROUP_CONCAT(co.orderedby) AS orderedby,
+ GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
+ GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
 FROM
-  customers c
-INNER JOIN
-  customerOrderdata co ON c.customer = co.customer
+ customers c
+LEFT JOIN
+ customerOrderdata co ON c.customer = co.customer
 GROUP BY
-  c.customerId, c.customer
+ c.customerId, c.customer
 `;
 
   db.query(query, (err, results) => {
@@ -425,18 +439,18 @@ router.get('/montlywisedataall', (req, res) => {
   })
 })
 
-router.get('/getCustomer-hybrid/:customer', (req, res) => {
-  const customer = req.params.customer;
-  console.log("customer", customer)
-  db.query("select hybrid from customers where name=?", [customer], (err, result) => {
-    if (err) {
-      console.log("Error", err)
-      return res.status(500).json({ message: "somthing went wrong..", error: true })
-    }
-    console.log("result", result)
-    return res.status(200).json(result[0])
-  })
-})
+// router.get('/getCustomer-hybrid/:customer', (req, res) => {
+//   const customer = req.params.customer;
+//   console.log("customer", customer)
+//   db.query("select hybrid from customers where name=?", [customer], (err, result) => {
+//     if (err) {
+//       console.log("Error", err)
+//       return res.status(500).json({ message: "somthing went wrong..", error: true })
+//     }
+//     console.log("result", result)
+//     return res.status(200).json(result[0])
+//   })
+// })
 
 router.get("/getuniqueCustomerdata/:customer", (req, res) => {
   const customer = req.params.customer;

@@ -588,6 +588,7 @@ router.post('/send-email', async (req, res) => {
         const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehicleName, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass } = req.body;
         console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehicleName, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass, "mailto")
         const formattedFromDate = moment(startdate).format('DD-MM-YYYY');
+      
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',

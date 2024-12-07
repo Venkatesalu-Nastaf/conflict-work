@@ -327,7 +327,7 @@ const useTransferdataentry = () => {
         setBillingdate(updatedFormData.Billdate);
         setServiceStation(updatedFormData.Stations);
         setTotalValue(parseInt(updatedFormData.Amount));
-        setBillingPage(updatedFormData?.billingsheet)        
+        setBillingPage(updatedFormData?.billingsheet)
         return () => {
             // setFormData({}); // Reset formData state to an empty object
         };
@@ -1727,10 +1727,10 @@ const useTransferdataentry = () => {
 
                 const OrganizationName = selectedCustomerDatas.customer || customer;
                 // const OrganizationName =  await customerMotherdatagroupstation(selectedCustomerDatas.customer || customer);
-                const Trips = rowSelectionModel.length;
+                const Trips = validTrips.length;
                 const billstatus = "notbilled";
                 // Construct the transfer list with valid trips and their amounts
-                
+
                 const transferlist = {
                     Status: billstatus,
                     Billdate: billDate,
@@ -1817,14 +1817,39 @@ const useTransferdataentry = () => {
                 const amount = response.data[0].Amount;
                 const trips = response.data[0].Trips;
                 const tripid = response.data[0].Trip_id;
-                const fullTotalAmount = parseInt(amount) + parseInt(tripAmount)
 
                 // const TotalTrips = parseInt(trips) + parseInt(Trips)
                 // Ensure rowSelectionModel is an array of strings
                 const rowSelectionModelAsStrings = rowSelectionModel.map(String); // Converts [1358] to ["1358"]
                 // console.log(rowSelectionModelAsStrings,"tttttttt",tripid)
                 const data = rowSelectionModelAsStrings.includes(tripid)
+                const filteredRows = selectedRow
+                    .filter(item => item.totalcalcAmount !== "" && item.totalcalcAmount !== 0)
+                    .map(item => ({
+                        tripid: item.tripid,
+                        totalcalcAmount: item.totalcalcAmount
+                    }));
 
+                const invalidRow = selectedRow
+                    .filter(item => item.totalcalcAmount === "" || item.totalcalcAmount === 0)
+                    .map(item => ({
+                        tripid: item.tripid,
+                        totalcalcAmount: item.totalcalcAmount
+                    }));
+                const invalidTripId = invalidRow.map(item => String(item.tripid));
+
+                const totalSum = filteredRows.reduce((sum, item) => sum + item.totalcalcAmount, 0);
+                const fullTotalAmount = parseInt(amount) + parseInt(totalSum)
+                const tripIds = filteredRows.map(item => String(item.tripid));
+                const tripidArray = tripid?.split(',');
+
+                const combinedTripIds = [...tripIds, ...tripidArray];
+
+                if (invalidRow.length > 0) {
+                    setError(true);
+                    setisbtnloading(false)
+                    setErrorMessage(`${invalidTripId} is Not Having Amount`);
+                }
                 if (data) {
                     setError(true);
                     setisbtnloading(false)
@@ -1833,48 +1858,42 @@ const useTransferdataentry = () => {
                 }
                 // Combine rowSelectionModelAsStrings and tripid into a new array
                 const combinedArray = [...rowSelectionModelAsStrings, tripid];
-                const uniqueTripIds = [...new Set(combinedArray)];
+                // const uniqueTripIds = [...new Set(combinedArray)];
+                const uniqueTripIds = [...new Set(combinedArray)].filter(tripId => tripId !== "");
+
                 // console.log(uniqueTripIds,"com")
-                const dadatrip = uniqueTripIds.length
+                const dadatrip = combinedTripIds.length
                 const TotalTrips = parseInt(dadatrip) // Results in ["1358", "1358"]
                 const todate = dayjs(toDate).format('YYYY-MM-DD')
                 const totalamount = fullTotalAmount.toString()
                 const tripscount = TotalTrips.toString()
-                // const transferlist = {
-                //     Billdate: billDate,
-                //     Organization_name: OrganizationName,
-                //     Trip_id: combinedArray,
-                //     FromDate: fromDate,
-                //     EndDate: todate,
-                //     Trips: tripscount,
-                //     Amount: totalamount,
-                //     grouptripid: grouptripid
-                // }
+
+
                 const transferlist = {
                     Billdate: billDate,
                     Organization_name: OrganizationName,
-                    Trip_id: uniqueTripIds,
+                    Trip_id: combinedTripIds,
                     FromDate: fromDate,
                     EndDate: todate,
                     Trips: tripscount,
                     Amount: totalamount,
                     grouptripid: grouptripid
                 }
+                if (filteredRows.length > 0) {
 
-                const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
-                setSuccess(true)
-                setisbtnloading(false)
-                setSuccessMessage("Successfully Added")
-                setRows([])
+                    const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
+                    setSuccess(true)
+                    setisbtnloading(false)
+                    setSuccessMessage("Successfully Added")
+                    setRows([])
 
-                console.log(transferlist, rows, rowSelectionModel, 'transferlist');
-                setMisGroupTripId(rowSelectionModel)
-                // await axios.post(`${apiUrl}/insertTransferListTrip`, transferlist);
-                // setSuccess(true);
-                // setSuccessMessage("Successfully added");
-                // const billingPageUrl = `/home/billing/transfer`
-                // window.location.href = billingPageUrl
-
+                    setMisGroupTripId(rowSelectionModel)
+                    // await axios.post(`${apiUrl}/insertTransferListTrip`, transferlist);
+                    // setSuccess(true);
+                    // setSuccessMessage("Successfully added");
+                    // const billingPageUrl = `/home/billing/transfer`
+                    // window.location.href = billingPageUrl
+                }
 
 
             }
@@ -1883,7 +1902,7 @@ const useTransferdataentry = () => {
             //     setErrorMessage("Failed to add organization: " + error.message);
             // }
             catch (error) {
-                // console.error("Error occurredddddd:", error);
+                console.error("Error occurredddddd:", error);
 
                 // Check if there's no response, indicating a network error
                 if (error.message) {
@@ -2013,7 +2032,7 @@ const useTransferdataentry = () => {
                     const fromDate1 = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
                     const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
 
-                    setFromDate(fromDate1);                    
+                    setFromDate(fromDate1);
                     setToDate(toDate);
 
                     setCustomer(response.data[0].Organization_name);

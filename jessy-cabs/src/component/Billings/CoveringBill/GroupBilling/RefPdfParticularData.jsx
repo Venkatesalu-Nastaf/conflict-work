@@ -153,7 +153,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
         }
     };
     // const rupeestext = convertToWords(fullTotal) || '------';
-  
+
     // const rupeestext = convertToWords(fullTotal);
     const commonBillingState = commonStates.length > 0 ? commonStates : commonState;
     console.log(commonBillingState, 'common--------');
@@ -164,33 +164,35 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     const cgstcalc = customerData[0]?.gstTax / 2;
     const sgstcalc = customerData[0]?.gstTax / 2;
     // const cgstAmount = Math.round(fullAmount * cgstcalc / 100 || 0);
-  
+
     // const cgstAmount = fullAmount * cgstcalc / 100 || 0;
 
     // const igstcalc = customerData[0]?.gstTax;
     // const igstAmount = Math.round(fullAmount * igstcalc / 100 || 0)
-    console.log(pdfData,"lll")
+    console.log(pdfData, "lll")
 
-    const totalSum = pdfData?.reduce((sum, li) => 
-        sum + Number(li.parking || 0) + Number(li.permit || 0) + Number(li.toll || 0),0);
-      const totalSumadvance = pdfData?.reduce(
-        (sum, li) => sum + Number(li.customeradvance || 0) ,
+    const totalSum = pdfData?.reduce((sum, li) =>
+        sum + Number(li.parking || 0) + Number(li.permit || 0) + Number(li.toll || 0), 0);
+    const totalSumadvance = pdfData?.reduce(
+        (sum, li) => sum + Number(li.customeradvance || 0),
         0
-      );
-      const totalSumcalc = pdfData?.reduce(
+    );
+    const totalSumcalc = pdfData?.reduce(
         (sum, li) => sum + Number(li.totalcalcAmount || 0),
         0
-      );
-      const totalAmountdata = Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)
+    );
+    //   const totalAmountdata = Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)
+    const totalAmountdata = Number(totalSumcalc)
+
     //   const totalAmountdata = Number(42870)
 
-      const cgstAmount = totalAmountdata * cgstcalc / 100 || 0;
-      const paymentValue = totalAmountdata + cgstAmount + cgstAmount || 0;
-      const roundamount = paymentValue.toFixed(0)
-      const igstcalc = customerData[0]?.gstTax;
-      const igstAmount = totalAmountdata * igstcalc / 100 || 0
-      const rupeestext = convertToWords(roundamount) || '------';
-    
+    const cgstAmount = totalAmountdata * cgstcalc / 100 || 0;
+    const paymentValue = totalAmountdata + cgstAmount + cgstAmount || 0;
+    const roundamount = paymentValue.toFixed(0)
+    const igstcalc = customerData[0]?.gstTax;
+    const igstAmount = totalAmountdata * igstcalc / 100 || 0
+    const rupeestext = convertToWords(roundamount) || '------';
+
 
     return (
         <>
@@ -264,7 +266,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 </div>
 
                 <div className="Datediv">
-            
+
                     <p>From: <span className="Datetext">{dayjs(FromDate).format('DD-MM-YYYY')}</span></p>
 
                     <p>To: <span className="Datetext">{dayjs(FromDate).format('DD-MM-YYYY')}</span></p>
@@ -355,7 +357,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 </div> */}
 
 
-<div>
+                <div>
                     <table className="table-ref">
                         <thead>
                             <tr>
@@ -366,10 +368,10 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                 <th className="tableheadtext">Reported To</th>
                                 <th className="tableheadtext">Park/Permit</th>
                                 <th className="tableheadtext">Cus Adv</th>
-                                <th className="tableheadtext">Amount</th>
+                                {/* <th className="tableheadtext">Amount</th> */}
                                 <th className="tableheadtext">Total Amount</th>
 
-                                 {/* <th className="tableheadtext">Amount</th>
+                                {/* <th className="tableheadtext">Amount</th>
                                 {
                                     customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
                                         <>
@@ -385,7 +387,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                     <th className="tableheadtext">Cus Adv</th>
                                 )}
                                 <th className="tableheadtext">Bill Amt</th> */}
-                            </tr> 
+                            </tr>
                         </thead>
                         <tbody className="tablebody" style={{ height: pdfData.length <= 2 ? '180px' : '100%' }}>
                             {pdfData?.map((li, index) => (
@@ -401,9 +403,9 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
 
                                     <td className="tdata">{li.customeradvance || 0}</td>
                                     <td className="tdata">{li.totalcalcAmount}</td>
-                                    <td className="tdata">
+                                    {/* <td className="tdata">
   {[li.parking, li.permit, li.toll, li.customeradvance || 0, li.totalcalcAmount || 0].reduce((sum, value) => sum + Number(value), 0)}
-</td>
+</td> */}
 
                                     {/* <td className="tdata">{li.totalcalcAmount}</td> */}
                                     {/* {
@@ -455,20 +457,20 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
 
 
 
-<tfoot>
+                        <tfoot>
                             <tr>
                                 <td className="tdata">{ }</td>
                                 <td className="tdata"> </td>
                                 <td className="tdata"></td>
                                 <td className="tdata"></td>
                                 <td className="tdata">Total</td>
-                                 <td className="tdata">{totalSum}</td> 
-                                 <td className="tdata">{totalSumadvance}</td> 
-                                 <td className="tdata">{totalSumcalc}</td>
-                                 <td className="tdata">
+                                <td className="tdata">{totalSum}</td>
+                                <td className="tdata">{totalSumadvance}</td>
+                                <td className="tdata">{totalSumcalc}</td>
+                                {/* <td className="tdata">
   {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}
-</td>                   
-                        
+</td>                    */}
+
                                 {/* {customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
 
                                     <>
@@ -492,56 +494,62 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
 
                 <div className="total-div" style={{ marginLeft: '50px' }}>
 
-                       
-                                      
-                        { customerData[0]?.state === stationData[0]?.state ?
-                                     <>    
-                                      <div style={{ marginLeft: "100px" }}>
-                                     
-                                   {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
-                                   <>
-                                  
-                                    <h4>Amount :</h4> 
-                                 
-                                    <h4>CGST {Gst}% on {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}:</h4>
-                                    
-                                    <h4>CGST {Gst}% on {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}:</h4>
-                                    <h4>Total Amount :</h4> </> : <>
-                                    <h4>Amount :</h4> <h4></h4>
-                                    <h4></h4> 
-                                    <h4 style={{ marginTop: '110px' }}>Total Amount :</h4> 
-                                  </>}
+
+
+                    {customerData[0]?.state === stationData[0]?.state ?
+                        <>
+                            <div style={{ marginLeft: "100px" }}>
+
+                                {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
+                                    <>
+
+                                        <h4>Amount :</h4>
+
+                                        {/* <h4>CGST {Gst}% on {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}:</h4> */}
+                                        <h4>CGST {Gst}% on {Number(totalSumcalc)}:</h4>
+
+
+                                        {/* <h4>CGST {Gst}% on {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}:</h4> */}
+                                        <h4>SGST {Gst}% on {Number(totalSumcalc)}:</h4>
+
+                                        <h4>Total Amount :</h4> </> : <>
+                                        <h4>Amount :</h4> <h4></h4>
+                                        <h4></h4>
+                                        <h4 style={{ marginTop: '110px' }}>Total Amount :</h4>
+                                    </>}
+                            </div>
+                            <div className="amount-div">
+                                {/* <div style={{textAlign:'center',width:'75px'}}> */}
+                                {/* <p className="amounttext">{Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}.00</p> */}
+                                <p className="amounttext">{Number(totalSumcalc)}.00</p>
+
+
+                                <p className="amounttext" style={{ marginTop: '23px', paddingLeft: "14px" }}>{cgstAmount.toFixed(2)}</p>
+                                <p className="amounttext" style={{ marginTop: '23px', paddingLeft: "14px" }}>{cgstAmount.toFixed(2)}</p>
+                                <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
+                            </div>
+                        </> : <>
+
+                            {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && <>
+                                <div style={{ marginLeft: "100px" }}><h4>Amount :</h4>
+                                    <h4>IGST {igstcalc}% on {totalAmountdata} :</h4>
+
+                                    <h4>Total Amount :</h4>
                                 </div>
                                 <div className="amount-div">
-                                {/* <div style={{textAlign:'center',width:'75px'}}> */}
-                                <p className="amounttext">{Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}.00</p>
-                                    
-                                     <p className="amounttext" style={{ marginTop: '23px',paddingLeft:"14px" }}>{cgstAmount.toFixed(2)}</p>
-                                    <p className="amounttext" style={{ marginTop: '23px',paddingLeft:"14px" }}>{cgstAmount.toFixed(2)}</p>
-                                    <p className="amounttext" style={{ marginTop: '23px'}}>{paymentValue.toFixed(0)}.00</p> 
+                                    <p className="amounttext">{totalAmountdata}.00</p>
+
+                                    <p className="amounttext" style={{ marginTop: '23px', paddingLeft: "14px" }}>{igstAmount.toFixed(2)}</p>
+
+                                    <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
                                 </div>
-                            </> : <>
-                            
-                            {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && <>
-                                           <div style={{ marginLeft: "100px" }}><h4>Amount :</h4> 
-                                           <h4>IGST {igstcalc}% on {totalAmountdata} :</h4>
-   
-                                           <h4>Total Amount :</h4>
-                                       </div>
-                                       <div className="amount-div">
-                                       <p className="amounttext">{totalAmountdata}.00</p>
-                                       
-                                     <p className="amounttext" style={{ marginTop: '23px',paddingLeft:"14px" }}>{igstAmount.toFixed(2)}</p>
-                                
-                                           <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
-                                       </div>
-                                       </>
-                            }
                             </>
-                               }
-                                 
-                                   
-                    </div>
+                            }
+                        </>
+                    }
+
+
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '10px', textTransform: 'capitalize' }}><h4 style={{ margin: 0 }}>Rs.</h4><p style={{ marginLeft: 6, marginTop: '0px', fontWeight: 600 }}>{rupeestext}</p></div>
                 {customerData[0]?.gstTax === 0 || customerData[0]?.gstTax === null ?
                     <div style={{ display: 'flex', alignItems: 'center' }}>

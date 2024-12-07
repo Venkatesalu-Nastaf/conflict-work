@@ -133,7 +133,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
 
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
-        console.log(li.TotalTimeWithoutAddHours, 'hcll');
+        console.log(li.TotalTimeWithoutAddHours,li.closekm, 'hcll');
 
         addressone = li.address1
 
@@ -166,11 +166,11 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
         Releasingtime = li.shedintime
         ReportKm = li.startkm
         StartKm = li.shedout
-        CloseKm = li.shedin
-        ReleaseKm = li.closekm
+        CloseKm = li.closekm
+        ReleaseKm = li.shedin
         Totaldays = li.totaldays
         Totaltime = li.TotalTimeWithoutAddHours
-        Totalkms = li.totalkm1
+        Totalkms = parseInt(li.shedin) - parseInt(li.shedout) || 0
         TotalParking = li.parking
         TotalToll = li.toll
         TotalPermit = li.permit

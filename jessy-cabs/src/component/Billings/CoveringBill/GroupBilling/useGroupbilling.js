@@ -1167,7 +1167,7 @@ const useGroupbilling = () => {
                 { key: "parking", header: "Parking" },
                 { key: "toll", header: "Toll" },
                 { key: "driverBeta_amount", header: "DND/Toll/Parking Amount" },
-                { key: "totalcalcAmount", header: "Amount With All Taxes" },
+                { key: "totalcalcAmount1", header: "Amount With All Taxes" },
             ];
     
             worksheet.columns = columns;
@@ -1223,7 +1223,7 @@ const useGroupbilling = () => {
                 }
     
                 singleData["withoutTaxes"] = withoutTaxesdata(singleData["totalcalcAmount"], singleData["toll"] || 0, singleData["parking"] || 0, singleData["permit"] || 0);
-                singleData["totalcalcAmount"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] || 0 : addPercentage(singleData["totalcalcAmount"] || 0, customerData[0]?.gstTax);
+                singleData["totalcalcAmount1"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] || 0 : addPercentage(singleData["totalcalcAmount"] || 0, customerData[0]?.gstTax);
     
                 worksheet.addRow(singleData);
     

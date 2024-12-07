@@ -94,6 +94,8 @@ const Agreement = ({organizationNames}) => {
     infoMessage,
     book,
     handleClick,
+    selectAll,
+    handleSelectAll,  
     handleChange,
     handleRowClick,
     handleAdd,
@@ -103,6 +105,7 @@ const Agreement = ({organizationNames}) => {
     handleAutocompleteChange,
     handleExcelDownload,
     handlePdfDownload,
+    setCustomerPDF,
     columns,
     searchText,
     setSearchText,
@@ -111,9 +114,10 @@ const Agreement = ({organizationNames}) => {
     handleCloseDialog,
     dialogOpen,
     setFile,
-    setFromDate,
+    // setFromDate,
     toDate,
-    setToDate,
+    fromdate,
+    // setToDate,
     setBook,
     handleFileChange,
     fromDate,
@@ -151,6 +155,7 @@ const Agreement = ({organizationNames}) => {
   //     console.log("Selected file:", file);
   //   }
   // };
+  
 
   return (
     <div className="main-content-form Scroll-Style-hide">
@@ -216,7 +221,7 @@ const Agreement = ({organizationNames}) => {
                                           className="full-width"
                                           label="From Date"
                                           name="fromdate"
-                                          value={selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : dayjs(fromDate)}
+                                          value={selectedCustomerData?.fromdate? dayjs(selectedCustomerData.fromdate) : dayjs(fromdate)}
                                           format="DD/MM/YYYY"
                                           onChange={(date) => {
                                               handleDateChange(date, 'fromdate');
@@ -225,6 +230,37 @@ const Agreement = ({organizationNames}) => {
                                   </DemoContainer>
                               </LocalizationProvider>
                           </div>
+
+
+                        {/* <div className="input driver-input">
+                                <div className='icone'>
+                                    <CalendarMonthIcon />
+                                </div>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        label="From Date"
+                                        id="fromdate"
+                                        className='full-width'
+                                        value={
+                                            selectedCustomerData.fromdate
+                                                ? dayjs(selectedCustomerData.fromdate)
+                                                : dayjs() || book.fromdate
+                                                    ? dayjs(book.fromdate)
+                                                    : dayjs()
+                                        }
+                                        format="DD/MM/YYYY"
+                                        onChange={(date) => handleDateChange(date, "fromdate")}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField
+                                                {...inputProps}
+                                                inputRef={inputRef}
+                                                value={selectedCustomerData?.fromdate}
+                                            />
+                                        )}
+                                    </DatePicker>
+                                </LocalizationProvider>
+                            </div> */}
 
                               <div className="input">
                                   <div className="icone">
@@ -237,17 +273,47 @@ const Agreement = ({organizationNames}) => {
                                               className="full-width"
                                               label="To Date"
                                               name="toDate"
-                                              value={selectedCustomerData.toDate ? dayjs(selectedCustomerData.toDate) : dayjs(toDate)}
+                                              value={selectedCustomerData?.toDate ? dayjs(selectedCustomerData.toDate) : dayjs(toDate)}
                                               format="DD/MM/YYYY"
                                               onChange={(date) => {
                                                   handleDateChange(date, 'toDate');
-                                                  const formattedDate = dayjs(date).format('DD-MM-YYYY');
-                                                  setToDate(formattedDate);
+                                                  // const formattedDate = dayjs(date).format('DD/MM/YYYY');
+                                                  // setToDate(formattedDate);
                                               }}
                                           />
                                       </DemoContainer>
                                   </LocalizationProvider>
                               </div>
+
+{/* <div className="input driver-input">
+    <div className="icone">
+        <CalendarMonthIcon />
+    </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+            label="To Date"
+            id="toDate"
+            className="full-width"
+            value={
+                selectedCustomerData.toDate
+                    ? dayjs(selectedCustomerData.toDate)
+                    : book.toDate
+                        ? dayjs(book.toDate)
+                        : dayjs() // Default to today's date
+            }
+            format="DD/MM/YYYY"
+            onChange={(date) => handleDateChange(date, "toDate")} 
+        >
+            {({ inputProps, inputRef }) => (
+                <TextField
+                    {...inputProps}
+                    inputRef={inputRef}
+                />
+            )}
+        </DatePicker>
+    </LocalizationProvider>
+</div> */}
+
                                 
               <div className="input">
                 <div className="icone">
@@ -310,13 +376,18 @@ const Agreement = ({organizationNames}) => {
                 />
               </div>
 
-              <div className="input">
+              <div className="input">   
                 <input
                   id="file-upload"
                   name="Agreement_Image"
                   type="file"
                   style={{ display: "none" }}
-                  onChange={handleFileChange}
+                  // onChange={handleFileChange}
+                  onChange={(e) => {
+                    setCustomerPDF(e.target.files[0]);
+                      console.log('File selected:', e.target.files[0]);
+                      handleFileChange(e);
+                  }}
                 />    
                 <label htmlFor="file-upload">
                   <Button variant="outlined" component="span">
@@ -577,56 +648,72 @@ const Agreement = ({organizationNames}) => {
               </DialogContent>
             </Dialog> */}
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-                  <DialogContent>
-                    <div className="employee-dialogbox-div1">
-                      {Array.isArray(allFile) &&
-                        allFile.map((file, index) => (
-                          <div key={index} className="employee-dialogbox-div2">
-                            <Checkbox
-                              type="checkbox"
-                              checked={deletefile.includes(file.fileName)}
-                              onClick={() => handlecheckbox(file.fileName)}
-                            />
-                            {file.Agreement_Image.endsWith('.pdf') ? (
-                              <iframe
-                                src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
-                                width="350"
-                                height="300"
-                                title={`PDF ${index}`}
-                                style={{ border: "none" }}
-                              />
-                            ) : (
-                              <img
-                                src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
-                                width="350"
-                                height="300"
-                                alt=""
-                              />
-                            )}
-                          </div>
-                        ))}
-                    </div>
-                    <div style={{ height: 1, backgroundColor: 'black', marginTop: 5, marginBottom: 10 }}></div>
-                    <div style={{ display: 'flex' }}>
-                      <Button
-                        disabled={!Employee_delete}
-                        variant="contained"
-                        onClick={() => handleimagedelete(deletefile)}
-                      >
-                        Delete
-                      </Button>
-                      <Button
-                        variant="contained"
-                        onClick={() => handleDocumentDownload()}
-                        style={{ marginLeft: '20px' }}
-                      >
-                        Print
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+  <DialogContent>
+    <div className="employee-dialogbox-div1">
+      <Button
+        variant="contained"
+        onClick={handleSelectAll} // Assuming handleSelectAll toggles the selectAll state
+      >
+        {selectAll ? 'Deselect All' : 'Select All'}
+      </Button>
 
+      {Array.isArray(allFile) &&
+        allFile.map((file, index) => (
+          
+          <div key={index} className="employee-dialogbox-div2">
+            {/* <Checkbox
+              type="checkbox"
+              checked={deletefile.includes(file.fileName)}
+              onClick={() => handlecheckbox(file.fileName)} // handlecheckbox will manage individual selection
+            /> */}
 
+                                            <Checkbox typeof='checked'
+                                                checked={deletefile.includes(file.Agreement_Image)}
+                                                onClick={(event) => {
+
+                                                    handlecheckbox(file.Agreement_Image)
+
+                                                }} />
+            {file.Agreement_Image.endsWith('.pdf') ? (
+              <iframe
+                src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
+                width="350"
+                height="300"
+                title={`PDF ${index}`}
+                style={{ border: "none" }}
+              />
+            ) : (
+              <img
+                src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
+                width="350"
+                height="300"
+                alt=""
+              />
+            )}
+          </div>
+        ))}
+    </div>
+
+    <div style={{ height: 1, backgroundColor: 'black', marginTop: 5, marginBottom: 10 }}></div>
+    
+    <div style={{ display: 'flex' }}>
+      <Button
+        disabled={!Employee_delete}
+        variant="contained"
+        onClick={() => handleimagedelete(deletefile)}
+      >
+        Delete
+      </Button>
+      <Button
+        variant="contained"
+        onClick={() => handleDocumentDownload()}
+        style={{ marginLeft: '20px' }}
+      >
+        Print
+      </Button>
+    </div>
+  </DialogContent>
+</Dialog>
             <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
               <DialogContent>
                 <div>
@@ -639,9 +726,7 @@ const Agreement = ({organizationNames}) => {
               </DialogContent>
             </Dialog>
           </div>
-
         </div>
-
       </form>
     </div>
   );

@@ -900,10 +900,7 @@ const handlePdfDownload = () => {
     
                     if (userDataArray.length > 0) {
                         setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } else {
-                        setErrorMessage('No template data found.');
-                        setError(true);
-                    }
+                    } 
                 } else {
                     console.log("Failed to fetch data, status:", response.status);
                 }

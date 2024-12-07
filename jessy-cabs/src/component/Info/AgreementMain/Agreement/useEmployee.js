@@ -20,14 +20,17 @@ const useEmployee = () => {
     const [customer, setCustomer] = useState("");
     const [formData] = useState({});
     const [error, setError] = useState(false);
+    const [selectAll, setSelectAll] = useState(false);
     const [success, setSuccess] = useState(false);
     const [organizationNames, setOrganizationNames] = useState([]);
     const [info, setInfo] = useState(false);
     const [warning, setWarning] = useState(false);
-    const [fromDate, setFromDate] = useState(dayjs());
+    // const [fromDate, setFromDate] = useState(dayjs());
+    const [checkbox, setCheckbox] = useState([]);
     const [ToDate, setToDate] = useState(dayjs());
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
+    const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [warningMessage] = useState({});
     // const [infoMessage, setInfoMessage] = useState({});
     const [searchText, setSearchText] = useState('');
@@ -266,18 +269,40 @@ const useEmployee = () => {
 
     const [book, setBook] = useState({
         customer: '',
-        fromdate: dayjs().format("DD-MM-YYYY"),
-        toDate: dayjs().format("DD-MM-YYYY"),
+        fromdate:dayjs().format('DD-MM-YYYY'),
+        toDate:dayjs().format('DD-MM-YYYY'),
         email: '',
         mobileno: '',
         address: '',
         gstno: '',
-        Agreement_Image:null,
+        // Agreement_Image:null,
     });
+
+    const [customerPDF, setCustomerPDF] = useState(null);
+
+
+    const licenceSubmit = async (customer) => {
+        if (customerPDF !== null) {
+            const formData = new FormData();
+            formData.append("file", customerPDF);
+            
+            try {
+                await axios.post(`${apiUrl}/Customer-Uploadpdf/${customer}`, formData);
+                setCustomerPDF(null);
+            }
+            catch {
+                setError(true);
+                setErrorMessage('Image not inserted');
+            }
+        } else {
+            return
+        }
+        setCustomerPDF(null);
+    };
     
 
     const handleFileChange = (e) => {
-        console.log( e.target.files , "Uploaddddddddddddddd");
+        // console.log( e.target.files , "Uploaddddddddddddddd");
         setBook({
             ...book,
             Agreement_Image: e.target.files[0]
@@ -344,31 +369,49 @@ const useEmployee = () => {
           }));
         }
       };
-      
+      console.log(dayjs())
+      console.log(selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate).format("DD/MM/YYYY") : dayjs().format("DD/MM/YYYY"),"ppppp")
+      console.log(selectedCustomerData.fromdate ? "hhh": "oooo","ppppp")
 
       const handleDateChange = (date, name) => {
-        if (!date || !dayjs(date).isValid()) {
-            console.error("Invalid date selected");
-            return;
-        }
-        const formattedDate = dayjs(date).format("DD-MM-YYYY");
+        // if (!date || !dayjs(date).isValid()) {
+        //     console.error("Invalid date selected");
+        //     return;
+        // }
+        console.log(date,name,"ff")
+        const formattedDate = dayjs(date).format("DD/MM/YYYY");
+        const parsedDate = dayjs(formattedDate).format("DD/MM/YYYY");
+        console.log(formattedDate,"fff")
         setBook((prevBook) => ({
             ...prevBook,
-            [name]: formattedDate,
+            [name]: parsedDate,
         }));
         setSelectedCustomerData((prevData) => ({
             ...prevData,
-            [name]: formattedDate,
+            [name]:parsedDate,
         }));
     };
-    
+
+    // const handleDateChange = (date, name) => {
+    //     const formattedDate = dayjs(date).format("DD-MM-YYYY");
+    //     const parsedDate = dayjs(formattedDate).format("DD-MM-YYYY");
+    //     // console.log(formattedDate, "driver", parsedDate)
+    //     setBook((prevBook) => ({
+    //         ...prevBook,
+    //         [name]: parsedDate,
+    //     }));
+    //     setSelectedCustomerData((prevValues) => ({
+    //         ...prevValues,
+    //         [name]: parsedDate,
+    //     }));
+    // };
 
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
         customer:'',
-        fromdate:'',
-        toDate:'',
+        fromdate:dayjs(),
+        toDate:dayjs(),
         email:'',
         mobileno:'',
         address:'',
@@ -397,7 +440,7 @@ const useEmployee = () => {
                 if (res.data.length > 0) {
                     setAllFile(res.data);
                     setDialogOpen(true);
-                    console.log(res.data, "yyyyyyyyyyyyyyyyyyyyyyy")
+                    // console.log(res.data, "yyyyyyyyyyyyyyyyyyyyyyy")
                 } else {
                     setError(true);
                     setErrorMessage('No data found');
@@ -412,7 +455,7 @@ const useEmployee = () => {
 
     ///--------------------------------------------
 
-    const empid = selectedCustomerData?.empid || book.empid
+    const id = book.customer || selectedCustomerData?.customer;
     const [file, setFile] = useState(null);
 
     const addPdf = async () => {
@@ -420,7 +463,7 @@ const useEmployee = () => {
             const formData = new FormData();
             formData.append("file", file);
             try {
-                await axios.post(`${apiUrl}/agreement/${empid}`, formData)
+                await axios.post(`${apiUrl}/agreementpdf_Document/${id}`, formData)
             }
             catch {
                 setError(true);
@@ -488,51 +531,76 @@ const useEmployee = () => {
 
     //---------------------------------------------
 
-
     // const handleAdd = async () => {
-    //     const email  = book.email  || selectedCustomerData.email ;
-    //     if (!email ) {
+    //     const customer = book.customer || selectedCustomerData.customer;
+    //     if (!customer) {
     //         setError(true);
-    //         setErrorMessage("Fill your Email ID");
+    //         setErrorMessage("Enter Organization Details");
     //         return;
     //     }
-        
+    
     //     try {
-    //         await axios.post(`${apiUrl}/agreementdatas`, book); 
+    //         const formData = new FormData();
+    //         for (const key in book) {
+    //             formData.append(key, book[key]);
+    //         }
+    
+    //         // API call to upload data and file
+    //         const response = await axios.post(`${apiUrl}/agreementdocumentimage`, formData, {
+    //             headers: { "Content-Type": "multipart/form-data" },
+    //         });
+    
+    //         // Handle success
+    //         setSuccess(true);
+    //         setSuccessMessage(response.data.message || "Successfully Added");
+    
+    //         // Reset form and states
     //         handleCancel();
     //         addPdf();
     //         setCustomer();
-    //         setRows([]);
-    //         setSuccess(true);
-    //         setSuccessMessage("Successfully Added");
+    //         setRows([]);    
     //         handleList();
-    //     } 
-    //     // catch {
-    //     //     setError(true);
-    //     //     setErrorMessage("Failed to ADD Employee Data");
-    //     // }
-    //     catch (error) {
-    //         // console.error("Error occurredddddd:", error);
-         
-    //         // Check if there's no response, indicating a network error
-    //         if (error.message ) {
+    //     } catch (error) {
+    //         console.error("Error occurred:", error);
+    
+    //         // Error handling
+    //         if (error.response) {
+    //             setError(true);
+    //             setErrorMessage(error.response.data.message || "Failed to add data");
+    //         } else {
     //             setError(true);
     //             setErrorMessage("Check your Network Connection");
-    //             // console.log('Network error');
-    //         } else if (error.response) {
-    //             setError(true);
-    //             // Handle other Axios errors (like 4xx or 5xx responses)
-    //             setErrorMessage("Failed to Add Employee Data: " + (error.response.data.message || error.message));
-    //         } else {
-    //             // Fallback for other errors
-    //             setError(true);
-    //             setErrorMessage("An unexpected error occurred: " + error.message);
     //         }
     //     }
     // };
+    const handlecheckmaildriver = async () => {
+        try {
+            // Add templateMessageData to the dataToSend object
+            const dataToSend = {
+                customer:book.customer,
+                email: book.email,
+                fromDate:selectedCustomerData.fromdate,
+                toDate:selectedCustomerData.toDate,
+                Sendmailauth: organistaionsendmail.Sendmailauth,
+                Mailauthpass: organistaionsendmail.Mailauthpass,
+                // templateMessageData
+            };
+    
+            console.log("Sending data:", dataToSend); // For debugging purposes
+            await axios.post(`${apiUrl}/send-emailagreementdata`, dataToSend);
+            setSuccess(true);
+            setSuccessMessage("Mail Sent Successfully");
+        } catch (error) {
+            console.error("Error sending email:", error); // Added console log for debugging
+            setError(true);
+            setErrorMessage("An error occurred while sending mail");
+        }
+    };
+
 
     const handleAdd = async () => {
         const customer = book.customer || selectedCustomerData.customer;
+        // console.log(book.customer,selectedCustomerData.customer, 'gtgtgtgtgtgtgtgtgtgtgttgtgtgtgtgt' )
         if (!customer) {
             setError(true);
             setErrorMessage("Enter Organization Details");
@@ -545,20 +613,26 @@ const useEmployee = () => {
                 formData.append(key, book[key]);
             }
     
-            // API call to upload data and file
-            const response = await axios.post(`${apiUrl}/agreementdocumentimage`, formData, {
+            // Step 1: Upload data and file
+            const uploadResponse = await axios.post(`${apiUrl}/agreementdocumentimage`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
     
-            // Handle success
+            // Step 2: Fetch the last inserted ID if applicable
+            // const lastIdResponse = await axios.get(`${apiUrl}/lastcustomergetimage`);
+            // const lastDriverId = lastIdResponse.data.driverid;
+    
+            // Step 3: Handle dependent operations (PDF upload, email, etc.)
+            // addPdf(lastDriverId);
+            licenceSubmit(book.customer);
+            handlecheckmaildriver(book.customer)
             setSuccess(true);
-            setSuccessMessage(response.data.message || "Successfully Added");
+            setSuccessMessage(uploadResponse.data.message || "Successfully Added");
     
             // Reset form and states
             handleCancel();
-            addPdf();
             setCustomer();
-            setRows([]);    
+            setRows([]);
             handleList();
         } catch (error) {
             console.error("Error occurred:", error);
@@ -574,11 +648,12 @@ const useEmployee = () => {
         }
     };
     
+    
 
     const handleEdit = async() => {
         console.log("edited")
         // const selectedCustomer = rows.find((row) => row.email === email);
-        const { id4,id, ...rest } = selectedCustomerData;
+        const { id4,id,Agreement_Image, ...rest } = selectedCustomerData;
         console.log(id4,"value",selectedCustomerData)
         const updatedCustomer = { ...rest };
         await axios.put(`${apiUrl}/agreementedit/${id}`, updatedCustomer);
@@ -586,6 +661,9 @@ const useEmployee = () => {
         setSuccessMessage("Successfully updated");
         handleCancel();
         addPdf();   
+        licenceSubmit(updatedCustomer.customer)
+        console.log(updatedCustomer.customer, 'ggggggggggggg');
+        
         setRows([]);
         handleList()
     };
@@ -621,6 +699,19 @@ const useEmployee = () => {
     //     }
     // };
     
+    const handleSelectAll = () => {
+        if (selectAll) {
+            setDeleteFile([]);
+            // setCheckbox([])
+        } else {
+            const allFiles = allFile.map(img => img.Agreement_Image);
+            setDeleteFile(allFiles);
+            // setCheckbox(allFiles)
+            setSelectAll(false)
+        }
+        setSelectAll(prevState => !prevState);
+    };
+
 
     const handleClick = async (event, actionName, empid) => {
         event.preventDefault();
@@ -831,18 +922,45 @@ const useEmployee = () => {
             setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
         } else {
             setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
+            setCheckbox(prevDeleteFile => [...prevDeleteFile, fileName]);
         }
     };
 
+    // const handleContextMenu = () => {
+    //     axios.delete(`${apiUrl}/agreementimage-delete/` + imagedata)
+    //         .then(res => {
+    //             console.log("deleted")
+    //             setSuccess(true); 
+    //             setSuccessMessage("Successfully Deleted"); 
+    //         })
+    //         .catch(err => console.log(err))
+    //         setError(true); 
+    //         setErrorMessage("Failed to delete the image");
+    //     setDialogdeleteOpen(false);
+    //     setDialogOpen(false);
+    // };
+
+
     const handleContextMenu = () => {
-        axios.delete(`${apiUrl}/agreementimage-delete/` + imagedata)
+        axios
+            .delete(`${apiUrl}/agreementimage-delete/` + imagedata)
             .then(res => {
-                console.log("deleted")
+                console.log("Deleted successfully:", res.data);
+                setSuccess(true); 
+                setSuccessMessage("Successfully Deleted");
+                setError(false); 
             })
-            .catch(err => console.log(err))
-        setDialogdeleteOpen(false);
-        setDialogOpen(false);
+            .catch(err => {
+                console.error("Error deleting the image:", err);
+                setError(true); 
+                setErrorMessage("Failed to delete the image");
+            })
+            .finally(() => {
+                setDialogdeleteOpen(false);
+                setDialogOpen(false);
+            });
     };
+    
 
     return {
         selectedCustomerData,
@@ -873,13 +991,16 @@ const useEmployee = () => {
         columns,
         searchText,
         setSearchText,
-        fromDate,setFromDate,
+        // fromDate,setFromDate,
         ToDate,
         handleFileChange,
         setToDate,
+        setCustomerPDF,
         handleShowAll,
         organizationNames,
         setOrganizationNames,
+        handleSelectAll,
+        selectAll,
         allFile,
         handleCloseDialog,
         dialogOpen,
@@ -891,6 +1012,8 @@ const useEmployee = () => {
         handleContextMenu,
         handleAutocompleteChange,
         handleimagedelete,
+        checkbox,
+        setCheckbox,
         handlecheckbox,
         handleDocumentDownload,
         handleClosedeleteDialog,

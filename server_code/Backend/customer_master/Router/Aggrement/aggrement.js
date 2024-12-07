@@ -132,15 +132,125 @@ const storage = multer.diskStorage({
     });
   });
 
-//   router.post('/agreementpdf_Document/:id',uploadfile.single("file"), async (req, res) => {
-//     const customer = req.params.id;
-//     const fileType = req.file.mimetype;
-//     const sql = `insert into agreement_image(customer,Agreement_,file_type)values(${customer},'${fileType}')`;
-//     db.query(sql, (err, result) => {
-//         if (err) return res.json({ Message: "Error" });
-//         return res.json({ Status: "success" });
-//     })
-// })
+  const storageLicence = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, './customer_master/public/agreement_doc')
+    },
+    filename: (req, file, cb) => {  
+      cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+    }
+
+  })
+  
+  const uploadfileLicence = multer({ storage: storageLicence });
+  
+  router.post('/Customer-Uploadpdf/:customer', uploadfileLicence.single("file"), async (req, res) => {
+    const customer = req.params.customer
+    const Agreement_Image = req.file.Agreement_Image;
+    const fileType = req.file.mimetype;
+    // const {created_at}=req.body;
+    // console.log(created_at)
+    if (Agreement_Image) {
+      const sql = `insert into agreement_image(customer,Agreement_Image,file_type)values('${customer}','${Agreement_Image}','${fileType}')`;
+      db.query(sql, (err, result) => {
+        if (err) return res.json({ Message: "Error" });
+        console.log(result, "license")
+        return res.json({ Status: "success" });
+      })
+    }
+  })
+
+router.post('/send-emailagreementdata', async (req, res) => {
+    try {
+        const { customer, email, fromdate, toDate, Sendmailauth, Mailauthpass } = req.body;
+            console.log(customer, email, fromdate, toDate, Sendmailauth, Mailauthpass, 'hh')
+        // Create a Nodemailer transporter
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: Sendmailauth, // User's email address
+                pass: Mailauthpass, // User's email app password
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+
+        // Email content for the owner
+        const ownerMailOptions = {
+            from: Sendmailauth,
+            to: 'sharan1228s@gmail.com', // Set the owner's email address
+            subject: `${customer} sent you a booking request`,
+            text: `Guest Name: ${customer}\nEmail: ${email}\nGuest Mobile No: ${fromDate}\nStart Date: ${toDate}`,
+        };
+
+        // Send email to the owner
+        await transporter.sendMail(ownerMailOptions);
+
+        // Email content for the customer
+        const customerMailOptions = {
+            from: Sendmailauth,
+            to: email,
+            subject: 'Greetings from Jessy Cabs',
+            html: `
+                <p>
+                Dear ${customer},
+                <br>
+                I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
+                <br><br>
+                As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
+                <br><br>
+                <strong>Here are the key details regarding your renewal:</strong>
+                <ul>
+                    <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
+                    <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+                    <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
+                </ul>
+                <br>
+                Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
+                <br><br>
+                We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
+                </p>`,
+        };
+
+        // Send greeting email to the customer
+        await transporter.sendMail(customerMailOptions);
+
+        res.status(200).json({ message: 'Email sent successfully' });
+    } catch (error) {
+        console.error('Error while sending email:', error);
+        res.status(500).json({ message: 'An error occurred while sending the email', error: error.message });
+    }
+});
+
+module.exports = router;
+
+
+  router.get('/lastcustomergetimage', (req, res) => {
+    db.query('SELECT customer  FROM  Aggrement ORDER BY customer DESC LIMIT  1', (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+      }
+      if (result.length === 0) {
+        return res.status(404).json({ error: 'Customer not found' });
+      }
+      const lastcustomer = result[0];
+      return res.status(200).json(lastcustomer);
+    });
+  });
+  
+
+  router.post('/agreementpdf_Document/:id',uploadfile.single("file"), async (req, res) => {
+    const customer = req.params.id;
+    const fileType = req.file.mimetype;
+    const sql = `insert into agreement_image(customer,Agreement_Image,file_type)values(${customer},'${fileType}')`;
+    db.query(sql, (err, result) => {
+        if (err) return res.json({ Message: "Error" });
+        return res.json({ Status: "success" });
+    })
+})
 
   router.get('/agreement_Docview/:id', (req, res) => {
     const id = req.params.id;
@@ -158,6 +268,8 @@ const storage = multer.diskStorage({
     });
   });
 
+
+  
 
 // TO Delete
 router.delete('/agreementimage-delete/:filename', (req, res) => {
@@ -200,8 +312,8 @@ router.get('/Customerdatasfetch', (req, res) => {
     });
 });
 
-
 router.put('/agreementedit/:id', (req, res) => {
+
     const email= req.params.id
     const updatedCustomerData = req.body;
     console.log(email,"dddd",updatedCustomerData)
@@ -219,7 +331,6 @@ router.put('/agreementedit/:id', (req, res) => {
     });
 });
 
-// Delete Customer Master data
 // Delete Customer Master data
     router.delete('/aggreementdeleteid/:id', (req, res) => {
         const id = req.params.id; 

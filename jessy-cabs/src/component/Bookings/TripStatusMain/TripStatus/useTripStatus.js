@@ -585,7 +585,7 @@ const useDispatched = () => {
       setLoading(false)
       return;
     }
-    setRows([]); // Clear rows to show empty grid
+    setRows([]); 
     try {
       // const response = await axios.get(
       //   `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}`
@@ -597,7 +597,7 @@ const useDispatched = () => {
     .filter(station => station.Stationname !== 'All')
     .map(station => station.Stationname);
 
-console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
+console.log(filteredStations,'station values'); 
 
 
       const response = await axios.get(
@@ -617,6 +617,7 @@ console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
             ...row,
             // id5: index + 1,
             id1: index + 1,
+            starttime: dayjs(row.starttime, "HH:mm:ss").format("HH:mm"),
           }));
           setRows(rowsWithUniqueId);
           setColumnShowall(false);
@@ -629,15 +630,17 @@ console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
         }
       } else {
         if (data && Array.isArray(data.tripsheet) && Array.isArray(data.booking)) {
-          // Process tripsheet data
+     
           const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
             ...row,
-           // id5: `tripsheet-${index + 1}`, // Unique ID for tripsheet
+            starttime: dayjs(row.starttime, "HH:mm:ss").format("HH:mm"),
+         
           }));
-          // Process booking data
+         
           const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
             ...row,
-           // id5: `booking-${index + 1}`, // Unique ID for booking
+            starttime: dayjs(row.starttime, "HH:mm:ss").format("HH:mm"),
+           
           }));
           // Combine both sets of data
           // const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
@@ -647,6 +650,7 @@ console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
             id: index + 1,
             // S.No for combined rows
           }))
+          console.log(combinedRows,'rows with statrt time ')
           setRows(combinedRows);
           setColumnShowall(false);
           setSuccess(true);
@@ -674,7 +678,7 @@ console.log(filteredStations,'station values'); // ['Mumbai', 'chennai']
           // console.log('Network error');
       } else if (error.response) {
           setError(true);
-          // Handle other Axios errors (like 4xx or 5xx responses)
+      
           setErrorMessage("Failed to Show: " + (error.response.data.message || error.message));
       } else {
           // Fallback for other errors

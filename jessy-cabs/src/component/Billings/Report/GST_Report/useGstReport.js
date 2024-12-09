@@ -182,7 +182,8 @@ const useGstReport = () => {
                 const newRow = worksheet.addRow({
                     id: row.id,
                     invoiceNo: row.invoiceNo,
-                    invoicedate: row.invoicedate,
+                    // invoicedate: row.invoicedate,
+                     invoicedate: row.invoicedate,
                     billingno: row.billingno,
                     billdate: dayjs(row.billdate).format('DD-MM-YYYY'),
                     tripsheetdate: dayjs(row.tripsheetdate).format('DD-MM-YYYY'),
@@ -270,7 +271,7 @@ const useGstReport = () => {
 
         // Map the rows to the format needed for autoTable
         const tableRows = rows.map(row => [
-            row.id, row.invoiceNo, dayjs(row.invoiceDate).format('DD-MM-YYYY'), dayjs(row.tripsheetdate).format('DD-MM-YYYY'),
+            row.id, row.invoiceNo, dayjs(row.invoicedate).format('DD-MM-YYYY'), dayjs(row.tripsheetdate).format('DD-MM-YYYY'),
             row.customer,
             row.gstNumber, row.totalcalcAmount, row.gstTax, row.cgst, row.sgst, row.igst, row.tripid, row.billed
         ]);
@@ -611,7 +612,8 @@ const useGstReport = () => {
             let igstTax = customerData[0]?.gstTax
 
             const FinalTripsheetResults = updatedTripsheetResults.map((item, index) => {
-                const billdate = item.invoiceDate;
+                // const billdate = item.invoiceDate;
+                const billdate = dayjs(item.invoiceDate).format('DD-MM-YYYY'); 
                 const customerDetails = item.customer;
                 const gstTax = customerData[0]?.gstTax || 0;
                 const totalcalcAmount = item.totalcalcAmount || 0;

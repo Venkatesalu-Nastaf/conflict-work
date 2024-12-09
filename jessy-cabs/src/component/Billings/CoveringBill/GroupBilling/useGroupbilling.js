@@ -86,7 +86,13 @@ const useGroupbilling = () => {
             headerName: groupInvoice ? "Invoice No" : "Bill No",
             width: 150
         },
-        { field: "InvoiceDate", headerName: "Invoice Date", width: 130 },
+        // { field: "InvoiceDate", headerName: "Invoice Date", width: 130 },
+        {
+            field: "InvoiceDate",
+            headerName: "Invoice Date",
+            width: 130,
+            valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),
+          },
         { field: "tripid", headerName: "Trip No", width: 150 },
         { field: "customer", headerName: "Customer", width: 130 },
         { field: "vehRegNo", headerName: "Vehcile No", width: 150 },

@@ -1365,15 +1365,19 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
     WHERE 
         ts.customer = ? AND ts.tripid = ?
     GROUP BY 
-        ts.tripid;
+        ts.id,vi.fueltype,vi.segement,c.gstTax,c.address1,s.signature_path,mi.path
     
         `,
         [decodedCustomer, tripid],
         (err, result) => {
           if (err) {
+            console.log(err,'error');
+            
             reject(err);
           } else {
-            resolve(result[0]); // Assuming we expect only one result per tripid
+            // console.log(result,'pdfzippppppppppppppppppppp');
+            
+            resolve(result); // Assuming we expect only one result per tripid
           }
         }
       );

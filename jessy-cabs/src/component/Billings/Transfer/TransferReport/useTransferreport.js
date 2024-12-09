@@ -538,18 +538,18 @@ const useTransferreport = () => {
           );
 
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const tripData = await response.json();
+          const tripData = await response.json()
+          const flattenedTripData = tripData.flat();
 
-          setPdfzipdata(tripData)
+          setPdfzipdata(flattenedTripData)
           // setSuccess(true)
         }
         else {
           return
         }
-      } catch { }
+      } catch (err) {
+        console.log(err, 'error');
+      }
     };
     fetchData();
   }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
@@ -736,8 +736,6 @@ const useTransferreport = () => {
           const fromdate = Result?.map(li => li.FromDate);
           setFromDate(fromdate)
           const enddate = Result?.map(li => li.EndDate);
-          console.log(enddate,'enddate');
-          
           setEndDate(enddate)
           const organization = Result?.map(li => li.Organization_name);
 

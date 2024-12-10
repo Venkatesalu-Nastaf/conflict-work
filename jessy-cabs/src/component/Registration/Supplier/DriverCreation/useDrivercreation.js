@@ -107,9 +107,12 @@ const useDrivercreation = () => {
         { field: "aadharno", headerName: "Aadhar Card No", width: 130 },
         {
             field: "licenseexpdate", headerName: "License Exp Date", width: 130,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            valueFormatter: (params) =>params.value ? dayjs(params.value).format("DD/MM/YYYY") :'',
         },
-        { field: "badgeexpdate", headerName: "Badge Exp Date", width: 130 },
+        { field: "badgeexpdate", headerName: "Badge Exp Date", width: 130,
+            valueFormatter: (params) =>params.value ? dayjs(params.value).format("DD/MM/YYYY") :'',
+         },
+
         { field: "active", headerName: "Active", width: 160 },
     ];
 

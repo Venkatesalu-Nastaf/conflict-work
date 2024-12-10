@@ -261,7 +261,13 @@ const useTripsheet = () => {
         { field: "id", headerName: "Sno", width: 70 },
         { field: "tripid", headerName: "TripSheet No", width: 120 },
         { field: "time", headerName: "Trip Time", width: 100 },
-        { field: "date", headerName: "Trip Date", width: 100, },
+        // { field: "date", headerName: "Trip Date", width: 100, },
+        {
+            field: "date",
+            headerName: "Trip Date",
+            width: 100,
+            renderCell: (params) => dayjs(params.value).format("DD-MM-YYYY"), // Change format as needed
+          },
         { field: "trip_type", headerName: "Trip Type", width: 120 },
         { field: "place_name", headerName: "Place Name", width: 120 },
         {
@@ -449,6 +455,7 @@ const useTripsheet = () => {
                 const data = response.data;
                 setRow(data);
                 setMaplogimgPopupOpen(true);
+                console.log(data,'mapdata')
             }
         } catch {
         }
@@ -1174,7 +1181,7 @@ const useTripsheet = () => {
                     Vendor_BataTotalAmount: vendorbilldata.Vendor_BataTotalAmount || 0,
                     Vendor_FULLTotalAmount: vendorbilldata.Vendor_FULLTotalAmount || 0,
                     Hybriddata: hybridhclcustomer || 0,
-                    TimeToggleData: timeToggle || null,
+                    TimeToggleData: timeToggle || 0,
                     VendorTimeToggle: timeTogglevendor,
                     Hcldatakmvalue: conflicthcldatavalue.Hcldatakmvalue,
                     HclMaxConflctdata: conflicthcldatavalue.HclMaxConflctdata,
@@ -1648,11 +1655,18 @@ const useTripsheet = () => {
 
     const handleUpload = () => {
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+        const documentType = formData.documenttype || selectedCustomerData.documenttype || book.documenttype;
         if (!tripid) {
             setError(true);
             setErrorMessage("Enter The Tripid.");
             return
         }
+        if(!documentType){
+            setError(true)
+            setErrorMessage("Please Select the Document Type")
+            return
+        }
+
         else {
             const input = document.createElement('input');
             input.type = 'file';

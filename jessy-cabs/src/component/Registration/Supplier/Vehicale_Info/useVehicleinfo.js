@@ -71,26 +71,31 @@ const useVehicleinfo = () => {
         { field: "insuranceno", headerName: "Insurance No", width: 130 },
         {
             field: "insduedate", headerName: "Insurance Due Date", width: 150,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            // valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            valueFormatter: (params) => params.value ? dayjs(params.value).format("DD/MM/YYYY") : '-',
+
         },
 
         { field: "nationalpermito", headerName: "Notional Permit No", width: 150 },
         {
             field: "npdate", headerName: "Notional Permit Date", width: 150,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            // valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            valueFormatter: (params) =>params.value ? dayjs(params.value).format("DD/MM/YYYY"):'',
         },
         { field: "statepermito", headerName: "State Permit No", width: 130 },
         {
             field: "spdate", headerName: "State Permit Date", width: 130,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            // valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            valueFormatter: (params) =>params.value ? dayjs(params.value).format("DD/MM/YYYY"):'',
         },
         {
             field: "rcbookno", headerName: "RC Book No", width: 130,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            // valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
         },
         {
             field: "fcdate", headerName: "FC Date", width: 130,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            // valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            valueFormatter: (params) => params.value ?dayjs(params.value).format("DD/MM/YYYY"):'',
         },
         { field: "avgmileage", headerName: "AVG Mileage", width: 130 },
         { field: "driverName", headerName: "Driver Name", width: 130 },

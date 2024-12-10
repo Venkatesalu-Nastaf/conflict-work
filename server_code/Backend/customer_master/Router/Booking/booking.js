@@ -119,7 +119,8 @@ router.get('/booking/:bookingno', (req, res) => {
                         }
                         if (result.length === 0) {
 
-                            return res.status(404).json({ error: 'u dont have accesss the page of stations' });
+                            // return res.status(404).json({ error: 'u dont have accesss the page of stations' });
+                            return res.status(404).json({ error: "you don't have access to this trip sheet based on service station" });
                         }
 
                         const bookingDetails = result[0]; // Assuming there is only one matching booking
@@ -707,6 +708,12 @@ router.post('/send-email', async (req, res) => {
                             <td style="padding: 8px;"><strong>Contact Number :</strong></td>
                             <td style="padding: 8px;">${guestmobileno}</td>
                         </tr>
+
+                         </tr>
+                        <tr>
+                        <td style="padding: 8px;"><strong>Location :</strong></td>
+                        <td style="padding: 8px;color: #000"">${servicestation}</td>
+                    </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Reporting Date :</strong></td>
                             <td style="padding: 8px;">${formattedFromDate}</td>

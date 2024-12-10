@@ -13,7 +13,6 @@ const columns = [
   { field: "status", headerName: "Status", width: 110 },
   { field: "customer", headerName: "Customer", width: 130 },
   { field: "servicestation", headerName: "Service Station", width: 130 },
-  { field: "department", headerName: "TripsheetStation", width: 130 },
   { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
   { field: "bookingdate", headerName: "Booking Date", width: 120, valueFormatter: (params) => params.value ? dayjs(params.value).format('DD/MM/YYYY') : "" },
   { field: "tripsheetdate", headerName: "Tripsheet Date", width: 120, valueFormatter: (params) => params.value ? dayjs(params.value).format('DD/MM/YYYY') : "" },
@@ -575,6 +574,19 @@ const useDispatched = () => {
   }
   const reversedRows = [...rows].reverse();  // to reverse 
 
+  function removeSeconds(time) {
+    // Split the time string by colon (:)
+    const timeParts = time.split(':');
+  
+    // Check if there are seconds (length 3), return hours:minutes
+    if (timeParts.length === 3) {
+      return `${timeParts[0]}:${timeParts[1]}`;
+    }
+  
+    // If there's only hours:minutes, return it as is
+    return time;
+  }
+
   // new working code
   const handleShow = useCallback(async () => {  
     setLoading(true)
@@ -617,7 +629,7 @@ console.log(filteredStations,'station values');
             ...row,
             // id5: index + 1,
             id1: index + 1,
-            starttime: dayjs(row.starttime, "HH:mm:ss").format("HH:mm"),
+            starttime: removeSeconds(row.starttime),
           }));
           setRows(rowsWithUniqueId);
           setColumnShowall(false);
@@ -633,13 +645,17 @@ console.log(filteredStations,'station values');
      
           const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
             ...row,
-            starttime: dayjs(row.starttime, "HH:mm:ss").format("HH:mm"),
+            // starttime: dayjs(row.starttime, "HH:mm:ss").format("HH:mm"),
+            starttime: removeSeconds(row.starttime),
+            servicestation:row.department
          
           }));
          
           const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
             ...row,
-            starttime: dayjs(row.starttime, "HH:mm:ss").format("HH:mm"),
+            // starttime: dayjs(row.starttime, "HH:mm:ss").format("HH:mm"),
+            starttime:removeSeconds(row.starttime), 
+
            
           }));
           // Combine both sets of data
@@ -669,10 +685,11 @@ console.log(filteredStations,'station values');
     //   // setErrorMessage("Error retrieving data");
     // }
     catch (error) {
-      // console.error("Error occurredddddd:", error);
+      console.error("Error occurredddddd:", error);
    
       // Check if there's no response, indicating a network error
       if (error.message ) {
+
           setError(true);
           setErrorMessage("Check your Network Connection");
           // console.log('Network error');
@@ -764,76 +781,76 @@ console.log(filteredStations,'station values');
    
 // }
   // };
-  const handleShowAll = async () => {
-    setLoading(true);
-    setColumnShowall(false);
-    setRows([]); // Clear rows to show empty grid
+  // const handleShowAll = async () => {
+  //   setLoading(true);
+  //   setColumnShowall(false);
+  //   setRows([]); // Clear rows to show empty grid
   
-    try {
-      const filteredStations = isStations
-        .filter(station => station.Stationname !== 'All')
-        .map(station => station.Stationname);
+  //   try {
+  //     const filteredStations = isStations
+  //       .filter(station => station.Stationname !== 'All')
+  //       .map(station => station.Stationname);
   
-      // Convert the array of station names to a comma-separated string
-      const stationQueryString = filteredStations.join(',');
+  //     // Convert the array of station names to a comma-separated string
+  //     const stationQueryString = filteredStations.join(',');
   
-      const response = await axios.get(`${apiUrl}/tripsheet-showall?isStation=${stationQueryString}`);
+  //     const response = await axios.get(`${apiUrl}/tripsheet-showall?isStation=${stationQueryString}`);
   
-      const data = response.data;
-      console.log(data,"statiom")
+  //     const data = response.data;
+  //     console.log(data,"statiom")
   
-      if (data && data.length > 0) {
-        setLoading(false); // Stop loading
-      }
-      // if (data && data.tripsheet.length > 0 || data.booking.length > 0) {
-      if (data && data.tripsheet && data.booking) {
-        // Process tripsheet data
-        console.log("hello enter")
-        const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
-          ...row,
-          // id1: index + 1,
-          //  tripsheetdate1 :row.tripsheetdate
-        }));
+  //     if (data && data.length > 0) {
+  //       setLoading(false); // Stop loading
+  //     }
+  //     // if (data && data.tripsheet.length > 0 || data.booking.length > 0) {
+  //     if (data && data.tripsheet && data.booking) {
+  //       // Process tripsheet data
+  //       console.log("hello enter")
+  //       const tripsheetRowsWithUniqueId = data.tripsheet.map((row, index) => ({
+  //         ...row,
+  //         // id1: index + 1,
+  //         //  tripsheetdate1 :row.tripsheetdate
+  //       }));
   
-        // Process booking data
-        const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
-          ...row,
-          // id1: index + 1,
-        }));
+  //       // Process booking data
+  //       const bookingRowsWithUniqueId = data.booking.map((row, index) => ({
+  //         ...row,
+  //         // id1: index + 1,
+  //       }));
   
-        // Combine both sets of data
-        const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
+  //       // Combine both sets of data
+  //       const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId];
   
-        const tripsheetRowsWithUniqueId2 = combinedRows.map((row, index) => ({
-          ...row,
-          id: index + 1,
-        }));
-        console.log(tripsheetRowsWithUniqueId2,)
+  //       const tripsheetRowsWithUniqueId2 = combinedRows.map((row, index) => ({
+  //         ...row,
+  //         id: index + 1,
+  //       }));
+  //       console.log(tripsheetRowsWithUniqueId2,)
   
-        setRows(tripsheetRowsWithUniqueId2);
-        setSuccess(true);
-        setSuccessMessage("Successfully listed");
-      } else {
-        setRows([]);
-        setError(true);
-        setErrorMessage("No data found");
-      }
-    } catch (error) {
-      // Handle errors
-      if (error.message) {
-        setError(true);
-        setErrorMessage("Check your Network Connection");
-      } else if (error.response) {
-        setError(true);
-        setErrorMessage("Failed to Show : " + (error.response.data.message || error.message));
-      } else {
-        setError(true);
-        setErrorMessage("An unexpected error occurred: " + error.message);
-      }
-    } finally {
-      setLoading(false); // Stop loading
-    }
-  };
+  //       setRows(tripsheetRowsWithUniqueId2);
+  //       setSuccess(true);
+  //       setSuccessMessage("Successfully listed");
+  //     } else {
+  //       setRows([]);
+  //       setError(true);
+  //       setErrorMessage("No data found");
+  //     }
+  //   } catch (error) {
+  //     // Handle errors
+  //     if (error.message) {
+  //       setError(true);
+  //       setErrorMessage("Check your Network Connection");
+  //     } else if (error.response) {
+  //       setError(true);
+  //       setErrorMessage("Failed to Show : " + (error.response.data.message || error.message));
+  //     } else {
+  //       setError(true);
+  //       setErrorMessage("An unexpected error occurred: " + error.message);
+  //     }
+  //   } finally {
+  //     setLoading(false); // Stop loading
+  //   }
+  // };
   
   const handleButtonClick = (row) => {
     if (row.status === "Cancelled") {
@@ -897,7 +914,7 @@ console.log(filteredStations,'station values');
     infoMessage,
     setToDate,
     handleShow,
-    handleShowAll,
+    // handleShowAll,
     department,
     hidePopup,
     handleInputChange,

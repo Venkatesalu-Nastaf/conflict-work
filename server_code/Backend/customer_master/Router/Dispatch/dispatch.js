@@ -117,7 +117,7 @@ router.get('/pending_tripsheet-show', (req, res) => {
   const datacustomer = cutomerName ? cutomerName.split(',').map(name => name.trim()).filter(name => name) : [];
   // console.log(isStations,"ll")
   const isStation = isStations ? isStations.split(',').map(name => name.trim()).filter(name => name) : [];
-  console.log('Is Stations departs:', datadepartment,"kkkkk",isStation);
+  console.log('Is Stations departs:', datadepartment,"kkkkk",isStation,datacustomer);
   
   let sqlQuery = '';
   let Tripquery = '';
@@ -190,76 +190,10 @@ if (status === 'All') {
 
   queryParams = [formattedFromDate, formattedToDate];
  
-// if (datadepartment.length === 1 && !datadepartment.includes('All')) {
-//   sqlQuery += ' AND servicestation = ?';
-//   //Tripquery += ' AND servicestation = ?';
-//   queryParams.push(datadepartment[0]); 
-// } else if (datadepartment.length > 1) {
-//   sqlQuery += ' AND servicestation IN (?)';
-//   //Tripquery += ' AND servicestation IN (?)';
-//   queryParams.push(datadepartment); 
-// }
-
-// if (VehNo) {
-//   sqlQuery += ' AND vehRegNo = ?';
-//   Tripquery += ' AND vehRegNo = ?';
-//   queryParams.push(VehNo);
-// }
-
-// if (datacustomer.length === 1 && !datacustomer.includes('All')) {
-//   sqlQuery += ' AND customer = ?'; 
-//   Tripquery += ' AND customer = ?'; 
-//   queryParams.push(datacustomer[0]);
-// } else if (datacustomer.length > 1) {
-//   sqlQuery += ' AND customer IN (?)';
-//   Tripquery += ' AND customer IN (?)';
-//   queryParams.push(datacustomer); 
-// }
 
 
-
-//   // Fetch bookings
-//   db.query(sqlQuery, queryParams, (err, bookingResults) => {
-//       if (err) {
-//           console.error('Error fetching bookings:', err.message);
-//           return res.status(500).json({ error: 'Database error on fetching booking' });
-//       }
-
-//       // Fetch tripsheets
-//       db.query(Tripquery, queryParams, (err, tripsheetResults) => {
-//           if (err) {
-//               console.error('Error fetching tripsheets:', err.message);
-//               return res.status(500).json({ error: 'Database error on fetching trip sheet' });
-//           }
-
-//           // Check if there are results
-//           if (bookingResults.length === 0 && tripsheetResults.length === 0) {
-//               return res.status(200).json({ message: 'No data found' });
-//           }
-
-//           // Send response 
-//           return res.status(200).json({
-//               booking: bookingResults,
-//               tripsheet: tripsheetResults
-//           });
-//       });
-//   });
-
-// custom filtering changes 
-// if (isStation.length === 1 && !datadepartment.includes('All')) {
-// if (datadepartment.length === 1 && !datadepartment.includes('All')) {
-//   sqlQuery += ' AND servicestation = ?';
-//   Tripquery += ' AND department = ?'; 
-//   queryParams.push(datadepartment[0]); 
-//   // queryParams.push(isStation[0]); 
-// } else if (datadepartment.length === 1) {
-//   sqlQuery += ' AND servicestation IN (?)';
-//   Tripquery += ' AND department IN (?)'; 
-//   // queryParams.push(datadepartment); 
-//   queryParams.push(isStation); 
-// }
-
-if (datadepartment.length === 0 || datadepartment.includes('All')) {
+// if (datadepartment.length === 0 || datadepartment.includes('All')) {
+  if (datadepartment.length === 0) {
   // if (isStation.length > 0) {
   // Ensure we filter only by servicestation
   // sqlQuery += ' AND servicestation IN (?)';
@@ -292,17 +226,17 @@ if (datacustomer.length === 1 && !datacustomer.includes('All')) {
   queryParams.push(datacustomer); 
 }
 
-console.log("SQL Query:", sqlQuery);
-console.log("Query Params:", queryParams,);
-console.log("SQL Query:", Tripquery);
-console.log("Query Params:", queryParams);
+// console.log("SQL Query:", sqlQuery);
+// console.log("Query Params:", queryParams,);
+// console.log("SQL Query:", Tripquery);
+// console.log("Query Params:", queryParams);
 
 db.query(sqlQuery, queryParams, (err, bookingResults) => {
   if (err) {
       console.error('Error fetching bookings:', err.message);
       return res.status(500).json({ error: 'Database error on fetching booking' });
   }
-  console.log(bookingResults,"kkk")
+  // console.log(bookingResults,"kkk")
 
   db.query(Tripquery, queryParams, (err, tripsheetResults) => {
       if (err) {
@@ -324,31 +258,7 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
 
   // Handle 'pending' and 'Cancelled' statuses
   if (status === 'pending' || status === 'Cancelled') {
-    // sqlQuery = `
-    //   SELECT *
-    //   FROM booking
-    //   WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?
-    // `;
-    // queryParams = [formattedFromDate, formattedToDate, status];
-    //  if(datadepartment.length === 0){
-    //   if(datadepartment.length === 0){
-    //   sqlQuery = `
-    //   SELECT *
-    //   FROM booking
-    //   WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?
-    //   AND servicestation IN (?)
-    // `;
-    // queryParams = [formattedFromDate, formattedToDate, status,isStation];
-    // // console.log(isStations,isStations)
-    // }
-    
 
-      // sqlQuery = `
-      //   SELECT *
-      //   FROM booking
-      //   WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?   
-      //   AND servicestation IN (?)
-      // `;
       sqlQuery = `
         SELECT *
         FROM booking
@@ -453,6 +363,7 @@ else {
       console.error(err);
       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
     }
+    // console.log(result,"oo")
     return res.status(200).json(result);
   });
 });
@@ -519,53 +430,53 @@ else {
 //     });
 //   });
 // });
-router.get('/tripsheet-showall', (req, res) => {
-  const { isStation } = req.query;
+// router.get('/tripsheet-showall', (req, res) => {
+//   const { isStation } = req.query;
 
-  // Validate isStation input
-  if (!isStation) {
-    return res.status(400).json({ error: "isStation parameter is required" });
-  }
+//   // Validate isStation input
+//   if (!isStation) {
+//     return res.status(400).json({ error: "isStation parameter is required" });
+//   }
 
-  // Convert isStation to an array
-  const stationsArray = isStation.split(',').map(station => station.trim());
-  console.log(stationsArray,"saeee")
+//   // Convert isStation to an array
+//   const stationsArray = isStation.split(',').map(station => station.trim());
+//   console.log(stationsArray,"saeee")
 
-  let tripsheetResults, bookingResults;
+//   let tripsheetResults, bookingResults;
 
-  // Query to fetch tripsheet data
-  db.query(
-    "SELECT * FROM tripsheet WHERE status != 'Cancelled' AND department IN (?)",
-    [stationsArray],
-    (err, tripsheetData) => {
-      if (err) {
-        return res.status(500).json({ error: "Failed to fetch tripsheet data from MySQL" });
-      }
-      tripsheetResults = tripsheetData;
+//   // Query to fetch tripsheet data
+//   db.query(
+//     "SELECT * FROM tripsheet WHERE status != 'Cancelled' AND department IN (?)",
+//     [stationsArray],
+//     (err, tripsheetData) => {
+//       if (err) {
+//         return res.status(500).json({ error: "Failed to fetch tripsheet data from MySQL" });
+//       }
+//       tripsheetResults = tripsheetData;
 
-      // Query to fetch booking data with status 'pending' or 'Cancelled'
-      db.query(
-        "SELECT * FROM booking WHERE (status = 'pending' OR status = 'Cancelled') AND servicestation IN (?)",
-        [stationsArray],
-        (err, bookingData) => {
-          if (err) {
-            return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
-          }
-          bookingResults = bookingData;
+//       // Query to fetch booking data with status 'pending' or 'Cancelled'
+//       db.query(
+//         "SELECT * FROM booking WHERE (status = 'pending' OR status = 'Cancelled') AND servicestation IN (?)",
+//         [stationsArray],
+//         (err, bookingData) => {
+//           if (err) {
+//             return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+//           }
+//           bookingResults = bookingData;
 
-          // Combine both results and send response
-          const combinedResults = {
-            tripsheet: tripsheetResults,
-            booking: bookingResults
-          };
+//           // Combine both results and send response
+//           const combinedResults = {
+//             tripsheet: tripsheetResults,
+//             booking: bookingResults
+//           };
           
-          // console.log(combinedResults,"opp")
-          return res.status(200).json(combinedResults);
-        }
-      );
-    }
-  );
-});
+//           // console.log(combinedResults,"opp")
+//           return res.status(200).json(combinedResults);
+//         }
+//       );
+//     }
+//   );
+// });
 
 
 

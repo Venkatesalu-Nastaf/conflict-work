@@ -74,7 +74,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     setToDate,
     handleClick,
     handleShow,
-    handleShowAll,
+    // handleShowAll,
     department,
     hidePopup,
     handleInputChange,
@@ -288,7 +288,7 @@ useEffect(() => {
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                   </div>
                   <div className="input">
-                    <Button className='text-nowrap' variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+                    {/* <Button className='text-nowrap' variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button> */}
                   </div>
                 </div>
               </div>

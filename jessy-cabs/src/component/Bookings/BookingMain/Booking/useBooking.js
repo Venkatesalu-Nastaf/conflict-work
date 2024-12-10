@@ -225,7 +225,8 @@ const useBooking = () => {
     travelsemail: "",
     Groups: "",
     escort:'',
-    transferreport:""
+    transferreport:"",
+  
   }
 
   const [book, setBook] = useState(bookDatdObj);
@@ -267,6 +268,7 @@ const useBooking = () => {
   const handleChange = useCallback(
     (event) => {
       const { name, value, checked, type } = event.target;
+      console.log("wq",name,value)
 
       if (type === "checkbox") {
         setBook((prevBook) => ({
@@ -304,6 +306,20 @@ const useBooking = () => {
         }));
       } else {
         const fieldValue = value;
+        if(name === "orderByMobileNo"){
+          setBook((prevBook) => ({
+            ...prevBook,
+            ["mobile"]: fieldValue,
+          }));
+        }
+        if(name === "orderByEmail"){
+          setBook((prevBook) => ({
+            ...prevBook,
+            ["orderbyemail"]: fieldValue,
+          }));
+        
+        }
+        
         setBook((prevBook) => ({
           ...prevBook,
           [name]: fieldValue,
@@ -839,15 +855,69 @@ const handleAirportTransferChange = (event) => {
 useEffect(() => {
     fetchdatacustomerhybrid();
 }, [fetchdatacustomerhybrid]);
-  const handleAdd = async () => {
-   
 
-    if (!selectedCustomerData.guestmobileno) {
+
+  const handleAdd = async () => {
+ 
+   const guestmobilenodata = selectedCustomerData.guestmobileno || book.guestmobileno
+   const servicestationdata = selectedCustomerData.servicestation || book.servicestation
+   const customerdatas = selectedCustomerData.customer|| book.customer
+   const starttimedata = selectedCustomerData.starttime || book.starttime
+  const guestname = selectedCustomerData.guestname || book.guestname
+  const bookaddress = selectedCustomerData.address1 || book.address1
+
+
+    // if (!selectedCustomerData.guestmobileno) {
+    //   setError(true);
+    //   setErrorMessage("Enter Guest Mobile Number");
+    //   return;
+    // }
+
+    
+    // if (!selectedCustomerData.guestmobileno) {
+    //   setError(true);
+    //   setErrorMessage("Enter Guest Mobile Number");
+    //   return;
+    // }
+    // if (!selectedCustomerData.servicestation) {
+    //   setError(true);
+    //   setErrorMessage("Enter Station");
+    //   return;
+    // }
+    // if (!reportdate) {
+    //   setError(true);
+    //   setErrorMessage("Enter Report Date");
+    //   return;
+    // }
+    // if (!selectedCustomerData.customer) {
+    //   setError(true)
+    //   setErrorMessage("Enter Customer Name")
+    //   return
+    // }
+    // if (!selectedCustomerData.starttime) {
+    //   setError(true)
+    //   setErrorMessage("Enter starting Time")
+    //   return
+    // }
+   
+    // if (!selectedCustomerData.guestname) {
+    //   setError(true)
+    //   setErrorMessage("Enter GuestName")
+    //   return
+    // }
+    // if (!selectedCustomerData.address1) {
+    //   setError(true);
+    //   setErrorMessage("Enter Address Details");
+    //   return;
+    // }
+
+     if (!guestmobilenodata) {
       setError(true);
       setErrorMessage("Enter Guest Mobile Number");
       return;
     }
-    if (!selectedCustomerData.servicestation) {
+
+    if (!servicestationdata) {
       setError(true);
       setErrorMessage("Enter Station");
       return;
@@ -857,23 +927,23 @@ useEffect(() => {
       setErrorMessage("Enter Report Date");
       return;
     }
-    if (!selectedCustomerData.customer) {
+    if (!customerdatas) {
       setError(true)
       setErrorMessage("Enter Customer Name")
       return
     }
-    if (!selectedCustomerData.starttime) {
+    if (!starttimedata) {
       setError(true)
       setErrorMessage("Enter starting Time")
       return
     }
    
-    if (!selectedCustomerData.guestname) {
+    if (!guestname) {
       setError(true)
       setErrorMessage("Enter GuestName")
       return
     }
-    if (!selectedCustomerData.address1) {
+    if (!bookaddress) {
       setError(true);
       setErrorMessage("Enter Address Details");
       return;
@@ -891,7 +961,7 @@ useEffect(() => {
       const updatedBook = {
         bookingtime: getCurrentTime(),
         bookingdate: selectedBookingDate,
-        starttime: restSelectedCustomerData.starttime,
+        starttime: restSelectedCustomerData.starttime || book.starttime,
         status: bookingStatus,
         mobile: selectedCustomerDatas.phoneno || selectedCustomerData.mobile,
         guestname: selectedCustomerData.guestname || formData.guestname || book.guestname || formValues.guestname,
@@ -905,8 +975,8 @@ useEffect(() => {
         startdate: bookingstartdate,
         shedOutDate: bookingshedoutdata,
         orderedby: book.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby || formData.orderedby,
-        orderByMobileNo: book.orderByMobileNo || selectedCustomerData.orderByMobileNo || selectedCustomerDatas.orderByMobileNo || formData.orderByMobileNo,
-        orderByEmail: book.orderByEmail || selectedCustomerData.orderByEmail || selectedCustomerDatas.orderByEmail || formData.orderByEmail,
+        orderByMobileNo: book.orderByMobileNo || selectedCustomerData.orderByMobileNo || selectedCustomerDatas.orderByMobileNo || formData.orderByMobileNo || book.mobile,
+        orderByEmail: book.orderByEmail || selectedCustomerData.orderByEmail || selectedCustomerDatas.orderByEmail || formData.orderByEmail ||book.orderbyemail ,
         duty: formData.duty || selectedCustomerData.duty || book.duty,
         pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
         customercode: formData.customercode || selectedCustomerData.customercode || book.customercode,
@@ -923,16 +993,17 @@ useEffect(() => {
         driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
-        reporttime: restSelectedCustomerData.reporttime,
+        reporttime: restSelectedCustomerData.reporttime || book.reporttime,
         ratenamebook: ratename,
         username: storedUsername,
         Groups: selectedCustomerData.Groups || book.Groups || formData.Groups || selectedCustomerdriver.Groups,
-        customer: restSelectedCustomerData.customer,
+        customer: restSelectedCustomerData.customer || book.customer,
         escort:formData.escort || selectedCustomerData.escort || book.escort || escort,
         transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport || transferreport,
         hybridhcldata:hybdridatabooking
 
       };
+      console.log(updatedBook,"pppp")
 
       setSendmailGuestsms(true)
       await axios.post(`${apiUrl}/booking`, updatedBook);

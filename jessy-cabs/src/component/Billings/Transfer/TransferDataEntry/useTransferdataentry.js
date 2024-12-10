@@ -841,7 +841,8 @@ const useTransferdataentry = () => {
             const invalidTripIds = invalidTrips.map(trip => trip.tripid).join(', ');
             console.log(`The following trip IDs are invalid (amount is zero or null): ${invalidTripIds}`);
             setError(true);
-            setErrorMessage(`Invalid trip IDs: ${invalidTripIds}`); // Set error message
+            // setErrorMessage(`Invalid trip IDs: ${invalidTripIds}`); // Set error message
+            setErrorMessage(`Check ${invalidTripIds} Trip ID`); // Set error message
         }
 
         // Proceed only with valid trips
@@ -1701,7 +1702,9 @@ const useTransferdataentry = () => {
                 setError(true);
                 setisbtnloading(false)
 
-                setErrorMessage(`Invalid trip IDs: ${invalidTripIds}`); // Set error message
+                // setErrorMessage(`Invalid trip IDs: ${invalidTripIds}`); // Set error message
+                setErrorMessage(`Check ${invalidTripIds} Trip ID`); // Set error message
+
             }
 
             // Proceed only with valid trips

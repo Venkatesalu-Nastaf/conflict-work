@@ -210,7 +210,7 @@ const Agreement = ({organizationNames}) => {
                           )}
                         />
                       </div>
-                                <div className="input">
+                                {/* <div className="input">
                               <div className="icone">
                                   <CalendarMonthIcon color="action" />
                               </div>
@@ -229,90 +229,101 @@ const Agreement = ({organizationNames}) => {
                                       />
                                   </DemoContainer>
                               </LocalizationProvider>
-                          </div>
+                          </div> */}
 
-
-                        {/* <div className="input driver-input">
-                                <div className='icone'>
-                                    <CalendarMonthIcon />
-                                </div>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        label="From Date"
-                                        id="fromdate"
-                                        className='full-width'
-                                        value={
-                                            selectedCustomerData.fromdate
-                                                ? dayjs(selectedCustomerData.fromdate)
-                                                : dayjs() || book.fromdate
-                                                    ? dayjs(book.fromdate)
-                                                    : dayjs()
-                                        }
-                                        format="DD/MM/YYYY"
-                                        onChange={(date) => handleDateChange(date, "fromdate")}
-                                    >
-                                        {({ inputProps, inputRef }) => (
-                                            <TextField
-                                                {...inputProps}
-                                                inputRef={inputRef}
-                                                value={selectedCustomerData?.fromdate}
-                                            />
-                                        )}
-                                    </DatePicker>
-                                </LocalizationProvider>
-                            </div> */}
 
                               <div className="input">
-                                  <div className="icone">
-                                      <CalendarMonthIcon color="action" />
-                                  </div>
-                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                      <DemoContainer components={["DatePicker", "DatePicker"]}>
-                                          <DatePicker
-                                              id="toDate"
-                                              className="full-width"
-                                              label="To Date"
-                                              name="toDate"
-                                              value={selectedCustomerData?.toDate ? dayjs(selectedCustomerData.toDate) : dayjs(toDate)}
-                                              format="DD/MM/YYYY"
-                                              onChange={(date) => {
-                                                  handleDateChange(date, 'toDate');
-                                                  // const formattedDate = dayjs(date).format('DD/MM/YYYY');
-                                                  // setToDate(formattedDate);
-                                              }}
-                                          />
-                                      </DemoContainer>
-                                  </LocalizationProvider>
-                              </div>
+                                    <div className='icone'>
+                                        <CalendarMonthIcon className='ratetype-startdate-icon' />
+                                    </div>
+                                    <div>
+                                        {/* <label>From Date</label> */}
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DatePicker
+                                                label="From Date"
+                                                    id="fromdate"
+                                                    value={
+                                                        selectedCustomerData.fromdate
+                                                            ? dayjs(selectedCustomerData.frodate)
+                                                            : null || book.fromdate
+                                                                ? dayjs(book.fromdate)
+                                                                : dayjs()
+                                                    }
+                                                    format="DD/MM/YYYY"
+                                                    onChange={(date) => handleDateChange(date, "fromdate")}
+                                                >
+                                                    {({ inputProps, inputRef }) => (
+                                                        <TextField
+                                                            {...inputProps}
+                                                            inputRef={inputRef}
+                                                            value={selectedCustomerData?.fomdate}
+                                                        />
+                                                    )}
+                                                </DatePicker>                                            
+                                        </LocalizationProvider>
+                                    </div>
+                                </div>
 
-{/* <div className="input driver-input">
-    <div className="icone">
-        <CalendarMonthIcon />
-    </div>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-            label="To Date"
-            id="toDate"
-            className="full-width"
-            value={
-                selectedCustomerData.toDate
-                    ? dayjs(selectedCustomerData.toDate)
-                    : book.toDate
-                        ? dayjs(book.toDate)
-                        : dayjs() // Default to today's date
-            }
-            format="DD/MM/YYYY"
-            onChange={(date) => handleDateChange(date, "toDate")} 
-        >
-            {({ inputProps, inputRef }) => (
-                <TextField
-                    {...inputProps}
-                    inputRef={inputRef}
-                />
-            )}
-        </DatePicker>
-    </LocalizationProvider>
-</div> */}
+                        {/* <div className="input driver-input">
+                            <div className="icone">
+                                <CalendarMonthIcon />
+                            </div>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="To Date"
+                                    id="toDate"
+                                    className="full-width"
+                                    value={
+                                        selectedCustomerData.toDate
+                                            ? dayjs(selectedCustomerData.toDate)
+                                            : book.toDate
+                                                ? dayjs(book.toDate)
+                                                : dayjs() // Default to today's date
+                                    }
+                                    format="DD/MM/YYYY"
+                                    onChange={(date) => handleDateChange(date, "toDate")} 
+                                >
+                                    {({ inputProps, inputRef }) => (
+                                        <TextField
+                                            {...inputProps}
+                                            inputRef={inputRef}
+                                        />
+                                    )}
+                                </DatePicker>
+                            </LocalizationProvider>
+                        </div> */}
+
+                                <div className="input">
+                                    <div className='icone'>
+                                        <CalendarMonthIcon className='ratetype-startdate-icon' />
+                                    </div>
+                                    <div>
+                                        {/* <label>To Date</label> */}
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DatePicker
+                                                label="To Date"
+                                                    id="toDate"
+                                                    value={
+                                                        selectedCustomerData.toDate
+                                                            ? dayjs(selectedCustomerData.toDate)
+                                                            : null || book.toDate
+                                                                ? dayjs(book.toDate)
+                                                                : dayjs()
+                                                    }
+                                                    format="DD/MM/YYYY"
+                                                    onChange={(date) => handleDateChange(date, "toDate")}
+                                                >
+                                                    {({ inputProps, inputRef }) => (
+                                                        <TextField
+                                                            {...inputProps}
+                                                            inputRef={inputRef}
+                                                            value={selectedCustomerData?.toDate}
+                                                        />
+                                                    )}
+                                                </DatePicker>                                            
+                                        </LocalizationProvider>
+                                    </div>
+                                </div>
 
                                 
               <div className="input">

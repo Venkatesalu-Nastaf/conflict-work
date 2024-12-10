@@ -279,7 +279,8 @@ router.post('/tripsheet-add', (req, res) => {
     console.log(addCustomerData,'tripsheetadddata');
     
     // Assuming 'startdate' is in ISO 8601 format
-    const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
+    // const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
+    const formattedStartDate = moment(startdate).format('DD-MM-YYYY');
     const driverTripAssign = {
         driverName,
         startdate: formattedStartDate,
@@ -1312,6 +1313,10 @@ router.post('/send-tripsheet-email', async (req, res) => {
                         <tr>
                             <td style="padding: 8px;"><strong>Contact Number </strong></td>
                             <td style="padding: 8px;">${guestmobileno}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Location </strong></td>
+                            <td style="padding: 8px;">${servicestation}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong> Date :</strong></td>

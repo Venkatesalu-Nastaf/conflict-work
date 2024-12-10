@@ -668,6 +668,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
     setOpensnack(false); // Close the Snackbar
   };
+  const duty = formData.duty || selectedCustomerData.duty || book.duty;
 
   return (
     <div className="form-container form-container-tripsheet">
@@ -1491,13 +1492,20 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <div className='input-type-grid'>
                     {/* Display the label and invalid message conditionally based on closeTimeVar and day difference */}
-                    {(closeTimeVar && calculateTotalDay() === 1 &&
+                    {/* {(closeTimeVar && calculateTotalDay() === 1 &&
                       ((closeTimeVar < shedInTimeVar)
                         ? (<label>Shed In Time</label>)
                         : (<label style={{ color: "red" }}>Invalid Time</label>)
                       ))
                       || ( <label>Shed In Time</label>)
-                    }
+                    } */}
+                    {(closeTimeVar && calculateTotalDay() === 1 &&
+                      ((closeTimeVar < shedInTimeVar)
+                        ? (<label>Shed In Time</label>)
+                        : (dayhcl===1 && duty === "Outstation"? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
+                      ))
+                      || (closeTimeVar >= shedInTimeVar && dayhcl===1 && duty === "Outstation"? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
+                    }
 
                     {/* {calculateTotalDay() > 1 ? (<label>Shed In Time</label>) : ""} */}
 
@@ -3042,6 +3050,24 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                   />
                 </div>
+                {/* <div className="input">
+                  <div className="icone">
+                    <BackupTableSharpIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    name="vpermettovendor"
+                    value={formData.vpermettovendo || selectedCustomerData.vpermettovendor || book.vpermettovendor || ""}
+                    onChange={(e) => {
+                      handleChange(e)
+                      setVendorinfodata({ ...vendorinfo, vendor_vpermettovendor: e.target.value })
+                    }}
+                    label="Vendor Parking"
+                    id="vpermettovendor"
+                    autoComplete="password"
+                  />
+                </div> */}
+
                 <div className="input">
                   <div className="icone">
                     <MinorCrashSharpIcon color="action" />
@@ -3071,6 +3097,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     label="Customer Advance"
                     id="customer-advance"
                     autoComplete="password"
+                    disabled={Number(superpower) === 0}
                   />
                 </div>
                 <div className="input tripsheet-remarks-division">

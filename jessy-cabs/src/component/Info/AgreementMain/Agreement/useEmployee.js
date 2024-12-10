@@ -373,38 +373,39 @@ const useEmployee = () => {
       console.log(selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate).format("DD/MM/YYYY") : dayjs().format("DD/MM/YYYY"),"ppppp")
       console.log(selectedCustomerData.fromdate ? "hhh": "oooo","ppppp")
 
-      const handleDateChange = (date, name) => {
-        // if (!date || !dayjs(date).isValid()) {
-        //     console.error("Invalid date selected");
-        //     return;
-        // }
-        console.log(date,name,"ff")
-        const formattedDate = dayjs(date).format("DD/MM/YYYY");
-        const parsedDate = dayjs(formattedDate).format("DD/MM/YYYY");
-        console.log(formattedDate,"fff")
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: parsedDate,
-        }));
-        setSelectedCustomerData((prevData) => ({
-            ...prevData,
-            [name]:parsedDate,
-        }));
-    };
-
-    // const handleDateChange = (date, name) => {
-    //     const formattedDate = dayjs(date).format("DD-MM-YYYY");
-    //     const parsedDate = dayjs(formattedDate).format("DD-MM-YYYY");
-    //     // console.log(formattedDate, "driver", parsedDate)
+    //   const handleDateChange = (date, name) => {
+    //     // if (!date || !dayjs(date).isValid()) {
+    //     //     console.error("Invalid date selected");
+    //     //     return;
+    //     // }
+    //     console.log(date,name,"ff")
+    //     const formattedDate = dayjs(date).format("DD/MM/YYYY");
+    //     const parsedDate = dayjs(formattedDate).format("DD/MM/YYYY");
+    //     console.log(formattedDate,"fff")
     //     setBook((prevBook) => ({
     //         ...prevBook,
     //         [name]: parsedDate,
     //     }));
-    //     setSelectedCustomerData((prevValues) => ({
-    //         ...prevValues,
-    //         [name]: parsedDate,
+    //     setSelectedCustomerData((prevData) => ({
+    //         ...prevData,
+    //         [name]:parsedDate,
     //     }));
     // };
+
+    const handleDateChange = (date, name) => {
+        const formattedDate = dayjs(date).format("YYYY-MM-DD");
+        const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
+
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: parsedDate,
+        }));
+
+        setSelectedCustomerData((prevValues) => ({
+            ...prevValues,
+            [name]: parsedDate,
+        }));
+    };
 
     const handleCancel = () => {
         setBook((prevBook) => ({

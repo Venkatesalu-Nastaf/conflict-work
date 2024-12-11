@@ -698,7 +698,7 @@ app.post('/generate-link/:tripid', (req, res) => {
   const checkIfExistsQuery = `SELECT * FROM signatures WHERE tripid = ?`;
   db.query(checkIfExistsQuery, [tripid], (err, rows) => {
     if (err) {
-      console.log("error ", err)
+      
       return res.status(500).json({ message: "Error checking profile existence", error: err });
     }
     if (rows.length > 0) {
@@ -706,6 +706,7 @@ app.post('/generate-link/:tripid', (req, res) => {
       const query = 'UPDATE signatures SET unique_number = ? WHERE tripid = ?';
       db.query(query, [uniqueNumber, tripid], (err, results) => {
         if (err) {
+          
           return res.status(500).json({ message: 'Internal server error', error: err });
         }
         var ciphertext1 = CryptoJS.AES.encrypt(JSON.stringify(tripid), 'my-secret-key@123').toString();
@@ -721,6 +722,7 @@ app.post('/generate-link/:tripid', (req, res) => {
       const uniqueNumber = generateUniqueNumber();
       db.query('INSERT INTO signatures (tripid, unique_number) VALUES (?, ?)', [tripid, uniqueNumber], (insertErr, insertResult) => {
         if (insertErr) {
+          // console.log(insertErr,"ee")
           return res.status(500).json({ message: "Error inserting new tripid", error: insertErr });
         }
         // const dataencryt=encrypt(tripid)
@@ -730,6 +732,7 @@ app.post('/generate-link/:tripid', (req, res) => {
 
         // const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?trip=${encodeURIComponent(ciphertext)}&uniqueNumber=${encodeURIComponent(cipherunique2)}`;
+        // console.log(link,"ll")
 
         res.status(200).json({ link });
       });
@@ -842,14 +845,16 @@ app.post("/signaturedatatimes/:tripid", (req, res) => {
     updateclosedate,
     updateclosetime } = req.body;
   console.log(tripid, status, datesignature, signtime,updateclosedate,updateclosetime, "jjjjjjj")
-   const sql2=" UPDATE tripsheet set closedate=? , closetime = ? where  tripid = ?"
+   const sql2=" UPDATE tripsheet set closedate=? , closetime = ?,vendorshedInDate = ?, vendorshedintime = ? where  tripid = ?"
 
   db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, datesignature, signtime, status], (err, results) => {
     if (err) {
+      // console.log(err,"errins")
       return res.status(400).json(err)
     }
-    db.query(sql2,[updateclosedate,updateclosetime,tripid],(err,results1)=>{
+    db.query(sql2,[updateclosedate,updateclosetime,updateclosedate,updateclosetime,tripid],(err,results1)=>{
       if (err) {
+        // console.log(err,"trip")
         return res.status(400).json(err)
       }
       console.log(results)

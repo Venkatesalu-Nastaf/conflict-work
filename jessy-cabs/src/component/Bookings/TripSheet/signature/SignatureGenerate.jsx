@@ -140,6 +140,7 @@ const SignatureGenerate = () => {
             await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`, signtauretimes);
 
             const data = response.data.link;
+            console.log(data,"lll")
             window.location.href = data;
 
             sessionStorage.setItem("expiredsign", true);
@@ -158,7 +159,7 @@ const SignatureGenerate = () => {
     }
     const handleTollParkinglink = () => {
         const tripdata = tripId;
-        const uploadtollaprk = `http://jessycabs.com/UploadtollPark?Tripid=${tripdata}`
+        const uploadtollaprk = `https://jessycabs.com/UploadtollPark?Tripid=${tripdata}`
         // const uploadtollaprk=`http://localhost:3000/UploadtollPark?Tripid=${tripdata}`
         // window.open(uploadtollaprk,'_blank')
         window.location.href = uploadtollaprk;
@@ -175,7 +176,7 @@ const SignatureGenerate = () => {
         // Format to get hours and minutes
         return datefunsdata(time, 'HH:mm');
     }
-    console.log(fulldetails,"full")
+    // console.log(fulldetails,"full")
 
     return (
        

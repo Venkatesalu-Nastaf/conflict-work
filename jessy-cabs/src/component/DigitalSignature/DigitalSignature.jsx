@@ -41,7 +41,7 @@ const DigitalSignature = () => {
 
   const handleuploaddialog=()=>{
     const tripId = decryptdata(tripIddata)
-    const data= `http://jessycabs.com/SignatureGenerate/?tripid=${tripId}`
+    const data= `https://jessycabs.com/SignatureGenerate/?tripid=${tripId}`
   //  const data=`http://localhost:3000/SignatureGenerate?tripid=${tripId}`
    localStorage.setItem("expireuploadpage",false)
    sessionStorage.setItem("expiredsign", false);

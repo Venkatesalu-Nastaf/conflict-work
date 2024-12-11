@@ -11,12 +11,15 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
     const shedOutDate = tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate;
     const startDate = tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate
     const endkm = tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm
+    const startkm = tripSheetData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm
+    const shedinkm = tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin
     const dutiesdata = tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty
     const dutydata = dutiesdata === "Transfer" || dutiesdata ===  "Outstation" ? dutiesdata : pack
     const closedata = tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate
     const closedata2 =tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate
    
     const Totalkm = Number(endkm)
+    const Totalkmoutsation = Number(shedinkm)
     
  
 
@@ -183,8 +186,53 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                     </thead>
 
                                      <tbody>
+                                        {
+                                            dutiesdata ===  "Outstation" ?
+
+                                        
+<>
+                                        <tr>
+                                            <td id='table-datas'><span >Closing</span></td>
+                                            {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
+                                            <td id='table-datas'><span >{dayjs(closedata).format("DD-MM-YYYY")}</span></td>
+                                            <td id='table-datas'><span >{removeSeconds(tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime)}</span></td>
+                                            <td id='table-datas'><span >{shedinkm}</span></td>
+                                        </tr>
 
                                         <tr>
+                                            <td id='table-datas'><span >Releasing</span></td>
+                                            <td id='table-datas'><span >{dayjs(closedata2).format("DD-MM-YYYY")}</span></td>
+                                            {/* <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td> */}
+                                            <td id='table-datas'><span >{removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime)}</span></td>
+                                            <td id='table-datas'><span >{endkm}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td id='table-datas'><span >Reporting</span></td>
+                                             <td id='table-datas'><span >{dayjs(startDate).format("DD-MM-YYYY")}</span></td>
+                                            <td id='table-datas'><span >{ removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime)}</span></td>
+                                            <td id='table-datas'><span >{startkm}</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td id='table-datas'><span >Starting</span></td>
+                                            <td id='table-datas'><span >{dayjs(shedOutDate).format("DD-MM-YYYY")}</span></td>
+                                            <td id='table-datas'><span >{ removeSeconds(tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime)}</span></td>
+                                            <td id='table-datas'><span >-</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td id='table-datas'><span >Total</span></td>
+                                            {/* <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
+                                            <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
+                                            <td id='table-datas'><span >{totalhour}</span></td> */}
+                                            <td id='table-datas'><span >{TotalDays}</span></td>
+                                            <td id='table-datas'><span >{Totaltimes}</span></td>
+                                            <td id='table-datas'><span >{Totalkmoutsation}</span></td>
+                                        </tr>
+                                        </>
+:
+<>
+<tr>
                                             <td id='table-datas'><span >Closing</span></td>
                                             {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
                                             <td id='table-datas'><span >{dayjs(closedata).format("DD-MM-YYYY")}</span></td>
@@ -222,6 +270,8 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                             <td id='table-datas'><span >{Totaltimes}</span></td>
                                             <td id='table-datas'><span >{Totalkm}</span></td>
                                         </tr>
+</>
+}
                                     </tbody>
 
 

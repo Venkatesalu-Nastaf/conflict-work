@@ -1731,7 +1731,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                           }
                           if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                           }
                         }
                       }}
@@ -2207,7 +2207,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <Button
                                   variant="contained"
                                   color="secondary"
-                                  disabled={!Tripsheet_delete}
+                                  // disabled={!Tripsheet_delete}
+                                  disabled={!Tripsheet_modify}
                                   onClick={() => {
                                     handleimagedelete(selectedRow);
                                     handleimgPopupClose();

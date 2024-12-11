@@ -179,7 +179,7 @@ if (status === 'All') {
   sqlQuery = `
     SELECT * FROM booking
     WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-      AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)
+      AND bookingdate <= DATE_ADD(?, INTERVAL 0 DAY)
       AND (status = 'pending' OR status = 'Cancelled')
   `;
   Tripquery = `
@@ -262,7 +262,7 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
       sqlQuery = `
         SELECT *
         FROM booking
-        WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?   
+        WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?   
       `;
       queryParams = [formattedFromDate, formattedToDate, status];
   
@@ -306,7 +306,7 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
   FROM tripsheet
   LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
   WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-  AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+  AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
 `;
 
 // Initialize query parameters

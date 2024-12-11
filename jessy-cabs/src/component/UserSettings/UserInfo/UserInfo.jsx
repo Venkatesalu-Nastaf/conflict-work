@@ -116,6 +116,7 @@ const UserSetting = () => {
 
     setUserAvatarValue(value);
   }
+  const superpower = localStorage.getItem("SuperAdmin")
 
   
 
@@ -188,7 +189,9 @@ const UserSetting = () => {
                       name="userid"
                       value={selectedCustomerData?.userid || book.userid || ""}
                       onChange={handleChange}
-                      disabled={!editMode}
+                      // disabled={!editMode}
+                      // disabled={Number(superpower) === 0}
+                      disabled={!editMode || Number(superpower) === 0}
                     />
                   </div>
                   <div className="input">
@@ -205,7 +208,8 @@ const UserSetting = () => {
                         selectedCustomerData?.designation || book.designation
                       }
                       onChange={handleChange}
-                      disabled={!editMode}
+                      // disabled={!editMode}
+                      disabled={!editMode || Number(superpower) === 0}
                     />
                   </div>
                   <div className="input">
@@ -221,7 +225,8 @@ const UserSetting = () => {
                       value={selectedCustomerData?.username || book.username}
                       onChange={handleChange}
                       autoFocus
-                      disabled={!editMode}
+                      // disabled={!editMode}
+                      disabled={!editMode || Number(superpower) === 0}
                     />
                   </div>
                  

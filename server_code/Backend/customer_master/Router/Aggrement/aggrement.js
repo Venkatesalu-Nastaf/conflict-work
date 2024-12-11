@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
+const nodemailer = require('nodemailer');
 const multer = require('multer');
 const path = require('path');
 router.use(express.static('customer_master'));
@@ -225,7 +226,76 @@ router.post('/send-emailagreementdata', async (req, res) => {
     }
 });
 
-module.exports = router;
+// router.post('/send-emailagreementdata', async (req, res) => {
+//   try {
+//       const { customer, email, 
+//         // fromdate, toDate
+//        } = req.body;
+
+//       console.log('Received data:', { customer, email });
+
+//       // Create a Nodemailer transporter
+//       const transporter = nodemailer.createTransport({
+//           host: 'smtp.gmail.com',
+//           port: 465,
+//           secure: true,
+//           auth: {
+//               user: 'accounts@jessycabs.in', // Replace with your email address
+//               pass: 'ufue oqxr zhoc jdmf', // Replace with your email app password
+//           },
+//           tls: {
+//               rejectUnauthorized: false,
+//           },
+//       });
+
+//       // Email content for the owner
+//       const ownerMailOptions = {
+//           from: 'accounts@jessycabs.in', // Replace with your email address
+//           to: 'sharan1228s@gmail.com', // Owner's email address
+//           subject: `${customer} sent you a booking request`,
+//           text: `Guest Name: ${customer}\nEmail: ${email}`,
+//       };
+
+//       // Send email to the owner
+//       await transporter.sendMail(ownerMailOptions);
+
+//       // Email content for the customer
+//       const customerMailOptions = {
+//           from: 'accounts@jessycabs.in', // Replace with your email address
+//           to: email,
+//           subject: 'Greetings from Jessy Cabs',
+//           html: `
+//               <p>
+//               Dear ${customer},
+//               <br>
+//               I hope this message finds you well. We greatly value your association with <strong>JESSYCABS</strong> and are committed to providing you with seamless and exceptional service for all your transport needs.
+//               <br><br>
+//               As per our records, your current agreement with us is set to expire on <strong></strong>. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
+//               <br><br>
+//               <strong>Here are the key details regarding your renewal:</strong>
+//               <ul>
+//                   <li><strong>Agreement Expiry Date:</strong></li>
+//                   <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+//                   <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
+//               </ul>
+//               <br>
+//               Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
+//               <br><br>
+//               We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
+//               </p>`,
+//       };
+
+//       // Send greeting email to the customer
+//       await transporter.sendMail(customerMailOptions);
+
+//       res.status(200).json({ message: 'Emails sent successfully' });
+//   } catch (error) {
+//       console.error('Error while sending email:', error.message);
+//       res.status(500).json({ message: 'An error occurred while sending the email', error: error.message });
+//   }
+// });
+
+
 
 
   router.get('/lastcustomergetimage', (req, res) => {

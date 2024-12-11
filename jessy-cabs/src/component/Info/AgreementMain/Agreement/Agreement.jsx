@@ -210,7 +210,7 @@ const Agreement = ({organizationNames}) => {
                           )}
                         />
                       </div>
-                                {/* <div className="input">
+                                <div className="input">
                               <div className="icone">
                                   <CalendarMonthIcon color="action" />
                               </div>
@@ -229,16 +229,16 @@ const Agreement = ({organizationNames}) => {
                                       />
                                   </DemoContainer>
                               </LocalizationProvider>
-                          </div> */}
+                          </div>
 
 
-                              <div className="input">
+                              {/* <div className="input">
                                     <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
                                     <div>
                                         {/* <label>From Date</label> */}
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
                                                 label="From Date"
                                                     id="fromdate"
@@ -262,7 +262,7 @@ const Agreement = ({organizationNames}) => {
                                                 </DatePicker>                                            
                                         </LocalizationProvider>
                                     </div>
-                                </div>
+                                </div> */} 
 
                         {/* <div className="input driver-input">
                             <div className="icone">
@@ -293,13 +293,35 @@ const Agreement = ({organizationNames}) => {
                             </LocalizationProvider>
                         </div> */}
 
-                                <div className="input">
+                          <div className="input">
+                              <div className="icone">
+                                  <CalendarMonthIcon color="action" />
+                              </div>
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                      <DatePicker
+                                          id="toDate"
+                                          className="full-width"
+                                          label="To Date"
+                                          name="toDate"
+                                          value={selectedCustomerData?.toDate? dayjs(selectedCustomerData.toDate) : dayjs(toDate)}
+                                          format="DD/MM/YYYY"
+                                          onChange={(date) => {
+                                              handleDateChange(date, 'toDate');
+                                          }}
+                                      />
+                                  </DemoContainer>
+                              </LocalizationProvider>
+                          </div>  
+
+
+                                {/* <div className="input">
                                     <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
-                                    <div>
+                                    <div> */}
                                         {/* <label>To Date</label> */}
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
                                                 label="To Date"
                                                     id="toDate"
@@ -323,7 +345,7 @@ const Agreement = ({organizationNames}) => {
                                                 </DatePicker>                                            
                                         </LocalizationProvider>
                                     </div>
-                                </div>
+                                </div> */} 
 
                                 
               <div className="input">

@@ -393,8 +393,8 @@ const useEmployee = () => {
     // };
 
     const handleDateChange = (date, name) => {
-        const formattedDate = dayjs(date).format("YYYY-MM-DD");
-        const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
+        const formattedDate = dayjs(date).format("DD-MM-YYYY");
+        const parsedDate = dayjs(formattedDate).format("DD-MM-YYYY");
 
         setBook((prevBook) => ({
             ...prevBook,

@@ -74,6 +74,7 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
+import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -1409,6 +1410,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (!lockdata && dayhcl === 0) {
                             setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                           }
+                          if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
+                            setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                          }
                         }}
                       />
                     </div>
@@ -1439,7 +1443,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         setStartTime(rTime);
                         setFormData({ ...formData, starttime: rTime });
                         setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
-                        if (!lockdata && dayhcl === 1) {
+                        if (!lockdata && dayhcl === 1 && duty !== "Outstation" ) {
                           setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
                         }
                       }}
@@ -1476,7 +1480,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: rTime });
                         setBook({ ...book, closetime: rTime });
                         setCloseTime(rTime);
-                        if (!lockdata && dayhcl === 1) {
+                        if (!lockdata && dayhcl === 1 && duty !== "Outstation" ) {
                           setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                         }
                       }}
@@ -1533,12 +1537,18 @@ const TripSheet = ({ stationName, logoImage }) => {
                             if (!lockdata && dayhcl === 0) {
                               setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                             }
+                            if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedintime:rTime}))
+                            }
                           }
                         } else {
                           // If the day difference is more than 1, allow any time
                           if (!lockdata && dayhcl === 0) {
                             setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                           }
+                          if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedintime:rTime}))
+                          }
                         }
                       }}
                     />
@@ -1629,6 +1639,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (!lockdata && dayhcl === 0) {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                           }
+                          if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                          }
                         }
                       }}
 
@@ -1657,7 +1670,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         if (value >= 0) {
                           handleChange(e)
                           setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
-                          if (!lockdata && dayhcl === 1) {
+                          if (!lockdata && dayhcl === 1  && duty !== "Outstation") {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                           }
                         }
@@ -1686,7 +1699,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         if (value >= 0) {
                           setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
                           handleChange(e)
-                          if (!lockdata && dayhcl === 1) {
+                          if (!lockdata && dayhcl === 1  && duty !== "Outstation") {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                           }
                         }
@@ -1717,6 +1730,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                           if (!lockdata && dayhcl === 0) {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                           }
+                          if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                          }
                         }
                       }}
                       label="Shed In"
@@ -1766,7 +1782,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                
 
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faStamp} />
                   </div>
@@ -1779,8 +1795,39 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size='small'
                     autoComplete="password"
                   />
+                </div> */}
+
+              <div className="input">
+                <div className="icone">
+                  <FontAwesomeIcon icon={faStamp} />
                 </div>
-                <div className="input">
+                <TextField
+                  name="permit"
+                  value={formData.permit || selectedCustomerData.permit || book.permit || ''}
+                  onChange={(e) => {
+                    handleChange(e);
+                    const value = e.target.value;
+                    // Automatically update the Vendor permit field
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                    }));
+                    setSelectedCustomerData((prevState) => ({
+                      ...prevState,
+                      vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                    }));
+                    setBook((prevState) => ({
+                      ...prevState,
+                      vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                    }));
+                  }}
+                  label="Permit"
+                  id="permit"
+                  size="small"
+                  autoComplete="password"
+                />
+              </div>
+                {/* <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faSquareParking} />
                   </div>
@@ -1793,8 +1840,39 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size='small'
                     autoComplete="password"
                   />
-                </div>
-                <div className="input">
+                </div> */}
+
+                  <div className="input">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faSquareParking} />
+                    </div>
+                    <TextField
+                      name="parking"
+                      value={formData.parking || selectedCustomerData.parking || book.parking || ''}
+                      onChange={(e) => {
+                        handleChange(e);
+                        const value = e.target.value;
+                        // Syncing the value of "parking" to "vendorparking"
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          vendorparking: value,
+                        }));
+                        setSelectedCustomerData((prevState) => ({
+                          ...prevState,
+                          vendorparking: value,
+                        }));
+                        setBook((prevState) => ({
+                          ...prevState,
+                          vendorparking: value,
+                        }));
+                      }}
+                      label="Parking"
+                      id="parking"
+                      size="small"
+                      autoComplete="password"
+                    />
+                  </div>
+                {/* <div className="input">
                   <div className="icone">
                     <TollTwoToneIcon color="action" />
                   </div>
@@ -1807,6 +1885,37 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size='small'
                     autoComplete="password"
                   />
+                </div> */}
+
+              <div className="input">
+                <div className="icone">
+                  <TollTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  name="toll"
+                  value={formData.toll || selectedCustomerData.toll || book.toll || ''}
+                  onChange={(e) => {
+                    handleChange(e);
+                    const value = e.target.value;
+                    // Syncing the value of "toll" to "vendortoll"
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      vendortoll: value,
+                    }));
+                    setSelectedCustomerData((prevState) => ({
+                      ...prevState,
+                      vendortoll: value,
+                    }));
+                    setBook((prevState) => ({
+                      ...prevState,
+                      vendortoll: value,
+                    }));
+                  }}
+                  label="Toll"
+                  id="toll"
+                  size="small"
+                  autoComplete="password"
+                />
                 </div>
 
                 <React.Fragment>
@@ -3033,7 +3142,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </Dialog>
                 </React.Fragment>
 
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <BackupTableSharpIcon color="action" />
                   </div>
@@ -3045,29 +3154,49 @@ const TripSheet = ({ stationName, logoImage }) => {
                       handleChange(e)
                       setVendorinfodata({ ...vendorinfo, vendor_vpermettovendor: e.target.value })
                     }}
-                    label="Vendor permet"
-                    id="vpermettovendor"
-                    autoComplete="password"
-                  />
-                </div>
-                {/* <div className="input">
-                  <div className="icone">
-                    <BackupTableSharpIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="vpermettovendor"
-                    value={formData.vpermettovendo || selectedCustomerData.vpermettovendor || book.vpermettovendor || ""}
-                    onChange={(e) => {
-                      handleChange(e)
-                      setVendorinfodata({ ...vendorinfo, vendor_vpermettovendor: e.target.value })
-                    }}
-                    label="Vendor Parking"
+                    label="Vendor permit"
                     id="vpermettovendor"
                     autoComplete="password"
                   />
                 </div> */}
 
+                  <div className="input">
+                    <div className="icone">
+                      <BackupTableSharpIcon color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      name="vpermettovendor"
+                      value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
+                      onChange={(e) => {
+                        handleChange(e);
+                        setVendorinfodata({
+                          ...vendorinfo,
+                          vendor_vpermettovendor: e.target.value,
+                        });
+                      }}
+                      label="Vendor permit"
+                      id="vpermettovendor"
+                      autoComplete="password"
+                    />
+                  </div>
+                <div className="input">
+                <div className="icone">
+                      <FontAwesomeIcon icon={faSquareParking} />
+                    </div>
+                  <TextField
+                    size="small"
+                    name="vendorparking"
+                    value={formData.vendorparking || selectedCustomerData.vendorparking || book.vendorparking || ""}
+                    onChange={(e) => {
+                      handleChange(e)
+                      setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
+                    }}
+                    label="Vendor Parking"
+                    id="vendorparking"
+                    autoComplete="password"
+                  />
+                </div>
                 <div className="input">
                   <div className="icone">
                     <MinorCrashSharpIcon color="action" />
@@ -3085,21 +3214,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input">
-                  <div className="icone">
-                    <PaymentsIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="customeradvance"
-                    value={formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || ''}
-                    onChange={handleChange}
-                    label="Customer Advance"
-                    id="customer-advance"
-                    autoComplete="password"
-                    disabled={Number(superpower) === 0}
-                  />
-                </div>
+
+
+                
+
+                
                 <div className="input tripsheet-remarks-division">
                   <div className="icone">
                     <MarkChatReadIcon color="action" />
@@ -3112,7 +3231,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       handleChange(e);
                     
                     }}
-                    label="Remark"
+                    label="Remarks"
                     id="remark"
                     multiline
                     rows={3}
@@ -3120,6 +3239,41 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                   />
                 </div>
+     
+                {/* <div className="input">
+                  <div className="icone">
+                <AccountBalanceWalletTwoToneIcon color="action" />
+              </div>
+                  <TextField
+                    name="fuelamount"
+                    value={formData.fuelamount || selectedCustomerData.fuelamount|| book.fuelamount || ''}
+                    onChange={handleChange}
+                    label="Fuel Amount"
+                    id="fuelamount"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div> */}
+
+               <div className="input">    
+                  <div className="icone">
+                     <AccountBalanceWalletTwoToneIcon color="action" />
+                  </div>
+                      <TextField
+                          margin="normal"
+                          size="small"
+                          name="fuelamount"
+                          value={formData.fuelamount || selectedCustomerData.fuelamount || book.fuelamount|| ""}
+                          onChange={(e) => {
+                            handleChange(e)
+                            setVendorinfodata({ ...vendorinfo, vendor_fuelamount: e.target.value })
+                          }}
+                          label="Fuel Amount"
+                          id="fuelamount"
+                          autoComplete="password"
+                          style={{marginBottom:'20px'}}
+                        />
+                  </div>
 
                 <div className="input">
                   <div className="icone">
@@ -3137,10 +3291,31 @@ const TripSheet = ({ stationName, logoImage }) => {
                     label="Vendor Advance"
                     id="advance-paid-to-vendor"
                     autoComplete="password"
+                    style={{marginBottom:'20px'}}
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <PaymentsIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    name="customeradvance"
+                    value={formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || ''}
+                    onChange={handleChange}
+                    label="Customer Advance"
+                    id="customer-advance"
+                    autoComplete="password"
+                    disabled={Number(superpower) === 0}
                   />
                 </div>
 
-                <div className="input tripsheet-calculate-input">
+
+                <div style={{display:"flex",flexWrap:"nowrap"}}>
+
+                
+
+                <div className="input-tripsheet-btns-overview tripsheet-calculate-input">
                   <Button variant="contained"
                     onClick={() => {
                       handleClickOpen();
@@ -3160,7 +3335,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </Button>
                   </DialogActions>
                 </Dialog>
-                <div className="input">
+                <div className="input-tripsheet-btns">
                   {isEditMode ? (<>
                     {/* <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button> */}
                     <LoadingButton  loading={isEditload} variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</LoadingButton>
@@ -3170,7 +3345,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <LoadingButton  loading={isAddload} variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</LoadingButton>
                   )}
                 </div>
-
+                </div>
                 <div className="vehicle-confirm-tripsheet">
                   <div className="input-field input-feild-vehicle-confirm">
                     <div className="input">

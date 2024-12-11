@@ -570,7 +570,7 @@
 .tripsheet-calculate-input button,
 .tripsheet-e-tripsheet-input button {
   width: 100%;
-  margin-left: 28px;
+  /* margin-left: 28px; */
 }
 
 .tripsheet-vendor-bill-main {
@@ -869,4 +869,18 @@
 
 .tripsheet-division1 .input-g:hover {
   transform: translateY(-5px) scale(1.05);
+}
+
+.input-tripsheet-btns {
+  /* width: 212px ; */
+  display: flex;
+  align-items: center;
+  padding-right: 15px;
+}
+
+.input-tripsheet-btns-overview {
+  width: 150px ;
+  display: flex;
+  align-items: center;
+  padding-right: 15px;
 }

@@ -250,6 +250,7 @@ const useTripsheet = () => {
         totalDays: '',
         remark: '',
         parking: '',
+        fuelamount:'',
         permit: '',
     });
     const [conflictenddate, setConflictEndDate] = useState({
@@ -267,7 +268,7 @@ const useTripsheet = () => {
             headerName: "Trip Date",
             width: 100,
             renderCell: (params) => dayjs(params.value).format("DD-MM-YYYY"), // Change format as needed
-          },
+        },
         { field: "trip_type", headerName: "Trip Type", width: 120 },
         { field: "place_name", headerName: "Place Name", width: 120 },
         {
@@ -455,7 +456,7 @@ const useTripsheet = () => {
                 const data = response.data;
                 setRow(data);
                 setMaplogimgPopupOpen(true);
-                console.log(data,'mapdata')
+                console.log(data, 'mapdata')
             }
         } catch {
         }
@@ -586,7 +587,7 @@ const useTripsheet = () => {
 
         const formData = {};
         const parameterKeys = [
-            'dispatchcheck', 'vehType', 'shedInDate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
+            'dispatchcheck', 'vehType', 'shedInDate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll','vendorparking','fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -597,7 +598,7 @@ const useTripsheet = () => {
 
         const formvendorinfo = {};
         const parameterKeys1 = [
-            "vendor_vehicle", "vendor_duty", "vendorshedOutDate", "vendorshedInDate", "vendortotaldays", "vendorreporttime", "vendorshedintime", "vendorTotaltime", "vendorshedoutkm", "vendorshedinkm", "vendortotalkm", "vendorRemarks", "Vendor_Calcpackage", "Vendor_rateAmount", "Vendor_ExtraKms", "Vendor_ExtraAmountKms", "Vendor_totalAmountKms", "Vendor_ExtraHours", "Vendor_ExtraAmountHours", "Vendor_totalAmountHours", "Vendor_NightHALT", "Vendor_NightBataAmount", "Vendor_NightbataTotalAmount", "Vendor_Bata", "Vendor_BataAmount", "Vendor_BataTotalAmount", "Vendor_FULLTotalAmount", "vendor_vpermettovendor", "vendor_toll", "vendor_advancepaidtovendor", "vendor_ratename"
+            "vendor_vehicle", "vendor_duty", "vendorshedOutDate", "vendorshedInDate", "vendortotaldays", "vendorreporttime", "vendorshedintime", "vendorTotaltime", "vendorshedoutkm", "vendorshedinkm", "vendortotalkm", "vendorRemarks", "Vendor_Calcpackage", "Vendor_rateAmount", "Vendor_ExtraKms", "Vendor_ExtraAmountKms", "Vendor_totalAmountKms", "Vendor_ExtraHours", "Vendor_ExtraAmountHours", "Vendor_totalAmountHours", "Vendor_NightHALT", "Vendor_NightBataAmount", "Vendor_NightbataTotalAmount", "Vendor_Bata", "Vendor_BataAmount", "Vendor_BataTotalAmount", "Vendor_FULLTotalAmount", "vendor_vpermettovendor","vendor_vendorparking", "vendor_toll","vendor_fuelamount", "vendor_advancepaidtovendor", "vendor_ratename"
         ];
         parameterKeys1.forEach(key => {
             const value = params.get(key);
@@ -1032,6 +1033,8 @@ const useTripsheet = () => {
     //     }
     // }
     const datakm1 = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
+    const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
+    const hclOutstation = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
 
     const hybridatahcldatakm = async () => {
         const hybridatahcl1 = hybridhclcustomer || hybridhclnavigate;
@@ -1055,15 +1058,25 @@ const useTripsheet = () => {
         const datakm = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm;
         // const addkmvaluedata = Number(datakm) || 0 + kmmax 
         const addkmvaluedata = (Number(datakm) || 0) + kmmax;
+        const Outstationkmdata = (Number(hclOutstation) || 0) + kmmax;
+        const addTotalKmvaluedata = dutytype === "Outstation" ? Outstationkmdata : addkmvaluedata
 
-        console.log(hclconfict, "hcl", hclconfict2)
-        console.log(datakm, "datakmmmm", addkmvaluedata, "add", kmmax, typeof (kmmax), Number(datakm) || 0, ";;;;", (Number(datakm) || 0) + kmmax)
+        // console.log(hclconfict, "hcl", hclconfict2)
+        const editHcldatakmvalue = hclconfict2 + (Number(hclOutstation) || 0);
+        const editHclnormal = hclconfict2 + (Number(datakm) || 0);
+        const editHclOutstationKmvalue = dutytype === "Outstation" ? editHcldatakmvalue : editHclnormal
+
+        // console.log(editHclOutstationKmvalue, "wwwwwwwwwww", editHclnormal, editHcldatakmvalue, dutytype);
+        // console.log(addkmvaluedata,"localll",addTotalKmvaluedata,"locallll",hclconfict,editHclOutstationKmvalue);
+
 
         if (hybridatahcl1 === 1) {
             if (datakm) {
-                console.log(datakm, "enter")
+
                 setConflictHCLDataValue({
-                    Hcldatakmvalue: hclconfict === 0 ? addkmvaluedata : hclconfict,
+                    Hcldatakmvalue: hclconfict === 0 ? addTotalKmvaluedata : editHclOutstationKmvalue,
+
+                    // Hcldatakmvalue: dutytype === "Outstation" ? addkmvaluedata : hclconfict,
                     HclMaxConflctdata: hclconfict === 0 ? kmmax : hclconfict2
                 });
             } else {
@@ -1077,10 +1090,12 @@ const useTripsheet = () => {
     console.log(conflicthcldatavalue.Hcldatakmvalue, "con", conflicthcldatavalue.HclMaxConflctdata)
     useEffect(() => {
         hybridatahcldatakm()
-    }, [datakm1])
+    }, [datakm1, hclOutstation])
     // console.log(hybridatahcldatakm(),"call")
 
     const handleEdit = async () => {
+        const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
+
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
         const checkdata = statusdata[0];
         const superpower = localStorage.getItem("SuperAdmin")
@@ -1150,7 +1165,7 @@ const useTripsheet = () => {
                     minhrs: packageDetails[0]?.Hours,
                     minkm: packageDetails[0]?.KMS,
                     vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
-                    calcPackage, extraHR: parseFloat(extraHR || 0) || 0, extraKM: parseFloat(extraKM || 0) || 0, package_amount: parseInt(package_amount || 0) || 0, extrakm_amount: parseFloat(extrakm_amount || 0) || 0, extrahr_amount: parseFloat(extrahr_amount || 0) || 0, ex_kmAmount, ex_hrAmount, nightBta: parseFloat(nightBta || 0) || 0, nightCount: parseFloat(nightCount || 0) || 0, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport,
+                    calcPackage, extraHR: parseFloat(extraHR || 0) || 0, extraKM: parseFloat(extraKM || 0) || 0, package_amount: parseInt(package_amount || 0) || 0, extrakm_amount: parseFloat(extrakm_amount || 0) || 0, extrahr_amount: parseFloat(extrahr_amount || 0) || 0, ex_kmAmount, ex_hrAmount, nightBta: parseFloat(nightBta || 0) || 0, nightCount: parseFloat(nightCount || 0) || 0, night_totalAmount, driverBeta, driverbeta_Count: parseFloat(driverbeta_Count || 0), driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport,
                     // -------------------------vendor--------------------------------------------------------
                     vendor_vehicle: vendorinfo.vendor_vehicle || "",
                     vendor_duty: vendorinfo.vendor_duty || ratename || "",
@@ -1406,6 +1421,8 @@ const useTripsheet = () => {
                 starttime: formData.starttime || book.starttime || selectedBookingDate.starttime,
                 toll: book.toll,
                 vendortoll: book.vendortoll,
+                vendorparking:book.vendorparking,
+                fuelamount:book.fuelamount,
                 vpermettovendor: book.vpermettovendor,
                 driverName: driverName,
                 request: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
@@ -1661,7 +1678,7 @@ const useTripsheet = () => {
             setErrorMessage("Enter The Tripid.");
             return
         }
-        if(!documentType){
+        if (!documentType) {
             setError(true)
             setErrorMessage("Please Select the Document Type")
             return
@@ -1697,6 +1714,18 @@ const useTripsheet = () => {
                     setSuccess(true)
                     setSuccessMessage("Sucessfully Added")
                 }
+                setFormData((prev) => ({
+                    ...prev,
+                    documenttype: '',
+                }));
+                setSelectedCustomerData((prev) => ({
+                    ...prev,
+                    documenttype: '', 
+                }));
+                setBook((prev) => ({
+                    ...prev,
+                    documenttype: '', 
+                }));
             } catch (error) {
                 console.error('Error uploading file:', error);
                 setError(true)
@@ -2514,7 +2543,8 @@ const useTripsheet = () => {
 
             const shedKmValue = parseInt(shedKilometers.shedkm || 0) || parseInt(formData.shedkm || 0) || parseInt(selectedCustomerData.shedkm || 0) || parseInt(book.shedkm || 0);
             const closekm = formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm || ''
-            const hclKM = parseInt(closekm) + shedKmValue || 0
+            const hclOutstation = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
+            const hclKM = dutytype === "Outstation" ? parseInt(hclOutstation || 0) + shedKmValue || 0 : parseInt(closekm) + shedKmValue || 0;
             return hclKM
 
         }
@@ -2723,31 +2753,31 @@ const useTripsheet = () => {
         const shedoutTime = vendorinfo?.vendorreporttime || ""
         const shedinTime = vendorinfo?.vendorshedintime || ""
         const totalDays = calculatevendorTotalDays()
-        const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
+        // const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
         const datatimetoggle = timeTogglevendor || timetogglevendornavigate
 
 
-        let additionalMinutes = 0;
-        let additionalHours = 0;
-        let additionalMinutesValue = 0;
+        // let additionalMinutes = 0;
+        // let additionalHours = 0;
+        // let additionalMinutesValue = 0;
 
-        // Parse additional time value if available
-        if (additionalTimeValue) {
-            const hoursMatch = additionalTimeValue.match(/(\d+)h/);
-            const minutesMatch = additionalTimeValue.match(/(\d+)m/);
+        // // Parse additional time value if available
+        // if (additionalTimeValue) {
+        //     const hoursMatch = additionalTimeValue.match(/(\d+)h/);
+        //     const minutesMatch = additionalTimeValue.match(/(\d+)m/);
 
-            additionalHours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
-            const additionalMinutesFromHours = additionalHours * 60;
-            additionalMinutes += additionalMinutesFromHours;
+        //     additionalHours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+        //     const additionalMinutesFromHours = additionalHours * 60;
+        //     additionalMinutes += additionalMinutesFromHours;
 
-            additionalMinutesValue = minutesMatch ? parseInt(minutesMatch[1]) : 0;
-            additionalMinutes += additionalMinutesValue;
-        }
+        //     additionalMinutesValue = minutesMatch ? parseInt(minutesMatch[1]) : 0;
+        //     additionalMinutes += additionalMinutesValue;
+        // }
 
-        // Convert minutes to a two-digit string
-        const formattedMinutes = additionalMinutesValue.toString().padStart(2, '0');
-        // Combine hours and minutes into a single decimal format
-        let combinedTime = `${additionalHours}.${formattedMinutes}`;
+        // // Convert minutes to a two-digit string
+        // const formattedMinutes = additionalMinutesValue.toString().padStart(2, '0');
+        // // Combine hours and minutes into a single decimal format
+        // let combinedTime = `${additionalHours}.${formattedMinutes}`;
         if (shedinTime && shedoutTime) {
 
             if (calculatevendorTotalDays() === 1) {
@@ -2757,10 +2787,11 @@ const useTripsheet = () => {
                 // Convert hours to minutes and add minutes
                 const totalShedoutMinutes = (shedoutHours * 60) + shedoutMinutes;
                 const totalShedinMinutes = (shedinHours * 60) + shedinMinutes;
-                const combinedTotal = (additionalHours * 60) + Number(formattedMinutes);
+                // const combinedTotal = (additionalHours * 60) + Number(formattedMinutes);
                 const a = Number(shedoutMinutes) + Number(shedinMinutes);
                 // Calculate the difference in minutes
-                let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
+                // let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
+                let minuteDifference = totalShedinMinutes - totalShedoutMinutes
                 if (minuteDifference < 0) {
                     minuteDifference += 24 * 60;
                 }
@@ -2791,12 +2822,14 @@ const useTripsheet = () => {
 
                 const c = 23.60 - Number(newTimeString) + Number(newTimeStrings);
                 const formattedC = c.toFixed(2);
-                const combined = combinedTime;
+                // const combined = combinedTime;
                 const [hours1, minutes1] = formattedC.toString().split('.').map(Number);
-                const [hours2, minutes2] = combined.toString().split('.').map(Number);
+                // const [hours2, minutes2] = combined.toString().split('.').map(Number);
 
-                let totalHours = hours1 + hours2;
-                let totalMinutes = minutes1 + minutes2;
+                // let totalHours = hours1 + hours2;
+                // let totalMinutes = minutes1 + minutes2;
+                let totalHours = hours1
+                let totalMinutes = minutes1
                 if (totalMinutes >= 100) {
                     const quotient = Math.floor(totalMinutes / 60); // Get the quotient
                     totalMinutes = totalMinutes % 60; // Get the remainder
@@ -2870,7 +2903,7 @@ const useTripsheet = () => {
                 const LongTripHours = LongTripDays * 24;
                 const LongHours = LongTripHours.toFixed(2);
 
-                const combined = combinedTime;
+                // const combined = combinedTime;
 
                 // const startendhours = 23.60 - Number(newTimeString) + Number(newTimeStrings);
 
@@ -2895,11 +2928,13 @@ const useTripsheet = () => {
                 const formattedHours = Number(TotalHoursCalc).toFixed(2);
 
                 const [integerPart, decimalPart] = formattedHours.toString().split('.').map(Number);
-                const [hours2, minutes2] = combined.toString().split('.');
+                // const [hours2, minutes2] = combined.toString().split('.');
 
 
-                let totalHours = Number(integerPart) + Number(hours2);
-                let totalMinutes = Number(decimalPart) + Number(minutes2);
+                // let totalHours = Number(integerPart) + Number(hours2);
+                // let totalMinutes = Number(decimalPart) + Number(minutes2);
+                let totalHours = Number(integerPart)
+                let totalMinutes = Number(decimalPart)
                 const formattedTotal = `${totalHours}.${totalMinutes}`
                 const [integerParts, newdecimalPart] = formattedTotal.toString().split('.').map(Number);
 
@@ -2990,10 +3025,10 @@ const useTripsheet = () => {
 
         if (startKm !== undefined && closeKm !== undefined) {
             let totalKm = parseInt(closeKm) - parseInt(startKm);
-            const shedKmValue = parseInt(shedKilometers.shedkm) || parseInt(formData.shedkm) || parseInt(selectedCustomerData.shedkm) || parseInt(book.shedkm);
-            if (!isNaN(shedKmValue)) {
-                totalKm += shedKmValue;
-            }
+            // const shedKmValue = parseInt(shedKilometers.shedkm) || parseInt(formData.shedkm) || parseInt(selectedCustomerData.shedkm) || parseInt(book.shedkm);
+            // if (!isNaN(shedKmValue)) {
+            //     totalKm += shedKmValue;
+            // }
             return totalKm;
         }
         return "";
@@ -4067,10 +4102,12 @@ const useTripsheet = () => {
         const amount5 = parseFloat(vendorinfo.vendor_vpermettovendor || vendorinfo?.vpermettovendor) || 0;
         const amount6 = parseFloat(vendorinfo.vendor_toll || vendorinfo?.vendortoll) || 0;
         const amount7 = parseFloat(vendorinfo.vendor_advancepaidtovendor || vendorinfo?.advancepaidtovendor) || 0;
+        const amount8 = parseFloat(vendorinfo.vendor_vendorparking || vendorinfo?.vendorparking) || 0;
+        const amount9 = parseFloat(vendorinfo.vendor_fuelamount|| vendorinfo?.fuelamount) || 0;
 
 
-        const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6;
-        const fullAmount = totalAmount - amount7;
+        const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount8;
+        const fullAmount = totalAmount - amount7 - amount9;
         const fullamountdata = Math.ceil(fullAmount);
         setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullamountdata })
         // return totalAmount;

@@ -150,6 +150,10 @@ const useTripsheet = () => {
         vendorshedinkm: "",
         vendortotalkm: "",
         vendorRemarks: "",
+        fuelamount: "",
+        vendorparking: "",
+        vendortoll: "",
+        vpermettovendor: ""
     })
 
     const [vendorbilldata, setVendorbilldata] = useState({
@@ -218,6 +222,10 @@ const useTripsheet = () => {
     const [hybridhclnavigate, setHybridHclNavigate] = useState('')
     const [timetogglenavigate, setTimeToggleNaviagate] = useState('')
     const [timetogglevendornavigate, setTimeToggleVendorNaviagate] = useState('')
+
+    // Hide some field for tripsheet
+    const [hideField, setHideField] = useState(null)
+
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
     const [attachedImage, setAttachedImage] = useState('');
@@ -251,7 +259,7 @@ const useTripsheet = () => {
         totalDays: '',
         remark: '',
         parking: '',
-        fuelamount:'',
+        // fuelamount: '',
         permit: '',
     });
     const [conflictenddate, setConflictEndDate] = useState({
@@ -588,7 +596,7 @@ const useTripsheet = () => {
 
         const formData = {};
         const parameterKeys = [
-            'dispatchcheck', 'vehType', 'vendorparking','fuelamount','shedInDate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll','vendorparking','fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
+            'dispatchcheck', 'vehType', 'shedInDate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -599,7 +607,7 @@ const useTripsheet = () => {
 
         const formvendorinfo = {};
         const parameterKeys1 = [
-            "vendor_vehicle", "vendor_duty", "vendorshedOutDate", "vendorshedInDate", "vendortotaldays", "vendorreporttime", "vendorshedintime", "vendorTotaltime", "vendorshedoutkm", "vendorshedinkm", "vendortotalkm", "vendorRemarks", "Vendor_Calcpackage", "Vendor_rateAmount", "Vendor_ExtraKms", "Vendor_ExtraAmountKms", "Vendor_totalAmountKms", "Vendor_ExtraHours", "Vendor_ExtraAmountHours", "Vendor_totalAmountHours", "Vendor_NightHALT", "Vendor_NightBataAmount", "Vendor_NightbataTotalAmount", "Vendor_Bata", "Vendor_BataAmount", "Vendor_BataTotalAmount", "Vendor_FULLTotalAmount", "vendor_vpermettovendor","vendor_vendorparking", "vendor_toll","vendor_fuelamount", "vendor_advancepaidtovendor", "vendor_ratename"
+            "vendor_vehicle", "vendor_duty", 'vendorparking', 'fuelamount', "vendorshedOutDate", "vendorshedInDate", "vendortotaldays", "vendorreporttime", "vendorshedintime", "vendorTotaltime", "vendorshedoutkm", "vendorshedinkm", "vendortotalkm", "vendorRemarks", "Vendor_Calcpackage", "Vendor_rateAmount", "Vendor_ExtraKms", "Vendor_ExtraAmountKms", "Vendor_totalAmountKms", "Vendor_ExtraHours", "Vendor_ExtraAmountHours", "Vendor_totalAmountHours", "Vendor_NightHALT", "Vendor_NightBataAmount", "Vendor_NightbataTotalAmount", "Vendor_Bata", "Vendor_BataAmount", "Vendor_BataTotalAmount", "Vendor_FULLTotalAmount", "vendor_vpermettovendor", "vendor_vendorparking", "vendor_toll", "vendor_advancepaidtovendor", "vendor_ratename"
         ];
         parameterKeys1.forEach(key => {
             const value = params.get(key);
@@ -629,6 +637,8 @@ const useTripsheet = () => {
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
         formData['apps'] = appsValue;
+        console.log(formData, 'formdataaa');
+
         setTripSheetData(formData);
         setBook(formData);
         setFormData(formData);
@@ -1001,7 +1011,6 @@ const useTripsheet = () => {
     }
 
 
-    console.log(book.closekm, "close", typeof (formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm), formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm, maxconflict)
 
 
     // const hybridatahcldatakm = ()=>{
@@ -1088,14 +1097,13 @@ const useTripsheet = () => {
         }
     };
 
-    console.log(conflicthcldatavalue.Hcldatakmvalue, "con", conflicthcldatavalue.HclMaxConflctdata)
     useEffect(() => {
         hybridatahcldatakm()
     }, [datakm1, hclOutstation])
     // console.log(hybridatahcldatakm(),"call")
 
     const handleEdit = async () => {
-        const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
+        // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
 
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
         const checkdata = statusdata[0];
@@ -1166,10 +1174,11 @@ const useTripsheet = () => {
                     minhrs: packageDetails[0]?.Hours,
                     minkm: packageDetails[0]?.KMS,
                     vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
-                    calcPackage, extraHR: parseFloat(extraHR || 0) || 0, extraKM: parseFloat(extraKM || 0) || 0, package_amount: parseInt(package_amount || 0) || 0, extrakm_amount: parseFloat(extrakm_amount || 0) || 0, extrahr_amount: parseFloat(extrahr_amount || 0) || 0, ex_kmAmount, ex_hrAmount, nightBta: parseFloat(nightBta || 0) || 0, nightCount: parseFloat(nightCount || 0) || 0, night_totalAmount, driverBeta:parseFloat(driverBeta || 0), driverbeta_Count: parseFloat(driverbeta_Count || 0), driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport,
+                    calcPackage, extraHR: parseFloat(extraHR || 0) || 0, extraKM: parseFloat(extraKM || 0) || 0, package_amount: parseInt(package_amount || 0) || 0, extrakm_amount: parseFloat(extrakm_amount || 0) || 0, extrahr_amount: parseFloat(extrahr_amount || 0) || 0, ex_kmAmount, ex_hrAmount, nightBta: parseFloat(nightBta || 0) || 0, nightCount: parseFloat(nightCount || 0) || 0, night_totalAmount, driverBeta: parseFloat(driverBeta || 0), driverbeta_Count: parseFloat(driverbeta_Count || 0), driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport,
                     // -------------------------vendor--------------------------------------------------------
                     vendor_vehicle: vendorinfo.vendor_vehicle || "",
                     vendor_duty: vendorinfo.vendor_duty || ratename || "",
+                    fuelamount: vendorinfo.fuelamount || "",
                     vendor_ratename: vendorinfo.vendor_ratename || "",
                     vendorshedOutDate: vendorinfo.vendorshedOutDate || "",
                     vendorshedInDate: vendorinfo.vendorshedInDate || "",
@@ -1422,8 +1431,8 @@ const useTripsheet = () => {
                 starttime: formData.starttime || book.starttime || selectedBookingDate.starttime,
                 toll: book.toll,
                 vendortoll: book.vendortoll,
-                vendorparking:book.vendorparking,
-                fuelamount:book.fuelamount,
+                vendorparking: book.vendorparking,
+                fuelamount: book.fuelamount,
                 vpermettovendor: book.vpermettovendor,
                 driverName: driverName,
                 request: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
@@ -1437,6 +1446,8 @@ const useTripsheet = () => {
                 // -------vendordata-------------------------------------------------
                 vendor_vehicle: vendorinfo.vendor_vehicle || "",
                 vendor_duty: vendorinfo.vendor_duty || "",
+                fuelamount: vendorinfo.fuelamount || "",
+                vendorparking: vendorinfo.vendorparking || "",
                 vendor_ratename: vendorinfo.vendor_ratename || ratename || "",
                 vendorshedOutDate: vendorinfo.vendorshedOutDate || "",
                 vendorshedInDate: vendorinfo.vendorshedInDate || "",
@@ -1703,40 +1714,84 @@ const useTripsheet = () => {
             const data = Date.now().toString();
             const formData = new FormData();
             formData.append('image', file);
-
             try {
-
                 await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
-                setSuccess(true)
-                setSuccessMessage("Sucessfully Added")
+                setSuccessMessage("Successfully added");
+
                 if (documentType === 'Toll' || documentType === 'Parking') {
                     await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
-                    //   await axios.post(`http://localhost:7000/uploadfolrderapp/${data}`, formData);
-                    setSuccess(true)
-                    setSuccessMessage("Sucessfully Added")
+                    setSuccessMessage("Successfully added");
                 }
+                setSuccess(true);
                 setFormData((prev) => ({
                     ...prev,
                     documenttype: '',
                 }));
                 setSelectedCustomerData((prev) => ({
                     ...prev,
-                    documenttype: '', 
+                    documenttype: '',
                 }));
                 setBook((prev) => ({
                     ...prev,
-                    documenttype: '', 
+                    documenttype: '',
                 }));
             } catch (error) {
-                console.error('Error uploading file:', error);
-                setError(true)
-                setErrorMessage('Failled to upload')
+                if (!error.response) {
+                    setErrorMessage('Check your network and try again.');
+                } else {
+                    setErrorMessage('Failed to upload');
+                }
+
+                setError(true);
             }
 
 
 
         }
     };
+    // const handleFileChange = async (event) => {
+    //     const documentType = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || '';
+    //     const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+    //     const file = event.target.files[0];
+    //     if (!file) return;
+    //     if (file) {
+    //         const data = Date.now().toString();
+    //         const formData = new FormData();
+    //         formData.append('image', file);
+
+    //         try {
+
+    //             await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
+    //             setSuccess(true)
+    //             setSuccessMessage("Sucessfully Added")
+    //             if (documentType === 'Toll' || documentType === 'Parking') {
+    //                 await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
+    //                 //   await axios.post(`http://localhost:7000/uploadfolrderapp/${data}`, formData);
+    //                 setSuccess(true)
+    //                 setSuccessMessage("Sucessfully Added")
+    //             }
+    //             setFormData((prev) => ({
+    //                 ...prev,
+    //                 documenttype: '',
+    //             }));
+    //             setSelectedCustomerData((prev) => ({
+    //                 ...prev,
+    //                 documenttype: '',
+    //             }));
+    //             setBook((prev) => ({
+    //                 ...prev,
+    //                 documenttype: '',
+    //             }));
+    //         } catch (error) {
+    //             console.error('Error uploading file:', error);
+    //             setError(true)
+    //             setErrorMessage('Failled to upload')
+    //         }
+
+
+
+    //     }
+    // };
 
 
     // const calculateTotalTime = () => {
@@ -1944,14 +1999,14 @@ const useTripsheet = () => {
 
                     setTimeToggle(res); // Update state with the fetched result
                 } else {
-                    setTimeToggle('');
+                    setTimeToggle(0);
                 }
             } catch (error) {
                 console.error('Error fetching customer data:', error);
-                setTimeToggle('');
+                setTimeToggle(0);
             }
         } else {
-            setTimeToggle('');
+            setTimeToggle(0);
         }
     }, [apiUrl, customerdatatimetoggle]); // Memoize the fetch function based on these dependencies
 
@@ -1980,14 +2035,14 @@ const useTripsheet = () => {
 
                     setTimeToggleVendor(res); // Update state with the fetched result
                 } else {
-                    setTimeToggleVendor('');
+                    setTimeToggleVendor(0);
                 }
             } catch (error) {
                 console.error('Error fetching customer data:', error);
-                setTimeToggleVendor('');
+                setTimeToggleVendor(0);
             }
         } else {
-            setTimeToggleVendor('');
+            setTimeToggleVendor(0);
         }
     }, [apiUrl, VendorTimetoggle]);
 
@@ -2048,6 +2103,7 @@ const useTripsheet = () => {
         const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
         const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
         // const datatimetoggle = timeToggle;
+        const duty = formData.duty || selectedCustomerData.duty || book.duty;
         const datatimetoggle = timeToggle || timetogglenavigate
         // console.log( timeToggle,"hhh",timetogglenavigate,datatimetoggle)
         const starttimehybrid = removeSeconds(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime)
@@ -2289,6 +2345,219 @@ const useTripsheet = () => {
                 }
 
             }
+            else {
+
+                if (shedoutTime && shedinTime && duty === "Outstation") {
+
+
+                    if (calculateTotalDay() === 1) {
+                        // Split the time strings into hours and minutes
+                        const [shedoutHours, shedoutMinutes] = shedoutTime?.split(':').map(Number);
+                        const [shedinHours, shedinMinutes] = shedinTime?.split(':').map(Number);
+
+                        // Convert hours to minutes and add minutes
+                        const totalShedoutMinutes = (shedoutHours * 60) + shedoutMinutes;
+                        const totalShedinMinutes = (shedinHours * 60) + shedinMinutes;
+                        const combinedTotal = (additionalHours * 60) + Number(formattedMinutes);
+                        // const a = Number(shedoutMinutes) + Number(shedinMinutes);
+
+                        // Calculate the difference in minutes
+                        let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
+
+                        if (minuteDifference < 0) {
+                            minuteDifference += 24 * 60;
+                        }
+
+
+                        // Convert the difference back to hours and minutes
+                        const hours = Math.floor(minuteDifference / 60);
+                        const minutes = minuteDifference % 60;
+
+
+                        if (datatimetoggle === 0) {
+                            // console.log(`${hours}h ${minutes}m`,"datamm")
+                            const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                            return dataminutes
+                        }
+                        else {
+                            return `${hours}h ${minutes}m`;
+                        }
+                    }
+
+
+
+                    if (calculateTotalDay() === 2) {
+
+                        const newTimeString = shedoutTime?.replace(":", ".");
+                        const newTimeStrings = shedinTime?.replace(":", ".");
+                        // const a = Number(newTimeStrings) + Number(newTimeString);
+
+                        const c = 23.60 - Number(newTimeString) + Number(newTimeStrings);
+                        const formattedC = c.toFixed(2);
+                        const combined = combinedTime;
+                        const [hours1, minutes1] = formattedC.toString().split('.').map(Number);
+                        const [hours2, minutes2] = combined.toString().split('.').map(Number);
+
+                        let totalHours = hours1 + hours2;
+                        let totalMinutes = minutes1 + minutes2;
+                        if (totalMinutes >= 100) {
+                            const quotient = Math.floor(totalMinutes / 60); // Get the quotient
+                            totalMinutes = totalMinutes % 60; // Get the remainder
+                            totalHours += quotient; // Add the quotient to starttotal
+                        }
+                        const formattedTotal = `${totalHours}.${totalMinutes}`;
+
+                        // const d = 
+                        const [integerPart, decimalPart] = formattedTotal.toString().split('.').map(Number);
+
+                        if (decimalPart >= 60) {
+                            // Increment the integer part by 1
+
+                            let newIntegerPart = integerPart;
+                            const additionalHours = Math.floor(decimalPart / 60);
+
+                            // Add the additional hours to totalHours
+                            newIntegerPart += additionalHours;
+                            // Subtract 60 from the decimal part
+                            const newDecimalPart = decimalPart % 60;
+
+                            // Return the adjusted time in the format "XX.XX"
+                            const RemainTotalCalculation = `${newIntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`
+                            const [hours, minutes] = RemainTotalCalculation?.toString().split('.').map(Number);
+
+                            const formattedMinutes = parseInt(minutes, 10);
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm")
+                                const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${formattedMinutes}m`;
+                            }
+                        }
+                        if (decimalPart < 60) {
+                            const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
+
+                            const formattedMinutes = parseInt(minutes, 10);
+                            if (datatimetoggle === 0) {
+                                const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${formattedMinutes}m`;
+                            }
+
+                        }
+
+                    }
+                    if (calculateTotalDay() > 2) {
+                        const newTimeString = shedoutTime?.replace(":", ".");
+                        const newTimeStrings = shedinTime?.replace(":", ".");
+
+                        const LongTripDays = totalDays - 2;
+                        const LongTripHours = LongTripDays * 24;
+                        const LongHours = LongTripHours.toFixed(2);
+
+                        const combined = combinedTime;
+
+                        const starthour1 = 23.60 - Number(newTimeString);
+                        const starthour = Number(starthour1).toFixed(2)
+
+                        const [startintegerPart, startdecimalPart] = starthour.toString().split('.').map(Number);
+                        const [endintegerPart, enddecimalPart] = newTimeStrings.toString().split('.').map(Number);
+
+                        let starttotal = Number(startintegerPart) + Number(endintegerPart);
+                        let endtotal = Number(startdecimalPart) + Number(enddecimalPart)
+
+                        if (endtotal >= 100) {
+                            const quotient = Math.floor(endtotal / 60); // Get the quotient
+                            endtotal = endtotal % 60; // Get the remainder
+                            starttotal += quotient; // Add the quotient to starttotal
+                        }
+                        const startendhours1 = `${starttotal}.${endtotal}`
+
+                        const TotalHoursCalc = Number(startendhours1) + Number(LongHours)
+
+                        const formattedHours = Number(TotalHoursCalc).toFixed(2);
+
+                        const [integerPart, decimalPart] = formattedHours.toString().split('.').map(Number);
+                        const [hours2, minutes2] = combined.toString().split('.');
+
+
+                        let totalHours = Number(integerPart) + Number(hours2);
+                        let totalMinutes = Number(decimalPart) + Number(minutes2);
+                        const formattedTotal = `${totalHours}.${totalMinutes}`
+                        const [integerParts, newdecimalPart] = formattedTotal.toString().split('.').map(Number);
+
+                        if (newdecimalPart >= 60) {
+                            // Increment the integer part by 1
+
+                            let IntegerPart = integerParts;
+                            const additionalHours = Math.floor(newdecimalPart / 60);
+
+                            // Add the additional hours to totalHours
+                            IntegerPart += additionalHours;
+                            //  const newIntegerPart = integerPart + 1;
+                            let Decimalvalue;
+
+
+                            const newDecimalPart = newdecimalPart % 60;
+
+                            Decimalvalue = Number(`${IntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`)
+                            // const TotalLongTripHours = LongTripHours + Number(Decimalvalue)
+                            const formattedDecimalValue = Decimalvalue.toFixed(2);
+
+
+                            const [hours, minutes] = formattedDecimalValue?.toString().split('.').map(Number);
+
+                            const formattedMinutes = minutes.toString().padStart('0', 2); // Ensure two digits for minutes
+
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm",datatimetoggle)
+                                const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${formattedMinutes}m`;
+                            }
+
+                            // return `${hours}h ${formattedMinutes}m`;
+
+
+                            // Example usage:
+                            //  const TotalLongTripHours = LongTripHours + Number(Decimalvalue)
+
+
+                            //  return `${newIntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`;
+                        }
+                        if (newdecimalPart < 60) {
+
+                            const RemainTotalCalculation = LongTripHours + Number(formattedHours);
+                            const a = RemainTotalCalculation.toFixed(2)
+                            // console.log(a);
+                            const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
+
+                            const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits for minutes
+                            if (datatimetoggle === 0) {
+
+                                const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${formattedMinutes}m`;
+                            }
+
+                            // return `${hours}h ${formattedMinutes}m`;
+
+                        }
+
+
+
+                    }
+                }
+            }
+
             return ''
         }
         else {
@@ -4100,15 +4369,25 @@ const useTripsheet = () => {
         const amount3 = parseFloat(vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0);
         // const amount4 = parseFloat(vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount) || 0;
         const amount4 = parseFloat(vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0);
+        // const amount5 = parseFloat(vendorinfo.vendor_vpermettovendor || vendorinfo?.vpermettovendor) || 0;
+        // const amount6 = parseFloat(vendorinfo.vendor_toll || vendorinfo?.vendortoll) || 0;
+        // const amount7 = parseFloat(vendorinfo.vendor_advancepaidtovendor || vendorinfo?.advancepaidtovendor) || 0;
+        // const amount8 = parseFloat(vendorinfo.vendor_vendorparking || vendorinfo?.vendorparking) || 0;
+        // const amount9 = parseFloat(vendorinfo.vendor_fuelamount || vendorinfo?.fuelamount) || 0;
+
         const amount5 = parseFloat(vendorinfo.vendor_vpermettovendor || vendorinfo?.vpermettovendor) || 0;
         const amount6 = parseFloat(vendorinfo.vendor_toll || vendorinfo?.vendortoll) || 0;
+        // console.log(vendorinfo.vendor_toll,"totalAmount1vvvvv",vendorinfo?.vendortoll)
         const amount7 = parseFloat(vendorinfo.vendor_advancepaidtovendor || vendorinfo?.advancepaidtovendor) || 0;
-        const amount8 = parseFloat(vendorinfo.vendor_vendorparking || vendorinfo?.vendorparking) || 0;
-        const amount9 = parseFloat(vendorinfo.vendor_fuelamount|| vendorinfo?.fuelamount) || 0;
+        const amount8 = parseFloat(vendorinfo?.vendorparking) || 0;
+        const amount9 = parseFloat(vendorinfo.fuelamount) || 0;
 
 
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount8;
-        const fullAmount = totalAmount - amount7 - amount9;
+        // const fullAmount = totalAmount - amount7 - amount9;
+        const fullAmount1 = totalAmount - amount7
+        // console.log(fullAmount1,"totalAmount2")
+        const fullAmount = fullAmount1 - amount9;
         const fullamountdata = Math.ceil(fullAmount);
         setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullamountdata })
         // return totalAmount;
@@ -4122,7 +4401,34 @@ const useTripsheet = () => {
 
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
 
+    const fetchdatasupplierraratename = async () => {
 
+        const supplierdata = selectedCustomerDatas.travelsname ||
+            formData.travelsname ||
+            selectedCustomerData.travelsname ||
+            book.travelsname || ""
+
+        if (supplierdata) {
+
+
+            const response = await axios.get(`${apiUrl}/AccountinfoTimetOOGLE/${supplierdata}`)
+            const data = response.data
+            if (data.length > 0) {
+                // console.log(data.length,data, "enetetsupplier")
+                const res = data[0].rateType;
+                // const res = response.data[0]
+                // console.log(res, "eneter")
+                return res
+            }
+
+            return ""
+        }
+
+        else {
+            return ''
+        }
+
+    }
 
     const handleVendorcalc = async () => {
         handleCalc()
@@ -4134,7 +4440,8 @@ const useTripsheet = () => {
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
-            vendorratetype = vendorinfo.vendor_ratename || ratename || "";
+            // vendorratetype = vendorinfo.vendor_ratename || ratename || "";
+            vendorratetype = await (fetchdatasupplierraratename() || vendorinfo.vendor_ratename || ratename);
             // vendorstations = await fetchdatasupplierraratenamestations();
             vendorstations = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department;
 
@@ -5090,7 +5397,7 @@ const useTripsheet = () => {
 
     const calculatewithoutadditonalhour = () => {
 
-
+        const duty = formData.duty || selectedCustomerData.duty || book.duty;
         const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
         const shedinTime = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
         const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
@@ -5105,8 +5412,8 @@ const useTripsheet = () => {
         // Parse additional time value if available
 
         if (hybriddata === 1) {
-            if (starttimehybrid && closetimehybrid) {
-
+            // if (starttimehybrid && closetimehybrid) {
+            if (starttimehybrid && closetimehybrid && duty !== "Outstation") {
 
                 if (calculateTotalDay() === 1) {
                     // Split the time strings into hours and minutes
@@ -5311,6 +5618,215 @@ const useTripsheet = () => {
 
                 }
 
+            }
+            else {
+
+                if (shedoutTime && shedinTime && duty === "Outstation") {
+
+
+                    if (calculateTotalDay() === 1) {
+                        // Split the time strings into hours and minutes
+                        const [shedoutHours, shedoutMinutes] = shedoutTime?.split(':').map(Number);
+                        const [shedinHours, shedinMinutes] = shedinTime?.split(':').map(Number);
+
+                        // Convert hours to minutes and add minutes
+                        const totalShedoutMinutes = (shedoutHours * 60) + shedoutMinutes;
+                        const totalShedinMinutes = (shedinHours * 60) + shedinMinutes;
+
+                        // const a = Number(shedoutMinutes) + Number(shedinMinutes);
+
+                        // Calculate the difference in minutes
+                        let minuteDifference = totalShedinMinutes - totalShedoutMinutes
+
+                        if (minuteDifference < 0) {
+                            minuteDifference += 24 * 60;
+                        }
+
+
+                        // Convert the difference back to hours and minutes
+                        const hours = Math.floor(minuteDifference / 60);
+                        const minutes = minuteDifference % 60;
+
+
+                        if (datatimetoggle === 0) {
+                            // console.log(`${hours}h ${minutes}m`,"datamm")
+                            const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                            return dataminutes
+                        }
+                        else {
+                            return `${hours}h ${minutes}m`;
+                        }
+                    }
+
+
+
+                    if (calculateTotalDay() === 2) {
+
+                        const newTimeString = shedoutTime?.replace(":", ".");
+                        const newTimeStrings = shedinTime?.replace(":", ".");
+                        // const a = Number(newTimeStrings) + Number(newTimeString);
+
+                        const c = 23.60 - Number(newTimeString) + Number(newTimeStrings);
+                        const formattedC = c.toFixed(2);
+                        const [hours1, minutes1] = formattedC.toString().split('.').map(Number);
+
+                        let totalHours = hours1
+                        let totalMinutes = minutes1
+                        if (totalMinutes >= 100) {
+                            const quotient = Math.floor(totalMinutes / 60); // Get the quotient
+                            totalMinutes = totalMinutes % 60; // Get the remainder
+                            totalHours += quotient; // Add the quotient to starttotal
+                        }
+                        const formattedTotal = `${totalHours}.${totalMinutes}`;
+
+                        // const d = 
+                        const [integerPart, decimalPart] = formattedTotal.toString().split('.').map(Number);
+
+                        if (decimalPart >= 60) {
+                            // Increment the integer part by 1
+
+                            let newIntegerPart = integerPart;
+                            const additionalHours = Math.floor(decimalPart / 60);
+
+                            // Add the additional hours to totalHours
+                            newIntegerPart += additionalHours;
+                            // Subtract 60 from the decimal part
+                            const newDecimalPart = decimalPart % 60;
+
+                            // Return the adjusted time in the format "XX.XX"
+                            const RemainTotalCalculation = `${newIntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`
+                            const [hours, minutes] = RemainTotalCalculation?.toString().split('.').map(Number);
+
+                            const formattedMinutes = parseInt(minutes, 10);
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm")
+                                const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${formattedMinutes}m`;
+                            }
+                        }
+                        if (decimalPart < 60) {
+                            const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
+
+                            const formattedMinutes = parseInt(minutes, 10);
+                            if (datatimetoggle === 0) {
+                                const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${formattedMinutes}m`;
+                            }
+
+                        }
+
+                    }
+                    if (calculateTotalDay() > 2) {
+                        const newTimeString = shedoutTime?.replace(":", ".");
+                        const newTimeStrings = shedinTime?.replace(":", ".");
+                        const LongTripDays = totalDays - 2;
+                        const LongTripHours = LongTripDays * 24;
+                        const LongHours = LongTripHours.toFixed(2);
+
+
+
+
+                        const starthour1 = 23.60 - Number(newTimeString);
+                        const starthour = Number(starthour1).toFixed(2)
+
+                        const [startintegerPart, startdecimalPart] = starthour.toString().split('.').map(Number);
+                        const [endintegerPart, enddecimalPart] = newTimeStrings.toString().split('.').map(Number);
+
+                        let starttotal = Number(startintegerPart) + Number(endintegerPart);
+                        let endtotal = Number(startdecimalPart) + Number(enddecimalPart)
+
+                        if (endtotal >= 100) {
+                            const quotient = Math.floor(endtotal / 60); // Get the quotient
+                            endtotal = endtotal % 60; // Get the remainder
+                            starttotal += quotient; // Add the quotient to starttotal
+                        }
+                        const startendhours1 = `${starttotal}.${endtotal}`
+
+                        const TotalHoursCalc = Number(startendhours1) + Number(LongHours)
+
+                        const formattedHours = Number(TotalHoursCalc).toFixed(2);
+
+                        const [integerPart, decimalPart] = formattedHours.toString().split('.').map(Number);
+                        // const [hours2, minutes2] = combined.toString().split('.');
+
+
+                        let totalHours = Number(integerPart)
+                        let totalMinutes = Number(decimalPart)
+                        const formattedTotal = `${totalHours}.${totalMinutes}`
+                        const [integerParts, newdecimalPart] = formattedTotal.toString().split('.').map(Number);
+
+                        if (newdecimalPart >= 60) {
+                            // Increment the integer part by 1
+
+                            let IntegerPart = integerParts;
+                            const additionalHours = Math.floor(newdecimalPart / 60);
+
+                            // Add the additional hours to totalHours
+                            IntegerPart += additionalHours;
+                            //  const newIntegerPart = integerPart + 1;
+                            let Decimalvalue;
+
+
+                            const newDecimalPart = newdecimalPart % 60;
+
+                            Decimalvalue = Number(`${IntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`)
+                            // const TotalLongTripHours = LongTripHours + Number(Decimalvalue)
+                            const formattedDecimalValue = Decimalvalue.toFixed(2);
+
+
+                            const [hours, minutes] = formattedDecimalValue?.toString().split('.').map(Number);
+
+                            const formattedMinutes = minutes.toString().padStart('0', 2); // Ensure two digits for minutes
+
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm",datatimetoggle)
+                                const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${formattedMinutes}m`;
+                            }
+
+                            // return `${hours}h ${formattedMinutes}m`;
+
+
+                            // Example usage:
+                            //  const TotalLongTripHours = LongTripHours + Number(Decimalvalue)
+
+
+                            //  return `${newIntegerPart}.${newDecimalPart.toString().padStart(2, '0')}`;
+                        }
+                        if (newdecimalPart < 60) {
+
+                            const RemainTotalCalculation = LongTripHours + Number(formattedHours);
+                            const a = RemainTotalCalculation.toFixed(2)
+                            // console.log(a);
+                            const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
+
+                            const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits for minutes
+                            if (datatimetoggle === 0) {
+
+                                const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${formattedMinutes}m`;
+                            }
+
+                            // return `${hours}h ${formattedMinutes}m`;
+
+                        }
+
+
+
+                    }
+                }
             }
         }
         else {
@@ -5531,6 +6047,66 @@ const useTripsheet = () => {
         )
     }, [formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm])
 
+    // Tripsheet some fields Hide after 30Min from reportTime
+    const TripReportTime = formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime;
+    const TripReportDate = formData.startdate || selectedCustomerData.startdate || book.startdate || selectedCustomerDatas.startdate || tripSheetData.startdate;
+    const CurrentDate = dayjs().format('DD-MM-YYYY');
+    const timedata = dayjs()
+    const formattedTripReportDate = dayjs(TripReportDate).format('DD-MM-YYYY')
+    const hours = timedata.$H.toString().padStart(2, "0");
+    const minutes = timedata.$m.toString().padStart(2, "0");
+    const CurrentTime = `${hours}:${minutes}`;
+    const formattedTime = TripReportTime?.split(":").slice(0, 2).join(":");
+    const formattedCurrentTime = CurrentTime?.replace(":", ".");
+    const formattedReportTime = formattedTime?.replace(":", ".");
+
+    const bonusReportTime = parseFloat(formattedReportTime || 0) + 0.30;
+    const finalCurrentTime = parseFloat(formattedCurrentTime || 0)
+
+
+    useEffect(() => {
+        // const currentDateObj = new Date(CurrentDate);
+        // const formattedDateObj = new Date(formattedTripReportDate);
+        const parseDate = (dateStr) => {
+            const [day, month, year] = dateStr.split('-');
+            return new Date(`${year}-${month}-${day}`);
+        };
+
+        // Parse the date strings
+        const currentDateObj = new Date(CurrentDate);
+        const formattedDateObj = parseDate(formattedTripReportDate);
+
+        // Set the hours to 0 to ignore the time part
+        currentDateObj.setHours(0, 0, 0, 0);
+        formattedDateObj.setHours(0, 0, 0, 0);
+
+        // Log the types and values of the variables
+        // console.log(formattedTripReportDate, "report time", typeof (formattedTripReportDate));
+
+        // console.log("Current Date Type:", typeof (CurrentDate), "Current Date:", CurrentDate);
+        // console.log("Formatted Trip Report Date Type:", typeof (formattedTripReportDate), "Formatted Trip Report Date:", formattedTripReportDate);
+        // console.log("Current Date Object:", currentDateObj);
+        // console.log("Formatted Trip Report Date Object:", formattedDateObj);
+
+        if (currentDateObj < formattedDateObj) {
+            console.log("CurrentDate is less than formattedTripReportDate");
+            setHideField(false);
+        } else if (currentDateObj > formattedDateObj) {
+            setHideField(true);
+            console.log("CurrentDate is greater than formattedTripReportDate");
+        } else if (currentDateObj.getTime() === formattedDateObj.getTime() && bonusReportTime >= finalCurrentTime) {
+            setHideField(false);
+            console.log("Both dates are equal allowed");
+        } else if (currentDateObj.getTime() === formattedDateObj.getTime() && bonusReportTime < finalCurrentTime) {
+            setHideField(true);
+            console.log("Both dates are equal not allowed");
+        }
+    }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime]);
+
+
+
+
+    // console.log(TripReportTime, "reporttimeee", dayjs(TripReportDate).format('DD-MM-YYYY'), CurrentDate, dayjs());
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
         escort, setEscort, driverdetails,
@@ -5662,7 +6238,8 @@ const useTripsheet = () => {
         handleEditMap,
         handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate, groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
-        isAddload, setisAddload, isEditload, setisEditload
+        isAddload, setisAddload, isEditload, setisEditload,
+        hideField
 
     };
 };

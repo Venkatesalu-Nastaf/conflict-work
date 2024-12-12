@@ -7,24 +7,24 @@ const CopyEmailHtmlcontent = () => {
     function removeSeconds(time) {
         // Split the time string by colon (:)
         const timeParts = time.split(':');
-      
+
         // Check if there are seconds (length 3), return hours:minutes
         if (timeParts.length === 3) {
-          return `${timeParts[0]}:${timeParts[1]}`;
+            return `${timeParts[0]}:${timeParts[1]}`;
         }
-      
+
         // If there's only hours:minutes, return it as is
         return time;
-      }
+    }
 
-    const pendingHtmlContent =(datatripsheet)=>{
-        const updatdata=datatripsheet
+    const pendingHtmlContent = (datatripsheet) => {
+        const updatdata = datatripsheet
         const formattedDate = dayjs(updatdata?.startdate).format('YYYY-MM-DD');
-        const formattedFromDate = dayjs(formattedDate).format('YYYY-MM-DD');
-        const datatime=removeSeconds(updatdata?.starttime)
-        
+        const formattedFromDate = dayjs(formattedDate).format('DD-MM-YYYY');
+        const datatime = removeSeconds(updatdata?.starttime)
 
-    return `
+
+        return `
        <table border="1" style="border-collapse: collapse; width: 100%;">
             <thead style="background-color: #9BB0C1; color: #FFFFFF;">
                 <tr>
@@ -46,6 +46,10 @@ const CopyEmailHtmlcontent = () => {
                     <td style="padding: 8px;"><strong>Contact Number:</strong></td>
                     <td style="padding: 8px;">${updatdata?.guestmobileno}</td>
                 </tr>
+                 <tr>
+                            <td style="padding: 8px;"><strong>Location:</strong></td>
+                            <td style="padding: 8px;color: #000"">${updatdata?.servicestation}</td>
+                        </tr>
                 <tr>
                     <td style="padding: 8px;"><strong>Date:</strong></td>
                     <td style="padding: 8px;">${formattedFromDate}</td>
@@ -78,17 +82,17 @@ const CopyEmailHtmlcontent = () => {
         <p>The Vehicle and Driver details will be sent to you before the pick-up time. In case of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
     `;
     }
-    
+
 
     // HTML content for cancelled status
-    const cancelledHtmlContent =(datatripsheet)=>{
-        const updatdata=datatripsheet
+    const cancelledHtmlContent = (datatripsheet) => {
+        const updatdata = datatripsheet
         const formattedDate = dayjs(updatdata?.startdate).format('YYYY-MM-DD');
-        const formattedFromDate = dayjs(formattedDate).format('YYYY-MM-DD');
-        const datatime=removeSeconds(updatdata?.starttime)
-    
+        const formattedFromDate = dayjs(formattedDate).format('DD-MM-YYYY');
+        const datatime = removeSeconds(updatdata?.starttime)
 
-    return `
+
+        return `
         <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1 ; color: #FFFFFF;">
                         <tr>
@@ -141,8 +145,8 @@ const CopyEmailHtmlcontent = () => {
     `;
     }
 
-    const getHtmlContentdata= (status,datatripsheet) => {
-        switch(status) {
+    const getHtmlContentdata = (status, datatripsheet) => {
+        switch (status) {
             case 'Opened':
                 return pendingHtmlContent(datatripsheet);
             case 'Cancelled':
@@ -152,12 +156,12 @@ const CopyEmailHtmlcontent = () => {
         }
     };
 
-   
+
 
     return {
         getHtmlContentdata
     }
-    
+
 };
 
 export default CopyEmailHtmlcontent;

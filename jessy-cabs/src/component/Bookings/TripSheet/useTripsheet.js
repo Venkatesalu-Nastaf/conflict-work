@@ -5070,7 +5070,7 @@ const useTripsheet = () => {
                     // Check if shedInDate matches the dateconflict
                     if (firstTrip?.shedInDate === dateconflict) {
                         setConflictEndDate({
-                            maxShedInDate: firstTrip.shedInDate,
+                            maxShedInDate: dayjs(firstTrip.shedInDate).format("DD-MM-YYYY"),
                             TripIdconflictdate: firstTrip.tripid,
                             conflictTimer: removeSeconds(firstTrip.shedintime),
                         });
@@ -5078,7 +5078,7 @@ const useTripsheet = () => {
                     else if (dateconflict < firstTrip?.shedInDate) {
                         // No data or no matching conflict, reset the conflict state
                         setConflictEndDate({
-                            maxShedInDate: firstTrip.shedInDate,
+                            maxShedInDate: dayjs(firstTrip.shedInDate).format("DD-MM-YYYY"),
                             TripIdconflictdate: firstTrip.tripid,
                             conflictTimer: removeSeconds(firstTrip.shedintime),
                         });

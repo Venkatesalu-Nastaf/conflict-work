@@ -21,7 +21,7 @@ const CopyEmailHtmlBooking = () => {
     const pendingHtmlContent = (datatripsheet) => {
         const updatdata = datatripsheet
         const formattedDate = dayjs(updatdata?.startdate).format('YYYY-MM-DD');
-        const formattedFromDate = dayjs(formattedDate).format('YYYY-MM-DD');
+        const formattedFromDate = dayjs(formattedDate).format('DD-MM-YYYY');
         const data = removeSeconds(updatdata?.starttime)
 
         return `
@@ -43,6 +43,10 @@ const CopyEmailHtmlBooking = () => {
                         <tr>
                             <td style="padding: 8px;"><strong>Contact Number :</strong></td>
                             <td style="padding: 8px;">${updatdata?.guestmobileno}</td>
+                        </tr>
+                          <tr>
+                            <td style="padding: 8px;"><strong>Location:</strong></td>
+                            <td style="padding: 8px;color: #000"">${updatdata?.servicestation}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Reporting Date :</strong></td>

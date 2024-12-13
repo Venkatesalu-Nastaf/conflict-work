@@ -1738,11 +1738,12 @@ const useTripsheet = () => {
             } catch (error) {
                 if (!error.response) {
                     setErrorMessage('Check your network and try again.');
-                } else {
-                    setErrorMessage('Failed to upload');
+                } else {  
+                     setErrorMessage('Failed to upload');
                 }
-
+                
                 setError(true);
+             
             }
 
 
@@ -4235,7 +4236,7 @@ const useTripsheet = () => {
             // let extraAbout_hr = Math.round(Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) * Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours))
             const extravendorhr = Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) || 0
             console.log(extravendorhr, typeof (extravendorhr), "extratratimechanges")
-            const extraTotslhramount = Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours)
+            const extraTotslhramount = Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours||0)
             const vendorTotalfullamount = vendordatatimeminutescahrges(extravendorhr, extraTotslhramount)
             // setVendorExtrahrTotaldataAmount(extraAbout_hr)
             setVendorExtrahrTotaldataAmount(vendorTotalfullamount)
@@ -4399,7 +4400,7 @@ const useTripsheet = () => {
     }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor])
 
 
-    let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype,vendorratetype1, vendorstations;
+    let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
 
     const fetchdatasupplierraratename = async () => {
 
@@ -4440,10 +4441,11 @@ const useTripsheet = () => {
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
-            vendorratetype = vendorinfo.vendor_ratename || ratename || "";
+            // vendorratetype = vendorinfo.vendor_ratename || ratename || "";
             // vendorratetype = await (fetchdatasupplierraratename() || vendorinfo.vendor_ratename || ratename);
-            vendorratetype1 = await (fetchdatasupplierraratename() || vendorinfo.vendor_ratename || ratename);
-             console.log(vendorratetype1,"vendorratetype11",vendorratetype);
+            const  vendorratetypecheck = vendorinfo.vendor_ratename || ratename || "";
+            vendorratetype = await fetchdatasupplierraratename();
+             console.log("awaitvendorratetype11",vendorratetype,"check",vendorratetypecheck);
              
             // vendorstations = await fetchdatasupplierraratenamestations();
             vendorstations = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department;
@@ -4712,7 +4714,7 @@ const useTripsheet = () => {
             // organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
             organizationname = await fetchdatacustomeraratename();
             CustomerStatioms = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department;
-
+            console.log(totkm,"tokm", tothr ,"tohr",duty ,"duty",vehicleNames,"vehcilenames",organizationname,"organisationname")
             // console.log(organizationname, "ratetype")
 
 

@@ -1736,14 +1736,14 @@ const useTripsheet = () => {
                     documenttype: '',
                 }));
             } catch (error) {
-                if (!error.response) {
-                    setErrorMessage('Check your network and try again.');
-                } else {  
-                     setErrorMessage('Failed to upload');
-                }
-                
-                setError(true);
-             
+                // if (!error.response) {
+                //     setErrorMessage('Check your network and try again.');
+                // } else {  
+                // }
+                // setErrorMessage('Failed to upload');
+
+                // setError(true);
+
             }
 
 
@@ -2137,7 +2137,7 @@ const useTripsheet = () => {
             let combinedTime = `${additionalHours}.${formattedMinutes}`;
 
             // if (starttimehybrid && closetimehybrid) {
-                if (starttimehybrid && closetimehybrid && duty !== "Outstation") {
+            if (starttimehybrid && closetimehybrid && duty !== "Outstation") {
 
                 if (calculateTotalDay() === 1) {
                     // Split the time strings into hours and minutes
@@ -4236,7 +4236,7 @@ const useTripsheet = () => {
             // let extraAbout_hr = Math.round(Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) * Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours))
             const extravendorhr = Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) || 0
             console.log(extravendorhr, typeof (extravendorhr), "extratratimechanges")
-            const extraTotslhramount = Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours||0)
+            const extraTotslhramount = Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0)
             const vendorTotalfullamount = vendordatatimeminutescahrges(extravendorhr, extraTotslhramount)
             // setVendorExtrahrTotaldataAmount(extraAbout_hr)
             setVendorExtrahrTotaldataAmount(vendorTotalfullamount)
@@ -4400,10 +4400,10 @@ const useTripsheet = () => {
     }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor])
 
 
-    let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
+    let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations, vendorratetype1;
 
     const fetchdatasupplierraratename = async () => {
-
+        console.log("vendortravelname", selectedCustomerDatas.travelsname, "fff", formData.travelsname, "dd", selectedCustomerData.travelsname, "bb", book.travelsname)
         const supplierdata = selectedCustomerDatas.travelsname ||
             formData.travelsname ||
             selectedCustomerData.travelsname ||
@@ -4411,14 +4411,43 @@ const useTripsheet = () => {
 
         if (supplierdata) {
 
-
+            console.log(supplierdata, "enetervendor")
             const response = await axios.get(`${apiUrl}/AccountinfoTimetOOGLE/${supplierdata}`)
             const data = response.data
             if (data.length > 0) {
-                // console.log(data.length,data, "enetetsupplier")
+                console.log(data.length, data, "enetetsuppliervendor")
                 const res = data[0].rateType;
                 // const res = response.data[0]
-                // console.log(res, "eneter")
+                console.log(res, "enetervendor")
+                return res
+            }
+
+            return ""
+        }
+
+        else {
+            return ''
+        }
+
+    }
+
+    const fetchdatasupplierraratenametryyyy = async () => {
+        console.log("vendortravelnametryy", selectedCustomerDatas.travelsname, "fff", formData.travelsname, "dd", selectedCustomerData.travelsname, "bb", book.travelsname)
+        const supplierdata = selectedCustomerDatas.travelsname ||
+            formData.travelsname ||
+            selectedCustomerData.travelsname ||
+            book.travelsname || ""
+
+        if (supplierdata) {
+
+            console.log(supplierdata, "enetervendortryy")
+            const response = await axios.get(`${apiUrl}/Accountinfosupplierdata/${supplierdata}`)
+            const data = response.data
+            if (data.length > 0) {
+                console.log(data.length, data, "enetetsuppliervendortryy")
+                const res = data[0].rateType;
+                // const res = response.data[0]
+                console.log(res, "enetervendortryy")
                 return res
             }
 
@@ -4441,16 +4470,17 @@ const useTripsheet = () => {
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
-            // vendorratetype = vendorinfo.vendor_ratename || ratename || "";
+            vendorratetype = vendorinfo.vendor_ratename || ratename || "";
             // vendorratetype = await (fetchdatasupplierraratename() || vendorinfo.vendor_ratename || ratename);
-            const  vendorratetypecheck = vendorinfo.vendor_ratename || ratename || "";
-            vendorratetype = await fetchdatasupplierraratename();
-             console.log("awaitvendorratetype11",vendorratetype,"check",vendorratetypecheck);
-             
+            // const  vendorratetypecheck = vendorinfo.vendor_ratename || ratename || "";
+            vendorratetype1 = await fetchdatasupplierraratename();
+            const vendorratetypetryyy = await fetchdatasupplierraratenametryyyy();
+            console.log("awaitvendorratetype11", vendorratetype, "check", vendorratetype1, "vendortryyy", vendorratetypetryyy);
+
             // vendorstations = await fetchdatasupplierraratenamestations();
             vendorstations = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department;
 
-            console.log(vendortotkm,"vendorkm",vendortothr,"vendortohr",vendorduty,"vendorduty",vendorvehicleNames,"vechilenames",vendorratetype,"vendorratetype",vendorstations,"vendorstations")
+            console.log(vendortotkm, "vendorkm", vendortothr, "vendortohr", vendorduty, "vendorduty", vendorvehicleNames, "vechilenames", vendorratetype, "vendorratetype", vendorstations, "vendorstations")
 
             if (!vendortotkm || !vendortothr || !vendorduty || !vendorvehicleNames || !vendorratetype || !vendorstations) {
                 setError(true);
@@ -4714,7 +4744,7 @@ const useTripsheet = () => {
             // organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
             organizationname = await fetchdatacustomeraratename();
             CustomerStatioms = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department;
-            console.log(totkm,"tokm", tothr ,"tohr",duty ,"duty",vehicleNames,"vehcilenames",organizationname,"organisationname")
+            console.log(totkm, "tokm", tothr, "tohr", duty, "duty", vehicleNames, "vehcilenames", organizationname, "organisationname")
             // console.log(organizationname, "ratetype")
 
 

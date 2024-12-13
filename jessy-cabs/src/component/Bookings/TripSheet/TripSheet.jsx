@@ -677,6 +677,9 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
   };
   const duty = formData.duty || selectedCustomerData.duty || book.duty;
 
+// super Admin access
+const superAdminAccess = localStorage.getItem("SuperAdmin")
+// console.log(superAdminAccess,'superadminnn',typeof(superAdminAccess));
 
   return (
     <div className="form-container form-container-tripsheet">
@@ -896,7 +899,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
                     onChange={handleChange}
                     label="Customer"
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     id="standard-size-customer"
                     required
                     autoComplete="password"
@@ -908,7 +911,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                   </div>
                   <TextField
                     name="orderedby"
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     size="small"
                     value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
                     onChange={handleChange}
@@ -928,7 +931,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
                     onChange={handleChange}
                     label="Mobile"                
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     id="standard-size-mobile"
                     size="small"
                     autoComplete="password"
@@ -944,7 +947,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     name="orderbyemail"
                     value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
                     onChange={handleChange}
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     label="Order By Email"
                     id="orderbyemail"
                     size="small"
@@ -962,7 +965,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     id="free-solo-department"
                     freeSolo
                     sx={{ width: "100%" }}
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
                     value={stationOptions?.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                     options={stationOptions?.map((option) => ({
@@ -987,7 +990,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     id="guestname"
                     label="Guest Name"
                     name="guestname"
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
                     onChange={handleChange}
                     size="small"
@@ -1003,7 +1006,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     name="guestmobileno"
                     value={formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
                     onChange={handleChange}
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     label="Phone (Cell)"
                     id="guestmobileno"
                     size="small"
@@ -1019,7 +1022,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     name="email"
                     value={formData.email || selectedCustomerData.email || formValues.email || book.email || ''}
                     onChange={handleChange}
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     label="Email"
                     id="email"
                     size="small"
@@ -1038,7 +1041,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     label="Address"
                     name="address1"
                     multiline
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     rows={2}
                     sx={{ width: "100%" }}
                     autoComplete="new-password"
@@ -1055,7 +1058,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     margin="normal"
                     size="small"
                     name="useage"
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
                     onChange={handleChange}
                     label="Usage"
@@ -1074,7 +1077,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     id="free-solo-duty"
                     freeSolo
                     sx={{ width: "100%" }}
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     onChange={(event, value) => {
                       handleAutocompleteChange(event, value, "duty")
                       if (!lockdata) {
@@ -1102,7 +1105,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                   <TextField
                     size="small"
                     name="request"
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
                     onChange={handleChange}
                     label="Request"
@@ -1144,7 +1147,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     name="customercode"
                     value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
                     onChange={handleChange}
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     label="Cost Code"
                     id="customer-customercode"
                     autoComplete="password"
@@ -1160,7 +1163,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                     value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
                     onChange={handleChange}
                     name="employeeno"
-                    disabled={hideField}
+                    disabled={hideField && superAdminAccess === "0"}
                     label="Employee No"
                     id="employeeno"
                     autoComplete="password"
@@ -1176,7 +1179,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                         labelId="demo-simple-select-labelescort"
                         id="demo-simple-select"
                         // value={bookingStatus}
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         value={escort}
                         // label="Status"
                         onChange={handleEscortChange}
@@ -1221,7 +1224,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                         labelId="demo-simple-select-labelescort"
                         id="demo-simple-select"
                         value={transferreport}
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         onChange={handleTransferChange}
                       >
                         <MenuItem value={'Yes'}>Yes</MenuItem>
@@ -3405,7 +3408,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                         id="free-solo-hireTypes"
                         freeSolo
                         sx={{ width: "100%" }}
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
                         value={
                           formData.hireTypes ||
@@ -3434,7 +3437,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                         id="free-solo-travelmail"
                         freeSolo
                         sx={{ width: "100%" }}
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
                         value={
                           selectedCustomerDatas.travelsname ||
@@ -3469,7 +3472,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                         id="vehicleRegno"
                         freeSolo
                         sx={{ width: "100%" }}
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
                         onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
                         onKeyDown={handleKeyEnterdriver}
@@ -3505,7 +3508,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                         onChange={(event, value) =>
                           handleAutocompleteChange(event, value, "vehType")
                         }
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         renderInput={(params) => {
                           return (
                             <TextField {...params} name='vehType' label="Vehicle Type" inputRef={params.inputRef} />
@@ -3524,7 +3527,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName2")}
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         value={selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
                         options={vehileNames?.map((option) => ({
                           label: option,
@@ -3545,7 +3548,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                         id="free-solo-vehileName"
                         freeSolo
                         sx={{ width: "100%" }}
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         onChange={(event, value) => {
                           handleAutocompleteChange(event, value, "vehicleName");
                           if (!lockdata && value) {
@@ -3577,7 +3580,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                           selectedCustomerDatas.Groups ||
                           book.Groups || ""
                         }
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         options={GroupTypes ? GroupTypes.map((option) => ({ label: option?.Option })) : []} // Fallback to an empty array
                         onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
                         renderInput={(params) => {
@@ -3599,7 +3602,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                         id="driverName"
                         freeSolo
                         sx={{ width: "100%" }}
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         onChange={(event, value) => handleDriverChange(event, value, "driverName")}
                         onInputChange={(event, value) => handleDriverChange(event, value, "driverName")} // Handle manual input
                         onKeyDown={handleKeyEnterdriver}
@@ -3641,7 +3644,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                           // selectedCustomerData.mobileNo ||
                           book.mobileNo || selectedCustomerDatas.mobileNo || formData.mobileNo || ""}
                         onChange={handleChange}
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         label="Driver Phone"
                         id="mobileNo"
                         size='small'
@@ -3664,7 +3667,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                           ""
                         }
                         onChange={handleChange}
-                        disabled={!lockdata || hideField}
+                        disabled={hideField && superAdminAccess === "0"}
                         label="Travels Email"
                         id="travelsemail"
                         size='small'
@@ -3691,7 +3694,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                               }
                             }}
                             
-                            disabled={!lockdata || hideField}
+                            disabled={ hideField && superAdminAccess === "0"}
                             value={vendorinfo?.vendor_vehicle}
                             options={vehileNames?.map((option) => ({
                               label: option,
@@ -3709,7 +3712,7 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
                             freeSolo
                             sx={{ width: "100%" }}
                             
-                            disabled={!lockdata || hideField}
+                            disabled={ hideField && superAdminAccess === "0"}
                             onChange={(event, value) => {
                               if (lockdata) {
                                 handleAutocompleteVendor(event, value, "vendor_duty")

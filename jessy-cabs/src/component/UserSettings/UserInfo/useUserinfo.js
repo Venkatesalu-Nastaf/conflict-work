@@ -5,7 +5,7 @@ import { APIURL } from "../../url";
 
 const useUserinfo = () => {
     const apiUrl = APIURL;
-    const {SetDataTrigUser } = useData1(); // -->  its for context for image
+    const { SetDataTrigUser } = useData1(); // -->  its for context for image
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
     const [showPasswords, setShowPasswords] = useState(false);
@@ -38,25 +38,32 @@ const useUserinfo = () => {
         try {
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-           const response= await axios.put(`${apiUrl}/usercreationdataupdate/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
-           
-           const dataresponse=response.data.affectedRows
-           if(dataresponse >= 1){
-            console.log(dataresponse,"dataresp",updatedCustomer.username)
-           localStorage.removeItem("username")
-           localStorage.setItem("username",updatedCustomer.username)
-            SetDataTrigUser(updatedCustomer.username)
-            setSuccess(true);
-            setSuccessMessage("Successfully updated");
-            setEditMode((prevEditMode) => !prevEditMode);
-        
-            
+            console.log(selectedCustomer, updatedCustomer, "user info");
 
-           }
-           
-           
+            const response = await axios.put(`${apiUrl}/usercreationdataupdate/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
+            console.log(response, "user response error");
+
+            const dataresponse = response.data.affectedRows
+            console.log(dataresponse, "dataresp", updatedCustomer.username)
+
+            if (dataresponse >= 1) {
+                console.log(dataresponse, "dataresp", updatedCustomer.username)
+                localStorage.removeItem("username")
+                localStorage.setItem("username", updatedCustomer.username)
+                SetDataTrigUser(updatedCustomer.username)
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                setEditMode((prevEditMode) => !prevEditMode);
+
+
+
+            }
+
+
         }
-        catch {
+        catch (err) {
+            console.log(err, "user error");
+
             setError(true);
             setErrorMessage("Data Not Update");
         }
@@ -129,17 +136,17 @@ const useUserinfo = () => {
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
                         setSelectedCustomerData(userDataArray[0]);
-                    } 
-                    
+                    }
+
                 }
-            
+
             }
-            catch{
+            catch {
 
             }
         };
         fetchData();
-    }, [apiUrl,useriddata]);
+    }, [apiUrl, useriddata]);
 
     const hidePopup = () => {
         setSuccess(false);

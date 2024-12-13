@@ -399,6 +399,8 @@ router.put("/usercreationdataupdate/:editid", (req, res) => {
   db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,email=?,mobileno=? where userid=?", [username, designation, employeeid, userpassword, email, mobileno, editid], (err, results) => {
     // db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,EmailApp_Password=?,Sender_Mail=?,email=?,mobileno=? where userid=?", [username, designation, employeeid, userpassword, email, mobileno, editid], (err, results) => {
     if (err) {
+      console.log(err,'user error');
+      
       return res.status(500).json({ Message: "Error updating data", err });
     }
 

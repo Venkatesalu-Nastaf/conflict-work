@@ -130,6 +130,20 @@ router.get('/AccountinfoTimetOOGLE/:travelsname', (req, res) => {
     });
 });
 
+router.get('/Accountinfosupplierdata/:travelsname', (req, res) => {
+    const {travelsname}=req.params;
+    // console.log(travelsname,"llllll")
+    db.query('SELECT rateType FROM accountinfo WHERE travelsname = ?',[travelsname], (err, results) => {
+        if (err) {
+            // console.log(err,"kk")
+            return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+        }
+        // console.log(results, "hhh");
+        return res.status(200).json(results);
+    });
+});
+
+
 
 // Fetch rate management supplier data
 router.get('/ratemanagmentSupplierdata', (req, res) => {

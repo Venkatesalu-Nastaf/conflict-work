@@ -641,7 +641,6 @@ const TripSheet = ({ stationName, logoImage }) => {
 };
 const formattedReportTime = formatTime(reportTimeVar || ""); // "20.08"
 const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
-console.log(tripshedoutdate,"reporttttt",startdate,reportTimeVar,startTimeVar,"rrrr",formattedReportTime,formattedStartTime);
 
 
   // for modal

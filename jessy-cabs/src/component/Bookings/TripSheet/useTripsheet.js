@@ -2135,8 +2135,8 @@ const useTripsheet = () => {
             // Combine hours and minutes into a single decimal format
             let combinedTime = `${additionalHours}.${formattedMinutes}`;
 
-            if (starttimehybrid && closetimehybrid) {
-
+            // if (starttimehybrid && closetimehybrid) {
+                if (starttimehybrid && closetimehybrid && duty !== "Outstation") {
 
                 if (calculateTotalDay() === 1) {
                     // Split the time strings into hours and minutes
@@ -4399,7 +4399,7 @@ const useTripsheet = () => {
     }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor])
 
 
-    let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
+    let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype,vendorratetype1, vendorstations;
 
     const fetchdatasupplierraratename = async () => {
 
@@ -4440,16 +4440,19 @@ const useTripsheet = () => {
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
-            // vendorratetype = vendorinfo.vendor_ratename || ratename || "";
-            vendorratetype = await (fetchdatasupplierraratename() || vendorinfo.vendor_ratename || ratename);
+            vendorratetype = vendorinfo.vendor_ratename || ratename || "";
+            // vendorratetype = await (fetchdatasupplierraratename() || vendorinfo.vendor_ratename || ratename);
+            vendorratetype1 = await (fetchdatasupplierraratename() || vendorinfo.vendor_ratename || ratename);
+             console.log(vendorratetype1,"vendorratetype11",vendorratetype);
+             
             // vendorstations = await fetchdatasupplierraratenamestations();
             vendorstations = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department;
 
-
+            console.log(vendortotkm,"vendorkm",vendortothr,"vendortohr",vendorduty,"vendorduty",vendorvehicleNames,"vechilenames",vendorratetype,"vendorratetype",vendorstations,"vendorstations")
 
             if (!vendortotkm || !vendortothr || !vendorduty || !vendorvehicleNames || !vendorratetype || !vendorstations) {
                 setError(true);
-                setErrorMessage("Check Hour & KM & duty and vehiletype.! ")
+                setErrorMessage("Check Hour & KM & duty and vehiletype.! for vendor ")
                 return;
             }
             // if (vendorhiretype !== "Attached Vehicle") {
@@ -6053,15 +6056,39 @@ const useTripsheet = () => {
     const CurrentDate = dayjs().format('DD-MM-YYYY');
     const timedata = dayjs()
     const formattedTripReportDate = dayjs(TripReportDate).format('DD-MM-YYYY')
-    const hours = timedata.$H.toString().padStart(2, "0");
-    const minutes = timedata.$m.toString().padStart(2, "0");
+    const hours = timedata.$H?.toString().padStart(2, "0") || "00";
+    const minutes = timedata.$m?.toString().padStart(2, "0") || "00";
     const CurrentTime = `${hours}:${minutes}`;
     const formattedTime = TripReportTime?.split(":").slice(0, 2).join(":");
-    const formattedCurrentTime = CurrentTime?.replace(":", ".");
+    const formattedCurrentTime = CurrentTime?.replace(":", ".")
     const formattedReportTime = formattedTime?.replace(":", ".");
 
-    const bonusReportTime = parseFloat(formattedReportTime || 0) + 0.30;
-    const finalCurrentTime = parseFloat(formattedCurrentTime || 0)
+    const convertReportTime = parseFloat(formattedReportTime || 0)
+    const timeParts = formattedReportTime?.split(".") || ["0", "0"]; // Default to ["0", "0"] if undefined
+    let hours1 = parseInt(timeParts[0] || 0, 10); // Parse hours as an integer
+    let minutes1 = parseInt(timeParts[1] || 0, 10); // Parse minutes as an integer
+
+    minutes1 += 30;
+
+    if (minutes1 >= 60) {
+        hours1 += 1;
+        minutes1 -= 60;
+    }
+
+    const bonusReportTime1 = `${hours1}.${minutes1.toString().padStart(2, "0")}`;
+    // console.log(bonusReportTime1, "assssssss");
+    let startdatecalc;
+    if (bonusReportTime1 === "24.00") {
+        console.log("It's 24.00, converting to 00.00");
+        startdatecalc = "00.00";
+    }
+    // console.log(startdatecalc, 'asssssssssssssssssss');
+    const bonusReportTime = bonusReportTime1 === "24.00" ? startdatecalc : bonusReportTime1
+
+    // const bonusReportTime = (parseFloat(formattedReportTime || 0) + 0.30).toFixed(2);
+    // console.log(startdatecalc, 'reporttimeeeeee', formattedReportTime, "ee33eeee", convertReportTime);
+
+    const finalCurrentTime = parseFloat(formattedCurrentTime || 0).toFixed(2)
 
 
     useEffect(() => {
@@ -6073,13 +6100,17 @@ const useTripsheet = () => {
         };
 
         // Parse the date strings
-        const currentDateObj = new Date(CurrentDate);
+        const currentDateObj = parseDate(CurrentDate);
         const formattedDateObj = parseDate(formattedTripReportDate);
 
         // Set the hours to 0 to ignore the time part
         currentDateObj.setHours(0, 0, 0, 0);
         formattedDateObj.setHours(0, 0, 0, 0);
+        // console.log(currentDateObj,"----------------------------------------------",formattedDateObj);
+        // console.log(bonusReportTime, "-------finallll", finalCurrentTime,parseFloat(bonusReportTime));
 
+        const finalreportTimecalc = parseFloat(bonusReportTime).toFixed(2);
+        const finalCurrentTimecalc = parseFloat(finalCurrentTime).toFixed(2)
         // Log the types and values of the variables
         // console.log(formattedTripReportDate, "report time", typeof (formattedTripReportDate));
 
@@ -6087,21 +6118,40 @@ const useTripsheet = () => {
         // console.log("Formatted Trip Report Date Type:", typeof (formattedTripReportDate), "Formatted Trip Report Date:", formattedTripReportDate);
         // console.log("Current Date Object:", currentDateObj);
         // console.log("Formatted Trip Report Date Object:", formattedDateObj);
+        const a = parseFloat(finalreportTimecalc).toFixed(2)
+        // console.log(finalreportTimecalc,"reporttimecalccccc",finalCurrentTimecalc,typeof(finalreportTimecalc),typeof(finalCurrentTimecalc),a);
+
 
         if (currentDateObj < formattedDateObj) {
+            console.log('-----------111111');
+
             console.log("CurrentDate is less than formattedTripReportDate");
             setHideField(false);
         } else if (currentDateObj > formattedDateObj) {
+            console.log('-----------1111112222');
+
             setHideField(true);
             console.log("CurrentDate is greater than formattedTripReportDate");
-        } else if (currentDateObj.getTime() === formattedDateObj.getTime() && bonusReportTime >= finalCurrentTime) {
+        } else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(finalreportTimecalc) > parseFloat(finalCurrentTimecalc)) {
+            console.log('-----------1111113333');
+
             setHideField(false);
             console.log("Both dates are equal allowed");
-        } else if (currentDateObj.getTime() === formattedDateObj.getTime() && bonusReportTime < finalCurrentTime) {
+        }
+        else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(finalreportTimecalc) === parseFloat(finalCurrentTimecalc)) {
+            console.log('-----------1111113333');
+
+            setHideField(true);
+            console.log("Both dates are equal allowed");
+        }
+        else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(finalreportTimecalc) < parseFloat(finalCurrentTimecalc).toFixed(2)) {
+            console.log('-----------111111444444');
+
             setHideField(true);
             console.log("Both dates are equal not allowed");
         }
-    }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime]);
+    }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
+
 
 
 

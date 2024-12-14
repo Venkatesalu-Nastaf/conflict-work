@@ -3336,7 +3336,7 @@ const superAdminAccess = localStorage.getItem("SuperAdmin")
                     value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ""}
                     onChange={(e) => {
                       handleChange(e)
-                      setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
+                      setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value,advancepaidtovendor:e.target.value})
                     }}
                     label="Vendor Advance"
                     id="advance-paid-to-vendor"

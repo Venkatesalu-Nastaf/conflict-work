@@ -17,7 +17,7 @@ const useTripsheet = () => {
     const { permissions } = useContext(PermissionContext)
     const Tripsheet_modify1 = permissions[3]?.modify;
     const Tripsheet_delete1 = permissions[3]?.delete;
-    const signatureurlinkurl = "https://jessycabs.com/SignatureGenerate"
+    // const signatureurlinkurl = "https://jessycabs.com/SignatureGenerate"
     //  const signatureurlinkurl = "https://192.168.1.79/SignatureGenerate"
     const apiUrl = APIURL;
     // THIS APIURL TRANSFER FRO DRIVER APP
@@ -1377,7 +1377,8 @@ const useTripsheet = () => {
 
         try {
             setisAddload(true)
-            const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+            // const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs().format("");
+         const selectedBookingDate = dayjs().format("YYYY-MM-DD");
             const dattasign = book.apps;
             const updatedBook = {
                 ...book,
@@ -4210,9 +4211,10 @@ const useTripsheet = () => {
             if (vendorhr !== 0) {
 
                 const [hrdavendor, midavendor = 0] = vendorhr.toString().split('.').map(Number);
-                // console.log(hrdavendor, "Hour part",midavendor, "Minute vendorpart",vendorhramount);
+                console.log(hrdavendor, "Hour part",midavendor, "Minute vendorpart",vendorhramount);
                 const onehrdata = Number(hrdavendor) * Number(vendorhramount)
                 const result = Math.round((vendorhramount / 60) * 10) / 10;
+                console.log(result,"clatimeeeee")
                 const etrxamin = result * Number(midavendor)
                 const totalamountwithmin = onehrdata + etrxamin
                 const totalamounthrmin = Math.round(totalamountwithmin)
@@ -4349,7 +4351,7 @@ const useTripsheet = () => {
         calcdatavendor();
     }, [vendorbilldata.Vendor_NightHALT, vendorbilldata.Vendor_NightBataAmount, vendorbilldata, vendorpassvalue.Vendor_NightHALT, vendorpassvalue.Vendor_NightBataAmount])
 
-
+    console.log(vendorinfo.fuelamount,"fuelammountconnnnnnectedactive",vendorinfo.vendor_advancepaidtovendor,"vvvv",vendorinfo?.advancepaidtovendor,vendorinfo?.vendorparking)
     useEffect(() => {
         const calcdatavendor = () => {
 
@@ -4383,12 +4385,15 @@ const useTripsheet = () => {
         const amount8 = parseFloat(vendorinfo?.vendorparking) || 0;
         const amount9 = parseFloat(vendorinfo.fuelamount) || 0;
 
+        console.log(amount,"1",amount1 ,"2",amount2,"3",amount3 ,"4",amount4 ,"5",amount5 ,"6",amount6 ,"8", amount8)
+
 
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount8;
         // const fullAmount = totalAmount - amount7 - amount9;
         const fullAmount1 = totalAmount - amount7
-        // console.log(fullAmount1,"totalAmount2")
+        console.log(fullAmount1,"totalAmount2check",amount7)
         const fullAmount = fullAmount1 - amount9;
+        console.log(fullAmount,"fullcheck")
         const fullamountdata = Math.ceil(fullAmount);
         setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullamountdata })
         // return totalAmount;
@@ -4397,39 +4402,12 @@ const useTripsheet = () => {
 
     useEffect(() => {
         calculatevendorTotalAmount()
-    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo?.advancepaidtovendor])
+    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor,vendorinfo.advancepaidtovendor,vendorinfo.fuelamount,vendorinfo?.vendorparking])
 
 
-    let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations, vendorratetype1;
+    let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
 
-    const fetchdatasupplierraratename = async () => {
-        console.log("vendortravelname", selectedCustomerDatas.travelsname, "fff", formData.travelsname, "dd", selectedCustomerData.travelsname, "bb", book.travelsname)
-        const supplierdata = selectedCustomerDatas.travelsname ||
-            formData.travelsname ||
-            selectedCustomerData.travelsname ||
-            book.travelsname || ""
 
-        if (supplierdata) {
-
-            console.log(supplierdata, "enetervendor")
-            const response = await axios.get(`${apiUrl}/AccountinfoTimetOOGLE/${supplierdata}`)
-            const data = response.data
-            if (data.length > 0) {
-                console.log(data.length, data, "enetetsuppliervendor")
-                const res = data[0].rateType;
-                // const res = response.data[0]
-                console.log(res, "enetervendor")
-                return res
-            }
-
-            return ""
-        }
-
-        else {
-            return ''
-        }
-
-    }
 
     const fetchdatasupplierraratenametryyyy = async () => {
         console.log("vendortravelnametryy", selectedCustomerDatas.travelsname, "fff", formData.travelsname, "dd", selectedCustomerData.travelsname, "bb", book.travelsname)
@@ -4470,12 +4448,12 @@ const useTripsheet = () => {
             vendortotkm = await (calculatevendorTotalKilometers() || vendorinfo.vendortotalkm);
             vendortothr = await (calculatevendorTotalTime() || vendorinfo.vendorTotaltime);
             // vendororganizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
-            vendorratetype = vendorinfo.vendor_ratename || ratename || "";
+            // vendorratetype = vendorinfo.vendor_ratename || ratename || "";
             // vendorratetype = await (fetchdatasupplierraratename() || vendorinfo.vendor_ratename || ratename);
             // const  vendorratetypecheck = vendorinfo.vendor_ratename || ratename || "";
-            vendorratetype1 = await fetchdatasupplierraratename();
-            const vendorratetypetryyy = await fetchdatasupplierraratenametryyyy();
-            console.log("awaitvendorratetype11", vendorratetype, "check", vendorratetype1, "vendortryyy", vendorratetypetryyy);
+            // vendorratetype1 = await fetchdatasupplierraratename();
+            vendorratetype = await fetchdatasupplierraratenametryyyy();
+            // console.log("awaitvendorratetype11", vendorratetype, "check", vendorratetype1, "vendortryyy", vendorratetypetryyy);
 
             // vendorstations = await fetchdatasupplierraratenamestations();
             vendorstations = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department;
@@ -5243,14 +5221,20 @@ const useTripsheet = () => {
             return
         }
 
-        const paramsdata = {
-            tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
-        };
+        // const paramsdata = {
+        //     tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
+        // };
+       const ttrip = formData.tripid || selectedCustomerData.tripid || book.tripid
 
         // Create the URL with the JSON string as a single query parameter
-        const url = new URL(signatureurlinkurl);
-        Object.keys(paramsdata).forEach(key => url.searchParams.append(key, paramsdata[key]));
-        const generatedLinkdata = url.toString();
+        // const url = new URL(signatureurlinkurl);
+        // Object.keys(paramsdata).forEach(key => url.searchParams.append(key, paramsdata[key]));
+        // window.location.origin ="https://jessycabs.com"
+        const path = `/SignatureGenerate?tripid=${ttrip}`;
+        // const signatureurlinkurl = "https://jessycabs.com/SignatureGenerate"
+        const fullUrl = `${window.location.origin}${path}`;
+          const generatedLinkdata = fullUrl
+        // const generatedLinkdata = url.toString();
         setSignatureWhattsapplink(generatedLinkdata)
 
         // Create a temporary textarea element to copy the link

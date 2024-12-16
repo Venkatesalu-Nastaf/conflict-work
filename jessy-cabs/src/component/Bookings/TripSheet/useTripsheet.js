@@ -1382,6 +1382,7 @@ const useTripsheet = () => {
             const dattasign = book.apps;
             const updatedBook = {
                 ...book,
+                bookingno:formData.tripid || selectedCustomerData.tripid || book.tripid,
                 apps: dattasign,
                 starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
                 closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
@@ -1480,6 +1481,7 @@ const useTripsheet = () => {
                 HclMaxConflctdata: 0,
                 Hcldatakmvalue: 0
             };
+            // console.log(updatedBook," book")
 
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
             handleTripsheetlogDetails(updatedBook, tripnodata, "create")
@@ -5065,6 +5067,7 @@ const useTripsheet = () => {
         }
     }
     const transformFunconflict = (data) => {
+        // console.log(data,"jjj")
         return { tripid: data.shedInDateTripid || data.closeDateTripid || null, shedInDate: data.shedInDate || data.closedate || null, shedintime: data.shedintime || data.closetime || null }
     }
 
@@ -5077,9 +5080,12 @@ const useTripsheet = () => {
             if (!vehicleRegisterNo) return
             try {
                 const data = await axios.get(`${apiUrl}/trip-data/${vehicleRegisterNo}`)
+                // console.log(data,"gg")
                 const mapdata = data && Array.isArray(data.data) && data.data.map(transformFunconflict)
+                // console.log(mapdata,"mm")
                 if (mapdata.length > 0) {
                     const firstTrip = mapdata[0];
+                    // console.log(firstTrip,"hh")
                     // Check if shedInDate matches the dateconflict
                     if (firstTrip?.shedInDate === dateconflict) {
                         setConflictEndDate({
@@ -5109,6 +5115,7 @@ const useTripsheet = () => {
 
         fetchData()
     }, [apiUrl, vehicleRegisterNo, dateconflict])
+    // console.log(conflictenddate,"flictdata")
     const transformFun1 = (data) => {
         return { shedout: data.shedout || null, shedin: data.shedin || null, tripid: data.tripid, closekm: data.closekm || null, startkm: data.startkm || null }
     }
@@ -5137,12 +5144,15 @@ const useTripsheet = () => {
                     );
                 });
                 const hclcustomerhybrid = Number(hclkmdatas[0].totalCloseKm)
+                const hcltripid = Number(hclkmdatas[0].tripid)
                 const datamaxhybrid = maxValue > hclcustomerhybrid ? maxValue : hclcustomerhybrid
+                const datamaxtripid= maxValue > hclcustomerhybrid ? maxTrip?.tripid : hcltripid 
                 // console.log(datamaxhybrid,"hclaclllll")
                 // console.log(hclcustomerhybrid,"hclhybridhcllllll",maxValue)
                 // Find the maximum value 
                 // setMaxConflict({ maxconflictdata: maxValue || 0, maxTripid: maxTrip.tripid })
-                setMaxConflict({ maxconflictdata: datamaxhybrid, maxTripid: maxTrip.tripid })
+                // setMaxConflict({ maxconflictdata: datamaxhybrid, maxTripid: maxTrip.tripid })
+                setMaxConflict({ maxconflictdata: datamaxhybrid, maxTripid : datamaxtripid})
 
                 const shedoutkm1 = Number(formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || '');
 
@@ -5240,8 +5250,10 @@ const useTripsheet = () => {
         // Create a temporary textarea element to copy the link
         setSignaturtCopied(true)
         setCopyDataLink(true)
+        // window.localStorage.setItem("auth",true);
         // Get the div element by its ID
         localStorage.setItem("expiredsign", "false");
+        // localStorage.setItem("auth",true);
         localStorage.setItem("expired", "false");
         localStorage.setItem("uploadtollparkdata", "false");
         localStorage.setItem("expireuploadpage", "false");

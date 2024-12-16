@@ -2159,7 +2159,17 @@ router.get('/get-CancelTripDataforHcl/:VehicleNo', (req, res) => {
     // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
 //  sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
     // sql = `SELECT  COALESCE(MAX(Hcldatakmvalue), 0)  AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1`
-        sql = `SELECT  MAX(CAST(Hcldatakmvalue AS UNSIGNED))  AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1`
+  sql = `SELECT tripid, MAX(CAST(Hcldatakmvalue AS UNSIGNED)) AS totalCloseKm
+FROM tripsheet
+WHERE vehRegNo = ? 
+  AND status != 'Cancelled' 
+  AND closekm IS NOT NULL 
+  AND closekm != "" 
+  AND Hybriddata = 1
+GROUP BY tripid
+ORDER BY totalCloseKm DESC
+LIMIT 1`
+        // sql = `SELECT  tripid, MAX(CAST(Hcldatakmvalue AS UNSIGNED))  AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1 GROUP BY tripid`
     db.query(sql, [vehicleNo], (err, result) => {
         if (err) {
             console.log("err", err)
@@ -2169,7 +2179,7 @@ router.get('/get-CancelTripDataforHcl/:VehicleNo', (req, res) => {
         if (result) {
             res.status(200).json(result)
         }
-        console.log(result,"pp")
+        // console.log(result,"pp","hcl")
     })
 
 })

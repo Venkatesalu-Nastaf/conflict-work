@@ -597,8 +597,10 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const checkForConflict = () => {
     const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
-    const shedOutDate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+    const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
     const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+    console.log(conflictenddate?.maxShedInDate,"she",shedOutDate)
+   
 
     const isEqual = (
       isEditMode &&
@@ -610,6 +612,7 @@ const TripSheet = ({ stationName, logoImage }) => {
       shedOutDate === conflictenddate?.maxShedInDate
 
     )
+    
     const isLessThan = (
       isEditMode &&
       conflictenddate?.maxShedInDate !== null &&
@@ -622,6 +625,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
     return isEqual || isLessThan;
   };
+  
 
 
   const handleCloseMapPopUp = () => {
@@ -680,6 +684,23 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
 // super Admin access
 const superAdminAccess = localStorage.getItem("SuperAdmin")
 // console.log(superAdminAccess,'superadminnn',typeof(superAdminAccess));
+
+function removeSeconds(time) {
+  const data = time || 0;
+  // Split the time string by colon (:)
+  if (data !== 0) {
+  const timeParts = time?.split(':');
+
+  // Check if there are seconds (length 3), return hours:minutes
+  if (timeParts.length === 3) {
+    return `${timeParts[0]}:${timeParts[1]}`;
+  }
+
+  // If there's only hours:minutes, return it as is
+  return time;
+}
+
+}
 
   return (
     <div className="form-container form-container-tripsheet">
@@ -3986,10 +4007,10 @@ const superAdminAccess = localStorage.getItem("SuperAdmin")
 
                       <div style={{ display: 'flex', gap: "20px", padding: '10px' }}>
                         <label style={{ fontWeight: 'bold' }}>Trip Id :<span>{tripid}</span> </label>
-                        <label style={{ fontWeight: 'bold' }}>Start Date : <span>{startdate}</span></label>
-                        <label style={{ fontWeight: 'bold' }}>Close Date : <span>{closedate}</span></label>
-                        <label style={{ fontWeight: 'bold' }}>Start Time : <span>{starttime}</span></label>
-                        <label style={{ fontWeight: 'bold' }}>Close Time : <span>{endtime}</span> </label>
+                        <label style={{ fontWeight: 'bold' }}>Start Date : <span>{dayjs(startdate).format("DD/MM/YYYY")}</span></label>
+                        <label style={{ fontWeight: 'bold' }}>Close Date : <span>{dayjs(closedate).format("DD/MM/YYYY")}</span></label>
+                        <label style={{ fontWeight: 'bold' }}>Start Time : <span>{removeSeconds(starttime)}</span></label>
+                        <label style={{ fontWeight: 'bold' }}>Close Time : <span>{removeSeconds(endtime)}</span> </label>
                       </div>
                       <IconButton onClick={handleCloseMapPopUp}>
                         <CloseIcon />

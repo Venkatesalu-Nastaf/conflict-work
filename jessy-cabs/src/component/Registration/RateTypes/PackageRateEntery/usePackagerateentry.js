@@ -384,8 +384,30 @@ const usePackagerateentry = () => {
         }
         try {
             setisbtnloading(true)
+            // const fieldsToDefault = ['AKMS', 'Bata', 'Hours', 'KMS', 'NHalt', 'Rate', 'UptoHours', 'UptoKMS', 'extraHours', 'extraKMS'];
 
-            const requestData = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
+            // // Set default value of 0 for empty fields
+            // fieldsToDefault.forEach((field) => {
+            //     if (!updatedData[field] || updatedData[field] === "") {
+            //         updatedData[field] = 0;
+            //     }
+            // });
+
+            // const requestData1 = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
+            // console.log(requestData1,"requestsample")
+            const fieldsToDefault = ['AKMS', 'Bata', 'Hours', 'KMS', 'NHalt', 'Rate', 'UptoHours', 'UptoKMS', 'extraHours', 'extraKMS'];
+            const normalizeFields = (obj, fields) => {
+                return fields.reduce((acc, field) => {
+                  acc[field] = obj[field] === null || obj[field] === "" || obj[field] === undefined ? 0 : obj[field];
+                  return acc;
+                }, { ...obj });
+              };
+              
+              const requestData = fieldSets.map(fieldSet => {
+                // Merge commonData with the normalized fieldSet
+                const normalizedFieldSet = normalizeFields(fieldSet, fieldsToDefault);
+                return { ...commonData, ...normalizedFieldSet };
+              });
             // const requestData = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
             await axios.post(`${apiUrl}/ratemanagement-add`, requestData);
             // If successful, update state
@@ -470,6 +492,15 @@ const usePackagerateentry = () => {
                 ...commonData,
                 ...fieldSets[0] // Assuming fieldSets contains only one set of data
             };
+            const fieldsToDefault = ['AKMS', 'Bata', 'Hours', 'KMS', 'NHalt', 'Rate', 'UptoHours', 'UptoKMS', 'extraHours', 'extraKMS'];
+
+            // Set default value of 0 for empty fields
+            fieldsToDefault.forEach((field) => {
+                if (!updatedData[field] || updatedData[field] === "") {
+                    updatedData[field] = 0;
+                }
+            });
+            console.log(updatedData,'rateupdate');
             await axios.put(`${apiUrl}/ratemanagement-edit/${selectedCustomerId}`, updatedData);
             setSuccess(true);
             setisbtnloading(false)

@@ -884,3 +884,6 @@
   align-items: center;
   padding-right: 15px;
 }
+.closebuttonhover:hover{
+  background-color: #ffff;
+}

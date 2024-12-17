@@ -144,10 +144,12 @@ const style1 = {
   transform: 'translate(-50%, -50%)',
   width: 1100,
   bgcolor: 'background.paper',
+  // bgcolor: 'yellow',
   // border: '1px solid #000',
   boxShadow: 24,
   p: 4,
 };
+
 
 const TripSheet = ({ stationName, logoImage }) => {
 
@@ -258,11 +260,11 @@ const TripSheet = ({ stationName, logoImage }) => {
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
     handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate,
-    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer,setSuccess,
+    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess,
     setSuccessMessage,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate,isAddload,setisAddload,isEditload,setisEditload,hideField
+    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -335,7 +337,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   //   }
   // }
 
- /// changes 
+  /// changes 
   // const handlesignatureimages = async () => {
   //   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
 
@@ -377,16 +379,16 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const handlesignatureimages = async () => {
     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-  
+
     if (!tripid) {
       setWarning(true);
       setWarningMessage("Enter The Tripid");
       return;
     }
-  
+
     try {
       const response = await fetch(`${apiurl}/get-signimage/${tripid}`);
-  
+
       if (response.status === 200) {
         const imageUrl = URL.createObjectURL(await response.blob());
         setSignImageUrl(imageUrl); // Update state
@@ -599,8 +601,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
     const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
     const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-    console.log(conflictenddate?.maxShedInDate,"she",shedOutDate)
-   
+    console.log(conflictenddate?.maxShedInDate, "she", shedOutDate)
+
 
     const isEqual = (
       isEditMode &&
@@ -612,7 +614,7 @@ const TripSheet = ({ stationName, logoImage }) => {
       shedOutDate === conflictenddate?.maxShedInDate
 
     )
-    
+
     const isLessThan = (
       isEditMode &&
       conflictenddate?.maxShedInDate !== null &&
@@ -625,7 +627,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
     return isEqual || isLessThan;
   };
-  
+
 
 
   const handleCloseMapPopUp = () => {
@@ -635,16 +637,16 @@ const TripSheet = ({ stationName, logoImage }) => {
   const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || formData.closetime;
   const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
   const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
-  const tripShedInDate = dayjs(formData.shedInDate || selectedCustomerData.shedInDate  || book.shedInDate).format('YYYY-MM-DD')
+  const tripShedInDate = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format('YYYY-MM-DD')
   const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
-  const tripshedoutdate =  dayjs(formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate).format('YYYY-MM-DD')
+  const tripshedoutdate = dayjs(formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate).format('YYYY-MM-DD')
   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
   const formatTime = (timeString) => {
     const [hours, minutes] = timeString?.split(':');
     return `${hours}.${minutes}`;
-};
-const formattedReportTime = formatTime(reportTimeVar || ""); // "20.08"
-const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
+  };
+  const formattedReportTime = formatTime(reportTimeVar || ""); // "20.08"
+  const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
 
 
   // for modal
@@ -681,26 +683,26 @@ const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
   };
   const duty = formData.duty || selectedCustomerData.duty || book.duty;
 
-// super Admin access
-const superAdminAccess = localStorage.getItem("SuperAdmin")
-// console.log(superAdminAccess,'superadminnn',typeof(superAdminAccess));
+  // super Admin access
+  const superAdminAccess = localStorage.getItem("SuperAdmin")
+  // console.log(superAdminAccess,'superadminnn',typeof(superAdminAccess));
 
-function removeSeconds(time) {
-  const data = time || 0;
-  // Split the time string by colon (:)
-  if (data !== 0) {
-  const timeParts = time?.split(':');
+  function removeSeconds(time) {
+    const data = time || 0;
+    // Split the time string by colon (:)
+    if (data !== 0) {
+      const timeParts = time?.split(':');
 
-  // Check if there are seconds (length 3), return hours:minutes
-  if (timeParts.length === 3) {
-    return `${timeParts[0]}:${timeParts[1]}`;
+      // Check if there are seconds (length 3), return hours:minutes
+      if (timeParts.length === 3) {
+        return `${timeParts[0]}:${timeParts[1]}`;
+      }
+
+      // If there's only hours:minutes, return it as is
+      return time;
+    }
+
   }
-
-  // If there's only hours:minutes, return it as is
-  return time;
-}
-
-}
 
   return (
     <div className="form-container form-container-tripsheet">
@@ -951,7 +953,7 @@ function removeSeconds(time) {
                     name="mobile"
                     value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
                     onChange={handleChange}
-                    label="Mobile"                
+                    label="Mobile"
                     disabled={hideField && superAdminAccess === "0"}
                     id="standard-size-mobile"
                     size="small"
@@ -1266,6 +1268,7 @@ function removeSeconds(time) {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
                         label="Shed Out Date"
+                        disabled={hideField}
                         id="shedOutDate"
                         value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
                         format="DD/MM/YYYY"
@@ -1291,6 +1294,7 @@ function removeSeconds(time) {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
                         label="Report Date"
+                        disabled={hideField}
                         id="startdate"
                         value={
                           formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
@@ -1448,6 +1452,7 @@ function removeSeconds(time) {
                       <input
                         type="time"
                         name="reporttime"
+                        disabled={hideField}
                         value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                         onChange={(event) => {
                           setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
@@ -1457,9 +1462,9 @@ function removeSeconds(time) {
                           if (!lockdata && dayhcl === 0) {
                             setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                           }
-                          if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
+                          if (!lockdata && dayhcl === 1 && duty === "Outstation") {
                             setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
-                          }
+                          }
                         }}
                       />
                     </div>
@@ -1476,14 +1481,15 @@ function removeSeconds(time) {
                     ) : (
                       tripshedoutdate!==startdate || startdate==="" ?  <label>Report Time</label> : <label style={{ color: "red" }}>Invalid Time</label> 
                     ))) || (!reportTimeVar && <label>Report Time</label>)} */}
-                    {tripshedoutdate === startdate && formattedReportTime < formattedStartTime ? <label>Report Time</label> : 
-                    (tripshedoutdate!==startdate || startTimeVar==="" || startTimeVar === undefined  ? <label>Report Time</label> : <label style={{ color: "red" }}>Invalid Time</label>)
+                    {tripshedoutdate === startdate && formattedReportTime < formattedStartTime ? <label>Report Time</label> :
+                      (tripshedoutdate !== startdate || startTimeVar === "" || startTimeVar === undefined ? <label>Report Time</label> : <label style={{ color: "red" }}>Invalid Time</label>)
                     }
 
                     {/* Time input without restricting manual entry */}
                     <input
                       type="time"
                       id="starttime"
+                      disabled={hideField}
                       name="starttime"
                       value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
                       onChange={(event) => {
@@ -1493,7 +1499,7 @@ function removeSeconds(time) {
                         setStartTime(rTime);
                         setFormData({ ...formData, starttime: rTime });
                         setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
-                        if (!lockdata && dayhcl === 1 && duty !== "Outstation" ) {
+                        if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
                           setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
                         }
                       }}
@@ -1530,7 +1536,7 @@ function removeSeconds(time) {
                         setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: rTime });
                         setBook({ ...book, closetime: rTime });
                         setCloseTime(rTime);
-                        if (!lockdata && dayhcl === 1 && duty !== "Outstation" ) {
+                        if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
                           setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                         }
                       }}
@@ -1556,10 +1562,10 @@ function removeSeconds(time) {
                     {(closeTimeVar && calculateTotalDay() === 1 &&
                       ((closeTimeVar < shedInTimeVar)
                         ? (<label>Shed In Time</label>)
-                        : (dayhcl===1 && duty === "Outstation" ? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
+                        : (dayhcl === 1 && duty === "Outstation" ? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
                       ))
-                      || (closeTimeVar >= shedInTimeVar && dayhcl===1 && duty === "Outstation" && tripShedInDate===closedate ? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
-                    }
+                      || (closeTimeVar >= shedInTimeVar && dayhcl === 1 && duty === "Outstation" && tripShedInDate === closedate ? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
+                    }
 
                     {/* {calculateTotalDay() > 1 ? (<label>Shed In Time</label>) : ""} */}
 
@@ -1587,18 +1593,18 @@ function removeSeconds(time) {
                             if (!lockdata && dayhcl === 0) {
                               setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                             }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedintime:rTime}))
-                            }
+                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                            }
                           }
                         } else {
                           // If the day difference is more than 1, allow any time
                           if (!lockdata && dayhcl === 0) {
                             setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                           }
-                          if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedintime:rTime}))
-                          }
+                          if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          }
                         }
                       }}
                     />
@@ -1606,36 +1612,36 @@ function removeSeconds(time) {
                 </div>
 
                 <div className="input" style={{ position: 'relative', top: '10px' }}>
-                    <div className="icone icone-margin-adjust" style={{marginBottom:'16px'}}>
-                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
-                    </div>
-                    <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center' ,marginBottom:'15px'}}>
-                      <label>Add Time</label>
-                      <div style={{ position: 'relative', top: '-4px' }}>
-                        <TextField
-                          name="additionaltime"
-                          value={
-                            formData.additionaltime || 
-                            book.additionaltime || 
-                            selectedCustomerData.additionaltime || 
-                            additionalTime.additionaltime || 
-                            ''
-                          }
-                          onChange={handleChange}
-                          id="additionaltime"
-                          size="small"
-                          autoComplete="password"
-                        />
-                      </div>
+                  <div className="icone icone-margin-adjust" style={{ marginBottom: '16px' }}>
+                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                  </div>
+                  <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center', marginBottom: '15px' }}>
+                    <label>Add Time</label>
+                    <div style={{ position: 'relative', top: '-4px' }}>
+                      <TextField
+                        name="additionaltime"
+                        value={
+                          formData.additionaltime ||
+                          book.additionaltime ||
+                          selectedCustomerData.additionaltime ||
+                          additionalTime.additionaltime ||
+                          ''
+                        }
+                        onChange={handleChange}
+                        id="additionaltime"
+                        size="small"
+                        autoComplete="password"
+                      />
                     </div>
                   </div>
+                </div>
 
                 <div className="input">
                   <div className="icone icone-margin-adjust">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
-                   <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center',marginTop:'5px' }}>
-                  <label>Total Time</label>
+                  <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center', marginTop: '5px' }}>
+                    <label>Total Time</label>
                     <div style={{ position: 'relative', top: '-4px' }}>
                       <TextField
                         name="totaltime"
@@ -1675,7 +1681,7 @@ function removeSeconds(time) {
 
                   )}
                   <div style={{ display: "flex" }}>
-                    <div className="icone"> 
+                    <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
                     </div>
                     <TextField
@@ -1689,9 +1695,9 @@ function removeSeconds(time) {
                           if (!lockdata && dayhcl === 0) {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                           }
-                          if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
+                          if (!lockdata && dayhcl === 1 && duty === "Outstation") {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                          }
+                          }
                         }
                       }}
 
@@ -1720,7 +1726,7 @@ function removeSeconds(time) {
                         if (value >= 0) {
                           handleChange(e)
                           setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
-                          if (!lockdata && dayhcl === 1  && duty !== "Outstation") {
+                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                           }
                         }
@@ -1749,7 +1755,7 @@ function removeSeconds(time) {
                         if (value >= 0) {
                           setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
                           handleChange(e)
-                          if (!lockdata && dayhcl === 1  && duty !== "Outstation") {
+                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                           }
                         }
@@ -1780,9 +1786,9 @@ function removeSeconds(time) {
                           if (!lockdata && dayhcl === 0) {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                           }
-                          if (!lockdata && dayhcl === 1 && duty === "Outstation" ) {
+                          if (!lockdata && dayhcl === 1 && duty === "Outstation") {
                             setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
-                          }
+                          }
                         }
                       }}
                       label="Shed In"
@@ -1830,7 +1836,7 @@ function removeSeconds(time) {
                   />
                 </div>
 
-               
+
 
                 {/* <div className="input">
                   <div className="icone">
@@ -1847,40 +1853,40 @@ function removeSeconds(time) {
                   />
                 </div> */}
 
-              <div className="input">
-                <div className="icone">
-                  <FontAwesomeIcon icon={faStamp} />
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faStamp} />
+                  </div>
+                  <TextField
+                    name="permit"
+                    value={formData.permit || selectedCustomerData.permit || book.permit || ''}
+                    onChange={(e) => {
+                      handleChange(e);
+                      const value = e.target.value;
+                      // Automatically update the Vendor permit field
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                      }));
+                      setSelectedCustomerData((prevState) => ({
+                        ...prevState,
+                        vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                      }));
+                      setBook((prevState) => ({
+                        ...prevState,
+                        vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                      }));
+                      setVendorinfodata({
+                        ...vendorinfo,
+                        vendor_vpermettovendor: value, vpermettovendor: value
+                      });
+                    }}
+                    label="Permit"
+                    id="permit"
+                    size="small"
+                    autoComplete="password"
+                  />
                 </div>
-                <TextField
-                  name="permit"
-                  value={formData.permit || selectedCustomerData.permit || book.permit || ''}
-                  onChange={(e) => {
-                    handleChange(e);
-                    const value = e.target.value;
-                    // Automatically update the Vendor permit field
-                    setFormData((prevState) => ({
-                      ...prevState,
-                      vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
-                    }));
-                    setSelectedCustomerData((prevState) => ({
-                      ...prevState,
-                      vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
-                    }));
-                    setBook((prevState) => ({
-                      ...prevState,
-                      vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
-                    }));
-                    setVendorinfodata({
-                      ...vendorinfo,
-                      vendor_vpermettovendor: value,vpermettovendor:value
-                    });
-                  }}
-                  label="Permit"
-                  id="permit"
-                  size="small"
-                  autoComplete="password"
-                />
-              </div>
                 {/* <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faSquareParking} />
@@ -1896,37 +1902,37 @@ function removeSeconds(time) {
                   />
                 </div> */}
 
-                  <div className="input">
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faSquareParking} />
-                    </div>
-                    <TextField
-                      name="parking"
-                      value={formData.parking || selectedCustomerData.parking || book.parking || ''}
-                      onChange={(e) => {
-                        handleChange(e);
-                        const value = e.target.value;
-                        // Syncing the value of "parking" to "vendorparking"
-                        setFormData((prevState) => ({
-                          ...prevState,
-                          vendorparking: value,
-                        }));
-                        setSelectedCustomerData((prevState) => ({
-                          ...prevState,
-                          vendorparking: value,
-                        }));
-                        setVendorinfodata({ ...vendorinfo,vendorparking:value });
-                        setBook((prevState) => ({
-                          ...prevState,
-                          vendorparking: value,
-                        }));
-                      }}
-                      label="Parking"
-                      id="parking"
-                      size="small"
-                      autoComplete="password"
-                    />
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faSquareParking} />
                   </div>
+                  <TextField
+                    name="parking"
+                    value={formData.parking || selectedCustomerData.parking || book.parking || ''}
+                    onChange={(e) => {
+                      handleChange(e);
+                      const value = e.target.value;
+                      // Syncing the value of "parking" to "vendorparking"
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        vendorparking: value,
+                      }));
+                      setSelectedCustomerData((prevState) => ({
+                        ...prevState,
+                        vendorparking: value,
+                      }));
+                      setVendorinfodata({ ...vendorinfo, vendorparking: value });
+                      setBook((prevState) => ({
+                        ...prevState,
+                        vendorparking: value,
+                      }));
+                    }}
+                    label="Parking"
+                    id="parking"
+                    size="small"
+                    autoComplete="password"
+                  />
+                </div>
                 {/* <div className="input">
                   <div className="icone">
                     <TollTwoToneIcon color="action" />
@@ -1942,36 +1948,36 @@ function removeSeconds(time) {
                   />
                 </div> */}
 
-              <div className="input">
-                <div className="icone">
-                  <TollTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  name="toll"
-                  value={formData.toll || selectedCustomerData.toll || book.toll || ''}
-                  onChange={(e) => {
-                    handleChange(e);
-                    const value = e.target.value;
-                    // Syncing the value of "toll" to "vendortoll"
-                    setFormData((prevState) => ({
-                      ...prevState,
-                      vendortoll: value,
-                    }));
-                    setSelectedCustomerData((prevState) => ({
-                      ...prevState,
-                      vendortoll: value,
-                    }));
-                    setVendorinfodata({ ...vendorinfo, vendor_toll: value,vendortoll:value })
-                    setBook((prevState) => ({
-                      ...prevState,
-                      vendortoll: value,
-                    }));
-                  }}
-                  label="Toll"
-                  id="toll"
-                  size="small"
-                  autoComplete="password"
-                />
+                <div className="input">
+                  <div className="icone">
+                    <TollTwoToneIcon color="action" />
+                  </div>
+                  <TextField
+                    name="toll"
+                    value={formData.toll || selectedCustomerData.toll || book.toll || ''}
+                    onChange={(e) => {
+                      handleChange(e);
+                      const value = e.target.value;
+                      // Syncing the value of "toll" to "vendortoll"
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        vendortoll: value,
+                      }));
+                      setSelectedCustomerData((prevState) => ({
+                        ...prevState,
+                        vendortoll: value,
+                      }));
+                      setVendorinfodata({ ...vendorinfo, vendor_toll: value, vendortoll: value })
+                      setBook((prevState) => ({
+                        ...prevState,
+                        vendortoll: value,
+                      }));
+                    }}
+                    label="Toll"
+                    id="toll"
+                    size="small"
+                    autoComplete="password"
+                  />
                 </div>
 
                 <React.Fragment>
@@ -2135,15 +2141,15 @@ function removeSeconds(time) {
                                     <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
                                   </div>
                                   <div className="input">
-                                  <Button
-                                    disabled={!Tripsheet_modify}
-                                    onClick={handlesignatureimages}
-                                    variant="contained"
-                                    className={`full-width ${signimageUrl ? 'green-button' : ''}`}
-                                    sx={!signimageUrl ? { backgroundColor: '' } : undefined}
-                                  >
-                                    Signature
-                                  </Button>
+                                    <Button
+                                      disabled={!Tripsheet_modify}
+                                      onClick={handlesignatureimages}
+                                      variant="contained"
+                                      className={`full-width ${signimageUrl ? 'green-button' : ''}`}
+                                      sx={!signimageUrl ? { backgroundColor: '' } : undefined}
+                                    >
+                                      Signature
+                                    </Button>
                                     {/* <Button disabled={!Tripsheet_modify} onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button> */}
                                   </div>
                                   <input
@@ -2237,11 +2243,18 @@ function removeSeconds(time) {
                                       <embed
                                         src={imageUrl}
                                         title="PDF Viewer"
+                                        // style={{
+                                        //   maxWidth: '100%',
+                                        //   maxHeight: '600px',
+                                        //   width: '100%',
+                                        //   height: '600px',
+                                        //   border: 'none',
+                                        // }}
                                         style={{
                                           maxWidth: '100%',
-                                          maxHeight: '600px',
-                                          width: '100%',
-                                          height: '600px',
+                                          maxHeight: '90vh', 
+                                          width: '90vw',     
+                                          height: '80vh',     
                                           border: 'none',
                                         }}
                                       />
@@ -2651,7 +2664,7 @@ function removeSeconds(time) {
                                   <TextField
                                     name="Vendor_Calcpackage"
                                     // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
-                                    value={vendorinfo?.vendor_duty === "Transfer" || vendorinfo?.vendor_duty === "Outstation"  ?    vendorinfo?.vendor_duty : vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                    value={vendorinfo?.vendor_duty === "Transfer" || vendorinfo?.vendor_duty === "Outstation" ? vendorinfo?.vendor_duty : vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
                                     // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
                                     label="Package"
                                     id="Vendor_Calcpackage"
@@ -3217,30 +3230,30 @@ function removeSeconds(time) {
                   />
                 </div> */}
 
-                  <div className="input">
-                    <div className="icone">
-                      <BackupTableSharpIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      name="vpermettovendor"
-                      value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
-                      // onChange={(e) => {
-                      //   handleChange(e);
-                      //   setVendorinfodata({
-                      //     ...vendorinfo,
-                      //     vendor_vpermettovendor: e.target.value,
-                      //   });
-                      // }}
-                      label="Vendor permit"
-                      id="vpermettovendor"
-                      autoComplete="password"
-                    />
-                  </div>
                 <div className="input">
-                <div className="icone">
-                      <FontAwesomeIcon icon={faSquareParking} />
-                    </div>
+                  <div className="icone">
+                    <BackupTableSharpIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    name="vpermettovendor"
+                    value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
+                    // onChange={(e) => {
+                    //   handleChange(e);
+                    //   setVendorinfodata({
+                    //     ...vendorinfo,
+                    //     vendor_vpermettovendor: e.target.value,
+                    //   });
+                    // }}
+                    label="Vendor permit"
+                    id="vpermettovendor"
+                    autoComplete="password"
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faSquareParking} />
+                  </div>
                   <TextField
                     size="small"
                     name="vendorparking"
@@ -3273,9 +3286,9 @@ function removeSeconds(time) {
                 </div>
 
 
-                
 
-                
+
+
                 <div className="input tripsheet-remarks-division">
                   <div className="icone">
                     <MarkChatReadIcon color="action" />
@@ -3286,7 +3299,7 @@ function removeSeconds(time) {
                     value={formData.remark || selectedCustomerData.remark || book.remark || ''}
                     onChange={(e) => {
                       handleChange(e);
-                    
+
                     }}
                     label="Remarks"
                     id="remark"
@@ -3296,7 +3309,7 @@ function removeSeconds(time) {
                     autoComplete="password"
                   />
                 </div>
-     
+
                 {/* <div className="input">
                   <div className="icone">
                 <AccountBalanceWalletTwoToneIcon color="action" />
@@ -3312,25 +3325,25 @@ function removeSeconds(time) {
                   />
                 </div> */}
 
-               <div className="input">    
+                <div className="input">
                   <div className="icone">
-                     <AccountBalanceWalletTwoToneIcon color="action" />
+                    <AccountBalanceWalletTwoToneIcon color="action" />
                   </div>
                   <TextField
-                          margin="normal"
-                          size="small"
-                          name="fuelamount"
-                          value={vendorinfo.fuelamount || ""}
-                          onChange={(e) => {
-                            // handleChange(e)
-                            setVendorinfodata({ ...vendorinfo, fuelamount: e.target.value })
-                          }}
-                          label="Fuel Amount"
-                          id="fuelamount"
-                          autoComplete="password"
-                          style={{marginBottom:'20px'}}
-                        />
-                      {/* <TextField
+                    margin="normal"
+                    size="small"
+                    name="fuelamount"
+                    value={vendorinfo.fuelamount || ""}
+                    onChange={(e) => {
+                      // handleChange(e)
+                      setVendorinfodata({ ...vendorinfo, fuelamount: e.target.value })
+                    }}
+                    label="Fuel Amount"
+                    id="fuelamount"
+                    autoComplete="password"
+                    style={{ marginBottom: '20px' }}
+                  />
+                  {/* <TextField
                           margin="normal"
                           size="small"
                           name="fuelamount"
@@ -3344,7 +3357,7 @@ function removeSeconds(time) {
                           autoComplete="password"
                           style={{marginBottom:'20px'}}
                         /> */}
-                  </div>
+                </div>
 
                 <div className="input">
                   <div className="icone">
@@ -3357,12 +3370,12 @@ function removeSeconds(time) {
                     value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ""}
                     onChange={(e) => {
                       handleChange(e)
-                      setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value,advancepaidtovendor:e.target.value})
+                      setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value, advancepaidtovendor: e.target.value })
                     }}
                     label="Vendor Advance"
                     id="advance-paid-to-vendor"
                     autoComplete="password"
-                    style={{marginBottom:'20px'}}
+                    style={{ marginBottom: '20px' }}
                   />
                 </div>
                 <div className="input">
@@ -3382,40 +3395,40 @@ function removeSeconds(time) {
                 </div>
 
 
-                <div style={{display:"flex",flexWrap:"nowrap"}}>
+                <div style={{ display: "flex", flexWrap: "nowrap" }}>
 
-                
 
-                <div className="input-tripsheet-btns-overview tripsheet-calculate-input">
-                  <Button variant="contained"
-                    onClick={() => {
-                      handleClickOpen();
-                    }}
-                  >
-                    Overview
-                  </Button>
-                </div>
-                <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
-                  <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                    {dayhcl === 1 ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)
-                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)}
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handlePopupClose} variant="contained" color="primary">
-                      Cancel
+
+                  <div className="input-tripsheet-btns-overview tripsheet-calculate-input">
+                    <Button variant="contained"
+                      onClick={() => {
+                        handleClickOpen();
+                      }}
+                    >
+                      Overview
                     </Button>
-                  </DialogActions>
-                </Dialog>
-                <div className="input-tripsheet-btns">
-                  {isEditMode ? (<>
-                    {/* <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button> */}
-                    <LoadingButton  loading={isEditload} variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</LoadingButton>
-                  </>
-                  ) : (
-                    // <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
-                    <LoadingButton  loading={isAddload} variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</LoadingButton>
-                  )}
-                </div>
+                  </div>
+                  <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                    <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                      {dayhcl === 1 ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)
+                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)}
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handlePopupClose} variant="contained" color="primary">
+                        Cancel
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                  <div className="input-tripsheet-btns">
+                    {isEditMode ? (<>
+                      {/* <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button> */}
+                      <LoadingButton loading={isEditload} variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</LoadingButton>
+                    </>
+                    ) : (
+                      // <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
+                      <LoadingButton loading={isAddload} variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</LoadingButton>
+                    )}
+                  </div>
                 </div>
                 <div className="vehicle-confirm-tripsheet">
                   <div className="input-field input-feild-vehicle-confirm">
@@ -3714,8 +3727,8 @@ function removeSeconds(time) {
                                 setWarningMessage("IS not locked,locked Enter Again");
                               }
                             }}
-                            
-                            disabled={ hideField && superAdminAccess === "0"}
+
+                            disabled={hideField && superAdminAccess === "0"}
                             value={vendorinfo?.vendor_vehicle}
                             options={vehileNames?.map((option) => ({
                               label: option,
@@ -3732,8 +3745,8 @@ function removeSeconds(time) {
                             id="free-solo-duty"
                             freeSolo
                             sx={{ width: "100%" }}
-                            
-                            disabled={ hideField && superAdminAccess === "0"}
+
+                            disabled={hideField && superAdminAccess === "0"}
                             onChange={(event, value) => {
                               if (lockdata) {
                                 handleAutocompleteVendor(event, value, "vendor_duty")
@@ -3992,7 +4005,7 @@ function removeSeconds(time) {
               </div>
             </div>
 
-            <div>
+            <div >
               <Modal
                 open={mapPopUp}
                 onClose={handleCloseMapPopUp}
@@ -4000,21 +4013,36 @@ function removeSeconds(time) {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style1}>
-
-                  <Box >
+                  <Box>
                     <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                      <div>
+                        <div style={{ display: 'flex', gap: "40px", padding: '10px', flexWrap: "wrap", }}>
+                          <label style={{ fontWeight: "600" }}>  Trip Id :<span>{tripid}</span> </label>
+                          <label style={{ fontWeight: '600' }}>Start Date : <span>{dayjs(startdate).format("DD/MM/YYYY")}</span></label>
+                          <label style={{ fontWeight: '600' }}>Close Date : <span>{dayjs(closedate).format("DD/MM/YYYY")}</span></label>
+                          <label style={{ fontWeight: '600' }}>Start Time : <span>{removeSeconds(starttime)}</span></label>
+                          <label style={{ fontWeight: '600' }}>Close Time : <span>{removeSeconds(endtime)}</span> </label>
+                          {/* <label style={{ fontWeight: 'bold',width:"30%" }}>Report : <span>{formData.remark || selectedCustomerData.remark || book.remark}</span> </label> */}
+                        </div>
+                        <div style={{ width: '60%', display: "flex", justifyContent: "space-around", padding: '10px' }}>
+                          <label style={{ display: "flex", gap: '10px' }}>
+                            <span style={{ fontWeight: 'bold', height: "50px", display: "flex", flexWrap: 'nowrap', gap: "10px" }}>
+                              <span style={{ fontWeight: '600' }}>Remarks</span>
+                              <span> :</span>
 
+                            </span>
 
-                      <div style={{ display: 'flex', gap: "20px", padding: '10px' }}>
-                        <label style={{ fontWeight: 'bold' }}>Trip Id :<span>{tripid}</span> </label>
-                        <label style={{ fontWeight: 'bold' }}>Start Date : <span>{dayjs(startdate).format("DD/MM/YYYY")}</span></label>
-                        <label style={{ fontWeight: 'bold' }}>Close Date : <span>{dayjs(closedate).format("DD/MM/YYYY")}</span></label>
-                        <label style={{ fontWeight: 'bold' }}>Start Time : <span>{removeSeconds(starttime)}</span></label>
-                        <label style={{ fontWeight: 'bold' }}>Close Time : <span>{removeSeconds(endtime)}</span> </label>
+                            <span style={{ height: '50px', border: "1px solid #ccc", overflow: 'auto',width:"600px" }}>{formData.remark || selectedCustomerData.remark || book.remark}</span>
+
+                          </label>
+
+                        </div>
                       </div>
-                      <IconButton onClick={handleCloseMapPopUp}>
-                        <CloseIcon />
-                      </IconButton>
+                      <div className='closebuttonhover'>
+                        <IconButton onClick={handleCloseMapPopUp}>
+                          <CloseIcon />
+                        </IconButton>
+                      </div>
                     </div>
                   </Box>
                   <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} />

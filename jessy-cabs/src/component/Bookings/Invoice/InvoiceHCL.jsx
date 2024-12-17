@@ -441,22 +441,24 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                     // />
                     <div
   style={{
-    display: "flex",
-      flexDirection: "row",
-    flexWrap: "wrap", 
-    justifyContent: "center", 
-    alignItems: "center", 
-    gap: "10px", 
-    margin: "0 auto", 
-    maxWidth: "600px", 
+    // display: "flex",
+    //   flexDirection: "row",
+    // flexWrap: "wrap", 
+    // justifyContent: "center", 
+    // alignItems: "center", 
+    // gap: "10px", 
+    // background:"red",
+    margin: " auto", 
+    width:"345px",
+    height:"345px"
   }}
 >
   <img
     src={file}
     alt={`image_${index}`}
     style={{
-      width: "300px",
-      height: "auto",
+      width: "100%",
+      height: "100%",
       marginBottom: "20px",
     }}
   />
@@ -509,7 +511,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
 
     // Custom settings for image files
     const imageOptions = {
-      filename: "E-tripsheet-images.pdf",
+      filename: "E-tripsheet.pdf",
       resolution: 2,
       method: "save",
       page: {

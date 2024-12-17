@@ -196,12 +196,12 @@ const SignatureGenerate = () => {
                 signtime: time,
             };
                console.log(signtauretimes,'sign data')
-            // const response = await axios.post(`${apiUrl}/generate-link/${tripno}`);
-            // await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`, signtauretimes);
+            const response = await axios.post(`${apiUrl}/generate-link/${tripno}`);
+            await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`, signtauretimes);
 
-            // const data = response.data.link;
+            const data = response.data.link;
             // console.log(data,"lll")
-            // window.location.href = data;
+            window.location.href = data;
 
             sessionStorage.setItem("expiredsign", true);
             localStorage.setItem("expiredsign", true);

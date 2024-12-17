@@ -887,3 +887,8 @@
 .closebuttonhover:hover{
   background-color: #ffff;
 }
+
+/* .closebuttonhover{
+  display: flex;
+  justify-content: end;
+} */

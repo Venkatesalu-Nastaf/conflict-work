@@ -142,7 +142,7 @@ const style1 = {
   height: 'fit-content',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 1100,
+  width: 1300,
   bgcolor: 'background.paper',
   // bgcolor: 'yellow',
   // border: '1px solid #000',
@@ -2252,9 +2252,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         // }}
                                         style={{
                                           maxWidth: '100%',
-                                          maxHeight: '90vh', 
-                                          width: '90vw',     
-                                          height: '80vh',     
+                                          maxHeight: '90vh',
+                                          width: '90vw',
+                                          height: '80vh',
                                           border: 'none',
                                         }}
                                       />
@@ -4014,17 +4014,33 @@ const TripSheet = ({ stationName, logoImage }) => {
               >
                 <Box sx={style1}>
                   <Box>
+
+                    {/* <div className='closebuttonhover'>
+                        <IconButton onClick={handleCloseMapPopUp}>
+                          <CloseIcon />
+                        </IconButton>
+                      </div> */}
+
                     <div style={{ display: 'flex', justifyContent: "space-between" }}>
-                      <div>
-                        <div style={{ display: 'flex', gap: "40px", padding: '10px', flexWrap: "wrap", }}>
-                          <label style={{ fontWeight: "600" }}>  Trip Id :<span>{tripid}</span> </label>
-                          <label style={{ fontWeight: '600' }}>Start Date : <span>{dayjs(startdate).format("DD/MM/YYYY")}</span></label>
-                          <label style={{ fontWeight: '600' }}>Close Date : <span>{dayjs(closedate).format("DD/MM/YYYY")}</span></label>
-                          <label style={{ fontWeight: '600' }}>Start Time : <span>{removeSeconds(starttime)}</span></label>
-                          <label style={{ fontWeight: '600' }}>Close Time : <span>{removeSeconds(endtime)}</span> </label>
-                          {/* <label style={{ fontWeight: 'bold',width:"30%" }}>Report : <span>{formData.remark || selectedCustomerData.remark || book.remark}</span> </label> */}
-                        </div>
-                        <div style={{ width: '60%', display: "flex", justifyContent: "space-around", padding: '10px' }}>
+
+
+                      <div style={{ display: 'flex', gap: "20px", padding: '0px', flexWrap: "nowrap", }}>
+                        <label style={{ fontWeight: "600" }}>  Trip Id :<span>{tripid}</span> </label>
+                        <label style={{ fontWeight: '600' }}>Start Date : <span>{dayjs(startdate).format("DD/MM/YYYY")}</span></label>
+                        <label style={{ fontWeight: '600' }}>Close Date : <span>{dayjs(closedate).format("DD/MM/YYYY")}</span></label>
+                        <label style={{ fontWeight: '600' }}>Start Time : <span>{removeSeconds(starttime)}</span></label>
+                        <label style={{ fontWeight: '600' }}>Close Time : <span>{removeSeconds(endtime)}</span> </label>
+                        <label style={{ display: "flex", gap: '10px' }}>
+                          <span style={{ fontWeight: 'bold', height: "50px", display: "flex", flexWrap: 'nowrap', gap: "10px" }}>
+                            <span style={{ fontWeight: '600' }}>Remarks</span>
+                            <span> :</span>
+
+                          </span>
+
+                          <span style={{ height: '50px', border: "1px solid #ccc", overflow: 'auto', width: "300px" }}>{formData.remark || selectedCustomerData.remark || book.remark}</span>
+
+                        </label>                        </div>
+                      {/* <div style={{ width: '60%', display: "flex", justifyContent: "space-around", padding: '10px' }}>
                           <label style={{ display: "flex", gap: '10px' }}>
                             <span style={{ fontWeight: 'bold', height: "50px", display: "flex", flexWrap: 'nowrap', gap: "10px" }}>
                               <span style={{ fontWeight: '600' }}>Remarks</span>
@@ -4036,14 +4052,14 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           </label>
 
-                        </div>
-                      </div>
+                        </div> */}
                       <div className='closebuttonhover'>
                         <IconButton onClick={handleCloseMapPopUp}>
                           <CloseIcon />
                         </IconButton>
                       </div>
                     </div>
+
                   </Box>
                   <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} />
 

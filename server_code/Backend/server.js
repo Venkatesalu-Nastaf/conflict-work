@@ -408,6 +408,98 @@ app.put('/tripsheet_uploads/:id/:documentType/:data', uploadtripsheet.single('im
   }
 
 });
+
+const uploadstartkm = multer({
+  storage: storagetripsheet
+})
+
+// app.put('/tripsheet_uploads/:id/:data', uploadstartkm.single('image'), (req, res) => {
+//   const userId = req.params.id;
+//   const fileName = req.file.filename;
+//   const filename = req.file.originalname;
+
+//   if (userId, fileName, filename) {
+//     const insertQuery = `UPDATE tripsheetupload SET startkm_imgpath = ? WHERE tripid = ?`;
+//     db.query(insertQuery, [userId, fileName, filename], (err, result) => {
+//       if (err) {
+//         return res.status(500).json({ Message: "Error inserting profile picture", err });
+//       }
+//       return res.status(200).json({ Status: "success" });
+//     })
+
+//   } else {
+//     return res.status(500).json({ Message: "some data undefind" })
+//   }
+
+// });
+
+app.put('/tripsheet_uploads/:id/:data', uploadstartkm.single('image'), (req, res) => {
+  const tripId = req.params.id;
+  const data = req.params.data;
+  const fileName = req.file?.filename; 
+  const originalName = req.file?.originalname;
+
+  if (tripId && fileName && originalName) {
+    const updateQuery = `UPDATE tripsheetupload SET startkm_imgpath = ? WHERE tripid = ?`;
+    db.query(updateQuery, [fileName, tripId], (err, result) => {
+      if (err) {
+        console.error(err); 
+        return res.status(500).json({ Message: "Error updating database", err });
+      }
+      return res.status(200).json({ Status: "success" });
+    });
+  } else {
+    return res.status(400).json({ Message: "Required data is missing" });
+  }
+});
+
+const uploadclosekm = multer({
+  storage: storagetripsheet
+})
+
+
+app.put('/tripsheet_uploadsclosekm/:id/:data', uploadclosekm.single('image'), (req, res) => {
+  const tripId = req.params.id;
+  const data = req.params.data;
+  const fileName = req.file?.filename;
+  const originalName = req.file?.originalname;
+
+  if (tripId && fileName && originalName) {
+    const updateQuery = `UPDATE tripsheetupload SET closekm_imgpath = ? WHERE tripid = ?`;
+    db.query(updateQuery, [fileName, tripId], (err, result) => {
+      if (err) {
+        return res.status(500).json({ Message: "Error updating database", err });
+      }
+      return res.status(200).json({ Status: "success" });
+    });
+  } else {
+    return res.status(400).json({ Message: "Required data is missing" });
+  }
+});
+
+app.put('/tripsheet-updatekm/:tripid', (req, res) => {
+  const { startkm, closekm } = req.body; 
+  const tripid = req.params.tripid; 
+
+  db.query(
+    'UPDATE tripsheet SET startkm = ?, closekm = ? WHERE tripid = ?',
+    [startkm, closekm, tripid],
+    (err, result) => {
+      if (err) {
+        console.error('Error updating tripsheet:', err);
+        return res.status(500).send('Failed to update');
+      }
+      console.log(result, "data of the tripsheet")
+      return res.status(200).send('Successfully updated');
+    }
+  );
+});
+
+
+
+
+
+
 // --------------------------driverappupdatedtoll and parking image----------------------
 const storagetripsheet1 = multer.diskStorage({
   destination: (req, file, cb) => {

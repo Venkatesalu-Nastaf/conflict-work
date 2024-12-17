@@ -4,6 +4,8 @@ import { APIURL } from '../../../url';
 import axios from 'axios'
 import { format as datefunsdata, parse } from 'date-fns';
 import Logo from "../../../../assets/img/logo.png";
+import { Button } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const SignatureGenerate = () => {
     const apiUrl = APIURL;
@@ -33,8 +35,12 @@ const SignatureGenerate = () => {
     }, [])
 
 
+    const [uploadStatus, setUploadStatus] = useState(null);
+    const [uploadStatus1, setUploadStatus1] = useState(null);
 
     const [fulldetails, setFulltripdetails] = useState([])
+    const [startkm, setStartkm] = useState('');
+    const [closekm, setClosekm] = useState();
     const [expired, setExpired] = useState(() => {
         const expiredInSessionStorage =
             localStorage.getItem("expiredsign");
@@ -57,6 +63,12 @@ const SignatureGenerate = () => {
                     const response = await axios.get(`${apiUrl}/signaturedataurltrip/${datatripid}`)
                     const data = response.data
                     setFulltripdetails(data)
+                    console.log(data,"data");
+                    const startkm = data[0]?.startkm
+                    setStartkm(startkm)
+                    const closekm = data[0]?.closekm
+                    setClosekm(closekm)
+                    
                     // setTimeout(() => {
                     //     setExpired(true);
                     //     sessionStorage.setItem("expiredsign", true);
@@ -122,6 +134,54 @@ const SignatureGenerate = () => {
     //     } catch {
     //     }
     // };
+
+    // const handleDataUpload = async () => {
+    //     const tripid = fulldetails[0]?.tripid; // Replace with actual trip ID
+    //     const updatedCustomerData = { startkm, closekm };
+    //     console.log(updatedCustomerData, ' data of the customer')
+      
+    //     try {
+    //       // Send both startkm and closekm in one PUT request
+    //       const response = await axios.put(
+    //         `${apiUrl}/tripsheet-edit/${tripid}`, 
+    //         updatedCustomerData
+    //       )
+      
+    //       console.log('Start KM and Close KM updated:', response.data);
+    //     } catch (error) {
+    //       // Handle error status
+    //       setUploadStatus('failure');
+    //       setTimeout(() => setUploadStatus(null), 1000);
+      
+    //       console.error('Failed to upload Start KM and Close KM:', error);
+    //     }
+    //   };
+      
+    const handleDataUpload = async () => {
+        const tripid = fulldetails[0]?.tripid; // Replace with actual trip ID
+        const updatedCustomerData = { startkm, closekm };
+        console.log(updatedCustomerData, ' data of the customer');
+      
+        try {
+          // Send both startkm and closekm in one PUT request
+          const response = await axios.put(
+            `${apiUrl}/tripsheet-updatekm/${tripid}`,
+            updatedCustomerData
+          );
+      
+          console.log('Start KM and Close KM updated:', response.data);
+          if (response.status === 200) {
+            setUploadStatus('success');
+            setTimeout(() => setUploadStatus(null), 1000);
+          }
+        } catch (error) {
+          console.error('Failed to upload Start KM and Close KM:', error.response ? error.response.data : error);
+          setUploadStatus('failure');
+          setTimeout(() => setUploadStatus(null), 1000);
+        }
+      };
+      
+      
   
     const generateLink = async () => {
         try {
@@ -135,13 +195,13 @@ const SignatureGenerate = () => {
                 datesignature: dateTime,
                 signtime: time,
             };
+               console.log(signtauretimes,'sign data')
+            // const response = await axios.post(`${apiUrl}/generate-link/${tripno}`);
+            // await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`, signtauretimes);
 
-            const response = await axios.post(`${apiUrl}/generate-link/${tripno}`);
-            await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`, signtauretimes);
-
-            const data = response.data.link;
-            console.log(data,"lll")
-            window.location.href = data;
+            // const data = response.data.link;
+            // console.log(data,"lll")
+            // window.location.href = data;
 
             sessionStorage.setItem("expiredsign", true);
             localStorage.setItem("expiredsign", true);
@@ -170,14 +230,84 @@ const SignatureGenerate = () => {
 
 
     const timeformtdata = (datatime) => {
-        console.log(datatime)
+        // console.log(datatime)
         const time = parse(datatime, 'HH:mm:ss', new Date());
-
         // Format to get hours and minutes
         return datefunsdata(time, 'HH:mm');
     }
     // console.log(fulldetails,"full")
 
+    
+
+    const handleUpload = () =>{
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.pdf, .jpg, .jpeg, .png';
+        input.onchange = handleFileChange
+        input.click();
+}
+
+const handleFileChange = async (event) => {
+    const tripid = tripId; 
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    const data = Date.now().toString();
+    const formData = new FormData();
+    formData.append('image', file);
+  
+    try {
+      console.log('Uploading file:', { tripId, data, file });
+      const response = await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${data}`, formData);
+      console.log('File uploaded successfully:', response.data);
+      setUploadStatus('success'); 
+      setTimeout(() => setUploadStatus(null), 1000);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    //   alert('Failed to upload file. Please try again.');
+     setUploadStatus('failure');
+     setTimeout(() => setUploadStatus(null), 1000);
+    }
+  };
+
+  const handleclosekmUpload = () =>{
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf, .jpg, .jpeg, .png';
+    input.onchange = handleCloseKmFileChange
+    input.click();
+}
+
+  const handleCloseKmFileChange = async (event) => {
+    const tripid = tripId; 
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    const data = Date.now().toString(); 
+    const formcloseData = new FormData();
+    formcloseData.append('image', file);  
+    try {
+      console.log('Uploading Close KM image:', { tripId, data, file });
+      const response = await axios.put(`${apiUrl}/tripsheet_uploadsclosekm/${tripid}/${data}`, formcloseData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        
+        
+      });
+      setUploadStatus1('success'); 
+      setTimeout(() => setUploadStatus1(null), 1000);
+      console.log('Close KM image uploaded successfully:', response.data);
+    } catch (error) {
+        setUploadStatus1('failure');
+        setTimeout(() => setUploadStatus1(null), 1000);
+      console.error('Error uploading Close KM image:', error);
+    //   alert('Failed to upload Close KM image. Please try again.');
+    }
+  };
+  
+  
+  
     return (
        
         <div  className={isLoading ? "loading-container" : ""} style={{ display: 'flex', justifyContent: 'center' }}>
@@ -215,10 +345,7 @@ const SignatureGenerate = () => {
                     <p>Starting Time :</p>
                     <input value={fulldetails[0]?.starttime ? timeformtdata(fulldetails[0]?.starttime) : null} />
                 </div>
-                <div className='signature-generate-input'>
-                    <p>Starting KM : </p>
-                    <input value={fulldetails[0]?.startkm || ""} />
-                </div>
+               
                 <div className='signature-generate-input'>
                     <p>Closing Date </p>
                     {/* <input value={fulldetails[0]?.closedate ? dayjs(fulldetails[0]?.closedate).format("YYYY-MM-DD") : ""} /> */}
@@ -230,10 +357,81 @@ const SignatureGenerate = () => {
                     {/* <input value={fulldetails[0]?.closetime  /> */}
                     <input value={fulldetails[0]?.closetime ? timeformtdata(fulldetails[0]?.closetime) : null} />
                 </div>
-                <div className='signature-generate-input'>
+                {/* <div className='signature-generate-input'>
+                    <p>Starting KM : </p>
+                    <input value={fulldetails[0]?.startkm ? (fulldetails[0]?.startkm) : null} />
+                    <Button
+      component="label"
+      variant="contained"
+      startIcon={<CloudUploadIcon />}
+      type="file"
+      onChange={(event) => console.log(event.target.files)}
+      multiple
+    > Upload
+    </Button>
+                </div> */}
+            {/* <div className="signature-generate-input">
+            <p>Starting KM : </p>
+            <div className="input-with-button">
+                <input value={fulldetails[0]?.startkm ? fulldetails[0]?.startkm : null} onChange={(e) => setStartkm(e.target.value)} />
+                <Button component="label" variant="contained" onClick={handleUpload}  > Upload </Button>
+            </div>
+            {uploadStatus === 'success' && <p style={{ color: 'green' }}>Successfully updated</p>} 
+      {uploadStatus === 'failure' && <p style={{ color: 'red' }}>Failed to upload.</p>}
+
+            </div> */}
+
+<div className="signature-generate-input">
+  <p>Starting KM:</p>
+  <div className="input-with-button">
+    <input
+      value={startkm}
+      onChange={(e) => setStartkm(e.target.value)}
+    />
+    <Button component="label" variant="contained" onClick={handleUpload}>
+      Upload
+    </Button>
+  </div>
+  {uploadStatus === 'success' && (
+    <p style={{ color: 'green' }}>Successfully updated</p>
+  )}
+  {uploadStatus === 'failure' && (
+    <p style={{ color: 'red' }}>Failed to upload.</p>
+  )}
+</div>
+
+                {/* <div className='signature-generate-input'>
                     <p>Closing KM </p>
-                    <input value={fulldetails[0]?.closekm || ""} />
-                </div>
+                    <input value={fulldetails[0]?.closekm ? (fulldetails[0]?.closekm) : null} />
+
+                </div> */}
+                 {/* <div className="signature-generate-input">
+            <p>Closing KM : </p>
+            <div className="input-with-button">
+                <input value={fulldetails[0]?.closekm ? fulldetails[0]?.closekm : null}   onChange={(e) => setClosekm(e.target.value)}/>
+                <Button component="label" variant="contained" onClick={handleclosekmUpload}  > Upload </Button>
+            </div>
+            {uploadStatus1 === 'success' && <p style={{ color: 'green' }}>Successfully updated</p>} 
+            {uploadStatus1 === 'failure' && <p style={{ color: 'red' }}>Failed to upload.</p>} 
+            </div> */}
+            <div className="signature-generate-input">
+  <p>Closing KM:</p>
+  <div className="input-with-button">
+    <input
+      value={closekm}
+      onChange={(e) => setClosekm(e.target.value)}
+    />
+    <Button component="label" variant="contained" onClick={handleclosekmUpload}>
+      Upload
+    </Button>
+  </div>
+  {uploadStatus1 === 'success' && (
+    <p style={{ color: 'green' }}>Successfully updated</p>
+  )}
+  {uploadStatus1 === 'failure' && (
+    <p style={{ color: 'red' }}>Failed to upload.</p>
+  )}
+</div>
                 <div className='signature-generate-input'>
                     <p>Toll & Parking </p>
                     <input value={`${fulldetails[0]?.toll || 0} & ${fulldetails[0]?.parking || 0}`} />
@@ -243,7 +441,17 @@ const SignatureGenerate = () => {
                     <input value={fulldetails[0]?.permit || ""} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-                    <button className='Accept-btn' onClick={handlesignaturedata}> Accept</button>
+                    {/* <button className='Accept-btn' onClick={handlesignaturedata}> Accept</button> */}
+                                            <button
+                        className="Accept-btn"
+                        onClick={() => {
+                            handlesignaturedata(); // Call handlesignaturedata
+                            handleDataUpload();    // Call handleDataUpload
+                        }}
+                        >
+                        Accept
+                        </button>
+
                     {uploadtoll === "true" ?
                         <button className='Accept-btn' onClick={handleTollParkinglink}>upload toll & parking</button> : <></>
                     }

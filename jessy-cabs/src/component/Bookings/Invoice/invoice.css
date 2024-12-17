@@ -326,3 +326,40 @@ header img {
 .guest-sign-text{
   text-align: center;
 }
+
+@media print {
+  .print-page {
+    page-break-before: always; /* Force each item to start on a new page */
+    margin: 0;
+    padding: 0;
+  }
+
+  .pdf-page {
+    width: 100%; /* Ensure PDF fits the page width */
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    page-break-inside: avoid; /* Prevent page breaks inside PDF pages */
+  }
+
+  .image-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .print-image {
+    width: 100%; /* Fit the width of the page */
+    height: auto; /* Maintain aspect ratio */
+    margin: 0 auto;
+    display: block;
+    page-break-before: always; /* Force new page for each image */
+  }
+}
+
+@media print {
+  li {
+    page-break-inside: avoid;
+    page-break-before: always;
+  }
+}
+

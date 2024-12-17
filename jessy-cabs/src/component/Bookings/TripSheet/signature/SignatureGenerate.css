@@ -24,6 +24,26 @@
     width: 80px;
     animation: pulse 1s infinite;
   }
+
+  .signature-generate-input {
+    margin-bottom: 15px; /* Adds spacing between input fields */
+  }
+  
+  .input-with-button {
+    display: flex; 
+    align-items: center; 
+    /* gap: 5px;  */
+  }
+  
+  .input-with-button input {
+    width: 270px; 
+    padding: 5px; 
+  }
+  
+  .input-with-button .MuiButton-root {
+    margin-left: 10px;
+  }
+  
   
   @keyframes pulse {
   

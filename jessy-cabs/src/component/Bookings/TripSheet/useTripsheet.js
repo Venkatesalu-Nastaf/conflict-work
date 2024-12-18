@@ -233,6 +233,9 @@ const useTripsheet = () => {
 
     // const [isentertripID,setisenterTripid] = useState(false)
 
+    const [temporaryStatus,setTemporaryStatus] = useState(null);
+    const [emptyState,setEmptyState] = useState(false);
+
     const [routeData, setRouteData] = useState('');
     const [tripSheetData, setTripSheetData] = useState({
         customer: '',
@@ -1177,7 +1180,7 @@ const useTripsheet = () => {
                     calcPackage, extraHR: parseFloat(extraHR || 0) || 0, extraKM: parseFloat(extraKM || 0) || 0, package_amount: parseInt(package_amount || 0) || 0, extrakm_amount: parseFloat(extrakm_amount || 0) || 0, extrahr_amount: parseFloat(extrahr_amount || 0) || 0, ex_kmAmount, ex_hrAmount, nightBta: parseFloat(nightBta || 0) || 0, nightCount: parseFloat(nightCount || 0) || 0, night_totalAmount, driverBeta: parseFloat(driverBeta || 0), driverbeta_Count: parseFloat(driverbeta_Count || 0), driverBeta_amount, totalcalcAmount, escort, minHour, minKM, transferreport,
                     // -------------------------vendor--------------------------------------------------------
                     vendor_vehicle: vendorinfo.vendor_vehicle || "",
-                    vendor_duty: vendorinfo.vendor_duty || ratename || "",
+                    vendor_duty: vendorinfo.vendor_duty || "",
                     fuelamount: vendorinfo.fuelamount || "",
                     vendor_ratename: vendorinfo.vendor_ratename || "",
                     vendorshedOutDate: vendorinfo.vendorshedOutDate || "",
@@ -1378,11 +1381,11 @@ const useTripsheet = () => {
         try {
             setisAddload(true)
             // const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs().format("");
-         const selectedBookingDate = dayjs().format("YYYY-MM-DD");
+            const selectedBookingDate = dayjs().format("YYYY-MM-DD");
             const dattasign = book.apps;
             const updatedBook = {
                 ...book,
-                bookingno:formData.tripid || selectedCustomerData.tripid || book.tripid,
+                bookingno: formData.tripid || selectedCustomerData.tripid || book.tripid,
                 apps: dattasign,
                 starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
                 closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
@@ -4213,10 +4216,10 @@ const useTripsheet = () => {
             if (vendorhr !== 0) {
 
                 const [hrdavendor, midavendor = 0] = vendorhr.toString().split('.').map(Number);
-                console.log(hrdavendor, "Hour part",midavendor, "Minute vendorpart",vendorhramount);
+                console.log(hrdavendor, "Hour part", midavendor, "Minute vendorpart", vendorhramount);
                 const onehrdata = Number(hrdavendor) * Number(vendorhramount)
                 const result = Math.round((vendorhramount / 60) * 10) / 10;
-                console.log(result,"clatimeeeee")
+                console.log(result, "clatimeeeee")
                 const etrxamin = result * Number(midavendor)
                 const totalamountwithmin = onehrdata + etrxamin
                 const totalamounthrmin = Math.round(totalamountwithmin)
@@ -4353,7 +4356,6 @@ const useTripsheet = () => {
         calcdatavendor();
     }, [vendorbilldata.Vendor_NightHALT, vendorbilldata.Vendor_NightBataAmount, vendorbilldata, vendorpassvalue.Vendor_NightHALT, vendorpassvalue.Vendor_NightBataAmount])
 
-    console.log(vendorinfo.fuelamount,"fuelammountconnnnnnectedactive",vendorinfo.vendor_advancepaidtovendor,"vvvv",vendorinfo?.advancepaidtovendor,vendorinfo?.vendorparking)
     useEffect(() => {
         const calcdatavendor = () => {
 
@@ -4387,15 +4389,15 @@ const useTripsheet = () => {
         const amount8 = parseFloat(vendorinfo?.vendorparking) || 0;
         const amount9 = parseFloat(vendorinfo.fuelamount) || 0;
 
-        console.log(amount,"1",amount1 ,"2",amount2,"3",amount3 ,"4",amount4 ,"5",amount5 ,"6",amount6 ,"8", amount8)
+        console.log(amount, "1", amount1, "2", amount2, "3", amount3, "4", amount4, "5", amount5, "6", amount6, "8", amount8)
 
 
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount8;
         // const fullAmount = totalAmount - amount7 - amount9;
         const fullAmount1 = totalAmount - amount7
-        console.log(fullAmount1,"totalAmount2check",amount7)
+        console.log(fullAmount1, "totalAmount2check", amount7)
         const fullAmount = fullAmount1 - amount9;
-        console.log(fullAmount,"fullcheck")
+        console.log(fullAmount, "fullcheck")
         const fullamountdata = Math.ceil(fullAmount);
         setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullamountdata })
         // return totalAmount;
@@ -4404,7 +4406,7 @@ const useTripsheet = () => {
 
     useEffect(() => {
         calculatevendorTotalAmount()
-    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor,vendorinfo.advancepaidtovendor,vendorinfo.fuelamount,vendorinfo?.vendorparking])
+    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo.advancepaidtovendor, vendorinfo.fuelamount, vendorinfo?.vendorparking])
 
 
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
@@ -5143,16 +5145,16 @@ const useTripsheet = () => {
                         Number(trip.startkm) === maxValue
                     );
                 });
-                const hclcustomerhybrid = Number(hclkmdatas[0].totalCloseKm)
-                const hcltripid = Number(hclkmdatas[0].tripid)
+                const hclcustomerhybrid = Number(hclkmdatas[0]?.totalCloseKm)
+                const hcltripid = Number(hclkmdatas[0]?.tripid)
                 const datamaxhybrid = maxValue > hclcustomerhybrid ? maxValue : hclcustomerhybrid
-                const datamaxtripid= maxValue > hclcustomerhybrid ? maxTrip?.tripid : hcltripid 
+                const datamaxtripid = maxValue > hclcustomerhybrid ? maxTrip?.tripid : hcltripid
                 // console.log(datamaxhybrid,"hclaclllll")
                 // console.log(hclcustomerhybrid,"hclhybridhcllllll",maxValue)
                 // Find the maximum value 
                 // setMaxConflict({ maxconflictdata: maxValue || 0, maxTripid: maxTrip.tripid })
                 // setMaxConflict({ maxconflictdata: datamaxhybrid, maxTripid: maxTrip.tripid })
-                setMaxConflict({ maxconflictdata: datamaxhybrid, maxTripid : datamaxtripid})
+                setMaxConflict({ maxconflictdata: datamaxhybrid, maxTripid: datamaxtripid })
 
                 const shedoutkm1 = Number(formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || '');
 
@@ -5190,7 +5192,7 @@ const useTripsheet = () => {
                 if (shedoutkm1 > 1) {
                     const result = getTripWithValueInRange(mapdata, shedoutkm1);
                     if (result !== undefined) {
-                        const hclcustomertotalkm = Number(hclkmdatas[0].totalCloseKm)
+                        const hclcustomertotalkm = Number(hclkmdatas[0]?.totalCloseKm)
 
                         const ggg = Number(result.shedin || result?.closekm || result.startkm || result.shedout || 0)
                         // console.log(ggg,"hybridtotalkmwithout hybrid")
@@ -5234,7 +5236,7 @@ const useTripsheet = () => {
         // const paramsdata = {
         //     tripid: formData.tripid || selectedCustomerData.tripid || book.tripid
         // };
-       const ttrip = formData.tripid || selectedCustomerData.tripid || book.tripid
+        const ttrip = formData.tripid || selectedCustomerData.tripid || book.tripid
 
         // Create the URL with the JSON string as a single query parameter
         // const url = new URL(signatureurlinkurl);
@@ -5243,7 +5245,7 @@ const useTripsheet = () => {
         const path = `/SignatureGenerate?tripid=${ttrip}`;
         // const signatureurlinkurl = "https://jessycabs.com/SignatureGenerate"
         const fullUrl = `${window.location.origin}${path}`;
-          const generatedLinkdata = fullUrl
+        const generatedLinkdata = fullUrl
         // const generatedLinkdata = url.toString();
         setSignatureWhattsapplink(generatedLinkdata)
 
@@ -5252,14 +5254,20 @@ const useTripsheet = () => {
         setCopyDataLink(true)
         // window.localStorage.setItem("auth",true);
         // Get the div element by its ID
-        localStorage.setItem("expiredsign", "false");
-        // localStorage.setItem("auth",true);
-        localStorage.setItem("expired", "false");
-        localStorage.setItem("uploadtollparkdata", "false");
-        localStorage.setItem("expireuploadpage", "false");
+
+        const updatedetails = {
+            tripid : ttrip,
+            Expired : false,
+            signExpired : false,
+            UploadTollExpired : false,
+            ExpiredUploadpage : false
+        }
+
+
         setTimeout(() => {
             setSignaturtCopied(false)
         }, 2000)
+        await axios.post(`${apiUrl}/signaturelinkExpiredatas/`,updatedetails)
 
     }
 
@@ -6180,7 +6188,50 @@ const useTripsheet = () => {
         }
     }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
 
+    const loginusername = localStorage.getItem("username")
+    const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    const statusCheck =  formData.status || selectedCustomerData.status || book.status;
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
+                    username: loginusername,
+                });
+                const data = response.data;
+                const station = data?.map(li => li.stationname.split(",")).flat();
+                console.log(station,"userstation444444",statusCheck,station.includes('Chennai'));
+                if (statusCheck === "Temporary Closed" && (station.includes("All") || station.includes("Chennai"))) {
+                    
+                    setTemporaryStatus(false);
+                    return
+                }
+                else if(statusCheck === "Temporary Closed"){
+
+                    setTemporaryStatus(true)
+                    setEmptyState(false)
+                    return
+                }
+                else if(statusCheck === 'Closed' && (station.includes('Chennai') || station.includes('All'))){
+                    
+                    setTemporaryStatus(true)
+                    setHideField(true)
+                }
+                else if(statusCheck === "Closed"){
+                    setEmptyState(true)
+                    return
+                }
+                else if(statusCheck !== "Closed"){
+                    setEmptyState(false)
+                    return
+                }
+    
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
+        };
+        fetchData();
+    }, [loginusername, apiUrl,tripno,statusCheck]);
 
 
 
@@ -6317,7 +6368,7 @@ const useTripsheet = () => {
         handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate, groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
-        hideField
+        hideField,temporaryStatus,emptyState
 
     };
 };

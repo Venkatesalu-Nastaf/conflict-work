@@ -264,7 +264,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSuccessMessage,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField
+    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -601,7 +601,6 @@ const TripSheet = ({ stationName, logoImage }) => {
     const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
     const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
     const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-    console.log(conflictenddate?.maxShedInDate, "she", shedOutDate)
 
 
     const isEqual = (
@@ -1256,73 +1255,75 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </FormControl>
                   </Box>
                 </div>
-
-                <div className="input" style={{ display: "grid" }}>
-                  {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
-                    Conflict tripid: {conflictenddate?.TripIdconflictdate}, Time: {conflictenddate?.conflictTimer}, conflictdate:{conflictenddate?.maxShedInDate}
-                  </label>}
-                  <div style={{ display: "flex" }}>
-                    <div className="icone" >
-                      <CalendarMonthIcon color="action" />
+                {emptyState ? "" :
+                  <div className="input" style={{ display: "grid" }}>
+                    {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
+                      Conflict tripid: {conflictenddate?.TripIdconflictdate}, Time: {conflictenddate?.conflictTimer}, conflictdate:{conflictenddate?.maxShedInDate}
+                    </label>}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone" >
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Shed Out Date"
+                          disabled={hideField && superAdminAccess === "0" || temporaryStatus}
+                          id="shedOutDate"
+                          value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            setKmValue((prev) => ({ ...prev, shedOutDate: date }));
+                            handleDateChange(date, 'shedOutDate')
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.shedOutDate} />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
                     </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Shed Out Date"
-                        disabled={hideField}
-                        id="shedOutDate"
-                        value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-                          setKmValue((prev) => ({ ...prev, shedOutDate: date }));
-                          handleDateChange(date, 'shedOutDate')
-                        }}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.shedOutDate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
                   </div>
-                </div>
+                }
+                {emptyState ? "" :
+                  <div style={{ display: "grid" }} className="input">
+                    {startDateCheckFun()}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Report Date"
+                          disabled={hideField && superAdminAccess === "0" || temporaryStatus}
+                          id="startdate"
+                          value={
+                            formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
+                          }
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            setKmValue((prev) => ({ ...prev, startDate: date }));
+                            handleDateChange(date, 'startdate');
 
-                <div style={{ display: "grid" }} className="input">
-                  {startDateCheckFun()}
-                  <div style={{ display: "flex" }}>
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
+                            // const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+                            // const startdate = date;
+
+                            // if (shedoutdate && startdate) {
+                            //   const shedoutdateObj = dayjs(shedoutdate);
+                            //   const startdateObj = dayjs(startdate);
+                            //   const totalDays = startdateObj.diff(shedoutdateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, start_totalDays: totalDays }));
+                            // }
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
                     </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Report Date"
-                        disabled={hideField}
-                        id="startdate"
-                        value={
-                          formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
-                        }
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-                          setKmValue((prev) => ({ ...prev, startDate: date }));
-                          handleDateChange(date, 'startdate');
+                  </div>}
 
-                          // const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
-                          // const startdate = date;
-
-                          // if (shedoutdate && startdate) {
-                          //   const shedoutdateObj = dayjs(shedoutdate);
-                          //   const startdateObj = dayjs(startdate);
-                          //   const totalDays = startdateObj.diff(shedoutdateObj, 'days') + 1;
-                          //   setKmValue(prev => ({ ...prev, start_totalDays: totalDays }));
-                          // }
-                        }}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
-                  </div>
-                </div>
-
+                  {emptyState ?  "" :
                 <div className="input" style={{ display: "grid" }}>
                   {closeDateCheckFun()}
                   <div style={{ display: "flex" }}>
@@ -1333,6 +1334,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <DatePicker
                         label="Close Date"
                         id="closedate"
+                        disabled={temporaryStatus && superAdminAccess === "0"}
                         value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
                         format="DD/MM/YYYY"
                         onChange={(date) => {
@@ -1365,9 +1367,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </DatePicker>
                     </LocalizationProvider>
                   </div>
-                </div>
+                </div> }
 
-
+                {emptyState ?  "" :
                 <div className="input" style={{ display: "grid" }}>
 
                   {shedInDateCheck()}
@@ -1381,6 +1383,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <DatePicker
                         label="Shed In Date"
                         id="shedInDate"
+                        disabled={temporaryStatus && superAdminAccess === "0"}
                         value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
                         format="DD/MM/YYYY"
                         onChange={(date) => {
@@ -1414,9 +1417,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </LocalizationProvider>
                   </div>
 
-                </div>
+                </div> }
 
-
+                {emptyState ?  "" :
                 <div className="input">
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
@@ -1426,6 +1429,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       name="totaldays"
                       value={calculateTotalDay()}
                       label="Total Days"
+                      disabled={temporaryStatus && superAdminAccess === "0"}
                       size="small"
                       type="number"
                       id="totaldays"
@@ -1433,13 +1437,15 @@ const TripSheet = ({ stationName, logoImage }) => {
                       autoComplete="password"
                     />
                   </DemoItem>
-                </div>
+                </div> }
 
                 <div className="input tripsheet-e-tripsheet-input">
                   <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
                     E-Tripsheet
                   </Button>
                 </div>
+
+                {emptyState ?  "" :
                 <div className="input time" style={{ display: "grid" }}>
 
                   <div style={{ display: "flex", alignItems: 'center' }}>
@@ -1452,7 +1458,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <input
                         type="time"
                         name="reporttime"
-                        disabled={hideField}
+                        disabled={hideField && superAdminAccess === "0" || temporaryStatus}
                         value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                         onChange={(event) => {
                           setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
@@ -1469,7 +1475,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </div>
                   </div>
-                </div>
+                </div> }
+
+                {emptyState ?  "" :
                 <div className="input time">
                   <div className='icone icone-margin-adjust'>
                     <MdOutlineAccessTimeFilled />
@@ -1489,7 +1497,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <input
                       type="time"
                       id="starttime"
-                      disabled={hideField}
+                      disabled={hideField && superAdminAccess === "0" || temporaryStatus}
                       name="starttime"
                       value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
                       onChange={(event) => {
@@ -1505,8 +1513,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       }}
                     />
                   </div>
-                </div>
+                </div> }
 
+                {emptyState ?  "" :
                 <div className="input time">
                   <div className='icone icone-margin-adjust'>
                     <MdOutlineAccessTimeFilled />
@@ -1527,6 +1536,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       type="time"
                       name="closetime"
                       id="closetime"
+                      disabled={temporaryStatus && superAdminAccess === "0"}
                       value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                       onChange={(event) => {
                         const rTime = event.target.value;
@@ -1543,9 +1553,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                     />
                   </div>
 
-                </div>
+                </div> }
 
-
+                {emptyState ?  "" :
                 <div className="input time">
                   <div className='icone icone-margin-adjust'>
                     <MdOutlineAccessTimeFilled />
@@ -1573,6 +1583,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <input
                       type="time"
                       name="shedintime"
+                      disabled={temporaryStatus && superAdminAccess === "0"}
                       value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
                       onChange={(event) => {
                         const rTime = event.target.value;
@@ -1609,8 +1620,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       }}
                     />
                   </div>
-                </div>
+                </div> }
 
+                {emptyState ?  "" :
                 <div className="input" style={{ position: 'relative', top: '10px' }}>
                   <div className="icone icone-margin-adjust" style={{ marginBottom: '16px' }}>
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
@@ -1627,6 +1639,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           additionalTime.additionaltime ||
                           ''
                         }
+                        disabled={temporaryStatus && superAdminAccess === "0"}
                         onChange={handleChange}
                         id="additionaltime"
                         size="small"
@@ -1634,8 +1647,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </div>
                   </div>
-                </div>
+                </div> }
 
+                {emptyState ?  "" :
                 <div className="input">
                   <div className="icone icone-margin-adjust">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
@@ -1652,6 +1666,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             ? calculateTotalTimes()
                             : ""
                         }
+                        disabled={temporaryStatus && superAdminAccess === "0"}
                         onChange={handleChange}
                         id="totaltime"
                         size='small'
@@ -1659,8 +1674,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </div>
                   </div>
-                </div>
+                </div> }
 
+                {emptyState ?  "" :
                 <div className="input" style={{ display: "grid" }} >
                   {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
                   {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
@@ -1700,7 +1716,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           }
                         }
                       }}
-
+                      disabled={temporaryStatus && superAdminAccess === "0"}
                       label="Shed Out"
                       id="shedout"
                       size='small'
@@ -1708,9 +1724,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       autoComplete="password"
                     />
                   </div>
-                </div>
+                </div> }
 
-
+                {emptyState ?  "" :
                 <div style={{ display: "grid" }} className="input">
                   {dayhcl === 0 && (kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
 
@@ -1731,6 +1747,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           }
                         }
                       }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
                       size="small"
                       label="Start KM"
                       type="number"
@@ -1738,8 +1755,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       autoComplete="password"
                     />
                   </div>
-                </div>
+                </div> }
 
+                {emptyState ?  "" :
                 <div className="input" style={{ display: "grid" }}>
                   {dayhcl === 0 && kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
                   <div style={{ display: "flex" }}>
@@ -1760,6 +1778,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           }
                         }
                       }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
                       label="Close KM"
                       size="small"
                       type="number"
@@ -1767,8 +1786,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       autoComplete="password"
                     />
                   </div>
-                </div>
+                </div> }
 
+                {emptyState ?  "" :
                 <div style={{ display: "grid" }} className="input">
                   {dayhcl === 0 && kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
                   <div style={{ display: "flex" }}>
@@ -1791,6 +1811,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           }
                         }
                       }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
                       label="Shed In"
                       type="number"
                       id="shedin"
@@ -1798,7 +1819,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       autoComplete="password"
                     />
                   </div>
-                </div>
+                </div> }
+
+                {emptyState ?  "" :
                 <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1812,14 +1835,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                         handleChange(e)
                       }
                     }}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     label="Add KM"
                     type="number"
                     id="shedkm"
                     size='small'
                     autoComplete="password"
                   />
-                </div>
+                </div>}
 
+                {emptyState ?  "" :
                 <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1827,6 +1852,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <TextField
                     name="totalkm1"
                     value={calculateTotalKilometers()}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     onChange={handleChange}
                     label="Total KM"
                     id="totalkm1"
@@ -1834,7 +1860,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size='small'
                     autoComplete="password"
                   />
-                </div>
+                </div> }
 
 
 
@@ -1853,6 +1879,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
 
+               {emptyState ?  "" :
                 <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faStamp} />
@@ -1881,12 +1908,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                         vendor_vpermettovendor: value, vpermettovendor: value
                       });
                     }}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     label="Permit"
                     id="permit"
                     size="small"
                     autoComplete="password"
                   />
-                </div>
+                </div> }
                 {/* <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faSquareParking} />
@@ -1902,6 +1930,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
 
+               {emptyState ?  "" :
                 <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faSquareParking} />
@@ -1927,12 +1956,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                         vendorparking: value,
                       }));
                     }}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     label="Parking"
                     id="parking"
                     size="small"
                     autoComplete="password"
                   />
-                </div>
+                </div>}
                 {/* <div className="input">
                   <div className="icone">
                     <TollTwoToneIcon color="action" />
@@ -1948,6 +1978,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
 
+               {emptyState ?  "" :
                 <div className="input">
                   <div className="icone">
                     <TollTwoToneIcon color="action" />
@@ -1973,12 +2004,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                         vendortoll: value,
                       }));
                     }}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     label="Toll"
                     id="toll"
                     size="small"
                     autoComplete="password"
                   />
-                </div>
+                </div>}
 
                 <React.Fragment>
                   <Dialog
@@ -3230,6 +3262,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
 
+               {emptyState ?  "" :
                 <div className="input">
                   <div className="icone">
                     <BackupTableSharpIcon color="action" />
@@ -3245,11 +3278,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                     //     vendor_vpermettovendor: e.target.value,
                     //   });
                     // }}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     label="Vendor permit"
                     id="vpermettovendor"
                     autoComplete="password"
                   />
-                </div>
+                </div>}
+
+                {emptyState ?  "" :
                 <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faSquareParking} />
@@ -3262,11 +3298,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                     //   handleChange(e)
                     //   setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
                     // }}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     label="Vendor Parking"
                     id="vendorparking"
                     autoComplete="password"
                   />
-                </div>
+                </div> }
+
+                {emptyState ?  "" :
                 <div className="input">
                   <div className="icone">
                     <MinorCrashSharpIcon color="action" />
@@ -3279,11 +3318,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                     //   handleChange(e)
                     //   setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
                     // }}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     label="Vendor Toll"
                     id="vendor-vendortoll"
                     autoComplete="password"
                   />
-                </div>
+                </div> }
 
 
 

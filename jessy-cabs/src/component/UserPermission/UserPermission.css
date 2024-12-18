@@ -62,7 +62,8 @@
 } */
 
 .user-permission-table-first-row {
-    padding: 3px 5px;
+    /* padding: 3px 5px; */
+    padding: 20px 10px;
 }
 
 .user-permission-even-no-rows {

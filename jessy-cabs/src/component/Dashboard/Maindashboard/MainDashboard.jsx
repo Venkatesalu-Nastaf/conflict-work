@@ -76,7 +76,8 @@ const MainDashboard = () => {
       if (e) {
         e.preventDefault();
       }
-      localStorage.removeItem("auth");
+      // localStorage.removeItem("auth");
+      localStorage.setItem("auth",false);
       localStorage.removeItem("username");
       localStorage.removeItem("useridno");
       localStorage.removeItem("selectedImage");
@@ -146,7 +147,8 @@ const MainDashboard = () => {
 
       if (expiretime && Number(expiretime) < Date.now()) {
         // console.log("logout");
-        localStorage.removeItem("auth");
+        // localStorage.removeItem("auth");
+        localStorage.setItem("auth",false);
         handleLogoutdialog();
       }
       // console.log("timeout");

@@ -426,7 +426,8 @@ const Sidebar = () => {
       if (e) {
         e.preventDefault();
       }
-      localStorage.removeItem("auth");
+      // localStorage.removeItem("auth");
+      localStorage.setItem("auth",false);
       localStorage.removeItem("username");
       localStorage.removeItem("useridno");
       localStorage.removeItem("selectedImage");

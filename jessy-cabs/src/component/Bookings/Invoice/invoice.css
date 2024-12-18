@@ -226,6 +226,10 @@ header img {
 .total-values {
   display: flex;
 }
+.total-values-hcl {
+  display: flex;
+  margin-bottom: 90%;
+}
 
 .total-values #Totals {
   margin: 10px;
@@ -281,10 +285,11 @@ header img {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  margin-bottom: 0%;
 }
 
 .tripsheet-location-img img {
-  height: 300px;
+  height: 250px;
   width: 100%;
 }
 

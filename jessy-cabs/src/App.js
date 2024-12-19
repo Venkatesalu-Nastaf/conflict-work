@@ -195,7 +195,9 @@ function App() {
 
   useEffect(() => {
     const auth = localStorage.getItem("auth");
-    if (auth === null || auth === undefined) {
+    console.log(auth,typeof(auth),"auth")
+    // if (auth === null || auth === undefined) {
+      if (auth === "false") {
       setIsLoading(false)
       navigate('/', { replace: true });
       return; 
@@ -206,7 +208,7 @@ function App() {
     }, 3500);
   
     // Check if the user is authenticated
-    if (auth) {
+    if (auth === "true") {
       // Keep loading if permissions are empty or undefined
       if (!permissions || permissions.length === 0) {
         setIsLoading(true);
@@ -219,6 +221,7 @@ function App() {
   
     // Handle redirection once loading is complete
     if (!isLoading && location.pathname !== '/') {
+      console.log("enetr")
       if (location.pathname !== window.location.pathname) {
         navigate(location.pathname, { replace: true });
       }

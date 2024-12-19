@@ -178,11 +178,11 @@ router.post('/tripsheet-add', (req, res) => {
         startdate,
         closedate,
         shedInDate,
-        totaldays:parseInt(totaldays) || 0,
+        totaldays: parseInt(totaldays) || 0,
         employeeno,
         reporttime,
-        starttime:starttime || null,
-        closetime:closetime || null,
+        starttime: starttime || null,
+        closetime: closetime || null,
         additionaltime,
         advancepaidtovendor,
         customercode,
@@ -215,18 +215,18 @@ router.post('/tripsheet-add', (req, res) => {
         minHour,
         minKM,
         calcPackage,
-        extraHR:parseInt(extraHR || 0) || 0,
-        extraKM:parseInt(extraKM || 0) || 0,
-        package_amount:parseInt(package_amount || 0) || 0,
-        extrakm_amount:parseInt(extrakm_amount || 0) || 0,
-        extrahr_amount:parseInt(extrahr_amount || 0) || 0,
+        extraHR: parseInt(extraHR || 0) || 0,
+        extraKM: parseInt(extraKM || 0) || 0,
+        package_amount: parseInt(package_amount || 0) || 0,
+        extrakm_amount: parseInt(extrakm_amount || 0) || 0,
+        extrahr_amount: parseInt(extrahr_amount || 0) || 0,
         ex_kmAmount,
         ex_hrAmount,
-        nightBta:parseInt(nightBta || 0) || 0,
-        nightCount:parseInt(nightCount || 0) || 0,
+        nightBta: parseInt(nightBta || 0) || 0,
+        nightCount: parseInt(nightCount || 0) || 0,
         night_totalAmount,
-        driverBeta:parseInt(driverBeta || 0) || 0,
-        driverbeta_Count:parseInt(driverbeta_Count || 0) || 0,
+        driverBeta: parseInt(driverBeta || 0) || 0,
+        driverbeta_Count: parseInt(driverbeta_Count || 0) || 0,
         driverBeta_amount,
         totalcalcAmount,
         nightThrs,
@@ -261,7 +261,7 @@ router.post('/tripsheet-add', (req, res) => {
         vendortotalkm,
         vendorRemarks,
         Vendor_Calcpackage,
-        Vendor_rateAmount:parseInt(Vendor_rateAmount || 0) || 0,
+        Vendor_rateAmount: parseInt(Vendor_rateAmount || 0) || 0,
         Vendor_ExtraKms,
         Vendor_ExtraAmountKms,
         Vendor_totalAmountKms,
@@ -277,11 +277,11 @@ router.post('/tripsheet-add', (req, res) => {
         Vendor_FULLTotalAmount,
         TotalTimeWithoutAddHours,
         Hybriddata,
-        TimeToggleData,VendorTimeToggle,HclMaxConflctdata,
+        TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
         Hcldatakmvalue
     }
-    console.log(addCustomerData,'tripsheetadddata');
-    
+    console.log(addCustomerData, 'tripsheetadddata');
+
     // Assuming 'startdate' is in ISO 8601 format
     // const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
     const formattedStartDate = moment(startdate).format('DD-MM-YYYY');
@@ -296,8 +296,8 @@ router.post('/tripsheet-add', (req, res) => {
     db.query('INSERT INTO tripsheet SET ?', addCustomerData, (err, result) => {
 
         if (err) {
-            console.log(err,'error');
-            
+            console.log(err, 'error');
+
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
         if (result.affectedRows > 0) {
@@ -486,7 +486,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_Bata,
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
-        Vendor_FULLTotalAmount,TotalTimeWithoutAddHours,Hybriddata,TimeToggleData,VendorTimeToggle,HclMaxConflctdata,
+        Vendor_FULLTotalAmount, TotalTimeWithoutAddHours, Hybriddata, TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
         Hcldatakmvalue } = req.body
 
 
@@ -619,7 +619,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
-        TotalTimeWithoutAddHours,Hybriddata,TimeToggleData,VendorTimeToggle,HclMaxConflctdata,
+        TotalTimeWithoutAddHours, Hybriddata, TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
         Hcldatakmvalue
     }
     // console.log(updatedCustomerData,"llll")
@@ -2137,14 +2137,14 @@ router.get('/get-CancelTripDatanewdatatry/:VehicleNo', (req, res) => {
     console.log(vehicleNo, "nooo")
     // const status = 'Transfer_Closed';
     // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
-//  sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
+    //  sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
     sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled'  and Hybriddata = 0`
     db.query(sql, [vehicleNo], (err, result) => {
         if (err) {
             console.log("err", err)
             res.json({ message: "error fetching data", success: false })
         }
-    //   console.log(result.length,"lemmmmmmmmm")
+        //   console.log(result.length,"lemmmmmmmmm")
         if (result) {
             res.status(200).json(result)
         }
@@ -2157,9 +2157,9 @@ router.get('/get-CancelTripDataforHcl/:VehicleNo', (req, res) => {
     console.log(vehicleNo, "nooo")
     // const status = 'Transfer_Closed';
     // sql = select * from tripsheet where vehRegNo=? and (status='Transfer_Closed' ||status='Covering_Closed' ||status='Closed')
-//  sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
+    //  sql = `select * from tripsheet where vehRegNo=? and status !='Cancelled' `
     // sql = `SELECT  COALESCE(MAX(Hcldatakmvalue), 0)  AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1`
-  sql = `SELECT tripid, MAX(CAST(Hcldatakmvalue AS UNSIGNED)) AS totalCloseKm
+    sql = `SELECT tripid, MAX(CAST(Hcldatakmvalue AS UNSIGNED)) AS totalCloseKm
 FROM tripsheet
 WHERE vehRegNo = ? 
   AND status != 'Cancelled' 
@@ -2169,7 +2169,7 @@ WHERE vehRegNo = ?
 GROUP BY tripid
 ORDER BY totalCloseKm DESC
 LIMIT 1`
-        // sql = `SELECT  tripid, MAX(CAST(Hcldatakmvalue AS UNSIGNED))  AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1 GROUP BY tripid`
+    // sql = `SELECT  tripid, MAX(CAST(Hcldatakmvalue AS UNSIGNED))  AS totalCloseKm  from tripsheet where vehRegNo=? and status !='Cancelled' and  closekm is not null  and closekm != "" and Hybriddata = 1 GROUP BY tripid`
     db.query(sql, [vehicleNo], (err, result) => {
         if (err) {
             console.log("err", err)
@@ -2418,9 +2418,9 @@ router.get('/signaturedataurltrip/:tripid', (req, res) => {
 })
 router.post("/uploadtollandparkinglink", (req, res) => {
     const { toll, parking, tripid } = req.body;
-    const query = 'UPDATE tripsheet SET toll = ?, parking = ? WHERE tripid = ?';
+    const query = 'UPDATE tripsheet SET toll = ?, parking = ?, vendorparking = ?,vendortoll = ? WHERE tripid = ?';
 
-    db.query(query, [toll, parking, tripid], (err, results) => {
+    db.query(query, [toll,parking,toll,parking,tripid], (err, results) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;
@@ -2499,6 +2499,70 @@ router.get('/Checkstatusandappsclosed/:tripid', (req, res) => {
 
 // })
 
+
+router.post("/signaturelinkExpiredatas", (req, res) => {
+    const { tripid, Expired, signExpired, UploadTollExpired, ExpiredUploadpage } = req.body;
+    console.log(tripid, Expired, signExpired, UploadTollExpired, ExpiredUploadpage, "signaturlink")
+
+    db.query('select  * from SigntureExpireLink where tripid = ?', [tripid], (err1, result) => {
+        if (err1) {
+            console.log(err1, "pp11")
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        }
+        if (result.length > 0) {
+            db.query('Update SigntureExpireLink set Expired = ? ,signExpired = ?, UploadTollExpired = ? , ExpiredUploadpage = ? where tripid = ? ', [Expired, signExpired, UploadTollExpired, ExpiredUploadpage, tripid], (err2, result) => {
+                if (err2) {
+                    console.log(err2, "pp222")
+                    return res.status(500).json({ error: "Failed to insert data into MySQL" });
+                }
+
+                return res.status(200).json({ message: "Data Updated successfully" });
+            });
+        }
+        else {
+            db.query('INSERT INTO SigntureExpireLink (tripid,Expired,signExpired,UploadTollExpired,ExpiredUploadpage) values(?,?,?,?,?)', [tripid, Expired, signExpired, UploadTollExpired, ExpiredUploadpage], (err3, result) => {
+                if (err3) {
+                    console.log(err3, "pp333")
+                    return res.status(500).json({ error: "Failed to insert data into MySQL" });
+                }
+
+                return res.status(200).json({ message: "Data inserted successfully" });
+            });
+        }
+
+    });
+})
+
+
+
+
+router.get('/getlinkExpireddataExppp/:tripid', (req, res) => {
+    const tripid = req.params.tripid;
+    console.log(tripid, "cusssssssssssssssssss")
+    db.query('select  * from SigntureExpireLink where tripid = ?', [tripid], (err, result) => {
+        if (err) {
+            res.status(500).json({ message: 'Internal server error' });
+            return;
+        }
+        console.log(result, "mm")
+        res.status(200).json(result);
+    })
+})
+
+// get userdetails for loginusers
+router.post('/getParticularUserDetails', (req, res) => {
+    const { username } = req.body; // Extract username from the request body
+    console.log(username, "sqlusername");
+
+    const usernamequery = `SELECT stationname FROM usercreation WHERE username = ?`;
+    db.query(usernamequery, [username], (err, result) => {
+        if (err) {
+            console.log(err, "error");
+            return res.status(500).json({ error: "Database error" });
+        }
+        return res.status(200).json(result);
+    });
+});
 
 
 module.exports = router; 

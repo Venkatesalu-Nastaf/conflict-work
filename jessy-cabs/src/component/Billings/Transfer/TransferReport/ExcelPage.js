@@ -421,11 +421,13 @@ const useExeclpage = () => {
 
 
     const handledatazipDownload = async (tripheaderIndex,misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel,customerData,stationData) => {
-        console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation)
+        console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation, " console for datas")
         
         const data = invoice;
         const customername = customer;
         const workbook = new Excel.Workbook();
+        console.log(data,"exceldataaa");
+        
 
         try {
             const zip = new JSZip();
@@ -469,7 +471,11 @@ const useExeclpage = () => {
                     column.alignment = { horizontal: 'center', vertical: 'middle' };
                 });
 
-                data.forEach((singleData, index) => {
+                const uniqueData = data.filter((value, index, self) =>
+                    index === self.findIndex((t) => t.tripid === value.tripid)
+                );
+
+                uniqueData.forEach((singleData, index) => {
 
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
@@ -503,6 +509,8 @@ const useExeclpage = () => {
                         column.width = Math.max(currentColumnWidth, cellLength + 5);
                     });
                 });
+
+            console.log(data , "data of old format excel")
 
 
 
@@ -564,7 +572,11 @@ const useExeclpage = () => {
                     column.alignment = { horizontal: 'center', vertical: 'middle' };
                 });
 
-                data.forEach((singleData, index) => {
+                const uniqueData = data.filter((value, index, self) =>
+                    index === self.findIndex((t) => t.tripid === value.tripid)
+                );
+
+                uniqueData.forEach((singleData, index) => {
                     singleData["SNo"] = index + 1;
                     const location = `${singleData.address1}`;
                     singleData['location'] = location
@@ -594,7 +606,7 @@ const useExeclpage = () => {
                         column.width = Math.max(currentColumnWidth, cellLength + 5);
                     });
                 });
-
+                console.log(data , "data of old format excel")
                 // loop through all of the rows and set the outline style.
                 worksheet.eachRow({ includeEmpty: false }, (row) => {
                     // store each cell to currentCell

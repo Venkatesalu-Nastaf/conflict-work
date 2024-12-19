@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Uploadtollpark.css'
 import { APIURL, Apiurltransfer } from '../../../url';
 import axios from 'axios';
@@ -6,14 +6,8 @@ import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 
 const UploadTollParking = () => {
-  // const [selectedfile,setSelectedfile]=useState("");
-  const [expired, setExpired] = useState(() => {
-    const expiredInSessionStorage =
-      localStorage.getItem("expireuploadpage");
-    return expiredInSessionStorage
-      ? JSON.parse(expiredInSessionStorage)
-      : false;
-  });
+
+  const [expired, setExpired] = useState()
   const apiUrl = APIURL;
   const apiurltransfer = Apiurltransfer;
   const tripId = new URLSearchParams(window.location.search).get("Tripid");
@@ -38,7 +32,36 @@ const UploadTollParking = () => {
       [name]: value,
     }));
   };
+  const tripDATA1 = tripId
+  const linkexpiredata = async () => {
+    // const tripDATA1 = tripId;
+    const tripDATA2 = tripId;
+    try {
+      const response = await axios.get(`${apiUrl}/getlinkExpireddataExppp/${tripDATA2}`);
+      const data = response.data;
+      if (data.length > 0) {
+        const data2 = data[0]?.ExpiredUploadpage;
+        // Safe access with optional chaining
+        console.log(data2, "linkexppp", typeof (data2), "nummm")
+        setExpired(data2);
+      } else {
+        setExpired(1);
+      }
+      // setUploadToll(data3)
+    } catch (err) {
+      console.error("Error fetching expired data:", err);
+      setExpired(1);
+      // Default to true on error
+    }
+  };
 
+  useEffect(() => {
+
+    // Call the function when the component mounts or when tripno/apiUrl changes
+    if (tripDATA1) {
+      linkexpiredata();
+    }
+  }, [tripId, apiUrl]);
 
   const handleFileChange = async (event, documentdata) => {
     // const document1data=documentdata;
@@ -113,7 +136,21 @@ const UploadTollParking = () => {
         toll: inputData.toll,// Include both toll and parking in the request data
         parking: inputData.parking, // Include parking
       };
+      const updatedetails = {
+        tripid: tripId,
+        Expired: true,
+        signExpired: true,
+        UploadTollExpired: true,
+        ExpiredUploadpage: true
+
+
+
+      }
       await axios.post(`${apiUrl}/uploadtollandparkinglink`, updatedData)
+      await axios.post(`${apiUrl}/signaturelinkExpiredatas/`, updatedetails)
+
+
+
       setError(false)
       handleCancel()
       setDocumentTypedata("")
@@ -122,7 +159,7 @@ const UploadTollParking = () => {
       setTimeout(() => {
         setSuccess(false)
         setSuccessMessage()
-        localStorage.setItem("expireuploadpage", true)
+        // localStorage.setItem("expireuploadpage", true)
         setExpired(true)
 
       }, 1600);
@@ -134,6 +171,7 @@ const UploadTollParking = () => {
 
 
   }
+
   if (expired) {
     return <div>This link has expired. Please generate a new link.</div>;
   }
@@ -143,9 +181,9 @@ const UploadTollParking = () => {
     <>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', height: '100vh' }}>
         <h1>Upload Toll Parking</h1>
-        <div style={{ display: "flex", gap: "10px", flexDirection: 'row', alignItems: 'end',  marginBottom: '20px' }}>
+        <div style={{ display: "flex", gap: "10px", flexDirection: 'row', alignItems: 'end', marginBottom: '20px' }}>
           <div style={{ display: 'grid' }}>
-            <h4 style={{margin: '0px'}}>Enter Toll amount:</h4>
+            <h4 style={{ margin: '0px' }}>Enter Toll amount:</h4>
             <TextField id="standard-basic" label="toll amount" name="toll" size='small' value={inputData.toll} onChange={handleInputChange} type="number" />
           </div>
 
@@ -155,8 +193,8 @@ const UploadTollParking = () => {
           </div>
         </div>
         <div style={{ display: "flex", gap: "10px", flexDirection: 'row', alignItems: 'end', marginBottom: '20px' }}>
-          <div style={{display: 'grid'}}>
-            <h4 style={{margin: '0px'}}>Enter parking amount:</h4>
+          <div style={{ display: 'grid' }}>
+            <h4 style={{ margin: '0px' }}>Enter parking amount:</h4>
             <TextField id="standard-basic" label="parking amount" value={inputData.parking} name="parking" size='small' onChange={handleInputChange} type="number" />
           </div>
           <div className="input" style={{ display: 'grid' }}>

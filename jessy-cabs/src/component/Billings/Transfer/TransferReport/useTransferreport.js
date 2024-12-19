@@ -510,7 +510,7 @@ const useTransferreport = () => {
 
     console.log("Row Selection Model (Trip Sheet IDs):", tripsheetid);
   };
-
+  console.log(rowSelectionModel,"rrrrrr",rowSelectionModel.length);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -522,7 +522,8 @@ const useTransferreport = () => {
         const storedCustomer = localStorage.getItem("selectedcustomer");
         // console.log(rowSelectionModel,'Transferreport response')
         // const customer = decodeURIComponent(storedCustomer);
-
+        // console.log(tripID,"exceltrip",rowSelectionModel);
+        
         if (tripid.length >= 1) {
 
           // const response = await fetch(
@@ -531,17 +532,21 @@ const useTransferreport = () => {
           //   )}/${tripid}`
           // );
 
-          const response = await fetch(
+          const response = await axios.get(
             `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
               customer
             )}/${tripID}`
           );
 
 
-          const tripData = await response.json()
+          const tripData =  response.data
+          console.log(tripData,"exceltripppppppppppp");
+          
           const flattenedTripData = tripData.flat();
 
           setPdfzipdata(flattenedTripData)
+        
+          // console.log(flattenedTripData,"trip dtatas ")
           // setSuccess(true)
         }
         else {

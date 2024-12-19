@@ -55,7 +55,6 @@
   /* background-color: var(--glass); */
   margin-top: 10px;
   height: 300px;
-  background-color: red;
 }
 
 .table-EmployeeCreations {
@@ -119,7 +118,6 @@
   overflow: auto;
   padding: 0px 15px 15px 15px;
   margin-top: 10px;
-  background-color: orange;
 }
 
 .user-table-permission {
@@ -143,7 +141,6 @@
 .search-profile {
   display: flex;
   height: 300px;
-  background-color: green;
 }
 
 .user-name-text {
@@ -182,5 +179,26 @@ div .user-name-text , div .user-details-text{
 @media screen and (min-width: 1200px) and (max-width: 1299.99px) {
   .main-content-form-emp-cretion {
       zoom: 87%;
+  }
+}
+
+.main-content-form-emp-cretion {
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: #000;
+  zoom: 90%;
+}
+
+@media screen and (min-width: 1300px) and (max-width: 1424.99px) {
+  .main-content-form-emp-cretion {
+    zoom: 82%;
+  }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1299.99px) {
+  .main-content-form-emp-cretion {
+    zoom: 77%;
   }
 }

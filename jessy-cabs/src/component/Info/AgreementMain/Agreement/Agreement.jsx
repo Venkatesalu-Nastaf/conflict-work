@@ -83,6 +83,7 @@ const Agreement = ({organizationNames}) => {
     success,
     info,
     warning,
+    fromdate,setFromdate,
     // selectedCustomerDatas,
     successMessage,
     customer,
@@ -92,6 +93,8 @@ const Agreement = ({organizationNames}) => {
     warningMessage,
     setSelectedCustomerData,
     infoMessage,
+    toDate,
+    setTodate,
     book,
     handleClick,
     selectAll,
@@ -115,9 +118,7 @@ const Agreement = ({organizationNames}) => {
     dialogOpen,
     setFile,
     // setFromDate,
-    toDate,
-    fromdate,
-    // setToDate,
+  
     setBook,
     handleFileChange,
     fromDate,
@@ -210,27 +211,41 @@ const Agreement = ({organizationNames}) => {
                           )}
                         />
                       </div>
-                                <div className="input">
-                              <div className="icone">
-                                  <CalendarMonthIcon color="action" />
-                              </div>
-                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                  <DemoContainer components={["DatePicker", "DatePicker"]}>
+
+                      {/* <div className="input">
+                      <div className='icone'>
+                                        <CalendarMonthIcon className='ratetype-startdate-icon' />
+                                    </div>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                    <DatePicker
+                                        label="From Date"
+                                        format="DD/MM/YYYY"
+                                        value={fromdate}
+                                        onChange={(date) => setFromdate(date)}
+                                    />
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </div> */}
+
+                      <div className="input">
+                                  <div className="icone">
+                                      <CalendarMonthIcon className="ratetype-startdate-icon" />
+                                  </div>
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
                                       <DatePicker
-                                          id="fromdate"
-                                          className="full-width"
                                           label="From Date"
-                                          name="fromdate"
-                                          value={selectedCustomerData?.fromdate? dayjs(selectedCustomerData.fromdate) : dayjs(fromdate)}
                                           format="DD/MM/YYYY"
+                                          value={dayjs(fromdate)}
                                           onChange={(date) => {
-                                              handleDateChange(date, 'fromdate');
+                                              const formattedDate = dayjs(date).format('DD-MM-YYYY');
+                                              setFromdate(date);
+                                              setBook((prevBook) => ({ ...prevBook, fromdate: formattedDate }));
                                           }}
                                       />
-                                  </DemoContainer>
-                              </LocalizationProvider>
-                          </div>
-
+                                  </LocalizationProvider>
+                              </div>
+                                
 
                               {/* <div className="input">
                                     <div className='icone'>
@@ -293,26 +308,23 @@ const Agreement = ({organizationNames}) => {
                             </LocalizationProvider>
                         </div> */}
 
-                          <div className="input">
-                              <div className="icone">
-                                  <CalendarMonthIcon color="action" />
-                              </div>
-                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                  <DemoContainer components={["DatePicker", "DatePicker"]}>
+                              <div className="input">
+                                  <div className="icone">
+                                      <CalendarMonthIcon className="ratetype-startdate-icon" />
+                                  </div>
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
                                       <DatePicker
-                                          id="toDate"
-                                          className="full-width"
                                           label="To Date"
-                                          name="toDate"
-                                          value={selectedCustomerData?.toDate? dayjs(selectedCustomerData.toDate) : dayjs(toDate)}
                                           format="DD/MM/YYYY"
+                                          value={dayjs(toDate)}
                                           onChange={(date) => {
-                                              handleDateChange(date, 'toDate');
+                                              const formattedDate = dayjs(date).format('DD-MM-YYYY');
+                                              setTodate(date);
+                                              setBook((prevBook) => ({ ...prevBook, toDate: formattedDate }));
                                           }}
                                       />
-                                  </DemoContainer>
-                              </LocalizationProvider>
-                          </div>  
+                                  </LocalizationProvider>
+                              </div> 
 
 
                                 {/* <div className="input">
@@ -369,7 +381,7 @@ const Agreement = ({organizationNames}) => {
                 </div>
                 <TextField
                   size="small"
-                  id="mobileno1"
+                  id="mobileno"
                   className="full-width"
                   label="Mobile"
                   name="mobileno"

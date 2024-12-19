@@ -161,76 +161,178 @@ const storage = multer.diskStorage({
     }
   })
 
+// router.post('/send-emailagreementdata', async (req, res) => {
+//     try {
+//         const { customer, email, toDate, Sendmailauth, Mailauthpass } = req.body;
+//             console.log(customer, email, toDate, Sendmailauth, Mailauthpass, 'hh')
+//         // Create a Nodemailer transporter
+//         const transporter = nodemailer.createTransport({
+//             host: 'smtp.gmail.com',
+//             port: 465,
+//             secure: true,
+//             auth: {
+//                 user: Mailauthpass, // User's email address
+//                 pass: Sendmailauth, // User's email app password
+//             },
+//             tls: {
+//                 rejectUnauthorized: false
+//             }
+//         });
+
+//         // Email content for the owner
+//         const ownerMailOptions = {
+//             from: Mailauthpass,
+//             to: 'sharan1228s@gmail.com', // Set the owner's email address
+//             subject: `${customer} sent you a booking request`,
+//             html: `
+//                 <p>
+//                 Dear ${customer},
+//                 <br>
+//                 I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
+//                 <br><br>
+//                 As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
+//                 <br><br>
+//                 <strong>Here are the key details regarding your renewal:</strong>
+//                 <ul>
+//                     <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
+//                     <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+//                     <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
+//                 </ul>
+//                 <br>
+//                 Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
+//                 <br><br>
+//                 We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
+//                 </p>`,
+//         };
+
+//         // Send email to the owner
+//         await transporter.sendMail(ownerMailOptions);
+
+//         // Email content for the customer
+//         const customerMailOptions = {
+//             from: Mailauthpass,
+//             to: email,
+//             subject: 'Greetings from Jessy Cabs',
+//             html: `
+//                 <p>
+//                 Dear ${customer},
+//                 <br>
+//                 I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
+//                 <br><br>
+//                 As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
+//                 <br><br>
+//                 <strong>Here are the key details regarding your renewal:</strong>
+//                 <ul>
+//                     <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
+//                     <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+//                     <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
+//                 </ul>
+//                 <br>
+//                 Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
+//                 <br><br>
+//                 We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
+//                 </p>`,
+//         };
+
+//         // Send greeting email to the customer
+//         await transporter.sendMail(customerMailOptions);
+
+//         res.status(200).json({ message: 'Email sent successfully' });
+//     } catch (error) {
+//         console.error('Error while sending email:', error);
+//         res.status(500).json({ message: 'An error occurred while sending the email', error: error.message });
+//     }
+// });
+
 router.post('/send-emailagreementdata', async (req, res) => {
-    try {
-        const { customer, email, fromdate, toDate, Sendmailauth, Mailauthpass } = req.body;
-            console.log(customer, email, fromdate, toDate, Sendmailauth, Mailauthpass, 'hh')
-        // Create a Nodemailer transporter
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
-            auth: {
-                user: Sendmailauth, // User's email address
-                pass: Mailauthpass, // User's email app password
-            },
-            tls: {
-                rejectUnauthorized: false
-            }
-        });
+  try {
+      const { customer, email, toDate, Sendmailauth, Mailauthpass } = req.body;
 
-        // Email content for the owner
-        const ownerMailOptions = {
-            from: Sendmailauth,
-            to: 'sharan1228s@gmail.com', // Set the owner's email address
-            subject: `${customer} sent you a booking request`,
-            text: `Guest Name: ${customer}\nEmail: ${email}\nGuest Mobile No: ${fromDate}\nStart Date: ${toDate}`,
-        };
+      console.log(customer, email, toDate, Sendmailauth, Mailauthpass, 'debugging log');
 
-        // Send email to the owner
-        await transporter.sendMail(ownerMailOptions);
+      // Create a Nodemailer transporter
+      const transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: Mailauthpass, // User's email address
+              pass: Sendmailauth, // User's email app password
+          },
+          tls: {
+              rejectUnauthorized: false,
+          },
+      });
 
-        // Email content for the customer
-        const customerMailOptions = {
-            from: Sendmailauth,
-            to: email,
-            subject: 'Greetings from Jessy Cabs',
-            html: `
-                <p>
-                Dear ${customer},
-                <br>
-                I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
-                <br><br>
-                As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
-                <br><br>
-                <strong>Here are the key details regarding your renewal:</strong>
-                <ul>
-                    <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
-                    <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
-                    <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
-                </ul>
-                <br>
-                Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
-                <br><br>
-                We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
-                </p>`,
-        };
+      // Email content for the owner
+      const ownerMailOptions = {
+          from: Mailauthpass,
+          to: 'sharan1228s@gmail.com', // Set the owner's email address
+          subject: `${customer} sent you a booking request`,
+          html: `
+              <p>
+              Dear ${customer},
+              <br>
+              I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
+              <br><br>
+              As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
+              <br><br>
+              <strong>Here are the key details regarding your renewal:</strong>
+              <ul>
+                  <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
+                  <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+                  <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
+              </ul>
+              <br>
+              Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
+              <br><br>
+              We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
+              </p>`,
+      };
 
-        // Send greeting email to the customer
-        await transporter.sendMail(customerMailOptions);
+      // Send email to the owner
+      await transporter.sendMail(ownerMailOptions);
 
-        res.status(200).json({ message: 'Email sent successfully' });
-    } catch (error) {
-        console.error('Error while sending email:', error);
-        res.status(500).json({ message: 'An error occurred while sending the email', error: error.message });
-    }
+      // Email content for the customer
+      const customerMailOptions = {
+          from: Mailauthpass,
+          to: email,
+          subject: 'Greetings from Jessy Cabs',
+          html: `
+              <p>
+              Dear ${customer},
+              <br>
+              I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
+              <br><br>
+              As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
+              <br><br>
+              <strong>Here are the key details regarding your renewal:</strong>
+              <ul>
+                  <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
+                  <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+                  <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
+              </ul>
+              <br>
+              Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
+              <br><br>
+              We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
+              </p>`,
+      };
+
+      // Send greeting email to the customer
+      await transporter.sendMail(customerMailOptions);
+
+      res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+      console.error('Error while sending email:', error);
+      res.status(500).json({ message: 'An error occurred while sending the email', error: error.message });
+  }
 });
+
 
 // router.post('/send-emailagreementdata', async (req, res) => {
 //   try {
-//       const { customer, email, 
-//         // fromdate, toDate
-//        } = req.body;
+//       const { customer, email } = req.body;
 
 //       console.log('Received data:', { customer, email });
 
@@ -240,58 +342,77 @@ router.post('/send-emailagreementdata', async (req, res) => {
 //           port: 465,
 //           secure: true,
 //           auth: {
-//               user: 'accounts@jessycabs.in', // Replace with your email address
-//               pass: 'ufue oqxr zhoc jdmf', // Replace with your email app password
+//               user: 'sharan1228s@gmail.com', // Your email
+//               pass: 'uqbh faoi ipum dhqb', // App-specific password
 //           },
 //           tls: {
 //               rejectUnauthorized: false,
 //           },
 //       });
 
-//       // Email content for the owner
-//       const ownerMailOptions = {
-//           from: 'accounts@jessycabs.in', // Replace with your email address
-//           to: 'sharan1228s@gmail.com', // Owner's email address
-//           subject: `${customer} sent you a booking request`,
-//           text: `Guest Name: ${customer}\nEmail: ${email}`,
+//       const sendEmails = async (customer, email, fromdate, toDate) => {
+//           try {
+//               // Email to owner
+//               const ownerMailOptions = {
+//                   from: 'sharan1228s@gmail.com',
+//                   to: 'sharan@nastaf.com',
+//                   subject: `${customer} sent you a booking request`,
+//                   text: `Guest Name: ${customer}\nEmail: ${email}\nGuest Mobile No: ${fromdate}\nStart Date: ${toDate}`,
+//               };
+//               await transporter.sendMail(ownerMailOptions);
+
+//               // Email to customer
+//               const customerMailOptions = {
+//                   from: 'sharan1228s@gmail.com',
+//                   to: email,
+//                   subject: 'Greetings from Jessy Cabs',
+//                   html: `
+//                       <p>
+//                       Dear ${customer},
+//                       <br>
+//                       I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
+//                       <br><br>
+//                       As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
+//                       <br><br>
+//                       <strong>Here are the key details regarding your renewal:</strong>
+//                       <ul>
+//                           <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
+//                           <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+//                           <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
+//                       </ul>
+//                       <br>
+//                       Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
+//                       <br><br>
+//                       We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
+//                       </p>`,
+//               };
+//               await transporter.sendMail(customerMailOptions);
+
+//               console.log('Emails sent successfully');
+//           } catch (error) {
+//               console.error('Error while sending email:', error);
+//           }
 //       };
 
-//       // Send email to the owner
-//       await transporter.sendMail(ownerMailOptions);
+//       // Schedule the email task
+//       cron.schedule('0 9 * * *', async () => { // Runs daily at 9 AM
+//           const today = new Date();
+//           const fromDate = new Date('12/05/2025');
+//           const toDate = new Date('12/06/2025');
 
-//       // Email content for the customer
-//       const customerMailOptions = {
-//           from: 'accounts@jessycabs.in', // Replace with your email address
-//           to: email,
-//           subject: 'Greetings from Jessy Cabs',
-//           html: `
-//               <p>
-//               Dear ${customer},
-//               <br>
-//               I hope this message finds you well. We greatly value your association with <strong>JESSYCABS</strong> and are committed to providing you with seamless and exceptional service for all your transport needs.
-//               <br><br>
-//               As per our records, your current agreement with us is set to expire on <strong></strong>. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
-//               <br><br>
-//               <strong>Here are the key details regarding your renewal:</strong>
-//               <ul>
-//                   <li><strong>Agreement Expiry Date:</strong></li>
-//                   <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
-//                   <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
-//               </ul>
-//               <br>
-//               Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
-//               <br><br>
-//               We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
-//               </p>`,
-//       };
+//           if (today >= fromDate && today <= toDate) {
+//               const customer = 'Customer Name';
+//               const email = 'customer@example.com';
+//               const startDate = '12/12/2024';
+//               const endDate = '12/06/2025';
+//               await sendEmails(customer, email, startDate, endDate);
+//           }
+//       });
 
-//       // Send greeting email to the customer
-//       await transporter.sendMail(customerMailOptions);
-
-//       res.status(200).json({ message: 'Emails sent successfully' });
+//       res.status(200).send('Email scheduling task created successfully.');
 //   } catch (error) {
-//       console.error('Error while sending email:', error.message);
-//       res.status(500).json({ message: 'An error occurred while sending the email', error: error.message });
+//       console.error('Error in /send-emailagreementdata:', error);
+//       res.status(500).send('An error occurred.');
 //   }
 // });
 

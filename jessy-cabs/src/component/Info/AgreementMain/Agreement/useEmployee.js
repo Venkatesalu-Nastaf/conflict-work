@@ -7,7 +7,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
-import { toDate } from 'validator';
+// import { toDate } from 'validator';
 
 const useEmployee = () => {
     const apiUrl = APIURL;
@@ -23,11 +23,12 @@ const useEmployee = () => {
     const [selectAll, setSelectAll] = useState(false);
     const [success, setSuccess] = useState(false);
     const [organizationNames, setOrganizationNames] = useState([]);
+    const [fromdate, setFromdate] = useState(dayjs())
+    const [toDate, setTodate] = useState(dayjs())
     const [info, setInfo] = useState(false);
     const [warning, setWarning] = useState(false);
     // const [fromDate, setFromDate] = useState(dayjs());
     const [checkbox, setCheckbox] = useState([]);
-    const [ToDate, setToDate] = useState(dayjs());
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
@@ -580,8 +581,8 @@ const useEmployee = () => {
             const dataToSend = {
                 customer:book.customer,
                 email: book.email,
-                fromDate:selectedCustomerData.fromdate,
-                toDate:selectedCustomerData.toDate,
+                fromDate:fromdate,
+                toDate:book.toDate,
                 Sendmailauth: organistaionsendmail.Sendmailauth,
                 Mailauthpass: organistaionsendmail.Mailauthpass,
                 // templateMessageData
@@ -798,6 +799,29 @@ const useEmployee = () => {
     //     fetchOrganizationnames()
     // }, [apiUrl])
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                      console.log(userDataArray,'userdata');
+                    if (userDataArray.length > 0) {
+                        setOrganisationSendEmail(userDataArray[0])
+                        // setDatatrigger(!datatrigger)
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }   
+                }
+            }
+            catch {
+            }
+        };
+        fetchData();
+    }, [apiUrl]);
+
     useEffect(() => {
         const fetchOrganizationNames = async () => {
           try {
@@ -993,9 +1017,7 @@ const useEmployee = () => {
         searchText,
         setSearchText,
         // fromDate,setFromDate,
-        ToDate,
         handleFileChange,
-        setToDate,
         setCustomerPDF,
         handleShowAll,
         organizationNames,
@@ -1011,7 +1033,10 @@ const useEmployee = () => {
         isEditMode,
         handleEdit,
         handleContextMenu,
+        toDate,
+        setTodate,
         handleAutocompleteChange,
+        fromdate,setFromdate,
         handleimagedelete,
         checkbox,
         setCheckbox,

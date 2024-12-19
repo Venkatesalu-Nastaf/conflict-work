@@ -170,7 +170,7 @@ setSationNameforUser(updatedData);
 
   return (
     <div className="EmployeeCreation-main">
-      <div className='main-content-form'>
+      <div className='main-content-form-emp-cretion'>
         <div className="EmployeeCreation-form-container">
           <form onSubmit={handleClick}>
             <div className="EmployeeCreation-header">

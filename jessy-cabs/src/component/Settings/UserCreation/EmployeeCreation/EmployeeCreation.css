@@ -55,6 +55,7 @@
   /* background-color: var(--glass); */
   margin-top: 10px;
   height: 300px;
+  background-color: red;
 }
 
 .table-EmployeeCreations {
@@ -118,6 +119,7 @@
   overflow: auto;
   padding: 0px 15px 15px 15px;
   margin-top: 10px;
+  background-color: orange;
 }
 
 .user-table-permission {
@@ -140,7 +142,8 @@
 
 .search-profile {
   display: flex;
-  height: 400px;
+  height: 300px;
+  background-color: green;
 }
 
 .user-name-text {
@@ -175,3 +178,9 @@ div .user-name-text , div .user-details-text{
 /* .user-creation-station-select-main{
   width: 360px !important;
 } */
+
+@media screen and (min-width: 1200px) and (max-width: 1299.99px) {
+  .main-content-form-emp-cretion {
+      zoom: 87%;
+  }
+}

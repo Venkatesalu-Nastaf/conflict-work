@@ -478,13 +478,28 @@ app.put('/tripsheet_uploadsclosekm/:id/:data', uploadclosekm.single('image'), (r
 });
 
 app.put('/tripsheet-updatekm/:tripid', (req, res) => {
-  const { startkm, closekm } = req.body; 
+  const { startkm, closekm ,Hcl,duty} = req.body; 
   const tripid = req.params.tripid; 
+  // let sql = "UPDATE tripsheet SET startkm = ?, closekm = ? WHERE tripid = ?"
+    
+  let sql = "";
+  let values = [];
+  
+  if (Hcl === 1 && duty === "Outstation") {
+    // First condition
+    sql = "UPDATE tripsheet SET startkm = ?, closekm = ? WHERE tripid = ?";
+    values = [startkm, closekm,tripid];
+  } else if (Hcl === 1 && duty !== "Outstation") {
+    // Second condition
+    sql = "UPDATE tripsheet SET startkm = ?,closekm = ?, vendorshedoutkm = ?,vendorshedinkm = ? WHERE tripid = ?";
+    values = [startkm, closekm,startkm, closekm,tripid];
+  } else {
+    // Default case or other conditions
+    sql = "UPDATE tripsheet SET startkm = ?, closekm = ? WHERE tripid = ?";
+    values = [startkm, closekm,tripid];
+  }
 
-  db.query(
-    'UPDATE tripsheet SET startkm = ?, closekm = ? WHERE tripid = ?',
-    [startkm, closekm, tripid],
-    (err, result) => {
+  db.query(sql,values,(err, result) => {
       if (err) {
         console.error('Error updating tripsheet:', err);
         return res.status(500).send('Failed to update');
@@ -494,9 +509,6 @@ app.put('/tripsheet-updatekm/:tripid', (req, res) => {
     }
   );
 });
-
-
-
 
 
 

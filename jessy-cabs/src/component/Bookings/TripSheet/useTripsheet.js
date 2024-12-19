@@ -44,7 +44,7 @@ const useTripsheet = () => {
     const [formData, setFormData] = useState({});  ////-------------
     const [calcCheck, setCalcCheck] = useState(false);
     const location = useLocation();
-    const [selectedStatus, setSelectedStatus] = useState('Opened');
+    const [selectedStatus, setSelectedStatus] = useState('');
     const [error, setError] = useState(false);
     const [shedKilometers, setShedKilometers] = useState('');
     const [additionalTime, setAdditionalTime] = useState('');
@@ -225,6 +225,7 @@ const useTripsheet = () => {
 
     // Hide some field for tripsheet
     const [hideField, setHideField] = useState(null)
+    const [editButtonStatusCheck, SetEditButtonStatusCheck] = useState(false)
 
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
@@ -233,8 +234,8 @@ const useTripsheet = () => {
 
     // const [isentertripID,setisenterTripid] = useState(false)
 
-    const [temporaryStatus,setTemporaryStatus] = useState(null);
-    const [emptyState,setEmptyState] = useState(false);
+    const [temporaryStatus, setTemporaryStatus] = useState(null);
+    const [emptyState, setEmptyState] = useState(false);
 
     const [routeData, setRouteData] = useState('');
     const [tripSheetData, setTripSheetData] = useState({
@@ -1552,9 +1553,9 @@ const useTripsheet = () => {
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
 
-        if (name === "status") { // Or any specific criteria
-            setSelectedStatus(selectedOption || 'Opened');
-        }
+        // if (name === "status") { // Or any specific criteria
+        //     setSelectedStatus(selectedOption || 'Opened');
+        // }
 
         setBook((prevBook) => ({
             ...prevBook,
@@ -3652,7 +3653,8 @@ const useTripsheet = () => {
                     setFormData({})
                     setFormValues({})
                     // setBook({})
-                    setErrorMessage(`${error.response.data.error}`);
+                    // setErrorMessage(`${error.response.data.error}`);
+                    setErrorMessage(" You Don't Have Accesss To This Tripsheet Based On Service Station");
                 } else {
                     setError(true);
                     // setErrorMessage("Failed to fetch data");
@@ -5256,18 +5258,18 @@ const useTripsheet = () => {
         // Get the div element by its ID
 
         const updatedetails = {
-            tripid : ttrip,
-            Expired : false,
-            signExpired : false,
-            UploadTollExpired : false,
-            ExpiredUploadpage : false
+            tripid: ttrip,
+            Expired: false,
+            signExpired: false,
+            UploadTollExpired: false,
+            ExpiredUploadpage: false
         }
 
 
         setTimeout(() => {
             setSignaturtCopied(false)
         }, 2000)
-        await axios.post(`${apiUrl}/signaturelinkExpiredatas/`,updatedetails)
+        await axios.post(`${apiUrl}/signaturelinkExpiredatas/`, updatedetails)
 
     }
 
@@ -6190,7 +6192,9 @@ const useTripsheet = () => {
 
     const loginusername = localStorage.getItem("username")
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
-    const statusCheck =  formData.status || selectedCustomerData.status || book.status;
+    const statusCheck = formData.status || selectedCustomerData.status || book.status;
+    const superAdminAccess = localStorage.getItem("SuperAdmin")
+console.log(superAdminAccess,"ssssssssss",statusCheck);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -6200,40 +6204,71 @@ const useTripsheet = () => {
                 });
                 const data = response.data;
                 const station = data?.map(li => li.stationname.split(",")).flat();
-                console.log(station,"userstation444444",statusCheck,station.includes('Chennai'));
+                console.log(station, "userstation444444", statusCheck, station.includes('Chennai'));
                 if (statusCheck === "Temporary Closed" && (station.includes("All") || station.includes("Chennai"))) {
-                    
+
                     setTemporaryStatus(false);
                     return
                 }
-                else if(statusCheck === "Temporary Closed"){
+                else if (statusCheck === "Temporary Closed") {
 
                     setTemporaryStatus(true)
                     setEmptyState(false)
                     return
                 }
-                else if(statusCheck === 'Closed' && (station.includes('Chennai') || station.includes('All'))){
-                    
+                else if (statusCheck === 'Closed' && (station.includes('Chennai') || station.includes('All'))) {
+
                     setTemporaryStatus(true)
                     setHideField(true)
                 }
-                else if(statusCheck === "Closed"){
+                else if ((statusCheck === "Closed" || statusCheck === "Billed") && superAdminAccess === "0") {
                     setEmptyState(true)
                     return
                 }
-                else if(statusCheck !== "Closed"){
+                else if (statusCheck !== "Closed") {
                     setEmptyState(false)
+                    setTemporaryStatus(false)
                     return
                 }
-    
+
             } catch (error) {
                 console.error('Error fetching user details:', error);
             }
         };
         fetchData();
-    }, [loginusername, apiUrl,tripno,statusCheck]);
+    }, [loginusername, apiUrl, tripno, statusCheck]);
+    // Edit Button Hide
 
-
+    const statuschecking = selectedStatus;
+    // console.log(statuschecking,'status checking',selectedCustomerData.status,book.status,selectedStatus);
+    const EditButtonHide = async() => {
+        try {
+            const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
+                username: loginusername,
+            });
+            const data = response.data;
+            const station = data?.map(li => li.stationname.split(",")).flat();
+        if (statuschecking === "Closed" && ((station.includes('Chennai') || station.includes('All')))) {
+            SetEditButtonStatusCheck(true)
+        }
+        else if(statuschecking === "Temporary Closed" && ((station.includes('Chennai') || station.includes('All'))) ){
+            SetEditButtonStatusCheck(false)
+        }
+        else if(statuschecking === "Temporary Closed" || statuschecking === "Closed" || statuschecking === "Billed"){
+            SetEditButtonStatusCheck(true)
+        }
+        else if(statuschecking === "Opened"){
+            SetEditButtonStatusCheck(false)
+        }
+    }
+    catch(err){
+        console.log(err,"error");
+        
+    }
+    }
+    useEffect(() => {
+       EditButtonHide()
+    },[statuschecking])
 
     // console.log(TripReportTime, "reporttimeee", dayjs(TripReportDate).format('DD-MM-YYYY'), CurrentDate, dayjs());
     return {
@@ -6368,7 +6403,7 @@ const useTripsheet = () => {
         handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate, groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
-        hideField,temporaryStatus,emptyState
+        hideField, temporaryStatus, emptyState, editButtonStatusCheck
 
     };
 };

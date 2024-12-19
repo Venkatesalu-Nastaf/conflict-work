@@ -201,8 +201,10 @@ const SignatureGenerate = () => {
   //   };
 
   const handleDataUpload = async () => {
-    const tripid = fulldetails[0]?.tripid; // Replace with actual trip ID
-    const updatedCustomerData = { startkm, closekm };
+    const tripid = fulldetails[0]?.tripid; // Replace with actual trip 
+    const Hcl = fulldetails[0]?.Hybriddata;// Replace with actual trip ID
+    const duty = fulldetails[0]?.duty;
+    const updatedCustomerData = { startkm, closekm, Hcl, duty };
     console.log(updatedCustomerData, ' data of the customer');
 
     try {

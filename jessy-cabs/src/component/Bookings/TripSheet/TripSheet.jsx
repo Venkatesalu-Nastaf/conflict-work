@@ -264,7 +264,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSuccessMessage,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState
+    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState,editButtonStatusCheck
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -769,6 +769,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     className='tripsheet-top-division-status-main'
                     freeSolo
                     sx={{ width: "100%" }}
+                    disabled={editButtonStatusCheck && superAdminAccess === "0"}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
                     value={Status.find((option) => option.optionvalue)?.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                     options={Status.map((option) => ({
@@ -792,6 +793,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     className='tripsheet-top-division-status-main'
                     freeSolo
                     sx={{ width: "100%" }}
+                    disabled={editButtonStatusCheck && superAdminAccess === "0"}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "apps")}
                     value={Apps.find((option) => option.optionvalue)?.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
                     options={Apps.map((option) => ({
@@ -1267,7 +1269,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           label="Shed Out Date"
-                          disabled={hideField && superAdminAccess === "0" || temporaryStatus}
+                          disabled={hideField && superAdminAccess === "0" && temporaryStatus}
                           id="shedOutDate"
                           value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
                           format="DD/MM/YYYY"
@@ -1294,7 +1296,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           label="Report Date"
-                          disabled={hideField && superAdminAccess === "0" || temporaryStatus}
+                          disabled={hideField && superAdminAccess === "0" && temporaryStatus}
                           id="startdate"
                           value={
                             formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
@@ -1458,7 +1460,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <input
                         type="time"
                         name="reporttime"
-                        disabled={hideField && superAdminAccess === "0" || temporaryStatus}
+                        disabled={hideField && superAdminAccess === "0" && temporaryStatus}
                         value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                         onChange={(event) => {
                           setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
@@ -1497,7 +1499,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <input
                       type="time"
                       id="starttime"
-                      disabled={hideField && superAdminAccess === "0" || temporaryStatus}
+                      disabled={hideField && superAdminAccess === "0" && temporaryStatus}
                       name="starttime"
                       value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
                       onChange={(event) => {
@@ -3364,7 +3366,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     autoComplete="password"
                   />
                 </div> */}
-
+                {emptyState ? "" :
                 <div className="input">
                   <div className="icone">
                     <AccountBalanceWalletTwoToneIcon color="action" />
@@ -3378,6 +3380,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       // handleChange(e)
                       setVendorinfodata({ ...vendorinfo, fuelamount: e.target.value })
                     }}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     label="Fuel Amount"
                     id="fuelamount"
                     autoComplete="password"
@@ -3397,8 +3400,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                           autoComplete="password"
                           style={{marginBottom:'20px'}}
                         /> */}
-                </div>
+                </div> }
 
+                {emptyState ? "" :
                 <div className="input">
                   <div className="icone">
                     <CurrencyRupeeTwoToneIcon color="action" />
@@ -3412,12 +3416,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                       handleChange(e)
                       setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value, advancepaidtovendor: e.target.value })
                     }}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     label="Vendor Advance"
                     id="advance-paid-to-vendor"
                     autoComplete="password"
                     style={{ marginBottom: '20px' }}
                   />
-                </div>
+                </div>}
+
                 <div className="input">
                   <div className="icone">
                     <PaymentsIcon color="action" />
@@ -3462,7 +3468,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="input-tripsheet-btns">
                     {isEditMode ? (<>
                       {/* <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button> */}
-                      <LoadingButton loading={isEditload} variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</LoadingButton>
+                      {editButtonStatusCheck && superAdminAccess==="0" ? "" : <LoadingButton loading={isEditload} variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</LoadingButton>}
                     </>
                     ) : (
                       // <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>

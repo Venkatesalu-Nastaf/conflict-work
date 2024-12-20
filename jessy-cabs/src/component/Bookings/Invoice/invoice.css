@@ -48,6 +48,10 @@
   font-size: 14px;
 }
 
+.invoice-contact-details{
+margin: 0%;
+}
+
 /* heading */
 .invoice-wrapper header {
   margin: 0 0 3em;
@@ -228,7 +232,7 @@ header img {
 }
 .total-values-hcl {
   display: flex;
-  margin-bottom: 90%;
+  /* margin-bottom: 50%; */
 }
 
 .total-values #Totals {
@@ -289,13 +293,25 @@ header img {
 }
 
 .tripsheet-location-img img {
-  height: 250px;
+  height: 230px;
   width: 100%;
 }
 
 .tripsheet-RouteSummary {
+  /* margin-top: -30%; */
+  position: relative;
+  top:30%;
   width: 80%;
   font-size: 13px;
+  margin: 0 auto 0 auto;
+}
+.tripsheet-RouteSummary-normal{
+  position: relative;
+  top:30%;
+  width: 80%;
+  font-size: 13px;
+  margin: 30px auto 30px auto;
+
 }
 
 .tripsheet-RouteSummary p {
@@ -308,7 +324,10 @@ header img {
 }
 
 .attached-toll {
-  margin-top: 110px;
+  /* margin-top: 80px; */
+  /* margin-top: -10px; */
+  margin-bottom: 60px;
+  margin-top: -40px;
 }
 
 .attached-toll img {
@@ -367,4 +386,18 @@ header img {
     page-break-before: always;
   }
 }
+/* .upload-img{
+margin: 25px auto ;
+width: 500px !important;
+height: 730px !important;
+/* background-color: green; */
+/* } */ 
+.upload-img{
+  margin: 18% auto 20% auto;
+  width: 300px !important;
+  height: 285px !important;
+  /* background-color: green; */
+  }
+
+
 

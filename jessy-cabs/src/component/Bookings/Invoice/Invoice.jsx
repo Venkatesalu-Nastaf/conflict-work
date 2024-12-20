@@ -200,7 +200,7 @@ const onDocumentLoadSuccess = ({ numPages }) => {
             </ol>
           </div> */}
           {routeData.length > 0 && (
-            <div className="tripsheet-RouteSummary">
+            <div className="tripsheet-RouteSummary-normal">
               <h2>Route Summary</h2>
               <ol type="1">
                 {routeData.map((data, index) => (
@@ -218,7 +218,7 @@ const onDocumentLoadSuccess = ({ numPages }) => {
               ))}
             </ol>
           </div> */}
-           <div className="attached-toll" ref={targetRef}>
+           <div className="attached-toll">
         <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
           {Array.isArray(attachedImage) &&
             attachedImage.map((file, index) => {
@@ -305,8 +305,19 @@ const onDocumentLoadSuccess = ({ numPages }) => {
 
         </article>
       </div>
-      {/* <Button onClick={() => generatePDF(targetRef, { filename: 'E-tripsheet.pdf' })}>Print</Button> */}
-      <Button
+      <Button onClick={() => generatePDF(targetRef, { filename: 'E-tripsheet.pdf',resolution:3,
+      method:'save',
+      page:{
+        margin: { top: 10, right: 10, bottom: 38, left: 10 },
+        format: "a4",
+        orientation: "portrait",
+      },
+      canvas: {
+        mimeType: "image/jpeg",
+        qualityRatio: 5,
+      },
+       })}>Print</Button>
+      {/* <Button
   onClick={() => {
     const pdfFiles = attachedImage.filter((file) => file.endsWith(".pdf"));
     const imageFiles = attachedImage.filter((file) => !file.endsWith(".pdf"));
@@ -358,7 +369,7 @@ const onDocumentLoadSuccess = ({ numPages }) => {
   }}
 >
   Print
-</Button>
+</Button> */}
     </>
   );
 };

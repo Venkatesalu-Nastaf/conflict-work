@@ -388,24 +388,29 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
    <div className="attached-toll" ref={targetRef}>
         <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
           {Array.isArray(attachedImage) &&
-            attachedImage.map((file, index) => {
+            // attachedImage.map((file, index) => {
+            //   const isPdf = file.endsWith(".pdf");
+            attachedImage
+            .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
+            .map((file, index) => {
               const isPdf = file.endsWith(".pdf");
               return (
                 <li
                   key={index}
                   style={{
-                    pageBreakAfter: "always", 
+                    // pageBreakAfter: "always", 
+                    pageBreakAfter: isPdf ? "always" : "auto",
                     padding: "20px",
-                    marginBottom: "90px",
+                    marginBottom: "50",
                   }}
                 >
-                  {isPdf ? (
-                    <div>
+                  {/* {isPdf ? (
+                    <div style={{height:"500px", background:"red"}}>
                       <Document
                         file={file}
                         onLoadSuccess={onDocumentLoadSuccess}
                         style={{
-                          width: "595px", // Width for A4 page
+                          width: "595px", 
                           height: "auto",
                           margin: "auto",
                         }}
@@ -425,7 +430,44 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                         ))}
                       </Document>
                     </div>
-                  ) : (
+                  )  */}
+
+{isPdf ? (
+  <div
+    style={{
+      height: "825px", // Allow height to adjust automatically
+      width:'100%',
+      // background: "red",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom:"10px",
+    }}
+  >
+    <Document
+      file={file}
+      onLoadSuccess={onDocumentLoadSuccess}
+      style={{
+        margin: "auto",
+      }}
+    >
+      {Array.from(new Array(numPages), (el, pageIndex) => (
+        <Page
+          key={`page_${pageIndex + 1}`}
+          pageNumber={pageIndex + 1}
+          scale={0.9} // Adjust scale to fit the page to the desired size
+          style={{
+            display: "block",
+            width: "auto", // Let the width adjust automatically
+            margin: "20px auto", // Add spacing for better display
+          }}
+        />
+      ))}
+    </Document>
+  </div>
+) 
+                  
+                  : (
                     // <img
                     //   src={file}
                     //   alt={`image_${index}`}
@@ -440,18 +482,8 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                     //   }}
                     // />
                     <div
-  style={{
-    // display: "flex",
-    //   flexDirection: "row",
-    // flexWrap: "wrap", 
-    // justifyContent: "center", 
-    // alignItems: "center", 
-    // gap: "10px", 
-    // background:"red",
-    margin: " auto", 
-    width:"345px",
-    height:"345px"
-  }}
+  
+  className='upload-img'
 >
   <img
     src={file}
@@ -459,7 +491,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
     style={{
       width: "100%",
       height: "100%",
-      marginBottom: "20px",
+      marginBottom: "50px"
     }}
   />
 </div>
@@ -474,20 +506,6 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
              </article>
             </div>
             {/* <Button onClick={() => generatePDF(targetRef, { filename: 'E-tripsheet.pdf', margin: Margin.LARGE, })}>Print</Button> */}
-            {/* <Button onClick={() => generatePDF(targetRef,{
-                 filename: 'E-tripsheet.pdf',
-                 resolution: 3, 
-                 method: "save",
-                 page: {
-                    margin: { top: 10, right: 10, bottom: 50, left: 10 }, 
-                    format: "a4", 
-                    orientation: "portrait", 
-                  },
-                  canvas: {
-                    mimeType: "image/jpeg",
-                    qualityRatio: 5,
-                  },
-            })}>Print</Button> */}
             <Button
   onClick={() => {
     const pdfFiles = attachedImage.filter((file) => file.endsWith(".pdf"));
@@ -499,7 +517,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
       resolution: 3,
       method: "save",
       page: {
-        margin: { top: 10, right: 10, bottom: 50, left: 10 },
+        margin: { top: 10, right: 10, bottom: 49, left: 10 },
         format: "a4",
         orientation: "portrait",
       },

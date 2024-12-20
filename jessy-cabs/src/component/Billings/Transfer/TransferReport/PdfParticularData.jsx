@@ -399,7 +399,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
 
           </div>
 
-          <div style={{ display: 'flex', gap: 20, border: '1.5px solid #000000', padding: 10, }}>
+          <div style={{ display: 'flex', gap: 20, border: '1.5px solid #000000', padding: '10px', }}>
             <div className="clientFistDiv">
 
               <p className="detailstext"><span className="labeltag">Client Name </span><p className="colontag">:</p> <span className="clientName">{customer}</span></p>
@@ -410,7 +410,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
               <p className="detailstext"><span className="labeltag">Emp.Name </span ><p className="colontag">:</p><span className="clientName"> {guestname}</span></p>
               <p className="detailstext"><span className="labeltag">Report Add</span><p className="colontag">:</p><span className="clientName">{address1}</span></p>
               <p className="detailstext"><span className="labeltag">Client Mobile</span><p className="colontag">:</p><span className="clientName">{customermobile}</span></p>
-              <p className="detailstext"><span className="labeltag">Drop Address</span><p className="colontag">:</p><span>{dropaddress}</span></p>
+              <p className="detailstext"><span className="labeltag">Drop Address</span><p className="colontag">:</p><span className="clientNamedrop">{dropaddress}</span></p>
             </div>
             <div className="clientSecondDiv">
               <p className="detailstext"><span className="labeltagsecond">Escort Route </span><p className="colontag">:</p><span >{escort}</span> </p>

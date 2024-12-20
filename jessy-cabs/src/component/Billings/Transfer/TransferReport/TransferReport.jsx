@@ -1125,7 +1125,7 @@ const TransferReport = ({ stationName }) => {
               width: '854px',
               height: '700px',
               bgcolor: 'background.paper',
-              border: '2px solid #000',
+              // border: '2px solid #000',
               boxShadow: 24,
               p: 4,
               overflowY: 'auto'

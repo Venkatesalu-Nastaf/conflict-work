@@ -128,6 +128,8 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
 
 
   } = useOverviewDrawer();
+  console.log(reversedRows,' datas if grid')
+  
 
   const [allCustomer, setAllCustomer] = useState([])
   const { permissions } = useContext(PermissionContext)
@@ -154,6 +156,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
         <p></p>
     </div>
 );
+
 
   return (
     <>
@@ -331,9 +334,9 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
               <div className="input" >
                 <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
               </div>
-              <div className="input">
+              {/* <div className="input">
                 <Button className='text-nowrap' variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
-              </div>
+              </div> */}
             </div>
           </div>
           {/* <div className="SpeedDial">

@@ -5,6 +5,9 @@ import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(customParseFormat);
 
 
 const columns = [
@@ -15,9 +18,27 @@ const columns = [
     { field: "customer", headerName: "Customer", width: 130 },
     { field: "servicestation", headerName: "Service Station", width: 130 },
     { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
-    { field: "bookingdate", headerName: "Booking Date", width: 120 },
-    { field: "shedOutDate", headerName: "ShedOut Date", width: 120 },
-    { field: "startdate", headerName: "Start Date", width: 120 },
+    // { field: "bookingdate", headerName: "Booking Date", width: 120 },
+    // { field: "shedOutDate", headerName: "ShedOut Date", width: 120 },
+    // { field: "startdate", headerName: "Start Date", width: 120 },
+    {
+        field: "bookingdate",
+        headerName: "Booking Date",
+        width: 120,
+        valueFormatter: (params) => dayjs(params.value).format("DD-MM-YY"),
+      },
+      {
+        field: "shedOutDate",
+        headerName: "ShedOut Date",
+        width: 120,
+        valueFormatter: (params) => dayjs(params.value).format("DD-MM-YY"),
+      },
+      {
+        field: "startdate",
+        headerName: "Start Date",
+        width: 120,
+        valueFormatter: (params) => dayjs(params.value).format("DD-MM-YY"),
+      },
     { field: "guestname", headerName: "Guest Name", width: 140 },
     { field: "address1", headerName: "Address", width: 130 },
     { field: "email", headerName: "Email", width: 130 },
@@ -26,8 +47,30 @@ const columns = [
     { field: "driverName", headerName: "Driver Name", width: 130 },
     { field: "mobileNo", headerName: "Driver MobNo", width: 130 },
     { field: "vehType", headerName: "Rate For", width: 130 },
-    { field: "reporttime", headerName: "ShedOut Time", width: 110 },
-    { field: "starttime", headerName: "Start Time", width: 100 },
+    // { field: "reporttime", headerName: "ShedOut Time", width: 110 },
+    // { field: "starttime", headerName: "Start Time", width: 100 },
+    {
+        field: "starttime",
+        headerName: "Start Time",
+        width: 100,
+        valueFormatter: (params) => {
+          const time = params.value;
+          return time
+            ? dayjs(time, ["HH:mm:ss", "HH:mm"]).format("HH:mm") // Support both formats
+            : "-";
+        },
+      },
+      {
+        field: "reporttime",
+        headerName: "ShedOut Time",
+        width: 110,
+        valueFormatter: (params) => {
+          const time = params.value;
+          return time
+            ? dayjs(time, ["HH:mm:ss", "HH:mm"]).format("HH:mm") // Support both formats
+            : "-";
+        },
+      },
     { field: "duty", headerName: "Duty", width: 100 },
     { field: "customercode", headerName: "Cost Code", width: 110 },
     { field: "registerno", headerName: "Request Id", width: 130 },

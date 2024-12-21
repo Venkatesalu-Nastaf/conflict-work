@@ -1143,7 +1143,8 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
                         }
                         if (result.length === 0) {
 
-                            return res.status(404).json({ error: 'u dont have accesss the page of stations' });
+                            // return res.status(404).json({ error: 'u dont have accesss the page of stations' });
+                            return res.status(404).json({ error: 'You Dont Have Accesss To This Tripsheet Based On Service Station' });
                         }
                         else if (result.length > 0) {
                             db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
@@ -1324,11 +1325,13 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
 
 // --------------------------------------------------------------
 router.get('/tripsheet-maindash', (req, res) => {
-    const { fromDate, toDate } = req.query;
+    const { fromDate, toDate,Stations } = req.query;
     console.log(fromDate, "dd", toDate)
+    const stationname = Stations?.split(',');
+    console.log(stationname,"name")
 
-    db.query(`SELECT * FROM tripsheet where  tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-        AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)`, [fromDate, toDate], (err, result) => {
+    db.query(`SELECT * FROM tripsheet where department IN (?) AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+        AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)`, [stationname,fromDate, toDate], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }
@@ -1340,11 +1343,14 @@ router.get('/tripsheet-maindash', (req, res) => {
     });
 });
 
-router.get('/tripsheet-maindashcuurentdate/:tripsheetdate', (req, res) => {
+router.get('/tripsheet-maindashcuurentdate/:tripsheetdate/:Stations', (req, res) => {
     const tripsheet = req.params.tripsheetdate
+    const stations = req.params.Stations
+    const stationname = stations?.split(',');
+    console.log(stationname,"name")
 
 
-    db.query('SELECT * FROM tripsheet where tripsheetdate=? ', [tripsheet], (err, result) => {
+    db.query('SELECT * FROM tripsheet where department IN (?) AND tripsheetdate = ? ', [stationname,tripsheet], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }
@@ -1356,13 +1362,14 @@ router.get('/tripsheet-maindashcuurentdate/:tripsheetdate', (req, res) => {
     });
 });
 router.get('/tripsheet-maindashcuurentdate', (req, res) => {
-    const { toDate, fromDate } = req.query;
+    const { toDate, fromDate,station } = req.query;
     const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
     const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+    const stationname = station?.split(',');
     console.log(formattedFromDate, "to", formattedToDate)
 
-    db.query(`SELECT * FROM tripsheet  where tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-        AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) `, [formattedFromDate, formattedToDate], (err, result) => {
+    db.query(`SELECT * FROM tripsheet  where department IN (?) AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+        AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY) `, [stationname,formattedFromDate, formattedToDate], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }

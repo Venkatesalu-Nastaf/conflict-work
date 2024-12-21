@@ -1760,6 +1760,7 @@ const useTransferdataentry = () => {
                 setisbtnloading(false)
                 setAddEditTrigger(true)
                 setSuccessMessage("Successfully added");
+                setRows([])
                 console.log(transferlist, 'listtransfer');
 
             }

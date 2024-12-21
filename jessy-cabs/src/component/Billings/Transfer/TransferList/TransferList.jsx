@@ -264,32 +264,32 @@ const TransferList = ({ stationName, organizationNames, Statename }) => {
                                     sx={{
                                         height: '100%',
                                         width: '100%',
-                                        '& .green-row': {
-                                            backgroundColor: 'green',
-                                            color: 'white',
-                                            '&:hover': {
-                                                backgroundColor: 'darkgreen',
-                                            },
-                                        },
-                                        '& .red-row': {
-                                            backgroundColor: 'red',
-                                            color: 'white',
-                                            '&:hover': {
-                                                backgroundColor: 'darkred',
-                                            },
-                                        },
-                                        '& .Mui-selected.green-row': {
-                                            backgroundColor: 'green !important',
-                                            '&:hover': {
-                                                backgroundColor: 'darkgreen !important',
-                                            },
-                                        },
-                                        '& .Mui-selected.red-row': {
-                                            backgroundColor: 'red !important',
-                                            '&:hover': {
-                                                backgroundColor: 'darkred !important',
-                                            },
-                                        },
+                                        // '& .green-row': {
+                                        //     backgroundColor: 'green',
+                                        //     color: 'white',
+                                        //     '&:hover': {
+                                        //         backgroundColor: 'darkgreen',
+                                        //     },
+                                        // },
+                                        // '& .red-row': {
+                                        //     backgroundColor: 'red',
+                                        //     color: 'white',
+                                        //     '&:hover': {
+                                        //         backgroundColor: 'darkred',
+                                        //     },
+                                        // },
+                                        // '& .Mui-selected.green-row': {
+                                        //     backgroundColor: 'green !important',
+                                        //     '&:hover': {
+                                        //         backgroundColor: 'darkgreen !important',
+                                        //     },
+                                        // },
+                                        // '& .Mui-selected.red-row': {
+                                        //     backgroundColor: 'red !important',
+                                        //     '&:hover': {
+                                        //         backgroundColor: 'darkred !important',
+                                        //     },
+                                        // },
                                     }}
                                 />
                             )}

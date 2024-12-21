@@ -238,15 +238,15 @@ router.get("/customerreviewdataallmonth/:station/:fromdate/:todate",(req, res) =
     const endtodate=req.params.todate;
     console.log(fromtodate,"ff",endtodate)
    
-    const stationname = station.split(',');
-    // console.log(stationname,"name")
+    const stationname = station?.split(',');
+    console.log(stationname,"name")
  
     const promises = stationname.map(data => {
         return new Promise((resolve, reject) => {
           
 
     
-    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='pending' and servicestation=?  AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)", [data,fromtodate,endtodate], (err, result) => {
+    db.query("SELECT COUNT(*) AS count ,servicestation FROM booking WHERE status ='pending' and servicestation = ?  AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 0 DAY)", [data,fromtodate,endtodate], (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -260,7 +260,7 @@ router.get("/customerreviewdataallmonth/:station/:fromdate/:todate",(req, res) =
 
 Promise.all(promises)
 .then(results => {
-//   console.log(results,"data")
+  // console.log(results,"data")
   return res.status(200).json(results);
 })
 .catch(error => {

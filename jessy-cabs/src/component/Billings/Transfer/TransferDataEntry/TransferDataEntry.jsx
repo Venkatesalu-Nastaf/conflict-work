@@ -103,6 +103,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
 
   const invoiceNoCheck = invoiceno === "" || invoiceno === null || invoiceno === undefined
 
+  const getRowClassName = (params) => {
+
+    return params.row.status === "Billed" ? 'green-row' : 'red-row';
+}
+
   return (
     <div className="TransferDataEntry-form main-content-form Scroll-Style-hide">
       <form >
@@ -493,27 +498,55 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                   setRowSelectionModel(newRowSelectionModel);
                   handleRowSelection(newRowSelectionModel);
                 }}
+                // getRowId={(row) => row.id}
+                getRowClassName={getRowClassName}
                 checkboxSelection
                 disableRowSelectionOnClick
                 // sx={{ height: '100%', width: '100%' }}
                 sx={{
                   height: '100%',
                   width: '100%',
-                  '& .MuiDataGrid-row': {
-                    backgroundColor: invoiceNoCheck ? "red" : "green",
-                    color: 'white', // Optional for text visibility
-                    '&:hover': {
-                      backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Highlight on hover
-                    },
-                  },
-                  '& .Mui-selected': {
-                    // backgroundColor: invoiceno === "" ? 'red' : 'green', // Same color for selected row
-                    backgroundColor: invoiceNoCheck ? 'red !important' : 'green !important', // Prevent lighter selected row color
+                  // '& .MuiDataGrid-row': {
+                  //   backgroundColor: invoiceNoCheck ? "red" : "green",
+                  //   color: 'white', // Optional for text visibility
+                  //   '&:hover': {
+                  //     backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Highlight on hover
+                  //   },
+                  // },
+                  // '& .Mui-selected': {
+                  //   // backgroundColor: invoiceno === "" ? 'red' : 'green', // Same color for selected row
+                  //   backgroundColor: invoiceNoCheck ? 'red !important' : 'green !important', // Prevent lighter selected row color
 
-                    '&:hover': {
-                      backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Same hover effect for selected row
-                    },
-                  },
+                  //   '&:hover': {
+                  //     backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Same hover effect for selected row
+                  //   },
+                  // },
+                     '& .green-row': {
+                                            backgroundColor: '#65B741',
+                                            color: 'white',
+                                            '&:hover': {
+                                                backgroundColor: '#21b90f',
+                                            },
+                                        },
+                                        '& .red-row': {
+                                            backgroundColor: '#E72929',
+                                            color: 'white',
+                                            '&:hover': {
+                                                backgroundColor: '#ec2424',
+                                            },
+                                        },
+                                        '& .Mui-selected.green-row': {
+                                            backgroundColor: '#65B741 !important',
+                                            '&:hover': {
+                                                backgroundColor: '#21b90f !important',
+                                            },
+                                        },
+                                        '& .Mui-selected.red-row': {
+                                            backgroundColor: '#E72929 !important',
+                                            '&:hover': {
+                                                backgroundColor: '#ec2424 !important',
+                                            },
+                                        },
                 }}
               />
             </Box>

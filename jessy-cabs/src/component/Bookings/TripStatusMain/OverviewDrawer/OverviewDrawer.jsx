@@ -92,7 +92,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     cutomerName,
     statusvalue,
     handleShow,
-    handleShowAll,
+    // handleShowAll,
     fromDate,
     department,
     handleInputChange,

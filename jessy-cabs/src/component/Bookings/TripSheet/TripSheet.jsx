@@ -264,7 +264,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSuccessMessage,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState,editButtonStatusCheck,conflictdate,conflicttripid,conflictday,conflictTime,conflictCompareDatas
+    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -598,29 +598,38 @@ const TripSheet = ({ stationName, logoImage }) => {
   }
 
   const checkForConflict = () => {
+    console.log(conflictCompareDatas, "data", conflictCompareDatas?.conflictmaxdate)
+    console.log(conflictenddate, "data2")
     const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
     const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
     const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-
+    // const formattedLatestTime = maxDateData.row?.latestTime?.replace(":", ".")
+    // const finalLatestTime = parseFloat(formattedLatestTime).toFixed(2);
+    const shedinTimeFormat = reportTime?.replace(":", ".")
+    const finalshedinTimeFormat = parseFloat(shedinTimeFormat).toFixed(2);
+    const lastestTimeFormat = conflictCompareDatas?.latestTime?.replace(":",".")
+    const finallastestTimeFormat = parseFloat(lastestTimeFormat).toFixed(2)
 
     const isEqual = (
       isEditMode &&
-      conflictenddate?.maxShedInDate !== null &&
-      conflictenddate?.TripIdconflictdate !== null &&
-      conflictenddate?.TripIdconflictdate !== tripID &&
-      !shedindate &&
-      reportTime <= conflictenddate?.conflictTimer &&
-      shedOutDate === conflictenddate?.maxShedInDate
+      conflictCompareDatas?.conflictmaxdate !== null &&
+      conflictCompareDatas?.tripids !== null &&
+      conflictCompareDatas?.tripids !== tripID &&
+      // !shedindate &&
+      // reportTime <= conflictCompareDatas?.latestTime &&
+      parseFloat(finalshedinTimeFormat) <= parseFloat(finallastestTimeFormat) &&
+      shedOutDate === conflictCompareDatas?.conflictmaxdate
 
     )
 
     const isLessThan = (
       isEditMode &&
-      conflictenddate?.maxShedInDate !== null &&
-      conflictenddate?.TripIdconflictdate !== null &&
-      conflictenddate?.TripIdconflictdate !== tripID &&
-      !shedindate &&
-      shedOutDate < conflictenddate?.maxShedInDate
+      conflictCompareDatas?.conflictmaxdate !== null &&
+      conflictCompareDatas?.tripids !== null &&
+      conflictCompareDatas?.tripids !== tripID &&
+      // !shedindate &&
+
+      shedOutDate < conflictCompareDatas?.conflictmaxdate
       // Check if shedOutDate is less than conflictenddate
     );
 
@@ -1260,9 +1269,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                 {emptyState ? "" :
                   <div className="input" style={{ display: "grid" }}>
                     {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
-                      Conflict tripid: {conflictenddate?.TripIdconflictdate}, Time: {conflictenddate?.conflictTimer}, conflictdate:{conflictenddate?.maxShedInDate}
+                      Conflict tripid: {conflictCompareDatas?.tripids}, Time: {conflictCompareDatas?.latestTime}, conflictdate:{conflictCompareDatas?.conflictmaxdate}
                     </label>}
-                    {conflictdate ?  <label className='invalid-km' style={{ paddingBottom: '5px' }}>conflict tripid : {conflictCompareDatas?.tripids} date :{conflictCompareDatas?.conflictmaxdate} Time :{conflictCompareDatas?.latestTime}</label> : "" }
                     <div style={{ display: "flex" }}>
                       <div className="icone" >
                         <CalendarMonthIcon color="action" />
@@ -1326,121 +1334,121 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </div>
                   </div>}
 
-                  {emptyState ?  "" :
-                <div className="input" style={{ display: "grid" }}>
-                  {closeDateCheckFun()}
-                  <div style={{ display: "flex" }}>
+                {emptyState ? "" :
+                  <div className="input" style={{ display: "grid" }}>
+                    {closeDateCheckFun()}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Close Date"
+                          id="closedate"
+                          disabled={temporaryStatus && superAdminAccess === "0"}
+                          value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+
+                            handleDateChange(date, 'closedate')
+                            setKmValue(prev => ({ ...prev, closeDate: date }))
+
+                            // const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
+                            // const closeDate = date
+                            // const shedindate = kmValue.shedInDate
+
+                            // if (startDate && closeDate) {
+                            //   const startDateObj = dayjs(startDate);
+                            //   const closeDateObj = dayjs(closeDate);
+                            //   const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
+                            // }
+
+                            // if (shedindate && closeDate) {
+                            //   const closedateObj = dayjs(closeDate);
+                            //   const shedindateObj = dayjs(shedindate);
+                            //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                            // }
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input" style={{ display: "grid" }}>
+
+                    {shedInDateCheck()}
+
+                    <div style={{ display: "flex" }}>
+
+                      <div className="icone">
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Shed In Date"
+                          id="shedInDate"
+                          disabled={temporaryStatus && superAdminAccess === "0"}
+                          value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            handleDateChange(date, 'shedInDate')
+
+                            // setKmValue(prev => ({ ...prev, shedInDate: date }))
+                            // const closedate = kmValue.closeDate;
+                            // const shedoutdate = kmValue.shedOutDate;
+                            // const shedindate = date
+
+                            // if (shedoutdate && shedindate) {
+                            //   const shedOutDateObj = dayjs(shedoutdate);
+                            //   const shedindateObj = dayjs(shedindate);
+                            //   const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, shedIn_TotalDays: totalDays }))
+                            // }
+
+                            // if (shedindate && closedate) {
+                            //   const closedateObj = dayjs(closedate);
+                            //   const shedindateObj = dayjs(shedindate);
+                            //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                            // }
+
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
+                    </div>
+
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input">
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
                     </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Close Date"
-                        id="closedate"
+                    <DemoItem>
+                      <TextField
+                        name="totaldays"
+                        value={calculateTotalDay()}
+                        label="Total Days"
                         disabled={temporaryStatus && superAdminAccess === "0"}
-                        value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-
-                          handleDateChange(date, 'closedate')
-                          setKmValue(prev => ({ ...prev, closeDate: date }))
-
-                          // const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
-                          // const closeDate = date
-                          // const shedindate = kmValue.shedInDate
-
-                          // if (startDate && closeDate) {
-                          //   const startDateObj = dayjs(startDate);
-                          //   const closeDateObj = dayjs(closeDate);
-                          //   const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-                          //   setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
-                          // }
-
-                          // if (shedindate && closeDate) {
-                          //   const closedateObj = dayjs(closeDate);
-                          //   const shedindateObj = dayjs(shedindate);
-                          //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
-                          //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
-                          // }
-                        }}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
-                  </div>
-                </div> }
-
-                {emptyState ?  "" :
-                <div className="input" style={{ display: "grid" }}>
-
-                  {shedInDateCheck()}
-
-                  <div style={{ display: "flex" }}>
-
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
-                    </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Shed In Date"
-                        id="shedInDate"
-                        disabled={temporaryStatus && superAdminAccess === "0"}
-                        value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-                          handleDateChange(date, 'shedInDate')
-
-                          // setKmValue(prev => ({ ...prev, shedInDate: date }))
-                          // const closedate = kmValue.closeDate;
-                          // const shedoutdate = kmValue.shedOutDate;
-                          // const shedindate = date
-
-                          // if (shedoutdate && shedindate) {
-                          //   const shedOutDateObj = dayjs(shedoutdate);
-                          //   const shedindateObj = dayjs(shedindate);
-                          //   const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
-                          //   setKmValue(prev => ({ ...prev, shedIn_TotalDays: totalDays }))
-                          // }
-
-                          // if (shedindate && closedate) {
-                          //   const closedateObj = dayjs(closedate);
-                          //   const shedindateObj = dayjs(shedindate);
-                          //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
-                          //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
-                          // }
-
-                        }}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
-                  </div>
-
-                </div> }
-
-                {emptyState ?  "" :
-                <div className="input">
-                  <div className="icone">
-                    <CalendarMonthIcon color="action" />
-                  </div>
-                  <DemoItem>
-                    <TextField
-                      name="totaldays"
-                      value={calculateTotalDay()}
-                      label="Total Days"
-                      disabled={temporaryStatus && superAdminAccess === "0"}
-                      size="small"
-                      type="number"
-                      id="totaldays"
-                      // variant="standard"
-                      autoComplete="password"
-                    />
-                  </DemoItem>
-                </div> }
+                        size="small"
+                        type="number"
+                        id="totaldays"
+                        // variant="standard"
+                        autoComplete="password"
+                      />
+                    </DemoItem>
+                  </div>}
 
                 <div className="input tripsheet-e-tripsheet-input">
                   <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
@@ -1448,162 +1456,171 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </Button>
                 </div>
 
-                {emptyState ?  "" :
-                <div className="input time" style={{ display: "grid" }}>
+                {emptyState ? "" :
+                  <div className="input time" style={{ display: "grid" }}>
 
-                  <div style={{ display: "flex", alignItems: 'center' }}>
+                    <div style={{ display: "flex", alignItems: 'center' }}>
+                      <div className='icone icone-margin-adjust'>
+                        <MdOutlineAccessTimeFilled />
+                      </div>
+
+                      <div className='input-type-grid'>
+                        <label>Shed Out Time</label>
+                        <input
+                          type="time"
+                          name="reporttime"
+                          disabled={hideField && superAdminAccess === "0" && temporaryStatus}
+                          value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
+                          onChange={(event) => {
+                            setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                            setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
+                            setBook({ ...book, reporttime: event.target.value });
+                            setreporttime(event.target.value);
+                            if (!lockdata && dayhcl === 0) {
+                              setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            }
+                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input time">
                     <div className='icone icone-margin-adjust'>
                       <MdOutlineAccessTimeFilled />
                     </div>
-
                     <div className='input-type-grid'>
-                      <label>Shed Out Time</label>
-                      <input
-                        type="time"
-                        name="reporttime"
-                        disabled={hideField && superAdminAccess === "0" && temporaryStatus}
-                        value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
-                        onChange={(event) => {
-                          setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
-                          setBook({ ...book, reporttime: event.target.value });
-                          setreporttime(event.target.value);
-                          if (!lockdata && dayhcl === 0) {
-                            setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
-                          }
-                          if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                            setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div> }
-
-                {emptyState ?  "" :
-                <div className="input time">
-                  <div className='icone icone-margin-adjust'>
-                    <MdOutlineAccessTimeFilled />
-                  </div>
-                  <div className='input-type-grid'>
-                    {/* Display 'Invalid Time' conditionally based on the report and start times */}
-                    {/* {(tripshedoutdate===startdate && ((reportTimeVar < startTimeVar) ? (
+                      {/* Display 'Invalid Time' conditionally based on the report and start times */}
+                      {/* {(tripshedoutdate===startdate && ((reportTimeVar < startTimeVar) ? (
                       <label>Report Time</label>
                     ) : (
                       tripshedoutdate!==startdate || startdate==="" ?  <label>Report Time</label> : <label style={{ color: "red" }}>Invalid Time</label> 
                     ))) || (!reportTimeVar && <label>Report Time</label>)} */}
-                    {tripshedoutdate === startdate && formattedReportTime < formattedStartTime ? <label>Report Time</label> :
-                      (tripshedoutdate !== startdate || startTimeVar === "" || startTimeVar === undefined ? <label>Report Time</label> : <label style={{ color: "red" }}>Invalid Time</label>)
-                    }
+                      {tripshedoutdate === startdate && formattedReportTime < formattedStartTime ? <label>Report Time</label> :
+                        (tripshedoutdate !== startdate || startTimeVar === "" || startTimeVar === undefined ? <label>Report Time</label> : <label style={{ color: "red" }}>Invalid Time</label>)
+                      }
 
-                    {/* Time input without restricting manual entry */}
-                    <input
-                      type="time"
-                      id="starttime"
-                      disabled={hideField && superAdminAccess === "0" && temporaryStatus}
-                      name="starttime"
-                      value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
-                      onChange={(event) => {
-                        const rTime = event.target.value;
-                        // Allow the input time to be entered without restriction
-                        setBook({ ...book, starttime: rTime });
-                        setStartTime(rTime);
-                        setFormData({ ...formData, starttime: rTime });
-                        setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
-                        if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
-                          setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
-                        }
-                      }}
-                    />
-                  </div>
-                </div> }
+                      {/* Time input without restricting manual entry */}
+                      <input
+                        type="time"
+                        id="starttime"
+                        disabled={hideField && superAdminAccess === "0" && temporaryStatus}
+                        name="starttime"
+                        value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
+                        onChange={(event) => {
+                          const rTime = event.target.value;
+                          // Allow the input time to be entered without restriction
+                          setBook({ ...book, starttime: rTime });
+                          setStartTime(rTime);
+                          setFormData({ ...formData, starttime: rTime });
+                          setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
+                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>}
 
-                {emptyState ?  "" :
-                <div className="input time">
-                  <div className='icone icone-margin-adjust'>
-                    <MdOutlineAccessTimeFilled />
-                  </div>
-                  <div className='closetime tripsheet-shed-in-time'>
-                    {/* Display 'Invalid Time' conditionally based on the start and close times, and the total number of days */}
-                    {calculateTotalDay() === 1 ? (
-                      startTimeVar && ((startTimeVar < closeTimeVar) ? (
-                        <label>Close Time</label>
+                {emptyState ? "" :
+                  <div className="input time">
+                    <div className='icone icone-margin-adjust'>
+                      <MdOutlineAccessTimeFilled />
+                    </div>
+                    <div className='closetime tripsheet-shed-in-time'>
+                      {/* Display 'Invalid Time' conditionally based on the start and close times, and the total number of days */}
+                      {calculateTotalDay() === 1 ? (
+                        startTimeVar && ((startTimeVar < closeTimeVar) ? (
+                          <label>Close Time</label>
+                        ) : (
+                          <label style={{ color: "red" }}>Invalid Time</label>
+                        ))
+                        || (!startTimeVar && <label>Close Time</label>)
                       ) : (
-                        <label style={{ color: "red" }}>Invalid Time</label>
-                      ))
-                      || (!startTimeVar && <label>Close Time</label>)
-                    ) : (
-                      <label>Close Time</label>
-                    )}
-                    <input
-                      type="time"
-                      name="closetime"
-                      id="closetime"
-                      disabled={temporaryStatus && superAdminAccess === "0"}
-                      value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
-                      onChange={(event) => {
-                        const rTime = event.target.value;
+                        <label>Close Time</label>
+                      )}
+                      <input
+                        type="time"
+                        name="closetime"
+                        id="closetime"
+                        disabled={temporaryStatus && superAdminAccess === "0"}
+                        value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                        onChange={(event) => {
+                          const rTime = event.target.value;
 
-                        // Update the time without restriction
-                        setSelectedCustomerData({ ...selectedCustomerData, closetime: rTime });
-                        setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: rTime });
-                        setBook({ ...book, closetime: rTime });
-                        setCloseTime(rTime);
-                        if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
-                          setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                        }
-                      }}
-                    />
-                  </div>
+                          // Update the time without restriction
+                          setSelectedCustomerData({ ...selectedCustomerData, closetime: rTime });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: rTime });
+                          setBook({ ...book, closetime: rTime });
+                          setCloseTime(rTime);
+                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          }
+                        }}
+                      />
+                    </div>
 
-                </div> }
+                  </div>}
 
-                {emptyState ?  "" :
-                <div className="input time">
-                  <div className='icone icone-margin-adjust'>
-                    <MdOutlineAccessTimeFilled />
-                  </div>
-                  <div className='input-type-grid'>
-                    {/* Display the label and invalid message conditionally based on closeTimeVar and day difference */}
-                    {/* {(closeTimeVar && calculateTotalDay() === 1 &&
+                {emptyState ? "" :
+                  <div className="input time">
+                    <div className='icone icone-margin-adjust'>
+                      <MdOutlineAccessTimeFilled />
+                    </div>
+                    <div className='input-type-grid'>
+                      {/* Display the label and invalid message conditionally based on closeTimeVar and day difference */}
+                      {/* {(closeTimeVar && calculateTotalDay() === 1 &&
                       ((closeTimeVar < shedInTimeVar)
                         ? (<label>Shed In Time</label>)
                         : (<label style={{ color: "red" }}>Invalid Time</label>)
                       ))
                       || ( <label>Shed In Time</label>)
                     } */}
-                    {(closeTimeVar && calculateTotalDay() === 1 &&
-                      ((closeTimeVar < shedInTimeVar)
-                        ? (<label>Shed In Time</label>)
-                        : (dayhcl === 1 && duty === "Outstation" ? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
-                      ))
-                      || (closeTimeVar >= shedInTimeVar && dayhcl === 1 && duty === "Outstation" && tripShedInDate === closedate ? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
-                    }
+                      {(closeTimeVar && calculateTotalDay() === 1 &&
+                        ((closeTimeVar < shedInTimeVar)
+                          ? (<label>Shed In Time</label>)
+                          : (dayhcl === 1 && duty === "Outstation" ? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
+                        ))
+                        || (closeTimeVar >= shedInTimeVar && dayhcl === 1 && duty === "Outstation" && tripShedInDate === closedate ? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
+                      }
 
-                    {/* {calculateTotalDay() > 1 ? (<label>Shed In Time</label>) : ""} */}
+                      {/* {calculateTotalDay() > 1 ? (<label>Shed In Time</label>) : ""} */}
 
-                    {/* Time input field */}
-                    <input
-                      type="time"
-                      name="shedintime"
-                      disabled={temporaryStatus && superAdminAccess === "0"}
-                      value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
-                      onChange={(event) => {
-                        const rTime = event.target.value;
+                      {/* Time input field */}
+                      <input
+                        type="time"
+                        name="shedintime"
+                        disabled={temporaryStatus && superAdminAccess === "0"}
+                        value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
+                        onChange={(event) => {
+                          const rTime = event.target.value;
 
-                        // Always allow input and set the state
-                        setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
-                        setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
-                        setBook({ ...book, shedintime: rTime });
-                        setshedintime(rTime);
+                          // Always allow input and set the state
+                          setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
+                          setBook({ ...book, shedintime: rTime });
+                          setshedintime(rTime);
 
-                        // Check if the day difference is 1, and validate the time
-                        if (calculateTotalDay() === 1) {
-                          if (closeTimeVar && rTime <= closeTimeVar) {
-                            // If the shed in time is invalid, display an error message but allow input
-                            console.log("Invalid Shed In Time");
+                          // Check if the day difference is 1, and validate the time
+                          if (calculateTotalDay() === 1) {
+                            if (closeTimeVar && rTime <= closeTimeVar) {
+                              // If the shed in time is invalid, display an error message but allow input
+                              console.log("Invalid Shed In Time");
+                            } else {
+                              // Valid input, you can handle any additional logic here
+                              if (!lockdata && dayhcl === 0) {
+                                setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                              }
+                              if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                                setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                              }
+                            }
                           } else {
-                            // Valid input, you can handle any additional logic here
+                            // If the day difference is more than 1, allow any time
                             if (!lockdata && dayhcl === 0) {
                               setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                             }
@@ -1611,259 +1628,250 @@ const TripSheet = ({ stationName, logoImage }) => {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
                             }
                           }
-                        } else {
-                          // If the day difference is more than 1, allow any time
-                          if (!lockdata && dayhcl === 0) {
-                            setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                          }
-                          if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                          }
-                        }
-                      }}
-                    />
-                  </div>
-                </div> }
+                        }}
+                      />
+                    </div>
+                  </div>}
 
-                {emptyState ?  "" :
-                <div className="input" style={{ position: 'relative', top: '10px' }}>
-                  <div className="icone icone-margin-adjust" style={{ marginBottom: '16px' }}>
-                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
-                  </div>
-                  <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center', marginBottom: '15px' }}>
-                    <label>Add Time</label>
-                    <div style={{ position: 'relative', top: '-4px' }}>
+                {emptyState ? "" :
+                  <div className="input" style={{ position: 'relative', top: '10px' }}>
+                    <div className="icone icone-margin-adjust" style={{ marginBottom: '16px' }}>
+                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                    </div>
+                    <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center', marginBottom: '15px' }}>
+                      <label>Add Time</label>
+                      <div style={{ position: 'relative', top: '-4px' }}>
+                        <TextField
+                          name="additionaltime"
+                          value={
+                            formData.additionaltime ||
+                            book.additionaltime ||
+                            selectedCustomerData.additionaltime ||
+                            additionalTime.additionaltime ||
+                            ''
+                          }
+                          disabled={temporaryStatus && superAdminAccess === "0"}
+                          onChange={handleChange}
+                          id="additionaltime"
+                          size="small"
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone icone-margin-adjust">
+                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                    </div>
+                    <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center', marginTop: '5px' }}>
+                      <label>Total Time</label>
+                      <div style={{ position: 'relative', top: '-4px' }}>
+                        <TextField
+                          name="totaltime"
+                          // value={ calculateTotalTimes()}
+                          value={
+                            (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
+                              (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
+                              ? calculateTotalTimes()
+                              : ""
+                          }
+                          disabled={temporaryStatus && superAdminAccess === "0"}
+                          onChange={handleChange}
+                          id="totaltime"
+                          size='small'
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input" style={{ display: "grid" }} >
+                    {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                    {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                    {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
+                    {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
+                    {/* <br></br> */}
+                    {conflictkm?.maximumkm !== 0 && dayhcl === 0 && tripID !== conflictkm.maxtripid && data === undefined && (
+                      (Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && (
+                        <label className='invalid-km' style={{ paddingBottom: '18px' }}>
+                          Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}
+                        </label>
+                      )
+                    )}
+                    {data === undefined && tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
+                      <label className='invalid-km'>
+                        Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
+                      </label>
+
+                    )}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                      </div>
                       <TextField
-                        name="additionaltime"
-                        value={
-                          formData.additionaltime ||
-                          book.additionaltime ||
-                          selectedCustomerData.additionaltime ||
-                          additionalTime.additionaltime ||
-                          ''
-                        }
+                        name="shedout"
+                        value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          if (value >= 0) {
+                            handleChange(e)
+                            setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
+                            if (!lockdata && dayhcl === 0) {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            }
+                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            }
+                          }
+                        }}
                         disabled={temporaryStatus && superAdminAccess === "0"}
-                        onChange={handleChange}
-                        id="additionaltime"
-                        size="small"
+                        label="Shed Out"
+                        id="shedout"
+                        size='small'
+                        type="number"
                         autoComplete="password"
                       />
                     </div>
-                  </div>
-                </div> }
+                  </div>}
 
-                {emptyState ?  "" :
-                <div className="input">
-                  <div className="icone icone-margin-adjust">
-                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
-                  </div>
-                  <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center', marginTop: '5px' }}>
-                    <label>Total Time</label>
-                    <div style={{ position: 'relative', top: '-4px' }}>
+                {emptyState ? "" :
+                  <div style={{ display: "grid" }} className="input">
+                    {dayhcl === 0 && (kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
+
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                      </div>
                       <TextField
-                        name="totaltime"
-                        // value={ calculateTotalTimes()}
-                        value={
-                          (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
-                            (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
-                            ? calculateTotalTimes()
-                            : ""
-                        }
+                        name="startkm"
+                        value={formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm || ''}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          if (value >= 0) {
+                            handleChange(e)
+                            setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
+                            if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            }
+                          }
+                        }}
                         disabled={temporaryStatus && superAdminAccess === "0"}
-                        onChange={handleChange}
-                        id="totaltime"
+                        size="small"
+                        label="Start KM"
+                        type="number"
+                        id="startkm"
+                        autoComplete="password"
+                      />
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input" style={{ display: "grid" }}>
+                    {dayhcl === 0 && kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                      </div>
+                      <TextField
+                        name="closekm"
+                        value={formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm || ''}
+
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          if (value >= 0) {
+                            setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
+                            handleChange(e)
+                            if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            }
+                          }
+                        }}
+                        disabled={temporaryStatus && superAdminAccess === "0"}
+                        label="Close KM"
+                        size="small"
+                        type="number"
+                        id="outlined-start-closekm"
+                        autoComplete="password"
+                      />
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div style={{ display: "grid" }} className="input">
+                    {dayhcl === 0 && kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                      </div>
+                      <TextField
+                        name="shedin"
+                        value={formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || ''}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          if (value >= 0) {
+                            setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
+                            handleChange(e)
+                            if (!lockdata && dayhcl === 0) {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            }
+                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            }
+                          }
+                        }}
+                        disabled={temporaryStatus && superAdminAccess === "0"}
+                        label="Shed In"
+                        type="number"
+                        id="shedin"
                         size='small'
                         autoComplete="password"
                       />
                     </div>
-                  </div>
-                </div> }
+                  </div>}
 
-                {emptyState ?  "" :
-                <div className="input" style={{ display: "grid" }} >
-                  {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
-                  {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
-                  {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
-                  {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
-                  {/* <br></br> */}
-                  {conflictkm?.maximumkm !== 0 && dayhcl === 0 && tripID !== conflictkm.maxtripid && data === undefined && (
-                    (Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && (
-                      <label className='invalid-km' style={{ paddingBottom: '18px' }}>
-                        Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}
-                      </label>
-                    )
-                  )}
-                  {data === undefined && tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
-                    <label className='invalid-km'>
-                      Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
-                    </label>
-
-                  )}
-                  <div style={{ display: "flex" }}>
+                {emptyState ? "" :
+                  <div className="input">
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
                     </div>
                     <TextField
-                      name="shedout"
-                      value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
+                      name="shedkm"
+                      value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
                       onChange={(e) => {
-                        let value = e.target.value;
+                        const value = e.target.value;
                         if (value >= 0) {
                           handleChange(e)
-                          setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
-                          if (!lockdata && dayhcl === 0) {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                          }
-                          if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                          }
                         }
                       }}
                       disabled={temporaryStatus && superAdminAccess === "0"}
-                      label="Shed Out"
-                      id="shedout"
-                      size='small'
+                      label="Add KM"
                       type="number"
-                      autoComplete="password"
-                    />
-                  </div>
-                </div> }
-
-                {emptyState ?  "" :
-                <div style={{ display: "grid" }} className="input">
-                  {dayhcl === 0 && (kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
-
-                  <div style={{ display: "flex" }}>
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faRoad} size="lg" />
-                    </div>
-                    <TextField
-                      name="startkm"
-                      value={formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm || ''}
-                      onChange={(e) => {
-                        let value = e.target.value;
-                        if (value >= 0) {
-                          handleChange(e)
-                          setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
-                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                          }
-                        }
-                      }}
-                      disabled={temporaryStatus && superAdminAccess === "0"}
-                      size="small"
-                      label="Start KM"
-                      type="number"
-                      id="startkm"
-                      autoComplete="password"
-                    />
-                  </div>
-                </div> }
-
-                {emptyState ?  "" :
-                <div className="input" style={{ display: "grid" }}>
-                  {dayhcl === 0 && kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
-                  <div style={{ display: "flex" }}>
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faRoad} size="lg" />
-                    </div>
-                    <TextField
-                      name="closekm"
-                      value={formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm || ''}
-
-                      onChange={(e) => {
-                        let value = e.target.value;
-                        if (value >= 0) {
-                          setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
-                          handleChange(e)
-                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
-                          }
-                        }
-                      }}
-                      disabled={temporaryStatus && superAdminAccess === "0"}
-                      label="Close KM"
-                      size="small"
-                      type="number"
-                      id="outlined-start-closekm"
-                      autoComplete="password"
-                    />
-                  </div>
-                </div> }
-
-                {emptyState ?  "" :
-                <div style={{ display: "grid" }} className="input">
-                  {dayhcl === 0 && kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
-                  <div style={{ display: "flex" }}>
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faRoad} size="lg" />
-                    </div>
-                    <TextField
-                      name="shedin"
-                      value={formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || ''}
-                      onChange={(e) => {
-                        const value = e.target.value
-                        if (value >= 0) {
-                          setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
-                          handleChange(e)
-                          if (!lockdata && dayhcl === 0) {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
-                          }
-                          if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
-                          }
-                        }
-                      }}
-                      disabled={temporaryStatus && superAdminAccess === "0"}
-                      label="Shed In"
-                      type="number"
-                      id="shedin"
+                      id="shedkm"
                       size='small'
                       autoComplete="password"
                     />
-                  </div>
-                </div> }
+                  </div>}
 
-                {emptyState ?  "" :
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faRoad} size="lg" />
-                  </div>
-                  <TextField
-                    name="shedkm"
-                    value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value >= 0) {
-                        handleChange(e)
-                      }
-                    }}
-                    disabled={temporaryStatus && superAdminAccess === "0"}
-                    label="Add KM"
-                    type="number"
-                    id="shedkm"
-                    size='small'
-                    autoComplete="password"
-                  />
-                </div>}
-
-                {emptyState ?  "" :
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faRoad} size="lg" />
-                  </div>
-                  <TextField
-                    name="totalkm1"
-                    value={calculateTotalKilometers()}
-                    disabled={temporaryStatus && superAdminAccess === "0"}
-                    onChange={handleChange}
-                    label="Total KM"
-                    id="totalkm1"
-                    type="number"
-                    size='small'
-                    autoComplete="password"
-                  />
-                </div> }
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faRoad} size="lg" />
+                    </div>
+                    <TextField
+                      name="totalkm1"
+                      value={calculateTotalKilometers()}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
+                      onChange={handleChange}
+                      label="Total KM"
+                      id="totalkm1"
+                      type="number"
+                      size='small'
+                      autoComplete="password"
+                    />
+                  </div>}
 
 
 
@@ -1882,42 +1890,42 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
 
-               {emptyState ?  "" :
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faStamp} />
-                  </div>
-                  <TextField
-                    name="permit"
-                    value={formData.permit || selectedCustomerData.permit || book.permit || ''}
-                    onChange={(e) => {
-                      handleChange(e);
-                      const value = e.target.value;
-                      // Automatically update the Vendor permit field
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
-                      }));
-                      setSelectedCustomerData((prevState) => ({
-                        ...prevState,
-                        vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
-                      }));
-                      setBook((prevState) => ({
-                        ...prevState,
-                        vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
-                      }));
-                      setVendorinfodata({
-                        ...vendorinfo,
-                        vendor_vpermettovendor: value, vpermettovendor: value
-                      });
-                    }}
-                    disabled={temporaryStatus && superAdminAccess === "0"}
-                    label="Permit"
-                    id="permit"
-                    size="small"
-                    autoComplete="password"
-                  />
-                </div> }
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faStamp} />
+                    </div>
+                    <TextField
+                      name="permit"
+                      value={formData.permit || selectedCustomerData.permit || book.permit || ''}
+                      onChange={(e) => {
+                        handleChange(e);
+                        const value = e.target.value;
+                        // Automatically update the Vendor permit field
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                        }));
+                        setSelectedCustomerData((prevState) => ({
+                          ...prevState,
+                          vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                        }));
+                        setBook((prevState) => ({
+                          ...prevState,
+                          vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                        }));
+                        setVendorinfodata({
+                          ...vendorinfo,
+                          vendor_vpermettovendor: value, vpermettovendor: value
+                        });
+                      }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
+                      label="Permit"
+                      id="permit"
+                      size="small"
+                      autoComplete="password"
+                    />
+                  </div>}
                 {/* <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faSquareParking} />
@@ -1933,39 +1941,39 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
 
-               {emptyState ?  "" :
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faSquareParking} />
-                  </div>
-                  <TextField
-                    name="parking"
-                    value={formData.parking || selectedCustomerData.parking || book.parking || ''}
-                    onChange={(e) => {
-                      handleChange(e);
-                      const value = e.target.value;
-                      // Syncing the value of "parking" to "vendorparking"
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        vendorparking: value,
-                      }));
-                      setSelectedCustomerData((prevState) => ({
-                        ...prevState,
-                        vendorparking: value,
-                      }));
-                      setVendorinfodata({ ...vendorinfo, vendorparking: value });
-                      setBook((prevState) => ({
-                        ...prevState,
-                        vendorparking: value,
-                      }));
-                    }}
-                    disabled={temporaryStatus && superAdminAccess === "0"}
-                    label="Parking"
-                    id="parking"
-                    size="small"
-                    autoComplete="password"
-                  />
-                </div>}
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faSquareParking} />
+                    </div>
+                    <TextField
+                      name="parking"
+                      value={formData.parking || selectedCustomerData.parking || book.parking || ''}
+                      onChange={(e) => {
+                        handleChange(e);
+                        const value = e.target.value;
+                        // Syncing the value of "parking" to "vendorparking"
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          vendorparking: value,
+                        }));
+                        setSelectedCustomerData((prevState) => ({
+                          ...prevState,
+                          vendorparking: value,
+                        }));
+                        setVendorinfodata({ ...vendorinfo, vendorparking: value });
+                        setBook((prevState) => ({
+                          ...prevState,
+                          vendorparking: value,
+                        }));
+                      }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
+                      label="Parking"
+                      id="parking"
+                      size="small"
+                      autoComplete="password"
+                    />
+                  </div>}
                 {/* <div className="input">
                   <div className="icone">
                     <TollTwoToneIcon color="action" />
@@ -1981,39 +1989,39 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
 
-               {emptyState ?  "" :
-                <div className="input">
-                  <div className="icone">
-                    <TollTwoToneIcon color="action" />
-                  </div>
-                  <TextField
-                    name="toll"
-                    value={formData.toll || selectedCustomerData.toll || book.toll || ''}
-                    onChange={(e) => {
-                      handleChange(e);
-                      const value = e.target.value;
-                      // Syncing the value of "toll" to "vendortoll"
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        vendortoll: value,
-                      }));
-                      setSelectedCustomerData((prevState) => ({
-                        ...prevState,
-                        vendortoll: value,
-                      }));
-                      setVendorinfodata({ ...vendorinfo, vendor_toll: value, vendortoll: value })
-                      setBook((prevState) => ({
-                        ...prevState,
-                        vendortoll: value,
-                      }));
-                    }}
-                    disabled={temporaryStatus && superAdminAccess === "0"}
-                    label="Toll"
-                    id="toll"
-                    size="small"
-                    autoComplete="password"
-                  />
-                </div>}
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <TollTwoToneIcon color="action" />
+                    </div>
+                    <TextField
+                      name="toll"
+                      value={formData.toll || selectedCustomerData.toll || book.toll || ''}
+                      onChange={(e) => {
+                        handleChange(e);
+                        const value = e.target.value;
+                        // Syncing the value of "toll" to "vendortoll"
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          vendortoll: value,
+                        }));
+                        setSelectedCustomerData((prevState) => ({
+                          ...prevState,
+                          vendortoll: value,
+                        }));
+                        setVendorinfodata({ ...vendorinfo, vendor_toll: value, vendortoll: value })
+                        setBook((prevState) => ({
+                          ...prevState,
+                          vendortoll: value,
+                        }));
+                      }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
+                      label="Toll"
+                      id="toll"
+                      size="small"
+                      autoComplete="password"
+                    />
+                  </div>}
 
                 <React.Fragment>
                   <Dialog
@@ -3265,68 +3273,68 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
 
-               {emptyState ?  "" :
-                <div className="input">
-                  <div className="icone">
-                    <BackupTableSharpIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="vpermettovendor"
-                    value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
-                    // onChange={(e) => {
-                    //   handleChange(e);
-                    //   setVendorinfodata({
-                    //     ...vendorinfo,
-                    //     vendor_vpermettovendor: e.target.value,
-                    //   });
-                    // }}
-                    disabled={temporaryStatus && superAdminAccess === "0"}
-                    label="Vendor permit"
-                    id="vpermettovendor"
-                    autoComplete="password"
-                  />
-                </div>}
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <BackupTableSharpIcon color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      name="vpermettovendor"
+                      value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
+                      // onChange={(e) => {
+                      //   handleChange(e);
+                      //   setVendorinfodata({
+                      //     ...vendorinfo,
+                      //     vendor_vpermettovendor: e.target.value,
+                      //   });
+                      // }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
+                      label="Vendor permit"
+                      id="vpermettovendor"
+                      autoComplete="password"
+                    />
+                  </div>}
 
-                {emptyState ?  "" :
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faSquareParking} />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="vendorparking"
-                    value={formData.vendorparking || selectedCustomerData.vendorparking || book.vendorparking || ""}
-                    // onChange={(e) => {
-                    //   handleChange(e)
-                    //   setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
-                    // }}
-                    disabled={temporaryStatus && superAdminAccess === "0"}
-                    label="Vendor Parking"
-                    id="vendorparking"
-                    autoComplete="password"
-                  />
-                </div> }
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faSquareParking} />
+                    </div>
+                    <TextField
+                      size="small"
+                      name="vendorparking"
+                      value={formData.vendorparking || selectedCustomerData.vendorparking || book.vendorparking || ""}
+                      // onChange={(e) => {
+                      //   handleChange(e)
+                      //   setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
+                      // }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
+                      label="Vendor Parking"
+                      id="vendorparking"
+                      autoComplete="password"
+                    />
+                  </div>}
 
-                {emptyState ?  "" :
-                <div className="input">
-                  <div className="icone">
-                    <MinorCrashSharpIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="vendortoll"
-                    value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ""}
-                    // onChange={(e) => {
-                    //   handleChange(e)
-                    //   setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
-                    // }}
-                    disabled={temporaryStatus && superAdminAccess === "0"}
-                    label="Vendor Toll"
-                    id="vendor-vendortoll"
-                    autoComplete="password"
-                  />
-                </div> }
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <MinorCrashSharpIcon color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      name="vendortoll"
+                      value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ""}
+                      // onChange={(e) => {
+                      //   handleChange(e)
+                      //   setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
+                      // }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
+                      label="Vendor Toll"
+                      id="vendor-vendortoll"
+                      autoComplete="password"
+                    />
+                  </div>}
 
 
 
@@ -3368,26 +3376,26 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div> */}
                 {emptyState ? "" :
-                <div className="input">
-                  <div className="icone">
-                    <AccountBalanceWalletTwoToneIcon color="action" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    name="fuelamount"
-                    value={vendorinfo.fuelamount || ""}
-                    onChange={(e) => {
-                      // handleChange(e)
-                      setVendorinfodata({ ...vendorinfo, fuelamount: e.target.value })
-                    }}
-                    disabled={temporaryStatus && superAdminAccess === "0"}
-                    label="Fuel Amount"
-                    id="fuelamount"
-                    autoComplete="password"
-                    style={{ marginBottom: '20px' }}
-                  />
-                  {/* <TextField
+                  <div className="input">
+                    <div className="icone">
+                      <AccountBalanceWalletTwoToneIcon color="action" />
+                    </div>
+                    <TextField
+                      margin="normal"
+                      size="small"
+                      name="fuelamount"
+                      value={vendorinfo.fuelamount || ""}
+                      onChange={(e) => {
+                        // handleChange(e)
+                        setVendorinfodata({ ...vendorinfo, fuelamount: e.target.value })
+                      }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
+                      label="Fuel Amount"
+                      id="fuelamount"
+                      autoComplete="password"
+                      style={{ marginBottom: '20px' }}
+                    />
+                    {/* <TextField
                           margin="normal"
                           size="small"
                           name="fuelamount"
@@ -3401,29 +3409,29 @@ const TripSheet = ({ stationName, logoImage }) => {
                           autoComplete="password"
                           style={{marginBottom:'20px'}}
                         /> */}
-                </div> }
+                  </div>}
 
                 {emptyState ? "" :
-                <div className="input">
-                  <div className="icone">
-                    <CurrencyRupeeTwoToneIcon color="action" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    name="advancepaidtovendor"
-                    value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ""}
-                    onChange={(e) => {
-                      handleChange(e)
-                      setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value, advancepaidtovendor: e.target.value })
-                    }}
-                    disabled={temporaryStatus && superAdminAccess === "0"}
-                    label="Vendor Advance"
-                    id="advance-paid-to-vendor"
-                    autoComplete="password"
-                    style={{ marginBottom: '20px' }}
-                  />
-                </div>}
+                  <div className="input">
+                    <div className="icone">
+                      <CurrencyRupeeTwoToneIcon color="action" />
+                    </div>
+                    <TextField
+                      margin="normal"
+                      size="small"
+                      name="advancepaidtovendor"
+                      value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ""}
+                      onChange={(e) => {
+                        handleChange(e)
+                        setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value, advancepaidtovendor: e.target.value })
+                      }}
+                      disabled={temporaryStatus && superAdminAccess === "0"}
+                      label="Vendor Advance"
+                      id="advance-paid-to-vendor"
+                      autoComplete="password"
+                      style={{ marginBottom: '20px' }}
+                    />
+                  </div>}
 
                 <div className="input">
                   <div className="icone">
@@ -3469,7 +3477,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="input-tripsheet-btns">
                     {isEditMode ? (<>
                       {/* <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button> */}
-                      {editButtonStatusCheck && superAdminAccess==="0" ? "" : <LoadingButton loading={isEditload} variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</LoadingButton>}
+                      {editButtonStatusCheck && superAdminAccess === "0" ? "" : <LoadingButton loading={isEditload} variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</LoadingButton>}
                     </>
                     ) : (
                       // <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
@@ -4084,7 +4092,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           </span>
 
-                          <span style={{ height: '50px', border: "1px solid #ccc", overflow: 'auto', width: "300px",padding:"5px" }}>{formData.remark || selectedCustomerData.remark || book.remark}</span>
+                          <span style={{ height: '50px', border: "1px solid #ccc", overflow: 'auto', width: "300px", padding: "5px" }}>{formData.remark || selectedCustomerData.remark || book.remark}</span>
 
                         </label>                        </div>
                       {/* <div style={{ width: '60%', display: "flex", justifyContent: "space-around", padding: '10px' }}>

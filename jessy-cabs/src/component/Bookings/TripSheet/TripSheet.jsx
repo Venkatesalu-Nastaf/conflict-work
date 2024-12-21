@@ -264,7 +264,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSuccessMessage,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState,editButtonStatusCheck
+    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState,editButtonStatusCheck,conflictdate,conflicttripid,conflictday,conflictTime,conflictCompareDatas
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -1262,6 +1262,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
                       Conflict tripid: {conflictenddate?.TripIdconflictdate}, Time: {conflictenddate?.conflictTimer}, conflictdate:{conflictenddate?.maxShedInDate}
                     </label>}
+                    {conflictdate ?  <label className='invalid-km' style={{ paddingBottom: '5px' }}>conflict tripid : {conflictCompareDatas?.tripids} date :{conflictCompareDatas?.conflictmaxdate} Time :{conflictCompareDatas?.latestTime}</label> : "" }
                     <div style={{ display: "flex" }}>
                       <div className="icone" >
                         <CalendarMonthIcon color="action" />
@@ -4083,7 +4084,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           </span>
 
-                          <span style={{ height: '50px', border: "1px solid #ccc", overflow: 'auto', width: "300px" }}>{formData.remark || selectedCustomerData.remark || book.remark}</span>
+                          <span style={{ height: '50px', border: "1px solid #ccc", overflow: 'auto', width: "300px",padding:"5px" }}>{formData.remark || selectedCustomerData.remark || book.remark}</span>
 
                         </label>                        </div>
                       {/* <div style={{ width: '60%', display: "flex", justifyContent: "space-around", padding: '10px' }}>

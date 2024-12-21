@@ -226,6 +226,12 @@ const useTripsheet = () => {
     // Hide some field for tripsheet
     const [hideField, setHideField] = useState(null)
     const [editButtonStatusCheck, SetEditButtonStatusCheck] = useState(false)
+    const [conflictdate,setConflictdate] = useState(false)
+    const [conflicttripid,setConflicttripid] = useState('')
+    const [conflictday,setConflictday] = useState('')
+    const [conflictTime,setConflictTime] = useState('')
+    const [conflictDatas,setConflictDatas] = useState(null)
+    const [conflictCompareDatas,setConflictCompareDatas] = useState(null)
 
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
@@ -1108,7 +1114,7 @@ const useTripsheet = () => {
 
     const handleEdit = async () => {
         // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
-
+        const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
         const checkdata = statusdata[0];
         const superpower = localStorage.getItem("SuperAdmin")
@@ -1216,6 +1222,26 @@ const useTripsheet = () => {
                     HclMaxConflctdata: conflicthcldatavalue.HclMaxConflctdata,
 
                 };
+                const VehcileHistory = {
+                    tripid: book.tripid || formData.tripid || selectedCustomerData.tripid,
+                    VehicleNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
+                    shedouttime: formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime,
+                    reporttime: formData.starttime || book.starttime || selectedBookingDate.starttime || selectedCustomerData.starttime,
+                    closetime: formData.closetime || selectedCustomerData.closetime || book.closetime || null,
+                    shedintime: book.shedintime || formData.shedintime || selectedCustomerData.shedintime || null,
+                    shedoutdate: formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
+                    reportdate: formData.startdate || selectedCustomerDatas.startdate || selectedCustomerData.startdate || book.startdate,
+                    closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate || null,
+                    shedindate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate || null,
+                    shedoutkm: formData.shedout || book.shedout || selectedCustomerData.shedout || 0,
+                    reportkm: formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm || 0,
+                    closekm: formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm || 0,
+                    shedinkm: formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || 0,
+                    totalkm: calculateTotalKilometers(),
+                    drivername: driverName,
+                };
+                console.log(VehcileHistory, "editVehicleHistory");
+
                 const tripsheetlogtripid = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
 
                 for (const key in updatedCustomer) {
@@ -1224,6 +1250,7 @@ const useTripsheet = () => {
                     }
                 }
                 await axios.put(`${apiUrl}/tripsheet-edit/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
+                await axios.put(`${apiUrl}/vehicleHistory/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, VehcileHistory)
                 setShedKilometers("")
                 setAdditionalTime("")
 
@@ -1486,8 +1513,29 @@ const useTripsheet = () => {
                 Hcldatakmvalue: 0
             };
             // console.log(updatedBook," book")
+            const VehcileHistory = {
+                tripid: book.tripid,
+                VehicleNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
+                shedouttime: formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime,
+                reporttime: formData.starttime || book.starttime || selectedBookingDate.starttime,
+                closetime: book.closetime,
+                shedintime: book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
+                shedoutdate: formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
+                reportdate: formData.startdate || selectedCustomerDatas.startdate || selectedCustomerData.startdate || book.startdate,
+                closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate,
+                shedindate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
+                shedoutkm: formData.shedout || book.shedout || selectedCustomerData.shedout,
+                reportkm: book.startkm,
+                closekm: book.closekm,
+                shedinkm: book.shedin,
+                totalkm: calculateTotalKilometers(),
+                drivername: driverName,
 
+            };
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
+            await axios.post(`${apiUrl}/addVehicleHistoryData`, VehcileHistory)
+            console.log(VehcileHistory, "vehiclehistory");
+
             handleTripsheetlogDetails(updatedBook, tripnodata, "create")
             setRow([]);
             setRows([]);
@@ -6194,7 +6242,7 @@ const useTripsheet = () => {
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
     const superAdminAccess = localStorage.getItem("SuperAdmin")
-console.log(superAdminAccess,"ssssssssss",statusCheck);
+    console.log(superAdminAccess, "ssssssssss", statusCheck);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -6241,34 +6289,146 @@ console.log(superAdminAccess,"ssssssssss",statusCheck);
 
     const statuschecking = selectedStatus;
     // console.log(statuschecking,'status checking',selectedCustomerData.status,book.status,selectedStatus);
-    const EditButtonHide = async() => {
+    const EditButtonHide = async () => {
         try {
             const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
                 username: loginusername,
             });
             const data = response.data;
             const station = data?.map(li => li.stationname.split(",")).flat();
-        if (statuschecking === "Closed" && ((station.includes('Chennai') || station.includes('All')))) {
-            SetEditButtonStatusCheck(true)
+            if (statuschecking === "Closed" && ((station.includes('Chennai') || station.includes('All')))) {
+                SetEditButtonStatusCheck(true)
+            }
+            else if (statuschecking === "Temporary Closed" && ((station.includes('Chennai') || station.includes('All')))) {
+                SetEditButtonStatusCheck(false)
+            }
+            else if (statuschecking === "Temporary Closed" || statuschecking === "Closed" || statuschecking === "Billed") {
+                SetEditButtonStatusCheck(true)
+            }
+            else if (statuschecking === "Opened") {
+                SetEditButtonStatusCheck(false)
+            }
         }
-        else if(statuschecking === "Temporary Closed" && ((station.includes('Chennai') || station.includes('All'))) ){
-            SetEditButtonStatusCheck(false)
+        catch (err) {
+            console.log(err, "error");
+
         }
-        else if(statuschecking === "Temporary Closed" || statuschecking === "Closed" || statuschecking === "Billed"){
-            SetEditButtonStatusCheck(true)
-        }
-        else if(statuschecking === "Opened"){
-            SetEditButtonStatusCheck(false)
-        }
-    }
-    catch(err){
-        console.log(err,"error");
-        
-    }
     }
     useEffect(() => {
-       EditButtonHide()
-    },[statuschecking])
+        EditButtonHide()
+    }, [statuschecking])
+
+    // getVehcileHistoryData in vehcileHistoryData
+
+    const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+
+    useEffect(() => {
+        const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo;
+        const fetchData = async () => {
+            try {
+                const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, {
+                    vehicleNo
+                });
+                console.log(response.data, "vehiclehistorydata");
+                const maxDateData = response.data;
+                console.log(maxDateData,"responseeeeeeee");
+                
+                setConflictDatas(maxDateData)
+                const latestDatevalue = maxDateData?.row?.latestFormattedDate;
+                console.log(latestDatevalue, "latest",typeof(maxDateData.row?.Tripid),maxDateData.row?.Tripid,typeof(tripid),maxDateData);
+                const parseDate = (dateStr) => {
+                    const [day, month, year] = dateStr.split('-');
+                    return new Date(`${year}-${month}-${day}`);
+                };
+                const maxDateFormat = dayjs(latestDatevalue).format('DD-MM-YYYY');
+                const latestmaxDate = parseDate(maxDateFormat);
+                const conflictmaxdate = dayjs(latestDatevalue).format('DD-MM-YYYY');
+                latestmaxDate.setHours(0, 0, 0, 0);
+                console.log(latestmaxDate, "latestmaxdate");
+                const shedoutdate = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate
+                const sheddate = dayjs(shedoutdate).format('DD-MM-YYYY')
+                const shedoutenterdate = parseDate(sheddate)
+                shedoutenterdate.setHours(0, 0, 0, 0);
+                console.log(shedoutenterdate, "latestmaxdate", latestmaxDate);
+                const tripids = parseInt(maxDateData.row?.Tripid || 0)
+                console.log(tripids,"tripiddddddddd",tripid);
+                console.log(vehicleNo,"vehicleeeeeeeeee",maxDateData.row?.VehicleNo);
+                const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+                const formattedShedoutTime = shedoutTime?.replace(":",".")
+                const formattedLatestTime = maxDateData.row?.latestTime?.replace(":", ".")
+                const finalLatestTime = parseFloat(formattedLatestTime).toFixed(2);
+                const finalShedOutTime = parseFloat(formattedShedoutTime).toFixed(2);
+                console.log(finalLatestTime,"11111111111",finalShedOutTime,parseFloat(finalLatestTime),parseFloat(finalShedOutTime));
+                  console.log(latestmaxDate,"11111111111111dateeeee",shedoutenterdate);
+                        // Set the conflictCompareDatas object state
+            setConflictCompareDatas({
+                conflictmaxdate,
+                latestmaxDate,
+                shedoutenterdate,
+                tripids,
+                vehicleNo,
+                latestTime: finalLatestTime,
+                shedOutTime: finalShedOutTime,
+                latestDateValue: latestmaxDate,
+                latestTimeRaw: maxDateData.row?.latestTime,
+            });
+                
+                // else if(vehicleNo === maxDateData.row?.VehicleNo && latestmaxDate > shedoutenterdate){
+                //     setConflictdate(false)
+                // }
+                // if()
+
+
+            } catch (err) {
+                console.log(err, "error");
+            }
+        };
+        fetchData();
+    }, [apiUrl, formData, selectedCustomerData, formValues, selectedCustomerDatas, book,tripid]);
+    console.log(conflictCompareDatas,"conflictcompare",isEditMode);
+    
+    const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+
+    useEffect(()=>{
+        const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo;
+        const conflictmaxdate = conflictCompareDatas?.conflictmaxdate
+                const parseDate = (dateStr) => {
+            const [day, month, year] = dateStr.split('-')
+            return new Date(`${year}-${month}-${day}`);
+        };
+        
+        const shedoutdate = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate
+        const sheddate = dayjs(shedoutdate).format('DD-MM-YYYY')
+        const shedoutenterdate = parseDate(sheddate)
+        shedoutenterdate.setHours(0, 0, 0, 0);
+        
+        const formattedShedoutTime = shedoutTime?.replace(":",".")
+        const finalShedOutTime = parseFloat(formattedShedoutTime).toFixed(2);
+        console.log(conflictCompareDatas?.latestmaxDate ,"dateeeeeeeeeeeeee",shedoutenterdate);
+        const finalLatestTime = parseFloat(conflictCompareDatas?.latestTime).toFixed(2)
+        console.log(finalLatestTime,"1111111111finaltime",finalShedOutTime,"vennnn");
+        
+            if((conflictCompareDatas?.latestmaxDate > shedoutenterdate) && vehicleNo === conflictCompareDatas?.vehicleNo ){
+                    
+                setConflictdate(true)
+                console.log('1111111111======================');
+
+             }
+             else if((conflictCompareDatas?.latestmaxDate < shedoutenterdate) && vehicleNo === conflictCompareDatas?.vehicleNo){
+                setConflictdate(false)
+                console.log('11111111112222222222======================');
+             }
+             else if((conflictCompareDatas?.latestmaxDate === shedoutenterdate) && (vehicleNo === conflictCompareDatas?.vehicleNo) && (parseFloat(finalLatestTime) > parseFloat(finalShedOutTime)) ){
+                 setConflictdate(true)
+                 console.log('11111111113333333333======================');
+
+             }
+         
+      
+        
+    },[ formData, selectedCustomerData, formValues, selectedCustomerDatas, book,tripid,conflictCompareDatas,shedoutTime])
+
+
 
     // console.log(TripReportTime, "reporttimeee", dayjs(TripReportDate).format('DD-MM-YYYY'), CurrentDate, dayjs());
     return {
@@ -6403,7 +6563,7 @@ console.log(superAdminAccess,"ssssssssss",statusCheck);
         handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate, groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
-        hideField, temporaryStatus, emptyState, editButtonStatusCheck
+        hideField, temporaryStatus, emptyState, editButtonStatusCheck,conflictdate,conflicttripid,conflicttripid,conflictday,conflictTime,conflictCompareDatas
 
     };
 };

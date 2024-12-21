@@ -321,6 +321,55 @@ router.post('/tripsheet-add', (req, res) => {
     });
 });
 
+// add vehicleHistorydata table
+router.post('/addVehicleHistoryData', (req, res) => {
+    const { tripid,
+        VehicleNo,
+        shedouttime,
+        reporttime,
+        closetime,
+        shedintime,
+        shedoutdate,
+        reportdate,
+        closedate,
+        shedindate,
+        shedoutkm,
+        reportkm,
+        closekm,
+        shedinkm,
+        totalkm,
+        drivername,
+    } = req.body;
+
+    const vehcileHistoryData = {
+        tripid,
+        VehicleNo,
+        shedouttime,
+        reporttime,
+        closetime,
+        shedintime,
+        shedoutdate,
+        reportdate,
+        closedate,
+        shedindate,
+        shedoutkm,
+        reportkm,
+        closekm,
+        shedinkm,
+        totalkm,
+        drivername,
+    }
+    db.query('INSERT INTO Vehicle_History_Data SET ?', vehcileHistoryData, (err, result) => {
+        if (err) {
+            console.log(err, 'error');
+
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        }
+        return res.status(200).json({ message: "Data inserted successfully" });
+    })
+
+})
+
 router.get('/drivernamedrivercreation', (req, res) => {
     const sql = 'SELECT drivername,Mobileno FROM drivercreation';
     db.query(sql, (err, result) => {
@@ -355,6 +404,148 @@ router.delete('/tripsheet/:tripid', (req, res) => {
         return res.status(200).json({ message: "Data deleted successfully" });
     });
 });
+
+// get vehicleHistorydata by vehicleNo
+// router.post('/getVehcileHistoryData',(req,res)=>{
+//     const { vehicleNo } = req.body;
+//     console.log(vehicleNo,"vehicleno");
+
+//     db.query('SELECT * FROM Vehicle_History_Data WHERE VehicleNo = ?',[vehicleNo],(err,result)=>{
+//         if(err){
+//             console.log(err,"error");
+//         }
+//         console.log(result,"vehicle result");
+
+//         res.status(200).json(result);
+//     })
+// })
+router.post('/getVehcileHistoryData', (req, res) => {
+    const { vehicleNo } = req.body;
+    console.log(vehicleNo, "historyvehicle");
+
+    //     const query = `
+    //     SELECT shedoutdate, reportdate, closedate, shedindate,Tripid,
+    //     GREATEST(
+    //         IFNULL(STR_TO_DATE(shedoutdate, '%Y-%m-%d %H:%i:%s'), '1970-01-01'), 
+    //         IFNULL(STR_TO_DATE(reportdate, '%Y-%m-%d %H:%i:%s'), '1970-01-01'), 
+    //         IFNULL(STR_TO_DATE(closedate, '%Y-%m-%d'), '1970-01-01'), 
+    //         IFNULL(STR_TO_DATE(shedindate, '%Y-%m-%d'), '1970-01-01')
+    //     ) AS latestDate
+    //     FROM Vehicle_History_Data
+    //     WHERE VehicleNo = ?
+    //     ORDER BY latestDate DESC
+    //     LIMIT 1
+    // `;
+    const query = `
+SELECT VehicleNo, shedoutdate, reportdate, closedate, shedindate,
+       shedouttime, reporttime, closetime, shedintime, Tripid,
+       DATE_FORMAT(
+           GREATEST(
+               IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+               IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+               IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+               IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
+           ),
+           '%Y-%m-%d'
+       ) AS latestFormattedDate,
+       GREATEST(
+           IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+           IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+           IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+           IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
+       ) AS latestDateTime,
+       -- Logic to return the correct field based on the availability
+       COALESCE(NULLIF(shedintime, ''), NULLIF(closetime, ''), reporttime) AS finalTime,
+       -- Extract the time part from the latestDateTime
+       TIME(
+           GREATEST(
+               IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+               IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+               IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+               IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
+           )
+       ) AS latestTime
+FROM Vehicle_History_Data
+WHERE VehicleNo = ?
+ORDER BY latestDateTime DESC
+LIMIT 1;
+
+
+
+`;
+
+    db.query(query, [vehicleNo], (err, result) => {
+        if (err) {
+            console.error(err, "error");
+            res.status(500).json({ error: "Database query error" });
+            return;
+        }
+
+        if (result.length > 0) {
+            const row = result[0];
+
+            console.log("Latest row for VehicleNo:", row);
+
+            res.status(200).json({
+                row,
+                latestDateValue: row.latestDate,
+            });
+        } else {
+            res.status(404).json({ message: "No data found" });
+        }
+    });
+});
+
+
+
+
+// update vehcile_history_data details
+router.put('/vehicleHistory/:tripid', (req, res) => {
+    const {
+        tripid,
+        VehicleNo,
+        shedouttime,
+        reporttime,
+        closetime,
+        shedintime,
+        shedoutdate,
+        reportdate,
+        closedate,
+        shedindate,
+        shedoutkm,
+        reportkm,
+        closekm,
+        shedinkm,
+        totalkm,
+        drivername,
+    } = req.body;
+
+    const updatevehicleHistory = {
+        tripid,
+        VehicleNo,
+        shedouttime,
+        reporttime,
+        closetime,
+        shedintime,
+        shedoutdate,
+        reportdate,
+        closedate,
+        shedindate,
+        shedoutkm,
+        reportkm,
+        closekm,
+        shedinkm,
+        totalkm,
+        drivername,
+    }
+
+    db.query('UPDATE Vehicle_History_Data SET ? WHERE tripid = ?', [updatevehicleHistory, tripid], (err, result) => {
+        if (err) {
+            console.log(err, "error");
+        }
+        return res.status(200).json({ message: "Data updated successfully" });
+    })
+})
 
 // update tripsheet details------------------------------------------------
 router.put('/tripsheet-edit/:tripid', (req, res) => {
@@ -2420,7 +2611,7 @@ router.post("/uploadtollandparkinglink", (req, res) => {
     const { toll, parking, tripid } = req.body;
     const query = 'UPDATE tripsheet SET toll = ?, parking = ?, vendorparking = ?,vendortoll = ? WHERE tripid = ?';
 
-    db.query(query, [toll,parking,toll,parking,tripid], (err, results) => {
+    db.query(query, [toll, parking, toll, parking, tripid], (err, results) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;

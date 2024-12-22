@@ -522,10 +522,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                   //   },
                   // },
                      '& .green-row': {
-                                            backgroundColor: '#65B741',
+                                            backgroundColor: invoiceNoCheck ? "#eb492f" : '#65B741' ,
                                             color: 'white',
                                             '&:hover': {
-                                                backgroundColor: '#21b90f',
+                                                backgroundColor: invoiceNoCheck ? "red" : '#21b90f' ,
+
                                             },
                                         },
                                         '& .red-row': {
@@ -536,9 +537,9 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                                             },
                                         },
                                         '& .Mui-selected.green-row': {
-                                            backgroundColor: '#65B741 !important',
+                                            backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
                                             '&:hover': {
-                                                backgroundColor: '#21b90f !important',
+                                                backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
                                             },
                                         },
                                         '& .Mui-selected.red-row': {

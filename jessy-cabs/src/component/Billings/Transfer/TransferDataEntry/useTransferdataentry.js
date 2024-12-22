@@ -1865,8 +1865,8 @@ const useTransferdataentry = () => {
                 // const uniqueTripIds = [...new Set(combinedArray)];
                 const uniqueTripIds = [...new Set(combinedArray)].filter(tripId => tripId !== "");
 
-                // console.log(uniqueTripIds,"com")
-                const dadatrip = combinedTripIds.length
+                console.log(uniqueTripIds,"com")
+                const dadatrip = uniqueTripIds.length
                 const TotalTrips = parseInt(dadatrip) // Results in ["1358", "1358"]
                 const todate = dayjs(toDate).format('YYYY-MM-DD')
                 const totalamount = fullTotalAmount.toString()
@@ -1883,6 +1883,8 @@ const useTransferdataentry = () => {
                     Amount: totalamount,
                     grouptripid: grouptripid
                 }
+                console.log(transferlist,"not empty");
+                
                 if (filteredRows.length > 0) {
 
                     const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);

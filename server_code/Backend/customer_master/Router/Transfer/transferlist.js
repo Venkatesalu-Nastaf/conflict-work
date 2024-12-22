@@ -344,7 +344,7 @@ router.post('/updateParticularTransferList', (req, res) => {
   // First query to update Transfer_list
   const updateQuery = `
     UPDATE Transfer_list 
-    SET Billdate = ?, Organization_name = ?, FromDate = ?, EndDate = ?, Trips = ?, Amount = ?, Trip_id = ?
+    SET Billdate = ?, Organization_name = ?, FromDate = ?, EndDate = ?, Trips = ?, Amount = ?, Trip_id = ?,Status="Billed"
     WHERE Grouptrip_id = ?`;
 
   db.query(updateQuery, [Billdate, Organization_name, FromDate, EndDate, Trips, Amount, tripIdString, grouptripid], (error, result) => {

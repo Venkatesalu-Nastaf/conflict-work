@@ -189,7 +189,9 @@ const DigitalSignature = () => {
     const now = new Date();
     const formattedDateTime = datefunsdata(now, 'yyyy-MM-dd HH:mm:ss');
     const formattedTime = datefunsdata(now, 'HH:mm:ss');
-    const formatteddate = datefunsdata(now, "YYYY-MM-DD")
+    const formatteddate = datefunsdata(now, 'yyyy-MM-dd');
+    console.log(formatteddate,"for,mmm")
+
     const formattedtimes = datefunsdata(now, "HH:mm")
     return {
       dateTime: formattedDateTime,
@@ -284,7 +286,7 @@ const DigitalSignature = () => {
     try {
       setIsLoading(true);
 
-      await fetch(`${apiUrl}/api/saveSignaturewtid`, {
+   const hh =   await fetch(`${apiUrl}/api/saveSignaturewtid`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -296,9 +298,14 @@ const DigitalSignature = () => {
           imageName: datadate,
         }),
       });
-
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`, signtauretimes);
-      await axios.post(`${apiUrl}/signaturelinkExpiredatas/`, updatedetails)
+      console.log(hh,"llhh")
+  console.log(signtauretimes,"times")
+  console.log(updatedetails,"detils")
+     const reponse = await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`, signtauretimes);
+      console.log(reponse,"ll")
+      const response2 = await axios.post(`${apiUrl}/signaturelinkExpiredatas/`, updatedetails)
+      console.log(response2,"ll2")
+      
 
       // setSuccessMessage("Upload successfully");
 

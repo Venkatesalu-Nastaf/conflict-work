@@ -185,7 +185,7 @@ if (status === 'All') {
   Tripquery = `
     SELECT * FROM tripsheet
     WHERE tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
-      AND DATE_ADD(?, INTERVAL 1 DAY) AND  status != 'Cancelled'
+      AND DATE_ADD(?, INTERVAL 0 DAY) AND  status != 'Cancelled'
   `;
 
   queryParams = [formattedFromDate, formattedToDate];

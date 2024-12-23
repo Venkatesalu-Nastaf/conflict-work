@@ -58,13 +58,13 @@
     font-size: 24px;
   }
   
-.loading-image-container {
+/* .loading-image-container {
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center;    /* Center vertically */
-    /* height: 300px; */
+    justify-content: center; 
+    align-items: center;    
+    height: 300px;
     padding-bottom: 50%;
-  }
+  } */
   .no-images-container {
     display: flex;
     justify-content: center; /* Center horizontally */
@@ -74,4 +74,85 @@
     font-weight: bold;       /* Make the text bold */
     font-size: 20px;         /* Increase font size  */
   }
+  .EtripSheetImages-card:hover{
+    /* background-color: red; */
+    z-index: 999999;
+}
+.loading-image-container {
+    display: flex;
+    justify-content: center;  /* Center horizontally */
+    align-items: center;      /* Center vertically */
+    position: absolute;       /* Make sure it stays within its parent container */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;             /* Take full height of the parent container */
+    width: 100%;              /* Take full width of the parent container */
+    background-color: rgba(0, 0, 0, 0.3); /* Optional background to dim the area */
+  }
+  /* Image container with overlay button */
+.image-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 100%;
+  }
   
+  /* The overlay that will appear on the image */
+  .image-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1; /* To ensure overlay is on top of the image */
+  }
+  
+  /* Button overlay */
+  .image-container .overlay-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 2; /* Ensure button is above the overlay */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .image-container:hover .overlay-button {
+    opacity: 1; /* Show button when hovered over the image */
+  }
+  
+  .image-container:hover::after {
+    opacity: 1; /* Show overlay on hover */
+  }
+  
+  /* No Images Available style */
+  .no-images-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: white;
+    z-index: 2;
+  }
+  
+  /* Loading overlay (optional) */
+  .loading-image-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }

@@ -1779,7 +1779,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                 {emptyState ? "" :
                   <div className="input" style={{ display: "grid" }}>
-                    {dayhcl === 0 && kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                    {dayhcl === 0 && kmValue.startKMState && (Number(kmValue.closeKMState || formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm ) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
                     <div style={{ display: "flex" }}>
                       <div className="icone">
                         <FontAwesomeIcon icon={faRoad} size="lg" />

@@ -425,7 +425,25 @@ const EtripSheetImages = ({ imageDetails }) => {
               )
             )}
           </div> */}
-                          <div className='image-container' onClick={openImageDialog}>
+                          {/* <div className='image-container' onClick={openImageDialog}>
+                  {loading ? (
+                    <div className="loading-image-container">
+                      <CircularProgress />
+                    </div>
+                  ) : (
+                    imageDetails && imageDetails.length > 0 ? (
+                      renderContent(imageDetails[currentIndex])
+                    ) : (
+                      // <p>No images available</p>
+                      <div className="no-images-container">
+                      <p>No Images Available !</p>
+                      
+
+                    </div>
+                    )
+                  )}
+                </div> */}
+                <div className='image-container' onClick={openImageDialog}>
                   {loading ? (
                     <div className="loading-image-container">
                       <CircularProgress />

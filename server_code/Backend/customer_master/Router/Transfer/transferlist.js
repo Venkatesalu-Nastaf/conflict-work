@@ -606,7 +606,7 @@ router.get('/gettransfer_list/:userdata', (req, res) => {
 
       const data = stationArr.map(el => ({ Stationname: el }))
 
-      if (station?.toLowerCase() === "all" || stationArr.includes("ALL")) {
+      if (station?.toLowerCase() === "all" || stationArr.includes("All")) {
         db.query('SELECT * FROM Transfer_list ', (err, result) => {
           if (err) {
             return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });

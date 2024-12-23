@@ -267,9 +267,9 @@ const useTripsheet = () => {
         // fuelamount: '',
         permit: '',
     });
-    const [conflictenddate, setConflictEndDate] = useState({
-        maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null
-    })
+    // const [conflictenddate, setConflictEndDate] = useState({
+    //     maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null
+    // })
     const [checkstatusapps, setCheckStatusApp] = useState([])
     const usernamedata = localStorage.getItem("username");
     const maplogcolumns = [
@@ -846,7 +846,7 @@ const useTripsheet = () => {
             maxTripid: "",
         })
         // setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
-        setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
+        // setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
         localStorage.removeItem('selectedTripid');
     };
     const handlecheck = async () => {
@@ -5117,55 +5117,55 @@ const useTripsheet = () => {
             return time;
         }
     }
-    const transformFunconflict = (data) => {
-        // console.log(data,"jjj")
-        return { tripid: data.shedInDateTripid || data.closeDateTripid || null, shedInDate: data.shedInDate || data.closedate || null, shedintime: data.shedintime || data.closetime || null }
-    }
+    // const transformFunconflict = (data) => {
+    //     // console.log(data,"jjj")
+    //     return { tripid: data.shedInDateTripid || data.closeDateTripid || null, shedInDate: data.shedInDate || data.closedate || null, shedintime: data.shedintime || data.closetime || null }
+    // }
 
-    const dateconflict = useMemo(() => {
-        return dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("YYYY-MM-DD");
-    }, [formData.shedOutDate, selectedCustomerData.shedOutDate, book.shedOutDate]);
+    // const dateconflict = useMemo(() => {
+    //     return dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("YYYY-MM-DD");
+    // }, [formData.shedOutDate, selectedCustomerData.shedOutDate, book.shedOutDate]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (!vehicleRegisterNo) return
-            try {
-                const data = await axios.get(`${apiUrl}/trip-data/${vehicleRegisterNo}`)
-                // console.log(data,"gg")
-                const mapdata = data && Array.isArray(data.data) && data.data.map(transformFunconflict)
-                // console.log(mapdata,"mm")
-                if (mapdata.length > 0) {
-                    const firstTrip = mapdata[0];
-                    // console.log(firstTrip,"hh")
-                    // Check if shedInDate matches the dateconflict
-                    if (firstTrip?.shedInDate === dateconflict) {
-                        setConflictEndDate({
-                            maxShedInDate: dayjs(firstTrip.shedInDate).format("DD-MM-YYYY"),
-                            TripIdconflictdate: firstTrip.tripid,
-                            conflictTimer: removeSeconds(firstTrip.shedintime),
-                        });
-                    }
-                    else if (dateconflict < firstTrip?.shedInDate) {
-                        // No data or no matching conflict, reset the conflict state
-                        setConflictEndDate({
-                            maxShedInDate: dayjs(firstTrip.shedInDate).format("DD-MM-YYYY"),
-                            TripIdconflictdate: firstTrip.tripid,
-                            conflictTimer: removeSeconds(firstTrip.shedintime),
-                        });
-                    }
-                }
-                else {
-                    setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
-                }
-            }
-            catch (error) {
-                // console.error("Error fetching trip data", error);
-                // Handle error (optional)
-            }
-        }
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         if (!vehicleRegisterNo) return
+    //         try {
+    //             const data = await axios.get(`${apiUrl}/trip-data/${vehicleRegisterNo}`)
+    //             // console.log(data,"gg")
+    //             const mapdata = data && Array.isArray(data.data) && data.data.map(transformFunconflict)
+    //             // console.log(mapdata,"mm")
+    //             if (mapdata.length > 0) {
+    //                 const firstTrip = mapdata[0];
+    //                 // console.log(firstTrip,"hh")
+    //                 // Check if shedInDate matches the dateconflict
+    //                 if (firstTrip?.shedInDate === dateconflict) {
+    //                     setConflictEndDate({
+    //                         maxShedInDate: dayjs(firstTrip.shedInDate).format("DD-MM-YYYY"),
+    //                         TripIdconflictdate: firstTrip.tripid,
+    //                         conflictTimer: removeSeconds(firstTrip.shedintime),
+    //                     });
+    //                 }
+    //                 else if (dateconflict < firstTrip?.shedInDate) {
+    //                     // No data or no matching conflict, reset the conflict state
+    //                     setConflictEndDate({
+    //                         maxShedInDate: dayjs(firstTrip.shedInDate).format("DD-MM-YYYY"),
+    //                         TripIdconflictdate: firstTrip.tripid,
+    //                         conflictTimer: removeSeconds(firstTrip.shedintime),
+    //                     });
+    //                 }
+    //             }
+    //             else {
+    //                 setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
+    //             }
+    //         }
+    //         catch (error) {
+    //             // console.error("Error fetching trip data", error);
+    //             // Handle error (optional)
+    //         }
+    //     }
 
-        fetchData()
-    }, [apiUrl, vehicleRegisterNo, dateconflict])
+    //     fetchData()
+    // }, [apiUrl, vehicleRegisterNo, dateconflict])
     // console.log(conflictenddate,"flictdata")
     const transformFun1 = (data) => {
         return { shedout: data.shedout || null, shedin: data.shedin || null, tripid: data.tripid, closekm: data.closekm || null, startkm: data.startkm || null }
@@ -5175,9 +5175,11 @@ const useTripsheet = () => {
         const fetchData = async () => {
             if (!vehicleRegisterNo) return
             const data = await axios.get(`${apiUrl}/get-CancelTripDatanewdatatry/${vehicleRegisterNo}`)
+            console.log(data, "op")
             const hcldata = await axios.get(`${apiUrl}/get-CancelTripDataforHcl/${vehicleRegisterNo}`)
             const hclkmdatas = hcldata.data;
             const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun1)
+            console.log(mapdata, "opssssS")
             if (mapdata.length > 0) {
                 const allValues = mapdata.flatMap(trip => [
                     Number(trip.shedout) || 0,
@@ -5194,70 +5196,85 @@ const useTripsheet = () => {
                         Number(trip.startkm) === maxValue
                     );
                 });
-                const hclcustomerhybrid = Number(hclkmdatas[0]?.totalCloseKm)
-                const hcltripid = Number(hclkmdatas[0]?.tripid)
+                let hclcustomerhybrid = 0
+                let hcltripid = 0
+                console.log(maxTrip, "opttt", maxValue)
+                if (hclkmdatas.length > 0) {
+                    hclcustomerhybrid = Number(hclkmdatas[0]?.totalCloseKm || 0);
+                    hcltripid = Number(hclkmdatas[0]?.tripid || 0)
+                    console.log(hclcustomerhybrid);
+                }
+                // const hclcustomerhybrid = Number(hclkmdatas[0]?.totalCloseKm)
+                // const hcltripid = Number(hclkmdatas[0]?.tripid)
+                console.log(hcltripid, typeof (hcltripid), "opppp")
+                console.log(hclcustomerhybrid, typeof (hcltripid), "opppp")
                 const datamaxhybrid = maxValue > hclcustomerhybrid ? maxValue : hclcustomerhybrid
                 const datamaxtripid = maxValue > hclcustomerhybrid ? maxTrip?.tripid : hcltripid
-                // console.log(datamaxhybrid,"hclaclllll")
+                console.log(datamaxhybrid, "opclllll")
                 // console.log(hclcustomerhybrid,"hclhybridhcllllll",maxValue)
                 // Find the maximum value 
                 // setMaxConflict({ maxconflictdata: maxValue || 0, maxTripid: maxTrip.tripid })
                 // setMaxConflict({ maxconflictdata: datamaxhybrid, maxTripid: maxTrip.tripid })
                 setMaxConflict({ maxconflictdata: datamaxhybrid, maxTripid: datamaxtripid })
 
-                const shedoutkm1 = Number(formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || '');
+                // const shedoutkm1 = Number(formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || '');
 
 
-                const getTripWithValueInRange = (data, value) => {
-                    return data.find(trip => {
-                        // Convert fields to numbers, treat empty values as extremes
-                        const shedin = parseFloat(trip.shedin) || null;
-                        const shedout = parseFloat(trip.shedout) || null || Infinity;
-                        const startkm = parseFloat(trip.startkm) || null;
-                        const closekm = parseFloat(trip.closekm) || null;
+                // const getTripWithValueInRange = (data, value) => {
+                //     return data.find(trip => {
+                //         // Convert fields to numbers, treat empty values as extremes
+                //         const shedin = parseFloat(trip.shedin) || null;
+                //         const shedout = parseFloat(trip.shedout) || null || Infinity;
+                //         const startkm = parseFloat(trip.startkm) || null;
+                //         const closekm = parseFloat(trip.closekm) || null;
 
-                        // Define default to use if necessary
-                        //   const defaultValue = startkm;
+                //         // Define default to use if necessary
+                //         //   const defaultValue = startkm;
 
-                        // Check if value falls between shedin and shedout
-                        const isWithinShedRange = shedin !== null && value <= shedin && value >= shedout;
+                //         // Check if value falls between shedin and shedout
+                //         const isWithinShedRange = shedin !== null && value <= shedin && value >= shedout;
 
-                        // Check if value falls between startkm and shedout if shedin is empty
+                //         // Check if value falls between startkm and shedout if shedin is empty
 
-                        const isWithinStartkmAndShedout = shedin === null && closekm !== null && value <= closekm && value >= shedout;
+                //         const isWithinStartkmAndShedout = shedin === null && closekm !== null && value <= closekm && value >= shedout;
 
-                        // Check if value falls between startkm and closekm if shedout is empty
-                        const isWithinStartkmAndClosekm = closekm === null && value >= shedout && value <= startkm;
-                        const isWithinStartkmAndClosekm2 = startkm === null && value === shedout;
+                //         // Check if value falls between startkm and closekm if shedout is empty
+                //         const isWithinStartkmAndClosekm = closekm === null && value >= shedout && value <= startkm;
+                //         const isWithinStartkmAndClosekm2 = startkm === null && value === shedout;
 
-                        // Check if shedin and closekm are empty, and use startkm
-                        //   const useStartkmIfShedinAndClosekmEmpty = shedin === null && closekm === null && value === startkm;
+                //         // Check if shedin and closekm are empty, and use startkm
+                //         //   const useStartkmIfShedinAndClosekmEmpty = shedin === null && closekm === null && value === startkm;
 
-                        // Return true if any of the conditions are met
-                        return isWithinShedRange || isWithinStartkmAndShedout || isWithinStartkmAndClosekm || isWithinStartkmAndClosekm2;
-                    });
-                };
+                //         // Return true if any of the conditions are met
+                //         return isWithinShedRange || isWithinStartkmAndShedout || isWithinStartkmAndClosekm || isWithinStartkmAndClosekm2;
+                //     });
+                // };
 
-                if (shedoutkm1 > 1) {
-                    const result = getTripWithValueInRange(mapdata, shedoutkm1);
-                    if (result !== undefined) {
-                        const hclcustomertotalkm = Number(hclkmdatas[0]?.totalCloseKm)
+                // if (shedoutkm1 > 1) {
+                //     const result = getTripWithValueInRange(mapdata, shedoutkm1);
+                //     if (result !== undefined) {
+                //            let hclcustomertotalkm = 0
+                //         if (hclkmdatas.length > 0) {
+                //             hclcustomertotalkm = Number(hclkmdatas[0]?.totalCloseKm)
+                //            console.log(hclcustomerhybrid);
+                //        }
+                //         // const hclcustomertotalkm = Number(hclkmdatas[0]?.totalCloseKm)
 
-                        const ggg = Number(result.shedin || result?.closekm || result.startkm || result.shedout || 0)
-                        // console.log(ggg,"hybridtotalkmwithout hybrid")
-                        // console.log(hclcustomertotalkm,"hybridwithhybrid")
-                        const dattt = ggg + hclcustomertotalkm
-                        const datamaxhybrid = ggg > hclcustomerhybrid ? ggg : hclcustomerhybrid
-                        // console.log(dattt,"hybridfulllkmm")
-                        // console.log(dattt,"s",ggg)
-                        // setConflictKMData({ maximumkm: result.shedin || result?.closekm || result.startkm || result.shedout || 0, maxtripid: result?.tripid })
-                        setConflictKMData({ maximumkm: datamaxhybrid, maxtripid: result?.tripid })
-                        // setConflictKMData({ maximumkm: result.shedin || result?.closekm || result.startkm || result.shedout || 0, maxtripid: result?.tripid })
-                    }
-                    else {
-                        setConflictKMData({ maximumkm: 0, maxtripid: null })
-                    }
-                }
+                //         const ggg = Number(result.shedin || result?.closekm || result.startkm || result.shedout || 0)
+                //         // console.log(ggg,"hybridtotalkmwithout hybrid")
+                //         // console.log(hclcustomertotalkm,"hybridwithhybrid")
+                //         const dattt = ggg + hclcustomertotalkm
+                //         const datamaxhybrid = ggg > hclcustomerhybrid ? ggg : hclcustomerhybrid
+                //         // console.log(dattt,"hybridfulllkmm")
+                //         // console.log(dattt,"s",ggg)
+                //         // setConflictKMData({ maximumkm: result.shedin || result?.closekm || result.startkm || result.shedout || 0, maxtripid: result?.tripid })
+                //         setConflictKMData({ maximumkm: datamaxhybrid, maxtripid: result?.tripid })
+                //         // setConflictKMData({ maximumkm: result.shedin || result?.closekm || result.startkm || result.shedout || 0, maxtripid: result?.tripid })
+                //     }
+                //     else {
+                //         setConflictKMData({ maximumkm: 0, maxtripid: null })
+                //     }
+                // }
             }
             else {
                 setConflictKMData({ maximumkm: 0, maxtripid: null })
@@ -6501,7 +6518,9 @@ const useTripsheet = () => {
         maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
         signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
         handleEditMap,
-        handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate, groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
+        handleDeleteMap, copydatalink, setCopyDataLink,
+        // conflictenddate, 
+        groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas

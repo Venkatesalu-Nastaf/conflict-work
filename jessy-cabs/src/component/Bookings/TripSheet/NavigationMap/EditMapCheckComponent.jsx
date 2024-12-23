@@ -878,6 +878,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
                     value={dayjs(mapContent.date)}
                     onChange={(newValue) => handledatechange(newValue)}
                     renderInput={(params) => <TextField {...params} />}
+                    format='DD/MM/YYYY'
                   />
                 </div>
                 <div>

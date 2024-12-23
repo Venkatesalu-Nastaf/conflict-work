@@ -291,6 +291,7 @@ const SignatureGenerate = () => {
     // const uploadtollaprk = `http://localhost:3000/UploadtollPark?Tripid=${tripdata}`
     const uploadtollaprk = `https://jessycabs.com/UploadtollPark?Tripid=${tripdata}`
     await axios.post(`${apiUrl}/signaturelinkExpiredatas/`, updatedetails)
+    linkexpiredata()
     // const uploadtollaprk=`http://localhost:3000/UploadtollPark?Tripid=${tripdata}`
     // window.open(uploadtollaprk,'_blank')
     window.location.href = uploadtollaprk;

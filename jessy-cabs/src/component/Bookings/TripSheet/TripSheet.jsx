@@ -261,7 +261,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
-    handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate,
+    handleDeleteMap, copydatalink, setCopyDataLink,
+    //  conflictenddate,
     mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess,
     setSuccessMessage,
     // timeToggle,HclKMCalculation,
@@ -601,7 +602,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const checkForConflict = () => {
     console.log(conflictCompareDatas, "data", conflictCompareDatas?.conflictmaxdate)
-    console.log(conflictenddate, "data2")
+    // console.log(conflictenddate, "data2")
     const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
     const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
     const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;

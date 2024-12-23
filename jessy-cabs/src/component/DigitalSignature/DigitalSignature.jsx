@@ -108,6 +108,7 @@ const DigitalSignature = () => {
     // const data = `http://localhost:3000/SignatureGenerate?tripid=${tripId}`
     const data= `https://jessycabs.com/SignatureGenerate/?tripid=${tripId}`
     await axios.post(`${apiUrl}/signaturelinkExpiredatas/`, updatedetails)
+    linkexpiredata()
     //  const data=`http://localhost:3000/SignatureGenerate?tripid=${tripId}`
     //  localStorage.setItem("expireuploadpage",false)
     //  sessionStorage.setItem("expiredsign", false);

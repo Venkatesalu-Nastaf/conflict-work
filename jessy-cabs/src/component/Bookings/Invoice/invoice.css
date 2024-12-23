@@ -324,17 +324,17 @@ header img {
 }
 
 .attached-toll {
-  /* margin-top: 80px; */
+  margin-top: 90px;
   /* margin-top: -10px; */
-  margin-bottom: 60px;
-  margin-top: -40px;
+  /* margin-bottom: 60px; */
+  /* margin-top: -40px; */
 }
 
-.attached-toll img {
+/* .attached-toll img {
   height: 350px;
   width: 100%;
   margin: 10px;
-}
+} */
 
 .invoice-remarks-main {
   font-weight: 600;
@@ -392,12 +392,37 @@ width: 500px !important;
 height: 730px !important;
 /* background-color: green; */
 /* } */ 
+
+
+
+
 .upload-img{
-  margin: 18% auto 20% auto;
-  width: 300px !important;
-  height: 285px !important;
+  margin-top: 13.5%;
+  /* margin-top: 58%; */
+  margin-bottom:0% ;
+  margin-right: auto;
+  margin-left: auto;
+  width: 400px !important;
+  height: 840px !important;
   /* background-color: green; */
+  border: 5px solid rgb(255, 255, 255);
+  /* margin-bottom: 20px; */
+  /* margin-top: 80px; */
   }
 
+  .upload-pdf{
+height: 840px;
+width: 700px;
+display:flex;
+justify-content: center;
+align-items: center;
+margin-top: 16%;
+border: 5px solid rgb(255, 255, 255);
+  }
 
+  .li-files{
+    background-color: #ffffff;
+  }
+
+ 
 

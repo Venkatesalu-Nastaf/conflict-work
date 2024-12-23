@@ -27,7 +27,7 @@ const style2 = {
 };
 
 const mapStyles = {
-  height: "500px",
+  height: "450px",
   width: "100%"
 };
 

@@ -334,7 +334,7 @@ router.get('/Get-Billing', (req, res) => {
 
 // update TransferList Particular Tripid
 router.post('/updateParticularTransferList', (req, res) => {
-  const { Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id, grouptripid } = req.body;
+  const { Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id, grouptripid,Status } = req.body;
   const tripIdString = Array.isArray(Trip_id) ? Trip_id.join(',') : Trip_id;
 
   if (!grouptripid) {
@@ -344,10 +344,10 @@ router.post('/updateParticularTransferList', (req, res) => {
   // First query to update Transfer_list
   const updateQuery = `
     UPDATE Transfer_list 
-    SET Billdate = ?, Organization_name = ?, FromDate = ?, EndDate = ?, Trips = ?, Amount = ?, Trip_id = ?,Status="Billed"
+    SET Billdate = ?, Organization_name = ?, FromDate = ?, EndDate = ?, Trips = ?, Amount = ?, Trip_id = ?,Status=?
     WHERE Grouptrip_id = ?`;
 
-  db.query(updateQuery, [Billdate, Organization_name, FromDate, EndDate, Trips, Amount, tripIdString, grouptripid], (error, result) => {
+  db.query(updateQuery, [Billdate, Organization_name, FromDate, EndDate, Trips, Amount, tripIdString,Status, grouptripid], (error, result) => {
     if (error) {
       console.error('Database query error:', error);
       return res.status(500).json({ error: 'Database query failed' });

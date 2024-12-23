@@ -492,6 +492,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                 </Box>
               )}
               <DataGrid
+                // rows={combinedRowsTrigger ? combinedRows : rows}
                 rows={rows}
                 columns={columns}
                 onRowSelectionModelChange={(newRowSelectionModel) => {

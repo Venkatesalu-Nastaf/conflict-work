@@ -139,10 +139,12 @@ const style = {
 const style1 = {
   position: 'absolute',
   top: '50%',
+  // height: '80%',
   height: 'fit-content',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 1300,
+  // width: 1300,
+  width: "90%",
   bgcolor: 'background.paper',
   // bgcolor: 'yellow',
   // border: '1px solid #000',
@@ -611,7 +613,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     const finallastestTimeFormat = parseFloat(lastestTimeFormat).toFixed(2)
 
     const isEqual = (
-      isEditMode &&
+      // isEditMode &&
       conflictCompareDatas?.conflictmaxdate !== null &&
       conflictCompareDatas?.tripids !== null &&
       conflictCompareDatas?.tripids !== tripID &&
@@ -623,7 +625,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     )
 
     const isLessThan = (
-      isEditMode &&
+      // isEditMode &&
       conflictCompareDatas?.conflictmaxdate !== null &&
       conflictCompareDatas?.tripids !== null &&
       conflictCompareDatas?.tripids !== tripID &&
@@ -712,6 +714,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   }
 
+  const shedoutDisabled = temporaryStatus ? hideField : hideField
   return (
     <div className="form-container form-container-tripsheet">
       <div className="Tripsheet-form main-content-container">
@@ -1278,7 +1281,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           label="Shed Out Date"
-                          disabled={hideField && superAdminAccess === "0" && temporaryStatus}
+                          // disabled={hideField && superAdminAccess === "0" && temporaryStatus}
+                          disabled={shedoutDisabled && superAdminAccess === "0"}
+
                           id="shedOutDate"
                           value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
                           format="DD/MM/YYYY"
@@ -1305,7 +1310,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           label="Report Date"
-                          disabled={hideField && superAdminAccess === "0" && temporaryStatus}
+                          // disabled={hideField && superAdminAccess === "0" && temporaryStatus}
+                          disabled={shedoutDisabled && superAdminAccess === "0"}
                           id="startdate"
                           value={
                             formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
@@ -1469,7 +1475,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <input
                           type="time"
                           name="reporttime"
-                          disabled={hideField && superAdminAccess === "0" && temporaryStatus}
+                          // disabled={hideField && superAdminAccess === "0" && temporaryStatus}
+                          disabled={shedoutDisabled && superAdminAccess === "0"}
                           value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                           onChange={(event) => {
                             setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
@@ -1508,7 +1515,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <input
                         type="time"
                         id="starttime"
-                        disabled={hideField && superAdminAccess === "0" && temporaryStatus}
+                        // disabled={hideField && superAdminAccess === "0" && temporaryStatus}
+                        disabled={shedoutDisabled && superAdminAccess === "0"}
                         name="starttime"
                         value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
                         onChange={(event) => {
@@ -1694,13 +1702,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                     {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                     {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
                     {/* <br></br> */}
-                    {conflictkm?.maximumkm !== 0 && dayhcl === 0 && tripID !== conflictkm.maxtripid && data === undefined && (
+                    {/* {conflictkm?.maximumkm !== 0 && dayhcl === 0 && tripID !== conflictkm.maxtripid && data === undefined && (
                       (Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && (
                         <label className='invalid-km' style={{ paddingBottom: '18px' }}>
                           Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}
                         </label>
                       )
-                    )}
+                    )} */}
                     {data === undefined && tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
                       <label className='invalid-km'>
                         Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}

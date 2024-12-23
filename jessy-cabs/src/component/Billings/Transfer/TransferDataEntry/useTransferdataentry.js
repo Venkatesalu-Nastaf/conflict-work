@@ -90,6 +90,9 @@ const useTransferdataentry = () => {
     //    Add and Edit Boolean 
     const [addEditTrigger, setAddEditTrigger] = useState(false)
 
+    // Combined Rows for Grouptripid
+    const [combinedRows, setCombinedRows] = useState([]);
+    const [billedRowSelect, setBilledRowSelect] = useState(null)
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
@@ -516,7 +519,11 @@ const useTransferdataentry = () => {
     //     setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
     // };
 
+
+
     const handleRowSelection = (newSelectionModel) => {
+        console.log(newSelectionModel, "enter select");
+
         const selectedTripIds = newSelectionModel
             .filter((selectedId) => selectedId !== null)
             .map((selectedId) => {
@@ -524,6 +531,16 @@ const useTransferdataentry = () => {
                 return selectedRow ? selectedRow.tripid : null;
             })
             .filter((tripid) => tripid !== null);
+
+        const selectedBilledTrips = newSelectionModel
+            .filter((selectedId) => selectedId !== null)
+            .map((selectedId) => {
+                const selectedRow = combinedRows.find((row) => row.id === parseInt(selectedId));
+                return selectedRow && selectedRow.status === "Billed" ? selectedRow : null;
+            })
+            .filter((tripid) => tripid !== null);
+          
+        setBilledRowSelect(selectedBilledTrips)
 
         const selectedTrips = newSelectionModel
             .filter((selectedId) => selectedId !== null)
@@ -978,6 +995,8 @@ const useTransferdataentry = () => {
             setRows(updatedRows);
             setSelectedRow([]);
             setMatchTripID('')
+            setRowSelectionModel([])
+            setCombinedRows(updatedRows)
 
             const responsedata = resultresponse.data
             if (responsedata.affectedRows > 0) {
@@ -987,6 +1006,7 @@ const useTransferdataentry = () => {
                 setRowSelectionModel([])
                 setRows(updatedRows);
                 setSelectedRow([]);
+                setCombinedRows(updatedRows)
 
             }
 
@@ -1241,19 +1261,46 @@ const useTransferdataentry = () => {
                     ...row,
                     id: index + 1,
                 }));
-                setRows(rowsWithUniqueId);
+                console.log(rowsWithUniqueId, "enter 1111");
+                console.log(combinedRows, "enter 2222222");
+
+                if (!combinedRows || combinedRows.length === 0) {
+                    // setCombinedRows(rowsWithUniqueId);  // Initialize with rowsWithUniqueId if empty
+                    setRows(rowsWithUniqueId);
+                } else {
+                    // Add rowsWithUniqueId to combinedRows
+                    // setCombinedRows(prevCombinedRows => [
+                    //     ...prevCombinedRows, 
+                    //     ...rowsWithUniqueId
+                    // ]);     
+                    const newCombinedRows = [...combinedRows, ...rowsWithUniqueId];
+
+                    const updatedCombinedRows = newCombinedRows.map((row, index) => ({
+                        ...row,
+                        id: index + 1, // Reassign id starting from 1
+                    }));
+
+                    console.log(updatedCombinedRows, " enter Combined and Updated Rows");
+
+                    // Now update combinedRows with the updated data
+                    // setCombinedRows(updatedCombinedRows);
+                    setRows(updatedCombinedRows);
+
+                }
+
+                // setRows(rowsWithUniqueId);
                 setSuccess(true);
                 setSuccessMessage("successfully listed");
                 setLoading(false); // Stop loading
 
             } else {
-                setRows([]);
+                // setRows([]);
                 setError(true);
                 setErrorMessage("no data found");
             }
         } catch (error) {
 
-            setRows([]);
+            // setRows([]);
             setError(true);
             setErrorMessage("Check your Network Connection");
         } finally {
@@ -1612,7 +1659,13 @@ const useTransferdataentry = () => {
     // console.log(rowSelectionModel, 'presentrowSelect', matchTripID);
 
     const handleAddGroup = async () => {
-        const presentIds = rowSelectionModel.filter(id => matchTripID.includes(id.toString()));
+        const presentIds = rowSelectionModel?.filter(id => matchTripID.includes(id.toString()));
+
+        if (billedRowSelect?.length >= 1) {
+            setError(true)
+            setErrorMessage("Remove Billed Row")
+            return
+        }
         if (presentIds.length > 0) {
             setError(true)
             setisbtnloading(false)
@@ -1793,6 +1846,12 @@ const useTransferdataentry = () => {
         }
         else if (groupId !== "") {
             // updateTransferListTrip'
+            if (rowSelectionModel.length === 0) {
+                setError(true);
+                setErrorMessage("Please select the Row");
+                return;
+    
+            }
             try {
                 if (!rows || rows.length === 0) {
                     throw new Error("Rows data is empty");
@@ -1863,15 +1922,22 @@ const useTransferdataentry = () => {
                 // Combine rowSelectionModelAsStrings and tripid into a new array
                 const combinedArray = [...rowSelectionModelAsStrings, tripid];
                 // const uniqueTripIds = [...new Set(combinedArray)];
-                const uniqueTripIds = [...new Set(combinedArray)].filter(tripId => tripId !== "");
+                // const uniqueTripIds = [...new Set(combinedArray)].filter(tripId => tripId !== "");
+                const uniqueTripIds = [
+                    ...new Set(
+                        combinedArray
+                            .flatMap((tripId) => tripId.split(',')) // Split comma-separated values into individual IDs
+                            .filter((tripId) => tripId.trim() !== "") // Filter out empty strings after trimming
+                    ),
+                ];
 
-                console.log(uniqueTripIds,"com")
+                console.log(uniqueTripIds, "com")
                 const dadatrip = uniqueTripIds.length
                 const TotalTrips = parseInt(dadatrip) // Results in ["1358", "1358"]
                 const todate = dayjs(toDate).format('YYYY-MM-DD')
                 const totalamount = fullTotalAmount.toString()
                 const tripscount = TotalTrips.toString()
-
+                const statusUpdate = invoiceno ? "Billed" : "notbilled"
 
                 const transferlist = {
                     Billdate: billDate,
@@ -1881,10 +1947,11 @@ const useTransferdataentry = () => {
                     EndDate: todate,
                     Trips: tripscount,
                     Amount: totalamount,
-                    grouptripid: grouptripid
+                    grouptripid: grouptripid,
+                    Status:statusUpdate
                 }
-                console.log(transferlist,"not empty");
-                
+                console.log(transferlist, "not empty",filteredRows);
+
                 if (filteredRows.length > 0) {
 
                     const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
@@ -2073,7 +2140,8 @@ const useTransferdataentry = () => {
                             ...row,
                             id: index + 1,
                         }));
-
+                        console.log(rowsWithUniqueId, "enter datas");
+                        setCombinedRows(rowsWithUniqueId)
                         setRows(rowsWithUniqueId);
                         setAddEditTrigger(false)
                         setSuccess(true);
@@ -2194,7 +2262,8 @@ const useTransferdataentry = () => {
         setLoading,
         setInfo,
         addEditTrigger, setAddEditTrigger,
-        infoMessage, setINFOMessage, handlecustomer, isbtnloading, setisbtnloading, iseditloading, setiseditloading, isbillloading, setisbillloading
+        infoMessage, setINFOMessage, handlecustomer, isbtnloading, setisbtnloading, iseditloading, setiseditloading, isbillloading, setisbillloading,
+        combinedRows, setCombinedRows
 
     };
 };

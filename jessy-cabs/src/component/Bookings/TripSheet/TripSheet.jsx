@@ -723,6 +723,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
 
   }
+  
+  const signaturedisabled = signimageUrl ==="" && temporaryStatus ? true : false
 
   const shedoutDisabled = temporaryStatus ? hideField : hideField
   return (
@@ -2203,8 +2205,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </div>
                                   <div className="input">
                                     <Button
-                                      // disabled={!Tripsheet_modify}
-                                      disabled={!Tripsheet_modify }
+                                      disabled={!Tripsheet_modify || (superAdminAccess === "0" && signaturedisabled)}
+                                      // disabled={!Tripsheet_modify || (superAdminAccess === "0" && temporaryStatus)}
                                       onClick={handlesignatureimages}
                                       variant="contained"
                                       className={`full-width ${signimageUrl ? 'green-button' : ''}`}

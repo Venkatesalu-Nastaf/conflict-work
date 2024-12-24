@@ -41,7 +41,7 @@ const useGstReport = () => {
         { field: 'id', headerName: 'Sno', width: 70 },
         // { field: "", headerName: "Invoice No", width: 130 },
         // { field: "InvoiceDate", headerName: "Invoice Date", width: 130 },
-        { field: 'invoiceNo', headerName: 'Invoice No', width: 90 },
+        { field: 'invoiceNo', headerName: 'Invoice No', width: 90,},
         // { field: 'billdate', headerName: 'Invoice Date', width: 130,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
         { field: 'billdate', headerName: 'Invoice Date', width: 130, },
         { field: 'tripsheetdate', headerName: 'Trip Date', width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
@@ -369,13 +369,14 @@ const useGstReport = () => {
                     return {
                         ...trip,
                         invoiceNo: tripDetails.invoiceNo,
-                        invoiceDate: tripDetails.invoiceDate,
+                        invoiceDate: dayjs(tripDetails.invoiceDate).format('DD-MM-YYYY'),
                     };
                 }
 
                 return trip;
             });
-
+          console.log(updatedTripsheetResults,"invoicedateresults");
+          
             // Initialize totals
             let totalCGST = 0;
             let totalSGST = 0;

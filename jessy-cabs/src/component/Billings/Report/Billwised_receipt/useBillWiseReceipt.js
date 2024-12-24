@@ -222,15 +222,20 @@ const useBillWiseReceipt = () => {
 
       const invoice = combinedPendingBill.map((li) => li.BillNo);
       setInvoiceNo(invoice);
-
+      console.log(combinedPendingBill,"pendingggggggggggggg");
+      
       const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => ({
-        id: currentId++, // Unique ID for MUI DataGrid
+        id: index + 1, // Assign a unique ID based on the array index
         sno: index + 1, // Sequential SNO
-        ...item,
+        ...item, // Include all other properties from the original item
       }));
-
+      
+      console.log(combinedPendingBillWithSnoAndId, "pendinggggggggcombined pending ordered",combinedPendingBill);
+      
+      
       if (combinedPendingBillWithSnoAndId.length === 0) {
         setError(true);
+        setPendingBillRows([])
         setErrorMessage("No Data Found");
         return;
       }

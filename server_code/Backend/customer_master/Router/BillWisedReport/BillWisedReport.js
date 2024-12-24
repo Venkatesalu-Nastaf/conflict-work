@@ -20,8 +20,9 @@ router.get('/customerBilledDetails', (req, res) => {
             if (error) {
                 return reject('Error fetching group billing details');
             }
-            resolve(result);
-            console.log(result, 'result groupbilling');
+            const updatedResult = result.map(({ id, ...rest }) => rest);
+            resolve(updatedResult);
+            console.log(updatedResult, 'result groupbilling');
         });
     });
 
@@ -94,14 +95,17 @@ router.post('/updateInvoiceStatus', async (req, res) => {
     const updateTransferTable = `UPDATE Transfer_list SET BillReportStatus = "Success" WHERE Grouptrip_id IN (?)`;
     const updateGroupTable = `UPDATE Group_billing SET BillReportStatus = "Success" WHERE ReferenceNo IN (?)`;
     const updateIndividualTable = `UPDATE Individual_Billing SET BillReportStatus = "Success" WHERE Invoice_No IN (?)`;
-
+    const intInvoiceNos = invoiceNo?.filter((item) => Number.isInteger(item));
+    console.log(intInvoiceNos, 'Filtered integer invoice numbers');
+    const stringInvoiceNos = invoiceNo?.filter((item) => typeof item === 'string');
+    console.log(stringInvoiceNos, 'Filtered string invoice numbers');
     try {
         // Use a transaction to ensure all updates are done together
         await db.beginTransaction();
 
         // Execute the three update queries for the same set of invoiceNos
         await new Promise((resolve, reject) => {
-            db.query(updateTransferTable, [invoiceNo], (error, result) => {
+            db.query(updateTransferTable, [intInvoiceNos], (error, result) => {
                 if (error) {
                     return reject(error);
                 }
@@ -109,29 +113,29 @@ router.post('/updateInvoiceStatus', async (req, res) => {
             });
         });
 
+        await new Promise((resolve, reject) => {
+            db.query(updateGroupTable, [stringInvoiceNos], (error, result) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(result);
+            });
+        });
         // await new Promise((resolve, reject) => {
-        //     db.query(updateGroupTable, [invoiceNo], (error, result) => {
+        //     // Convert `invoiceNo` array to a stringified format for SQL `IN` clause
+        //     const formattedInvoiceNos = invoiceNo?.map(num => `'${num}'`).join(',');
+        //     const query = `UPDATE Group_billing SET BillReportStatus = "Success" WHERE ReferenceNo IN (${formattedInvoiceNos})`;
+
+        //     db.query(query, (error, result) => {
         //         if (error) {
         //             return reject(error);
         //         }
         //         resolve(result);
         //     });
         // });
-        await new Promise((resolve, reject) => {
-            // Convert `invoiceNo` array to a stringified format for SQL `IN` clause
-            const formattedInvoiceNos = invoiceNo?.map(num => `'${num}'`).join(',');
-            const query = `UPDATE Group_billing SET BillReportStatus = "Success" WHERE ReferenceNo IN (${formattedInvoiceNos})`;
-
-            db.query(query, (error, result) => {
-                if (error) {
-                    return reject(error);
-                }
-                resolve(result);
-            });
-        });
 
         await new Promise((resolve, reject) => {
-            db.query(updateIndividualTable, [invoiceNo], (error, result) => {
+            db.query(updateIndividualTable, [stringInvoiceNos], (error, result) => {
                 if (error) {
                     return reject(error);
                 }
@@ -144,6 +148,8 @@ router.post('/updateInvoiceStatus', async (req, res) => {
         res.status(200).json({ message: 'Invoice status updated successfully' });
     } catch (error) {
         // Rollback transaction in case of an error
+        console.log(error, 'error');
+
         await db.rollback();
         res.status(500).json({ error: 'Failed to update invoice status', details: error.message });
     }

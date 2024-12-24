@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 const multer = require('multer');
 const path = require('path');
 router.use(express.static('customer_master'));
+const cron = require('node-cron');
+const moment = require('moment'); 
 
 // add Aggrement database
 
@@ -160,6 +162,44 @@ const storage = multer.diskStorage({
       })
     }
   })
+
+  //searchbar in Agreement Page
+router.get('/searchAgreementpage', (req, res) => {
+  const { searchText } = req.query; // Get the searchText from the query params
+  // console.log(searchText, "search")
+  let query = 'SELECT * FROM  Aggrement WHERE 1=1'; // Ensure you query from the correct table
+  let params = [];
+
+  if (searchText) {
+    const columnsToSearch = [
+        'customer',
+        'email',
+        'mobileno',
+        'address',
+        'gstno'
+    ];
+    console.log(columnsToSearch, "columns")
+    const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+    query += ` AND (${likeConditions})`;
+
+    // Add searchText to params for each column
+    params = columnsToSearch.map(() =>` ${searchText}%`);
+  }
+console.log(query,params, "fhjf");
+
+  // Execute the query
+  db.query(query, params, (err, results) => {
+    if (err) {
+      console.error("Database query error:", err); // Log the error for debugging
+      return res.status(500).json({ error: 'Error retrieving data' });
+    }
+
+    console.log("Search results:", results); // Log results to verify
+    res.json(results); // Send back the results to the client
+  });
+});
+
+
 
 // router.post('/send-emailagreementdata', async (req, res) => {
 //     try {
@@ -415,6 +455,174 @@ router.post('/send-emailagreementdata', async (req, res) => {
 //       res.status(500).send('An error occurred.');
 //   }
 // });
+
+
+//  auto Email setup
+
+// Utility function for async DB queries
+const queryAsync = (query, params = []) => {
+  return new Promise((resolve, reject) => {
+    db.query(query, params, (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+};
+
+
+const getEmailCredentials = async () => {
+  const results = await queryAsync("SELECT EmailApp_Password, Sender_mail FROM usercreation LIMIT 1");
+  if (results.length > 0) {
+    // console.log(results)
+    return results[0];
+  } else {
+    throw new Error('No credentials found in the table.');
+  }
+};
+
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: 'foxfahad386@gmail.com',
+//     pass: 'vwmh mtxr qdnk tldd',
+//   },
+// });
+
+// const credentials = getEmailCredentials();
+// transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: credentials.Sender_mail,
+//     pass: credentials.EmailApp_Password,
+//   },
+// });
+
+const createTransporter = async () => {
+  try {
+    const credentials = await getEmailCredentials(); 
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: credentials.Sender_mail,
+        pass: credentials.EmailApp_Password,
+      },
+    });
+    return { transporter, from: credentials.Sender_mail }; 
+    // console.log('Transporter created successfully');
+    // return transporter;
+  } catch (error) {
+    console.error('Failed to create transporter:', error);
+    throw error;
+  }
+};
+
+// Function to parse and validate dates
+const parseDate = (dateStr) => {
+  console.log(`Attempting to parse: "${dateStr}"`);
+  
+  const validFormats = [
+    "DD-MM-YYYY",
+    "MM/DD/YYYY",
+    "YYYY-MM-DD",
+    "ddd, D MMM YYYY HH:mm:ss [GMT]",
+    "YYYY-MM-DDTHH:mm:ssZ",
+    "DD/MM/YYYY"
+  ];
+
+  for (const format of validFormats) {
+    const parsedDate = moment(dateStr, format, true); 
+    if (parsedDate.isValid()) {
+      console.log(`Parsed successfully with format "${format}": ${parsedDate.format("DD-MM-YYYY")}`);
+      return parsedDate;
+    }
+  }
+
+  console.error(`Failed to parse: "${dateStr}"`);
+  return null;
+};
+
+// Subscription reminders function
+const sendSubscriptionReminders = async () => {
+  const today = moment();
+
+  db.query("SELECT email, customer, toDate FROM Aggrement WHERE toDate IS NOT NULL AND toDate != ''", (err, results) => {
+    if (err) {
+      console.error("Error fetching subscriptions:", err);
+      return;
+    }
+
+    results.forEach(async (user) => {
+      if (!user.toDate) {
+        console.error(`Missing date for ${user.email}`);
+        return;
+      }
+
+      const subscriptionEnd = parseDate(user.toDate.trim());
+
+      if (!subscriptionEnd) {
+        console.error(`Invalid subscription end date for ${user.email} with date: ${user.toDate}`);
+        return;
+      }
+
+      const fifthMonthStart = subscriptionEnd.clone().subtract(1, "month").startOf("month");
+      const fifthMonthEnd = subscriptionEnd.clone().subtract(1, "month").endOf("month");
+      const previousDay = subscriptionEnd.clone().subtract(1, "day");
+
+      console.log(`Reminder period for ${user.email}: ${fifthMonthStart.format("DD-MM-YYYY")} to ${fifthMonthEnd.format("DD-MM-YYYY")}`);
+
+      if (today.isSameOrAfter(fifthMonthStart) && today.isSameOrBefore(fifthMonthEnd)) {
+        try {
+          // Send reminder email
+          // const transporter = await createTransporter();
+          const { transporter, from } = await createTransporter();
+          // console.log('Sending email...')
+          await transporter.sendMail({
+            from,
+            to: user.email,
+            subject: 'Subscription Reminder',
+            html: `
+              <p>Dear ${user.customer},</p>
+              <p>I hope this message finds you well. We greatly value your association with <strong>JESSYCABS</strong> and are committed to providing you with seamless and exceptional service for all your complete transport needs.</p>
+              <p>As per our records, your current agreement with us is set to expire on <strong style="color: red;">${subscriptionEnd.format("DD-MM-YYYY")}</strong>.</p>
+              <p>To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.</p>
+              <p>Here are the key details regarding your renewal:</p>
+              <ul>
+                <li><strong>Agreement Expiry Date:</strong> ${subscriptionEnd.format("DD-MM-YYYY")}</li>
+                <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+              </ul>
+              <p><strong>Action Required:</strong> Kindly confirm your intent to renew by <span style="color: red;">${previousDay.format("DD-MM-YYYY")}</span>.</p>
+              <p>Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].</p>
+              <p>We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.</p>
+            `,
+          });
+          console.log(`Reminder sent to ${user.email}`);
+
+          // Send notification to admin
+          await transporter.sendMail({
+            from,
+            to:from,
+            subject: 'Customer Subscription Reminder Sent',
+            text: `The subscription reminder email has been successfully sent to ${user.customer} (${user.email}) with an expiry date of ${subscriptionEnd.format("DD-MM-YYYY")}.`,
+          });
+          console.log(`Notification sent to admin for ${user.email}`);
+        } catch (error) {
+          console.error(`Failed to send email to ${user.email}:`, error);
+        }
+      } else {
+        console.log(`No reminder needed for ${user.email} today.`);
+      }
+    });
+  });
+};
+
+
+cron.schedule('0 0 * * *', () => {
+  console.log('Running daily subscription reminder job...');
+  sendSubscriptionReminders();
+});
+
+
+
 
 
 

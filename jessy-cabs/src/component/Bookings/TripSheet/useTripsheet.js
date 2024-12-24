@@ -293,9 +293,10 @@ const useTripsheet = () => {
                 <Button
                     onClick={() => handleEditMapLogPoint(params)}
                     aria-label="open-dialog"
-                    disabled={!Tripsheet_modify1}
+                    // disabled={!Tripsheet_modify1}
+                    disabled={!Tripsheet_modify1 || (superAdminAccess==="0" && temporaryStatus)}
                 >
-                    <Button disabled={!Tripsheet_modify1} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button disabled={!Tripsheet_modify1 || (superAdminAccess==="0" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <FiEdit3 style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -309,9 +310,10 @@ const useTripsheet = () => {
                 <Button
                     onClick={() => handleRemoveMapLogPoint(params)}
                     aria-label="open-dialog"
-                    disabled={!Tripsheet_delete1}
+                    // disabled={!Tripsheet_delete1}
+                    disabled={!Tripsheet_delete1 || (superAdminAccess==="0" && temporaryStatus)}
                 >
-                    <Button disabled={!Tripsheet_delete1} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button disabled={!Tripsheet_delete1 || (superAdminAccess==="0" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <RiDeleteBinLine style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -6281,6 +6283,11 @@ const useTripsheet = () => {
                     return
                 }
                 else if (statusCheck === 'Closed' && (station.includes('Chennai') || station.includes('All'))) {
+
+                    setTemporaryStatus(true)
+                    setHideField(true)
+                }
+                else if (statusCheck === 'Closed' &&  station.includes('All')) {
 
                     setTemporaryStatus(true)
                     setHideField(true)

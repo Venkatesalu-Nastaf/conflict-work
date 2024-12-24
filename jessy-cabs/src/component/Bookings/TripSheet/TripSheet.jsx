@@ -601,7 +601,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   }
 
   const checkForConflict = () => {
-    console.log(conflictCompareDatas, "data", conflictCompareDatas?.conflictmaxdate)
+    // console.log(conflictCompareDatas, "data", conflictCompareDatas?.conflictmaxdate)
     // console.log(conflictenddate, "data2")
     const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
     const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
@@ -609,9 +609,17 @@ const TripSheet = ({ stationName, logoImage }) => {
     // const formattedLatestTime = maxDateData.row?.latestTime?.replace(":", ".")
     // const finalLatestTime = parseFloat(formattedLatestTime).toFixed(2);
     const shedinTimeFormat = reportTime?.replace(":", ".")
-    const finalshedinTimeFormat = parseFloat(shedinTimeFormat).toFixed(2);
-    const lastestTimeFormat = conflictCompareDatas?.latestTime?.replace(":",".")
-    const finallastestTimeFormat = parseFloat(lastestTimeFormat).toFixed(2)
+    const finalshedinTimeFormat = parseFloat(shedinTimeFormat)?.toFixed(2);
+    const lastestTimeFormat = conflictCompareDatas?.latestTime?.replace(":", ".")
+    const finallastestTimeFormat = parseFloat(lastestTimeFormat)?.toFixed(2)
+    const parseDate = (dateStr) => {
+      const [day, month, year] = dateStr?.split('-');
+      return new Date(`${year}-${month}-${day}`);
+    };
+    const finalshedouttime = parseDate(shedOutDate || "")
+    const finalmaxtime = parseDate(conflictCompareDatas?.conflictmaxdate || "")
+    finalshedouttime?.setHours(0, 0, 0, 0);
+    finalmaxtime?.setHours(0, 0, 0, 0);
 
     const isEqual = (
       // isEditMode &&
@@ -621,7 +629,8 @@ const TripSheet = ({ stationName, logoImage }) => {
       // !shedindate &&
       // reportTime <= conflictCompareDatas?.latestTime &&
       parseFloat(finalshedinTimeFormat) <= parseFloat(finallastestTimeFormat) &&
-      shedOutDate === conflictCompareDatas?.conflictmaxdate
+      // shedOutDate === conflictCompareDatas?.conflictmaxdate
+      finalshedouttime === finalmaxtime
 
     )
 
@@ -632,7 +641,7 @@ const TripSheet = ({ stationName, logoImage }) => {
       conflictCompareDatas?.tripids !== tripID &&
       // !shedindate &&
 
-      shedOutDate < conflictCompareDatas?.conflictmaxdate
+      finalshedouttime < finalmaxtime
       // Check if shedOutDate is less than conflictenddate
     );
 
@@ -1779,7 +1788,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                 {emptyState ? "" :
                   <div className="input" style={{ display: "grid" }}>
-                    {dayhcl === 0 && kmValue.startKMState && (Number(kmValue.closeKMState || formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm ) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                    {dayhcl === 0 && kmValue.startKMState && (Number(kmValue.closeKMState || formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
                     <div style={{ display: "flex" }}>
                       <div className="icone">
                         <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -2110,7 +2119,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       <Button
                                         // onClick={handleDeleteMap}
                                         onClick={handleOpen}
-                                        variant="contained" color="primary">
+                                        variant="contained" color="primary" disabled={superAdminAccess === "0" && temporaryStatus}>
                                         Delete map
                                       </Button>
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
@@ -2184,7 +2193,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     </Box>
                                   </Modal>
                                   <div className="input">
-                                    <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleUpload} className='full-width'>Upload Doc</Button>
+                                    <Button variant="contained" disabled={!Tripsheet_modify || (superAdminAccess === "0" && temporaryStatus)} onClick={handleUpload} className='full-width'>Upload Doc</Button>
                                   </div>
                                 </div>
                                 <div className="in-feild" style={{ marginTop: '20px' }}>
@@ -2194,7 +2203,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </div>
                                   <div className="input">
                                     <Button
-                                      disabled={!Tripsheet_modify}
+                                      // disabled={!Tripsheet_modify}
+                                      disabled={!Tripsheet_modify || (superAdminAccess === "0" && temporaryStatus)}
                                       onClick={handlesignatureimages}
                                       variant="contained"
                                       className={`full-width ${signimageUrl ? 'green-button' : ''}`}
@@ -2250,8 +2260,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </div> */}
                                   <div className="input">
                                     {manualTripID.length > 0 ?
-                                      <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
-                                      <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Manual Marking</Button>
+                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess === "0" && temporaryStatus)} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
+                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess === "0" && temporaryStatus)} className='full-width' onClick={handleEditMap} >Manual Marking</Button>
                                     }
                                   </div>
                                 </div>
@@ -3222,7 +3232,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <DialogActions className='tripsheet-cancel-save-btn'>
                         <Button className='tripsheet-cancel-button' onClick={handleClose}>Cancel</Button>
                         {isEditMode ?
-                          <Button variant="contained" onClick={handleEdit}>
+                          <Button variant="contained" onClick={handleEdit} disabled={superAdminAccess === "0" && temporaryStatus} >
                             Save
                           </Button>
                           : <></>

@@ -188,7 +188,10 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   <TextField
                     size="small"
                     id="Validity"
-                    sx={{ width: "300px" }}
+                    sx={{  
+                      minWidth: { xs: 200, sm: 350 }, // Responsive minWidth
+
+                    }}
                     label="Validity"
                     name="Validity"
                     autoComplete="new-password"

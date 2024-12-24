@@ -154,8 +154,9 @@ export const GstReport = ({ stationName, Statename }) => {
             </div>
           </div>
         </div>
+        <div style={{ overflowX:"auto"}}>
         <div className='input-field gst-report-table-input-field'>
-          <div className="input">
+          <div className="input" >
             <TextField
               name="orderByMobileNo"
               autoComplete="new-password"
@@ -243,6 +244,8 @@ export const GstReport = ({ stationName, Statename }) => {
             </PopupState>
           </div>
         </div>
+        </div>
+        
         <div className='gst-report-table'>
           <Box
             sx={{

@@ -235,7 +235,7 @@ export const BillWiseReceipt = () => {
                       <label htmlFor="">Collected Amount:</label>
                       <input type="text" value={totals.collectedAmount} onChange={(e) => handleCollectedChange(e)} />
                     </div>
-                    <div className='total-inputsss' style={{display: 'flex', gap: '10px'}}>
+                    <div className='total-inputsss'>
                       <Button variant='contained' onClick={handlePending}>Pending </Button>
                       <Button variant='contained' disabled={!Report_create} onClick={handleAddBillReceive}>ADD</Button>
                     </div>

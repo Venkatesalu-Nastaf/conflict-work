@@ -343,7 +343,7 @@ const RateType = () => {
                         </div>
                     }
                 </div>
-                <div style={{ display: "flex", gap: "20px", alignItems:"center", flexWrap:"wrap" }}>
+                <div style={{ display: "flex", gap: "20px", alignItems:"center", flexWrap:"wrap", paddingBottom:"10px" }}>
                     <div className="Download-btn">
                         <PopupState variant="popover" popupId="demo-popup-menu">
                             {(popupState) => (

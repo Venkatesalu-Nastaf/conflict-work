@@ -19,8 +19,8 @@
 }
 
 .gst-report-table-input-field {
-  overflow-x: auto;
-  width: 100%;
+  /* overflow-x: auto; */
+  width: 1200px;
   height: 50px;
   padding: 10px;
 }

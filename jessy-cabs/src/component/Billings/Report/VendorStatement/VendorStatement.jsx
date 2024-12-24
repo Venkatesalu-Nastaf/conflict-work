@@ -168,8 +168,8 @@ const VendorStatement = () => {
         </div>
         
 
-        <div style={{ display: "flex" }}>
-          <div className="Download-btn" style={{ paddingRight: '15px' }}>
+        <div className='vendor-down-section'>
+          <div className="Download-btn" style={{ paddingRight: '15px',paddingBottom:"0px" }}>
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>

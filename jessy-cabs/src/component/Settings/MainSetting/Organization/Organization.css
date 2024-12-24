@@ -215,6 +215,13 @@
     /* justify-content: center; */
 }
 
+@media only screen and (min-width:563px) and (max-width:960px) {
+    .organisation-details-input-feilds {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
 @media only screen and (min-width:964px) and (max-width:1241px) {
 
     .input-buttons-small {

@@ -163,7 +163,7 @@ const UserSetting = () => {
                         src={selectedavtar}
                       /> 
                      ) : (
-                      <div>
+                      <div className="user-division-image">
 
                         <div className="user-selected-avatar-division">
                           <img     src={selectedavtar}alt="" className="user-selected-avatar" />

@@ -202,68 +202,6 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       }}
                     />
                   </div>
-                  <div className="input">
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
-                    </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer components={["DatePicker", "DatePicker"]}>
-                        <DatePicker
-                          label="From Date"
-                          id="fromDate"
-                          className="full-width"
-                          value={
-                            fromDate || selectedCustomerDatas?.fromdate
-                              ? dayjs(fromDate || selectedCustomerDatas?.fromdate)
-                              : fromDate || formDataTransfer?.FromDate
-                                ? dayjs(formDataTransfer?.FromDate)
-                                : ""
-                          }
-                          format="DD/MM/YYYY"
-                          onChange={(date) => {
-                            // handleDateChange(date, 'fromdate');
-                            const formattedDate = dayjs(date).format('YYYY-MM-DD');
-                            setFromDate(formattedDate);
-                          }}
-                        >
-                          {({ inputProps, inputRef }) => (
-                            <TextField
-                              {...inputProps}
-                              inputRef={inputRef}
-                              value={selectedCustomerDatas?.fromdate || fromDate || dayjs().format('DD/MM/YYYY')}
-                            />
-                          )}
-                        </DatePicker>
-                      </DemoContainer>
-                    </LocalizationProvider>
-                  </div>
-
-                  <div className="input">
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
-                    </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer components={["DatePicker", "DatePicker"]}>
-                        <DatePicker
-                          label="To Date"
-                          id="toDate"
-                          className='full-width'
-                          value={toDate || selectedCustomerDatas.todate ? dayjs(toDate || selectedCustomerDatas.todate) : toDate || formDataTransfer?.EndDate ? dayjs(formDataTransfer?.EndDate) : "" || ''}
-                          format="DD/MM/YYYY"
-                          onChange={(date) => {
-                            handleDateChange(date, 'todate');
-                            const formattedDate = dayjs(date).format('YYYY-MM-DD');
-                            const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
-                            setToDate(parsedDate);
-                          }}
-                        >
-                          {({ inputProps, inputRef }) => (
-                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.todate || toDate} />
-                          )}
-                        </DatePicker>
-                      </DemoContainer>
-                    </LocalizationProvider>
-                  </div>
                   <div className="input" >
                     <div className="icone">
                       <FontAwesomeIcon icon={faBuilding} size="xl" />
@@ -326,6 +264,70 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       autoComplete='off'
                     />
                   </div>
+                  
+                  <div className="input">
+                    <div className="icone">
+                      <CalendarMonthIcon color="action" />
+                    </div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker", "DatePicker"]}>
+                        <DatePicker
+                          label="From Date"
+                          id="fromDate"
+                          className="full-width"
+                          value={
+                            fromDate || selectedCustomerDatas?.fromdate
+                              ? dayjs(fromDate || selectedCustomerDatas?.fromdate)
+                              : fromDate || formDataTransfer?.FromDate
+                                ? dayjs(formDataTransfer?.FromDate)
+                                : ""
+                          }
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            // handleDateChange(date, 'fromdate');
+                            const formattedDate = dayjs(date).format('YYYY-MM-DD');
+                            setFromDate(formattedDate);
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField
+                              {...inputProps}
+                              inputRef={inputRef}
+                              value={selectedCustomerDatas?.fromdate || fromDate || dayjs().format('DD/MM/YYYY')}
+                            />
+                          )}
+                        </DatePicker>
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
+
+                  <div className="input">
+                    <div className="icone">
+                      <CalendarMonthIcon color="action" />
+                    </div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker", "DatePicker"]}>
+                        <DatePicker
+                          label="To Date"
+                          id="toDate"
+                          className='full-width'
+                          value={toDate || selectedCustomerDatas.todate ? dayjs(toDate || selectedCustomerDatas.todate) : toDate || formDataTransfer?.EndDate ? dayjs(formDataTransfer?.EndDate) : "" || ''}
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            handleDateChange(date, 'todate');
+                            const formattedDate = dayjs(date).format('YYYY-MM-DD');
+                            const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
+                            setToDate(parsedDate);
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.todate || toDate} />
+                          )}
+                        </DatePicker>
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
+                  
                   <div className="input">
                     <Button variant="contained" disabled={!Transfer_read} onClick={() => handleShow()} >List</Button>
                   </div>

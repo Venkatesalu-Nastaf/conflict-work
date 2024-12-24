@@ -27,15 +27,35 @@ import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 
 
+// const customer_colums = [
+//   { field: 'id', headerName: 'S.no', width: 70 },
+//   { field: 'vehRegNo', headerName: 'Vehicle', width: 160 },
+//   { field: 'totalTime', headerName: 'Tot. Time', width: 120 },
+//   { field: 'totalKilometers', headerName: 'TKMS', width: 120 },
+//   { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
+//   { field: 'totalcustomeradvance', headerName: 'Driver Advance', width: 130 },
+//   { field: 'balance', headerName: 'Balance', width: 130 },
+//   { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+//   { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
+//   { field: "grandTotal", headerName: "TotalAmount", with: 100 }
+// ]
+
+
+
 const customer_colums = [
   { field: 'id', headerName: 'S.no', width: 70 },
   { field: 'vehRegNo', headerName: 'Vehicle', width: 160 },
   { field: 'totalTime', headerName: 'Tot. Time', width: 120 },
   { field: 'totalKilometers', headerName: 'TKMS', width: 120 },
-  { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
+  { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+  { field: "grandTotal", headerName: "TotalAmount", with: 100 },
+  // { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
   { field: 'totalcustomeradvance', headerName: 'Driver Advance', width: 130 },
-  { field: 'balance', headerName: 'Balance', width: 130 },
-  { field: "betaTotalAmount", headerName: "Beta", with: 100 }
+  // { field: 'balance', headerName: 'Balance', width: 130 },
+  // { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+  { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
+  { field: 'totalPackageAmount', headerName: 'Total Balance', width: 130 },
+  // { field: "grandTotal", headerName: "TotalAmount", with: 100 }
 ]
 
 
@@ -60,50 +80,53 @@ const VehicleStatement = () => {
     totalAdvance: "",
     totalBalance: "",
     totalBeta: '',
+    fuelamount:"",
+    grandTotal:""
+  
   })
 
   // customer--------------------------
 
-  const transformCustomer = (data) => {
-    const vehicleTotals = {};
+  // const transformCustomer = (data) => {
+  //   const vehicleTotals = {};
 
-    data?.forEach(element => {
-      const { vehRegNo, totalkm1, totalcalcAmount, totaltime, customeradvance, driverBeta_amount } = element;
+  //   data?.forEach(element => {
+  //     const { vehRegNo, totalkm1, totalcalcAmount, totaltime, customeradvance, driverBeta_amount } = element;
 
-      if (!vehicleTotals[vehRegNo]) {
-        vehicleTotals[vehRegNo] = {
-          totalKilometers: 0,
-          totalPackageAmount: 0,
-          totalTime: 0,
-          totalcustomeradvance: 0,
-          balance: 0,
-          betaTotalAmount: 0,
+  //     if (!vehicleTotals[vehRegNo]) {
+  //       vehicleTotals[vehRegNo] = {
+  //         totalKilometers: 0,
+  //         totalPackageAmount: 0,
+  //         totalTime: 0,
+  //         totalcustomeradvance: 0,
+  //         balance: 0,
+  //         betaTotalAmount: 0,
 
-        };
-      }
+  //       };
+  //     }
 
-      vehicleTotals[vehRegNo].totalKilometers += parseFloat(totalkm1) || 0;
-      vehicleTotals[vehRegNo].totalPackageAmount += parseFloat(totalcalcAmount) || 0;
-      vehicleTotals[vehRegNo].totalcustomeradvance += parseFloat(customeradvance) || 0;
-      vehicleTotals[vehRegNo].betaTotalAmount += parseFloat(driverBeta_amount) || 0;
-
-
-      const totalTimeMinutes = convertTotalTimeToMinutes(totaltime);
-      vehicleTotals[vehRegNo].totalTime += totalTimeMinutes || 0;
-    });
+  //     vehicleTotals[vehRegNo].totalKilometers += parseFloat(totalkm1) || 0;
+  //     vehicleTotals[vehRegNo].totalPackageAmount += parseFloat(totalcalcAmount) || 0;
+  //     vehicleTotals[vehRegNo].totalcustomeradvance += parseFloat(customeradvance) || 0;
+  //     vehicleTotals[vehRegNo].betaTotalAmount += parseFloat(driverBeta_amount) || 0;
 
 
-    return Object.keys(vehicleTotals).map((vehRegNo, index) => ({
-      id: index + 1,
-      vehRegNo,
-      totalKilometers: vehicleTotals[vehRegNo].totalKilometers,
-      totalPackageAmount: vehicleTotals[vehRegNo].totalPackageAmount,
-      totalTime: convertMinutesToTime(vehicleTotals[vehRegNo].totalTime),
-      totalcustomeradvance: vehicleTotals[vehRegNo].totalcustomeradvance,
-      balance: vehicleTotals[vehRegNo].totalPackageAmount - vehicleTotals[vehRegNo].totalcustomeradvance,
-      betaTotalAmount: vehicleTotals[vehRegNo].betaTotalAmount,
-    }));
-  };
+  //     const totalTimeMinutes = convertTotalTimeToMinutes(totaltime);
+  //     vehicleTotals[vehRegNo].totalTime += totalTimeMinutes || 0;
+  //   });
+
+
+  //   return Object.keys(vehicleTotals).map((vehRegNo, index) => ({
+  //     id: index + 1,
+  //     vehRegNo,
+  //     totalKilometers: vehicleTotals[vehRegNo].totalKilometers,
+  //     totalPackageAmount: vehicleTotals[vehRegNo].totalPackageAmount,
+  //     totalTime: convertMinutesToTime(vehicleTotals[vehRegNo].totalTime),
+  //     totalcustomeradvance: vehicleTotals[vehRegNo].totalcustomeradvance,
+  //     balance: vehicleTotals[vehRegNo].totalPackageAmount - vehicleTotals[vehRegNo].totalcustomeradvance,
+  //     betaTotalAmount: vehicleTotals[vehRegNo].betaTotalAmount,
+  //   }));
+  // };
 
 
   // TIME CONVERTION TYPE HH:MM
@@ -153,7 +176,7 @@ const VehicleStatement = () => {
     const vehicleTotals = {};
 
     data?.forEach(element => {
-      const { vehRegNo, vendortotalkm, vendorTotaltime, Vendor_FULLTotalAmount, advancepaidtovendor, Vendor_BataTotalAmount } = element;
+      const { vehRegNo, vendortotalkm, vendorTotaltime, Vendor_FULLTotalAmount, advancepaidtovendor, Vendor_BataTotalAmount,fuelamount,grandTotal} = element;
 
       if (!vehicleTotals[vehRegNo]) {
         vehicleTotals[vehRegNo] = {
@@ -162,7 +185,10 @@ const VehicleStatement = () => {
           totalTime: 0,
           totalcustomeradvance: 0,
           balance: 0,
-          betaTotalAmount: 0
+          betaTotalAmount: 0,
+          fuelamount:0,
+          grandTotal:0
+       
         };
       }
 
@@ -170,6 +196,9 @@ const VehicleStatement = () => {
       vehicleTotals[vehRegNo].totalPackageAmount += parseFloat(Vendor_FULLTotalAmount) || 0;
       vehicleTotals[vehRegNo].totalcustomeradvance += parseFloat(advancepaidtovendor) || 0;
       vehicleTotals[vehRegNo].betaTotalAmount += parseFloat(Vendor_BataTotalAmount) || 0;
+      vehicleTotals[vehRegNo].fuelamount += parseFloat(fuelamount) || 0;
+      vehicleTotals[vehRegNo].grandTotal += parseFloat(grandTotal) || 0;
+  
 
       const totalTimeMinutes = convertTotalTimeToMinutes(vendorTotaltime);
       console.log(totalTimeMinutes, "min")
@@ -184,8 +213,11 @@ const VehicleStatement = () => {
       totalPackageAmount: vehicleTotals[vehRegNo].totalPackageAmount,
       totalTime: convertMinutesToTime(vehicleTotals[vehRegNo].totalTime),
       totalcustomeradvance: vehicleTotals[vehRegNo].totalcustomeradvance,
-      balance: vehicleTotals[vehRegNo].totalPackageAmount - vehicleTotals[vehRegNo].totalcustomeradvance,
+      // balance: vehicleTotals[vehRegNo].totalPackageAmount - vehicleTotals[vehRegNo].totalcustomeradvance,
+      balance: vehicleTotals[vehRegNo].totalPackageAmount,
       betaTotalAmount: vehicleTotals[vehRegNo].betaTotalAmount,
+      fuelamount :vehicleTotals[vehRegNo].fuelamount,
+      grandTotal:vehicleTotals[vehRegNo].grandTotal
     }));
   };
 
@@ -199,10 +231,12 @@ const VehicleStatement = () => {
       accumulator.totalAdvance += current.totalcustomeradvance || 0;
       accumulator.totaalBalance += current.balance || 0;
       accumulator.totalBeta += current.betaTotalAmount || 0;
+      accumulator.grandTotal += current.grandTotal || 0;
+      accumulator.fuelamount += current.fuelamount || 0;
 
 
       return accumulator
-    }, { totalPackageAmount: 0, totalKilometers: 0, totaalBalance: 0, totalTime: 0, totalAdvance: 0, totalBeta: 0 })
+    }, { totalPackageAmount: 0, totalKilometers: 0, totaalBalance: 0, totalTime: 0, totalAdvance: 0, totalBeta: 0,fuelamount : 0,grandTotal:0 })
 
     return result;
   }
@@ -303,7 +337,11 @@ const VehicleStatement = () => {
       const datas = response.data;
 
       if (data.hireTypes === "Own Vehicle") {
-        const parseData = transformCustomer(datas);
+        if(datas.length > 0){
+        
+        const parseData = transformAtached(datas);
+        // const parseData = transformCustomer(datas);
+        console.log(parseData,"ddd")
         const reducedData = reduceFun(parseData);
 
         if (reducedData &&
@@ -318,10 +356,12 @@ const VehicleStatement = () => {
             ...prev,
             fullTotalKM: reducedData.totalKilometers,
             fullTotalHR: convertMinutesToTime(reducedData.totalTime),
-            totalAmount: reducedData.totalPackageAmount,
-            totalAdvance: reducedData.totalAdvance,
+            // totalAmount: reducedData.totalPackageAmount,
+            totalAmount: reducedData.grandTotal,
+            totalAdvance: reducedData.totalAdvance || 0,
             totalBalance: reducedData.totaalBalance,
             totalBeta: reducedData.totalBeta,
+            fuelamount : reducedData.fuelamount,
           }));
 
           setSuccess(true);
@@ -334,24 +374,37 @@ const VehicleStatement = () => {
           setCustomerData(parseData);
         } else {
           setCustomerData([]);
+          setTotalValues({});
           setError(true);
           setErrorMessage("No Data Found");
         }
+      }
+      else{
+        setCustomerData([]);
+        setTotalValues({});
+        setError(true);
+        setErrorMessage("No Data Found");
+      }
 
       } else if (data.hireTypes === "Attached Vehicle") {
+        if(datas.length > 0) {
         const parseData = transformAtached(datas);
+        console.log(parseData,"ddd")
         if (parseData.length > 0) {
           const reducedData = reduceFun(parseData);
+          console.log(reducedData,"redu")
 
           if (reducedData) {
             setTotalValues(prev => ({
               ...prev,
               fullTotalKM: reducedData.totalKilometers,
               fullTotalHR: convertMinutesToTime(reducedData.totalTime),
-              totalAmount: reducedData.totalPackageAmount,
-              totalAdvance: reducedData.totalAdvance,
+              totalAmount: reducedData.grandTotal,
+              // totalAmount: reducedData.totalPackageAmount,
+              totalAdvance: reducedData.totalAdvance || 0,
               totalBalance: reducedData.totaalBalance,
               totalBeta: reducedData.totalBeta,
+              fuelamount : reducedData.fuelamount,
             }));
             setSuccess(true);
             setSuccessMessage("Successfully Listed");
@@ -363,12 +416,23 @@ const VehicleStatement = () => {
           // setData(prev => ({ ...prev, hireTypes: "Attached Vehicle" }));
         } else {
           setCustomerData([]);
+          setTotalValues({});
           setError(true);
           setErrorMessage("No Data Found");
         }
+      }
+      else{
+        setCustomerData([]);
+          setTotalValues({});
+          setError(true);
+          setErrorMessage("No Data Found");
+      }
 
       }
       else if (data.hireTypes === "Out Side Travels") {
+        if(datas.length > 0){
+
+        
         const parseData = transformAtached(datas);
         if (parseData.length > 0) {
           const reducedData = reduceFun(parseData);
@@ -378,10 +442,12 @@ const VehicleStatement = () => {
               ...prev,
               fullTotalKM: reducedData.totalKilometers,
               fullTotalHR: convertMinutesToTime(reducedData.totalTime),
-              totalAmount: reducedData.totalPackageAmount,
-              totalAdvance: reducedData.totalAdvance,
+              totalAmount: reducedData.grandTotal,
+              // totalAmount: reducedData.totalPackageAmount,
+              totalAdvance: reducedData.totalAdvance || 0,
               totalBalance: reducedData.totaalBalance,
               totalBeta: reducedData.totalBeta,
+              fuelamount : reducedData.fuelamount,
             }));
             setSuccess(true);
             setSuccessMessage("Successfully Listed");
@@ -393,11 +459,20 @@ const VehicleStatement = () => {
           // setData(prev => ({ ...prev, hireTypes: "lease" }));
         } else {
           setCustomerData([]);
+          setTotalValues({});
           setError(true);
           setErrorMessage("No Data Found");
         }
+      }
+      else{
+        setCustomerData([]);
+        setTotalValues({});
+        setError(true);
+        setErrorMessage("No Data Found");
+      }
 
       } else if (data.hireTypes === "DCO Vehicle") {
+        if(datas.length > 0) {
         const parseData = transformAtached(datas);
         if (parseData.length > 0) {
           const reducedData = reduceFun(parseData);
@@ -407,10 +482,12 @@ const VehicleStatement = () => {
               ...prev,
               fullTotalKM: reducedData.totalKilometers,
               fullTotalHR: convertMinutesToTime(reducedData.totalTime),
-              totalAmount: reducedData.totalPackageAmount,
-              totalAdvance: reducedData.totalAdvance,
+              // totalAmount: reducedData.totalPackageAmount,
+              totalAmount: reducedData.grandTotal,
+              totalAdvance: reducedData.totalAdvance || 0,
               totalBalance: reducedData.totaalBalance,
               totalBeta: reducedData.totalBeta,
+              fuelamount : reducedData.fuelamount,
             }));
             setSuccess(true);
             setSuccessMessage("Successfully Listed");
@@ -423,9 +500,17 @@ const VehicleStatement = () => {
         }
         else {
           setCustomerData([]);
+          setTotalValues({});
           setError(true);
           setErrorMessage("No Data Found");
         }
+      }
+      else{
+        setCustomerData([]);
+        setTotalValues({});
+        setError(true);
+        setErrorMessage("No Data Found");
+      }
 
       }
       // else {
@@ -529,9 +614,13 @@ const VehicleStatement = () => {
       totalRow.getCell(columns1.findIndex(col => col.header === 'Vehicle') + 1).value = 'TOTAL';
       totalRow.getCell(columns1.findIndex(col => col.header === 'Tot. Time') + 1).value = totalValues?.fullTotalHR;
       totalRow.getCell(columns1.findIndex(col => col.header === 'TKMS') + 1).value = totalValues?.fullTotalKM;
-      totalRow.getCell(columns1.findIndex(col => col.header === 'Amount') + 1).value = totalValues?.totalAmount;
+
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'Amount') + 1).value = totalValues?.totalAmount;
+      totalRow.getCell(columns1.findIndex(col => col.header === 'TotalAmount') + 1).value = totalValues?.totalAmount;
       totalRow.getCell(columns1.findIndex(col => col.header === 'Driver Advance') + 1).value = totalValues?.totalAdvance;
-      totalRow.getCell(columns1.findIndex(col => col.header === 'Balance') + 1).value = totalValues?.totalBalance;
+//   { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
+      totalRow.getCell(columns1.findIndex(col => col.header === 'Fuel Amount') + 1).value = totalValues?.fuelamount;
+      totalRow.getCell(columns1.findIndex(col => col.header === 'Total Balance') + 1).value = totalValues?.totalBalance;
       totalRow.getCell(columns1.findIndex(col => col.header === 'Beta') + 1).value = totalValues?.totalBeta;
       // console.log(totalRow,"ooo")
 
@@ -619,9 +708,11 @@ const VehicleStatement = () => {
       if (column.headerName === 'Vehicle') return "TOTAL";
       if (column.headerName === 'Tot. Time') return totalValues?.fullTotalHR;
       if (column.headerName === 'TKMS') return totalValues?.fullTotalKM;
-      if (column.headerName === 'Amount') return totalValues?.totalAmount;
+      // if (column.headerName === 'Amount') return totalValues?.totalAmount;
+      if (column.headerName === 'TotalAmount') return totalValues?.totalAmount;
       if (column.headerName === 'Driver Advance') return totalValues?.totalAdvance;
-      if (column.headerName === 'Balance') return totalValues?.totalBalance;
+      if (column.headerName === 'Fuel Amount') return totalValues?.fuelamount;
+      if (column.headerName === 'Total Balance') return totalValues?.totalBalance;
       if (column.headerName === 'Beta') return totalValues?.totalBeta;
 
       return '';
@@ -721,6 +812,11 @@ const VehicleStatement = () => {
                 <MenuItem value="">
                   {/* <em>None</em> */}
                 </MenuItem>
+                {/* <MenuItem value={"Attached Vehicle"}>Attached Vehicle</MenuItem>
+                <MenuItem value={"Own Vehicle"}>Own Vehicle</MenuItem>
+                <MenuItem value={"OutSide Travels"}>OutSide Travels</MenuItem>
+                <MenuItem value={"DCO Vehicle"}>DCO Vehicle</MenuItem> */}
+
                 <MenuItem value={"Attached Vehicle"}>Attached Vehicle</MenuItem>
                 <MenuItem value={"Own Vehicle"}>Own Vehicle</MenuItem>
                 <MenuItem value={"OutSide Travels"}>OutSide Travels</MenuItem>
@@ -788,6 +884,18 @@ const VehicleStatement = () => {
               )}
             </PopupState>
           </div>
+          <div className='input'>
+            <TextField
+              name="fullTotalHR"
+              className='customer-bill-input'
+              value={totalValues.fullTotalHR || ''}
+              label="Full Total HR"
+              id="ex-fullTotalHR"
+              size="small"
+              autoComplete="password"
+              variant="standard"
+            />
+          </div>
 
           <div className='input'>
             <TextField
@@ -802,13 +910,14 @@ const VehicleStatement = () => {
             />
           </div>
 
+          
           <div className='input'>
             <TextField
-              name="fullTotalHR"
+              name="totalBeta"
               className='customer-bill-input'
-              value={totalValues.fullTotalHR || ''}
-              label="Full Total HR"
-              id="ex-fullTotalHR"
+              value={totalValues.totalBeta || ''}
+              label="Total Beta"
+              id="ex-totalBeta"
               size="small"
               autoComplete="password"
               variant="standard"
@@ -831,9 +940,21 @@ const VehicleStatement = () => {
             <TextField
               name="totalAdvance"
               className='customer-bill-input'
-              value={totalValues.totalAdvance || ''}
+              value={totalValues.totalAdvance || 0}
               label="Total Advance"
               id="ex-totalAdvance"
+              size="small"
+              autoComplete="password"
+              variant="standard"
+            />
+          </div>
+          <div className='input'>
+            <TextField
+              name="Fuelamount"
+              className='customer-bill-input'
+              value={totalValues.fuelamount || ''}
+              label="Total Fuel"
+              id="ex-totalBeta"
               size="small"
               autoComplete="password"
               variant="standard"
@@ -851,7 +972,7 @@ const VehicleStatement = () => {
               variant="standard"
             />
           </div>
-          <div className='input'>
+          {/* <div className='input'>
             <TextField
               name="totalBeta"
               className='customer-bill-input'
@@ -862,7 +983,19 @@ const VehicleStatement = () => {
               autoComplete="password"
               variant="standard"
             />
-          </div>
+          </div> */}
+          {/* <div className='input'>
+            <TextField
+              name="Fuelamount"
+              className='customer-bill-input'
+              value={totalValues.fuelamount || ''}
+              label="Total Fuel"
+              id="ex-totalBeta"
+              size="small"
+              autoComplete="password"
+              variant="standard"
+            />
+          </div> */}
         </div>
         <div className='alert-popup-main'>
           {error &&

@@ -494,7 +494,18 @@ router.get('/VehicleStatement-bookings', (req, res) => {
   const { Travelsname, fromDate, toDate } = req.query;
   // const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   // const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  db.query("select *,Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) As totalvendoramount from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)",
+  // db.query("select *,Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) As totalvendoramount from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)",
+  db.query(`select *,COALESCE(NULLIF(advancepaidtovendor, ''), 0) AS totalvendoramount,
+          COALESCE(NULLIF(fuelamount, ''), 0) AS totalfuelamount,
+    (COALESCE(NULLIF(Vendor_totalAmountKms, ''), 0) 
+ + COALESCE(NULLIF(Vendor_totalAmountHours, ''), 0) 
+ + COALESCE(NULLIF(Vendor_NightbataTotalAmount, ''), 0) 
+ + COALESCE(NULLIF(Vendor_BataTotalAmount, ''), 0) 
+ + COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
+ + COALESCE(NULLIF(vendortoll, ''), 0) 
+ + COALESCE(NULLIF(vendorparking, ''), 0) 
+ + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandtotal
+    from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)`,
     [Travelsname, fromDate, toDate], (err, results) => {
       if (err) {
         return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
@@ -512,7 +523,20 @@ router.get('/VehicleStatement-bookings', (req, res) => {
 })
 
 router.get('/tripsheetvendordata', (req, res) => {
-  db.query("SELECT *, Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) AS totalvendoramount FROM tripsheet", (err, results) => {
+
+  const sql = `select *,COALESCE(NULLIF(advancepaidtovendor, ''), 0) AS totalvendoramount,
+    COALESCE(NULLIF(fuelamount, ''), 0) AS totalfuelamount,
+(COALESCE(NULLIF(Vendor_totalAmountKms, ''), 0) 
++ COALESCE(NULLIF(Vendor_totalAmountHours, ''), 0) 
++ COALESCE(NULLIF(Vendor_NightbataTotalAmount, ''), 0) 
++ COALESCE(NULLIF(Vendor_BataTotalAmount, ''), 0) 
++ COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
++ COALESCE(NULLIF(vendortoll, ''), 0) 
++ COALESCE(NULLIF(vendorparking, ''), 0) 
++ COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandtotal
+from tripsheet`
+  // db.query("SELECT *, Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) AS totalvendoramount FROM tripsheet", (err, results) => {
+    db.query(sql, (err, results) => {
     if (err) {
       console.log(err)
       return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });

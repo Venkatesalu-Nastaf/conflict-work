@@ -406,8 +406,22 @@ if (customer !== "All") {
    AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
     AND customer IN (?)
   GROUP BY 
-    customer
+    customer,orderbyemail,billingno
 `;
+
+// const sql = `
+// SELECT 
+//   customer,
+//   SUM(IFNULL(totalcalcAmount, 0))  AS totalAmount
+// FROM 
+//   tripsheet
+// WHERE 
+//  tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+//  AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+//   AND customer IN (?)
+// GROUP BY 
+//   customer
+// `;
 
     db.query(sql, [fromDate, toDate, datas], (err, results1) => {
       if (err) {
@@ -430,7 +444,7 @@ if (customer !== "All") {
 })
 
 router.get('/montlywisedataall', (req, res) => {
-  db.query("select c.customerId,c.customerType as customertype,c.address1 as address,t.orderbyemail,t.billingno,sum(totalcalcAmount) as totalAmount,t.customer from customers c INNER JOIN  tripsheet t on c.customer = t.customer group by t.customer", (err, result) => {
+  db.query("select c.customerId,c.customerType as customertype,c.address1 as address,t.orderbyemail,t.billingno,sum(totalcalcAmount) as totalAmount,t.customer from customers c INNER JOIN  tripsheet t on c.customer = t.customer group by t.customer,c.customerId,t.orderbyemail,t.billingno", (err, result) => {
     if (err) {
       console.log(err)
     }

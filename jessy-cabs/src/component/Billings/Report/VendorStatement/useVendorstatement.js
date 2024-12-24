@@ -22,9 +22,15 @@ const columns = [
     { field: "vendorTotaltime", headerName: "Run-Hours", width: 130 },
     { field: "vpermettovendor", headerName: "Vehicle-Permit", width: 130 },
     { field: "vendortoll", headerName: "Vehicle-Toll", width: 130 },
+    { field: "vendorparking", headerName: "Vehicle-Parking", width: 130 },
     { field: "Vendor_BataTotalAmount", headerName: "Bata", width: 90 },
-    { field: "totalvendoramount", headerName: "Total Amount", width: 130 },
-    { field: "advancepaidtovendor", headerName: "Driver Advance", width: 130 },
+    // { field: "totalvendoramount", headerName: "Total Amount", width: 130 },
+    // { field: "fuelamount", headerName: "Fuelamount", width: 130 },
+    // { field: "advancepaidtovendor", headerName: "Driver Advance", width: 130 },
+    // { field: "Vendor_FULLTotalAmount", headerName: "Balance", width: 130 },
+    { field: "grandtotal", headerName: "Total Amount", width: 130 },
+    { field: "totalfuelamount", headerName: "Fuel Amount", width: 130 },
+    { field: "totalvendoramount", headerName: "Driver Advance", width: 130 },
     { field: "Vendor_FULLTotalAmount", headerName: "Balance", width: 130 },
    
 ];
@@ -281,10 +287,17 @@ const handleExcelDownload = async () => {
         const totalKms = rows.reduce((sum, row) => sum + parseInt(row.vendortotalkm || 0, 10), 0);
                 const totalpermit = rows.reduce((sum, row) => sum + parseInt(row.vpermettovendor || 0, 10), 0);
                 const totaltoll = rows.reduce((sum, row) => sum + parseInt(row.vendortoll || 0, 10), 0);
-                const totalfullAmount = rows.reduce((sum, row) => sum + parseInt(row.totalvendoramount || 0, 10), 0);
-                const advancedvendor = rows.reduce((sum, row) => sum + parseInt(row.advancepaidtovendor || 0, 10), 0);
-                const balancefull = rows.reduce((sum, row) => sum + parseInt(row.Vendor_FULLTotalAmount || 0, 10), 0);
+                const totalparking = rows.reduce((sum, row) => sum + parseInt(row.vendorparking || 0, 10), 0);
                 const bataamount = rows.reduce((sum, row) => sum + parseInt(row.Vendor_BataTotalAmount || 0, 10), 0);
+            
+                // const totalfullAmount = rows.reduce((sum, row) => sum + parseInt(row.totalvendoramount || 0, 10), 0);
+                // const advancedvendor = rows.reduce((sum, row) => sum + parseInt(row.advancepaidtovendor || 0, 10), 0);
+                // const balancefull = rows.reduce((sum, row) => sum + parseInt(row.Vendor_FULLTotalAmount || 0, 10), 0);
+                const totalfullAmount = rows.reduce((sum, row) => sum + parseInt(row.grandtotal || 0, 10), 0);
+                const advancedvendor = rows.reduce((sum, row) => sum + parseInt(row.totalvendoramount || 0, 10), 0);
+                const fuelamountvendor = rows.reduce((sum, row) => sum + parseInt(row.totalfuelamount || 0, 10), 0);
+                const balancefull = rows.reduce((sum, row) => sum + parseInt(row.Vendor_FULLTotalAmount || 0, 10), 0);
+             
                 // Add the total row
                 const totalRow = worksheet.addRow({});
                 totalRow.getCell(columns1.findIndex(col => col.header === 'Vendor Name') + 1).value = 'TOTAL';
@@ -293,6 +306,8 @@ const handleExcelDownload = async () => {
                 totalRow.getCell(columns1.findIndex(col => col.header === 'Vehicle-Toll') + 1).value = totaltoll;
                 totalRow.getCell(columns1.findIndex(col => col.header === 'Total Amount') + 1).value = totalfullAmount;
                 totalRow.getCell(columns1.findIndex(col => col.header === 'Driver Advance') + 1).value = advancedvendor;
+                totalRow.getCell(columns1.findIndex(col => col.header === 'Vehicle-Parking') + 1).value = totalparking;
+                totalRow.getCell(columns1.findIndex(col => col.header === 'Fuel Amount') + 1).value = fuelamountvendor;
                 totalRow.getCell(columns1.findIndex(col => col.header === 'Balance') + 1).value = balancefull;
                 totalRow.getCell(columns1.findIndex(col => col.header === 'Bata') + 1).value = bataamount;
                
@@ -678,18 +693,26 @@ const handlePdfDownload = () => {
     const totalKms = rows.reduce((sum, row) => sum + parseInt(row.vendortotalkm || 0, 10), 0);
     const totalpermit = rows.reduce((sum, row) => sum + parseInt(row.vpermettovendor || 0, 10), 0);
     const totaltoll = rows.reduce((sum, row) => sum + parseInt(row.vendortoll || 0, 10), 0);
-    const totalfullAmount = rows.reduce((sum, row) => sum + parseInt(row.totalvendoramount || 0, 10), 0);
-    const advancedvendor = rows.reduce((sum, row) => sum + parseInt(row.advancepaidtovendor || 0, 10), 0);
+    const totalfullAmount = rows.reduce((sum, row) => sum + parseInt(row.grandtotal || 0, 10), 0);
+    const advancedvendor = rows.reduce((sum, row) => sum + parseInt(row.totalvendoramount || 0, 10), 0);
+    const fuelamountvendor = rows.reduce((sum, row) => sum + parseInt(row.totalfuelamount || 0, 10), 0);
+    const totalparking = rows.reduce((sum, row) => sum + parseInt(row.vendorparking || 0, 10), 0);
     const balancefull = rows.reduce((sum, row) => sum + parseInt(row.Vendor_FULLTotalAmount || 0, 10), 0);
     const bataamount = rows.reduce((sum, row) => sum + parseInt(row.Vendor_BataTotalAmount || 0, 10), 0);
+
+
+
+   
 
     // Create the total row
     const totalRow = columns.map(column => {
         if (column.field === 'vendortotalkm') return totalKms;
         if (column.field === 'vpermettovendor') return totalpermit;
         if (column.field === 'vendortoll') return totaltoll;
-        if (column.field === 'totalvendoramount') return totalfullAmount;
-        if (column.field === 'advancepaidtovendor') return advancedvendor;
+        if (column.field === 'vendorparking') return totalparking;
+        if (column.field === 'totalfuelamount') return fuelamountvendor;
+        if (column.field === 'grandtotal') return totalfullAmount;
+        if (column.field === 'totalvendoramount') return advancedvendor;
         if (column.field === 'Vendor_FULLTotalAmount') return balancefull;
         if (column.field === 'Vendor_BataTotalAmount') return bataamount;
         if (column.headerName === 'Vendor Name') return 'Total';
@@ -800,7 +823,7 @@ const handlePdfDownload = () => {
                     ...row,
                     id: index + 1,
                 }));
-               
+               console.log(rowsWithUniqueId,"vendorrow")
                 setRows(rowsWithUniqueId);
                 setVendorfullamount(TotalAmoundata(rowsWithUniqueId))
                 setSuccess(true);

@@ -862,6 +862,7 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
   const query = `
     SELECT * FROM tripsheet 
     WHERE tripid = ? 
+    AND apps = "Closed"  
     AND status = "Closed" 
     AND (Billed_Status IS NULL 
     OR Billed_Status NOT IN ("Covering_Closed", "Covering_Billed", "Transfer_Closed", "Transfer_Billed"))
@@ -975,7 +976,7 @@ router.get("/trpisheetlogdetailst", (req, res) => {
     WHERE 
       TripsheetLog_Details.tripsheet_no = ? AND 
       TripsheetLog_Details.tripsheet_date >= ? AND 
-      TripsheetLog_Details.tripsheet_date < DATE_ADD(?, INTERVAL 1 DAY)
+      TripsheetLog_Details.tripsheet_date < DATE_ADD(?, INTERVAL 0 DAY)
   `;
 
   const sqlWithoutIdQuery = `

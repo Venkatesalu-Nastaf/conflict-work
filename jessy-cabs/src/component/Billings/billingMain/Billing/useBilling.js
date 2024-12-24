@@ -288,8 +288,10 @@ const useBilling = () => {
 
     const total_GrossAmount = () => {
         const nhamount = total_Nighthalt_Amount() || book.nhamount;
-        const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll } = book;
-        const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll].map((value) =>
+        // const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll } = book;
+        const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount, permit, parking, toll,} = book;
+        // const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll].map((value) =>
+            const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount, permit, parking, toll].map((value) =>
             isNaN(Number(value)) ? 0 : Number(value)
         );
         return parsedValues.reduce((add, num) => add + num, 0);
@@ -298,8 +300,11 @@ const useBilling = () => {
     const gst_taxAmountCalc = () => {
         // const gst = customerData.gstTax || 0;
         const gst = dataotherStations?.data || 0;
-        const GrossAmount = Number(total_GrossAmount() || book.GrossAmount);
+    
+        const GrossAmount = Number(total_GrossAmount() || book.GrossAmount||0);
+    
         const parsedValues = GrossAmount + (GrossAmount * (gst / 100))
+    
         return parsedValues.toFixed(2);
     }
 
@@ -317,8 +322,11 @@ const useBilling = () => {
 
     const balanceRecivable = () => {
         const customeradvance = parseFloat(book.customeradvance || 0);
+        console.log(customeradvance,"advance",discound_PercentageCalc())
         const discountAmount = parseFloat(discound_PercentageCalc() || book.DiscountAmount || 0);
-        const GrossAmount = parseFloat(total_GrossAmount() || book.GrossAmount);
+        console.log(discountAmount,"disca",total_GrossAmount())
+        const GrossAmount = parseFloat(total_GrossAmount() || book.GrossAmount || 0);
+        console.log(GrossAmount,"grosssbalance")
 
         if (customeradvance || discountAmount) {
             const result = GrossAmount - (discountAmount + customeradvance)
@@ -543,12 +551,25 @@ const useBilling = () => {
                      // Accessing the first item if response.data is an array
                     if(booklength.length > 0){
                     // Update the state with the booking details
+                    const noAmount = bookingDetails?.totalcalcAmount
+                    console.log(noAmount,"noAmount")
+                    if(noAmount === 0){
+                        setError(true)
+                        setErrorMessage(`The amount for trip ID ${tripid} is Invalid`)
+                        setBook(() => ({  }));
+                        
+                        return
+                    
+                    }
+                    else{
+                    console.log(noAmount,typeof(noAmount),"amount")
                     setBook(() => ({ ...bookingDetails }));
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
                     setBillAdd(true)
                     setEdit(false)
                     setIndividualBilled(false)
+                    }
                     }
                     else{
                     setError(true)

@@ -1022,7 +1022,14 @@ app.get("/getvehicleInfo", (req, res) => {
  
   
 
-    const sql = ` SELECT * FROM tripsheet  WHERE hireTypes = ? AND  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedInDate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?`
+    const sql = ` SELECT *,(COALESCE(NULLIF(Vendor_totalAmountKms, ''), 0) 
++ COALESCE(NULLIF(Vendor_totalAmountHours, ''), 0) 
++ COALESCE(NULLIF(Vendor_NightbataTotalAmount, ''), 0) 
++ COALESCE(NULLIF(Vendor_BataTotalAmount, ''), 0) 
++ COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
++ COALESCE(NULLIF(vendortoll, ''), 0) 
++ COALESCE(NULLIF(vendorparking, ''), 0) 
++ COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE hireTypes = ? AND  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?`
 
 
     // db.query(sql, [hireTypes, startDate, endDate, startDate, endDate, startDate, endDate], (err, result) => {

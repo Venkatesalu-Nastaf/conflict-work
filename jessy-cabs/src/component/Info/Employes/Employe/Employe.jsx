@@ -397,7 +397,7 @@ const Employe = () => {
                   ) : (
                     <Button color="primary" onClick={() => {
                       setError(true);
-                      setErrorMessage("Please Enter Booking No");
+                      setErrorMessage("Please Enter Employee No");
                     }}>
                       <UploadFileIcon />
                     </Button>

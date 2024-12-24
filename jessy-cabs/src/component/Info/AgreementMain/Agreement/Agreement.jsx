@@ -104,6 +104,7 @@ const Agreement = ({organizationNames}) => {
     handleAdd,
     hidePopup,
     formData,
+    handleenterSearch,
     handleDateChange,
     handleAutocompleteChange,
     handleExcelDownload,
@@ -211,7 +212,7 @@ const Agreement = ({organizationNames}) => {
                           )}
                         />
                       </div>
-
+                                
                       {/* <div className="input">
                       <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
@@ -236,7 +237,7 @@ const Agreement = ({organizationNames}) => {
                                       <DatePicker
                                           label="From Date"
                                           format="DD/MM/YYYY"
-                                          value={dayjs(fromdate)}
+                                          value={dayjs(fromdate)}                                       
                                           onChange={(date) => {
                                               const formattedDate = dayjs(date).format('DD-MM-YYYY');
                                               setFromdate(date);
@@ -358,7 +359,6 @@ const Agreement = ({organizationNames}) => {
                                         </LocalizationProvider>
                                     </div>
                                 </div> */} 
-
                                 
               <div className="input">
                 <div className="icone">
@@ -593,7 +593,7 @@ const Agreement = ({organizationNames}) => {
 
             <div className="Employe-search-container">
               <div className="input-field Employe-search-input">
-                <div className="input">
+                <div className="input" style={{paddingRight:'30px'}}>
                   <div className="icone">
                     <AiOutlineFileSearch
                       color="action"
@@ -605,12 +605,13 @@ const Agreement = ({organizationNames}) => {
                     label="Search"
                     name="searchText"
                     value={searchText || ''}
+                    onKeyDown={handleenterSearch}
                     onChange={(e) => setSearchText(e.target.value)}
                   />
                 </div>
-                <div className="">
+                {/* <div className="">
                   <Button variant="contained" onClick={handleShowAll}>Search</Button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

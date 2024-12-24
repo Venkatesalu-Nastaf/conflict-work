@@ -344,6 +344,44 @@ const useEmployee = () => {
         }
     };
 
+    const handleenterSearch = useCallback(async (e) => {
+        if (e.key === "Enter") {
+            console.log("Search Text:", searchText);
+
+            try {
+                // Fetching data from the server
+                const response = await fetch(`${apiUrl}/searchAgreementpage?searchText=${encodeURIComponent(searchText)}`);
+
+                // Checking if the response is not OK
+                if (!response.ok) {
+                    console.error("Network response not OK:", response.statusText);
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log("Fetched data:", data);  // Log the data to ensure it's correct
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId); // Set the fetched rows
+                    setSuccess(true); // Set success state
+                    setSuccessMessage("Successfully listed"); // Show success message
+                } else {
+                    setRows([]); // Clear rows if no data
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
+            } catch (error) {
+                console.error("Fetch error:", error); // Log the error for debugging
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+            }
+        }
+    }, [apiUrl, searchText]);
+
     const handleAutocompleteChange = (event, value, name) => {
         const manualInput = typeof value === "string" ? value : value?.label || "";
         console.log("Manual Input:", manualInput);
@@ -357,6 +395,7 @@ const useEmployee = () => {
             customer: manualInput,
             address: selectedOrganization?.address1,
             gstno: selectedOrganization?.gstnumber,
+            // fromdate: selectedOrganization?.fromdate,
             email:selectedOrganization?.orderByEmail,
             mobileno:selectedOrganization?.orderByMobileNo,
           }));
@@ -365,6 +404,7 @@ const useEmployee = () => {
             customer: manualInput,
             address: selectedOrganization?.address1,
             gstno: selectedOrganization?.gstnumber,
+            // fromdate: selectedOrganization?.fromdate,
             email:selectedOrganization?.orderByEmail,
             mobileno:selectedOrganization?.orderByMobileNo
           }));
@@ -422,12 +462,11 @@ const useEmployee = () => {
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
-
     
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
-        // console.log(customerData,"kkkkkkkkkkkkkkkkkkkkkkk")
-        setSelectedCustomerData(customerData);
+        console.log(customerData,"kkkkkkkkkkkkkkkkkkkkkkk")
+        setSelectedCustomerData(customerData); 
         // setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
         // console.log(customerData,'ddddddddddddddddddddd');
@@ -647,7 +686,7 @@ const useEmployee = () => {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
             }
-        }
+        } 
     };
     
     
@@ -1015,6 +1054,7 @@ const useEmployee = () => {
         handlePdfDownload,
         columns,
         searchText,
+        handleenterSearch,
         setSearchText,
         // fromDate,setFromDate,
         handleFileChange,

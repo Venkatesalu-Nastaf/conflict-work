@@ -432,6 +432,8 @@ const useBillWiseReceipt = () => {
       return
     }
     if (balanceAmount === true) {
+      console.log("1111111111111111111111111111111111111");
+      
       // if (totals.totalBalance === 0 && totals.collectedAmount !== 0) {
       const uniqueVoucherId = selectedBillRow?.map((li) => li.Voucherid);
       const CollectAmount = selectMatchList?.map((li) => li.Collected);
@@ -489,6 +491,8 @@ const useBillWiseReceipt = () => {
       }
       // }
     } else {
+      console.log('22222222222222222222222222222222222222222');
+      
       if (
         totals.collectedAmount === undefined ||
         totals.collectedAmount === 0
@@ -550,7 +554,7 @@ const useBillWiseReceipt = () => {
         );
         console.log(postResponse.data, "response data");
 
-        await axios.put(`${apiUrl}/updateInvoiceStatus`, {
+        await axios.post(`${apiUrl}/updateInvoiceStatus`, {
           invoiceNo: invoiceNo
         })
         await axios.post(`${apiUrl}/addCollect`, {

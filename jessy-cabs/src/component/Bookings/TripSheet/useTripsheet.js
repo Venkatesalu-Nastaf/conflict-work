@@ -2012,7 +2012,8 @@ const useTripsheet = () => {
 
             if (shedOutDateObj.isAfter(shedindateObj)) {
                 // console.log('Shed Out Date is greater than Shed In Date');
-                return 'Shed Out Date is greater';
+                // return 'Shed Out Date is greater';
+                return 0;
             } else if (shedOutDateObj.isSame(shedindateObj)) {
                 return 1;
             } else {
@@ -3063,7 +3064,8 @@ const useTripsheet = () => {
             const shedindateObj = dayjs(shedindate).startOf('day');
 
             if (shedOutDateObj.isAfter(shedindateObj)) {
-                return 'Shed Out Date is greater';
+                // return 'Shed Out Date is greater';
+                return 0;
             } else if (shedOutDateObj.isSame(shedindateObj)) {
                 return 1;
             } else {
@@ -6292,6 +6294,16 @@ const useTripsheet = () => {
                     setTemporaryStatus(true)
                     setHideField(true)
                 }
+                else if (
+                    (statusCheck === "Closed") && 
+                    (superAdminAccess === "0") &&
+                    (!station.includes('Chennai') && !station.includes('All'))
+                  ) {
+                    
+                    setTemporaryStatus(true);
+                    setEmptyState(true)
+                    setHideField(true);
+                  }
                 else if ((statusCheck === "Closed" || statusCheck === "Billed") && superAdminAccess === "0") {
                     setEmptyState(true)
                     return

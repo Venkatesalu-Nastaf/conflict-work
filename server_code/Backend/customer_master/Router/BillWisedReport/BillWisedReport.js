@@ -82,7 +82,7 @@ router.post('/addBillAmountReceived', (req, res) => {
     });
 });
 
-router.put('/updateInvoiceStatus', async (req, res) => {
+router.post('/updateInvoiceStatus', async (req, res) => {
     const { invoiceNo } = req.body; // Expecting an array of invoice numbers
     console.log(invoiceNo, 'iiiiiiiiii');
     // Validate input
@@ -109,8 +109,20 @@ router.put('/updateInvoiceStatus', async (req, res) => {
             });
         });
 
+        // await new Promise((resolve, reject) => {
+        //     db.query(updateGroupTable, [invoiceNo], (error, result) => {
+        //         if (error) {
+        //             return reject(error);
+        //         }
+        //         resolve(result);
+        //     });
+        // });
         await new Promise((resolve, reject) => {
-            db.query(updateGroupTable, [invoiceNo], (error, result) => {
+            // Convert `invoiceNo` array to a stringified format for SQL `IN` clause
+            const formattedInvoiceNos = invoiceNo?.map(num => `'${num}'`).join(',');
+            const query = `UPDATE Group_billing SET BillReportStatus = "Success" WHERE ReferenceNo IN (${formattedInvoiceNos})`;
+
+            db.query(query, (error, result) => {
                 if (error) {
                     return reject(error);
                 }

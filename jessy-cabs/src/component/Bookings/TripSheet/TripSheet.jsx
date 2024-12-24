@@ -2204,7 +2204,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   <div className="input">
                                     <Button
                                       // disabled={!Tripsheet_modify}
-                                      disabled={!Tripsheet_modify || (superAdminAccess === "0" && temporaryStatus)}
+                                      disabled={!Tripsheet_modify }
                                       onClick={handlesignatureimages}
                                       variant="contained"
                                       className={`full-width ${signimageUrl ? 'green-button' : ''}`}
@@ -2339,7 +2339,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   variant="contained"
                                   color="secondary"
                                   // disabled={!Tripsheet_delete}
-                                  disabled={!Tripsheet_modify}
+                                  disabled={!Tripsheet_modify || (superAdminAccess === "0" && temporaryStatus)}
                                   onClick={() => {
                                     handleimagedelete(selectedRow);
                                     handleimgPopupClose();

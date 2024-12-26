@@ -943,8 +943,8 @@ const useTripsheet = () => {
     // handleConfirm
 
     const tripID1 = useMemo(() => {
-        return formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
-    }, [formData.bookingno, selectedCustomerData.bookingno, book.bookingno]);
+        return book.tripid || selectedCustomerData.tripid || formData.tripid;
+    }, [book.tripid || selectedCustomerData.tripid || formData.tripid]);
 
     useEffect(() => {
         // Only make the API call if tripID1 is defined (not null or undefined)

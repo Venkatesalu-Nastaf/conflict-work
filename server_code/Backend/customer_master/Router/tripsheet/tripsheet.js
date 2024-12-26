@@ -307,7 +307,7 @@ router.post('/tripsheet-add', (req, res) => {
                     return res.status(500).json({ error: "Failed to insert data into MySQL" });
                 }
             })
-            db.query(`UPDATE booking SET status = 'Opened' WHERE bookingno=${bookingno}; `, (err, result5) => {
+            db.query(`UPDATE booking SET status = 'Opened' WHERE bookingno=${tripid}; `, (err, result5) => {
                 if (err) {
                     return res.status(500).json({ error: "Failed to insert data into MySQL" });
                 }
@@ -832,7 +832,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
 
             if (status === "Opened" || status === "Cancelled") {
 
-                db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${bookingno};`)
+                db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${tripid};`)
             }
             return res.status(200).json({ message: "Data updated successfully" });
         }

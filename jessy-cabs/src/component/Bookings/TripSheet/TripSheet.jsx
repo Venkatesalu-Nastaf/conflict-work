@@ -502,7 +502,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
   }, [mapPopUpbox])
 
-  const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+  const tripID = book.tripid || selectedCustomerData.tripid || formData.tripid;
   // const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
   const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
 

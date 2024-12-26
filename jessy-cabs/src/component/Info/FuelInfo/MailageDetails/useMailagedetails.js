@@ -5,7 +5,7 @@ import { APIURL } from "../../../url";
 
 const columns = [
   { field: "id", headerName: "Sno", width: 50 },
-  { field: "VehicleNo", headerName: "Vehicl eNo", width: 130 },
+  { field: "VehicleNo", headerName: "VehicleNo", width: 130 },
   { field: "VehicleName", headerName: "Vehicle Name", width: 130 },
   {
     field: "filldate",

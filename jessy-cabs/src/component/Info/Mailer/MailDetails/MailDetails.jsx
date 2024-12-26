@@ -575,8 +575,11 @@ useEffect(() => {
             multiline
             sx={{ mt: 1, width: "100%" }}
             rows={4}
-            defaultValue="USER CREATION : ${username} - Username , ${userpassword} - Password
-DRIVER INFO : ${Drivername} - Driver Name , ${userid} - Driver UserID, ${UserName} - Driver Username , ${password} -Driver App Password"
+            defaultValue="1. USER CREATION : ${username} - Username , ${userpassword} - Password
+2. DRIVER INFO : ${Drivername} - Driver Name , ${userid} - Driver UserID, ${UserName} - Driver Username , ${password} -Driver App Password
+3. AGREEMENT MAIL FOR CUSTOMER : ${user.customer} - Customer Name , ${subscriptionEnd.format} - Agreement End Date , ${previousDay.format} - Previous Date 
+4. AGREEMENT MAIL FOR OWNER : ${user.customer} - Customer Name , (${user.email}) - Customer Email ID , ${subscriptionEnd.format} - Agreement End Date"
+
             InputProps={{
                 readOnly: true,
             }}

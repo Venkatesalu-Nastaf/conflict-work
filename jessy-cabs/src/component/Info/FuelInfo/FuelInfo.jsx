@@ -23,7 +23,7 @@ const FuelInfo = () => {
                 onChange={handleChange}
                 aria-label="lab API tabs example"
               >
-                <Tab label="Mailage Details" value="MailageDetails" />
+                <Tab label="Mileage Details" value="MailageDetails" />
                 <Tab label="FuelRate" value="FuelRate" />
               </TabList>
             </Box>

@@ -55,6 +55,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import { CircularProgress } from '@mui/material';
 import { APIURL } from "../../../url";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 
 // import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from "../../../context/permissionContext";
@@ -228,8 +229,8 @@ const Agreement = ({organizationNames}) => {
                                 </DemoContainer>
                             </LocalizationProvider>
                         </div> */}
-
-                      <div className="input">
+                      
+                      {/* <div className="input">
                                   <div className="icone">
                                       <CalendarMonthIcon className="ratetype-startdate-icon" />
                                   </div>
@@ -245,9 +246,37 @@ const Agreement = ({organizationNames}) => {
                                           }}
                                       />
                                   </LocalizationProvider>
-                              </div>
-                                
+                              </div> */}
 
+                                  <div className="input">
+                                    <div className='icone'>
+                                        <CalendarMonthIcon className='ratetype-startdate-icon' />
+                                    </div>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        
+                                            <DatePicker
+                                            label="From Date"
+                                                id="fromdate"
+                                                value={
+                                                    selectedCustomerData.frodate || book.fromdate
+                                                        ? dayjs(selectedCustomerData.fromdate|| book.fromdate)
+                                                        : book.fromdate
+                                                }
+                                                format="DD/MM/YYYY"
+                                                onChange={(date) => handleDateChange(date, "fromdate")}
+                                            >
+                                                {({ inputProps, inputRef }) => (
+                                                    <TextField
+                                                        {...inputProps}
+                                                        inputRef={inputRef}
+                                                        value={selectedCustomerData?.fromdate || book.fromdate}
+                                                    />
+                                                )}
+                                            </DatePicker>
+                                       
+                                    </LocalizationProvider>
+                                </div>
+                                
                               {/* <div className="input">
                                     <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
@@ -279,6 +308,7 @@ const Agreement = ({organizationNames}) => {
                                         </LocalizationProvider>
                                     </div>
                                 </div> */} 
+                                {console.log(selectedCustomerData.todate, "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"ll",book.todate)}
 
                         {/* <div className="input driver-input">
                             <div className="icone">
@@ -290,14 +320,13 @@ const Agreement = ({organizationNames}) => {
                                     id="toDate"
                                     className="full-width"
                                     value={
-                                        selectedCustomerData.toDate
-                                            ? dayjs(selectedCustomerData.toDate)
-                                            : book.toDate
-                                                ? dayjs(book.toDate)
-                                                : dayjs() // Default to today's date
+                                        selectedCustomerData.todate
+                                            ? dayjs(selectedCustomerData.todate)
+                                            : book.todate
+                                        // Default to today's date
                                     }
                                     format="DD/MM/YYYY"
-                                    onChange={(date) => handleDateChange(date, "toDate")} 
+                                    onChange={(date) => handleDateChange(date, "todate")} 
                                 >
                                     {({ inputProps, inputRef }) => (
                                         <TextField
@@ -309,6 +338,38 @@ const Agreement = ({organizationNames}) => {
                             </LocalizationProvider>
                         </div> */}
 
+                      {console.log(dayjs(selectedCustomerData.todate), "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"kkkkkk",book.todate)}
+                      <div className="input">
+                                    <div className='icone'>
+                                        <CalendarMonthIcon className='ratetype-startdate-icon' />
+                                    </div>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        
+                                            <DatePicker
+                                            label="To Date"
+                                                id="todate"
+                                                value={
+                                                    selectedCustomerData.todate || book.todate
+                                                        ? dayjs(selectedCustomerData.todate || book.todate)
+                                                        : book.todate
+                                                }
+                                                format="DD/MM/YYYY"
+                                                onChange={(date) => handleDateChange(date, "todate")}
+                                            >
+                                                {({ inputProps, inputRef }) => (
+                                                    <TextField
+                                                        {...inputProps}
+                                                        inputRef={inputRef}
+                                                        value={selectedCustomerData?.todate || book.todate}
+                                                    />
+                                                )}
+                                            </DatePicker>
+                                        
+                                    </LocalizationProvider>
+                                </div>
+                        {/* {console.log(selectedCustomerData.todate, "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"ll",book.todate)
+                        
+
                               <div className="input">
                                   <div className="icone">
                                       <CalendarMonthIcon className="ratetype-startdate-icon" />
@@ -316,16 +377,24 @@ const Agreement = ({organizationNames}) => {
                                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                                       <DatePicker
                                           label="To Date"
-                                          format="DD/MM/YYYY"
-                                          value={dayjs(toDate)}
+                                          name="todate"
+                                       
+                                          // value={dayjs(toDate)}
+                                          value={
+                                            selectedCustomerData.todate
+                                                ? selectedCustomerData.todate
+                                                : book.todate
+                                               // Default to today's date
+                                        }
+                                           format="DD-MM-YYYY"
                                           onChange={(date) => {
                                               const formattedDate = dayjs(date).format('DD-MM-YYYY');
                                               setTodate(date);
-                                              setBook((prevBook) => ({ ...prevBook, toDate: formattedDate }));
+                                              setBook((prevBook) => ({ ...prevBook, todate: formattedDate }));
                                           }}
                                       />
                                   </LocalizationProvider>
-                              </div> 
+                              </div>  */}
 
 
                                 {/* <div className="input">
@@ -605,7 +674,7 @@ const Agreement = ({organizationNames}) => {
                     label="Search"
                     name="searchText"
                     value={searchText || ''}
-                    onKeyDown={handleenterSearch}
+                    onKeyDown={handleenterSearch} 
                     onChange={(e) => setSearchText(e.target.value)}
                   />
                 </div>
@@ -739,7 +808,7 @@ const Agreement = ({organizationNames}) => {
           </div>
         ))}
     </div>
-
+  
     <div style={{ height: 1, backgroundColor: 'black', marginTop: 5, marginBottom: 10 }}></div>
     
     <div style={{ display: 'flex' }}>
@@ -750,13 +819,13 @@ const Agreement = ({organizationNames}) => {
       >
         Delete
       </Button>
-      <Button
+      {/* <Button
         variant="contained"
         onClick={() => handleDocumentDownload()}
         style={{ marginLeft: '20px' }}
       >
         Print
-      </Button>
+      </Button> */}
     </div>
   </DialogContent>
 </Dialog>

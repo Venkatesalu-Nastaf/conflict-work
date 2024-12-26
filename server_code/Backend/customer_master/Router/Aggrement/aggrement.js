@@ -62,7 +62,7 @@ const storage = multer.diskStorage({
     const {
       customer,
       fromdate,
-      toDate,
+      todate,
       email,
       mobileno,
       address,
@@ -72,12 +72,15 @@ const storage = multer.diskStorage({
     console.log(
       customer,
       fromdate,
-      toDate,
+      todate,
       email,
       mobileno,
       address,
       gstno
     );
+            const formattedFromDate1 = moment(fromdate).format('YYYY-MM-DD');
+            const formattedFromDate2 = moment(todate).format('YYYY-MM-DD');
+            
   
     // Check if an entry for the customer already exists in agreement_image
     const checkSql = `
@@ -98,8 +101,8 @@ const storage = multer.diskStorage({
   
       db.query(aggrementSql, [
         customer,
-        fromdate,
-        toDate,
+        formattedFromDate1,
+        formattedFromDate2,
         email,
         mobileno,
         address,
@@ -284,90 +287,91 @@ console.log(query,params, "fhjf");
 //     }
 // });
 
-router.post('/send-emailagreementdata', async (req, res) => {
-  try {
-      const { customer, email, toDate, Sendmailauth, Mailauthpass } = req.body;
 
-      console.log(customer, email, toDate, Sendmailauth, Mailauthpass, 'debugging log');
+// router.post('/send-emailagreementdata', async (req, res) => {
+//   try {
+//       const { customer, email, toDate, Sendmailauth, Mailauthpass } = req.body;
 
-      // Create a Nodemailer transporter
-      const transporter = nodemailer.createTransport({
-          host: 'smtp.gmail.com',
-          port: 465,
-          secure: true,
-          auth: {
-              user: Mailauthpass, // User's email address
-              pass: Sendmailauth, // User's email app password
-          },
-          tls: {
-              rejectUnauthorized: false,
-          },
-      });
+//       console.log(customer, email, toDate, Sendmailauth, Mailauthpass, 'debugging log');
 
-      // Email content for the owner
-      const ownerMailOptions = {
-          from: Mailauthpass,
-          to: 'sharan1228s@gmail.com', // Set the owner's email address
-          subject: `${customer} sent you a booking request`,
-          html: `
-              <p>
-              Dear ${customer},
-              <br>
-              I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
-              <br><br>
-              As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
-              <br><br>
-              <strong>Here are the key details regarding your renewal:</strong>
-              <ul>
-                  <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
-                  <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
-                  <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
-              </ul>
-              <br>
-              Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
-              <br><br>
-              We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
-              </p>`,
-      };
+//       // Create a Nodemailer transporter
+//       const transporter = nodemailer.createTransport({
+//           host: 'smtp.gmail.com',
+//           port: 465,
+//           secure: true,
+//           auth: {
+//               user: Mailauthpass, // User's email address
+//               pass: Sendmailauth, // User's email app password
+//           },
+//           tls: {
+//               rejectUnauthorized: false,
+//           },
+//       });
 
-      // Send email to the owner
-      await transporter.sendMail(ownerMailOptions);
+//       // Email content for the owner
+//       const ownerMailOptions = {
+//           from: Mailauthpass,
+//           to: 'sharan1228s@gmail.com', // Set the owner's email address
+//           subject: `${customer} sent you a booking request`,
+//           html: `
+//               <p>
+//               Dear ${customer},
+//               <br>
+//               I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
+//               <br><br>
+//               As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
+//               <br><br>
+//               <strong>Here are the key details regarding your renewal:</strong>
+//               <ul>
+//                   <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
+//                   <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+//                   <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
+//               </ul>
+//               <br>
+//               Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
+//               <br><br>
+//               We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
+//               </p>`,
+//       };
 
-      // Email content for the customer
-      const customerMailOptions = {
-          from: Mailauthpass,
-          to: email,
-          subject: 'Greetings from Jessy Cabs',
-          html: `
-              <p>
-              Dear ${customer},
-              <br>
-              I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
-              <br><br>
-              As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
-              <br><br>
-              <strong>Here are the key details regarding your renewal:</strong>
-              <ul>
-                  <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
-                  <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
-                  <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
-              </ul>
-              <br>
-              Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
-              <br><br>
-              We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
-              </p>`,
-      };
+//       // Send email to the owner
+//       await transporter.sendMail(ownerMailOptions);
 
-      // Send greeting email to the customer
-      await transporter.sendMail(customerMailOptions);
+//       // Email content for the customer
+//       const customerMailOptions = {
+//           from: Mailauthpass,
+//           to: email,
+//           subject: 'Greetings from Jessy Cabs',
+//           html: `
+//               <p>
+//               Dear ${customer},
+//               <br>
+//               I hope this message finds you well. We greatly value your association with JESSYCABS and are committed to providing you with seamless and exceptional service for all your complete transport needs.
+//               <br><br>
+//               As per our records, your current agreement with us is set to expire on ${toDate}. To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.
+//               <br><br>
+//               <strong>Here are the key details regarding your renewal:</strong>
+//               <ul>
+//                   <li><strong>Agreement Expiry Date:</strong> ${toDate}</li>
+//                   <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+//                   <li><strong>Action Required:</strong> Kindly confirm your intent to renew by [insert deadline, e.g., "December 15, 2024"].</li>
+//               </ul>
+//               <br>
+//               Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].
+//               <br><br>
+//               We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.
+//               </p>`,
+//       };
 
-      res.status(200).json({ message: 'Email sent successfully' });
-  } catch (error) {
-      console.error('Error while sending email:', error);
-      res.status(500).json({ message: 'An error occurred while sending the email', error: error.message });
-  }
-});
+//       // Send greeting email to the customer
+//       await transporter.sendMail(customerMailOptions);
+
+//       res.status(200).json({ message: 'Email sent successfully' });
+//   } catch (error) {
+//       console.error('Error while sending email:', error);
+//       res.status(500).json({ message: 'An error occurred while sending the email', error: error.message });
+//   }
+// });
 
 
 // router.post('/send-emailagreementdata', async (req, res) => {
@@ -457,8 +461,31 @@ router.post('/send-emailagreementdata', async (req, res) => {
 // });
 
 
-//  auto Email setup
+router.get('/TemplateForAgreementMail', async (req, res) => {
+  const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "AgreementMail"';
+  db.query(query, (err, results) => {
+      if (err) {
+          console.log('Database error:', err);
+          return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+      }
+      console.log('Database results:', results);
+      return res.status(200).json(results);
+  });
+});
 
+router.get('/TemplateForAgreementOwnerMail', async (req, res) => {
+  const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "OwnerAgreementMail"';
+  db.query(query, (err, results) => {
+      if (err) {
+          console.log('Database error:', err);
+          return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+      }
+      console.log('Database results:', results);
+      return res.status(200).json(results);
+  });
+});
+
+//  auto Email setup
 // Utility function for async DB queries
 const queryAsync = (query, params = []) => {
   return new Promise((resolve, reject) => {
@@ -475,6 +502,25 @@ const getEmailCredentials = async () => {
   if (results.length > 0) {
     // console.log(results)
     return results[0];
+  } else {
+    throw new Error('No credentials found in the table.');
+  }
+};
+
+const TemplateMessageData = async () => {
+  const results = await queryAsync('SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "AgreementMail"');
+  if (results.length > 0) {
+    return results[0];
+    
+  } else {
+    throw new Error('No credentials found in the table.');
+  }
+};
+const TemplateMessageDataOwner = async () => {
+  const results = await queryAsync('SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "OwnerAgreementMail"');
+  if (results.length > 0) {
+    return results[0];
+    
   } else {
     throw new Error('No credentials found in the table.');
   }
@@ -542,26 +588,99 @@ const parseDate = (dateStr) => {
 };
 
 // Subscription reminders function
+// const sendSubscriptionReminders = async () => {
+//   const today = moment();
+
+//   db.query("SELECT email, customer, toDate FROM Aggrement WHERE toDate IS NOT NULL AND toDate != ''", (err, results) => {
+//     if (err) {
+//       console.error("Error fetching subscriptions:", err);
+//       return;
+//     }
+
+//     results.forEach(async (user) => {
+//       if (!user.toDate) {
+//         console.error(`Missing date for ${user.email}`);
+//         return;
+//       }
+
+//       const subscriptionEnd = parseDate(user.toDate.trim());
+
+//       if (!subscriptionEnd) {
+//         console.error(`Invalid subscription end date for ${user.email} with date: ${user.toDate}`);
+//         return;
+//       }
+
+//       const fifthMonthStart = subscriptionEnd.clone().subtract(1, "month").startOf("month");
+//       const fifthMonthEnd = subscriptionEnd.clone().subtract(1, "month").endOf("month");
+//       const previousDay = subscriptionEnd.clone().subtract(1, "day");
+
+//       console.log(`Reminder period for ${user.email}: ${fifthMonthStart.format("DD-MM-YYYY")} to ${fifthMonthEnd.format("DD-MM-YYYY")}`);
+
+//       if (today.isSameOrAfter(fifthMonthStart) && today.isSameOrBefore(fifthMonthEnd)) {
+//         try {
+//           // Send reminder email
+//           // const transporter = await createTransporter();
+//           const { transporter, from } = await createTransporter();
+//           // console.log('Sending email...')
+//           await transporter.sendMail({
+//             from,
+//             to: user.email,
+//             subject: 'Subscription Reminder',
+//             html: `
+//               <p>Dear ${user.customer},</p>
+//               <p>I hope this message finds you well. We greatly value your association with <strong>JESSYCABS</strong> and are committed to providing you with seamless and exceptional service for all your complete transport needs.</p>
+//               <p>As per our records, your current agreement with us is set to expire on <strong style="color: red;">${subscriptionEnd.format("DD-MM-YYYY")}</strong>.</p>
+//               <p>To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.</p>
+//               <p>Here are the key details regarding your renewal:</p>
+//               <ul>
+//                 <li><strong>Agreement Expiry Date:</strong> ${subscriptionEnd.format("DD-MM-YYYY")}</li>
+//                 <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
+//               </ul>
+//               <p><strong>Action Required:</strong> Kindly confirm your intent to renew by <span style="color: red;">${previousDay.format("DD-MM-YYYY")}</span>.</p>
+//               <p>Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].</p>
+//               <p>We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.</p>
+//             `,
+//           });
+//           console.log(`Reminder sent to ${user.email}`);
+
+//           // Send notification to admin
+//           await transporter.sendMail({
+//             from,
+//             to:from,
+//             subject: 'Customer Subscription Reminder Sent',
+//             text: `The subscription reminder email has been successfully sent to ${user.customer} (${user.email}) with an expiry date of ${subscriptionEnd.format("DD-MM-YYYY")}.`,
+//           });
+//           console.log(`Notification sent to admin for ${user.email}`);
+//         } catch (error) {
+//           console.error(`Failed to send email to ${user.email}:`, error);
+//         }
+//       } else {
+//         console.log(`No reminder needed for ${user.email} today.`);
+//       }
+//     });
+//   });
+// };
+
+
 const sendSubscriptionReminders = async () => {
   const today = moment();
 
-  db.query("SELECT email, customer, toDate FROM Aggrement WHERE toDate IS NOT NULL AND toDate != ''", (err, results) => {
+  db.query("SELECT email, customer, toDate FROM Aggrement WHERE toDate IS NOT NULL AND toDate != ''", async (err, results) => {
     if (err) {
       console.error("Error fetching subscriptions:", err);
       return;
     }
 
-    results.forEach(async (user) => {
+    for (const user of results) {
       if (!user.toDate) {
         console.error(`Missing date for ${user.email}`);
-        return;
+        continue;
       }
 
       const subscriptionEnd = parseDate(user.toDate.trim());
-
       if (!subscriptionEnd) {
         console.error(`Invalid subscription end date for ${user.email} with date: ${user.toDate}`);
-        return;
+        continue;
       }
 
       const fifthMonthStart = subscriptionEnd.clone().subtract(1, "month").startOf("month");
@@ -572,38 +691,72 @@ const sendSubscriptionReminders = async () => {
 
       if (today.isSameOrAfter(fifthMonthStart) && today.isSameOrBefore(fifthMonthEnd)) {
         try {
-          // Send reminder email
-          // const transporter = await createTransporter();
+          // Fetch the customer email template
+          const templateData = await TemplateMessageData();
+
+          if (!templateData || !templateData.TemplateMessageData) {
+            console.error('No customer email template data found.');
+            continue;
+          }
+
+          // Prepare replacements for customer email
+          const customerReplacements = {
+            '${user.customer}': user.customer,
+            '${subscriptionEnd.format("DD-MM-YYYY")}': subscriptionEnd.format("DD-MM-YYYY"),
+            '${previousDay.format("DD-MM-YYYY")}': previousDay.format("DD-MM-YYYY"),
+          };
+
+          // Replace placeholders in the customer email template
+          let customerEmailMessage = templateData.TemplateMessageData;
+          for (const [placeholder, value] of Object.entries(customerReplacements)) {
+            customerEmailMessage = customerEmailMessage.split(placeholder).join(value);
+          }
+
+          // Create transporter
           const { transporter, from } = await createTransporter();
-          // console.log('Sending email...')
+
+          // Send customer reminder email
           await transporter.sendMail({
             from,
             to: user.email,
             subject: 'Subscription Reminder',
-            html: `
-              <p>Dear ${user.customer},</p>
-              <p>I hope this message finds you well. We greatly value your association with <strong>JESSYCABS</strong> and are committed to providing you with seamless and exceptional service for all your complete transport needs.</p>
-              <p>As per our records, your current agreement with us is set to expire on <strong style="color: red;">${subscriptionEnd.format("DD-MM-YYYY")}</strong>.</p>
-              <p>To ensure uninterrupted service and maintain the benefits of your association with us, we kindly request you to renew your agreement at the earliest.</p>
-              <p>Here are the key details regarding your renewal:</p>
-              <ul>
-                <li><strong>Agreement Expiry Date:</strong> ${subscriptionEnd.format("DD-MM-YYYY")}</li>
-                <li><strong>Renewal Benefits:</strong> [Mention specific benefits or perks, if applicable]</li>
-              </ul>
-              <p><strong>Action Required:</strong> Kindly confirm your intent to renew by <span style="color: red;">${previousDay.format("DD-MM-YYYY")}</span>.</p>
-              <p>Should you have any questions, wish to make modifications to your agreement, or require further assistance, please feel free to contact us at [insert contact details].</p>
-              <p>We truly value your trust and look forward to continuing our association. Thank you for choosing <strong>JESSYCABS</strong>.</p>
-            `,
+            html: customerEmailMessage,
           });
+
           console.log(`Reminder sent to ${user.email}`);
 
-          // Send notification to admin
+          // Fetch the admin notification template
+          const adminTemplateData = await TemplateMessageDataOwner();
+
+          if (!adminTemplateData || !adminTemplateData.TemplateMessageData) {
+            console.error('No admin notification template data found.');
+            continue;
+          }
+
+          // Prepare replacements for admin notification
+          const adminReplacements = {
+            '${user.customer}': user.customer,
+            '${user.email}': user.email,
+            '${subscriptionEnd.format("DD-MM-YYYY")}': subscriptionEnd.format("DD-MM-YYYY"),
+          };
+
+          // Replace placeholders in the admin notification template
+          let adminEmailMessage = adminTemplateData.TemplateMessageData;
+          for (const [placeholder, value] of Object.entries(adminReplacements)) {
+            adminEmailMessage = adminEmailMessage.split(placeholder).join(value);
+          }
+
+          // Strip HTML tags for plain text version (if needed)
+          const plainTextMessage = adminEmailMessage.replace(/<\/?[^>]+(>|$)/g, "");
+
+          // Send admin notification email as plain text
           await transporter.sendMail({
             from,
-            to:from,
-            subject: 'Customer Subscription Reminder Sent',
-            text: `The subscription reminder email has been successfully sent to ${user.customer} (${user.email}) with an expiry date of ${subscriptionEnd.format("DD-MM-YYYY")}.`,
+            to: from,
+            subject: 'Customer Subscription Reminder',
+            text: plainTextMessage, // send as plain text
           });
+
           console.log(`Notification sent to admin for ${user.email}`);
         } catch (error) {
           console.error(`Failed to send email to ${user.email}:`, error);
@@ -611,20 +764,15 @@ const sendSubscriptionReminders = async () => {
       } else {
         console.log(`No reminder needed for ${user.email} today.`);
       }
-    });
+    }
   });
 };
 
 
-cron.schedule('0 0 * * *', () => {
+cron.schedule('00 09 * * *', () => {
   console.log('Running daily subscription reminder job...');
   sendSubscriptionReminders();
 });
-
-
-
-
-
 
 
   router.get('/lastcustomergetimage', (req, res) => {
@@ -669,7 +817,7 @@ cron.schedule('0 0 * * *', () => {
 
 
   
-
+  
 // TO Delete
 router.delete('/agreementimage-delete/:filename', (req, res) => {
     const sql = "delete from agreement_image where Agreement_Image=?";

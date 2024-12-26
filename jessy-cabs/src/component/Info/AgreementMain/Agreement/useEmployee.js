@@ -15,6 +15,7 @@ const useEmployee = () => {
     // const [selectedCustomerData, setSelectedCustomerDatas] = useState({});
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const [templateMessageData, setTemplateMessageData] = useState('');
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
     const [customer, setCustomer] = useState("");
@@ -71,8 +72,18 @@ const useEmployee = () => {
             ),
         },
         { field: "customer", headerName: "Customer", width: 140 },
-        { field: "fromdate", headerName: "From Date", width: 140 },
-        { field: "todate", headerName: "To Date", width: 140 },
+        { 
+            field: "fromdate", 
+            headerName: "From Date", 
+            width: 140,
+            valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY'), // Format to DD/MM/YYYY
+        },
+        { 
+            field: "todate", 
+            headerName: "To Date", 
+            width: 140,
+            valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY'), // Format to DD/MM/YYYY
+        },
         { field: "email", headerName: "Mail ID", width: 140 },
         { field: "mobileno", headerName: "Mobile No", width: 140 },
         { field: "address", headerName: "Address", width: 140 },
@@ -270,8 +281,8 @@ const useEmployee = () => {
 
     const [book, setBook] = useState({
         customer: '',
-        fromdate:dayjs().format('DD-MM-YYYY'),
-        toDate:dayjs().format('DD-MM-YYYY'),
+        fromdate:dayjs(),
+        todate:dayjs(),
         email: '',
         mobileno: '',
         address: '',
@@ -410,9 +421,9 @@ const useEmployee = () => {
           }));
         }
       };
-      console.log(dayjs())
-      console.log(selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate).format("DD/MM/YYYY") : dayjs().format("DD/MM/YYYY"),"ppppp")
-      console.log(selectedCustomerData.fromdate ? "hhh": "oooo","ppppp")
+    //   console.log(dayjs())
+    //   console.log(selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate).format("DD/MM/YYYY") : dayjs().format("DD/MM/YYYY"),"ppppp")
+    //   console.log(selectedCustomerData.fromdate ? "hhh": "oooo","ppppp")
 
     //   const handleDateChange = (date, name) => {
     //     // if (!date || !dayjs(date).isValid()) {
@@ -433,27 +444,45 @@ const useEmployee = () => {
     //     }));
     // };
 
-    const handleDateChange = (date, name) => {
-        const formattedDate = dayjs(date).format("DD-MM-YYYY");
-        const parsedDate = dayjs(formattedDate).format("DD-MM-YYYY");
+    // const handleDateChange = (date, name) => {
+    //     const parsedDate = dayjs(date).format("DD/MM/YYYY");
+    //     // const parsedDate = dayjs(formattedDate).format("DD-MM-YYYY");
+    //     console.log(parsedDate,name,"HHHHHHHHH");
+        
 
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: parsedDate,
-        }));
 
-        setSelectedCustomerData((prevValues) => ({
-            ...prevValues,
-            [name]: parsedDate,
-        }));
-    };
+    //     setBook((prevBook) => ({
+    //         ...prevBook,
+    //         [name]: parsedDate,
+    //     }));
+
+    //     setSelectedCustomerData((prevValues) => ({
+    //         ...prevValues,
+    //         [name]: parsedDate,
+    //     }));
+    // };
+
+     const handleDateChange = (date, name) => {
+            const formattedDate = dayjs(date).format("YYYY-MM-DD");
+            const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
+    
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: parsedDate,
+            }));
+    
+            setSelectedCustomerData((prevValues) => ({
+                ...prevValues,
+                [name]: parsedDate,
+            }));
+        };
 
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
         customer:'',
         fromdate:dayjs(),
-        toDate:dayjs(),
+        todate:dayjs(),
         email:'',
         mobileno:'',
         address:'',
@@ -463,18 +492,17 @@ const useEmployee = () => {
         setIsEditMode(false);
     };
     
-    const handleRowClick = useCallback((params) => {
+    const handleRowClick =(params) => {
         const customerData = params.row;
         console.log(customerData,"kkkkkkkkkkkkkkkkkkkkkkk")
         setSelectedCustomerData(customerData); 
         // setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
         // console.log(customerData,'ddddddddddddddddddddd');
-    }, []);
+    };
    
     //--------show pdf---------------
     const [allFile, setAllFile] = useState([]);
-
     const showPdf = (showID) => {
         axios.get(`${apiUrl}/agreement_Docview/${showID}`)
             .then(res => {
@@ -620,15 +648,15 @@ const useEmployee = () => {
             const dataToSend = {
                 customer:book.customer,
                 email: book.email,
-                fromDate:fromdate,
-                toDate:book.toDate,
+                fromDate:fromdate,  
+                todate:book.todate,
                 Sendmailauth: organistaionsendmail.Sendmailauth,
                 Mailauthpass: organistaionsendmail.Mailauthpass,
-                // templateMessageData
+                templateMessageData
             };
     
             console.log("Sending data:", dataToSend); // For debugging purposes
-            await axios.post(`${apiUrl}/send-emailagreementdata`, dataToSend);
+            // await axios.post(`${apiUrl}/send-emailagreementdata`, dataToSend);
             setSuccess(true);
             setSuccessMessage("Mail Sent Successfully");
         } catch (error) {
@@ -650,6 +678,7 @@ const useEmployee = () => {
     
         try {
             const formData = new FormData();
+            console.log(book,"llll")
             for (const key in book) {
                 formData.append(key, book[key]);
             }
@@ -838,6 +867,48 @@ const useEmployee = () => {
     //     fetchOrganizationnames()
     // }, [apiUrl])
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/TemplateForAgreementMail`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();    
+                    // console.log("Fetched data:", userDataArray);
+    
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } 
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/TemplateForAgreementOwnerMail`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();    
+                    // console.log("Fetched data:", userDataArray);
+    
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } 
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -860,6 +931,8 @@ const useEmployee = () => {
         };
         fetchData();
     }, [apiUrl]);
+
+
 
     useEffect(() => {
         const fetchOrganizationNames = async () => {
@@ -1047,6 +1120,8 @@ const useEmployee = () => {
         setBook,
         handleRowClick,
         handleAdd,
+        setTemplateMessageData,
+        templateMessageData,
         hidePopup,
         formData,
         handleDateChange,

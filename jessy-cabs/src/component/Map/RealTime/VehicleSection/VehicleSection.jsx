@@ -120,7 +120,7 @@ const VehicleSection = () => {
   const handleOpenhistoryLocation = () => {
     setHistoryLocation(true);
   };
-  const filteredVehicles = vehiclesData.filter((vehicle) => {
+  const filteredVehicles = vehiclesData?.filter((vehicle) => {
     return (
       vehicle.vehRegNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       vehicle.driverName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -200,7 +200,7 @@ const VehicleSection = () => {
               <div className='vehicle-indiduals-cards'>
                 <div className='vehicle-indiduals-cards-width' >
                   <div className='vehicle-indiduals-cards'>
-                    <h3 className='heading-three ' onClick={toggleDrawer(true)}>{li.vehRegNo}</h3>
+                    <h3 className='heading-three ' onClick={toggleDrawer(true)}>{li?.vehRegNo}</h3>
                     <div className='location-icon'>
                       <FaLocationArrow className='white-text' />
                     </div>
@@ -208,7 +208,7 @@ const VehicleSection = () => {
 
                   <div className='flex-class margins'>
                     <p className='indidual-para text-color' onClick={toggleDrawer(true)}>Group: chennai</p>
-                    <p className='flex-class indidual-para driver-para text-color' onClick={toggleDrawer(true)}> <span>Driver: {li.driverName}</span> <span onClick={handleClickOpenDriverModify}>< FiUpload /></span></p>
+                    <p className='flex-class indidual-para driver-para text-color' onClick={toggleDrawer(true)}> <span>Driver: {li?.driverName}</span> <span onClick={handleClickOpenDriverModify}>< FiUpload /></span></p>
                   </div>
 
                   <div className='flex-class margins'>

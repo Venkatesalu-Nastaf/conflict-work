@@ -1,4 +1,4 @@
-import React, { useState, useContext  } from 'react'
+import React, { useState, useContext } from 'react'
 import InputAdornment from '@mui/material/InputAdornment';
 import { ToggleButton, ToggleButtonGroup, MenuItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -24,6 +24,7 @@ import AddTags from "./AddTags/AddTags"
 import Detailsvehicle from "./Detailsvehicle/Detailsvehicle"
 import VehicleInformationDrawer from "./VehicleInformationDrawer/VehicleInformationDrawer"
 import { useNavigate } from 'react-router-dom';
+import useDetailsVehicle from './useDetailsVehicle';
 
 import "./VehicleSection.css"
 
@@ -56,6 +57,7 @@ CustomTabPanel.propTypes = {
 const VehicleSection = () => {
 
   const { setOpenHistoryDrawer, setOpenmessage, setOpenshare, setOpenDriverModify, setHistoryLocation, setOpenAddTag, setOpendetailsDrawer, setOpen } = useContext(PermissionContext)
+  const { vehiclesData } = useDetailsVehicle()
 
   const [selectedOption, setSelectedOption] = useState('Vehicle');
   const [searchTerm, setSearchTerm] = useState('');
@@ -118,7 +120,15 @@ const VehicleSection = () => {
   const handleOpenhistoryLocation = () => {
     setHistoryLocation(true);
   };
-
+  const filteredVehicles = vehiclesData.filter((vehicle) => {
+    return (
+      vehicle.vehRegNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vehicle.driverName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vehicle.stations?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vehicle.fueltype?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vehicle.vehicleName?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
   return (
     <>
       <div className='vehicle-section'>
@@ -182,12 +192,15 @@ const VehicleSection = () => {
           </div>
         </div>
         {selectedOption === 'Vehicle' && (
-          <div className='vehicle-details' >
+          
+          <div className='vehicle-details' style={{height:"400px", overflow:"auto"}} >
             <div className="vehicle-indiduals">
+              { filteredVehicles?.map((li)=>(
+<>
               <div className='vehicle-indiduals-cards'>
                 <div className='vehicle-indiduals-cards-width' >
                   <div className='vehicle-indiduals-cards'>
-                    <h3 className='heading-three ' onClick={toggleDrawer(true)}>1544115144444</h3>
+                    <h3 className='heading-three ' onClick={toggleDrawer(true)}>{li.vehRegNo}</h3>
                     <div className='location-icon'>
                       <FaLocationArrow className='white-text' />
                     </div>
@@ -195,7 +208,7 @@ const VehicleSection = () => {
 
                   <div className='flex-class margins'>
                     <p className='indidual-para text-color' onClick={toggleDrawer(true)}>Group: chennai</p>
-                    <p className='flex-class indidual-para driver-para text-color' onClick={toggleDrawer(true)}> <span>Driver: Sekar</span> <span onClick={handleClickOpenDriverModify}>< FiUpload /></span></p>
+                    <p className='flex-class indidual-para driver-para text-color' onClick={toggleDrawer(true)}> <span>Driver: {li.driverName}</span> <span onClick={handleClickOpenDriverModify}>< FiUpload /></span></p>
                   </div>
 
                   <div className='flex-class margins'>
@@ -223,13 +236,16 @@ const VehicleSection = () => {
                   </div>
                 </div>
               </div>
-
-              <div className='last-row-buttons'>
+              <div className='last-row-buttons'  style={{marginBottom:"10px"}} >
                 <button className='bottom-buttons' onClick={handleOpenHistoryDrawer}>History</button>
                 <button className='bottom-buttons' onClick={handleOpendetailsDrawer}>Details</button>
                 <button className='bottom-buttons' onClick={handleClickOpenAddTag}>Add Tag</button>
                 <button className='bottom-buttons' onClick={handleOpenhistoryLocation}>History Location</button>
               </div>
+              </>
+                            ))
+
+            }
 
             </div>
 
@@ -243,7 +259,7 @@ const VehicleSection = () => {
               <p className="Search-Location" >Search Location/Nearby (KM)50</p>
             </div>
             <div className='flex-class'>
-              <input type="number" name="" id="" className='location-input'  />
+              <input type="number" name="" id="" className='location-input' />
               <Button className='location-button-border' >Apply</Button>
             </div>
           </div>

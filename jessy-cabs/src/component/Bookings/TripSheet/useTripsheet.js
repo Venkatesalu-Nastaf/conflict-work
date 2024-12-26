@@ -482,13 +482,13 @@ const useTripsheet = () => {
     //refresh button function
     const handleRefresh = async () => {
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
-        const bookingno = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+        // const bookingno = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
         try {
             if (!tripid) {
                 setError(true);
                 setErrorMessage("Please enter the tripid");
             } else {
-                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${bookingno}`);
+                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${tripid}`);
                 const data = response.data;
 
                 //sepration of data----------------------------

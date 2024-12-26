@@ -21,6 +21,8 @@ export const Status = [
     optionvalue: "Billed",
   },
 
+
+
   // {
   //   Option: "Transfer_Billed",
   //   optionvalue: "Transfer_Billed"
@@ -37,6 +39,18 @@ export const Status = [
   //   Option: "Covering_Closed",
   //   optionvalue: "Covering_Closed"
   // }
+];
+
+export const OuststationStatus = [
+  {
+    Option: "Opened",
+    optionvalue: "opened",
+  },
+  {
+    Option: "Temporary Closed",
+    optionvalue: "Temporary Closed",
+  },
+
 ];
 
 export const GroupTypes = [

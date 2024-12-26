@@ -237,6 +237,7 @@ const useTripsheet = () => {
 
     const [temporaryStatus, setTemporaryStatus] = useState(null);
     const [emptyState, setEmptyState] = useState(false);
+    const [userStatus,setUserStatus] = useState(null);
 
     const [routeData, setRouteData] = useState('');
     const [tripSheetData, setTripSheetData] = useState({
@@ -1118,6 +1119,7 @@ const useTripsheet = () => {
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
         const checkdata = statusdata[0];
         const superpower = localStorage.getItem("SuperAdmin")
+        const tripidbookno = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
         // Log the type of superpower
         if (
             (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && Number(superpower) === 0) ||
@@ -1145,7 +1147,7 @@ const useTripsheet = () => {
                     ...selectedCustomerData,
                     ...formData,
                     apps: dattasign,
-
+                    bookingno: tripidbookno,
                     travelsname: selectedCustomerDatas.travelsname || selectedCustomerData.travelsname || formData.travelsname || book.travelsname,
                     travelsemail: selectedCustomerDatas.travelsemail || selectedCustomerData.travelsemail || formData.travelsemail || book.travelsemail,
                     starttime: starttime || book.starttime || formData.starttime || selectedCustomerData.starttime,
@@ -6272,6 +6274,7 @@ const useTripsheet = () => {
                 });
                 const data = response.data;
                 const station = data?.map(li => li.stationname.split(",")).flat();
+                setUserStatus(station)
                 console.log(station, "userstation444444", statusCheck, station.includes('Chennai'));
                 if (statusCheck === "Temporary Closed" && (station.includes("All") || station.includes("Chennai"))) {
 
@@ -6542,7 +6545,7 @@ const useTripsheet = () => {
         groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
-        hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas
+        hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,userStatus
 
     };
 };

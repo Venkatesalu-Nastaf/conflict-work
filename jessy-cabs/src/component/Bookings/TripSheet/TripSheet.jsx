@@ -11,6 +11,7 @@ import {
   Apps,
   Status,
   HireTypes,
+  OuststationStatus,
   DocumentType,
   Duty,
   // Email,
@@ -267,7 +268,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSuccessMessage,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas
+    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
+    userStatus
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -796,9 +798,19 @@ const TripSheet = ({ stationName, logoImage }) => {
                     disabled={editButtonStatusCheck && superAdminAccess === "0"}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
                     value={Status.find((option) => option.optionvalue)?.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
-                    options={Status.map((option) => ({
-                      label: option.Option,
-                    }))}
+                    // options={Status.map((option) => ({
+                    //   label: option.Option,
+                    // }))}
+                    options={
+                      !userStatus?.includes('Chennai') && !userStatus?.includes('All') 
+                        ? OuststationStatus?.map((option) => ({
+                            label: option.Option,
+                          }))
+                        : Status.map((option) => ({
+                            label: option.Option,
+                          }))
+                    }
+                    
                     getOptionLabel={(option) => option.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                     renderInput={(params) => {
                       return (

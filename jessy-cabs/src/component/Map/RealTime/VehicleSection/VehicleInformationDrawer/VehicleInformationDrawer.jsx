@@ -1,4 +1,4 @@
-import React, { useState, useContext , useCallback} from 'react';
+import React, { useState, useContext , useCallback,useEffect} from 'react';
 import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
 // import { IconButton, Button } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
@@ -23,6 +23,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { PermissionContext } from '../../../../context/permissionContext';
 import "./VehicleInformationDrawer.css"
 import { useNavigate } from 'react-router-dom';
+import { chennaiCoordinates } from '../../MapSection/mapData';
 
 
 
@@ -46,12 +47,12 @@ const containerStyle = {
 const VehicleInformationDrawer = () => {
 
     //vehicle section drawer
-    const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer } = useContext(PermissionContext);
+    const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer,vehicleListData, setVehicleListData } = useContext(PermissionContext);
     const navigate = useNavigate();
 
     const handleopenHistoryDrawer = () => {
         // setOpenHistoryDrawer(true);
-        navigate("/home/Map/History");
+        navigate("/home/Map/History"); 
 
     };
 
@@ -122,6 +123,7 @@ const VehicleInformationDrawer = () => {
   const [directionRoute, setDirectionRoute] = useState(null);
   const [openPopup, setOpenPopup] = useState(false); // State to handle popup open/close
   const [popupPosition, setPopupPosition] = useState(null); // State for popup position
+  const [directionsResponse, setDirectionsResponse] = useState(null);
 
   // Marker location based on latitude and longitude
   const markerLocation = lat && long ? { lat, lng: long } : null;
@@ -155,9 +157,38 @@ const VehicleInformationDrawer = () => {
   const handleClosePopup = () => setOpenPopup(false);
 
   // Check if Google Maps API is loaded
-  if (!isLoaded) return <div>Loading...</div>;
+//   if (!isLoaded) return <div>Loading...</div>;
 
+ useEffect(() => {
+    const directionsService = new window.google.maps.DirectionsService();
+console.log("google maps 22222222222222222");
 
+    // Prepare waypoints (excluding the start and end points)
+    const waypoints = chennaiCoordinates?.slice(1, -1).map((location) => ({
+      location,
+      stopover: true,
+    }));
+
+    directionsService.route(
+      {
+        origin: chennaiCoordinates[0],
+        destination: chennaiCoordinates[chennaiCoordinates.length - 1], 
+        waypoints: waypoints,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        console.log(result,"google maps result111");
+        if (status === window.google.maps.DirectionsStatus.OK) {
+            console.log(result,"google maps result");
+            
+          setDirectionsResponse(result);
+        } else {
+          console.error(`Error fetching directions: ${status}`);
+        }
+      }
+    );
+
+  }, [open]);
     return (
         <>
             <div>
@@ -261,7 +292,7 @@ const VehicleInformationDrawer = () => {
 
                                                     <div className='overview-content'>
                                                         <span className='overview-left'>Model:</span>
-                                                        <span>2016 TOYOTA ETIOS</span>
+                                                        <span>{vehicleListData[0]?.yearModel}</span>
                                                     </div>
 
                                                     <div className='overview-content-border' >
@@ -270,7 +301,7 @@ const VehicleInformationDrawer = () => {
 
                                                     <div className='overview-content'>
                                                         <span className='overview-left'>Fuel Type:</span>
-                                                        <span>Diesel</span>
+                                                        <span>{vehicleListData[0]?.fueltype}</span>
                                                     </div>
 
                                                     <div className='overview-content'>
@@ -391,27 +422,28 @@ const VehicleInformationDrawer = () => {
                                 </div>
 
                                 <div className='vehicle-info-content-map'>
-                                    <GoogleMap
-                                        mapContainerStyle={containerStyle}
-                                        options={{
-                                            minZoom: 12,
-                                            maxZoom: 18,
-                                        }}
-                                        center={center}
-                                        zoom={10}
-                                        onLoad={onLoad}
-                                        onUnmount={onUnmount}
-                                    >
-                                        {markerLocation && (
-                                            <MarkerF
-                                                position={markerLocation}
-                                                icon={{
-                                                    anchor: new google.maps.Point(137 / 2, 137 / 2),
-                                                    scaledSize: new google.maps.Size(137, 137),
-                                                }}
-                                                onClick={handleOpenPopup} // Open popup on marker click
-                                            />
-                                        )}
+                                           <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
+                                             {chennaiCoordinates?.map((coord, index) => (
+                                                <>
+                                                 <MarkerF
+                                                 position={{
+                                                   lat: chennaiCoordinates[0]?.latitude,
+                                                   lng: chennaiCoordinates[0]?.longitude,
+                                                 }}
+                                                 label="Start"
+                                               />
+                                           
+                                               <MarkerF
+                                                 position={{
+                                                   lat: chennaiCoordinates[chennaiCoordinates.length - 1]?.latitude,
+                                                   lng: chennaiCoordinates[chennaiCoordinates.length - 1]?.longitude,
+                                                 }}
+                                                 label="End"
+                                               />
+                                               </>
+                                             ))}
+                                 
+                                             {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
 
                                         {openPopup && popupPosition && (
                                             <InfoWindow

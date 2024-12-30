@@ -56,7 +56,9 @@ CustomTabPanel.propTypes = {
 
 const VehicleSection = () => {
 
-  const { setOpenHistoryDrawer, setOpenmessage, setOpenshare, setOpenDriverModify, setHistoryLocation, setOpenAddTag, setOpendetailsDrawer, setOpen } = useContext(PermissionContext)
+  const { setOpenHistoryDrawer, setOpenmessage, setOpenshare, setOpenDriverModify, setHistoryLocation, setOpenAddTag, setOpendetailsDrawer, setOpen,vehicleListData,setVehicleListData,
+    vehicleSearchDetails,setVehicleSearchDetails
+   } = useContext(PermissionContext)
   const { vehiclesData } = useDetailsVehicle()
 
   const [selectedOption, setSelectedOption] = useState('Vehicle');
@@ -78,7 +80,10 @@ const VehicleSection = () => {
   };
 
   //vehicle section drawer
-  const toggleDrawer = (open) => (event) => {
+  const toggleDrawer = (open,vehno) => (event) => {
+    console.log(vehno,"vehnooo");
+    
+    setVehicleSearchDetails(vehno)
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
@@ -197,10 +202,10 @@ const VehicleSection = () => {
             <div className="vehicle-indiduals">
               { filteredVehicles?.map((li)=>(
 <>
-              <div className='vehicle-indiduals-cards'>
+              <div className='vehicle-indiduals-cards' onClick={toggleDrawer(true,li?.vehRegNo)}>
                 <div className='vehicle-indiduals-cards-width' >
                   <div className='vehicle-indiduals-cards'>
-                    <h3 className='heading-three ' onClick={toggleDrawer(true)}>{li?.vehRegNo}</h3>
+                    <h3 className='heading-three ' onClick={toggleDrawer(true,li?.vehRegNo)}>{li?.vehRegNo}</h3>
                     <div className='location-icon'>
                       <FaLocationArrow className='white-text' />
                     </div>

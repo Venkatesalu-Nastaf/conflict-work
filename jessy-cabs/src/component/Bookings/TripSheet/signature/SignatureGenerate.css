@@ -43,6 +43,13 @@
   .input-with-button .MuiButton-root {
     margin-left: 10px;
   }
+  .upload-icon{
+    font-size: 38px;
+    color: #1976d2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
   
   
   @keyframes pulse {

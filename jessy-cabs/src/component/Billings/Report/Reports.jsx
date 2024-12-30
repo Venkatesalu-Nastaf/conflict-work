@@ -37,6 +37,7 @@ const handleChange = (event, newValue) => {
     console.log(newValue, "valueinner");
     setValue(newValue);
     sethasChanged(true)
+    localStorage.removeItem('reports')
  
 };
 

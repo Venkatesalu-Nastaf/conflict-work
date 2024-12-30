@@ -6,6 +6,7 @@ import { format as datefunsdata, parse } from 'date-fns';
 import Logo from "../../../../assets/img/logo.png";
 import { Button } from '@mui/material';
 // import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { RiFileUploadLine } from "react-icons/ri";
 
 const SignatureGenerate = () => {
   const apiUrl = APIURL;
@@ -38,6 +39,7 @@ const SignatureGenerate = () => {
 
   const [uploadStatus, setUploadStatus] = useState(null);
   const [uploadStatus1, setUploadStatus1] = useState(null);
+  const[isAlert,setisAlert] = useState(null)
 
   const [fulldetails, setFulltripdetails] = useState([])
   const [startkm, setStartkm] = useState('');
@@ -206,6 +208,13 @@ const SignatureGenerate = () => {
     const duty = fulldetails[0]?.duty;
     const updatedCustomerData = { startkm, closekm, Hcl, duty };
     console.log(updatedCustomerData, ' data of the customer');
+
+    if (!startkm.trim() || !closekm.trim()) {
+      setisAlert("Empty")
+      setTimeout(() => setisAlert(null), 2000);
+     
+      return;
+    }
 
     try {
       // Send both startkm and closekm in one PUT request
@@ -439,9 +448,12 @@ const SignatureGenerate = () => {
                   value={startkm}
                   onChange={(e) => setStartkm(e.target.value)}
                 />
-                <Button component="label" variant="contained" onClick={handleUpload}>
+                {/* <Button component="label" variant="contained" onClick={handleUpload}>
                   Upload
-                </Button>
+                </Button> */}
+                   <span className='upload-icon'>
+                        <RiFileUploadLine  onClick={handleUpload} />
+                     </span>
               </div>
               {uploadStatus === 'success' && (
                 <p style={{ color: 'green' }}>Successfully updated</p>
@@ -457,15 +469,22 @@ const SignatureGenerate = () => {
                   value={closekm}
                   onChange={(e) => setClosekm(e.target.value)}
                 />
-                <Button component="label" variant="contained" onClick={handleclosekmUpload}>
+                {/* <Button component="label" variant="contained" onClick={handleclosekmUpload}>
                   Upload
-                </Button>
+                </Button> */}
+                 <span className='upload-icon'>
+                        <RiFileUploadLine onClick={handleclosekmUpload} />
+                     </span>
+                     <Button component="label" variant="contained" style={{ marginLeft: 'auto' }} onClick={handleDataUpload}>Save </Button>
               </div>
               {uploadStatus1 === 'success' && (
                 <p style={{ color: 'green' }}>Successfully updated</p>
               )}
               {uploadStatus1 === 'failure' && (
                 <p style={{ color: 'red' }}>Failed to upload.</p>
+              )}
+               {isAlert === 'Empty' && (
+                <p style={{ color: 'red' }}>Please Enter All Fields.</p>
               )}
             </div>
             <div className='signature-generate-input'>

@@ -630,6 +630,7 @@ const useTripsheet = () => {
         if (formData['dispatchcheck'] === 'true' && formData['status'] === "pending") {
             formData['status'] = "Opened"
             // setIsEditMode(true);
+            
             setIsEditMode(false);
         }
         else if (formData['dispatchcheck'] === 'true' && formData['status'] !== 'pending') {
@@ -650,6 +651,7 @@ const useTripsheet = () => {
         setTripSheetData(formData);
         setBook(formData);
         setFormData(formData);
+        setSelectedStatus( formData['status'])
         ///calc--------------------------------------
         setcalcPackage(calcPackage);
         setExtraHR(extraHR);
@@ -1604,9 +1606,9 @@ const useTripsheet = () => {
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
 
-        // if (name === "status") { // Or any specific criteria
-        //     setSelectedStatus(selectedOption || 'Opened');
-        // }
+        if (name === "status") { // Or any specific criteria
+            setSelectedStatus(selectedOption || 'Opened');
+        }
 
         setBook((prevBook) => ({
             ...prevBook,

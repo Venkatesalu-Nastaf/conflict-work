@@ -187,9 +187,11 @@ if (status === 'All') {
   sqlQuery = `
   SELECT * FROM booking
   WHERE 
+  (
     (status = 'pending' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
     OR 
     (status = 'Cancelled' AND bookingdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+)
 `;
 
   Tripquery = `
@@ -205,6 +207,7 @@ if (status === 'All') {
 
 // if (datadepartment.length === 0 || datadepartment.includes('All')) {
   if (datadepartment.length === 0) {
+    // console.log("enter")
   // if (isStation.length > 0) {
   // Ensure we filter only by servicestation
   // sqlQuery += ' AND servicestation IN (?)';
@@ -216,6 +219,7 @@ if (status === 'All') {
   // queryParams.push(isStation);
 } 
 else {
+  // console.log("not entered")
   // If specific departments are provided, use them as a filter
   // sqlQuery += ' AND tripsheet.department IN (?)';
   sqlQuery += ' AND servicestation IN (?)';

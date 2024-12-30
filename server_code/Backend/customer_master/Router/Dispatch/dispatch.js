@@ -122,6 +122,8 @@ router.get('/pending_tripsheet-show', (req, res) => {
   let sqlQuery = '';
   let Tripquery = '';
   let queryParams = [];
+  let queerparamsbooking = []
+
   //  'All' status
   // if (status === 'All') {
   //   sqlQuery = `
@@ -176,12 +178,20 @@ router.get('/pending_tripsheet-show', (req, res) => {
 
 // changes with customer filtering 
 if (status === 'All') {
+  // sqlQuery = `
+  //   SELECT * FROM booking
+  //   WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+  //     AND bookingdate <= DATE_ADD(?, INTERVAL 0 DAY)
+  //     AND (status = 'pending' OR status = 'Cancelled')
+  // `;
   sqlQuery = `
-    SELECT * FROM booking
-    WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-      AND bookingdate <= DATE_ADD(?, INTERVAL 0 DAY)
-      AND (status = 'pending' OR status = 'Cancelled')
-  `;
+  SELECT * FROM booking
+  WHERE 
+    (status = 'pending' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+    OR 
+    (status = 'Cancelled' AND bookingdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+`;
+
   Tripquery = `
     SELECT * FROM tripsheet
     WHERE tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
@@ -189,6 +199,7 @@ if (status === 'All') {
   `;
 
   queryParams = [formattedFromDate, formattedToDate];
+  queerparamsbooking=[formattedFromDate, formattedToDate,formattedFromDate, formattedToDate]
  
 
 
@@ -201,6 +212,8 @@ if (status === 'All') {
   Tripquery += ' AND department IN (?)'; 
   //  sqlQuery += ' AND tripsheet.department IN (?)'
   queryParams.push(isStation);
+  queerparamsbooking.push(isStation);
+  // queryParams.push(isStation);
 } 
 else {
   // If specific departments are provided, use them as a filter
@@ -208,32 +221,39 @@ else {
   sqlQuery += ' AND servicestation IN (?)';
   Tripquery += ' AND department IN (?)'; 
   queryParams.push(datadepartment);
+  queerparamsbooking.push(datadepartment);
 }
 
 if (VehNo) {
   sqlQuery += ' AND vehRegNo = ?';
   Tripquery += ' AND vehRegNo = ?';
   queryParams.push(VehNo); 
+  queerparamsbooking.push(VehNo);
 }
 
 if (datacustomer.length === 1 && !datacustomer.includes('All')) {
   sqlQuery += ' AND customer = ?'; 
   Tripquery += ' AND customer = ?'; 
   queryParams.push(datacustomer[0]); 
+  queerparamsbooking.push(datacustomer[0]);
 } else if (datacustomer.length > 1) {
   sqlQuery += ' AND customer IN (?)';
   Tripquery += ' AND customer IN (?)';
   queryParams.push(datacustomer); 
+  queerparamsbooking.push(datacustomer);
 }
 
 // console.log("SQL Query:", sqlQuery);
 // console.log("Query Params:", queryParams,);
-// console.log("SQL Query:", Tripquery);
-// console.log("Query Params:", queryParams);
+console.log("SQL Query:", Tripquery);
+console.log("Query Params:", queryParams);
+console.log("SQL Query:", sqlQuery);
+console.log("Query Params booking:",queerparamsbooking);
 
-db.query(sqlQuery, queryParams, (err, bookingResults) => {
+// db.query(sqlQuery, queryParams, (err, bookingResults) => {
+  db.query(sqlQuery,queerparamsbooking, (err, bookingResults) => {
   if (err) {
-      console.error('Error fetching bookings:', err.message);
+      console.error('Error fetching bookings:', err);
       return res.status(500).json({ error: 'Database error on fetching booking' });
   }
   // console.log(bookingResults,"kkk")
@@ -258,13 +278,25 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
 
   // Handle 'pending' and 'Cancelled' statuses
   if (status === 'pending' || status === 'Cancelled') {
+    if(status === 'pending'){
 
+    
+
+      sqlQuery = `
+        SELECT *
+        FROM booking
+        WHERE startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate<= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?   
+      `;
+      queryParams = [formattedFromDate, formattedToDate, status];
+    }
+    if(status === 'Cancelled'){
       sqlQuery = `
         SELECT *
         FROM booking
         WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?   
       `;
       queryParams = [formattedFromDate, formattedToDate, status];
+    }
   
     if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
       sqlQuery += ' AND servicestation IN (?)';

@@ -954,7 +954,10 @@ useEffect(() => {
       setDatatrigger(!datatrigger)
       const selectedBookingDate = dayjs().format("YYYY-MM-DD");
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
+      const bookingstartdate1 = dayjs(bookingstartdate).format("YYYY-MM-DD");
       const bookingshedoutdata = selectedCustomerData.shedOutDate || formData.shedOutDate || book.shedOutDate || dayjs();
+      const bookingshedoutdata1 = dayjs(bookingshedoutdata).format("YYYY-MM-DD");
+
       // Create a new object without the 'id' field from selectedCustomerData
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
 
@@ -972,8 +975,10 @@ useEffect(() => {
         report: formData.report || selectedCustomerData.report || book.report,
         vehicleName: formData.vehicleName || selectedCustomerData.vehicleName || book.vehicleName || selectedCustomerdriver.vehicleName,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
-        startdate: bookingstartdate,
-        shedOutDate: bookingshedoutdata,
+        // startdate: bookingstartdate,
+        // shedOutDate: bookingshedoutdata,
+        startdate: bookingstartdate1,
+        shedOutDate: bookingshedoutdata1,
         orderedby: book.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby || formData.orderedby,
         orderByMobileNo: book.orderByMobileNo || selectedCustomerData.orderByMobileNo || selectedCustomerDatas.orderByMobileNo || formData.orderByMobileNo || book.mobile,
         orderByEmail: book.orderByEmail || selectedCustomerData.orderByEmail || selectedCustomerDatas.orderByEmail || formData.orderByEmail ||book.orderbyemail ,
@@ -1075,6 +1080,9 @@ useEffect(() => {
       const selectedbookingtime = selectedCustomerData.bookingtime || formData.bookingtime || book.bookingtime || getCurrentTime();
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       const bookingshedoutdata = selectedCustomerData.shedOutDate || formData.shedOutDate || book.shedOutDate || dayjs();
+      const bookingstartdate1 = dayjs(bookingstartdate).format("YYYY-MM-DD");
+      const bookingshedoutdata1 = dayjs(bookingshedoutdata).format("YYYY-MM-DD");
+      
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
       const updatedCustomer = {
         ...selectedCustomer,
@@ -1091,8 +1099,10 @@ useEffect(() => {
         report: formData.report || selectedCustomerData.report || book.report,
         vehicleName: formData.vehicleName || selectedCustomerData.vehicleName || book.vehicleName || selectedCustomerdriver.vehicleName,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
-        shedOutDate: bookingshedoutdata,
-        startdate: bookingstartdate,
+        // shedOutDate: bookingshedoutdata,
+        // startdate: bookingstartdate,
+        shedOutDate: bookingshedoutdata1,
+        startdate: bookingstartdate1,
         orderedby: book.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby || formData.orderedby,
         orderByMobileNo: book.orderByMobileNo || selectedCustomerData.orderByMobileNo || selectedCustomerDatas.orderByMobileNo || formData.orderByMobileNo,
         orderByEmail: book.orderByEmail || book.orderbyemail ||

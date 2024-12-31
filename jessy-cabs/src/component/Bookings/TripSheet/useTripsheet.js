@@ -441,6 +441,7 @@ const useTripsheet = () => {
     };
 
     const [mapimageUrls, setMapImageUrls] = useState([]);
+    const [mapimageUrls1, setMapImageUrls1] = useState("");
 
 
     // map1
@@ -459,6 +460,36 @@ const useTripsheet = () => {
             const imageUrl = URL.createObjectURL(responseData);
             setMapImageUrls(imageUrl);
             setMapimgPopupOpen(true);
+        } catch {
+        }
+    };
+
+    const handleTripmapverify = async () => {
+        try {
+            const tripid = book?.tripid || selectedCustomerData?.tripid || formData?.tripid;
+            // console.log(tripid,"urlstripiii")
+            if (!tripid) {
+                return;
+            }
+            // const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
+            // if (!response.ok) {
+            //     throw new Error(`HTTP error! Status: ${response.status}`);
+            // }
+            const response = await axios.get(`${apiUrl}/getmapimagesverfiy/${tripid}`);
+            
+            const responseData = response.data
+            // console.log(responseData,"urlstripiii")
+            if(responseData.length>0){
+                // setCheckSignandMapVerify(true)
+                // setCheckSignMapMessage("Map and Signature Verified")
+                setMapImageUrls1(responseData);
+            }else{
+            
+            // Assuming you want to display the image directly
+            // const imageUrl = URL.createObjectURL(responseData);
+            setMapImageUrls1("");
+            }
+            // setMapimgPopupOpen(true);
         } catch {
         }
     };
@@ -1118,9 +1149,12 @@ const useTripsheet = () => {
    
     const status1 = formData.status || selectedCustomerData.status || book.status
     const dayhcl1 = hybridhclcustomer || hybridhclnavigate
+    console.log(mapimageUrls1,"urls",typeof(mapimageUrls1),mapimageUrls)
     const checksignatureandmap = async () => {
-        handleTripmapClick()
-        await getSignatureImage()
+        // handleTripmapClick()
+        await handleTripmapverify()
+        // await getSignatureImage()
+        getSignatureImageverify()
         // console.log(tripID1, "userStatusdatatripi", typeof (tripID1))
     //    const status1 = formData.status || selectedCustomerData.status || book.status
   if(tripID1 && userStatus !== null) {
@@ -1132,7 +1166,7 @@ const useTripsheet = () => {
             if (userStatus.includes("All") || userStatus.includes("Chennai")) {
             if(dayhcl1 === 1 && status1 === "Closed"){
 
-                if(!signimageUrl && mapimageUrls.length === 0){
+                if(!signimageUrl && !mapimageUrls1 && mapimageUrls1 === ""){
                     setCheckSignandMapVerify(true)
                     setCheckSignMapMessage("Please upload the signature and Map")
                     return true;
@@ -1143,7 +1177,7 @@ const useTripsheet = () => {
                     // setError(true);
                     // setErrorMessage("Please upload the signature");
                     return true;
-                }else if(mapimageUrls.length === 0){
+                }else if(!mapimageUrls1 && mapimageUrls1 === ""){
                     setCheckSignandMapVerify(true)
                     setCheckSignMapMessage("Please upload the map image")
                     // setError(true);
@@ -1166,6 +1200,7 @@ const useTripsheet = () => {
                 }
             // }
                 else{
+                    console.log("withoyttripid")
                     setCheckSignandMapVerify(false)
                     return false
                 }
@@ -1197,12 +1232,13 @@ const useTripsheet = () => {
     }
     useEffect(()=>{
         checksignatureandmap()
-    },[isEditMode,status1,hybridhclcustomer,hybridhclnavigate,signimageUrl,mapimageUrls])
+    },[isEditMode,status1,hybridhclcustomer,hybridhclnavigate,signimageUrl,mapimageUrls1])
 
     console.log(checksignandMapverify,"userStatusdata",typeof(checksignandMapverify))
 
     const handleEdit = async () => {
         // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
+        // handleTripmapClick()
         await checksignatureandmap()
         
         const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
@@ -3995,6 +4031,28 @@ const useTripsheet = () => {
     };
 
 
+    const getSignatureImageverify = async () => {
+        const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+        try {
+            if (tripid !== null && tripid && tripid !== "undefined") {
+                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
+                if (response.status === 200) {
+                    const imageUrl = URL.createObjectURL(await response.blob());
+                    setSignImageUrl(imageUrl);
+                    // setSuccess(true)
+                    // setSuccessMessage('Signature Added Sucessfully')
+
+                }
+            }
+        } catch (err) {
+            console.log(err, 'error');
+            setWarning(true);
+            setWarningMessage("Failed to fetch signature image. Please try again.");
+
+        }
+    };
+
+
 
     const handleFileChangesignature = async (event) => {
         const file = event.target.files[0];
@@ -5596,6 +5654,9 @@ const useTripsheet = () => {
             setManualTripID([])
             setError(true)
             setErrorMessage("Successfully Deleted")
+            handleTripmapverify()
+            setMapImageUrls1("")
+            
             setMapimgPopupOpen(false)
         }
         catch (error) {

@@ -273,6 +273,26 @@ app.get('/getmapimages/:tripid', (req, res) => {
 });
 
 
+app.get('/getmapimagesverfiy/:tripid', (req, res) => {
+  const { tripid } = req.params;
+
+  const query = 'SELECT path FROM mapimage WHERE tripid = ?';
+  db.query(query, [tripid], (err, results) => {
+    if (err) {
+      console.log("err", err)
+      return res.status(500).send('Internal Server Error');
+    }
+    // if (results.length === 0) {
+    //   // No record found for the given tripid
+    //   return res.status(404).send('Image not found');
+    // }
+    return res.status(200).json(results)
+  
+  
+  });
+});
+
+
 app.delete('/api/mapimagedelete/:tripid', (req, res) => {
   const tripid = req.params.tripid;
   const sql = `SELECT path FROM mapimage WHERE tripid = ?`;

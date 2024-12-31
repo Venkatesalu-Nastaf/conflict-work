@@ -273,6 +273,8 @@ const useTripsheet = () => {
     // })
     const [checkstatusapps, setCheckStatusApp] = useState([])
     const usernamedata = localStorage.getItem("username");
+    const[checksignandMapverify,setCheckSignandMapVerify] = useState(false)
+    const [checksignmapmessage,setCheckSignMapMessage] = useState('')
     const maplogcolumns = [
         { field: "id", headerName: "Sno", width: 70 },
         { field: "tripid", headerName: "TripSheet No", width: 120 },
@@ -1113,15 +1115,102 @@ const useTripsheet = () => {
     useEffect(() => {
         hybridatahcldatakm()
     }, [datakm1, hclOutstation])
-    // console.log(hybridatahcldatakm(),"call")
+   
+    const status1 = formData.status || selectedCustomerData.status || book.status
+    const dayhcl1 = hybridhclcustomer || hybridhclnavigate
+    const checksignatureandmap = async () => {
+        handleTripmapClick()
+        await getSignatureImage()
+        // console.log(tripID1, "userStatusdatatripi", typeof (tripID1))
+    //    const status1 = formData.status || selectedCustomerData.status || book.status
+  if(tripID1 && userStatus !== null) {
+    // console.log(tripID1, "userStatusdatatripienetr", typeof (tripID1))
+    //     const station = userStatus
+    //     const dayhcl1 = hybridhclcustomer || hybridhclnavigate
+    
+        // if (stationmap.includes("All") || stationmap.includes("Chennai")) {
+            if (userStatus.includes("All") || userStatus.includes("Chennai")) {
+            if(dayhcl1 === 1 && status1 === "Closed"){
+
+                if(!signimageUrl && mapimageUrls.length === 0){
+                    setCheckSignandMapVerify(true)
+                    setCheckSignMapMessage("Please upload the signature and Map")
+                    return true;
+                }
+               else if(!signimageUrl){
+                    setCheckSignandMapVerify(true)
+                    setCheckSignMapMessage("Please upload the signature")
+                    // setError(true);
+                    // setErrorMessage("Please upload the signature");
+                    return true;
+                }else if(mapimageUrls.length === 0){
+                    setCheckSignandMapVerify(true)
+                    setCheckSignMapMessage("Please upload the map image")
+                    // setError(true);
+                    // setErrorMessage("Please upload the map image");
+                    return true;
+                }
+                else{
+                setCheckSignandMapVerify(false)
+                return false
+                }
+
+            }else{
+                // if(dayhcl1 === 0 && status1 === "Closed"){
+                     if(!signimageUrl && status1 === "Closed"){
+                    setCheckSignandMapVerify(true)
+                    setCheckSignMapMessage("Please upload the signature")
+                    // setError(true);
+                    // setErrorMessage("Please upload the signature");
+                    return true;
+                }
+            // }
+                else{
+                    setCheckSignandMapVerify(false)
+                    return false
+                }
+                
+
+            }
+
+        }
+        // else if( !stationmap.includes('Chennai') && !stationmap.includes('All')){
+        //     else if( !userStatus.includes('Chennai') && !userStatus.includes('All')){
+        //     if(!signimageUrl && status1 === "Temporary Closed"){
+        //         setCheckSignandMapVerify(true)
+        //         setCheckSignMapMessage("Please upload the signature")
+        //         // setError(true);
+        //         // setErrorMessage("Please upload the signature");
+        //         return;
+        //     }
+
+        // }
+        else{
+            setCheckSignandMapVerify(false);
+            return false;
+        }
+    }
+    else{
+        setCheckSignandMapVerify(false);
+        return false
+    }
+    }
+    useEffect(()=>{
+        checksignatureandmap()
+    },[isEditMode,status1,hybridhclcustomer,hybridhclnavigate,signimageUrl,mapimageUrls])
+
+    console.log(checksignandMapverify,"userStatusdata",typeof(checksignandMapverify))
 
     const handleEdit = async () => {
         // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
+        await checksignatureandmap()
+        
         const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
         const checkdata = statusdata[0];
         const superpower = localStorage.getItem("SuperAdmin")
         const tripidbookno = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
+        
         // Log the type of superpower
         if (
             (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && Number(superpower) === 0) ||
@@ -1129,6 +1218,11 @@ const useTripsheet = () => {
         ) {
             setError(true);
             setErrorMessage(`Tripsheet has been ${checkdata?.status}`);
+            return;
+        }
+        if(checksignandMapverify){
+            setError(true);
+            setErrorMessage(checksignmapmessage);
             return;
         }
 
@@ -1282,6 +1376,10 @@ const useTripsheet = () => {
                 setLockData(false)
                 setLockDatavendorBill(false)
                 setLockDatacustomerBill(false)
+                setCheckSignandMapVerify(false)
+            //    const data2= await  checksignatureandmap()
+            //    console.log(data2,"userStatusdata2")
+                
                 handleClose()
             } catch (err) {
                 // console.log(err, "erredit")

@@ -247,6 +247,9 @@ if (datacustomer.length === 1 && !datacustomer.includes('All')) {
   queerparamsbooking.push(datacustomer);
 }
 
+sqlQuery += ' ORDER BY shedOutDate ASC, reporttime ASC';
+Tripquery += ' ORDER BY shedOutDate ASC, reporttime ASC'; 
+
 // console.log("SQL Query:", sqlQuery);
 // console.log("Query Params:", queryParams,);
 console.log("SQL Query:", Tripquery);
@@ -319,6 +322,8 @@ console.log("Query Params booking:",queerparamsbooking);
       sqlQuery += ' AND customer IN (?)';
       queryParams.push(datacustomer);
     }
+    sqlQuery += ' ORDER BY shedOutDate ASC, reporttime ASC';
+   
   } else {
     // Handle other statuses
   //   sqlQuery = `
@@ -392,7 +397,10 @@ else {
       sqlQuery += ' AND tripsheet.customer IN (?)';
       queryParams.push(datacustomer);
     }
+     sqlQuery += ' ORDER BY tripsheet.shedOutDate ASC, tripsheet.reporttime ASC';
   }
+
+  // sqlQuery += ' ORDER BY tripsheet.shedOutDate ASC, tripsheet.starttime ASC';
   // console.log(sqlQuery,"dd",queryParams)
   db.query(sqlQuery, queryParams, (err, result) => {
     if (err) {

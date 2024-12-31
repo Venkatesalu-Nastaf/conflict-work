@@ -17,6 +17,7 @@ const columns = [
     { field: "status", headerName: "Status", width: 110 },
     { field: "customer", headerName: "Customer", width: 130 },
     { field: "servicestation", headerName: "Service Station", width: 130 },
+    { field: "vehicleName", headerName: "Vehicle Name", width: 130 },
     { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
     // { field: "bookingdate", headerName: "Booking Date", width: 120 },
     // { field: "shedOutDate", headerName: "ShedOut Date", width: 120 },
@@ -41,27 +42,6 @@ const columns = [
         width: 120,
         valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
       },
-    { field: "guestname", headerName: "Guest Name", width: 140 },
-    { field: "address1", headerName: "Address", width: 130 },
-    { field: "email", headerName: "Email", width: 130 },
-    { field: "employeeno", headerName: "Employee No", width: 110 },
-    // { field: "report", headerName: "Report", width: 130 },
-    { field: "driverName", headerName: "Driver Name", width: 130 },
-    { field: "mobileNo", headerName: "Driver MobNo", width: 130 },
-    { field: "vehType", headerName: "Rate For", width: 130 },
-    // { field: "reporttime", headerName: "ShedOut Time", width: 110 },
-    // { field: "starttime", headerName: "Start Time", width: 100 },
-    {
-        field: "starttime",
-        headerName: "Start Time",
-        width: 100,
-        // valueFormatter: (params) => {
-        //   const time = params.value;
-        //   return time
-        //     ? dayjs(time, ["HH:mm:ss", "HH:mm"]).format("HH:mm") // Support both formats
-        //     : "-";
-        // },
-      },
       {
         field: "reporttime",
         headerName: "ShedOut Time",
@@ -73,6 +53,50 @@ const columns = [
         //     : "-";
         // },
       },
+      {
+        field: "starttime",
+        headerName: "Start Time",
+        width: 100,
+        // valueFormatter: (params) => {
+        //   const time = params.value;
+        //   return time
+        //     ? dayjs(time, ["HH:mm:ss", "HH:mm"]).format("HH:mm") // Support both formats
+        //     : "-";
+        // },
+      },
+     
+    { field: "guestname", headerName: "Guest Name", width: 140 },
+    { field: "address1", headerName: "Address", width: 130 },
+    { field: "email", headerName: "Email", width: 130 },
+    { field: "employeeno", headerName: "Employee No", width: 110 },
+    // { field: "report", headerName: "Report", width: 130 },
+    { field: "driverName", headerName: "Driver Name", width: 130 },
+    { field: "mobileNo", headerName: "Driver MobNo", width: 130 },
+    { field: "vehType", headerName: "Rate For", width: 130 },
+    // { field: "reporttime", headerName: "ShedOut Time", width: 110 },
+    // { field: "starttime", headerName: "Start Time", width: 100 },
+    // {
+    //     field: "starttime",
+    //     headerName: "Start Time",
+    //     width: 100,
+    //     // valueFormatter: (params) => {
+    //     //   const time = params.value;
+    //     //   return time
+    //     //     ? dayjs(time, ["HH:mm:ss", "HH:mm"]).format("HH:mm") // Support both formats
+    //     //     : "-";
+    //     // },
+    //   },
+    //   {
+    //     field: "reporttime",
+    //     headerName: "ShedOut Time",
+    //     width: 110,
+    //     // valueFormatter: (params) => {
+    //     //   const time = params.value;
+    //     //   return time
+    //     //     ? dayjs(time, ["HH:mm:ss", "HH:mm"]).format("HH:mm") // Support both formats
+    //     //     : "-";
+    //     // },
+    //   },
     { field: "duty", headerName: "Duty", width: 100 },
     { field: "customercode", headerName: "Cost Code", width: 110 },
     { field: "registerno", headerName: "Request Id", width: 130 },
@@ -352,8 +376,8 @@ const useDispatched = () => {
         setCutomerName(newValue)
     }
 
-    const reversedRows = [...rows].reverse();  // to reverse 
-
+    // const reversedRows = [...rows].reverse();  // to reverse 
+    const reversedRows = [...rows];
 //// old code
     // const handleShow = useCallback(async () => {
 
@@ -520,6 +544,17 @@ const useDispatched = () => {
                 ...row,
                 id: index + 1, // S.No for combined rows
               }))
+              combinedRows.sort((a, b) => {
+                // Compare shedoutDate first
+                if (a.shedOutDate < b.shedOutDate) return -1;
+                if (a.shedOutDate > b.shedOutDate) return 1;
+              
+                // If shedoutDate is the same, compare reporttime
+                if (a.reporttime < b.reporttime) return -1;
+                if (a.reporttime > b.reporttime) return 1;
+              
+                return 0; // They are equal
+              });
               setRows(combinedRows);
               setColumnShowall(false);
               setSuccess(true);

@@ -128,7 +128,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
 
 
   } = useOverviewDrawer();
-  console.log(reversedRows,' datas if grid')
+  // console.log(reversedRows,' datas if grid')
   
 
   const [allCustomer, setAllCustomer] = useState([])

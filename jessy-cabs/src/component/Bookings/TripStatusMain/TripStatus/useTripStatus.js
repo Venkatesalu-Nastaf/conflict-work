@@ -13,6 +13,7 @@ const columns = [
   { field: "status", headerName: "Status", width: 110 },
   { field: "customer", headerName: "Customer", width: 130 },
   { field: "servicestation", headerName: "Service Station", width: 130 },
+  { field: "vehicleName", headerName: "Vehicle Name", width: 130 },
   { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
   { field: "bookingdate", headerName: "Booking Date", width: 120, valueFormatter: (params) => params.value ? dayjs(params.value).format('DD/MM/YYYY') : "" },
   { field: "tripsheetdate", headerName: "Tripsheet Date", width: 120, valueFormatter: (params) => params.value ? dayjs(params.value).format('DD/MM/YYYY') : "" },
@@ -572,7 +573,8 @@ const useDispatched = () => {
   const handleCustomerChange = (event, newValue) => {
     setCutomerName(newValue)
   }
-  const reversedRows = [...rows].reverse();  // to reverse 
+  // const reversedRows = [...rows].reverse();  // to reverse 
+  const reversedRows = [...rows]; 
 
   function removeSeconds(time) {
     // Split the time string by colon (:)
@@ -631,6 +633,7 @@ console.log(filteredStations,'station values');
             id1: index + 1,
             starttime: removeSeconds(row.starttime),
           }));
+          console.log(rowsWithUniqueId,"rows")
           setRows(rowsWithUniqueId);
           setColumnShowall(false);
           setSuccess(true);
@@ -666,6 +669,18 @@ console.log(filteredStations,'station values');
             id: index + 1,
             // S.No for combined rows
           }))
+
+          combinedRows.sort((a, b) => {
+            // Compare shedoutDate first
+            if (a.shedOutDate < b.shedOutDate) return -1;
+            if (a.shedOutDate > b.shedOutDate) return 1;
+          
+            // If shedoutDate is the same, compare reporttime
+            if (a.reporttime < b.reporttime) return -1;
+            if (a.reporttime > b.reporttime) return 1;
+          
+            return 0; // They are equal
+          });
           console.log(combinedRows,'rows with statrt time ')
           setRows(combinedRows);
           setColumnShowall(false);

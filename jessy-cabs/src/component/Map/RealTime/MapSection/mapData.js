@@ -1,24 +1,26 @@
 export const chennaiCoordinates = [
-    { latitude: 13.0827, longitude: 80.2707 }, // Chennai City Center
-    { latitude: 13.0604, longitude: 80.2496 }, // Marina Beach
-    { latitude: 13.0475, longitude: 80.2576 }, // Kapaleeshwarar Temple
-    { latitude: 13.0805, longitude: 80.2835 }, // Fort St. George
-    { latitude: 13.0582, longitude: 80.2184 }, // Guindy National Park
-    { latitude: 13.0265, longitude: 80.2633 }, // Elliot's Beach (Besant Nagar)
-    { latitude: 13.0837, longitude: 80.2721 }, // Chennai Central Railway Station
-    { latitude: 13.0814, longitude: 80.2744 }, // Government Museum Chennai
-    { latitude: 13.0042, longitude: 80.2352 }, // Phoenix Marketcity Chennai
-    { latitude: 13.0902, longitude: 80.2096 }, // IIT Madras
-    { latitude: 13.0095, longitude: 80.2570 }, // VGP Universal Kingdom
-    { latitude: 13.0342, longitude: 80.2677 }, // Ashtalakshmi Temple
-    { latitude: 13.0904, longitude: 80.2274 }, // TIDEL Park
-    { latitude: 13.1016, longitude: 80.2410 }, // Anna Nagar Tower Park
-    { latitude: 13.0350, longitude: 80.2652 }, // Theosophical Society
-    { latitude: 13.0615, longitude: 80.2354 }, // Thousand Lights Mosque
-    { latitude: 12.9957, longitude: 80.2147 }, // St. Thomas Mount
-    { latitude: 13.0595, longitude: 80.2433 }, // Express Avenue Mall
-    { latitude: 13.1290, longitude: 80.2096 }, // Puzhal Lake
-    { latitude: 12.9228, longitude: 80.1275 }, // Crocodile Bank
+    { latitude: 13.030329, longitude: 80.240229,TripType:"null" }, // Chennai City Center
+    { latitude: 13.029546, longitude:80.240000,TripType:'null' }, // Marina Beach
+    { latitude: 13.029880, longitude: 80.240094,TripType:'null'  }, // Kapaleeshwarar Temple
+    // { latitude: 13.0805, longitude: 80.2835,TripType:'null'  }, // Fort St. George
+    { latitude: 13.029062, longitude: 80.239888,TripType:'null'  }, // Guindy National Park
+    // { latitude: 13.0265, longitude: 80.2633,TripType:'null'  }, // Elliot's Beach (Besant Nagar)
+    // { latitude: 13.0837, longitude: 80.2721,TripType:'null'  }, // Chennai Central Railway Station
+    // { latitude: 13.0814, longitude: 80.2744,TripType:'null'  }, // Government Museum Chennai
+    // { latitude: 13.0042, longitude: 80.2352,TripType:'null'  }, // Phoenix Marketcity Chennai
+    // { latitude: 13.0902, longitude: 80.2096,TripType:'null'  }, // IIT Madras
+    // { latitude: 13.0095, longitude: 80.2570,TripType:'null'  }, // VGP Universal Kingdom
+    // { latitude: 13.0342, longitude: 80.2677,TripType:'null'  }, // Ashtalakshmi Temple
+    // { latitude: 13.0904, longitude: 80.2274,TripType:'null'  }, // TIDEL Park
+    // { latitude: 13.1016, longitude: 80.2410,TripType:'null'  }, // Anna Nagar Tower Park
+    // { latitude: 13.0350, longitude: 80.2652,TripType:'null'  }, // Theosophical Society
+    { latitude: 13.028853, longitude: 80.240318,TripType:"null" }, // Thousand Lights Mosque
+    { latitude:13.029337, longitude:80.240460,TripType:'null'  }, // St. Thomas Mount
+    { latitude: 13.029750, longitude:80.240540,TripType:'null'  }, // Express Avenue Mall
+    { latitude: 13.030148, longitude:80.240658,TripType:'null'  }, // Puzhal Lake
+    { latitude: 13.030413, longitude:80.240738,TripType:'null'  }, // Crocodile Bank
+    { latitude: 13.030680, longitude: 80.240518,TripType:'null'  }, // Crocodile Bank
+
   ];
   export const tiruvallurCoordinates = [
     { latitude: 13.1431, longitude: 79.9092 }, // Tiruvallur Town

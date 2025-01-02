@@ -1,4 +1,4 @@
-import React, { useState, useContext , useCallback,useEffect} from 'react';
+import React, { useState, useContext, useCallback, useEffect, useRef } from 'react';
 import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
 // import { IconButton, Button } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
@@ -34,25 +34,26 @@ const containerStyle = {
     width: '100%',
     height: '650px',
     // border: '2px solid black',
-  };
-  
-  // Set the default map center (Chennai)
-  const center = {
+};
+
+// Set the default map center (Chennai)
+const center = {
     lat: 13.0827,
     lng: 80.2707,
-  };
+};
 
 
 
 const VehicleInformationDrawer = () => {
-
     //vehicle section drawer
-    const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer,vehicleListData, setVehicleListData } = useContext(PermissionContext);
+    const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer, vehicleListData, setVehicleListData } = useContext(PermissionContext);
     const navigate = useNavigate();
+    const [currentPointIndex, setCurrentPointIndex] = useState(0);
 
+    const mapRef = useRef(null)
     const handleopenHistoryDrawer = () => {
         // setOpenHistoryDrawer(true);
-        navigate("/home/Map/History"); 
+        navigate("/home/Map/History");
 
     };
 
@@ -105,90 +106,164 @@ const VehicleInformationDrawer = () => {
         setNumber(event.target.value);
     };
 
-
+    const handleDrawPaths = () => {
+        setDirectionRendererKey(0)
+        setDirectionsResponse(null)
+        let index = 1; // Start from the second point since the first is fixed
+    
+        const directionsService = new window.google.maps.DirectionsService();
+    
+        const intervalId = setInterval(() => {
+            if (index >= chennaiCoordinates.length) {
+                clearInterval(intervalId); // Stop when all points are covered
+                return;
+            }
+    
+            // Fixed initial position as the origin
+            const origin = {
+                lat: chennaiCoordinates[0]?.latitude,
+                lng: chennaiCoordinates[0]?.longitude,
+            };
+    
+            // Dynamic destination for the current step
+            const destination = {
+                lat: chennaiCoordinates[index]?.latitude,
+                lng: chennaiCoordinates[index]?.longitude,
+            };
+    
+            const waypoints = chennaiCoordinates.slice(1, index).map(coord => ({
+                location: { lat: coord.latitude, lng: coord.longitude },
+                stopover: false,
+            }));
+    
+            directionsService.route(
+                {
+                    origin,
+                    destination,
+                    waypoints,
+                    travelMode: window.google.maps.TravelMode.DRIVING,
+                },
+                (result, status) => {
+                    if (status === window.google.maps.DirectionsStatus.OK) {
+                        setDirectionsResponse(result);
+                    } else {
+                        console.error(`Error fetching directions: ${status}`);
+                    }
+                }
+            );
+    
+            index += 1; // Move to the next destination
+        }, 2000); // Update every 1 second
+    };
+    
 
     // Load the Google Maps script with your API key and necessary libraries
-  const { isLoaded } = useLoadScript({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
-    libraries: ['places'], // Add any additional libraries you need
-  });
+    const { isLoaded } = useLoadScript({
+        id: 'google-map-script',
+        googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
+        libraries: ['places'], // Add any additional libraries you need
+    });
 
-  // State management for the map, location, directions, popup, etc.
-  const [map, setMap] = useState(null);
-  const [lat, setLat] = useState(13.0827); // Default latitude (Chennai)
-  const [long, setLong] = useState(80.2707); // Default longitude (Chennai)
-  const [direction, setDirection] = useState(false);
-  const [directionRendererKey, setDirectionRendererKey] = useState(0);
-  const [directionRoute, setDirectionRoute] = useState(null);
-  const [openPopup, setOpenPopup] = useState(false); // State to handle popup open/close
-  const [popupPosition, setPopupPosition] = useState(null); // State for popup position
-  const [directionsResponse, setDirectionsResponse] = useState(null);
+    // State management for the map, location, directions, popup, etc.
+    const [map, setMap] = useState(null);
+    const [lat, setLat] = useState(13.0827); // Default latitude (Chennai)
+    const [long, setLong] = useState(80.2707); // Default longitude (Chennai)
+    const [direction, setDirection] = useState(false);
+    const [directionRendererKey, setDirectionRendererKey] = useState(0);
+    const [directionRoute, setDirectionRoute] = useState(null);
+    const [openPopup, setOpenPopup] = useState(false); // State to handle popup open/close
+    const [popupPosition, setPopupPosition] = useState(null); // State for popup position
+    const [directionsResponse, setDirectionsResponse] = useState(null);
+    const [lastPointIndex, setLastPointIndex] = useState(0);
 
-  // Marker location based on latitude and longitude
-  const markerLocation = lat && long ? { lat, lng: long } : null;
+    // Marker location based on latitude and longitude
+    const markerLocation = lat && long ? { lat, lng: long } : null;
 
-  // Map loading handler
-  const onLoad = useCallback((map) => {
-    map.setCenter(center);
-    map.setZoom(16);
-    setMap(map);
-  }, []);
 
-  // Map unmount handler
-  const onUnmount = useCallback(() => {
-    setMap(null);
-  }, []);
 
-  // Center button click handler
-  const handleCenterButtonClick = () => {
-    const zoomLevel = 16;
-    if (map) {
-      map.panTo(markerLocation ? markerLocation : center);
-      map.setZoom(zoomLevel);
-    }
-  };
-
-  // Popup open/close handlers
-  const handleOpenPopup = () => {
-    setPopupPosition(markerLocation); // Open popup at marker location
-    setOpenPopup(true);
-  };
-  const handleClosePopup = () => setOpenPopup(false);
-
-  // Check if Google Maps API is loaded
-//   if (!isLoaded) return <div>Loading...</div>;
-
- useEffect(() => {
-    const directionsService = new window.google.maps.DirectionsService();
-console.log("google maps 22222222222222222");
-
-    // Prepare waypoints (excluding the start and end points)
-    const waypoints = chennaiCoordinates?.slice(1, -1).map((location) => ({
-      location,
-      stopover: true,
-    }));
-
-    directionsService.route(
-      {
-        origin: chennaiCoordinates[0],
-        destination: chennaiCoordinates[chennaiCoordinates.length - 1], 
-        waypoints: waypoints,
-        travelMode: window.google.maps.TravelMode.DRIVING,
-      },
-      (result, status) => {
-        console.log(result,"google maps result111");
-        if (status === window.google.maps.DirectionsStatus.OK) {
-            console.log(result,"google maps result");
-            
-          setDirectionsResponse(result);
-        } else {
-          console.error(`Error fetching directions: ${status}`);
+    // Center button click handler
+    const handleCenterButtonClick = () => {
+        const zoomLevel = 16;
+        if (map) {
+            map.panTo(markerLocation ? markerLocation : center);
+            map.setZoom(zoomLevel);
         }
-      }
-    );
+    };
 
-  }, [open]);
+    // Popup open/close handlers
+    const handleOpenPopup = () => {
+        setPopupPosition(markerLocation); // Open popup at marker location
+        setOpenPopup(true);
+    };
+    const handleClosePopup = () => setOpenPopup(false);
+
+    // Check if Google Maps API is loaded
+    //   if (!isLoaded) return <div>Loading...</div>;
+    useEffect(() => {
+        if (!chennaiCoordinates || chennaiCoordinates.length < 2) {
+            console.error("Invalid chennaiCoordinates for routing");
+            return;
+        }
+
+        const directionsService = new window.google.maps.DirectionsService();
+
+        const updateDirections = (isInitial = false) => {
+            const formattedCoordinates = chennaiCoordinates.map(coord => ({
+                lat: coord.latitude,
+                lng: coord.longitude,
+            }));
+
+            // Fixed last point as the standard destination
+            const fixedLastPoint = formattedCoordinates[formattedCoordinates.length - 1];
+
+            const waypoints = formattedCoordinates.slice(1, -1).map(location => ({
+                location,
+                stopover: false,
+            }));
+
+            directionsService.route(
+                {
+                    origin: formattedCoordinates[0],
+                    destination: fixedLastPoint, // Always use the last coordinate
+                    waypoints,
+                    travelMode: window.google.maps.TravelMode.DRIVING,
+                },
+                (result, status) => {
+                    console.log(status, "checkkkkkkk");
+
+                    if (status === window.google.maps.DirectionsStatus.OK) {
+                        setDirectionsResponse(result);
+
+                        if (isInitial) {
+                            const bounds = new window.google.maps.LatLngBounds();
+                            formattedCoordinates?.forEach(coord => bounds.extend(coord));
+                            mapRef?.current?.fitBounds(bounds);
+                        }
+                    } else {
+                        console.error(`Error fetching directions: ${status}`);
+                    }
+                }
+            );
+        };
+
+        updateDirections(true);
+
+        const intervalId = setInterval(() => {
+            updateDirections(false);
+        }, 10000);
+
+        return () => clearInterval(intervalId);
+    }, [chennaiCoordinates, open]);
+
+
+    const handleMapLoad = (map) => {
+        mapRef.current = map; // Save the map instance
+    };
+
+    if (!isLoaded) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
             <div>
@@ -422,28 +497,49 @@ console.log("google maps 22222222222222222");
                                 </div>
 
                                 <div className='vehicle-info-content-map'>
-                                           <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
-                                             {chennaiCoordinates?.map((coord, index) => (
-                                                <>
-                                                 <MarkerF
-                                                 position={{
-                                                   lat: chennaiCoordinates[0]?.latitude,
-                                                   lng: chennaiCoordinates[0]?.longitude,
-                                                 }}
-                                                 label="Start"
-                                               />
-                                           
-                                               <MarkerF
-                                                 position={{
-                                                   lat: chennaiCoordinates[chennaiCoordinates.length - 1]?.latitude,
-                                                   lng: chennaiCoordinates[chennaiCoordinates.length - 1]?.longitude,
-                                                 }}
-                                                 label="End"
-                                               />
-                                               </>
-                                             ))}
-                                 
-                                             {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
+                                    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}
+                                        onLoad={handleMapLoad}
+                                    >
+                                        {/* {chennaiCoordinates && chennaiCoordinates.length > 0 && (
+                                            <MarkerF
+                                                position={{
+                                                    lat: chennaiCoordinates[0]?.latitude,
+                                                    lng: chennaiCoordinates[0]?.longitude,
+                                                }}
+                                                // label="Shed out"
+                                            />
+                                        )} */}
+                                        {chennaiCoordinates && chennaiCoordinates.some(coord => coord?.TripType === "start") && (
+                                            <MarkerF
+                                                position={{
+                                                    lat: chennaiCoordinates.find(coord => coord?.TripType === "start")?.latitude,
+                                                    lng: chennaiCoordinates.find(coord => coord?.TripType === "start")?.longitude,
+                                                }}
+                                                label="Start"
+                                            />
+                                        )}
+
+                                        {/* End Marker based on TripType */}
+                                        {chennaiCoordinates && chennaiCoordinates.some(coord => coord?.TripType === "End") && (
+                                            <MarkerF
+                                                position={{
+                                                    lat: chennaiCoordinates.find(coord => coord?.TripType === "End")?.latitude,
+                                                    lng: chennaiCoordinates.find(coord => coord?.TripType === "End")?.longitude,
+                                                }}
+                                                label="End"
+                                            />
+                                        )}
+                                        {/* {chennaiCoordinates && chennaiCoordinates?.length > 1 && (
+                                            <MarkerF
+                                                position={{
+                                                    lat: chennaiCoordinates[chennaiCoordinates?.length - 1]?.latitude,
+                                                    lng: chennaiCoordinates[chennaiCoordinates?.length - 1]?.longitude,
+                                                }}
+                                                // label="Last"
+                                            />
+                                        )} */}
+
+                                        {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
 
                                         {openPopup && popupPosition && (
                                             <InfoWindow
@@ -482,24 +578,6 @@ console.log("google maps 22222222222222222");
 
 
 
-                                        {direction && (
-                                            <DirectionsRenderer
-                                                key={directionRendererKey}
-                                                directions={directionRoute}
-                                                options={{
-                                                    polylineOptions: {
-                                                        strokeColor: "#1FA445",
-                                                        strokeWeight: 7,
-                                                    },
-                                                }}
-                                            />
-                                        )}
-                                        {/* <div style={{ zIndex: 1, position: 'absolute', top: '60px', right: '20px' }}>
-          <Button variant="contained" color="primary" onClick={handleOpenPopup}>
-            Open Popup
-          </Button>
-        </div> */}
-
                                         <div style={{ zIndex: 1, position: 'absolute', top: '400px', right: '60px' }} onClick={handleOpenPopup}>
                                             <IconButton onClick={handleCenterButtonClick} style={{ backgroundColor: 'red', color: 'white' }}>
                                                 <NavigationIcon />
@@ -507,8 +585,10 @@ console.log("google maps 22222222222222222");
                                         </div>
 
                                     </GoogleMap>
+                                    <div className='playButton'>
+                                        <button onClick={()=>handleDrawPaths()}>Play</button>
+                                    </div>
                                 </div>
-
                             </div>
 
                         </Box>

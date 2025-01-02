@@ -334,7 +334,7 @@ router.get('/Get-Billing', (req, res) => {
 
 // update TransferList Particular Tripid
 router.post('/updateParticularTransferList', (req, res) => {
-  const { Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id, grouptripid,Status } = req.body;
+  const { Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id, grouptripid, Status } = req.body;
   const tripIdString = Array.isArray(Trip_id) ? Trip_id.join(',') : Trip_id;
 
   if (!grouptripid) {
@@ -347,7 +347,7 @@ router.post('/updateParticularTransferList', (req, res) => {
     SET Billdate = ?, Organization_name = ?, FromDate = ?, EndDate = ?, Trips = ?, Amount = ?, Trip_id = ?,Status=?
     WHERE Grouptrip_id = ?`;
 
-  db.query(updateQuery, [Billdate, Organization_name, FromDate, EndDate, Trips, Amount, tripIdString,Status, grouptripid], (error, result) => {
+  db.query(updateQuery, [Billdate, Organization_name, FromDate, EndDate, Trips, Amount, tripIdString, Status, grouptripid], (error, result) => {
     if (error) {
       console.error('Database query error:', error);
       return res.status(500).json({ error: 'Database query failed' });
@@ -1371,12 +1371,12 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
         [decodedCustomer, tripid],
         (err, result) => {
           if (err) {
-            console.log(err,'error');
-            
+            console.log(err, 'error');
+
             reject(err);
           } else {
             // console.log(result,'pdfzippppppppppppppppppppp');
-            
+
             resolve(result); // Assuming we expect only one result per tripid
           }
         }
@@ -1578,13 +1578,31 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
 
     const groupBilling = customerResult[0]?.billingGroup;
     const state = customerResult[0]?.state;
-    console.log(customerResult, 'customer result', groupBilling, state);
+    const stationName = customerResult[0]?.servicestation;
+    console.log(customerResult, 'customer result', groupBilling, state, stationName);
 
-    const stationQuery = 'SELECT * FROM stationcreation WHERE state = ? AND gstno IS NOT NULL AND gstno != ""';
-    const defaultStationQuery = 'SELECT * FROM stationcreation WHERE state = "Tamil Nadu" AND gstno IS NOT NULL AND gstno != ""';
+    // Query to fetch stations with state and stationName dependencies
+    const stationQuery = `
+      SELECT * 
+      FROM stationcreation 
+      WHERE state = ? 
+      AND Stationname = ? 
+      AND gstno IS NOT NULL 
+      AND gstno != ""
+    `;
 
-    const fetchStations = (state, callback) => {
-      db.query(stationQuery, [state], (err, stationResult) => {
+    // Query to fetch default stations if no GST is found for the specified station
+    const defaultStationQuery = `
+      SELECT * 
+      FROM stationcreation 
+      WHERE state = "Tamil Nadu" 
+      AND Stationname = "Chennai" 
+      AND gstno IS NOT NULL 
+      AND gstno != ""
+    `;
+
+    const fetchStations = (state, stationName, callback) => {
+      db.query(stationQuery, [state, stationName], (err, stationResult) => {
         if (err) {
           console.error(err, 'error');
           return res.status(500).json({ error: 'Database error while fetching stations' });
@@ -1607,32 +1625,32 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
     };
 
     if (groupBilling === null || groupBilling === '') {
-      console.log(groupBilling, 'yyyyyyyyyyyyyyyyyy');
+      console.log(groupBilling, 'No group billing, fetching stations for customer state');
 
-      console.log('Fetching stations for customer state');
-      fetchStations(state, stationResult => {
+      fetchStations(state, stationName, stationResult => {
         console.log(stationResult, 'Station results for customer state');
         res.status(200).json({
           customerDetails: customerResult,
           customerStations: stationResult,
-
         });
       });
     } else {
       const groupBillingQuery = 'SELECT * FROM customers WHERE customer = ?';
+
       db.query(groupBillingQuery, [groupBilling], (err, billingResult) => {
         if (err) {
           console.error(err, 'error');
           return res.status(500).json({ error: 'Database error while fetching group billing details' });
         }
-        console.log(billingResult, 'ppppppppppppp');
 
-        const groupbillingstate = billingResult[0]?.state
-        console.log('Fetching stations for group billing state');
-        fetchStations(groupbillingstate, billingGroupStationResult => {
-          console.log(billingGroupStationResult, 'Station results for group billing state');
+        console.log(billingResult, 'Group billing result');
+        const groupBillingState = billingResult[0]?.state;
+        const groupBillingStationName = billingResult[0]?.servicestation;
+
+        console.log('Fetching stations for group billing state and station');
+        fetchStations(groupBillingState, groupBillingStationName, billingGroupStationResult => {
+          console.log(billingGroupStationResult, 'Station results for group billing state and station');
           res.status(200).json({
-
             customerDetails: billingResult,
             customerStations: billingGroupStationResult,
           });
@@ -1641,6 +1659,90 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
     }
   });
 });
+
+
+// router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
+//   const { customer } = req.params;
+//   console.log(customer, 'params customer');
+
+//   const customerQuery = 'SELECT * FROM customers WHERE customer = ?';
+
+//   db.query(customerQuery, [customer], (err, customerResult) => {
+//     if (err) {
+//       console.error(err, 'error');
+//       return res.status(500).json({ error: 'Database error while fetching customer' });
+//     }
+
+//     if (customerResult.length === 0) {
+//       return res.status(404).json({ error: 'Customer not found' });
+//     }
+
+//     const groupBilling = customerResult[0]?.billingGroup;
+//     const state = customerResult[0]?.state;
+//     const stationName = customerResult[0]?.servicestation
+//     console.log(customerResult, 'customer result', groupBilling, state);
+
+//     const stationQuery = 'SELECT * FROM stationcreation WHERE state = ?,Stationname = ? AND gstno IS NOT NULL AND gstno != ""';
+//     const defaultStationQuery = 'SELECT * FROM stationcreation WHERE state = "Tamil Nadu",Stationname = "Chennai" AND gstno IS NOT NULL AND gstno != ""';
+
+//     const fetchStations = (state,stationName, callback) => {
+//       db.query(stationQuery, [state,stationName], (err, stationResult) => { 
+//         if (err) {
+//           console.error(err, 'error');
+//           return res.status(500).json({ error: 'Database error while fetching stations' });
+//         }
+
+//         const allGstEmpty = stationResult.every(station => !station.gstno || station.gstno.trim() === '');
+
+//         if (allGstEmpty) {
+//           db.query(defaultStationQuery, (err, defaultStations) => {
+//             if (err) {
+//               console.error(err, 'error');
+//               return res.status(500).json({ error: 'Database error while fetching default stations' });
+//             }
+//             callback(defaultStations);
+//           });
+//         } else {
+//           callback(stationResult);
+//         }
+//       });
+//     };
+
+//     if (groupBilling === null || groupBilling === '') {
+//       console.log(groupBilling, 'yyyyyyyyyyyyyyyyyy');
+
+//       console.log('Fetching stations for customer state');
+//       fetchStations(state, stationResult => {
+//         console.log(stationResult, 'Station results for customer state');
+//         res.status(200).json({
+//           customerDetails: customerResult,
+//           customerStations: stationResult,
+
+//         });
+//       });
+//     } else {
+//       const groupBillingQuery = 'SELECT * FROM customers WHERE customer = ?';
+//       db.query(groupBillingQuery, [groupBilling], (err, billingResult) => {
+//         if (err) {
+//           console.error(err, 'error');
+//           return res.status(500).json({ error: 'Database error while fetching group billing details' });
+//         }
+//         console.log(billingResult, 'ppppppppppppp');
+
+//         const groupbillingstate = billingResult[0]?.state
+//         console.log('Fetching stations for group billing state');
+//         fetchStations(groupbillingstate, billingGroupStationResult => {
+//           console.log(billingGroupStationResult, 'Station results for group billing state');
+//           res.status(200).json({
+
+//             customerDetails: billingResult,
+//             customerStations: billingGroupStationResult,
+//           });
+//         });
+//       });
+//     }
+//   });
+// });
 
 
 

@@ -117,7 +117,9 @@ const HistoryLocationModal = () => {
 
   // Check if Google Maps API is loaded
   // if (!isLoaded) return <div>Loading...</div>;
-
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+}
 
   return (
     <>

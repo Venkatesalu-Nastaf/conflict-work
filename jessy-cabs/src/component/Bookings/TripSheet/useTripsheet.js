@@ -4017,8 +4017,8 @@ const useTripsheet = () => {
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
                     setSignImageUrl(imageUrl);
-                    setSuccess(true)
-                    setSuccessMessage('Signature Added Sucessfully')
+                    // setSuccess(true)
+                    // setSuccessMessage('Signature Added Sucessfully')
 
                 }
             }
@@ -4065,6 +4065,9 @@ const useTripsheet = () => {
                 await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}/${datadate}`, formData);
                 // await axios.post(`http://localhost:7000/signatureimagesavedriver/${datadate}`,formData)
                 getSignatureImage()
+                setSignImageUrl(imageUrl);
+                setSuccess(true)
+                setSuccessMessage('Signature Added Sucessfully')
                 // THIS API FRO DRIVER APP 
                 await axios.post(`${apiurltransfer}/signatureimageuploaddriver/${datadate}`, formData)
 

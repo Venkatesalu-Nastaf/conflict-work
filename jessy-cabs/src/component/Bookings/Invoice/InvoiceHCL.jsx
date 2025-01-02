@@ -19,6 +19,8 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
   const dutydata = dutiesdata === "Transfer" || dutiesdata === "Outstation" ? dutiesdata : pack
   const closedata = tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate
   const closedata2 = tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate
+  const triplabel = tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid
+
 
   const Totalkm = Number(endkm)
   const Totalkmoutsation = Number(shedinkm)
@@ -204,28 +206,28 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                           <tr>
                             <td id='table-datas'><span >Closing</span></td>
                             {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
-                            <td id='table-datas'><span >{dayjs(closedata).format("DD-MM-YYYY")}</span></td>
+                            <td id='table-datas'><span >{closedata ? dayjs(closedata).format("DD-MM-YYYY"):""}</span></td>
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime)}</span></td>
                             <td id='table-datas'><span >{shedinkm}</span></td>
                           </tr>
 
                           <tr>
                             <td id='table-datas'><span >Releasing</span></td>
-                            <td id='table-datas'><span >{dayjs(closedata2).format("DD-MM-YYYY")}</span></td>
+                            <td id='table-datas'><span >{closedata2 ? dayjs(closedata2).format("DD-MM-YYYY"):""}</span></td>
                             {/* <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td> */}
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime)}</span></td>
                             <td id='table-datas'><span >{endkm}</span></td>
                           </tr>
                           <tr>
                             <td id='table-datas'><span >Reporting</span></td>
-                            <td id='table-datas'><span >{dayjs(startDate).format("DD-MM-YYYY")}</span></td>
+                            <td id='table-datas'><span >{startDate ? dayjs(startDate).format("DD-MM-YYYY"):""}</span></td>
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime)}</span></td>
                             <td id='table-datas'><span >{startkm}</span></td>
                           </tr>
 
                           <tr>
                             <td id='table-datas'><span >Starting</span></td>
-                            <td id='table-datas'><span >{dayjs(shedOutDate).format("DD-MM-YYYY")}</span></td>
+                            <td id='table-datas'><span >{shedOutDate ? dayjs(shedOutDate).format("DD-MM-YYYY"):""}</span></td>
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime)}</span></td>
                             <td id='table-datas'><span >-</span></td>
                           </tr>
@@ -245,28 +247,28 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                           <tr>
                             <td id='table-datas'><span >Closing</span></td>
                             {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
-                            <td id='table-datas'><span >{dayjs(closedata).format("DD-MM-YYYY")}</span></td>
+                            <td id='table-datas'><span >{closedata ? dayjs(closedata).format("DD-MM-YYYY"):""}</span></td>
                             <td id='table-datas'><span >-</span></td>
                             <td id='table-datas'><span >-</span></td>
                           </tr>
 
                           <tr>
                             <td id='table-datas'><span >Releasing</span></td>
-                            <td id='table-datas'><span >{dayjs(closedata2).format("DD-MM-YYYY")}</span></td>
+                            <td id='table-datas'><span >{closedata2 ? dayjs(closedata2).format("DD-MM-YYYY"):""}</span></td>
                             {/* <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td> */}
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime)}</span></td>
                             <td id='table-datas'><span >{Totalkm}</span></td>
                           </tr>
                           <tr>
                             <td id='table-datas'><span >Reporting</span></td>
-                            <td id='table-datas'><span >{dayjs(startDate).format("DD-MM-YYYY")}</span></td>
+                            <td id='table-datas'><span >{startDate ? dayjs(startDate).format("DD-MM-YYYY"):""}</span></td>
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime)}</span></td>
                             <td id='table-datas'><span >{ }{0}</span></td>
                           </tr>
 
                           <tr>
                             <td id='table-datas'><span >Starting</span></td>
-                            <td id='table-datas'><span >{dayjs(shedOutDate).format("DD-MM-YYYY")}</span></td>
+                            <td id='table-datas'><span >{shedOutDate ? dayjs(shedOutDate).format("DD-MM-YYYY"):""}</span></td>
                             <td id='table-datas'><span >-</span></td>
                             <td id='table-datas'><span >-</span></td>
                           </tr>
@@ -548,7 +550,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             // Handle mixed content (adjust as needed)
             generatePDF(targetRef, {
               ...pdfOptions,
-              filename: "E-tripsheet.pdf",
+              filename: `TS${triplabel}E-tripsheet.pdf`,
             });
           }
         }}

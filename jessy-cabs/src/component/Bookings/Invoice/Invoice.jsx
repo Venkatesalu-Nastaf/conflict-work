@@ -11,8 +11,10 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
   const startkm = tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin
   const endkm = tripSheetData.shedout || selectedCustomerData.shedout  || selectedCustomerDatas.shedout || book.shedout 
   const startdata = tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate
+ 
+  const tripidlable = tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid
   // const enddata =
-  const Totalkm =Number(startkm) - Number(endkm)
+  const Totalkm = Number(startkm) - Number(endkm)
 
   function removeSeconds(time) {
     // Split the time string by colon (:)
@@ -138,7 +140,7 @@ const onDocumentLoadSuccess = ({ numPages }) => {
 
                       <td id='table-datas'><span >Closing</span></td>
                       {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
-                      <td id='table-datas'><span >{dayjs(startdata).format('DD-MM-YYYY')}</span></td>
+                      <td id='table-datas'><span >{startdata ? dayjs(startdata).format('DD-MM-YYYY'):""}</span></td>
                       <td id='table-datas'><span >{removeSeconds(tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime)}</span></td>
                       <td id='table-datas'><span >{tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin}</span></td>
                     </tr>
@@ -305,7 +307,7 @@ const onDocumentLoadSuccess = ({ numPages }) => {
 
         </article>
       </div>
-      <Button onClick={() => generatePDF(targetRef, { filename: 'E-tripsheet.pdf',resolution:3,
+      <Button onClick={() => generatePDF(targetRef, { filename: `TS${tripidlable}E-tripsheet.pdf`,resolution:3,
       method:'save',
       page:{
         margin: { top: 10, right: 10, bottom: 38, left: 10 },

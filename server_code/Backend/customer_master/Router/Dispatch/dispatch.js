@@ -194,13 +194,51 @@ if (status === 'All') {
 )
 `;
 
-  Tripquery = `
-    SELECT * FROM tripsheet
-    WHERE tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
-      AND DATE_ADD(?, INTERVAL 0 DAY) AND  status != 'Cancelled'
-  `;
+  // Tripquery = `
+  //   SELECT * FROM tripsheet
+  //   WHERE tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+  //     AND DATE_ADD(?, INTERVAL 0 DAY) AND  status != 'Cancelled'
+  // `;
+//   Tripquery = ` SELECT * FROM tripsheet
+//   WHERE 
+//   (
 
-  queryParams = [formattedFromDate, formattedToDate];
+
+//     ((status = "Billed" OR status = "Transfer_Billed" OR status = "Covering_Billed") AND tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+//    AND DATE_ADD(?, INTERVAL 0 DAY))
+//     OR 
+//     ((status = "Closed" OR status = "Transfer_Closed" OR status = "Covering_Closed") AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+//    AND DATE_ADD(?, INTERVAL 0 DAY))
+//     OR 
+//     (status = "Opened" AND  status != 'Cancelled' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+//    AND DATE_ADD(?, INTERVAL 0 DAY))
+//     OR 
+//     (status = "Opened" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+//    AND DATE_ADD(?, INTERVAL 0 DAY))
+   
+// )`
+
+Tripquery = ` SELECT * FROM tripsheet
+WHERE 
+(
+
+
+  (status = "Billed" AND tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+  OR 
+  (status = "Closed"  AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY)  AND DATE_ADD(?, INTERVAL 0 DAY))
+  OR 
+  (status = "Opened" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+  OR 
+  (status = "Temporary Closed" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+ 
+)`
+//   Tripquery = `
+//   SELECT * FROM tripsheet
+//   WHERE startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+//     AND DATE_ADD(?, INTERVAL 0 DAY) AND  status != 'Cancelled'
+// `;
+
+  queryParams = [formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate];
   queerparamsbooking=[formattedFromDate, formattedToDate,formattedFromDate, formattedToDate]
  
 
@@ -252,10 +290,10 @@ Tripquery += ' ORDER BY shedOutDate ASC, reporttime ASC';
 
 // console.log("SQL Query:", sqlQuery);
 // console.log("Query Params:", queryParams,);
-console.log("SQL Query:", Tripquery);
-console.log("Query Params:", queryParams);
-console.log("SQL Query:", sqlQuery);
-console.log("Query Params booking:",queerparamsbooking);
+// console.log("SQL Query:", Tripquery);
+// console.log("Query Params:", queryParams);
+// console.log("SQL Query:", sqlQuery);
+// console.log("Query Params booking:",queerparamsbooking);
 
 // db.query(sqlQuery, queryParams, (err, bookingResults) => {
   db.query(sqlQuery,queerparamsbooking, (err, bookingResults) => {
@@ -292,7 +330,7 @@ console.log("Query Params booking:",queerparamsbooking);
       sqlQuery = `
         SELECT *
         FROM booking
-        WHERE startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate<= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?   
+        WHERE startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?   
       `;
       queryParams = [formattedFromDate, formattedToDate, status];
     }
@@ -342,13 +380,31 @@ console.log("Query Params booking:",queerparamsbooking);
   //     sqlQuery += ' AND servicestation IN (?)';
   //     queryParams.push(isStation);
   // }
-  sqlQuery = `
+//   sqlQuery = `
+//   SELECT booking.*, tripsheet.*
+//   FROM tripsheet
+//   LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
+//   WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+//   AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
+// `;
+if(status !== 'Billed'){
+sqlQuery = `
+  SELECT booking.*, tripsheet.*
+  FROM tripsheet
+  LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
+  WHERE tripsheet.startdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+  AND tripsheet.startdate <= DATE_ADD(?, INTERVAL 0 DAY)
+`;
+}
+else{
+    sqlQuery = `
   SELECT booking.*, tripsheet.*
   FROM tripsheet
   LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
   WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
   AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
 `;
+}
 
 // Initialize query parameters
 queryParams = [formattedFromDate, formattedToDate];

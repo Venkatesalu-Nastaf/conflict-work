@@ -20,6 +20,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
   const closedata = tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate
   const closedata2 = tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate
   const triplabel = tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid
+  console.log(triplabel,"lllhcl")
 
 
   const Totalkm = Number(endkm)
@@ -511,7 +512,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
 
           // Custom settings for PDF files
           const pdfOptions = {
-            filename: "E-tripsheet.pdf",
+            filename: `TS${triplabel} E-tripsheet.pdf`,
             resolution: 3,
             method: "save",
             page: {
@@ -527,7 +528,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
 
           // Custom settings for image files
           const imageOptions = {
-            filename: "E-tripsheet.pdf",
+            filename: `TS${triplabel} E-tripsheet.pdf`,
             resolution: 2,
             method: "save",
             page: {
@@ -550,7 +551,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             // Handle mixed content (adjust as needed)
             generatePDF(targetRef, {
               ...pdfOptions,
-              filename: `TS${triplabel}E-tripsheet.pdf`,
+              filename: `TS${triplabel} E-tripsheet.pdf`,
             });
           }
         }}

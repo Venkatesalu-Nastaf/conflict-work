@@ -366,21 +366,98 @@ const useStationCreation = () => {
 //     }
 // };
 
-const handleStationChange = async (event, value) => {
+// const handleStationChange = async (event, value) => {
  
-    const station = value ? value.label : '';
-    setSelectedStation(station);
+//     const station = value ? value.label : '';
+//     setSelectedStation(station);
    
 
-    if (!station) {
+//     if (!station) {
 
+//         setSelectedState('');
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: '',
+//             state: '',
+//             address:'',
+//             gstno:''
+//         }));
+//         setisDisabled(false);
+//         return;
+//     }
+
+//     const foundState = Object.keys(stateToStations).find(state => 
+//         stateToStations[state].includes(station)
+//     );
+
+//     if (foundState) {
+//         setSelectedState(foundState);
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: foundState,
+            
+//         }));
+//         setSelectedCustomerData(prevBook =>({
+//             ...prevBook,
+//             Stationname:station,
+//             State:foundState,
+            
+//         }))
+
+//         try {
+//             const response = await axios.get(`${apiUrl}/stationcreation`);
+//             const stateData = response.data;
+
+//             const matchingStateData = stateData.find(
+//                 data => data.state === foundState,
+
+//             );
+
+//             if (matchingStateData) {
+//                 const hasDetails = matchingStateData.address && matchingStateData.gstno;
+//                 console.log('Setting isDisabled to:', hasDetails);
+//                 setisDisabled(true);
+                
+//             } else {
+//                 setisDisabled(false);
+//             }
+//         } catch (error) {
+//             console.error('Error fetching data from API:', error);
+//         }
+//     } else {
+//         setSelectedState('');
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: '',
+//             address:book.address,
+//         }));
+//         setSelectedStation('');
+//         setSelectedState('');
+//         setisDisabled(false);
+//     }
+// };
+
+const handleStationChange = async (event, value) => {
+    const station = value ? value.label : '';
+    setSelectedStation(station);
+
+    if (!station) {
         setSelectedState('');
         setBook(prevBook => ({
             ...prevBook,
             Stationname: '',
             state: '',
-            address:'',
-            gstno:''
+            address: '',
+            gstno: ''
+        }));
+        setSelectedCustomerData(prevData => ({
+            ...prevData,
+            Stationname: '',
+            state: '',
+            address: '',
+            gstno: ''
         }));
         setisDisabled(false);
         return;
@@ -392,18 +469,6 @@ const handleStationChange = async (event, value) => {
 
     if (foundState) {
         setSelectedState(foundState);
-        setBook(prevBook => ({
-            ...prevBook,
-            Stationname: station,
-            state: foundState,
-            
-        }));
-        setSelectedCustomerData(prevBook =>({
-            ...prevBook,
-            Stationname:station,
-            State:foundState,
-            
-        }))
 
         try {
             const response = await axios.get(`${apiUrl}/stationcreation`);
@@ -414,11 +479,35 @@ const handleStationChange = async (event, value) => {
             );
 
             if (matchingStateData) {
-                const hasDetails = matchingStateData.address && matchingStateData.gstno;
-                console.log('Setting isDisabled to:', hasDetails);
-                setisDisabled(true);
-                
+                const { gstno = '' } = matchingStateData;
+
+                setBook(prevBook => ({
+                    ...prevBook,
+                    Stationname: station,
+                    state: foundState,
+                    gstno
+                }));
+                setSelectedCustomerData(prevData => ({
+                    ...prevData,
+                    Stationname: station,
+                    state: foundState,
+                    gstno
+                }));
+                setisDisabled(!!gstno);
+
             } else {
+                setBook(prevBook => ({
+                    ...prevBook,
+                    Stationname: station,
+                    state: foundState,
+                    gstno: ''
+                }));
+                setSelectedCustomerData(prevData => ({
+                    ...prevData,
+                    Stationname: station,
+                    state: foundState,
+                    gstno: ''
+                }));
                 setisDisabled(false);
             }
         } catch (error) {
@@ -430,13 +519,18 @@ const handleStationChange = async (event, value) => {
             ...prevBook,
             Stationname: station,
             state: '',
-            address:book.address
+            gstno: ''
         }));
-        setSelectedStation('');
-        setSelectedState('');
+        setSelectedCustomerData(prevData => ({
+            ...prevData,
+            Stationname: station,
+            state: '',
+            gstno: ''
+        }));
         setisDisabled(false);
     }
 };
+
 
 
 
@@ -684,13 +778,13 @@ const handleStationChange = async (event, value) => {
 
                         setSelectedCustomerData(prevData => ({
                             ...prevData,
-                            address: address,
+                            // address: address,
                             gstno: gst,
                         }));
                     } else {
                         setSelectedCustomerData(prevData => ({
                             ...prevData,
-                            address: "",
+                            // address: "",
                             gstno: ""
                         }));
                     }

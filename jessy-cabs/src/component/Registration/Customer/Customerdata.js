@@ -126,12 +126,23 @@ export const allStations = [
   "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir", "Alappuzha",
   "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad",
   "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad",
+  //odisa
+  "Angul", "Balangir", "Balasore", "Bhadrak", "Boudh", "Cuttack", "Deogarh",
+    "Dhenkanal", "Ganjam", "Gajapati", "Kendrapara", "Kalahandi", "Kandhamal",
+    "Kendujhar", "Khurda", "Koraput", "Malkangiri", "Nabarangpur", "Nayagarh",
+    "Nua Khar", "Rayagada", "Sambalpur", "Sonepur", "Sundargarh",
+  //Delhi
+  "Central Delhi", "East Delhi","New Delhi", "North Delhi", "North East  Delhi", "North West  Delhi", "Shahdara", "South Delhi", "South East Delhi","South West  Delhi",
+  "West Delhi",
   // Tamil Nadu
   "Ariyalur", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kanchipuram", "Kanyakumari",
   "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram",
   "Salem", "Sivaganga", "Thanjavur", "Theni", "Thoothukudi (Tuticorin)", "Tiruchirappalli",
   "Tirunelveli", "Tenkasi", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Villuppuram", "Virudhunagar",
   // 
+  //Puducherry
+  "Karaikal","Mahe", "Pondicherry", "Yanam",
+  //
   "Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Janagaon", "Khammam", "Komaram Bheem Asifabad",
     "Kothagudem", "Mahbubnagar", "Mancherial", "Medak", "Medchal-Malkajgiri", "Mulugu",
     "Nagarkurnool", "Nalgonda", "Narayanpet", "Nirmal", "Nizamabad", "Peddapalli", "Rajanna Sircilla",
@@ -146,7 +157,38 @@ export const allStations = [
   "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur",
   "Thane", "Wardha", "Washim", "Yavatmal", "Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West",
   "Jiribam", "Kangpokpi", "Noney", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul", "East Garo Hills",
-  "East Khasi Hills", "Jaintia Hills", "Ri Bhoi", "West Garo Hills", "West Khasi Hills", "West Jaintia Hills"
+  "East Khasi Hills", "Jaintia Hills", "Ri Bhoi", "West Garo Hills", "West Khasi Hills", "West Jaintia Hills","Aizawl",
+   "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip", "Dimapur", "Kohima", "Mokokchung", "Mon", "Peren", 
+   "Phek", "Tuensang", "Wokha", "Zunheboto",
+
+   "Amritsar", "Barnala", "Bhatinda", "Faridkot", "Fatehgarh Sahib", "Fazilka", "Gharinda",
+    "Gurdaspur", "Hushiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga",
+    "Muktsar", "Patiala", "Rupnagar", "S.A.S Nagar", "Sangrur", "Shaheed Bhagat Singh Nagar",
+    "Sri Muktsar Sahib",
+    "Dhalai", "North Tripura", "Sipahijala", "South Tripura", "West Tripura",
+
+    //uttar
+    "Agra", "Aligarh", "Allahabad", "Ambedkar Nagar", "Auraiya", "Azamgarh", "Baghpat",
+    "Bahraich", "Ballia", "Banda", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor",
+    "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad",
+    "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur",
+    "Gonda", "Hamirpur", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Jind", "Kanpur",
+    "Kanpur Dehat", "Kasganj", "Kaushambi", "Kushinagar", "Lucknow", "Mahooba",
+    "Maurawan", "Mathura", "Meerut", "Mirzapur", "Mau", "Muzaffarnagar", "Pilibhit",
+    "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar",
+    "Shahjahanpur", "Shamli", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur",
+    "Unnao", "Varanasi",
+
+    //uttarkand
+    "Almora", "Bageshwar", "Chamoli", "Champawat", "Dehradun", "Garhwal", "Haridwar",
+    "Nainital", "Pauri", "Pithoragarh", "Rudraprayag", "Tehri", "Udham Singh Nagar",
+    "Uttarkashi",
+
+    //westbengal
+    "Alipurduar", "Bankura", "Birbhum", "Cooch Behar", "Darjeeling", "Hooghly",
+    "Howrah", "Jalpaiguri", "Jhargram", "Kalimpong", "Kolkata", "Malda", "Murshidabad",
+    "Nadia", "North 24 Parganas", "Paschim Bardhaman", "Paschim Medinipur", "Purba Bardhaman",
+    "Purba Medinipur", "South 24 Parganas", "Uttar Dinajpur"
 
 ]
 
@@ -289,6 +331,10 @@ export const stateToStations = {
     "Kanker", "Korba", "Kondagaon", "Mahasamund", "Mungeli", "Narayanpur", "Raigarh",
     "Raipur", "Rajnandgaon", "Sukma", "Surajpur", "Surguja"
   ],
+  "New Delhi":[
+    "Central Delhi", "East Delhi","New Delhi", "North Delhi", "North East  Delhi", "North West  Delhi", "Shahdara", "South Delhi", "South East Delhi","South West  Delhi",
+    "West Delhi",
+  ],
   "Goa":
    [
     "North Goa", "South Goa"
@@ -374,6 +420,9 @@ export const stateToStations = {
     "Muktsar", "Patiala", "Rupnagar", "S.A.S Nagar", "Sangrur", "Shaheed Bhagat Singh Nagar",
     "Sri Muktsar Sahib"
   ],
+  "Puducherry":[
+    "Karaikal","Mahe", "Pondicherry", "Yanam",
+  ],
   "Rajasthan":
    [
     "Ajmer", "Alwar", "Banswara", "Baran", "Bareilly", "Bharatpur", "Bhilwara", "Bikaner",
@@ -392,7 +441,7 @@ export const stateToStations = {
     "Kallakurichi", "Kancheepuram", "Karur", "Krishnagiri", "Madurai", "Nagapattinam",
     "Namakkal", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivagangai",
     "Thanjavur", "Theni", "Tiruvarur", "Tirunelveli", "Tenkasi", "Tiruvarur", "Tiruppur",
-    "Vellore", "Virudhunagar"
+    "Vellore", "Virudhunagar", "Kanyakumari"
     ],
   "Telangana":
    [

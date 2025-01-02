@@ -390,7 +390,9 @@ const StationCreation = () => {
                       name="address"
                       rows="3"
                       // disabled={getMainBrachDetails.length > 0 || isDisabled}
-                      disabled={(getMainBrachDetails.length > 0 || isDisabled) && !isEditMode}
+                      // disabled={(getMainBrachDetails.length > 0 || isDisabled) && !isEditMode}
+                      // disabled={(getMainBrachDetails.length > 0 || isDisabled) && !isEditMode}
+                      // value={selectedCustomerData?.address || book.address}
                       value={selectedCustomerData?.address || book.address}
                       onChange={handleChange}
                       placeholder="Address"
@@ -409,11 +411,11 @@ const StationCreation = () => {
                       Already registered
                     </span>
                   )} */}
-                  {isDisabled && !isEditMode && (
+                  {/* {isDisabled && !isEditMode && (
   <span style={{ color: 'red', fontSize: '12px', textAlign: 'left', marginLeft: '32px' }}>
     Already registered
   </span>
-)}
+)} */}
                 </div>
 
 

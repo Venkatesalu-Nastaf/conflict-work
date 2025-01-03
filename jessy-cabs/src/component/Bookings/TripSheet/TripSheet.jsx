@@ -3714,7 +3714,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </div>
 
-                    <div className="input">
+                    {/* <div className="input">
                       <div className="icone">
                         <AirlineSeatReclineExtraIcon color="action" />
                       </div>
@@ -3727,7 +3727,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         disabled={hideField && superAdminAccess === "0"}
                         onChange={(event, value) => handleDriverChange(event, value, "driverName")}
                         onInputChange={(event, value) => handleDriverChange(event, value, "driverName")} // Handle manual input
-                        onKeyDown={handleKeyEnterdriver}
+                        // onKeyDown={handleKeyEnterdriver}
                         value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
                         options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
                         getOptionLabel={(option) => (typeof option === "string" ? option : option.label || "")} // Adjust to show input value or option label
@@ -3753,7 +3753,35 @@ const TripSheet = ({ stationName, logoImage }) => {
                           />
                         )}
                       />
-                    </div>
+                    </div> */}
+
+            <div className="input">
+              <div className="icone">
+                <AirlineSeatReclineExtraIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="driverName"
+                freeSolo
+                sx={{ width: "100%" }}
+                
+                onChange={(event, value) => handleDriverChange(event, value, "driverName")}
+                onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
+                // onKeyDown={handleKeyEnterdriver}
+                value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
+                options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
+                getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''} // Adjust to show input value or option label
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Driver Name"
+                    name="driverName"
+                    inputRef={params.inputRef}
+                  />
+                )}
+              />
+            </div>
 
                     <div className="input">
                       <div className="icone">
@@ -3763,7 +3791,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         name="mobileNo"
                         className='full-width'
                         value={
-                          // selectedCustomerData.mobileNo ||
+                          selectedCustomerData.mobileNo ||
                           book.mobileNo || selectedCustomerDatas.mobileNo || formData.mobileNo || ""}
                         onChange={handleChange}
                         disabled={hideField && superAdminAccess === "0"}

@@ -1391,25 +1391,28 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
               />
             </div>
             <div className="input">
-              <div className="icone">
-                <AddIcCallTwoToneIcon color="action" />
-              </div>
-              <TextField
-                name="mobileNo"
-                className="full-width"
-                autoComplete="new-password"
-                value={
-                  selectedCustomerData.mobileNo ||
-                  book.mobileNo || selectedCustomerdriver.mobileNo ||
-                  ""
-                }
-                onChange={handleChange}
-                label="Driver Phone"
-                id="mobileNo"
-                margin="normal"
-                size="small"
-              />
-            </div>
+  <div className="icone">
+    <AddIcCallTwoToneIcon color="action" />
+  </div>
+  <TextField
+    name="mobileNo"
+    className="full-width"
+    autoComplete="new-password" 
+    value={
+      selectedCustomerData?.mobileNo ||
+      book.mobileNo ||
+      selectedCustomerdriver?.mobileNo ||
+      ""
+    }
+    onChange={(event) => handleChange(event, "mobileNo")} // Pass the field name
+    onInputChange={(event, value) => handleChange(event, value, "driverName")}  // Handle manual input
+
+    label="Driver Phone"
+    id="mobileNo"
+    margin="normal"
+    size="small"
+  />
+</div>
 
             <div className="input">
               <div className="icone">

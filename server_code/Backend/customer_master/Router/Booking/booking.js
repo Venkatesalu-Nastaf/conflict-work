@@ -203,6 +203,34 @@ router.delete('/booking/:bookingno', async (req, res) => {
 });
 
 
+router.delete('/bookingDLETEUPLOAD/:bookingno', async (req, res) => {
+    const bookingno = req.params.bookingno;
+  
+    // Check if this booking added tripsheet or not
+    db.query('SELECT * FROM booking_doc WHERE booking_id = ?', [bookingno], (err1, result1) => {
+      if (err1) {
+        console.log(err1,"bb")
+        return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+      }
+  
+      if (result1.length > 0) {
+        // If booking exists, delete it
+        db.query('DELETE FROM booking_doc WHERE booking_id = ?', [bookingno], (err, result2) => {
+          if (err) {
+            console.log(err,"aa")
+            return res.status(500).json({ error: 'Failed to delete booking details from MySQL' });
+          }
+          return res.status(200).json("Successfully deleted");
+        });
+      } else {
+        // Booking not found
+        return res.status(200).json("Data not found");
+      }
+    });
+  });
+  
+
+
 // update booking details
 router.put('/booking/:bookingno', async (req, res) => {
     const bookingno = req.params.bookingno;

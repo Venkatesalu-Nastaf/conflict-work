@@ -370,6 +370,20 @@ router.post('/addVehicleHistoryData', (req, res) => {
 
 })
 
+router.delete('/deleteVehicleHistoryData/:tripid', (req, res) => {
+    const tripid = req.params.tripid;
+    db.query('DELETE FROM Vehicle_History_Data WHERE Tripid = ?', tripid, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to delete data from MySQL" });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Data Not Deleted " });
+        }
+        return res.status(200).json({ message: "Data deleted successfully" });
+    })
+})
+
+
 router.get('/drivernamedrivercreation', (req, res) => {
     const sql = 'SELECT drivername,Mobileno FROM drivercreation';
     db.query(sql, (err, result) => {

@@ -242,6 +242,7 @@ const useBooking = () => {
     setFormData({});
     setSelectedCustomerdriver({})
     setIsEditMode(false);
+    setSelectetImg([])
   };
 
   useEffect(() => {
@@ -611,6 +612,7 @@ const handleAirportTransferChange = (event) => {
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpentrail, setDialogOpenTrail] = useState(false);
   const booking_id = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
   const handleButtonClick = () => {
     const booking_no = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
@@ -622,6 +624,14 @@ const handleAirportTransferChange = (event) => {
     setDeleteFile([])
     showPdf();
   };
+  const handleButtonClickwithouttripid = () => {
+    setDialogOpenTrail(true)
+    // setDeleteFile([])
+    // showPdf();
+  };
+  const handleCloseDialogtrail = () => {
+    setDialogOpenTrail(false);
+  }
 
   // ------------------------------------------------------------
   const [allFile, setAllFile] = useState([]);
@@ -764,20 +774,22 @@ const handleAirportTransferChange = (event) => {
   const reportdate = dayjs(book.startdate)
   const [imageDialogOpen, setImageDialogOpen] = useState(false)
   const [selectetImg, setSelectetImg] = useState([])
-  const removeSelectedImage = (index, e) => {
-    e.preventDefault()
-    setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
-  }
+  // const removeSelectedImage = (index, e) => {
+  //   e.preventDefault()
+  //   setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
+  // }
   const handleImagechange2 = (e) => {
     const files = Array.from(e.target.files);
     setSelectetImg((prevImg) => [...prevImg, ...files]);
-    if (files.length > 0) {
-      setImageDialogOpen(true);
-    }
+    
+    // if (files.length > 0) {
+    //   setImageDialogOpen(true);
+    // }
   };
   const handleCloseImageDialog = () => {
     setImageDialogOpen(false)
   }
+  // console.log(selectetImg,"selectetImgdata")
 
   const handlebooklogDetails = async (updatebook, lastBookinglogno, modedata) => {
     const logupdatabookdetails = updatebook
@@ -813,6 +825,16 @@ const handleAirportTransferChange = (event) => {
       setError(true);
       setErrorMessage("Failed To ADD BooklogDetails");
       // console.log(err, "err")
+    }
+  }
+
+  const handlebookdeletebookingdoc = async (lastBookinglogno) => {
+    try{
+      await axios.delete(`${apiUrl}/bookingDLETEUPLOAD/${lastBookinglogno}`);
+    }
+    catch (err) {
+    
+      console.log(err, "err")
     }
   }
   //------------------------------------------------------
@@ -1185,6 +1207,9 @@ useEffect(() => {
             setSuccess(true);
             setSuccessMessage(response.data.message);
             handlebooklogDetails(updatedCustomer, deletebookno, "Delete")
+            handlebookdeletebookingdoc(deletebookno)
+            //  await axios.delete(`${apiUrl}/bookingDLETEUPLOAD/${book.bookingno || selectedCustomerData.bookingno}`);
+            // handlebooklogDetails(updatedCustomer, deletebookno, "Delete")
           } else {
             setInfo(true);
             setInfoMessage(response.data.message)
@@ -1382,11 +1407,46 @@ useEffect(() => {
     setSelectAll(prevState => !prevState);
   };
   const [deletefile, setDeleteFile] = useState([])
+
   const handlecheckbox = (fileName) => {
     if (deletefile.includes(fileName)) {
       setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
     } else {
       setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
+    }
+  };
+
+  // const handlecheckbox1 = (fileName) => {
+  //   if (deletefile.includes(fileName)) {
+  //     setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
+  //   } else {
+  //     setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
+  //   }
+  // };
+
+  const handlecheckbox1 = (e) => {
+    // console.log(index,"index",e)
+    // e.preventDefault()
+      if (deletefile.includes(e)) {
+      setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== e));
+    } else {
+      setDeleteFile(prevDeleteFile => [...prevDeleteFile,e]);
+    }
+    // setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
+  }
+  // console.log(deletefile,"deletefile")
+
+  const handleimagedeletewithouttripid =(deletefiledata) => {
+    if (deletefiledata.length > 0) {
+      // const updatedSelectedImg = selectedImg.filter(file => file.name !== nameToRemove);
+      // setSelectetImg((prevFileNames) => prevFileNames.filter(file => file.name !== nameToRemove));
+      setSelectetImg((prevFileNames) =>
+        prevFileNames.filter(file => !deletefiledata.includes(file.name))
+      );
+
+      // setDialogdeleteOpen(true);
+      setDialogOpenTrail(true)
+      setDeleteFile([]);
     }
   };
 
@@ -1531,9 +1591,11 @@ useEffect(() => {
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus, handletravelsAutocompleteChange, accountinfodata,
-    vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning,
+    vehileName, infoMessage, handleImagechange2, selectetImg,handleimagedeletewithouttripid,
+    //  removeSelectedImage,
+     imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning,
     handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort,
-    isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload
+    isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload,handleButtonClickwithouttripid,dialogOpentrail,handleCloseDialogtrail,handlecheckbox1
   };
 };
 export default useBooking;

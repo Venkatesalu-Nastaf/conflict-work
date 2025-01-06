@@ -116,25 +116,25 @@ const UploadTollParking = () => {
 
   const handlesubmit = async () => {
     const tripid = tripId;
-    const toll = inputData.toll;
-    const parking = inputData.parking;
+    // const toll = inputData.toll;
+    // const parking = inputData.parking;
 
 
-    if (!toll) {
-      setError(true);
-      setErrorMessage("ENTER TOLL Amount")
-      return
-    }
-    if (!parking) {
-      setError(true);
-      setErrorMessage("ENTER parking Amount")
-      return
-    }
+    // if (!toll) {
+    //   setError(true);
+    //   setErrorMessage("ENTER TOLL Amount")
+    //   return
+    // }
+    // if (!parking) {
+    //   setError(true);
+    //   setErrorMessage("ENTER parking Amount")
+    //   return
+    // }
     try {
       const updatedData = {
         tripid: tripid,
-        toll: inputData.toll,// Include both toll and parking in the request data
-        parking: inputData.parking, // Include parking
+        toll: inputData.toll || 0,// Include both toll and parking in the request data
+        parking: inputData.parking || 0, // Include parking
       };
       const updatedetails = {
         tripid: tripId,

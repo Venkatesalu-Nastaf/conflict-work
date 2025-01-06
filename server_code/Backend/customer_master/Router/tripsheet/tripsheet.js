@@ -370,18 +370,18 @@ router.post('/addVehicleHistoryData', (req, res) => {
 
 })
 
-router.delete('/deleteVehicleHistoryData/:tripid', (req, res) => {
-    const tripid = req.params.tripid;
-    db.query('DELETE FROM Vehicle_History_Data WHERE Tripid = ?', tripid, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: "Failed to delete data from MySQL" });
-        }
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Data Not Deleted " });
-        }
-        return res.status(200).json({ message: "Data deleted successfully" });
-    })
-})
+// router.delete('/deleteVehicleHistoryData/:tripid', (req, res) => {
+//     const tripid = req.params.tripid;
+//     db.query('DELETE FROM Vehicle_History_Data WHERE Tripid = ?', tripid, (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: "Failed to delete data from MySQL" });
+//         }
+//         if (result.affectedRows === 0) {
+//             return res.status(404).json({ error: "Data Not Deleted " });
+//         }
+//         return res.status(200).json({ message: "Data deleted successfully" });
+//     })
+// })
 
 
 router.get('/drivernamedrivercreation', (req, res) => {
@@ -404,20 +404,56 @@ router.get('/vehicleinfodatavehcile', (req, res) => {
 });
 
 // delete tripsheet data---------------------------------------------------
+// router.delete('/tripsheet/:tripid', (req, res) => {
+//     const tripid = req.params.tripid;
+//     const username = req.query;
+
+//     db.query('DELETE FROM tripsheet WHERE tripid = ?', tripid, (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: "Failed to delete data from MySQL" });
+//         }
+//         if (result.affectedRows === 0) {
+//             return res.status(404).json({ error: "Data Not Deleted " });
+//         }
+//         return res.status(200).json({ message: "Data deleted successfully" });
+//     });
+// });
+
+
 router.delete('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    const username = req.query;
 
-    db.query('DELETE FROM tripsheet WHERE tripid = ?', tripid, (err, result) => {
+    // First delete from tripsheet table
+    db.query('DELETE FROM tripsheet WHERE tripid = ?', [tripid], (err, tripsheetResult) => {
         if (err) {
-            return res.status(500).json({ error: "Failed to delete data from MySQL" });
+            return res.status(500).json({ error: "Failed to delete from tripsheet" });
         }
-        if (result.affectedRows === 0) {
+
+        // Check if tripsheet record exists
+        if (tripsheetResult.affectedRows === 0) {
+            // return res.status(404).json({ error: "No matching record found in tripsheet" });
             return res.status(404).json({ error: "Data Not Deleted " });
         }
-        return res.status(200).json({ message: "Data deleted successfully" });
+
+        // Then delete from Vehicle_History_Data table
+        db.query('DELETE FROM Vehicle_History_Data WHERE Tripid = ?', [tripid], (err, historyResult) => {
+            if (err) {
+                return res.status(500).json({ error: "Failed to delete from Vehicle_History_Data" });
+            }
+
+            // Check if Vehicle_History_Data record exists
+            if (historyResult.affectedRows === 0) {
+                // return res.status(404).json({ error: "No matching record found in Vehicle_History_Data" });
+                return res.status(404).json({ error: "Data Not Deleted " });
+            }
+
+            // If both deletions succeed
+            // return res.status(200).json({ message: "Data deleted successfully from both tables" });
+            return res.status(200).json({ message: "Data deleted successfully" });
+        });
     });
 });
+
 
 // get vehicleHistorydata by vehicleNo
 // router.post('/getVehcileHistoryData',(req,res)=>{
@@ -2809,7 +2845,7 @@ router.post("/uploadtollandparkinglink", (req, res) => {
     const { toll, parking, tripid } = req.body;
     const query = 'UPDATE tripsheet SET toll = ?, parking = ?, vendorparking = ?,vendortoll = ? WHERE tripid = ?';
 
-    db.query(query, [toll, parking, toll, parking, tripid], (err, results) => {
+    db.query(query, [toll,parking,parking,toll,tripid], (err, results) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;

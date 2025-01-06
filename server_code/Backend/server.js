@@ -375,6 +375,7 @@ app.post('/uploads', upload.single('file'), (req, res) => {
 });
 //get image from the folder
 const imageDirectory = path.join(__dirname, 'uploads');
+
 // Serve static files from the imageDirectory
 app.use('/images', express.static(imageDirectory));
 // Example route to serve an image by its filename
@@ -421,8 +422,10 @@ app.put('/tripsheet_uploads/:id/:documentType/:data', uploadtripsheet.single('im
     const insertQuery = `INSERT INTO tripsheetupload (tripid, path, name,documenttype) VALUES (?, ?, ?,?)`;
     db.query(insertQuery, [userId, fileName, filename, documentType], (err, result) => {
       if (err) {
+        console.log(err,"tripupload")
         return res.status(500).json({ Message: "Error inserting profile picture", err });
       }
+      console.log(result, "data of the tripsheet")
       return res.status(200).json({ Status: "success" });
     })
 
@@ -712,6 +715,7 @@ app.get('/get-signimageforpdfrendered/:tripid', (req, res) => {
 
 const attachedDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
+console.log(attachedDirectory, "attachedDirectory2")
 app.use('/images', express.static(attachedDirectory));
 // Example route to serve an image by its filename
 app.get('/get-attachedimage/:tripid', (req, res) => {

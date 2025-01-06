@@ -368,6 +368,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
   const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripReportKm || 0)
   //  const HclTotalKms = customerData[0]?.hybrid === 1 ? 
   console.log(customerData, 'hybrid', particularPdf);
+  console.log(bookmailiamge,"bookmailiamge")
 
   return (
     <>
@@ -515,15 +516,49 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
             )}
 
           </div>
-          <div >
+          {console.log(attachedImage,"pp")}
+          <div>
             {attachedImage ? <p className="attachtext" style={{ marginTop: 180 }}>Attached Image</p> : <p className="attachtext"></p>}
-            {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ?
+            {/* {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ?
               attachedImage.map((image, index) => (
                 <img key={index} src={image} alt='' className="attachimage" />
               ))
               :
               <div></div>
-            }
+            } */}
+
+              {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ? (
+                                            <>
+            
+                                                {attachedImage.map((file, index) => {
+                                                    const fileExtension = file.substring(file.lastIndexOf('.') + 1);
+                                                    console.log(fileExtension); // Logs the file extension (e.g., "jpg", "pdf")
+                                                    return fileExtension === 'pdf' ? (
+                                                        <Document
+                                                            file={file}
+                                                            onLoadSuccess={onDocumentLoadSuccess}
+                                                        >
+                                                            {Array.from(new Array(numPages), (el, index) => (
+            
+                                                                <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+            
+                                                            ))}
+            
+                                                        </Document>
+                                                    ) : (
+                                                        <img
+                                                            key={index}
+                                                            src={file}
+                                                            alt=""
+                                                            className="attachimage"
+                                                            loading="lazy"
+                                                        />
+                                                    );
+                                                })}
+                                            </>
+                                        ) : (
+                                            <></>
+                                        )}
           </div>
           {/* <div>
             {bookmailiamge && Array.isArray(bookmailiamge) && bookmailiamge.length && bookmailiamge !== "" > 0 ?
@@ -549,7 +584,9 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
               :
               <div></div>}
           </div> */}
-          {bookmailiamge && Array.isArray(bookmailiamge) && bookmailiamge.length > 0 ?
+
+          {/* dont delete this code */}
+          {/* {bookmailiamge && Array.isArray(bookmailiamge) && bookmailiamge.length > 0 ?
             bookmailiamge.map((image, index) => (
               image.mimetype === "pdf" ? (
                 <div key={index}>
@@ -574,7 +611,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
             ))
             :
             <div></div>
-          }
+          } */}
 
 
         </div>

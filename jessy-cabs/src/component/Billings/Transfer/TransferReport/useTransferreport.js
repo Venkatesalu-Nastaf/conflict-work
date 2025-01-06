@@ -540,11 +540,16 @@ const useTransferreport = () => {
 
 
           const tripData =  response.data
-          console.log(tripData,"exceltripppppppppppp");
+          // console.log(tripData,"exceltripppppppppppp");
           
           const flattenedTripData = tripData.flat();
-
-          setPdfzipdata(flattenedTripData)
+          // console.log(flattenedTripData,"flattenedTripData");
+          const uniqueData = flattenedTripData.filter((item, index, self) =>
+            index === self.findIndex((obj) => obj.tripid === item.tripid)
+          );
+          console.log(uniqueData,"flattenedTripDatauniqueData");
+          setPdfzipdata(uniqueData)
+          // setPdfzipdata(flattenedTripData)
         
           // console.log(flattenedTripData,"trip dtatas ")
           // setSuccess(true)

@@ -1227,7 +1227,10 @@ const checkMinTimeFun = () => {
                     disabled={hideField && superAdminAccess === "0"}
                     onChange={(event, value) => {
                       handleAutocompleteChange(event, value, "duty")
-                      if (!lockdata) {
+                      // if (!lockdata) {
+                      //   setVendorinfodata({ ...vendorinfo, vendor_duty: value.label })
+                      // }
+                      if (lockdata) {
                         setVendorinfodata({ ...vendorinfo, vendor_duty: value.label })
                       }
                     }}
@@ -1597,10 +1600,16 @@ const checkMinTimeFun = () => {
                             setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                             setBook({ ...book, reporttime: event.target.value });
                             setreporttime(event.target.value);
-                            if (!lockdata && dayhcl === 0) {
+                            // if (!lockdata && dayhcl === 0) {
+                            //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            // }
+                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            // }
+                            if (lockdata && dayhcl === 0) {
                               setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                             }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            if (lockdata && dayhcl === 1 && duty === "Outstation") {
                               setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                             }
                           }}
@@ -1640,7 +1649,10 @@ const checkMinTimeFun = () => {
                           setStartTime(rTime);
                           setFormData({ ...formData, starttime: rTime });
                           setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
-                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                          // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                          //   setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
+                          // }
+                          if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                             setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
                           }
                         }}
@@ -1679,7 +1691,10 @@ const checkMinTimeFun = () => {
                           setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: rTime });
                           setBook({ ...book, closetime: rTime });
                           setCloseTime(rTime);
-                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                          // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                          //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          // }
+                          if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                             setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                           }
                         }}
@@ -1734,19 +1749,31 @@ const checkMinTimeFun = () => {
                               console.log("Invalid Shed In Time");
                             } else {
                               // Valid input, you can handle any additional logic here
-                              if (!lockdata && dayhcl === 0) {
+                              // if (!lockdata && dayhcl === 0) {
+                              //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                              // }
+                              // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                              // }
+                              if (lockdata && dayhcl === 0) {
                                 setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                               }
-                              if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              if (lockdata && dayhcl === 1 && duty === "Outstation") {
                                 setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
                               }
                             }
                           } else {
                             // If the day difference is more than 1, allow any time
-                            if (!lockdata && dayhcl === 0) {
+                            // if (!lockdata && dayhcl === 0) {
+                            //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                            // }
+                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                            // }
+                            if (lockdata && dayhcl === 0) {
                               setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                             }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            if (lockdata && dayhcl === 1 && duty === "Outstation") {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
                             }
                           }
@@ -1841,10 +1868,16 @@ const checkMinTimeFun = () => {
                           if (value >= 0) {
                             handleChange(e)
                             setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
-                            if (!lockdata && dayhcl === 0) {
+                            // if (!lockdata && dayhcl === 0) {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            // }
+                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            // }
+                            if (lockdata && dayhcl === 0) {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                             }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            if (lockdata && dayhcl === 1 && duty === "Outstation") {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                             }
                           }
@@ -1875,7 +1908,10 @@ const checkMinTimeFun = () => {
                           if (value >= 0) {
                             handleChange(e)
                             setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
-                            if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            // }
+                            if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                             }
                           }
@@ -1906,7 +1942,10 @@ const checkMinTimeFun = () => {
                           if (value >= 0) {
                             setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
                             handleChange(e)
-                            if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            // }
+                            if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                             }
                           }
@@ -1936,10 +1975,17 @@ const checkMinTimeFun = () => {
                           if (value >= 0) {
                             setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
                             handleChange(e)
-                            if (!lockdata && dayhcl === 0) {
+                            // if (!lockdata && dayhcl === 0) {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            // }
+                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            // }
+
+                            if (lockdata && dayhcl === 0) {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                             }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            if (lockdata && dayhcl === 1 && duty === "Outstation") {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                             }
                           }
@@ -2576,9 +2622,9 @@ const checkMinTimeFun = () => {
                                     size="small"
                                     id="free-solo-vendor_vehicle"
                                     freeSolo
-                                    disabled={!lockdata}
+                                    disabled={lockdata}
                                     onChange={(event, value) => {
-                                      if (lockdata) {
+                                      if (!lockdata) {
                                         handleAutocompleteVendor(event, value, "vendor_vehicle");
                                       } else {
                                         setWarning(true);
@@ -2601,9 +2647,9 @@ const checkMinTimeFun = () => {
                                     id="free-solo-duty"
                                     freeSolo
                                     sx={{ width: "100%" }}
-                                    disabled={!lockdata}
+                                    disabled={lockdata}
                                     onChange={(event, value) => {
-                                      if (lockdata) {
+                                      if (!lockdata) {
                                         handleAutocompleteVendor(event, value, "vendor_duty")
                                       } else {
                                         setWarning(true);
@@ -2642,10 +2688,10 @@ const checkMinTimeFun = () => {
                                       // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                                       value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                                       format="DD/MM/YYYY"
-                                      disabled={!lockdata}
+                                      disabled={lockdata}
                                       // onChange={(date) => {
                                       onChange={(date) => {
-                                        if (lockdata) {
+                                        if (!lockdata) {
                                           handleDatevendorChange(date, 'vendorshedOutDate')
                                         } else {
                                           setWarning(true);
@@ -2666,14 +2712,14 @@ const checkMinTimeFun = () => {
                                     <DatePicker
                                       label="CloseDate"
                                       id="vendorshedInDate"
-                                      disabled={!lockdata}
+                                      disabled={lockdata}
 
                                       // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
                                       value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
                                       format="DD/MM/YYYY"
                                       // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
                                       onChange={(date) => {
-                                        if (lockdata) {
+                                        if (!lockdata) {
                                           handleDatevendorChange(date, 'vendorshedInDate')
                                         } else {
                                           setWarning(true);
@@ -2693,6 +2739,7 @@ const checkMinTimeFun = () => {
                                     name="vendortotaldays"
                                     value={calculatevendorTotalDays()}
                                     label="Total Days"
+                                    disabled={lockdata}
                                     size="small"
                                     type="number"
                                     id="totaldays"
@@ -2710,9 +2757,9 @@ const checkMinTimeFun = () => {
                                         type="time"
                                         name="venodrreporttime"
                                         value={vendorinfo?.vendorreporttime}
-                                        disabled={!lockdata}
+                                        disabled={lockdata}
                                         onChange={(event) => {
-                                          if (lockdata) {
+                                          if (!lockdata) {
                                             setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
                                           } else {
                                             setWarning(true);
@@ -2735,9 +2782,9 @@ const checkMinTimeFun = () => {
                                       type="time"
                                       name="vendorshedintime"
                                       value={vendorinfo?.vendorshedintime}
-                                      disabled={!lockdata}
+                                      disabled={lockdata}
                                       onChange={(event) => {
-                                        if (lockdata) {
+                                        if (!lockdata) {
                                           setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
                                         }
                                         else {
@@ -2755,6 +2802,7 @@ const checkMinTimeFun = () => {
                                   <TextField
                                     name="vendorTotaltime"
                                     value={calculatevendorTotalTime() || ""}
+                                    disabled={lockdata}
                                     label="Total Time"
                                     id="pack5"
                                     size="small"
@@ -2769,7 +2817,7 @@ const checkMinTimeFun = () => {
                                     name="vendorshedoutkm"
                                     value={vendorinfo?.vendorshedoutkm || ""}
                                     onChange={handlevendorinfofata}
-                                    disabled={!lockdata}
+                                    disabled={lockdata}
                                     label="starting Kilometers"
                                     id="vendorshedoutkm"
                                     size="small"
@@ -2783,7 +2831,7 @@ const checkMinTimeFun = () => {
                                     value={vendorinfo?.vendorshedinkm || ""}
                                     label="closing Kilometers"
                                     onChange={handlevendorinfofata}
-                                    disabled={!lockdata}
+                                    disabled={lockdata}
                                     id="vendorshedinkm"
                                     size="small"
                                     sx={{ my: 1, width: "100%" }}
@@ -2793,6 +2841,7 @@ const checkMinTimeFun = () => {
                                   <TextField
                                     name="vendortotalkm"
                                     value={calculatevendorTotalKilometers() || ''}
+                                    disabled={lockdata}
                                     label="Total kilometers"
                                     id="vendortotalkm"
                                     size="small"
@@ -2806,6 +2855,7 @@ const checkMinTimeFun = () => {
                                     name="vendorRemarks"
                                     value={vendorinfo?.vendorRemarks || ""}
                                     onChange={handlevendorinfofata}
+                                    disabled={lockdata}
                                     label="Remarks"
                                     id="vendorRemarks"
                                     size="small"
@@ -2834,6 +2884,7 @@ const checkMinTimeFun = () => {
                                     // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
                                     label="Package"
                                     id="Vendor_Calcpackage"
+                                    disabled={lockdatavendorbill}
                                     size="small"
                                     sx={{ m: 1, width: "100%" }}
                                   />
@@ -2843,6 +2894,7 @@ const checkMinTimeFun = () => {
                                     name="Vendor_rateAmount"
                                     value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || 0}
                                     size="small"
+                                    disabled={lockdatavendorbill}
                                     label="Amount"
                                     autoComplete="password"
                                     id="Vendor_rateAmount"
@@ -2863,6 +2915,7 @@ const checkMinTimeFun = () => {
                                   <TextField
                                     name="Vendor_ExtraKms"
                                     value={vendorbilldata.Vendor_ExtraKms || vendorpassvalue.Vendor_ExtraKms || 0}
+                                    disabled={lockdatavendorbill}
                                     label="Ex.Km"
                                     id="Vendor_ExtraKms"
                                     onChange={handlevendor_billdata}
@@ -2873,6 +2926,7 @@ const checkMinTimeFun = () => {
                                   <span>@</span>
                                   <TextField size="small"
                                     name='Vendor_ExtraAmountKms'
+                                    disabled={lockdatavendorbill}
                                     value={vendorbilldata.Vendor_ExtraAmountKms || vendorpassvalue.Vendor_ExtraAmountKms || 0}
                                     onChange={handlevendor_billdata}
                                     id="Vendor_ExtraAmountKms"
@@ -2886,6 +2940,7 @@ const checkMinTimeFun = () => {
                                     name="Vendor_totalAmountKms"
                                     value={vendorExtarkmTotalAmount || vendorbilldata.Vendor_totalAmountKms || vendorpassvalue.Vendor_totalAmountKms || 0}
                                     size="small"
+                                    disabled={lockdatavendorbill}
                                     label="Amount"
                                     id="Vendor_totalAmountKms"
                                   />
@@ -2898,6 +2953,7 @@ const checkMinTimeFun = () => {
                                     name="Vendor_ExtraHours"
                                     value={vendorbilldata.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours || 0}
                                     label="Ex.Hrs"
+                                    disabled={lockdatavendorbill}
                                     onChange={handlevendor_billdata}
                                     id="Vendor_ExtraHours"
                                     size="small"
@@ -2910,6 +2966,7 @@ const checkMinTimeFun = () => {
                                     name='Vendor_ExtraAmountHours'
                                     value={vendorbilldata.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0}
                                     onChange={handlevendor_billdata}
+                                    disabled={lockdatavendorbill}
                                     id="Vendor_ExtraAmountHours"
                                   />
 
@@ -2923,6 +2980,7 @@ const checkMinTimeFun = () => {
                                     value={vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours || vendorpassvalue.Vendor_totalAmountHours || 0}
                                     size="small"
                                     label="Amount"
+                                    disabled={lockdatavendorbill}
                                     id="Vendor_totalAmountHours"
                                   />
                                 </div>
@@ -2933,6 +2991,7 @@ const checkMinTimeFun = () => {
                                     name="Vendor_NightHALT"
                                     value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
                                     onChange={handlevendor_billdata}
+                                    disabled={lockdatavendorbill}
                                     label="Night"
                                     id="Vendor_NightHALT"
                                     size="small"
@@ -2945,6 +3004,7 @@ const checkMinTimeFun = () => {
                                     name='Vendor_NightBataAmount'
                                     value={vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0}
                                     onChange={handlevendor_billdata}
+                                    disabled={lockdatavendorbill}
                                     id="Vendor_NightBataAmount"
                                     autoComplete="password"
                                   />
@@ -2957,6 +3017,7 @@ const checkMinTimeFun = () => {
                                     name="Vendor_NightbataTotalAmount"
                                     value={vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0}
                                     size="small"
+                                    disabled={lockdatavendorbill}
                                     label="Amount"
                                     id="Vendor_NightbataTotalAmount"
                                   />
@@ -2969,6 +3030,7 @@ const checkMinTimeFun = () => {
                                     value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
                                     onChange={handlevendor_billdata}
                                     label="Bata"
+                                    disabled={lockdatavendorbill}
                                     id="Vendor_Bata"
                                     autoComplete="password"
                                     size="small"
@@ -2981,6 +3043,7 @@ const checkMinTimeFun = () => {
                                     name='Vendor_BataAmount'
                                     value={vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0}
                                     onChange={handlevendor_billdata}
+                                    disabled={lockdatavendorbill}
                                     id="Vendor_BataAmount"
                                   />
                                 </div>
@@ -2992,6 +3055,7 @@ const checkMinTimeFun = () => {
                                     name="Vendor_BataTotalAmount"
                                     value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
                                     size="small"
+                                    disabled={lockdatavendorbill}
                                     label="Amount"
                                     id="Vendor_BataTotalAmount"
                                   />
@@ -3028,6 +3092,7 @@ const checkMinTimeFun = () => {
                                         id="pack"
                                         size="small"
                                         variant="standard"
+                                        disabled={lockdatacustomerbill}
                                         autoComplete="password"
                                         sx={{ m: 1, width: "60ch" }}
                                       />
@@ -3044,6 +3109,7 @@ const checkMinTimeFun = () => {
                                         autoComplete="password"
                                         id="amount5"
                                         variant="standard"
+                                        disabled={lockdatacustomerbill}
                                       />
                                     </div>
                                     <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
@@ -3064,8 +3130,9 @@ const checkMinTimeFun = () => {
                                         name="exkm1"
                                         className='customer-bill-input'
                                         value={extraKM || formData.calcPackage || 0}
+                                        disabled={lockdatacustomerbill}
                                         onChange={(e) => {
-                                          if (lockdatacustomerbill) {
+                                          if (!lockdatacustomerbill) {
                                             setExtraKM(e.target.value)
                                           } else {
                                             setWarning(true);
@@ -3089,7 +3156,7 @@ const checkMinTimeFun = () => {
                                         value={extrakm_amount || formData.calcPackage || ''}
                                         onChange={(e) => {
 
-                                          if (lockdatacustomerbill) {
+                                          if (!lockdatacustomerbill) {
                                             setextrakm_amount(e.target.value)
                                           } else {
                                             setWarning(true);
@@ -3098,6 +3165,7 @@ const checkMinTimeFun = () => {
                                         }}
                                         id="exkmTkm2"
                                         variant="standard"
+                                        disabled={lockdatacustomerbill}
                                         autoComplete="password"
                                       />
                                     </div>
@@ -3114,6 +3182,7 @@ const checkMinTimeFun = () => {
                                         autoComplete="password"
                                         id="amount6"
                                         variant="standard"
+                                        disabled={lockdatacustomerbill}
                                       />
                                     </div>
                                   </div>
@@ -3126,9 +3195,10 @@ const checkMinTimeFun = () => {
                                         name="exHrs1"
                                         className='customer-bill-input'
                                         value={extraHR || formData.calcPackage || 0}
+                                        disabled={lockdatacustomerbill}
                                         onChange={(e) => {
 
-                                          if (lockdatacustomerbill) {
+                                          if (!lockdatacustomerbill) {
                                             setExtraHR(e.target.value)
                                           } else {
                                             setWarning(true);
@@ -3151,10 +3221,11 @@ const checkMinTimeFun = () => {
                                         id="exHrsTHrs2"
                                         name='exHrsTHrs2'
                                         className='customer-bill-input'
+                                        disabled={lockdatacustomerbill}
                                         value={extrahr_amount || formData.calcPackage || 0}
                                         onChange={(e) => {
 
-                                          if (lockdatacustomerbill) {
+                                          if (!lockdatacustomerbill) {
                                             setextrahr_amount(e.target.value)
                                           } else {
                                             setWarning(true);
@@ -3178,6 +3249,7 @@ const checkMinTimeFun = () => {
                                         autoComplete="password"
                                         id="amouamount7"
                                         variant="standard"
+                                        disabled={lockdatacustomerbill}
                                       />
                                     </div>
                                   </div>
@@ -3190,8 +3262,9 @@ const checkMinTimeFun = () => {
                                         name="night1"
                                         className='customer-bill-input'
                                         value={nightBta}
+                                        disabled={lockdatacustomerbill}
                                         onChange={(e) => {
-                                          if (lockdatacustomerbill) {
+                                          if (!lockdatacustomerbill) {
                                             setNightBeta(e.target.value)
                                           } else {
                                             setWarning(true);
@@ -3215,9 +3288,10 @@ const checkMinTimeFun = () => {
                                         name='nightThrs2'
                                         id="nightThrs2"
                                         value={nightCount}
+                                        disabled={lockdatacustomerbill}
                                         onChange={(e) => {
 
-                                          if (lockdatacustomerbill) {
+                                          if (!lockdatacustomerbill) {
                                             setNightCount(e.target.value)
                                           } else {
                                             setWarning(true);
@@ -3235,6 +3309,7 @@ const checkMinTimeFun = () => {
                                       <TextField
                                         name="amount8"
                                         className='customer-bill-input'
+                                        disabled={lockdatacustomerbill}
                                         value={night_totalAmount || 0}
                                         size="small"
                                         autoComplete="password"
@@ -3253,8 +3328,9 @@ const checkMinTimeFun = () => {
                                         name="driverconvenience1"
                                         className='customer-bill-input'
                                         value={driverBeta}
+                                        disabled={lockdatacustomerbill}
                                         onChange={(e) => {
-                                          if (lockdatacustomerbill) {
+                                          if (!lockdatacustomerbill) {
                                             setdriverBeta(e.target.value)
                                           } else {
                                             setWarning(true);
@@ -3278,8 +3354,9 @@ const checkMinTimeFun = () => {
                                         id='dtc2'
                                         className='customer-bill-input'
                                         value={driverbeta_Count}
+                                        disabled={lockdatacustomerbill}
                                         onChange={(e) => {
-                                          if (lockdatacustomerbill) {
+                                          if (!lockdatacustomerbill) {
                                             setdriverbeta_Count(e.target.value)
                                           } else {
                                             setWarning(true);
@@ -3298,14 +3375,15 @@ const checkMinTimeFun = () => {
                                         name="amount9"
                                         className='customer-bill-input'
                                         value={driverBeta_amount}
-                                        onChange={(e) => {
-                                          if (lockdatacustomerbill) {
-                                            setdriverBeta_amount(e.target.value)
-                                          } else {
-                                            setWarning(true);
-                                            setWarningMessage("IS not locked,locked Enter Again");
-                                          }
-                                        }}
+                                        disabled={lockdatacustomerbill}
+                                        // onChange={(e) => {
+                                        //   if (!lockdatacustomerbill) {
+                                        //     setdriverBeta_amount(e.target.value)
+                                        //   } else {
+                                        //     setWarning(true);
+                                        //     setWarningMessage("IS not locked,locked Enter Again");
+                                        //   }
+                                        // }}
                                         size="small"
                                         label="Amount"
                                         id="amount9"
@@ -3763,7 +3841,7 @@ const checkMinTimeFun = () => {
                         disabled={hideField && superAdminAccess === "0"}
                         onChange={(event, value) => {
                           handleAutocompleteChange(event, value, "vehicleName");
-                          if (!lockdata && value) {
+                          if (lockdata && value) {
                             setVendorinfodata({ ...vendorinfo, vendor_vehicle: value.label })
                           }
                         }}
@@ -3926,7 +4004,7 @@ const checkMinTimeFun = () => {
                             freeSolo
 
                             onChange={(event, value) => {
-                              if (lockdata) {
+                              if (!lockdata) {
                                 handleAutocompleteVendor(event, value, "vendor_vehicle");
                               } else {
                                 setWarning(true);
@@ -3954,7 +4032,7 @@ const checkMinTimeFun = () => {
 
                             disabled={hideField && superAdminAccess === "0"}
                             onChange={(event, value) => {
-                              if (lockdata) {
+                              if (!lockdata) {
                                 handleAutocompleteVendor(event, value, "vendor_duty")
                               } else {
                                 setWarning(true);
@@ -3989,13 +4067,13 @@ const checkMinTimeFun = () => {
                             <DatePicker
                               label="StartDate"
                               id="vendorshedOutDate"
-                              disabled={!lockdata}
+                              disabled={lockdata}
                               // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                               value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                               format="DD/MM/YYYY"
                               // onChange={(date) => {
                               onChange={(date) => {
-                                if (lockdata) {
+                                if (!lockdata) {
                                   handleDatevendorChange(date, 'vendorshedOutDate')
                                 } else {
                                   setWarning(true);
@@ -4016,7 +4094,7 @@ const checkMinTimeFun = () => {
                             <DatePicker
                               label="CloseDate"
                               id="vendorshedInDate"
-                              disabled={!lockdata}
+                              disabled={lockdata}
 
 
                               // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
@@ -4024,7 +4102,7 @@ const checkMinTimeFun = () => {
                               format="DD/MM/YYYY"
                               // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
                               onChange={(date) => {
-                                if (lockdata) {
+                                if (!lockdata) {
                                   handleDatevendorChange(date, 'vendorshedInDate')
                                 } else {
                                   setWarning(true);
@@ -4044,6 +4122,7 @@ const checkMinTimeFun = () => {
                             name="vendortotaldays"
                             value={calculatevendorTotalDays()}
                             label="Total Days"
+                            disabled={lockdata}
                             size="small"
                             type="number"
                             id="totaldays"
@@ -4060,10 +4139,10 @@ const checkMinTimeFun = () => {
                               <input
                                 type="time"
                                 name="venodrreporttime"
-                                disabled={!lockdata}
+                                disabled={lockdata}
                                 value={vendorinfo?.vendorreporttime}
                                 onChange={(event) => {
-                                  if (lockdata) {
+                                  if (!lockdata) {
                                     setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
                                   } else {
                                     setWarning(true);
@@ -4085,10 +4164,10 @@ const checkMinTimeFun = () => {
                             <input
                               type="time"
                               name="vendorshedintime"
-                              disabled={!lockdata}
+                              disabled={lockdata}
                               value={vendorinfo?.vendorshedintime}
                               onChange={(event) => {
-                                if (lockdata) {
+                                if (!lockdata) {
                                   setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
                                 }
                                 else {
@@ -4105,6 +4184,7 @@ const checkMinTimeFun = () => {
                           <TextField
                             name="vendorTotaltime"
                             value={calculatevendorTotalTime() || ""}
+                            disabled={lockdata}
                             label="Total Time"
                             id="pack5"
                             size="small"
@@ -4118,7 +4198,7 @@ const checkMinTimeFun = () => {
                           <TextField
                             name="vendorshedoutkm"
                             value={vendorinfo?.vendorshedoutkm || ""}
-                            disabled={!lockdata}
+                            disabled={lockdata}
                             onChange={handlevendorinfofata}
                             label="starting Kilometers"
                             id="vendorshedoutkm"
@@ -4131,7 +4211,7 @@ const checkMinTimeFun = () => {
                           <TextField
                             name="vendorshedinkm"
                             value={vendorinfo?.vendorshedinkm || ""}
-                            disabled={!lockdata}
+                            disabled={lockdata}
                             label="closing Kilometers"
                             onChange={handlevendorinfofata}
                             id="vendorshedinkm"
@@ -4144,6 +4224,7 @@ const checkMinTimeFun = () => {
                             name="vendortotalkm"
                             value={calculatevendorTotalKilometers() || ''}
                             label="Total kilometers"
+                            disabled={lockdata}
                             id="vendortotalkm"
                             size="small"
                             sx={{ my: 1, width: "100%" }}
@@ -4156,6 +4237,7 @@ const checkMinTimeFun = () => {
                             name="vendorRemarks"
                             value={vendorinfo?.vendorRemarks || ""}
                             onChange={handlevendorinfofata}
+                            disabled={lockdata}
                             label="Remarks"
                             id="vendorRemarks"
                             size="small"

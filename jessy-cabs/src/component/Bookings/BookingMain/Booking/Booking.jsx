@@ -1333,6 +1333,7 @@ const Booking = ({ stationName, customerData }) => {
                 )}
               />
             </div>
+         
             <div className="input">
               <div className="icone">
                 <PiCarSimpleFill color="action" />
@@ -1342,10 +1343,15 @@ const Booking = ({ stationName, customerData }) => {
                 id="vehiclemodule"
                 freeSolo
                 size="small"
+                // value={
+                //   selectedCustomerData.vehiclemodule ||
+                //   book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||
+                //   ""
+                // }
                 value={
                   selectedCustomerData.vehiclemodule ||
                   book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||
-                  ""
+                  "A/C"
                 }
                 options={vehicaleinfos?.map((option) => ({
                   label: option?.Option,
@@ -1582,7 +1588,7 @@ const Booking = ({ stationName, customerData }) => {
             </div>
           }
         </div>
-
+     
         <Dialog open={dialogOpen} onClose={handleCloseDialog}>
           <DialogContent>
             <div className="vehicle-info-dailog-box-div1" style={{ width: "600px" }}>

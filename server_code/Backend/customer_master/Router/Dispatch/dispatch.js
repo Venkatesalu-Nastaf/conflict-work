@@ -190,7 +190,7 @@ if (status === 'All') {
   (
     (status = 'pending' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
     OR 
-    (status = 'Cancelled' AND bookingdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+    (status = 'Cancelled' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
 )
 `;
 
@@ -338,7 +338,7 @@ Tripquery += ' ORDER BY shedOutDate ASC, reporttime ASC';
       sqlQuery = `
         SELECT *
         FROM booking
-        WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?   
+        WHERE startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?   
       `;
       queryParams = [formattedFromDate, formattedToDate, status];
     }

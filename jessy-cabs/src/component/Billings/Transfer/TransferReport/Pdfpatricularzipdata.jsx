@@ -369,6 +369,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   const [orgaddress1, setOrgaddress1] = useState('')
   const [orgaddress3, setOrgaddress3] = useState('')
   const [address1, setAddress1] = useState('')
+  const [guestaddress1, setGuestAddress1] = useState('')
   const [customer, setCustomer] = useState('')
   const [empno, setEmpno] = useState('')
   const [customermobile, setCustomermobile] = useState()
@@ -588,6 +589,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
       })
     }
+    console.log(particularPdf,"pdfff")
 
 
 
@@ -607,6 +609,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     const { signature_path } = signatureimage
     const { map_path } = mapimage
     setAddress1(customeraddress1)
+    setGuestAddress1(addressone)
     setCustomer(customers)
     setFuel(fueltype)
     setEmpno(employeeno)
@@ -667,6 +670,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   const nextSet = routemap.slice(12, 24);
   const remainingItems = routemap.slice(24);
   const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripReportKm || 0)
+  console.log(tripCloseKm,tripReportKm,"kmmmm" )
+  console.log(bookimage, "bookimage",stationData,"stationData")
 
   return (
     <>
@@ -697,7 +702,9 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   </View>
                   <View>
 
-                    <Text style={styles.gstno}>GSTIN: {organisationdetails[0].gstnumber}</Text>
+                    {/* <Text style={styles.gstno}>GSTIN: {organisationdetails[0].gstnumber}</Text> */}
+                        <Text style={styles.gstno}>GSTIN: {stationData[0]?.gstno}</Text>
+                    {/* <Text style={styles.text2add}> {stationData[0]?.gstno}</Text> */}
 
                   </View>
 
@@ -745,7 +752,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Report Add</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientNameadd}> {address1}</Text>
+                      {/* <Text style={styles.clientNameadd}> {address1}</Text> */}
+                      <Text style={styles.clientNameadd}> {guestaddress1}</Text>
                     </View>
 
                     <View style={styles.deatilssection1}>
@@ -1113,12 +1121,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   </View> : <></>}
 
 
-                {/* <View style={{ flexDirection: 'column', width: '100%', marginTop: '10px' }}> */}
-                {attachedImage && attachedImage.length > 0 ? (
+               
+                {/* {attachedImage && attachedImage.length > 0 ? (
                   <>
-                    {/* <View style={{ width: "100%" }}> */}
-                    {/* <Text style={styles.atimg}>Attached image</Text> */}
-                    {/* </View> */}
+                   
                     <View style={[styles.addimg, { width: '100%' }]}>
                       {attachedImage.map((item, index) => (
                         <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
@@ -1129,15 +1135,38 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   </>
                 ) : (
                   <></>
-                  // <View style={{ width: "100%", margin: 'auto', marginTop: '100px' }}>
-                  //   <Text style={styles.atimg}>  No Attached image</Text>
-                  // </View>
-                )}
-                {/* </View> */}
+                )} */}
 
+{attachedImage && attachedImage.length > 0 && (
+                  <>
+                  <View style={[styles.addimg, { width: '100%' }]}>
+                  {/* <View key={index} style={[styles.imgwidth, { padding: '3px' }]} > */}
+                      {attachedImage.map((item, index) => {
+                        const dataimgetype1 = item.attachedimageurl.split('.').pop();
+                        // URL.createObjectURL(img)
+                        if (dataimgetype1 !== "pdf") {
+                          return (
+                            // <View key={index} style={{ width: '100%' }}>
+                        <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
 
-                {/* <View style={{ flexDirection: 'column', width: '100%' }}> */}
-                {bookimage && bookimage.length > 0 && (
+                              <Image src={`${apiUrl}/images/${item.attachedimageurl}`} />
+                            </View>
+                          );
+                        } else {
+                          return null;
+                        }
+                      })}
+                      {/* </View> */}
+
+                    </View>
+                  </>
+                )
+                }
+          
+
+{/* dont remove the code */}
+              
+                {/* {bookimage && bookimage.length > 0 && (
                   <>
                     <View style={{ width: '100%' }}>
 
@@ -1158,7 +1187,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                     </View>
                   </>
                 )
-                }
+                } */}
 
 
                 {/* </View> */}

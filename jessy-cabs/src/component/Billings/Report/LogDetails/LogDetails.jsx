@@ -63,14 +63,27 @@ const LogDetails = () => {
       let valueFormatter = null;
 
       // Apply date formatting for specific fields
-      if (["Log_Time", "Log_Date", "bookingdate", "startdate", "tripsheet_date", "shedInDate", "shedOutDate", "Reportdate", "closedate"].includes(key)) {
+      // if (["Log_Time", "Log_Date", "bookingdate", "startdate", "tripsheet_date", "shedInDate", "shedOutDate", "Reportdate", "closedate"].includes(key)) {
+      //   valueFormatter = (params) => {
+      //     return params.value ? dayjs(params.value).format('DD-MM-YYYY') : '';
+      //   };
+      // }
+
+      // // Apply time formatting for specific time fields
+      // if (["Log_Date", "Log_Time", "bookingtime", "starttime", "Reporttime", "ShedOutTime",].includes(key)) {
+      //   valueFormatter = (params) => {
+      //     return params.value ? dayjs(params.value, 'HH:mm').format('HH:mm') : '';
+      //   };
+      // }
+
+      if (["bookingdate", "startdate", "tripsheet_date", "shedInDate", "shedOutDate", "Reportdate", "closedate"].includes(key)) {
         valueFormatter = (params) => {
           return params.value ? dayjs(params.value).format('DD-MM-YYYY') : '';
         };
       }
 
       // Apply time formatting for specific time fields
-      if (["Log_Date", "Log_Time", "bookingtime", "starttime", "Reporttime", "ShedOutTime",].includes(key)) {
+      if (["Log_Time", "bookingtime", "starttime", "Reporttime", "ShedOutTime",].includes(key)) {
         valueFormatter = (params) => {
           return params.value ? dayjs(params.value, 'HH:mm').format('HH:mm') : '';
         };
@@ -93,6 +106,7 @@ const LogDetails = () => {
     const fetchUserNames = async () => {
       const response = await axios.get(`${apiurl}/getAllUserNames`);
       const data = response.data;
+      // console.log(data, "data")
       const usernamedatas = data?.map(li => li.username)
       setAllUserNames(usernamedatas)
     }
@@ -236,6 +250,72 @@ const LogDetails = () => {
     }
   }
 
+
+  const handleKeyDownlogDetails = async (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (!logDateDetails.selectType) {
+        setWarning(true);
+        setWarningMessage("Select Type")
+        return
+      }
+      if (!logDateDetails.selectbookingId) {
+        setWarning(true);
+        setWarningMessage("Enter Id")
+        return
+      }
+      console.log(event.target.value,"valueee")
+      
+      try {
+        const response = await axios.get(`${apiurl}/handlelogdetails/${event.target.value}/${logDateDetails?.selectType}` );
+        // const response = await axios.get(
+        //   `${apiUrl}/booking/${event.target.value}`,{ params: { loginUserName } } );
+        const bookingDetails = response.data;
+        console.log(bookingDetails,"mmmmmmmmmmmmmmmmmmm")
+        if (bookingDetails.length > 0) {
+
+
+          setLogDetails(bookingDetails)
+          handlecolumnvalues(bookingDetails)
+          setSuccess(true);
+          setSuccessMessage("Succesfully listed")
+        }
+        else {
+          setLogDetails([])
+          setError(true);
+          setErrorMessage("Data not found")
+  
+        }
+        // setSelectedCustomerData(bookingDetails);
+        // setSelectedCustomerId(bookingDetails.tripid);
+        // setBookingStatus(bookingDetails?.status);
+        // setIsEditMode(true);
+        // setEdit(true);
+        // setSendEmail(false);
+        // setDatatrigger(!datatrigger);
+        // setAvilableimageCount(bookingDetails.count)
+      } 
+      catch (error) {
+        if (error.response && error.response.status === 404) {
+            setError(true);
+            setErrorMessage(`${error.response.data.error}`);
+        } else {
+            setError(true);
+            // setErrorMessage("Failed to fetch data");
+            setErrorMessage("Check your Network Connection");
+        }
+    }
+      
+      // catch(err) {
+
+     
+      //     setError(true);
+      //       setErrorMessage("Booking Not Found");
+   
+  
+  }
+  };
+
   const handleFromDateChange = (date) => {
     setLogDateDetails((prevState) => ({
       ...prevState,
@@ -304,8 +384,11 @@ const LogDetails = () => {
           <div className="input">
             <div style={{}}>
               <label htmlFor="" style={{ fontSize: "20px", marginRight: "10px" }}>Id</label>
-              <input type="text" value={logDateDetails.selectbookingId} style={{ backgroundColor: 'transparent', border: '1px solid #ccc', borderRadius: '5px', padding: '10px 5px' }}
+              <input type="text" 
+              value={logDateDetails.selectbookingId} 
+              style={{ backgroundColor: 'transparent', border: '1px solid #ccc', borderRadius: '5px', padding: '10px 5px' }}
                 onChange={handleSelectTripId}
+                onKeyDown={handleKeyDownlogDetails}
               />
             </div>
           </div>

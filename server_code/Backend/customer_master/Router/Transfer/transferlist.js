@@ -1752,8 +1752,8 @@ router.get('/customerdatgst/:customers', (req, res) => {
 
   const query = 'SELECT * FROM customers where customer = ?';
   const sql1 = 'SELECT state,gstTax,address1,gstnumber FROM customers where customer = ?';
-  // const sql2='SELECT * FROM stationcreation where state = ? and  gstno is not null'
-  const sql2 = 'SELECT * FROM stationcreation WHERE state = ? AND gstno IS NOT NULL AND gstno != ""';
+  // const sql2 = 'SELECT * FROM stationcreation WHERE state = ? AND gstno IS NOT NULL AND gstno != ""';
+  const sql2 = 'SELECT * FROM stationcreation WHERE state = ? AND  Stationname = ? AND gstno IS NOT NULL AND gstno != ""';
 
   // const sql3 = 'SELECT organizationname,addressLine1,contactPhoneNumber,gstnumber from organizationdetails';
 
@@ -1767,7 +1767,8 @@ router.get('/customerdatgst/:customers', (req, res) => {
       const data = results[0].billingGroup || null;
       if (data === null) {
         const datas = results[0].state || null;
-        db.query(sql2, [datas], (err, results3) => {
+        const datas2 = results[0].servicestation || null;
+        db.query(sql2, [datas,datas2], (err, results3) => {
           if (err) {
             console.log(err, "sql1")
             return res.status(500).send({ error: 'Database query failed' });
@@ -1803,10 +1804,11 @@ router.get('/customerdatgst/:customers', (req, res) => {
             return res.status(500).send({ error: 'Database query failed' });
           }
           const datas = results1[0].state || null;
+          const datas2 = results[0].servicestation || null;
           console.log(results1, "lll")
           console.log(datas)
           if (results1.length > 0) {
-            db.query(sql2, [datas], (err, result5) => {
+            db.query(sql2, [datas,datas2], (err, result5) => {
               if (err) {
                 console.log(err, "sql1")
                 return res.status(500).send({ error: 'Database query failed' });

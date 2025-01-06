@@ -133,7 +133,8 @@ const useTripsheet = () => {
     });
 
     // ----------------------------------------vendorinfo-------------------
-    const [lockdata, setLockData] = useState(false)
+    // const [lockdata, setLockData] = useState(false)
+    const [lockdata, setLockData] = useState(true)
     const [vendorinfo, setVendorinfodata] = useState({
         vehicleName: '',
         // duty:"",
@@ -215,8 +216,10 @@ const useTripsheet = () => {
     })
     const [timeToggle, setTimeToggle] = useState('');
     const [timeTogglevendor, setTimeToggleVendor] = useState('');
-    const [lockdatavendorbill, setLockDatavendorBill] = useState(false)
-    const [lockdatacustomerbill, setLockDatacustomerBill] = useState(false)
+    // const [lockdatavendorbill, setLockDatavendorBill] = useState(false)
+    // const [lockdatacustomerbill, setLockDatacustomerBill] = useState(false)
+    const [lockdatavendorbill, setLockDatavendorBill] = useState(true)
+    const [lockdatacustomerbill, setLockDatacustomerBill] = useState(true)
     const [manualMarkTrigger, setManualMarkTrigger] = useState(false)
     const [hybridhclcustomer, setHybridHclCustomer] = useState('')
     const [hybridhclnavigate, setHybridHclNavigate] = useState('')
@@ -1037,7 +1040,7 @@ const useTripsheet = () => {
                 apps: logupdatabookdetails.apps,
                 vehicleName: logupdatabookdetails.vehicleName,
                 vehRegNo: logupdatabookdetails.vehRegNo,
-                Log_Date: dayjs().format("YYYY-MM-DD"),
+                Log_Date: dayjs().format("DD-MM-YYYY"),
                 Log_Time: getCurrentTime(),
                 mode: modedata,
                 tripsheet_no: lastBookinglogno,
@@ -1410,9 +1413,12 @@ const useTripsheet = () => {
                 handleCancel();
                 setisEditload(false)
                 setSuccessMessage("Successfully updated");
-                setLockData(false)
-                setLockDatavendorBill(false)
-                setLockDatacustomerBill(false)
+                // setLockData(false)
+                // setLockDatavendorBill(false)
+                // setLockDatacustomerBill(false)
+                setLockData(true)
+                setLockDatavendorBill(true)
+                setLockDatacustomerBill(true)
                 setCheckSignandMapVerify(false)
             //    const data2= await  checksignatureandmap()
             //    console.log(data2,"userStatusdata2")
@@ -1686,9 +1692,12 @@ const useTripsheet = () => {
             handlecheck();
             setisAddload(false)
             setSuccessMessage("Successfully Added");
-            setLockData(false)
-            setLockDatavendorBill(false)
-            setLockDatacustomerBill(false)
+            // setLockData(false)
+            // setLockDatavendorBill(false)
+            // setLockDatacustomerBill(false)
+            setLockData(true)
+            setLockDatavendorBill(true)
+            setLockDatacustomerBill(true)
         }
         // catch {
         //     setError(true);
@@ -1720,7 +1729,7 @@ const useTripsheet = () => {
     // ---------------venodr-----------------------
     const handleAutocompleteVendor = (event, value, name) => {
         const selectedOption = value ? value.label : '';
-        if (lockdata) {
+        if (!lockdata) {
             setVendorinfodata((prevBook) => ({
                 ...prevBook,
                 [name]: selectedOption,
@@ -1730,7 +1739,7 @@ const useTripsheet = () => {
     const handleDatevendorChange = (date, name) => {
         const formattedDate = dayjs(date).format('YYYY-MM-DD');
         const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
-        if (lockdata) {
+        if (!lockdata) {
             setVendorinfodata((prevBook) => ({
                 ...prevBook,
                 [name]: parsedDate,
@@ -1838,7 +1847,7 @@ const useTripsheet = () => {
             ...prevValues,
             [name]: parsedDate,
         }));
-        if (!lockdata) {
+        if (lockdata) {
             if (name === "shedOutDate") {
                 setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: parsedDate }))
             }
@@ -1911,13 +1920,14 @@ const useTripsheet = () => {
             formData.append('image', file);
             try {
                 await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
+                setSuccess(true);
                 setSuccessMessage("Successfully added");
 
                 if (documentType === 'Toll' || documentType === 'Parking') {
                     await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
                     setSuccessMessage("Successfully added");
                 }
-                setSuccess(true);
+                // setSuccess(true);
                 setFormData((prev) => ({
                     ...prev,
                     documenttype: '',
@@ -3773,7 +3783,7 @@ const useTripsheet = () => {
                             setSelectedCustomerId(bookingDetails.tripid);
                             setSelectedStatus(bookingDetails.status); // Set selected status based on booking details
 
-                            if (!lockdata) {
+                            if (lockdata) {
 
 
                                 setVendorinfodata(restdatavendor)
@@ -3814,9 +3824,12 @@ const useTripsheet = () => {
                             setSuccessMessage("Successfully listed");
                             // setisenterTripid(true)
                             setIsEditMode(true);
-                            setLockData(false)
-                            setLockDatavendorBill(false)
-                            setLockDatacustomerBill(false)
+                            // setLockData(false)
+                            // setLockDatavendorBill(false)
+                            // setLockDatacustomerBill(false)
+                            setLockData(true)
+                            setLockDatavendorBill(true)
+                            setLockDatacustomerBill(true)
                             localStorage.setItem('selectedTripid', tripid);
                         }
                     } else {
@@ -3858,7 +3871,7 @@ const useTripsheet = () => {
 
     const handleRowClick = (params) => {
         setSelectedCustomerDatas(params);
-        if (!lockdata) {
+        if (lockdata) {
             // setVendorinfodata(params.vechicleName)
             setVendorinfodata({ ...vendorinfo, vendor_ratename: params.rateType })
             setRate_name(params.rateType)
@@ -4823,7 +4836,7 @@ const useTripsheet = () => {
     const handlevendor_billdata = (event) => {
         const { name, value } = event.target;
         console.log(name, value)
-        if (lockdatavendorbill) {
+        if (!lockdatavendorbill) {
             setVendorbilldata((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -4839,7 +4852,7 @@ const useTripsheet = () => {
     const handlevendorinfofata = (event) => {
         const { name, value } = event.target;
         console.log(name, "value", value)
-        if (lockdata) {
+        if (!lockdata) {
             if (name === "vendorshedoutkm") {
                 vendorinfo.shedout = ""
                 setVendorinfodata((data) => ({

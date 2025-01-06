@@ -11,8 +11,9 @@ const util = require('util');
 const { error } = require('console');
 const query = util.promisify(db.query).bind(db)
 
-const attachedmailDirectory = path.join(__dirname, 'uploads');
-router.use('/images', express.static(attachedmailDirectory));
+// const attachedmailDirectory = path.join(__dirname, 'uploads');
+// console.log(attachedmailDirectory, "attachedmailDirectory")
+// router.use('/images', express.static(attachedmailDirectory));
 // router.use(express.static('customer_master'));
 // const upload = multer({ dest: 'uploads/' });
 

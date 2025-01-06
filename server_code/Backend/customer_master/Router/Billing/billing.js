@@ -975,8 +975,9 @@ router.get("/trpisheetlogdetailst", (req, res) => {
       TripsheetLog_Details.tripsheet_no = booking.bookingno
     WHERE 
       TripsheetLog_Details.tripsheet_no = ? AND 
+      TripsheetLog_Details.username = ? AND 
       TripsheetLog_Details.tripsheet_date >= ? AND 
-      TripsheetLog_Details.tripsheet_date < DATE_ADD(?, INTERVAL 0 DAY)
+      TripsheetLog_Details.tripsheet_date < DATE_ADD(?, INTERVAL 1 DAY)
   `;
 
   const sqlWithoutIdQuery = `
@@ -1003,7 +1004,7 @@ router.get("/trpisheetlogdetailst", (req, res) => {
   // Choose query and parameters
   const query = selectbookingId ? sqlWithIdQuery : sqlWithoutIdQuery;
   const params = selectbookingId
-    ? [selectbookingId, fromDate, toDate]
+    ? [selectbookingId,userName, fromDate, toDate]
     : [userName, fromDate, toDate];
 
   // Execute the query
@@ -1017,6 +1018,52 @@ router.get("/trpisheetlogdetailst", (req, res) => {
   });
 });
 
+
+router.get("/handlelogdetails/:selectedid/:selectype", (req, res) => {
+  const { selectedid, selectype } = req.params;
+
+
+  // SQL queries
+  const sqlWithIdQuery = `
+    SELECT 
+      TripsheetLog_Details.*, 
+      booking.customer, 
+      booking.guestname, 
+      booking.guestmobileno, 
+      booking.address1, 
+      booking.duty, 
+      booking.useage
+    FROM
+      booking
+    LEFT JOIN 
+      TripsheetLog_Details 
+    ON 
+      TripsheetLog_Details.tripsheet_no = booking.bookingno
+    WHERE 
+      TripsheetLog_Details.tripsheet_no = ? 
+  `;
+  const AllDataQuery = `
+  SELECT * FROM BookingLogDetails 
+  WHERE bookingno = ? 
+`;
+
+  
+
+  // Choose query and parameters
+  const query = selectype === "Booking" ? AllDataQuery : sqlWithIdQuery;
+ 
+
+  // Execute the query
+  console.log(query, selectedid, 'query',selectype)
+  db.query(query,[selectedid], (err, result) => {
+    if (err) {
+      console.error(err, 'Database Error');
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+
+    return res.status(200).json(result);
+  });
+});
 
 
 router.post("/TripsheetlogDetailslogged", (req, res) => {

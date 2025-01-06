@@ -657,27 +657,65 @@ const useExeclpage = () => {
                 ).toBlob();
 
                 const pdfBytes = await blob.arrayBuffer();
-
+// dont delete this code
                 const reactPDFDocument = await PDFDocument.load(pdfBytes);
 
-                const data = await JSON.parse(pdfData.bookattachedimage)
-                const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
-                const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-                const datalink = JSON.parse(uniqueJsonStringbook)
+                // const data = await JSON.parse(pdfData.bookattachedimage)
+                // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+                // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+                // const datalink = JSON.parse(uniqueJsonStringbook)
 
+                const data1 = await JSON.parse(pdfData.Attachedimage)
+                const uniqueArraybook1 = Array.from(new Set(data1?.map(JSON.stringify)))?.map(JSON.parse);
+                const uniqueJsonStringbook1 = JSON.stringify(uniqueArraybook1);
+                const datalink1 = JSON.parse(uniqueJsonStringbook1)
+
+                //  const data = await JSON.parse(pdfData.bookattachedimage)
+                // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+                // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+                // const datalink = JSON.parse(uniqueJsonStringbook)
+
+                
 
                 // return datalink
 
 
                 // console.log(pdfPromises1,"pmisddd")
 
+                // const pdfDocuments = [];
+                // for (const data of datalink) {
+                //     if (data.imagees !== null) {
+                //         const data2 = data.imagees.split('.').pop()
+                //         console.log(data2, "datalonk22")
+                //         if (data2 === "pdf") {
+
+                //             const filePath = `${apiurl}/images/${data.imagees}`;
+                //             console.log(filePath, "datalinkpdfpath")
+
+                //             // Fetch the PDF file
+                //             const response = await fetch(filePath);
+                //             const pdfBytes = await response.arrayBuffer();
+
+                //             // Load the PDF document
+                //             const pdfDocument = await PDFDocument.load(pdfBytes);
+                //             console.log(pdfDocument)
+
+                //             // Add the PDF document to the array
+                //             pdfDocuments.push(pdfDocument);
+                //         }
+                //     }
+                // }
+
                 const pdfDocuments = [];
-                for (const data of datalink) {
-                    if (data.imagees !== null) {
-                        const data2 = data.imagees.split('.').pop()
+
+                for (const data of datalink1) {
+                    if (data.attachedimageurl !== null) {
+                        const data2 = data.attachedimageurl.split('.').pop()
+                        console.log(data2, "datalonk22")
                         if (data2 === "pdf") {
 
-                            const filePath = `${apiurl}/images/${data.imagees}`;
+                            const filePath = `${apiurl}/images/${data.attachedimageurl}`;
+                            console.log(filePath, "datalinkpdfpath")
 
                             // Fetch the PDF file
                             const response = await fetch(filePath);
@@ -692,6 +730,28 @@ const useExeclpage = () => {
                         }
                     }
                 }
+                // for (const data of datalink) {
+                //     if (data.imagees !== null) {
+                //         const data2 = data.imagees.split('.').pop()
+                //         console.log(data2, "datalonk22")
+                //         if (data2 === "pdf") {
+
+                //             const filePath = `${apiurl}/images/${data.imagees}`;
+                //             console.log(filePath, "datalinkpdfpath")
+
+                //             // Fetch the PDF file
+                //             const response = await fetch(filePath);
+                //             const pdfBytes = await response.arrayBuffer();
+
+                //             // Load the PDF document
+                //             const pdfDocument = await PDFDocument.load(pdfBytes);
+                //             console.log(pdfDocument)
+
+                //             // Add the PDF document to the array
+                //             pdfDocuments.push(pdfDocument);
+                //         }
+                //     }
+                // }
 
 
                 const mergedPDFDocument = await PDFDocument.create();

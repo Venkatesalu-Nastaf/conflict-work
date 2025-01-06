@@ -433,62 +433,238 @@ router.delete('/tripsheet/:tripid', (req, res) => {
 //         res.status(200).json(result);
 //     })
 // })
-router.post('/getVehcileHistoryData', (req, res) => {
-    const { vehicleNo } = req.body;
-    console.log(vehicleNo, "historyvehicle");
+// get vehicleHistorydata by vehicleNo
+// router.post('/getVehcileHistoryData',(req,res)=>{
+//     const { vehicleNo } = req.body;
+//     console.log(vehicleNo,"vehicleno");
 
-    //     const query = `
-    //     SELECT shedoutdate, reportdate, closedate, shedindate,Tripid,
-    //     GREATEST(
-    //         IFNULL(STR_TO_DATE(shedoutdate, '%Y-%m-%d %H:%i:%s'), '1970-01-01'), 
-    //         IFNULL(STR_TO_DATE(reportdate, '%Y-%m-%d %H:%i:%s'), '1970-01-01'), 
-    //         IFNULL(STR_TO_DATE(closedate, '%Y-%m-%d'), '1970-01-01'), 
-    //         IFNULL(STR_TO_DATE(shedindate, '%Y-%m-%d'), '1970-01-01')
-    //     ) AS latestDate
-    //     FROM Vehicle_History_Data
-    //     WHERE VehicleNo = ?
-    //     ORDER BY latestDate DESC
-    //     LIMIT 1
-    // `;
+//     db.query('SELECT * FROM Vehicle_History_Data WHERE VehicleNo = ?',[vehicleNo],(err,result)=>{
+//         if(err){
+//             console.log(err,"error");
+//         }
+//         console.log(result,"vehicle result");
+
+//         res.status(200).json(result);
+//     })
+// })
+
+// router.post('/getVehcileHistoryData', (req, res) => {
+//     const { vehicleNo } = req.body;
+//     console.log(vehicleNo, "historyvehicle");
+
+//     //     const query = `
+//     //     SELECT shedoutdate, reportdate, closedate, shedindate,Tripid,
+//     //     GREATEST(
+//     //         IFNULL(STR_TO_DATE(shedoutdate, '%Y-%m-%d %H:%i:%s'), '1970-01-01'), 
+//     //         IFNULL(STR_TO_DATE(reportdate, '%Y-%m-%d %H:%i:%s'), '1970-01-01'), 
+//     //         IFNULL(STR_TO_DATE(closedate, '%Y-%m-%d'), '1970-01-01'), 
+//     //         IFNULL(STR_TO_DATE(shedindate, '%Y-%m-%d'), '1970-01-01')
+//     //     ) AS latestDate
+//     //     FROM Vehicle_History_Data
+//     //     WHERE VehicleNo = ?
+//     //     ORDER BY latestDate DESC
+//     //     LIMIT 1
+//     // `;
+//     const query = `
+// SELECT VehicleNo, shedoutdate, reportdate, closedate, shedindate,
+//        shedouttime, reporttime, closetime, shedintime, Tripid,
+//        DATE_FORMAT(
+//            GREATEST(
+//                IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+//                IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+//                IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+//                IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
+//            ),
+//            '%Y-%m-%d'
+//        ) AS latestFormattedDate,
+//        GREATEST(
+//            IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+//            IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+//            IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+//            IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
+//        ) AS latestDateTime,
+//        -- Logic to return the correct field based on the availability
+//        COALESCE(NULLIF(shedintime, ''), NULLIF(closetime, ''), reporttime) AS finalTime,
+//        -- Extract the time part from the latestDateTime
+//        TIME(
+//            GREATEST(
+//                IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+//                IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+//                IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+//                IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
+//            )
+//        ) AS latestTime
+// FROM Vehicle_History_Data
+// WHERE VehicleNo = ?
+// ORDER BY latestDateTime DESC
+// LIMIT 1;
+
+
+
+// `;
+
+//     db.query(query, [vehicleNo], (err, result) => {
+//         if (err) {
+//             console.error(err, "error");
+//             res.status(500).json({ error: "Database query error" });
+//             return;
+//         }
+
+//         if (result.length > 0) {
+//             const row = result[0];
+
+//             console.log("Latest row for VehicleNo:", row);
+
+//             res.status(200).json({
+//                 row,
+//                 latestDateValue: row.latestDate,
+//             });
+//         } else {
+//             res.status(404).json({ message: "No data found" });
+//         }
+//     });
+// });
+
+router.post('/getVehcileHistoryData', (req, res) => {
+    const { vehicleNo, dateCheck } = req.body;
+
+    console.log(vehicleNo, dateCheck, "historyvehicle");
+
     const query = `
-SELECT VehicleNo, shedoutdate, reportdate, closedate, shedindate,
-       shedouttime, reporttime, closetime, shedintime, Tripid,
-       DATE_FORMAT(
-           GREATEST(
-               IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
-               IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
-               IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
-               IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
-           ),
-           '%Y-%m-%d'
-       ) AS latestFormattedDate,
-       GREATEST(
-           IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
-           IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
-           IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
-           IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
-       ) AS latestDateTime,
-       -- Logic to return the correct field based on the availability
-       COALESCE(NULLIF(shedintime, ''), NULLIF(closetime, ''), reporttime) AS finalTime,
-       -- Extract the time part from the latestDateTime
-       TIME(
-           GREATEST(
-               IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
-               IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
-               IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
-               IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
-           )
-       ) AS latestTime
+        SELECT 
+            VehicleNo, 
+            shedoutdate, 
+            reportdate, 
+            closedate, 
+            shedindate,
+            shedouttime, 
+            reporttime, 
+            closetime, 
+            shedintime, 
+            Tripid,
+            
+            -- Latest (Max) date and time
+            DATE_FORMAT(
+                GREATEST(
+                    IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+                    IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+                    IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+                    IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
+                ), 
+                '%Y-%m-%d'
+            ) AS latestFormattedDate,
+            GREATEST(
+                IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+                IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+                IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+                IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
+            ) AS latestDateTime,
+            TIME(
+                GREATEST(
+                    IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+                    IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+                    IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00'),
+                    IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '1970-01-01 00:00:00')
+                )
+            ) AS latestTime
+
+        FROM Vehicle_History_Data
+        WHERE VehicleNo = ?
+          AND (
+               shedoutdate = ? OR
+               reportdate = ? OR
+               closedate = ? OR
+               shedindate = ?
+          )
+        LIMIT 1;
+    `;
+
+    db.query(query, [vehicleNo, dateCheck, dateCheck, dateCheck, dateCheck], (err, result) => {
+        if (err) {
+            console.error(err, "error");
+            res.status(500).json({ error: "Database query error" });
+            return;
+        }
+
+        if (result.length > 0) {
+
+            const row = result[0];
+
+            console.log("Latest and earliest times for VehicleNo and Date:", row);
+
+            res.status(200).json({
+                row,
+                latestDateTime: row.latestDateTime,
+                earliestDateTime: row.earliestDateTime,
+            });
+        } else {
+            res.status(404).json({ message: "No data found for the given date" });
+        }
+    });
+});
+
+router.post('/getVehcileHistoryDataMinimumTime', (req, res) => {
+    const { vehicleNo, dateCheck } = req.body;
+
+    console.log(vehicleNo, dateCheck, "minimum historyvehicle");
+
+    const query = `
+      SELECT 
+    VehicleNo, 
+    shedoutdate, 
+    reportdate, 
+    closedate, 
+    shedindate,
+    shedouttime, 
+    reporttime, 
+    closetime, 
+    shedintime, 
+    Tripid,
+    
+    -- Earliest (Min) date and time
+    DATE_FORMAT(
+        LEAST(
+            IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+            IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+            IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+            IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59')
+        ), 
+        '%Y-%m-%d'
+    ) AS earliestFormattedDate,
+    LEAST(
+        IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+        IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+        IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+        IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59')
+    ) AS earliestDateTime,
+    TIME(
+        LEAST(
+           IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+           IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+           IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),    
+           IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59')
+        )
+    ) AS earliestTime
 FROM Vehicle_History_Data
 WHERE VehicleNo = ?
-ORDER BY latestDateTime DESC
+  AND (
+       shedoutdate = ? OR
+       reportdate = ? OR
+       closedate = ? OR
+       shedindate = ?
+  )
+ORDER BY 
+    LEAST(
+        IFNULL(STR_TO_DATE(CONCAT(shedoutdate, ' ', shedouttime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+        IFNULL(STR_TO_DATE(CONCAT(reportdate, ' ', reporttime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+        IFNULL(STR_TO_DATE(CONCAT(closedate, ' ', closetime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59'),
+        IFNULL(STR_TO_DATE(CONCAT(shedindate, ' ', shedintime), '%Y-%m-%d %H:%i:%s'), '9999-12-31 23:59:59')
+    )
 LIMIT 1;
 
+    `;
 
-
-`;
-
-    db.query(query, [vehicleNo], (err, result) => {
+    db.query(query, [vehicleNo, dateCheck, dateCheck, dateCheck, dateCheck], (err, result) => {
         if (err) {
             console.error(err, "error");
             res.status(500).json({ error: "Database query error" });
@@ -498,14 +674,14 @@ LIMIT 1;
         if (result.length > 0) {
             const row = result[0];
 
-            console.log("Latest row for VehicleNo:", row);
+            console.log("earliest times for VehicleNo and Date:", row);
 
             res.status(200).json({
                 row,
-                latestDateValue: row.latestDate,
+                earliestDateTime: row.earliestDateTime,
             });
         } else {
-            res.status(404).json({ message: "No data found" });
+            res.status(404).json({ message: "No data found for the given date" });
         }
     });
 });

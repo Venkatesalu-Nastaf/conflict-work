@@ -227,6 +227,7 @@ const useTripsheet = () => {
     const [hideField, setHideField] = useState(null)
     const [editButtonStatusCheck, SetEditButtonStatusCheck] = useState(false)
     const [conflictCompareDatas, setConflictCompareDatas] = useState(null)
+    const [conflictMinimumTimeDatas, setConflictMinimumTimeDatas] = useState(null)
 
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
@@ -6526,12 +6527,22 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo;
+        const datecheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate
         const fetchData = async () => {
             try {
                 const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, {
-                    vehicleNo
+                   vehicleNo: vehicleNo,
+                   dateCheck: datecheck
                 });
+                //getVehcileHistoryDataMinimumTime
+                const response1 = await axios.post(`${apiUrl}/getVehcileHistoryDataMinimumTime`, {
+                    vehicleNo: vehicleNo,
+                    dateCheck: datecheck
+                 });
+                 console.log(response1,"minimum date");
+                 
                 console.log(response.data, "vehiclehistorydata");
+                const minDateData = response1.data;
                 const maxDateData = response.data;
                 const latestDatevalue = maxDateData?.row?.latestFormattedDate;
                 const parseDate = (dateStr) => {
@@ -6550,6 +6561,8 @@ const useTripsheet = () => {
                 const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
                 const formattedShedoutTime = shedoutTime?.replace(":", ".")
                 const formattedLatestTime = maxDateData.row?.latestTime?.replace(":", ".")
+                const formattedleastTime = minDateData?.row?.earliestTime?.replace(":",".")
+                const finalLeastTime = parseFloat(formattedleastTime).toFixed(2);
                 const finalLatestTime = parseFloat(formattedLatestTime).toFixed(2);
                 const finalShedOutTime = parseFloat(formattedShedoutTime).toFixed(2);
                 // Set the conflictCompareDatas object state
@@ -6560,11 +6573,16 @@ const useTripsheet = () => {
                     tripids,
                     vehicleNo,
                     latestTime: finalLatestTime,
+                    leastTime:finalLeastTime,
                     shedOutTime: finalShedOutTime,
                     latestDateValue: latestmaxDate,
                     latestTimeRaw: maxDateData.row?.latestTime,
                 });
-
+               setConflictMinimumTimeDatas({
+                tripid:parseInt(minDateData?.row?.Tripid),
+                leastDate:dayjs(latestmaxDate).format("DD-MM-YYYY"),
+                leastTime:finalLeastTime,
+               })
 
 
             } catch (err) {
@@ -6709,7 +6727,7 @@ const useTripsheet = () => {
         groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
-        hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,userStatus
+        hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,userStatus,conflictMinimumTimeDatas
 
     };
 };

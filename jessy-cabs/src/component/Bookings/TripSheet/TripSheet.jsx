@@ -269,7 +269,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     // timeToggle,HclKMCalculation,
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
-    userStatus
+    userStatus,conflictMinimumTimeDatas
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -608,12 +608,15 @@ const TripSheet = ({ stationName, logoImage }) => {
     const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
     const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
     const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+    const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
     // const formattedLatestTime = maxDateData.row?.latestTime?.replace(":", ".")
     // const finalLatestTime = parseFloat(formattedLatestTime).toFixed(2);
     const shedinTimeFormat = reportTime?.replace(":", ".")
     const finalshedinTimeFormat = parseFloat(shedinTimeFormat)?.toFixed(2);
     const lastestTimeFormat = conflictCompareDatas?.latestTime?.replace(":", ".")
+    const leastTimeFormat = conflictCompareDatas?.leastTime?.replace(":",".")
     const finallastestTimeFormat = parseFloat(lastestTimeFormat)?.toFixed(2)
+    const finalleastTimeFormat = parseFloat(leastTimeFormat)?.toFixed(2)
     const parseDate = (dateStr) => {
       const [day, month, year] = dateStr?.split('-');
       return new Date(`${year}-${month}-${day}`);
@@ -623,16 +626,28 @@ const TripSheet = ({ stationName, logoImage }) => {
     finalshedouttime?.setHours(0, 0, 0, 0);
     finalmaxtime?.setHours(0, 0, 0, 0);
 
+    const finalShedoutFormat = parseFloat(finalshedinTimeFormat).toFixed(2)
+    const finalLatestFormat =  parseFloat(finallastestTimeFormat).toFixed(2)
+    console.log(finalshedouttime.getDate() === finalmaxtime.getDate() ,"finall")
+    console.log(finallastestTimeFormat,"isequalfinallll",finalshedinTimeFormat,"finalll",parseFloat(finalShedoutFormat),"qqq",parseFloat(finalLatestFormat))
+    console.log(parseFloat(finalShedoutFormat) < parseFloat(finalLatestFormat),"isequalfinallllll=========",parseFloat(finalShedoutFormat),parseFloat(finalLatestFormat),"isequall",);
+    console.log("finalllllllllllllll",finalShedoutFormat,finalleastTimeFormat,finalLatestFormat,parseFloat(finalShedoutFormat),parseFloat(finalleastTimeFormat),parseFloat(finalLatestFormat));
+    
     const isEqual = (
+
       // isEditMode &&
       conflictCompareDatas?.conflictmaxdate !== null &&
       conflictCompareDatas?.tripids !== null &&
-      conflictCompareDatas?.tripids !== tripID &&
+      conflictCompareDatas?.tripids !== tripid &&
+      finalshedouttime.getDate() === finalmaxtime.getDate()  &&
+      finalshedouttime.getMonth() === finalmaxtime.getMonth()  &&
+      finalshedouttime.getFullYear() === finalmaxtime.getFullYear()  &&
+
       // !shedindate &&
       // reportTime <= conflictCompareDatas?.latestTime &&
-      parseFloat(finalshedinTimeFormat) <= parseFloat(finallastestTimeFormat) &&
+      parseFloat(finalShedoutFormat || 0) === parseFloat(finalLatestFormat || 0) 
+    //  (parseFloat(a || 0) === parseFloat(b || 0) || parseFloat(a) < parseFloat(b) )
       // shedOutDate === conflictCompareDatas?.conflictmaxdate
-      finalshedouttime === finalmaxtime
 
     )
 
@@ -640,15 +655,87 @@ const TripSheet = ({ stationName, logoImage }) => {
       // isEditMode &&
       conflictCompareDatas?.conflictmaxdate !== null &&
       conflictCompareDatas?.tripids !== null &&
-      conflictCompareDatas?.tripids !== tripID &&
+      // conflictCompareDatas?.tripids !== tripID &&
       // !shedindate &&
-
-      finalshedouttime < finalmaxtime
+      finalshedouttime.getDate() === finalmaxtime.getDate()  &&
+      finalshedouttime.getMonth() === finalmaxtime.getMonth()  &&
+      finalshedouttime.getFullYear() === finalmaxtime.getFullYear() && 
+      parseFloat(finalShedoutFormat) === parseFloat(finalleastTimeFormat) &&
+      parseFloat(finalShedoutFormat) <= parseFloat(finalLatestFormat)
       // Check if shedOutDate is less than conflictenddate
     );
+console.log(isEqual,"isequalll",conflictMinimumTimeDatas);
+console.log(parseFloat(finalShedoutFormat) > parseFloat(finalleastTimeFormat),"is less",finalshedouttime.getFullYear() === finalmaxtime.getFullYear(),finalshedouttime.getMonth() === finalmaxtime.getMonth(),finalshedouttime.getDate() === finalmaxtime.getDate() );
 
-    return isEqual || isLessThan;
+
+    return  isEqual ;
   };
+
+const checkMinTimeFun = () => {
+  const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+  const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
+  const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+  const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
+  // const formattedLatestTime = maxDateData.row?.latestTime?.replace(":", ".")
+  // const finalLatestTime = parseFloat(formattedLatestTime).toFixed(2);
+  const shedinTimeFormat = reportTime?.replace(":", ".")
+  const finalshedinTimeFormat = parseFloat(shedinTimeFormat)?.toFixed(2);
+  const lastestTimeFormat = conflictCompareDatas?.latestTime?.replace(":", ".")
+  const leastTimeFormat = conflictCompareDatas?.leastTime?.replace(":",".")
+  const finallastestTimeFormat = parseFloat(lastestTimeFormat)?.toFixed(2)
+  const finalleastTimeFormat = parseFloat(leastTimeFormat)?.toFixed(2)
+  const parseDate = (dateStr) => {
+    const [day, month, year] = dateStr?.split('-');
+    return new Date(`${year}-${month}-${day}`);
+  };
+  const finalshedouttime = parseDate(shedOutDate || "")
+  const finalmaxtime = parseDate(conflictCompareDatas?.conflictmaxdate || "")
+  finalshedouttime?.setHours(0, 0, 0, 0);
+  finalmaxtime?.setHours(0, 0, 0, 0);
+
+  const finalShedoutFormat = parseFloat(finalshedinTimeFormat).toFixed(2)
+  const finalLatestFormat =  parseFloat(finallastestTimeFormat).toFixed(2)
+  console.log(finalshedouttime.getDate() === finalmaxtime.getDate() ,"finall")
+  console.log(finallastestTimeFormat,"isequalfinallll",finalshedinTimeFormat,"finalll",parseFloat(finalShedoutFormat),"qqq",parseFloat(finalLatestFormat))
+  console.log(parseFloat(finalShedoutFormat) < parseFloat(finalLatestFormat),"isequalfinallllll=========",parseFloat(finalShedoutFormat),parseFloat(finalLatestFormat),"isequall",);
+  console.log("finalllllllllllllll33333333333333333333",finalShedoutFormat,finalleastTimeFormat,finalLatestFormat,parseFloat(finalShedoutFormat),parseFloat(finalleastTimeFormat),parseFloat(finalLatestFormat));
+  console.log("finallllllllllllllll+++++++++++++++++++",finalshedouttime.getDate() === finalmaxtime.getDate(),finalshedouttime.getMonth() === finalmaxtime.getMonth(),finalshedouttime.getFullYear() === finalmaxtime.getFullYear());
+  
+  const maxisequal = (
+    conflictCompareDatas?.tripids !== tripid &&
+    // conflictMinimumTimeDatas?.tripid !==tripid &&
+    finalshedouttime.getDate() === finalmaxtime.getDate()  &&
+    finalshedouttime.getMonth() === finalmaxtime.getMonth()  &&
+    finalshedouttime.getFullYear() === finalmaxtime.getFullYear() && 
+    (parseFloat(finalShedoutFormat) === parseFloat(finalLatestFormat) )
+  );
+  const minisequal = (
+    // conflictCompareDatas?.tripids !== tripid &&
+    conflictMinimumTimeDatas?.tripid !==tripid &&
+    finalshedouttime.getDate() === finalmaxtime.getDate()  &&
+    finalshedouttime.getMonth() === finalmaxtime.getMonth()  &&
+    finalshedouttime.getFullYear() === finalmaxtime.getFullYear() && 
+    (parseFloat(finalShedoutFormat) === parseFloat(finalleastTimeFormat) )
+  )
+  
+  const inbetween = (
+    conflictCompareDatas?.tripids !== tripid &&
+    conflictMinimumTimeDatas?.tripid !== tripid &&
+    finalshedouttime.getDate() === finalmaxtime.getDate() &&
+    finalshedouttime.getMonth() === finalmaxtime.getMonth() &&
+    finalshedouttime.getFullYear() === finalmaxtime.getFullYear() &&
+    (
+      parseFloat(finalShedoutFormat) === parseFloat(finalleastTimeFormat) ||   
+      (parseFloat(finalShedoutFormat) >= parseFloat(finalleastTimeFormat) &&
+       parseFloat(finalShedoutFormat) <= parseFloat(finalLatestFormat)) // Strictly less than finalLatestFormat
+    )
+  );
+  
+
+  console.log(maxisequal,"islessthan");
+  
+  return maxisequal || minisequal || inbetween
+}
 
 
 
@@ -1295,8 +1382,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                 </div>
                 {emptyState ? "" :
                   <div className="input" style={{ display: "grid" }}>
-                    {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
+                    {/* {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
                       Conflict tripid: {conflictCompareDatas?.tripids}, Time: {conflictCompareDatas?.latestTime}, conflictdate:{conflictCompareDatas?.conflictmaxdate}
+                    </label>} */}
+                    {checkMinTimeFun() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
+                      Conflict tripid: {conflictMinimumTimeDatas?.tripid}, Time: {conflictMinimumTimeDatas?.leastTime} {'\n'} Conflict tripid : {conflictCompareDatas?.tripids} Time : {conflictCompareDatas?.latestTime}, conflictdate:{conflictMinimumTimeDatas?.leastDate}
                     </label>}
                     <div style={{ display: "flex" }}>
                       <div className="icone" >

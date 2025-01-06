@@ -191,7 +191,7 @@ const onDocumentLoadSuccess = ({ numPages }) => {
 
             {/* <img src={GmapimageUrl} alt='mapimage' /> */}
             {GmapimageUrl !== "" ?
-              <img src={GmapimageUrl} alt='mapimage' /> : <></>}
+              <img src={GmapimageUrl} alt='mapimage' style={{width:"100%", height:"100%"}}/> : <></>}
           </div>
           {/* <div className="tripsheet-RouteSummary">
             <h2>Route Summary</h2>
@@ -220,90 +220,106 @@ const onDocumentLoadSuccess = ({ numPages }) => {
               ))}
             </ol>
           </div> */}
-           <div className="attached-toll">
-        <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
-          {Array.isArray(attachedImage) &&
-            attachedImage.map((file, index) => {
-              const isPdf = file.endsWith(".pdf");
-              return (
-                <li
-                  key={index}
-                  style={{
-                    pageBreakAfter: "always", 
-                    padding: "20px",
-                    marginBottom: "140px",
-                  }}
-                >
-                  {isPdf ? (
-                    <div>
-                      <Document
-                        file={file}
-                        onLoadSuccess={onDocumentLoadSuccess}
-                        style={{
-                          width: "595px", // Width for A4 page
-                          height: "auto",
-                          margin: "auto",
-                        }}
-                      >
-                        {Array.from(new Array(numPages), (el, pageIndex) => (
-                          <Page
-                            key={`page_${pageIndex + 1}`}
-                            pageNumber={pageIndex + 1}
-                            scale={1}
+          <div className="attached-toll">
+            <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
+              {Array.isArray(attachedImage) &&
+                attachedImage.map((file, index) => {
+                  const isPdf = file.endsWith(".pdf");
+                  return (
+                    <>
+                    {isPdf ?                   
+                      <li
+                      key={index}
+                      style={{
+                        pageBreakAfter: "always",
+                        padding: "20px",
+                        // marginBottom: "140px",
+                       
+                      }}
+                    >
+                        <div className='upload-pdf'>
+                          <Document
+                            file={file}
+                            onLoadSuccess={onDocumentLoadSuccess}
                             style={{
-                              display: "block",
-                              width: "595px",
-                              height: "auto",
-                              marginBottom: "90px",
+                              width: "595px", // Width for A4 page
+                              // height: "auto",
+                              height: "595px",
+                              margin: "auto",
+                            
+                            }}
+                          >
+                            {Array.from(new Array(numPages), (el, pageIndex) => (
+                              <Page
+                                key={`page_${pageIndex + 1}`}
+                                pageNumber={pageIndex + 1}
+                                scale={1}                               
+                                className="custom-page-invoice"
+
+                                
+                              />
+                            ))}
+                          </Document>
+                        </div>
+                      
+                    </li> :
+                    
+                    ''}
+
+                    </>
+                    
+                  );
+                })}
+            </ol>
+          </div>
+
+          <div className="attached-toll">
+            <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
+              {Array.isArray(attachedImage) &&
+                attachedImage.map((file, index) => {
+                  const isimage = !file.endsWith(".pdf");
+                  return (
+                    <>
+
+                    {isimage ? 
+
+                      <li
+                      key={index}
+                      style={{
+                        pageBreakAfter: "always",
+                        padding: "20px",
+                        // marginBottom: "140px",
+                       
+                      }}
+                      className='li-files'
+                    >
+                    
+
+                        <div
+
+                          className='upload-img'
+                        >
+                          <img
+                            src={file}
+                            alt={`image_${index}`}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              // marginBottom: "20px",
                             }}
                           />
-                        ))}
-                      </Document>
-                    </div>
-                  ) : (
-                    // <img
-                    //   src={file}
-                    //   alt={`image_${index}`}
-                    //   style={{
-                    //     // width: "595px", // Width for A4 page
-                    //     width: "300px",
-                    //     height: "auto",
-                    //     marginBottom: "100px",
-                    //     display: "flex",
-                    //     marginLeft: "auto",
-                    //     marginRight: "auto",
-                    //   }}
-                    // />
-                    <div
-  style={{
-    // display: "flex",
-    //   flexDirection: "row",
-    // flexWrap: "wrap", 
-    // justifyContent: "center", 
-    // alignItems: "center", 
-    // gap: "10px", 
-    // background:"red",
-    margin: " auto", 
-    width:"345px",
-    height:"345px"
-  }}
->
-  <img
-    src={file}
-    alt={`image_${index}`}
-    style={{
-      width: "100%",
-      height: "100%",
-      marginBottom: "20px",
-    }}
-  />
-</div>
-                  )}
-                </li>
-              );
-            })}
-        </ol>
-      </div>
+                        </div>
+                      
+                    </li>
+
+                    :''}
+
+                    </>
+                   
+                  );
+                })}
+            </ol>
+          </div>
 
         </article>
       </div>

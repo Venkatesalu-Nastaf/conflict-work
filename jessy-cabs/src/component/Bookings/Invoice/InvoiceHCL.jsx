@@ -1,4 +1,6 @@
 import './invoice.css';
+import './InvoiceHCL.css';
+
 // import './invoice.css';
 import { useRef, useState } from 'react';
 import { Button } from '@mui/material';
@@ -20,7 +22,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
   const closedata = tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate
   const closedata2 = tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate
   const triplabel = tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid
-  console.log(triplabel,"lllhcl")
+  console.log(triplabel, "lllhcl")
 
 
   const Totalkm = Number(endkm)
@@ -207,28 +209,28 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                           <tr>
                             <td id='table-datas'><span >Closing</span></td>
                             {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
-                            <td id='table-datas'><span >{closedata ? dayjs(closedata).format("DD-MM-YYYY"):""}</span></td>
+                            <td id='table-datas'><span >{closedata ? dayjs(closedata).format("DD-MM-YYYY") : ""}</span></td>
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime)}</span></td>
                             <td id='table-datas'><span >{shedinkm}</span></td>
                           </tr>
 
                           <tr>
                             <td id='table-datas'><span >Releasing</span></td>
-                            <td id='table-datas'><span >{closedata2 ? dayjs(closedata2).format("DD-MM-YYYY"):""}</span></td>
+                            <td id='table-datas'><span >{closedata2 ? dayjs(closedata2).format("DD-MM-YYYY") : ""}</span></td>
                             {/* <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td> */}
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime)}</span></td>
                             <td id='table-datas'><span >{endkm}</span></td>
                           </tr>
                           <tr>
                             <td id='table-datas'><span >Reporting</span></td>
-                            <td id='table-datas'><span >{startDate ? dayjs(startDate).format("DD-MM-YYYY"):""}</span></td>
+                            <td id='table-datas'><span >{startDate ? dayjs(startDate).format("DD-MM-YYYY") : ""}</span></td>
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime)}</span></td>
                             <td id='table-datas'><span >{startkm}</span></td>
                           </tr>
 
                           <tr>
                             <td id='table-datas'><span >Starting</span></td>
-                            <td id='table-datas'><span >{shedOutDate ? dayjs(shedOutDate).format("DD-MM-YYYY"):""}</span></td>
+                            <td id='table-datas'><span >{shedOutDate ? dayjs(shedOutDate).format("DD-MM-YYYY") : ""}</span></td>
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime)}</span></td>
                             <td id='table-datas'><span >-</span></td>
                           </tr>
@@ -248,28 +250,28 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                           <tr>
                             <td id='table-datas'><span >Closing</span></td>
                             {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
-                            <td id='table-datas'><span >{closedata ? dayjs(closedata).format("DD-MM-YYYY"):""}</span></td>
+                            <td id='table-datas'><span >{closedata ? dayjs(closedata).format("DD-MM-YYYY") : ""}</span></td>
                             <td id='table-datas'><span >-</span></td>
                             <td id='table-datas'><span >-</span></td>
                           </tr>
 
                           <tr>
                             <td id='table-datas'><span >Releasing</span></td>
-                            <td id='table-datas'><span >{closedata2 ? dayjs(closedata2).format("DD-MM-YYYY"):""}</span></td>
+                            <td id='table-datas'><span >{closedata2 ? dayjs(closedata2).format("DD-MM-YYYY") : ""}</span></td>
                             {/* <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td> */}
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime)}</span></td>
                             <td id='table-datas'><span >{Totalkm}</span></td>
                           </tr>
                           <tr>
                             <td id='table-datas'><span >Reporting</span></td>
-                            <td id='table-datas'><span >{startDate ? dayjs(startDate).format("DD-MM-YYYY"):""}</span></td>
+                            <td id='table-datas'><span >{startDate ? dayjs(startDate).format("DD-MM-YYYY") : ""}</span></td>
                             <td id='table-datas'><span >{removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime)}</span></td>
                             <td id='table-datas'><span >{ }{0}</span></td>
                           </tr>
 
                           <tr>
                             <td id='table-datas'><span >Starting</span></td>
-                            <td id='table-datas'><span >{shedOutDate ? dayjs(shedOutDate).format("DD-MM-YYYY"):""}</span></td>
+                            <td id='table-datas'><span >{shedOutDate ? dayjs(shedOutDate).format("DD-MM-YYYY") : ""}</span></td>
                             <td id='table-datas'><span >-</span></td>
                             <td id='table-datas'><span >-</span></td>
                           </tr>
@@ -309,14 +311,14 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             <div id='Totals'><span id='title'>Total Toll  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
             <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
           </div>
-          <div className='tripsheet-location-img'>
+          <div className='tripsheet-location-img-hcl'>
 
             {/* <img src={GmapimageUrl} alt='mapimage' /> */}
             {GmapimageUrl !== "" ?
               <img src={GmapimageUrl} alt='mapimage' /> : <></>}
           </div>
           {routeData.length > 0 && (
-            <div className="tripsheet-RouteSummary">
+            <div className="tripsheet-RouteSummary-hcl">
               <h2>Route Summary</h2>
               <ol type="1">
                 {routeData.map((data, index) => (
@@ -389,7 +391,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
         </ol>
       </div> */}
 
-          <div className="attached-toll" ref={targetRef}>
+          <div className="attached-toll-hcl" ref={targetRef}>
             <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
               {Array.isArray(attachedImage) &&
                 // attachedImage.map((file, index) => {
@@ -399,17 +401,19 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                   .map((file, index) => {
                     const isPdf = file.endsWith(".pdf");
                     return (
-                      <li
-                        key={index}
-                        style={{
-                          // pageBreakAfter: "always", 
-                          pageBreakAfter: isPdf ? "always" : "auto",
-                          padding: "20px",
-                          // marginBottom: "50",
-                        }}
-                        className='li-files'
-                      >
-                        {/* {isPdf ? (
+                      <>
+                        {isPdf ?
+                          <li
+                            key={index}
+                            style={{
+                              // pageBreakAfter: "always", 
+                              pageBreakAfter: isPdf ? "always" : "auto",
+                              padding: "20px",
+                              // marginBottom: "50",
+                            }}
+                            className='li-files'
+                          >
+                            {/* {isPdf ? (
                     <div style={{height:"500px", background:"red"}}>
                       <Document
                         file={file}
@@ -422,7 +426,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                       >
                         {Array.from(new Array(numPages), (el, pageIndex) => (
                           <Page
-                            key={`page_${pageIndex + 1}`}
+                            key={page_${pageIndex + 1}}
                             pageNumber={pageIndex + 1}
                             scale={1}
                             style={{
@@ -437,65 +441,127 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                     </div>
                   )  */}
 
-                        {isPdf ? (
-                          <div
-                         
-                            className='upload-pdf'
-                          >
-                            <Document
-                              file={file}
-                              onLoadSuccess={onDocumentLoadSuccess}
-                              style={{
-                                // margin: "auto",
-                                width:"700px"
-                              }}
-                            >
-                              {Array.from(new Array(numPages), (el, pageIndex) => (
-                                <Page
-                                  key={`page_${pageIndex + 1}`}
-                                  pageNumber={pageIndex + 1}
-                                  scale={0.9} // Adjust scale to fit the page to the desired size
-                                  style={{
-                                    // display: "block",
-                                    // width: "auto", // Let the width adjust automatically
-                                    // margin: "20px auto", // Add spacing for better display
-                                  }}
-                                />
-                              ))}
-                            </Document>
-                          </div>
-                        )
 
-                          : (
-                            // <img
-                            //   src={file}
-                            //   alt={`image_${index}`}
-                            //   style={{
-                            //     // width: "595px", // Width for A4 page
-                            //     width: "300px",
-                            //     height: "auto",
-                            //     marginBottom: "100px",
-                            //     display: "flex",
-                            //     marginLeft: "auto",
-                            //     marginRight: "auto",
-                            //   }}
-                            // />
+                            {/* <div className='upload-pdf-hcl' >
+                         <Document
+                           file={file}
+                           onLoadSuccess={onDocumentLoadSuccess}
+                           style={{
+                             // margin: "auto",
+                             width:"100%"
+                           }}
+                         >
+                           {Array.from(new Array(numPages), (el, pageIndex) => (
+                             <Page
+                               key={page_${pageIndex + 1}}
+                               pageNumber={pageIndex + 1}
+                               scale={0.9} // Adjust scale to fit the page to the desired size
+                               style={{
+                                 // display: "block",
+                                 // width: "auto", // Let the width adjust automatically
+                                 // margin: "20px auto", // Add spacing for better display
+                               }}
+                             />
+                           ))}
+                         </Document>
+                       </div> */}
+
+
+
+
+                            <div className='upload-pdf-hcl' >
+                              <Document
+                                file={file}
+                                onLoadSuccess={onDocumentLoadSuccess}
+                                style={{
+                                  // margin: "auto",
+                                  width: "100%"
+                                }}
+                              >
+                                {Array.from(new Array(numPages), (el, pageIndex) => (
+                                  <Page
+                                    key={`page_${pageIndex + 1}`}
+                                    pageNumber={pageIndex + 1}
+                                    scale={0.9} // Adjust scale to fit the page to the desired size
+                                    style={{
+                                      // display: "block",
+                                      // width: "auto", // Let the width adjust automatically
+                                      // margin: "20px auto", // Add spacing for better display
+                                    }}
+                                  />
+                                ))}
+                              </Document>
+                            </div>
+
+
+
+
+                          </li>
+                          : ''}
+
+
+
+                      </>
+
+                    );
+                  })}
+            </ol>
+          </div>
+
+
+          <div className="attached-toll-hcl" ref={targetRef}>
+            <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
+              {Array.isArray(attachedImage) &&
+
+                attachedImage
+                  .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
+                  .map((file, index) => {
+                    // const image = file.endsWith('.jpg', '.jpeg', '.png');
+                    const image = !file.endsWith('.pdf');
+                    return (
+                      <>
+                        {image ?
+                          <li
+                            key={index}
+                            style={{
+                              // pageBreakAfter: "always", 
+                              // pageBreakAfter: isPdf ? "always" : "auto",
+                              padding: "20px",
+                              // marginBottom: "50",
+                            }}
+                            className='li-files'
+                          >
+
+
+
                             <div
 
-                              className='upload-img'
+                              className='upload-img-hcl'
                             >
                               <img
                                 src={file}
                                 alt={`image_${index}`}
-                                style={{
-                                  width: "100%",
-                                  height: "100%",
-                                  // marginBottom: "50px"
-                                }}
+                                // style={{
+                                //   width: "100%",
+                                //   height: "100%",
+                                //   // marginBottom: "50px"
+                                // }}
+                                className='image-hcl'
                               />
                             </div>
-                          )}
-                      </li>
+
+
+
+                          </li> : ''}
+                      </>
+
+
+
+
+
+
+
+
                     );
                   })}
             </ol>

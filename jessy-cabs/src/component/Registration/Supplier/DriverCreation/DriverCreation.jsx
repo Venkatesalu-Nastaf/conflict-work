@@ -531,38 +531,7 @@ const DriverCreation = ({ stationName }) => {
                                 )}
                             </div>
                         </div>
-                    </div>
-                    <div className='alert-popup-main'>
-                        {error &&
-                            <div className='alert-popup Error' >
-                                <div className="popup-icon"> <ClearIcon /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                                <p>{errorMessage}</p>
-                            </div>
-                        }
-                        {warning &&
-                            <div className='alert-popup Warning' >
-                                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                                <p>{warningMessage}</p>
-                            </div>
-                        }
-                        {success &&
-                            <div className='alert-popup Success' >
-                                <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                                <p>{successMessage}</p>
-                            </div>
-                        }
-                        {info &&
-                            <div className='alert-popup Info' >
-                                <div className="popup-icon"> <BsInfo /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-                                <p>{infoMessage}</p>
-                            </div>
-                        }
-                    </div>
-                    <Box className='common-speed-dail'>
+                        <Box className='common-speed-dail'>
                         <StyledSpeedDial
                             ariaLabel="SpeedDial playground example"
                             icon={<SpeedDialIcon />}
@@ -610,6 +579,88 @@ const DriverCreation = ({ stationName }) => {
                             />
                         </StyledSpeedDial>
                     </Box>
+                    </div>
+                    <div className='alert-popup-main'>
+                        {error &&
+                            <div className='alert-popup Error' >
+                                <div className="popup-icon"> <ClearIcon /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                                <p>{errorMessage}</p>
+                            </div>
+                        }
+                        {warning &&
+                            <div className='alert-popup Warning' >
+                                <div className="popup-icon"> <ErrorOutlineIcon /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                                <p>{warningMessage}</p>
+                            </div>
+                        }
+                        {success &&
+                            <div className='alert-popup Success' >
+                                <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                                <p>{successMessage}</p>
+                            </div>
+                        }
+                        {info &&
+                            <div className='alert-popup Info' >
+                                <div className="popup-icon"> <BsInfo /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
+                                <p>{infoMessage}</p>
+                            </div>
+                        }
+                    </div>
+                    
+                    {/* <Box className='common-speed-dail'>
+                        <StyledSpeedDial
+                            ariaLabel="SpeedDial playground example"
+                            icon={<SpeedDialIcon />}
+                            direction="left"
+                        >
+                            {Supllier_read === 1 && (
+                                <SpeedDialAction
+                                    key="list"
+                                    icon={<ChecklistIcon />}
+                                    tooltipTitle="List"
+                                    onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                                />
+                            )}
+
+                            {Supllier_modify === 1 && isEditMode && (
+                                <SpeedDialAction
+                                    key="edit"
+                                    icon={<ModeEditIcon />}
+                                    tooltipTitle="Edit"
+                                    onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                                />
+                            )}
+                            {Supllier_delete === 1 && isEditMode && (
+                                <SpeedDialAction
+                                    key="delete"
+                                    icon={<DeleteIcon />}
+                                    tooltipTitle="Delete"
+                                    onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                                />
+                            )}
+
+                            {Supllier_new === 1 && !isEditMode && (
+                                <SpeedDialAction
+                                    key="Add"
+                                    icon={<BookmarkAddedIcon />}
+                                    tooltipTitle="Add"
+                                    onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                                />
+                            )}
+                            <SpeedDialAction
+                                key="Cancel"
+                                icon={<CancelPresentationIcon />}
+                                tooltipTitle="Cancel"
+                                onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                            />
+                        </StyledSpeedDial>
+                    </Box> */}
+                    
+                    
 
                     <div className="DriverCreation-table-container">
                         <div style={{ display: "flex", gap: "20px", alignItems: "center", padding: "10px", flexWrap: "wrap" }}>

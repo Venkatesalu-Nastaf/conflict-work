@@ -48,8 +48,8 @@
   font-size: 14px;
 }
 
-.invoice-contact-details{
-margin: 0%;
+.invoice-contact-details {
+  margin: 0%;
 }
 
 /* heading */
@@ -230,6 +230,7 @@ header img {
 .total-values {
   display: flex;
 }
+
 .total-values-hcl {
   display: flex;
   /* margin-bottom: 50%; */
@@ -290,6 +291,8 @@ header img {
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 0%;
+  height: 400px;
+  
 }
 
 .tripsheet-location-img img {
@@ -300,18 +303,30 @@ header img {
 .tripsheet-RouteSummary {
   /* margin-top: -30%; */
   position: relative;
-  top:30%;
+  top: 30%;
   width: 80%;
   font-size: 13px;
   margin: 0 auto 0 auto;
 }
-.tripsheet-RouteSummary-normal{
-  position: relative;
-  top:30%;
-  width: 80%;
-  font-size: 13px;
-  margin: 30px auto 30px auto;
 
+/* .tripsheet-RouteSummary-normal {
+  position: relative;
+  height: 210px;
+  width: 100%;
+  font-size: 13px;
+
+} */
+.tripsheet-RouteSummary-normal {
+  margin-top: 10%;
+  padding-bottom: 17px;
+  position: relative;
+  /* top: 30%; */
+  width: 100%;
+  font-size: 13px;
+  /* margin: 0 auto 0 auto; */
+  /* background-color: red; */
+  border: 2px solid rgb(255, 255, 255);
+  height: 980px;
 }
 
 .tripsheet-RouteSummary p {
@@ -324,7 +339,7 @@ header img {
 }
 
 .attached-toll {
-  margin-top: 90px;
+  /* margin-top: 90px; */
   /* margin-top: -10px; */
   /* margin-bottom: 60px; */
   /* margin-top: -40px; */
@@ -347,23 +362,26 @@ header img {
   padding: 10px;
 }
 
-.guest-sign-text{
+.guest-sign-text {
   text-align: center;
 }
 
 @media print {
   .print-page {
-    page-break-before: always; /* Force each item to start on a new page */
+    page-break-before: always;
+    /* Force each item to start on a new page */
     margin: 0;
     padding: 0;
   }
 
   .pdf-page {
-    width: 100%; /* Ensure PDF fits the page width */
+    width: 100%;
+    /* Ensure PDF fits the page width */
     height: auto;
     margin: 0 auto;
     display: block;
-    page-break-inside: avoid; /* Prevent page breaks inside PDF pages */
+    page-break-inside: avoid;
+    /* Prevent page breaks inside PDF pages */
   }
 
   .image-container {
@@ -372,11 +390,14 @@ header img {
   }
 
   .print-image {
-    width: 100%; /* Fit the width of the page */
-    height: auto; /* Maintain aspect ratio */
+    width: 100%;
+    /* Fit the width of the page */
+    height: auto;
+    /* Maintain aspect ratio */
     margin: 0 auto;
     display: block;
-    page-break-before: always; /* Force new page for each image */
+    page-break-before: always;
+    /* Force new page for each image */
   }
 }
 
@@ -386,20 +407,21 @@ header img {
     page-break-before: always;
   }
 }
+
 /* .upload-img{
 margin: 25px auto ;
 width: 500px !important;
 height: 730px !important;
 /* background-color: green; */
-/* } */ 
+/* } */
 
 
 
 
-.upload-img{
+.upload-img {
   margin-top: 13.5%;
   /* margin-top: 58%; */
-  margin-bottom:0% ;
+  margin-bottom: 0%;
   margin-right: auto;
   margin-left: auto;
   width: 400px !important;
@@ -408,21 +430,45 @@ height: 730px !important;
   border: 5px solid rgb(255, 255, 255);
   /* margin-bottom: 20px; */
   /* margin-top: 80px; */
-  }
+}
 
-  .upload-pdf{
-height: 840px;
-width: 700px;
-display:flex;
-justify-content: center;
-align-items: center;
-margin-top: 16%;
-border: 5px solid rgb(255, 255, 255);
-  }
+.upload-pdf {
+  /* height: 840px;
+  width: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16%;
+  border: 5px solid rgb(255, 255, 255); */
+  height: 930px;
+  width: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 16px;
+  /* border: 5px solid rgb(255, 255, 255); */
+  border: 5px solid rgb(255, 255, 255);
+}
+.upload-img{
+  margin-top: 5%;
 
-  .li-files{
-    background-color: #ffffff;
-  }
+  margin-right: auto;
+  margin-left: auto;
+  width: 430px !important;
+  height: 430px !important;
+  border: 5px solid rgb(255, 255, 255);
+}
 
- 
+.li-files {
+  background-color: #ffffff;
+}
 
+/* .custom-page-invoice {
+  display: block;
+  width: 345px;
+  height: 345px;
+  margin-bottom: 90px;
+  background-color: orange !important;
+  padding: 50px !important;
+} */

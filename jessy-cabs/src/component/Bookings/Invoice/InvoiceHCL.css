@@ -1,3 +1,75 @@
-.attached-toll{
-    
-}
+
+.attached-toll-hcl {
+    /* margin-top: 90px; */
+    /* margin-top: -10px; */
+    /* margin-bottom: 60px; */
+    /* margin-top: -40px; */
+  }
+
+  .tripsheet-location-img-hcl {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 0%;
+    height: 240px;
+    width: 100%;
+  }
+  
+  .tripsheet-location-img-hcl img {
+    /* height: 230px; */
+    height: 100%;
+    width: 100%;
+  }
+
+  .tripsheet-RouteSummary-hcl {
+    margin-top: 10%;
+    padding-bottom: 17px;
+    position: relative;
+    /* top: 30%; */
+    width: 100%;
+    font-size: 13px;
+    /* margin: 0 auto 0 auto; */
+    /* background-color: red; */
+    border: 2px solid rgb(255, 255, 255);
+    height: 880px;
+  }
+  
+  
+  .tripsheet-RouteSummary-hcl p {
+    font-weight: 600;
+  }
+  
+  .tripsheet-RouteSummary-hcl ol {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .upload-pdf-hcl {
+    height: 880px;
+    width: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 16px;
+    /* border: 5px solid rgb(255, 255, 255); */
+    border: 5px solid rgb(255, 255, 255);
+  }
+
+  .upload-img-hcl {
+    /* padding-top: 35%;
+    padding-bottom: 35%; */
+    margin-top: 5%;
+
+    margin-right: auto;
+    margin-left: auto;
+    width: 400px !important;
+    height: 395px !important;
+    border: 5px solid rgb(255, 255, 255);
+  }
+
+  .image-hcl{
+    width: 100% !important;
+    height: 100% !important;
+  }
+  

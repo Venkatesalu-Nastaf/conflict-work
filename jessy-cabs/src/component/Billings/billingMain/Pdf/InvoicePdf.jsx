@@ -123,10 +123,10 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                 <p className="org-name">{organizationdata.organizationname}</p>
                                 {otherStations.data6 !== null ? (
                                     // <h2 className="organisationtext">{commonState.address}</h2>
-                                    <h2 className="organisationtext">{otherStations.data5}</h2>
+                                    <h2 className="organisationtext">{otherStations.data5}sufgbf fvugyugoy   </h2>
                                 ) : (
                                     <>
-                                        <h2 className="org-address">{organizationdata.addressLine1}</h2>
+                                        <h2 className="org-address">{organizationdata.addressLine1}SSSSSSS SSSSSSSSSS SSSSSSSSSSSS SSS SSSSSSS</h2>
                                         {/* <h2 className="org-address">{orgaddress3}</h2> */}
                                     </>
                                 )}
@@ -207,37 +207,36 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                 </tbody>
                             </table>
                         </div>
-                        <div className="total-div" style={{ marginLeft: '50px' }}>
+                        <div className="total-div"
+                        //  style={{ marginLeft: '50px' }}
+                         >
                             {(otherStations?.otherdata === "InStations" ? (
-                                <>
+                                <div style={{display:"flex", justifyContent:"end",gap:"10px"}}>
 
-                                    <div style={{ marginLeft: "100px" }}>
+                                    <div >
                                         {/* <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
                                 <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4> */}
                                         {gstAmount1 !== 0 ?
                                             <>
-                                                <h4>Amount :</h4>
-                                                <h4>CGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
-                                                <h4>SGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
-                                                <h4>Total Amount :</h4> </> : <>
-                                                <h4>Amount :</h4> <h4></h4>
-                                                <h4></h4>
-                                                <h4 style={{ marginTop: '110px' }}>Total Amount :</h4>
-                                            </>}
+                                                <h4 style={{margin:"3px"}}>Amount :</h4>
+                                                <h4 style={{margin:"3px"}}>CGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
+                                                <h4 style={{margin:"3px"}}>SGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
+                                                <h4 style={{margin:"3px"}}>Total Amount :</h4>
+                                            </>:''}
                                     </div>
                                     <div className="amount-div">
-                                        <p className="amounttext" style={{ marginTop: '23px' }}>{book.totalcalcAmount || 0}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '3px' }}>{book.totalcalcAmount || 0}.00</p>
                                         {/* <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}.00</p>
                                         <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}.00</p> */}
-                                        <p className="amounttext" style={{ marginTop: '23px', paddingLeft: "14px" }}>{cgst.toFixed(2)}</p>
-                                        <p className="amounttext" style={{ marginTop: '23px', paddingLeft: "14px" }}>{sgst.toFixed(2)}</p>
-                                        <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '3px', paddingLeft: "14px" }}>{cgst.toFixed(2)}</p>
+                                        <p className="amounttext" style={{ marginTop: '3px', paddingLeft: "14px" }}>{sgst.toFixed(2)}</p>
+                                        <p className="amounttext" style={{ marginTop: '3px' }}>{paymentValue.toFixed(0)}.00</p>
                                     </div>
-                                </>
+                                </div>
                             ) : (
-                                <>
+                                <div style={{display:"flex", justifyContent:"end",gap:"10px"}}>
 
-                                    <div style={{ marginLeft: "100px" }}>
+                                    <div>
                                         {/* <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
                                 <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4> */}
                                         <h4>IGST {othergst}% on {book.totalcalcAmount} :</h4>
@@ -251,11 +250,12 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                         <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
 
                                     </div>
-                                </>
+                                </div>
                             )
 
                             )}
                         </div>
+
                         <div>
                             <p style={{ fontWeight: 'bold' }}>E.& O.E In Words-Rupees</p>
                         </div>
@@ -286,23 +286,31 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                 <p className="sign-text" style={{ display: "flex", justifyContent: "flex-end" }}>Authorised Signature</p>
                             </div>
                         </div>
-                        <div className="google-map">
-                            <div>
+                        
+                        
+
+                    </div>
+
+                    {GmapimageUrl !== '' ? 
+
+                    <div className="google-map">
                                 {/* <h4 className="map-text">Map Image</h4> */}
                                 {GmapimageUrl !== '' ? (
+                            <div className="map-section-in">
+
                                     <img
                                         className="mapimage"
                                         src={GmapimageUrl}
                                     // style={{ height: '200px',width:'200px' }} 
                                     />
-                                ) : (
-                                    <div></div>
-                                )}
-                            </div>
+                                    </div>
 
-                            <div className="tripsheet-RouteSummary">
+                                ) : (
+                                    <div style={{height:"0px"}}></div>
+                                )}
+
                                 {routeData.length > 0 && (
-                                    <>
+                            <div className="tripsheet-RouteSummary-section">
                                         <h2>Route Summary</h2>
                                         <ol type="1">
                                             {routeData.map((data, index) => (
@@ -311,12 +319,18 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                                 </li>
                                             ))}
                                         </ol>
-                                    </>
+                                        </div>
                                 )}
-                            </div>
 
+                        </div> :
+                        
+                        <div style={{height:'50px', border:"2px solid red"}}>
                         </div>
-                        <div>
+                        }
+
+
+
+                    {/* <div className="pdf-division" >
                             {/* {attachedImage.length > 0 ? <p className="attach-text">Attached Images</p> : ""}
                             {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ?
                                 attachedImage.map((image, index) => (
@@ -335,13 +349,13 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                             ) : (
                                 <></>
                             )} */}
-                            {attachedImage.length > 0 ? (
+                            {/* {attachedImage.length > 0 ? (
                                 <>
 
                                     {attachedImage.map((file, index) => {
                                         const fileExtension = file.substring(file.lastIndexOf('.') + 1);
                                         console.log(fileExtension); // Logs the file extension (e.g., "jpg", "pdf")
-                                        return fileExtension === 'pdf' ? (
+                                        return fileExtension === 'pdf' ? 
                                             <Document
                                                 file={file}
                                                 onLoadSuccess={onDocumentLoadSuccess}
@@ -353,15 +367,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                                 ))}
 
                                             </Document>
-                                        ) : (
-                                            <img
-                                                key={index}
-                                                src={file}
-                                                alt=""
-                                                className="attachimage"
-                                                loading="lazy"
-                                            />
-                                        );
+                                         : ''
                                     })}
                                 </>
                             ) : (
@@ -370,9 +376,170 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
 
 
 
-                        </div>
+                        </div> */} 
 
-                    </div>
+
+{attachedImage?.length > 0 ? <>
+
+
+<div className="attached-pdf" >
+  <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
+    {Array.isArray(attachedImage) &&
+      
+      attachedImage
+        .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
+        .map((file, index) => {
+          const isPdf = file.endsWith(".pdf");
+          return (
+            <>
+              {isPdf ?
+                <li
+                  key={index}
+                  style={{
+                    pageBreakAfter: isPdf ? "always" : "auto",
+                    padding: "20px 20px 20px 20px",
+                  }}
+                  className='li-files'
+                >
+                  
+
+
+
+
+                  <div className='uploading-pdf' >
+                    <Document
+                      file={file}
+                      onLoadSuccess={onDocumentLoadSuccess}
+                      style={{
+                        margin: "auto",
+                        width: "100%",
+                        padding:"30px"
+                      }}
+                    >
+                      {Array.from(new Array(numPages), (el, pageIndex) => (
+                        <Page
+                          key={`page_${pageIndex + 1}`}
+                          pageNumber={pageIndex + 1}
+                          scale={0.7} // Adjust scale to fit the page to the desired size
+                          style={{
+                            // display: "block",
+                            width: "100%", // Let the width adjust automatically
+                            // margin: "20px auto", // Add spacing for better display
+                            border:"2px solid red",
+                          }}
+                        />
+                      ))}
+                    </Document>
+                  </div>
+
+
+
+
+                </li>
+                : ''}
+
+
+
+            </>
+
+          );
+        })}
+  </ol>
+</div>
+
+
+<div className="attached-image">
+  <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
+    {Array.isArray(attachedImage) &&
+
+      attachedImage
+        .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
+        .map((file, index) => {
+          // const image = file.endsWith('.jpg', '.jpeg', '.png');
+          const image = !file.endsWith('.pdf');
+          return (
+            <>
+              {image ?
+                <li
+                  key={index}
+                  style={{
+                    // pageBreakAfter: "always", 
+                    // pageBreakAfter: isPdf ? "always" : "auto",
+                    padding: "20px 20px 0px 20px",
+                    // marginBottom: "50",
+                  }}
+                  className='li-files'
+                >
+
+
+
+                  <div
+
+                    className='uploading-img'
+                  >
+                    <img
+                      src={file}
+                      alt={`image_${index}`}
+                      // style={{
+                      //   width: "100%",
+                      //   height: "100%",
+                      //   // marginBottom: "50px"
+                      // }}
+                      className='image-hcl'
+                    />
+                  </div>
+
+
+
+                </li> : ''}
+            </>
+
+
+
+
+
+
+
+
+          );
+        })}
+  </ol>
+</div></>
+:""
+}
+
+                        {/* <div className="image-division">
+                         
+                            {attachedImage.length > 0 ? (
+                                <>
+
+                                    {attachedImage.map((file, index) => {
+                                        const fileExtension = file.substring(file.lastIndexOf('.') + 1);
+                                        console.log(fileExtension); // Logs the file extension (e.g., "jpg", "pdf")
+                                        return fileExtension !== 'pdf' ? 
+                                            <img
+                                            key={index}
+                                            src={file}
+                                            alt=""
+                                            className="attachimage"
+                                            loading="lazy"
+                                        />
+                                        : ''
+                                    })}
+                                </>
+                            ) : (
+                                <></>
+                            )}
+
+
+
+                        </div> */}
+
+
+
+
+
+
                 </div>
                 <div className="btns-last">
                     <Button variant="contained" color="primary" onClick={handlePrint}>

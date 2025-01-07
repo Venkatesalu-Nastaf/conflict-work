@@ -659,41 +659,41 @@ router.post('/send-email', async (req, res) => {
                     <tbody>
                         <tr>
                             <td style="padding: 8px;"><strong>Trip No:</strong></td>
-                            <td style="padding: 8px; color: #000">${bookingno}</td>
+                            <td style="padding: 8px; color: #000">${bookingno || ""}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Name of Guest:</strong></td>
-                            <td style="padding: 8px;color: #000"">${guestname}</td>
+                            <td style="padding: 8px;color: #000"">${guestname || ""}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Location:</strong></td>
-                            <td style="padding: 8px;color: #000"">${servicestation}</td>
+                            <td style="padding: 8px;color: #000"">${servicestation || ""}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Date:</strong></td>
-                            <td style="padding: 8px;color: #000"">${formattedFromDate}</td>
+                            <td style="padding: 8px;color: #000"">${formattedFromDate || ""}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Time (24):</strong></td>
-                            <td style="padding: 8px;color: #000"">${starttime} Hrs</td>
+                            <td style="padding: 8px;color: #000"">${starttime || ""} Hrs</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Car Sent:</strong></td>
-                            <td style="padding: 8px;color: #000"">${vehicleName}</td>
+                            <td style="padding: 8px;color: #000"">${vehicleName || ""}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
-                            <td style="padding: 8px;color: #000"">${vehRegNo}</td>
+                            <td style="padding: 8px;color: #000"">${vehRegNo || ""}</td>
                         </tr>
                           ${requestno ? `
                     <tr>
                      <td style="padding: 8px;"><strong>Request Id:</strong></td>
-                      <td style="padding: 8px; color: #000;">${requestno}</td>
+                      <td style="padding: 8px; color: #000;">${requestno || ""}</td>
                       </tr>
                        ` : ''}
                         <tr>
                             <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
-                            <td style="padding: 8px;color: #000"">${driverName}</td>
+                            <td style="padding: 8px;color: #000"">${driverName || ""}</td>
                         </tr>
                     </tbody>
                 </table>

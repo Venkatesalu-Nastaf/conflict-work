@@ -54,7 +54,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
-console.log(attachedImage,"yyyyyyyyyyyyyy");
+  console.log(attachedImage, "yyyyyyyyyyyyyy");
 
   const targetRef = useRef();
   return (
@@ -106,13 +106,13 @@ console.log(attachedImage,"yyyyyyyyyyyyyy");
                 </tr>
                 <tr>
                   <th id='table-header-hcl'><span>Report Add:</span></th>
-                  <td id='table-data'><p  className='table-data-add-hcl'>{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}</p></td>
+                  <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}</p></td>
                 </tr>
                 <tr>
                   <th id='table-header-hcl'><span>Drop Address:</span></th>
-                  <td id='table-data'><p  className='table-data-add-hcl'>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage}</p></td>
+                  <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage}</p></td>
                 </tr>
-                
+
                 {/* <tr>
                                     <th id='table-header-hcl'><span>Report To</span></th>
                                     <td id='table-data'><span>{tripSheetData.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname || book.guestname}</span></td>
@@ -301,9 +301,23 @@ console.log(attachedImage,"yyyyyyyyyyyyyy");
                   <p id='line'>------------------</p>
                 </div>
                 <div className="guest-sign">
-                  {signimageUrl !== "" ?
-                    <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}
-                  <p className='guest-sign-text'>Guest Signature</p>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "baseline" }}>
+                    {signimageUrl !== "" ?
+                      <div>
+                        <img className='dialogboximg' src={signimageUrl} alt=" " />
+                        <p className='guest-sign-text' >Guest Signature</p>
+
+                      </div>
+
+                      :
+                      <div>
+                        <div className='dialogboximg' ></div>
+                        <p className='guest-sign-text' >Guest Signature</p>
+
+                      </div>
+                    }
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -315,32 +329,32 @@ console.log(attachedImage,"yyyyyyyyyyyyyy");
           </div>
 
 
-          <div style={{display:"flex",gap:"6px"}}>
+          <div style={{ display: "flex", gap: "6px" }}>
 
-          <div className='tripsheet-location-img-hcl'>
+            <div className='tripsheet-location-img-hcl'>
 
               {/* <img src={GmapimageUrl} alt='mapimage' /> */}
               {GmapimageUrl !== "" ?
                 <img src={GmapimageUrl} alt='mapimage' /> : <></>}
-              </div>
-              <div className="tripsheet-RouteSummary-hcl">
+            </div>
+            <div className="tripsheet-RouteSummary-hcl">
               {routeData.length > 0 && (
-              <div >
-                <h2 style={{marginTop:"0px"}}>Route Summary</h2>
-                <ol type="1">
-                  {routeData.map((data, index) => (
-                    <li key={index}>
-                      <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
-                    </li>
-                  ))}
-                </ol>
-              </div>
+                <div >
+                  <h2 style={{ marginTop: "0px" }}>Route Summary</h2>
+                  <ol type="1">
+                    {routeData.map((data, index) => (
+                      <li key={index}>
+                        <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
               )}
-              </div>
+            </div>
 
           </div>
-        
-          
+
+
           {/* <div className="attached-toll" ref={targetRef}>
         <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
           {Array.isArray(attachedImage) &&
@@ -402,32 +416,32 @@ console.log(attachedImage,"yyyyyyyyyyyyyy");
             })}
         </ol>
       </div> */}
-                {attachedImage?.length > 0 ? <>
+          {attachedImage?.length > 0 ? <>
 
 
-          <div className="attached-toll-hcl" ref={targetRef}>
-            <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
-              {Array.isArray(attachedImage) &&
-                // attachedImage.map((file, index) => {
-                //   const isPdf = file.endsWith(".pdf");
-                attachedImage
-                  .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
-                  .map((file, index) => {
-                    const isPdf = file.endsWith(".pdf");
-                    return (
-                      <>
-                        {isPdf ?
-                          <li
-                            key={index}
-                            style={{
-                              // pageBreakAfter: "always", 
-                              pageBreakAfter: isPdf ? "always" : "auto",
-                              padding: "20px",
-                              // marginBottom: "50",
-                            }}
-                            className='li-files'
-                          >
-                            {/* {isPdf ? (
+            <div className="attached-toll-hcl" ref={targetRef}>
+              <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
+                {Array.isArray(attachedImage) &&
+                  // attachedImage.map((file, index) => {
+                  //   const isPdf = file.endsWith(".pdf");
+                  attachedImage
+                    .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
+                    .map((file, index) => {
+                      const isPdf = file.endsWith(".pdf");
+                      return (
+                        <>
+                          {isPdf ?
+                            <li
+                              key={index}
+                              style={{
+                                // pageBreakAfter: "always", 
+                                pageBreakAfter: isPdf ? "always" : "auto",
+                                padding: "20px",
+                                // marginBottom: "50",
+                              }}
+                              className='li-files'
+                            >
+                              {/* {isPdf ? (
                     <div style={{height:"500px", background:"red"}}>
                       <Document
                         file={file}
@@ -456,7 +470,7 @@ console.log(attachedImage,"yyyyyyyyyyyyyy");
                   )  */}
 
 
-                            {/* <div className='upload-pdf-hcl' >
+                              {/* <div className='upload-pdf-hcl' >
                          <Document
                            file={file}
                            onLoadSuccess={onDocumentLoadSuccess}
@@ -483,93 +497,93 @@ console.log(attachedImage,"yyyyyyyyyyyyyy");
 
 
 
-                            <div className='upload-pdf-hcl' >
-                              <Document
-                                file={file}
-                                onLoadSuccess={onDocumentLoadSuccess}
-                                style={{
-                                  margin: "auto",
-                                  width: "100%",
-                                  padding:"30px"
-                                }}
-                              >
-                                {Array.from(new Array(numPages), (el, pageIndex) => (
-                                  <Page
-                                    key={`page_${pageIndex + 1}`}
-                                    pageNumber={pageIndex + 1}
-                                    scale={0.7} // Adjust scale to fit the page to the desired size
-                                    style={{
-                                      // display: "block",
-                                      width: "100%", // Let the width adjust automatically
-                                      // margin: "20px auto", // Add spacing for better display
-                                      border:"2px solid red",
-                                    }}
-                                  />
-                                ))}
-                              </Document>
-                            </div>
+                              <div className='upload-pdf-hcl' >
+                                <Document
+                                  file={file}
+                                  onLoadSuccess={onDocumentLoadSuccess}
+                                  style={{
+                                    margin: "auto",
+                                    width: "100%",
+                                    padding: "30px"
+                                  }}
+                                >
+                                  {Array.from(new Array(numPages), (el, pageIndex) => (
+                                    <Page
+                                      key={`page_${pageIndex + 1}`}
+                                      pageNumber={pageIndex + 1}
+                                      scale={0.7} // Adjust scale to fit the page to the desired size
+                                      style={{
+                                        // display: "block",
+                                        width: "100%", // Let the width adjust automatically
+                                        // margin: "20px auto", // Add spacing for better display
+                                        border: "2px solid red",
+                                      }}
+                                    />
+                                  ))}
+                                </Document>
+                              </div>
 
 
 
 
-                          </li>
-                          : ''}
+                            </li>
+                            : ''}
 
 
 
-                      </>
+                        </>
 
-                    );
-                  })}
-            </ol>
-          </div>
-
-
-          <div className="attached-toll-hcl" ref={targetRef}>
-            <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
-              {Array.isArray(attachedImage) &&
-
-                attachedImage
-                  .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
-                  .map((file, index) => {
-                    // const image = file.endsWith('.jpg', '.jpeg', '.png');
-                    const image = !file.endsWith('.pdf');
-                    return (
-                      <>
-                        {image ?
-                          <li
-                            key={index}
-                            style={{
-                              // pageBreakAfter: "always", 
-                              // pageBreakAfter: isPdf ? "always" : "auto",
-                              padding: "20px 20px 0px 20px",
-                              // marginBottom: "50",
-                            }}
-                            className='li-files'
-                          >
+                      );
+                    })}
+              </ol>
+            </div>
 
 
+            <div className="attached-toll-hcl" ref={targetRef}>
+              <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
+                {Array.isArray(attachedImage) &&
 
-                            <div
-
-                              className='upload-img-hcl'
+                  attachedImage
+                    .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
+                    .map((file, index) => {
+                      // const image = file.endsWith('.jpg', '.jpeg', '.png');
+                      const image = !file.endsWith('.pdf');
+                      return (
+                        <>
+                          {image ?
+                            <li
+                              key={index}
+                              style={{
+                                // pageBreakAfter: "always", 
+                                // pageBreakAfter: isPdf ? "always" : "auto",
+                                padding: "20px 20px 0px 20px",
+                                // marginBottom: "50",
+                              }}
+                              className='li-files'
                             >
-                              <img
-                                src={file}
-                                alt={`image_${index}`}
-                                // style={{
-                                //   width: "100%",
-                                //   height: "100%",
-                                //   // marginBottom: "50px"
-                                // }}
-                                className='image-hcl'
-                              />
-                            </div>
 
 
 
-                          </li> : ''}
-                      </>
+                              <div
+
+                                className='upload-img-hcl'
+                              >
+                                <img
+                                  src={file}
+                                  alt={`image_${index}`}
+                                  // style={{
+                                  //   width: "100%",
+                                  //   height: "100%",
+                                  //   // marginBottom: "50px"
+                                  // }}
+                                  className='image-hcl'
+                                />
+                              </div>
+
+
+
+                            </li> : ''}
+                        </>
 
 
 
@@ -578,12 +592,12 @@ console.log(attachedImage,"yyyyyyyyyyyyyy");
 
 
 
-                    );
-                  })}
-            </ol>
-          </div></>
-          :""
-}
+                      );
+                    })}
+              </ol>
+            </div></>
+            : ""
+          }
         </article>
       </div>
       {/* <Button onClick={() => generatePDF(targetRef, { filename: 'E-tripsheet.pdf', margin: Margin.LARGE, })}>Print</Button> */}
@@ -593,9 +607,9 @@ console.log(attachedImage,"yyyyyyyyyyyyyy");
           // const imageFiles = attachedImage.filter((file) => !file.endsWith(".pdf"));
           const attachedImageArray = Array.isArray(attachedImage) ? attachedImage : [attachedImage];
 
-// Filter PDF and non-PDF files
-const pdfFiles = attachedImageArray.filter((file) => file.endsWith(".pdf"));
-const imageFiles = attachedImageArray.filter((file) => !file.endsWith(".pdf"));
+          // Filter PDF and non-PDF files
+          const pdfFiles = attachedImageArray.filter((file) => file.endsWith(".pdf"));
+          const imageFiles = attachedImageArray.filter((file) => !file.endsWith(".pdf"));
 
           // Custom settings for PDF files
           const pdfOptions = {

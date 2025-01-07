@@ -1,8 +1,8 @@
 .outline-div{
     display: flex;
     flex-direction: column;
-     border: 1px solid black;
-     padding: 5px;
+     border: 1px solid rgb(0, 0, 0);
+     padding: 15px 15px 15px 20px;
 }
 .header-div{
     display: flex;
@@ -42,7 +42,7 @@
   }
   .invno-div{
     text-align: center;
-    margin-top: 10%;
+    /* margin-top: 10%; */
 }
 .taxinvoice{
     display: flex;
@@ -60,6 +60,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 
 }
 .details-receiver{
@@ -79,9 +80,9 @@
     
 }
 .total-div{
-    display: flex;
-    justify-content: end;
-    gap: 30px;
+    /* display: flex; */
+    /* justify-content: end; */
+    /* gap: 30px; */
     /* margin-right: 40px; */
 }
 
@@ -99,8 +100,13 @@
     justify-content: space-between;
 }
 .google-map{
-    padding-top: 50px;
-    margin-top: 1px solid black;
+    padding: 15px;
+    margin-top: 100px;
+    border: 2px solid rgb(255, 255, 255);
+    height: fit-content;
+    width: 700px;
+    /* padding-bottom: 20%; */
+    margin-bottom: 5px;
 }
 .map-text{
     text-align: center;
@@ -133,4 +139,79 @@
   }
   .tripsheet-RouteSummary p {
     font-weight: 600;
+  }
+
+  .tripsheet-RouteSummary-section {
+    /* margin-top: -30%; */
+   
+    width: 80%;
+    font-size: 13px;
+    margin: 0 auto 0 auto;
+    height: 750px;
+  }
+
+  .organisationtext{
+    width: 80%;
+  }
+
+  .org-address
+  ,.org-address
+  ,.org-mobile{
+    margin: 0px;
+  }
+
+  .details-receiver,
+.receiver-details {
+    margin: 0%;
+}
+
+
+.pdf-division{
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 880px !important;
+    width: 700px !important;  
+    padding-top: 20px;
+    padding-bottom: 16px;
+}
+
+.image-division{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.uploading-pdf {
+    height: 1070px !important;
+    width: 700px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 6px;
+    /* margin-bottom: 20px; */
+    /* border: 5px solid rgb(255, 255, 255); */
+    border: 5px solid rgb(255, 255, 255);
+  }
+
+  .uploading-img {
+    /* padding-top: 35%;
+    padding-bottom: 35%; */
+    margin-top: 6.5%;
+    /* padding-bottom: 5%; */
+
+    margin-right: auto;
+    margin-left: auto;
+    width: 500px !important;
+    height: 500px !important;
+    border: 5px solid rgb(255, 255, 255);
+  }
+  .map-section-in{
+    height:290px
   }

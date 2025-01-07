@@ -1,40 +1,40 @@
 import './invoice.css';
-import { useRef,useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '@mui/material';
 import generatePDF from 'react-to-pdf';
 import dayjs from 'dayjs';
 import { Document, Page } from 'react-pdf';
 
-const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book,Totaltimes, totalkm,TotalDays }) => {
+const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, Totaltimes, totalkm, TotalDays }) => {
 
 
   const startkm = tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin
-  const endkm = tripSheetData.shedout || selectedCustomerData.shedout  || selectedCustomerDatas.shedout || book.shedout 
+  const endkm = tripSheetData.shedout || selectedCustomerData.shedout || selectedCustomerDatas.shedout || book.shedout
   const startdata = tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate
- 
+
   const tripidlable = tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid
   // const enddata =
   const Totalkm = Number(startkm) - Number(endkm)
 
   function removeSeconds(time) {
     // Split the time string by colon (:)
-    if(time !== "undefined"){
-    const timeParts = time.split(':');
+    if (time !== "undefined") {
+      const timeParts = time.split(':');
 
-    // Check if there are seconds (length 3), return hours:minutes
-    if (timeParts.length === 3) {
+      // Check if there are seconds (length 3), return hours:minutes
+      if (timeParts.length === 3) {
         return `${timeParts[0]}:${timeParts[1]}`;
+      }
+
+      // If there's only hours:minutes, return it as is
+      return time;
     }
 
-    // If there's only hours:minutes, return it as is
-    return time;
-}
-
-}
-   const [numPages, setNumPages] = useState(0);
-const onDocumentLoadSuccess = ({ numPages }) => {
-  setNumPages(numPages);
-};
+  }
+  const [numPages, setNumPages] = useState(0);
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
 
   const targetRef = useRef();
   return (
@@ -42,7 +42,7 @@ const onDocumentLoadSuccess = ({ numPages }) => {
       <div className="invoice-wrapper" ref={targetRef}>
         <article className='artical-top'>
 
-          <div className='invoice-container-header'> 
+          <div className='invoice-container-header'>
             <div className="logo-image-invoice">
               {selectedImage && <img src={selectedImage} alt={"Logo"} />}
             </div>
@@ -95,7 +95,7 @@ const onDocumentLoadSuccess = ({ numPages }) => {
                 </tr>
                 <tr>
                   <th id='table-header'>Date:</th>
-                  <td id='table-data'>{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate ? dayjs(tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate).format("DD-MM-YYYY"):""}</td>
+                  <td id='table-data'>{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate ? dayjs(tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate).format("DD-MM-YYYY") : ""}</td>
                 </tr>
                 <tr>
                   <th id='table-header'>Duty Type:</th>
@@ -136,25 +136,25 @@ const onDocumentLoadSuccess = ({ numPages }) => {
                   </thead>
                   <tbody>
                     <tr>
-                 
+
 
                       <td id='table-datas'><span >Closing</span></td>
                       {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
-                      <td id='table-datas'><span >{startdata ? dayjs(startdata).format('DD-MM-YYYY'):""}</span></td>
+                      <td id='table-datas'><span >{startdata ? dayjs(startdata).format('DD-MM-YYYY') : ""}</span></td>
                       <td id='table-datas'><span >{removeSeconds(tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime)}</span></td>
                       <td id='table-datas'><span >{tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin}</span></td>
                     </tr>
-                  
+
                     <tr>
                       <td id='table-datas'><span >Starting</span></td>
-                      <td id='table-datas'><span >{tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate ? dayjs(tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate).format("DD-MM-YYYY"):""}</span></td>
-                      <td id='table-datas'><span >{ removeSeconds(tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime)}</span></td>
+                      <td id='table-datas'><span >{tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate ? dayjs(tripSheetData.shedOutDate || selectedCustomerData.shedOutDate || selectedCustomerDatas.shedOutDate || book.shedOutDate).format("DD-MM-YYYY") : ""}</span></td>
+                      <td id='table-datas'><span >{removeSeconds(tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime)}</span></td>
                       <td id='table-datas'><span >{tripSheetData.shedout || selectedCustomerData.shedout || selectedCustomerDatas.shedout || book.shedout}</span></td>
 
-                      
-                  
+
+
                     </tr>
-                    
+
                     <tr>
                       <td id='table-datas'><span >Total</span></td>
                       {/* <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td> */}
@@ -176,8 +176,19 @@ const onDocumentLoadSuccess = ({ numPages }) => {
                 </div>
                 <div className="guest-sign">
                   {signimageUrl !== "" ?
-                    <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}
-                  <p className='guest-sign-text'>Guest Signature</p>
+                    <div>
+                      <img className='dialogboximg' src={signimageUrl} alt=" " />
+                      <p className='guest-sign-text' >Guest Signature</p>
+
+                    </div>
+                    :
+                    <div>
+                      <div className='dialogboximg' ></div>
+                      <p className='guest-sign-text' >Guest Signature</p>
+
+                    </div>
+
+                  }
                 </div>
               </div>
             </div>
@@ -188,16 +199,16 @@ const onDocumentLoadSuccess = ({ numPages }) => {
             <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
           </div>
 
-          <div style={{display:"flex",gap:"6px"}}>
+          <div style={{ display: "flex", gap: "6px" }}>
 
-          
-          <div className='tripsheet-location-img'>
 
-            {/* <img src={GmapimageUrl} alt='mapimage' /> */}
-            {GmapimageUrl !== "" ?
-              <img src={GmapimageUrl} alt='mapimage' style={{width:"100%", height:"100%"}}/> : <></>}
-          </div>
-          {/* <div className="tripsheet-RouteSummary">
+            <div className='tripsheet-location-img'>
+
+              {/* <img src={GmapimageUrl} alt='mapimage' /> */}
+              {GmapimageUrl !== "" ?
+                <img src={GmapimageUrl} alt='mapimage' style={{ width: "100%", height: "100%" }} /> : <></>}
+            </div>
+            {/* <div className="tripsheet-RouteSummary">
             <h2>Route Summary</h2>
             <ol type="1">
               {routeData.length > 0 && routeData?.map((data, index) => (
@@ -205,23 +216,23 @@ const onDocumentLoadSuccess = ({ numPages }) => {
               ))}
             </ol>
           </div> */}
-          <div  className="tripsheet-RouteSummary-normal">
-            {routeData.length > 0 && (
-              <div>
-                <h2 style={{margin:"0px"}}>Route Summary</h2>
-                <ol type="1">
-                  {routeData.map((data, index) => (
-                    <li key={index}>
-                      <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            )}
-          </div>
+            <div className="tripsheet-RouteSummary-normal">
+              {routeData.length > 0 && (
+                <div>
+                  <h2 style={{ margin: "0px" }}>Route Summary</h2>
+                  <ol type="1">
+                    {routeData.map((data, index) => (
+                      <li key={index}>
+                        <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
 
           </div>
-          
+
           {/* <div className='attached-toll'>
             <ol type="1">
               {Array.isArray(attachedImage) && attachedImage?.map((image, index) => (
@@ -236,47 +247,47 @@ const onDocumentLoadSuccess = ({ numPages }) => {
                   const isPdf = file.endsWith(".pdf");
                   return (
                     <>
-                    {isPdf ?                   
-                      <li
-                      key={index}
-                      style={{
-                        pageBreakAfter: "always",
-                        padding: "20px",
-                        // marginBottom: "140px",
-                       
-                      }}
-                    >
-                        <div className='upload-pdf'>
-                          <Document
-                            file={file}
-                            onLoadSuccess={onDocumentLoadSuccess}
-                            style={{
-                              width: "595px", // Width for A4 page
-                              // height: "auto",
-                              height: "595px",
-                              margin: "auto",
-                            
-                            }}
-                          >
-                            {Array.from(new Array(numPages), (el, pageIndex) => (
-                              <Page
-                                key={`page_${pageIndex + 1}`}
-                                pageNumber={pageIndex + 1}
-                                scale={1}                               
-                                className="custom-page-invoice"
+                      {isPdf ?
+                        <li
+                          key={index}
+                          style={{
+                            pageBreakAfter: "always",
+                            padding: "20px",
+                            // marginBottom: "140px",
 
-                                
-                              />
-                            ))}
-                          </Document>
-                        </div>
-                      
-                    </li> :
-                    
-                    ''}
+                          }}
+                        >
+                          <div className='upload-pdf'>
+                            <Document
+                              file={file}
+                              onLoadSuccess={onDocumentLoadSuccess}
+                              style={{
+                                width: "595px", // Width for A4 page
+                                // height: "auto",
+                                height: "595px",
+                                margin: "auto",
+
+                              }}
+                            >
+                              {Array.from(new Array(numPages), (el, pageIndex) => (
+                                <Page
+                                  key={`page_${pageIndex + 1}`}
+                                  pageNumber={pageIndex + 1}
+                                  scale={1}
+                                  className="custom-page-invoice"
+
+
+                                />
+                              ))}
+                            </Document>
+                          </div>
+
+                        </li> :
+
+                        ''}
 
                     </>
-                    
+
                   );
                 })}
             </ol>
@@ -290,41 +301,41 @@ const onDocumentLoadSuccess = ({ numPages }) => {
                   return (
                     <>
 
-                    {isimage ? 
+                      {isimage ?
 
-                      <li
-                      key={index}
-                      style={{
-                        pageBreakAfter: "always",
-                        padding: "20px",
-                        // marginBottom: "140px",
-                       
-                      }}
-                      className='li-files'
-                    >
-                    
+                        <li
+                          key={index}
+                          style={{
+                            pageBreakAfter: "always",
+                            padding: "20px",
+                            // marginBottom: "140px",
 
-                        <div
-
-                          className='upload-img'
+                          }}
+                          className='li-files'
                         >
-                          <img
-                            src={file}
-                            alt={`image_${index}`}
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              // marginBottom: "20px",
-                            }}
-                          />
-                        </div>
-                      
-                    </li>
 
-                    :''}
+
+                          <div
+
+                            className='upload-img'
+                          >
+                            <img
+                              src={file}
+                              alt={`image_${index}`}
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                // marginBottom: "20px",
+                              }}
+                            />
+                          </div>
+
+                        </li>
+
+                        : ''}
 
                     </>
-                   
+
                   );
                 })}
             </ol>
@@ -332,18 +343,19 @@ const onDocumentLoadSuccess = ({ numPages }) => {
 
         </article>
       </div>
-      <Button onClick={() => generatePDF(targetRef, { filename: `TS${tripidlable}E-tripsheet.pdf`,resolution:3,
-      method:'save',
-      page:{
-        margin: { top: 10, right: 10, bottom: 38, left: 10 },
-        format: "a4",
-        orientation: "portrait",
-      },
-      canvas: {
-        mimeType: "image/jpeg",
-        qualityRatio: 5,
-      },
-       })}>Print</Button>
+      <Button onClick={() => generatePDF(targetRef, {
+        filename: `TS${tripidlable}E-tripsheet.pdf`, resolution: 3,
+        method: 'save',
+        page: {
+          margin: { top: 10, right: 10, bottom: 38, left: 10 },
+          format: "a4",
+          orientation: "portrait",
+        },
+        canvas: {
+          mimeType: "image/jpeg",
+          qualityRatio: 5,
+        },
+      })}>Print</Button>
       {/* <Button
   onClick={() => {
     const pdfFiles = attachedImage.filter((file) => file.endsWith(".pdf"));

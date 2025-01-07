@@ -292,11 +292,12 @@ header img {
   justify-content: flex-start;
   margin-bottom: 0%;
   height: 400px;
+  width: 40%;
   
 }
 
 .tripsheet-location-img img {
-  height: 230px;
+  height: 100%;
   width: 100%;
 }
 
@@ -317,16 +318,16 @@ header img {
 
 } */
 .tripsheet-RouteSummary-normal {
-  margin-top: 10%;
+  /* margin-top: 10%; */
   padding-bottom: 17px;
   position: relative;
   /* top: 30%; */
-  width: 100%;
+  width: 60%;
   font-size: 13px;
   /* margin: 0 auto 0 auto; */
   /* background-color: red; */
-  border: 2px solid rgb(255, 255, 255);
-  height: 980px;
+  /* border: 2px solid rgb(255, 255, 255); */
+  height: 400px;
 }
 
 .tripsheet-RouteSummary p {
@@ -418,19 +419,7 @@ height: 730px !important;
 
 
 
-.upload-img {
-  margin-top: 13.5%;
-  /* margin-top: 58%; */
-  margin-bottom: 0%;
-  margin-right: auto;
-  margin-left: auto;
-  width: 400px !important;
-  height: 840px !important;
-  /* background-color: green; */
-  border: 5px solid rgb(255, 255, 255);
-  /* margin-bottom: 20px; */
-  /* margin-top: 80px; */
-}
+
 
 .upload-pdf {
   /* height: 840px;
@@ -451,7 +440,7 @@ height: 730px !important;
   border: 5px solid rgb(255, 255, 255);
 }
 .upload-img{
-  margin-top: 5%;
+  margin-top: 5.5%;
 
   margin-right: auto;
   margin-left: auto;

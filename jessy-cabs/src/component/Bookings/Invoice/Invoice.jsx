@@ -187,6 +187,10 @@ const onDocumentLoadSuccess = ({ numPages }) => {
             <div id='Totals'><span id='title'>Total Toll  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
             <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
           </div>
+
+          <div style={{display:"flex",gap:"6px"}}>
+
+          
           <div className='tripsheet-location-img'>
 
             {/* <img src={GmapimageUrl} alt='mapimage' /> */}
@@ -201,18 +205,23 @@ const onDocumentLoadSuccess = ({ numPages }) => {
               ))}
             </ol>
           </div> */}
-          {routeData.length > 0 && (
-            <div className="tripsheet-RouteSummary-normal">
-              <h2>Route Summary</h2>
-              <ol type="1">
-                {routeData.map((data, index) => (
-                  <li key={index}>
-                    <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
+          <div  className="tripsheet-RouteSummary-normal">
+            {routeData.length > 0 && (
+              <div>
+                <h2 style={{margin:"0px"}}>Route Summary</h2>
+                <ol type="1">
+                  {routeData.map((data, index) => (
+                    <li key={index}>
+                      <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </div>
+
+          </div>
+          
           {/* <div className='attached-toll'>
             <ol type="1">
               {Array.isArray(attachedImage) && attachedImage?.map((image, index) => (

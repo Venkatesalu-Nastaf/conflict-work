@@ -11,8 +11,9 @@
     align-items: center;
     justify-content: flex-start;
     margin-bottom: 0%;
-    height: 240px;
-    width: 100%;
+    height: 210px;
+    width: 50%;
+    /* background-color: yellow; */
   }
   
   .tripsheet-location-img-hcl img {
@@ -22,7 +23,7 @@
   }
 
   .tripsheet-RouteSummary-hcl {
-    margin-top: 10%;
+    /* margin-top: 10%; */
     padding-bottom: 17px;
     position: relative;
     /* top: 30%; */
@@ -30,8 +31,8 @@
     font-size: 13px;
     /* margin: 0 auto 0 auto; */
     /* background-color: red; */
-    border: 2px solid rgb(255, 255, 255);
-    height: 880px;
+    /* border: 2px solid rgb(255, 255, 255); */
+    height: 210px;
   }
   
   
@@ -45,8 +46,8 @@
   }
 
   .upload-pdf-hcl {
-    height: 880px;
-    width: 700px;
+    height: 880px !important;
+    width: 700px !important;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -72,4 +73,41 @@
     width: 100% !important;
     height: 100% !important;
   }
+  .react-pdf__Page__canvas{
+    width: 535px !important;
+  }
+  .react-pdf__Page__textContent, .react-pdf__Page__annotations{
+    width: 535px !important;
+
+  }
+
+  .table-data-add-hcl{
+    width: 300px;
+    margin: 0%;
+  }
+
   
+
+  .invoice-wrapper #table-invoice.firstTable #table-header-hcl {
+    width: 40%;
+  }
+
+  .invoice-wrapper #table-header-hcl,
+#table-data {
+  border-width: 1px;
+  padding: 6px;
+  position: relative;
+  text-align: left;
+}
+
+.invoice-wrapper #table-header-hcl {
+  background: #EEE;
+  padding: 1px 6px;
+  border: none;
+}
+
+#table-datas-hcl{
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+}

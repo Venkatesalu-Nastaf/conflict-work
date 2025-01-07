@@ -54,6 +54,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
+console.log(attachedImage,"yyyyyyyyyyyyyy");
 
   const targetRef = useRef();
   return (
@@ -79,107 +80,108 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             <div className='first-table-invoice-container'>
               <table id='table-invoice' className="firstleftTable">
                 <tr>
-                  <th id='table-header'><span>Client Name:</span></th>
+                  <th id='table-header-hcl'><span>Client Name:</span></th>
                   <td id='table-data'><span >{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}</span></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span>Address:</span></th>
-                  <td id='table-data'><span >{customerAddress}</span></td>
+                  <th id='table-header-hcl'><span>Address:</span></th>
+                  <td id='table-data  '><p className='table-data-add-hcl'>{customerAddress}</p></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span>Category:</span></th>
+                  <th id='table-header-hcl'><span>Category:</span></th>
                   <td id='table-data'><span>{tripSheetData.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby || book.orderedby}</span></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span>Fuel Type:</span></th>
+                  <th id='table-header-hcl'><span>Fuel Type:</span></th>
                   <td id='table-data'><span>{fueltype}</span></td>
                 </tr>
 
                 <tr>
-                  <th id='table-header'><span>Emp. No:</span></th>
+                  <th id='table-header-hcl'><span>Emp. No:</span></th>
                   <td id='table-data'><span>{tripSheetData.employeeno || selectedCustomerData.employeeno || selectedCustomerDatas.employeeno || book.employeeno}</span></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span>Emp.Name:</span></th>
+                  <th id='table-header-hcl'><span>Emp.Name:</span></th>
                   <td id='table-data'><span>{tripSheetData.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname || book.guestname}</span></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span>Report Add:</span></th>
-                  <td id='table-data'><span>{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}</span></td>
+                  <th id='table-header-hcl'><span>Report Add:</span></th>
+                  <td id='table-data'><p  className='table-data-add-hcl'>{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}</p></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span>Drop Address:</span></th>
-                  <td id='table-data'><span>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage}</span></td>
+                  <th id='table-header-hcl'><span>Drop Address:</span></th>
+                  <td id='table-data'><p  className='table-data-add-hcl'>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage}</p></td>
                 </tr>
-                <tr>
-                  <th id='table-header'><span>Escort Route:</span></th>
-                  <td id='table-data'><span>{tripSheetData.escort || selectedCustomerData.escort || selectedCustomerDatas.escort || book.escort}</span></td>
-                </tr>
-                <tr>
-                  <th id='table-header'><span>Airport Transfer:</span></th>
-                  <td id='table-data'><span>{airportTransfer || tripSheetData.empolyeeno || selectedCustomerData.empolyeeno || selectedCustomerDatas.empolyeeno || book.empolyeeno}</span></td>
-                </tr>
-
-                <tr>
-                  <th id='table-header'><span>CCode:</span></th>
-                  <td id='table-data'><span>{tripSheetData.customercode || selectedCustomerData.customercode || selectedCustomerDatas.customercode || book.customercode}</span></td>
-                </tr>
+                
                 {/* <tr>
-                                    <th id='table-header'><span>Report To</span></th>
+                                    <th id='table-header-hcl'><span>Report To</span></th>
                                     <td id='table-data'><span>{tripSheetData.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname || book.guestname}</span></td>
                                 </tr>
                                 <tr>
-                                    <th id='table-header'><span >Reporting @</span></th>
+                                    <th id='table-header-hcl'><span >Reporting @</span></th>
                                     <td id='table-data'><span>{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}</span></td>
                                 </tr> */}
               </table>
               <table id='table-invoice' className="firstTable">
                 <tr>
-                  <th id='table-header'>Trip No:</th>
+                  <th id='table-header-hcl'>Trip No:</th>
                   <td id='table-data'>TS{tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid}</td>
                 </tr>
                 <tr>
-                  <th id='table-header'>Date:</th>
+                  <th id='table-header-hcl'>Date:</th>
                   <td id='table-data'>{dayjs(date).format('DD-MM-YYYY')}</td>
                 </tr>
                 <tr>
-                  <th id='table-header'>Duty Type:</th>
+                  <th id='table-header-hcl'>Duty Type:</th>
                   <td id='table-data'>{tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty}</td>
                 </tr>
                 {/* <tr>
-                                    <th id='table-header'>Vehicle Name:</th>
+                                    <th id='table-header-hcl'>Vehicle Name:</th>
                                     <td id='table-data'><span>{tripSheetData.vehicleName2 || selectedCustomerData.vehicleName2 || selectedCustomerDatas.vehicleName2 || book.vehicleName2}</span></td>
                                 </tr> */}
                 <tr>
-                  <th id='table-header'>Vehicle Name:</th>
+                  <th id='table-header-hcl'>Vehicle Name:</th>
                   <td id='table-data'><span>{tripSheetData.vehicleName || selectedCustomerData.vehicleName || selectedCustomerDatas.vehicleName || book.vehicleName}</span></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span >Vehicle No:</span></th>
+                  <th id='table-header-hcl'><span >Vehicle No:</span></th>
                   <td id='table-data'><span>{tripSheetData.vehRegNo || selectedCustomerData.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo}</span></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span >Driver Name:</span></th>
+                  <th id='table-header-hcl'><span >Driver Name:</span></th>
                   <td id='table-data'><span>{selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName}</span></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span >Driver Mobile:</span></th>
+                  <th id='table-header-hcl'><span >Driver Mobile:</span></th>
                   <td id='table-data'><span>{tripSheetData.mobileNo || selectedCustomerData.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo}</span></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span >Request No:</span></th>
+                  <th id='table-header-hcl'><span >Request No:</span></th>
                   <td id='table-data'><span>{tripSheetData.request || selectedCustomerData.request || selectedCustomerDatas.request || book.request}</span></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span >Service City:</span></th>
+                  <th id='table-header-hcl'><span >Service City:</span></th>
                   <td id='table-data'><span>{tripSheetData.department || selectedCustomerData.department || selectedCustomerDatas.department || book.department}</span></td>
                 </tr>
                 <tr>
-                  <th id='table-header'><span >Package:</span></th>
+                  <th id='table-header-hcl'><span >Package:</span></th>
                   <td id='table-data'><span>{dutydata}</span></td>
                 </tr>
+                <tr>
+                  <th id='table-header-hcl'><span>Escort Route:</span></th>
+                  <td id='table-data'><span>{tripSheetData.escort || selectedCustomerData.escort || selectedCustomerDatas.escort || book.escort}</span></td>
+                </tr>
+                <tr>
+                  <th id='table-header-hcl'><span>Airport Transfer:</span></th>
+                  <td id='table-data'><span>{airportTransfer || tripSheetData.empolyeeno || selectedCustomerData.empolyeeno || selectedCustomerDatas.empolyeeno || book.empolyeeno}</span></td>
+                </tr>
+
+                <tr>
+                  <th id='table-header-hcl'><span>CCode:</span></th>
+                  <td id='table-data'><span>{tripSheetData.customercode || selectedCustomerData.customercode || selectedCustomerDatas.customercode || book.customercode}</span></td>
+                </tr>
                 {/* <tr>
-                                    <th id='table-header'><span >Segment:</span></th>
+                                    <th id='table-header-hcl'><span >Segment:</span></th>
                                     <td id='table-data'><span>{tripSheetData.mobileNo || selectedCustomerData.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo}</span></td>
                                 </tr> */}
               </table>
@@ -207,83 +209,83 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
 
                         <>
                           <tr>
-                            <td id='table-datas'><span >Closing</span></td>
-                            {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
-                            <td id='table-datas'><span >{closedata ? dayjs(closedata).format("DD-MM-YYYY") : ""}</span></td>
-                            <td id='table-datas'><span >{removeSeconds(tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime)}</span></td>
-                            <td id='table-datas'><span >{shedinkm}</span></td>
+                            <td id='table-datas-hcl'><span >Closing</span></td>
+                            {/* <td id='table-datas-hcl'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
+                            <td id='table-datas-hcl'><span >{closedata ? dayjs(closedata).format("DD-MM-YYYY") : ""}</span></td>
+                            <td id='table-datas-hcl'><span >{removeSeconds(tripSheetData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime)}</span></td>
+                            <td id='table-datas-hcl'><span >{shedinkm}</span></td>
                           </tr>
 
                           <tr>
-                            <td id='table-datas'><span >Releasing</span></td>
-                            <td id='table-datas'><span >{closedata2 ? dayjs(closedata2).format("DD-MM-YYYY") : ""}</span></td>
-                            {/* <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td> */}
-                            <td id='table-datas'><span >{removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime)}</span></td>
-                            <td id='table-datas'><span >{endkm}</span></td>
+                            <td id='table-datas-hcl'><span >Releasing</span></td>
+                            <td id='table-datas-hcl'><span >{closedata2 ? dayjs(closedata2).format("DD-MM-YYYY") : ""}</span></td>
+                            {/* <td id='table-datas-hcl'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td> */}
+                            <td id='table-datas-hcl'><span >{removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime)}</span></td>
+                            <td id='table-datas-hcl'><span >{endkm}</span></td>
                           </tr>
                           <tr>
-                            <td id='table-datas'><span >Reporting</span></td>
-                            <td id='table-datas'><span >{startDate ? dayjs(startDate).format("DD-MM-YYYY") : ""}</span></td>
-                            <td id='table-datas'><span >{removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime)}</span></td>
-                            <td id='table-datas'><span >{startkm}</span></td>
-                          </tr>
-
-                          <tr>
-                            <td id='table-datas'><span >Starting</span></td>
-                            <td id='table-datas'><span >{shedOutDate ? dayjs(shedOutDate).format("DD-MM-YYYY") : ""}</span></td>
-                            <td id='table-datas'><span >{removeSeconds(tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime)}</span></td>
-                            <td id='table-datas'><span >-</span></td>
+                            <td id='table-datas-hcl'><span >Reporting</span></td>
+                            <td id='table-datas-hcl'><span >{startDate ? dayjs(startDate).format("DD-MM-YYYY") : ""}</span></td>
+                            <td id='table-datas-hcl'><span >{removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime)}</span></td>
+                            <td id='table-datas-hcl'><span >{startkm}</span></td>
                           </tr>
 
                           <tr>
-                            <td id='table-datas'><span >Total</span></td>
-                            {/* <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
-                                            <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
-                                            <td id='table-datas'><span >{totalhour}</span></td> */}
-                            <td id='table-datas'><span >{TotalDays}</span></td>
-                            <td id='table-datas'><span >{Totaltimes}</span></td>
-                            <td id='table-datas'><span >{Totalkmoutsation}</span></td>
+                            <td id='table-datas-hcl'><span >Starting</span></td>
+                            <td id='table-datas-hcl'><span >{shedOutDate ? dayjs(shedOutDate).format("DD-MM-YYYY") : ""}</span></td>
+                            <td id='table-datas-hcl'><span >{removeSeconds(tripSheetData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime)}</span></td>
+                            <td id='table-datas-hcl'><span >-</span></td>
+                          </tr>
+
+                          <tr>
+                            <td id='table-datas-hcl'><span >Total</span></td>
+                            {/* <td id='table-datas-hcl'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
+                                            <td id='table-datas-hcl'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
+                                            <td id='table-datas-hcl'><span >{totalhour}</span></td> */}
+                            <td id='table-datas-hcl'><span >{TotalDays}</span></td>
+                            <td id='table-datas-hcl'><span >{Totaltimes}</span></td>
+                            <td id='table-datas-hcl'><span >{Totalkmoutsation}</span></td>
                           </tr>
                         </>
                         :
                         <>
                           <tr>
-                            <td id='table-datas'><span >Closing</span></td>
-                            {/* <td id='table-datas'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
-                            <td id='table-datas'><span >{closedata ? dayjs(closedata).format("DD-MM-YYYY") : ""}</span></td>
-                            <td id='table-datas'><span >-</span></td>
-                            <td id='table-datas'><span >-</span></td>
+                            <td id='table-datas-hcl'><span >Closing</span></td>
+                            {/* <td id='table-datas-hcl'><span >{tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate}</span></td> */}
+                            <td id='table-datas-hcl'><span >{closedata ? dayjs(closedata).format("DD-MM-YYYY") : ""}</span></td>
+                            <td id='table-datas-hcl'><span >-</span></td>
+                            <td id='table-datas-hcl'><span >-</span></td>
                           </tr>
 
                           <tr>
-                            <td id='table-datas'><span >Releasing</span></td>
-                            <td id='table-datas'><span >{closedata2 ? dayjs(closedata2).format("DD-MM-YYYY") : ""}</span></td>
-                            {/* <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td> */}
-                            <td id='table-datas'><span >{removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime)}</span></td>
-                            <td id='table-datas'><span >{Totalkm}</span></td>
+                            <td id='table-datas-hcl'><span >Releasing</span></td>
+                            <td id='table-datas-hcl'><span >{closedata2 ? dayjs(closedata2).format("DD-MM-YYYY") : ""}</span></td>
+                            {/* <td id='table-datas-hcl'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td> */}
+                            <td id='table-datas-hcl'><span >{removeSeconds(tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime)}</span></td>
+                            <td id='table-datas-hcl'><span >{Totalkm}</span></td>
                           </tr>
                           <tr>
-                            <td id='table-datas'><span >Reporting</span></td>
-                            <td id='table-datas'><span >{startDate ? dayjs(startDate).format("DD-MM-YYYY") : ""}</span></td>
-                            <td id='table-datas'><span >{removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime)}</span></td>
-                            <td id='table-datas'><span >{ }{0}</span></td>
-                          </tr>
-
-                          <tr>
-                            <td id='table-datas'><span >Starting</span></td>
-                            <td id='table-datas'><span >{shedOutDate ? dayjs(shedOutDate).format("DD-MM-YYYY") : ""}</span></td>
-                            <td id='table-datas'><span >-</span></td>
-                            <td id='table-datas'><span >-</span></td>
+                            <td id='table-datas-hcl'><span >Reporting</span></td>
+                            <td id='table-datas-hcl'><span >{startDate ? dayjs(startDate).format("DD-MM-YYYY") : ""}</span></td>
+                            <td id='table-datas-hcl'><span >{removeSeconds(tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime)}</span></td>
+                            <td id='table-datas-hcl'><span >{ }{0}</span></td>
                           </tr>
 
                           <tr>
-                            <td id='table-datas'><span >Total</span></td>
-                            {/* <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
-                                            <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
-                                            <td id='table-datas'><span >{totalhour}</span></td> */}
-                            <td id='table-datas'><span >{TotalDays}</span></td>
-                            <td id='table-datas'><span >{Totaltimes}</span></td>
-                            <td id='table-datas'><span >{Totalkm}</span></td>
+                            <td id='table-datas-hcl'><span >Starting</span></td>
+                            <td id='table-datas-hcl'><span >{shedOutDate ? dayjs(shedOutDate).format("DD-MM-YYYY") : ""}</span></td>
+                            <td id='table-datas-hcl'><span >-</span></td>
+                            <td id='table-datas-hcl'><span >-</span></td>
+                          </tr>
+
+                          <tr>
+                            <td id='table-datas-hcl'><span >Total</span></td>
+                            {/* <td id='table-datas-hcl'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
+                                            <td id='table-datas-hcl'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
+                                            <td id='table-datas-hcl'><span >{totalhour}</span></td> */}
+                            <td id='table-datas-hcl'><span >{TotalDays}</span></td>
+                            <td id='table-datas-hcl'><span >{Totaltimes}</span></td>
+                            <td id='table-datas-hcl'><span >{Totalkm}</span></td>
                           </tr>
                         </>
                     }
@@ -311,24 +313,34 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             <div id='Totals'><span id='title'>Total Toll  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
             <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
           </div>
+
+
+          <div style={{display:"flex",gap:"6px"}}>
+
           <div className='tripsheet-location-img-hcl'>
 
-            {/* <img src={GmapimageUrl} alt='mapimage' /> */}
-            {GmapimageUrl !== "" ?
-              <img src={GmapimageUrl} alt='mapimage' /> : <></>}
+              {/* <img src={GmapimageUrl} alt='mapimage' /> */}
+              {GmapimageUrl !== "" ?
+                <img src={GmapimageUrl} alt='mapimage' /> : <></>}
+              </div>
+              <div className="tripsheet-RouteSummary-hcl">
+              {routeData.length > 0 && (
+              <div >
+                <h2 style={{marginTop:"0px"}}>Route Summary</h2>
+                <ol type="1">
+                  {routeData.map((data, index) => (
+                    <li key={index}>
+                      <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              )}
+              </div>
+
           </div>
-          {routeData.length > 0 && (
-            <div className="tripsheet-RouteSummary-hcl">
-              <h2>Route Summary</h2>
-              <ol type="1">
-                {routeData.map((data, index) => (
-                  <li key={index}>
-                    <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
+        
+          
           {/* <div className="attached-toll" ref={targetRef}>
         <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
           {Array.isArray(attachedImage) &&
@@ -390,6 +402,8 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             })}
         </ol>
       </div> */}
+                {attachedImage?.length > 0 ? <>
+
 
           <div className="attached-toll-hcl" ref={targetRef}>
             <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
@@ -474,19 +488,21 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                 file={file}
                                 onLoadSuccess={onDocumentLoadSuccess}
                                 style={{
-                                  // margin: "auto",
-                                  width: "100%"
+                                  margin: "auto",
+                                  width: "100%",
+                                  padding:"30px"
                                 }}
                               >
                                 {Array.from(new Array(numPages), (el, pageIndex) => (
                                   <Page
                                     key={`page_${pageIndex + 1}`}
                                     pageNumber={pageIndex + 1}
-                                    scale={0.9} // Adjust scale to fit the page to the desired size
+                                    scale={0.7} // Adjust scale to fit the page to the desired size
                                     style={{
                                       // display: "block",
-                                      // width: "auto", // Let the width adjust automatically
+                                      width: "100%", // Let the width adjust automatically
                                       // margin: "20px auto", // Add spacing for better display
+                                      border:"2px solid red",
                                     }}
                                   />
                                 ))}
@@ -526,7 +542,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                             style={{
                               // pageBreakAfter: "always", 
                               // pageBreakAfter: isPdf ? "always" : "auto",
-                              padding: "20px",
+                              padding: "20px 20px 0px 20px",
                               // marginBottom: "50",
                             }}
                             className='li-files'
@@ -565,16 +581,21 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                     );
                   })}
             </ol>
-          </div>
-
-
+          </div></>
+          :""
+}
         </article>
       </div>
       {/* <Button onClick={() => generatePDF(targetRef, { filename: 'E-tripsheet.pdf', margin: Margin.LARGE, })}>Print</Button> */}
       <Button
         onClick={() => {
-          const pdfFiles = attachedImage.filter((file) => file.endsWith(".pdf"));
-          const imageFiles = attachedImage.filter((file) => !file.endsWith(".pdf"));
+          // const pdfFiles = attachedImage.filter((file) => file.endsWith(".pdf"));
+          // const imageFiles = attachedImage.filter((file) => !file.endsWith(".pdf"));
+          const attachedImageArray = Array.isArray(attachedImage) ? attachedImage : [attachedImage];
+
+// Filter PDF and non-PDF files
+const pdfFiles = attachedImageArray.filter((file) => file.endsWith(".pdf"));
+const imageFiles = attachedImageArray.filter((file) => !file.endsWith(".pdf"));
 
           // Custom settings for PDF files
           const pdfOptions = {

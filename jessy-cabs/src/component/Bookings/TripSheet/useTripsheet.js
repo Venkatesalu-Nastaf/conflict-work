@@ -131,7 +131,7 @@ const useTripsheet = () => {
         Hours: '',
         duty: '',
     });
-
+    const [conflictLoad,setConflictLoad] = useState(null)
     // ----------------------------------------vendorinfo-------------------
     // const [lockdata, setLockData] = useState(false)
     const [lockdata, setLockData] = useState(true)
@@ -205,7 +205,9 @@ const useTripsheet = () => {
         close_shedOut_totalDays: '',
         totalDays: '',
     })
-
+    const [minTimeData, setMinTimeData] = useState(null)
+    const [maxTimeData, setMaxTimeData] = useState(null)
+    const [shedInTimeData,setShedInTimeData] = useState(null)
     const [conflictkm, setConflictKMData] = useState({
         maximumkm: 0,
         maxtripid: "",
@@ -3647,7 +3649,7 @@ const useTripsheet = () => {
     const handleChange = (event) => {
         const { name, value, checked } = event.target;
 
-
+        setConflictLoad(null)
         setPackageData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -3822,6 +3824,7 @@ const useTripsheet = () => {
                             setDriverSMS(false)
                             setSuccess(true);
                             setSuccessMessage("Successfully listed");
+                            setConflictLoad((prevConflictLoad) => !prevConflictLoad); 
                             // setisenterTripid(true)
                             setIsEditMode(true);
                             // setLockData(false)
@@ -6540,70 +6543,77 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo;
-        const datecheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate
+        const datecheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate;
+        const shedincheck = formData?.shedInDate || selectedCustomerData?.shedInDate || book?.shedInDate
         const fetchData = async () => {
+
             try {
                 const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, {
-                   vehicleNo: vehicleNo,
-                   dateCheck: datecheck
-                });
-                //getVehcileHistoryDataMinimumTime
-                const response1 = await axios.post(`${apiUrl}/getVehcileHistoryDataMinimumTime`, {
                     vehicleNo: vehicleNo,
                     dateCheck: datecheck
-                 });
-                 console.log(response1,"minimum date");
-                 
-                console.log(response.data, "vehiclehistorydata");
-                const minDateData = response1.data;
-                const maxDateData = response.data;
-                const latestDatevalue = maxDateData?.row?.latestFormattedDate;
-                const parseDate = (dateStr) => {
-                    const [day, month, year] = dateStr.split('-');
-                    return new Date(`${year}-${month}-${day}`);
-                };
-                const maxDateFormat = dayjs(latestDatevalue).format('DD-MM-YYYY');
-                const latestmaxDate = parseDate(maxDateFormat);
-                const conflictmaxdate = dayjs(latestDatevalue).format('DD-MM-YYYY');
-                latestmaxDate.setHours(0, 0, 0, 0);
-                const shedoutdate = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate
-                const sheddate = dayjs(shedoutdate).format('DD-MM-YYYY')
-                const shedoutenterdate = parseDate(sheddate)
-                shedoutenterdate.setHours(0, 0, 0, 0);
-                const tripids = parseInt(maxDateData.row?.Tripid || 0)
-                const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
-                const formattedShedoutTime = shedoutTime?.replace(":", ".")
-                const formattedLatestTime = maxDateData.row?.latestTime?.replace(":", ".")
-                const formattedleastTime = minDateData?.row?.earliestTime?.replace(":",".")
-                const finalLeastTime = parseFloat(formattedleastTime).toFixed(2);
-                const finalLatestTime = parseFloat(formattedLatestTime).toFixed(2);
-                const finalShedOutTime = parseFloat(formattedShedoutTime).toFixed(2);
-                // Set the conflictCompareDatas object state
-                setConflictCompareDatas({
-                    conflictmaxdate,
-                    latestmaxDate,
-                    shedoutenterdate,
-                    tripids,
-                    vehicleNo,
-                    latestTime: finalLatestTime,
-                    leastTime:finalLeastTime,
-                    shedOutTime: finalShedOutTime,
-                    latestDateValue: latestmaxDate,
-                    latestTimeRaw: maxDateData.row?.latestTime,
                 });
-               setConflictMinimumTimeDatas({
-                tripid:parseInt(minDateData?.row?.Tripid),
-                leastDate:dayjs(latestmaxDate).format("DD-MM-YYYY"),
-                leastTime:finalLeastTime,
-               })
+                console.log(response.data, "conflictdataaaa");
+
+                const mainDatas = response.data;
+                const minData = mainDatas.reduce((min, current) => {
+                    const timesWithDates = [
+                        { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
+                        { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
+                        { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
+                        { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
+                    ].filter(entry => entry.time && entry.date);
+
+                    // Find the minimum time in the current row
+                    const minCurrentRow = timesWithDates.reduce((minRow, currentRow) => {
+                        return parseFloat(currentRow.time) < parseFloat(minRow.time) ? currentRow : minRow;
+                    }, timesWithDates[0]);
+
+                    // Compare with the overall minimum
+                    return parseFloat(minCurrentRow.time) < parseFloat(min.time) ? minCurrentRow : min;
+                }, { time: Infinity, date: null, tripid: null }); // Start with an impossibly high time
+                setMinTimeData(minData)
+                console.log("Minimum Time:", minData.time);
+                console.log("Minimum Date:", minData.date);
+                console.log("Min Tripid:", minData.tripid);
 
 
-            } catch (err) {
-                console.log(err, "error");
+                const maxData = mainDatas.reduce((max, current) => {
+                    const timesWithDates = [
+                        { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
+                        { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
+                        { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
+                        { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
+                    ].filter(entry => entry.time && entry.date);
+
+                    // Find the maximum time in the current row
+                    const maxCurrentRow = timesWithDates.reduce((maxRow, currentRow) => {
+                        return parseFloat(currentRow.time) > parseFloat(maxRow.time) ? currentRow : maxRow;
+                    }, timesWithDates[0]);
+
+                    // Compare with the overall maximum
+                    return parseFloat(maxCurrentRow.time) > parseFloat(max.time) ? maxCurrentRow : max;
+                }, { time: -Infinity, date: null, tripid: null }); // Start with an impossibly low time
+                setMaxTimeData(maxData)
+                console.log("Maximum Time:", maxData.time);
+                console.log("Maximum Date:", maxData.date);
+                console.log("Max Tripid:", maxData.tripid);
+
+                const rowsWithShedInDate = mainDatas?.filter(current =>
+                    current?.shedindate !== null && current?.shedindate === datecheck
+                );
+                console.log("Rows with shedindate:", rowsWithShedInDate, datecheck);
+                console.log(rowsWithShedInDate, datecheck);
+                setShedInTimeData(rowsWithShedInDate)
+
+
             }
-        };
-        fetchData();
-    }, [apiUrl, formData, selectedCustomerData, formValues, selectedCustomerDatas, book, tripid]);
+            catch (err) {
+                console.log(err, "error");
+
+            }
+        }
+        fetchData()
+    }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues])
 
 
     return {
@@ -6740,7 +6750,8 @@ const useTripsheet = () => {
         groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
-        hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,userStatus,conflictMinimumTimeDatas
+        hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,userStatus,conflictMinimumTimeDatas,
+        minTimeData, maxTimeData,shedInTimeData,conflictLoad
 
     };
 };

@@ -65,11 +65,10 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const [polygonPath, setPolygonPath] = useState([]);
   const [polylinePath, setPolylinePath] = useState([])
   const [markerPosition, setMarkerPosition] = useState(null); // Store single marker position
-
   const [mapContent, setMapContent] = useState({
     tripid: '',
     time: dayjs().format('HH:mm'),
-    date: dayjs().format('YYYY-MM-DD'),
+    date: startdate,
     place_name: '',
     Location_Alpha: '',
     trip_type: 'start',
@@ -275,7 +274,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       setMapContent({
         tripid: '',
         time: dayjs().format('HH:mm'),
-        date: dayjs().format('YYYY-MM-DD'),
+        // date: dayjs().format('YYYY-MM-DD'),
+        date:startdate,
         place_name: '',
         Location_Alpha: '',
         trip_type: 'start',

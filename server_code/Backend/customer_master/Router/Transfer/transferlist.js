@@ -74,9 +74,11 @@ router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => 
       return res.status(404).json({ error: 'Tripsheet not found' });
     }
 
-    let vehtypes = result.map(obj => obj.vehicleName);
+    // let vehtypes = result.map(obj => obj.vehicleName);
+    let vehtypes = result.map(obj => obj.vehRegNo);
 
-    db.query('select vehicleName, fueltype ,segement from vehicleinfo where vehicleName IN (?)', [vehtypes], (err, result1) => {
+
+    db.query('select vehRegNo, fueltype ,segement from vehicleinfo where  vehRegNo IN (?)', [vehtypes], (err, result1) => {
       if (err) {
 
         return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
@@ -85,11 +87,18 @@ router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => 
         return res.status(404).json({ error: 'Tripsheet not found' });
       }
       // console.log(result1,'result vehicle');
+      // const vehicleDataMap = {};
+      // result1.forEach(row => {
+      //   vehicleDataMap[row.vehicleName] = { fueltype: row.fueltype, segement: row.segement };
+
+      // });
+
       const vehicleDataMap = {};
       result1.forEach(row => {
-        vehicleDataMap[row.vehicleName] = { fueltype: row.fueltype, segement: row.segement };
+        vehicleDataMap[row.vehRegNo] = { fueltype: row.fueltype, segement: row.segement };
 
       });
+
 
       db.query('select customer,gstTax,address1 from customers where customer=?', [customer], (err, result2) => {
         if (err) {
@@ -112,7 +121,8 @@ router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => 
         // Add fueltype to each object in the result array
         result.forEach(obj => {
 
-          const vehicleData = vehicleDataMap[obj.vehicleName];
+          // const vehicleData = vehicleDataMap[obj.vehicleName];
+          const vehicleData = vehicleDataMap[obj.vehRegNo];
           const customerdetails = vehicleDataMap[obj.customer];
           obj.fueltype = vehicleData ? vehicleData.fueltype : 'Unknown'; // Set default value if fueltype not found
           obj.segement = vehicleData ? vehicleData.segement : 'Unknown';
@@ -148,9 +158,10 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
       return res.status(404).json({ error: 'Tripsheet not found' });
     }
 
-    let vehtypes = result.map(obj => obj.vehicleName);
+    // let vehtypes = result.map(obj => obj.vehicleName);
+    let vehtypes = result.map(obj => obj.vehRegNo);
 
-    db.query('select vehicleName, fueltype ,segement from vehicleinfo where vehicleName IN (?)', [vehtypes], (err, result1) => {
+    db.query('select  vehRegNo, fueltype ,segement from vehicleinfo where  vehRegNo IN (?)', [vehtypes], (err, result1) => {
       if (err) {
 
         return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
@@ -161,7 +172,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
       // console.log(result1,'result vehicle');
       const vehicleDataMap = {};
       result1.forEach(row => {
-        vehicleDataMap[row.vehicleName] = { fueltype: row.fueltype, segement: row.segement };
+        vehicleDataMap[row.vehRegNo] = { fueltype: row.fueltype, segement: row.segement };
 
       });
 
@@ -186,7 +197,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
         // Add fueltype to each object in the result array
         result.forEach(obj => {
 
-          const vehicleData = vehicleDataMap[obj.vehicleName];
+          const vehicleData = vehicleDataMap[obj.vehRegNo];
           const customerdetails = vehicleDataMap[obj.customer];
           obj.fueltype = vehicleData ? vehicleData.fueltype : 'Unknown'; // Set default value if fueltype not found
           obj.segement = vehicleData ? vehicleData.segement : 'Unknown';
@@ -1349,7 +1360,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
     FROM 
         tripsheet AS ts
     LEFT JOIN 
-        vehicleinfo AS vi ON ts.vehicleName = vi.vehicleName
+        vehicleinfo AS vi ON ts.vehRegNo = vi.vehRegNo
     LEFT JOIN 
         customers AS c ON ts.customer = c.customer
     LEFT JOIN 
@@ -1386,7 +1397,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
 
   Promise.all(promises)
     .then(results => {
-
+//  console.log(results,'pdfzippppppppppppppppppppp');
       return res.status(200).json(results);
     })
     .catch(error => {

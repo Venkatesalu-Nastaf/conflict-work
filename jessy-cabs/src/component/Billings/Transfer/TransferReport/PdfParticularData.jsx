@@ -51,6 +51,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
   const [tripsheetdate, setTripsheetdate] = useState('')
   const [tripStartDate, setTripStartDate] = useState('')
   const [tripCloseDate, setTripCloseDate] = useState('')
+  const [tripshedoutDate, setTripShedOutDate] = useState('')
+  const [tripshedinDate, setTripShedinDate] = useState('')
   const [tripReporttime, setTripReporttime] = useState('')
   const [tripRelasingTime, setTripReleasingTime] = useState('')
   const [tripClosetime, setTripClosetime] = useState('')
@@ -113,6 +115,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     let Tripdate = ''
     let Tripstartdate = ''
     let TripClosedate = ''
+     let Tripshedoutdate = ''
+    let Tripshedindate = ''
     let Reporttime = ''
     let Releasingtime = ''
     let Starttime = ''
@@ -160,12 +164,24 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
         Tripdate = li.tripsheetdate
         Tripstartdate = li.startdate
         TripClosedate = li.closedate
-        Reporttime = li.starttime
-        Starttime = li.reporttime
+        Tripshedoutdate = li.shedOutDate
+        Tripshedindate = li.shedInDate
+        // Reporttime = li.starttime
+        // Starttime = li.reporttime
+        // CloseTime = li.closetime
+        // Releasingtime = li.shedintime
+
+        Starttime  = li.starttime
+        Reporttime = li.reporttime
         CloseTime = li.closetime
         Releasingtime = li.shedintime
-        ReportKm = li.startkm
-        StartKm = li.shedout
+        // ReportKm = li.startkm
+        // StartKm = li.shedout
+        // CloseKm = li.closekm
+        // ReleaseKm = li.shedin
+
+        StartKm = li.startkm
+        ReportKm = li.shedout
         CloseKm = li.closekm
         ReleaseKm = li.shedin
         Totaldays = li.totaldays
@@ -178,12 +194,18 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
         Categorygroups = li.Groups
         AddressCustomer1 = li.CustomerAddress1
 
+
       })
     }
+    // setTripReporttime(Reporttime)
+    // setTripStartTime(Starttime)
+    // setTripClosetime(Releasingtime)
+    // setTripReleasingTime(CloseTime)
+
     setTripReporttime(Reporttime)
     setTripStartTime(Starttime)
-    setTripClosetime(Releasingtime)
-    setTripReleasingTime(CloseTime)
+    setTripClosetime(CloseTime)
+    setTripReleasingTime(Releasingtime)
     setTripReportKm(ReportKm)
     setTripStartKm(StartKm)
     setTripCloseKm(CloseKm)
@@ -214,6 +236,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     setTripsheetdate(Tripdate)
     setTripStartDate(Tripstartdate)
     setTripCloseDate(TripClosedate)
+    setTripShedOutDate(Tripshedoutdate)
+    setTripShedinDate(Tripshedindate)
     // setTripReporttime(Reporttime)
     // setTripClosetime(CloseTime)
     setTripTotalDays(Totaldays)
@@ -322,31 +346,31 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     fetchData()
   }, [apiUrl, tripno])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const tripidno = tripno
-      try {
-        const response = await fetch(`${apiUrl}/booking-docPDFView/${tripidno}`);
-        if (response.status === 200) {
-          const data = await response.json();
-          const attachedImageUrls = data.files
-          // const attachedImageUrls = data.files.map(path => `${apiUrl}/images/${path.path}`);
-          // const imagepath=data.files.map
-          // console.log(attachedImageUrls, "dataimgaeurls")
-          setBookmailimage(attachedImageUrls);
-        }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const tripidno = tripno
+  //     try {
+  //       const response = await fetch(`${apiUrl}/booking-docPDFView/${tripidno}`);
+  //       if (response.status === 200) {
+  //         const data = await response.json();
+  //         const attachedImageUrls = data.files
+  //         // const attachedImageUrls = data.files.map(path => `${apiUrl}/images/${path.path}`);
+  //         // const imagepath=data.files.map
+  //         // console.log(attachedImageUrls, "dataimgaeurls")
+  //         setBookmailimage(attachedImageUrls);
+  //       }
 
-        else {
-          const timer = setTimeout(fetchData, 2000);
-          return () => clearTimeout(timer);
-        }
-      }
-      catch (err) {
-        console.log(err, 'error');
-      }
-    }
-    fetchData()
-  }, [apiUrl, tripno])
+  //       else {
+  //         const timer = setTimeout(fetchData, 2000);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     }
+  //     catch (err) {
+  //       console.log(err, 'error');
+  //     }
+  //   }
+  //   fetchData()
+  // }, [apiUrl, tripno])
 
   const handlePopup = () => {
     setPdfPrint(false)
@@ -365,10 +389,10 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     return time;
   }
 
-  const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripReportKm || 0)
+  const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripStartKm || 0)
   //  const HclTotalKms = customerData[0]?.hybrid === 1 ? 
   console.log(customerData, 'hybrid', particularPdf);
-  console.log(bookmailiamge,"bookmailiamge")
+  // console.log(bookmailiamge,"bookmailiamge")
 
   return (
     <>
@@ -415,7 +439,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
             </div>
             <div className="clientSecondDiv">
               <p className="detailstext"><span className="labeltagsecond">Escort Route </span><p className="colontag">:</p><span >{escort}</span> </p>
-              <p className="detailstext"><span className="labeltagsecond">Airport Transfer</span><p className="colontag">:</p><span>{report ? "Yes" : "No"}</span> </p>
+              {/* <p className="detailstext"><span className="labeltagsecond">Airport Transfer</span><p className="colontag">:</p><span>{report ? "Yes" : "No"}</span> </p> */}
+              <p className="detailstext"><span className="labeltagsecond">Airport Transfer</span><p className="colontag">:</p><span>{report}</span> </p>
               <p className="detailstext"><span className="labeltagsecond">CCode </span><p className="colontag">:</p><span>{tripCustomercode ? tripCustomercode : 'No'}</span> </p>
             </div>
             <div className="clientThirdDiv">
@@ -428,7 +453,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
               <p className="detailstext"><span className="labeltag">Driver Mobile</span><p className="colontag">:</p><span className="clientName">{drivermobile}</span></p>
               <p className="detailstext"><span className="labeltag">Request No</span><p className="colontag">:</p>{request}</p>
               <p className="detailstext"><span className="labeltag">Service City</span><p className="colontag">:</p>{department}</p>
-              <p className="detailstext"><span className="labeltag">Package</span><p className="colontag">:</p>{calcpackage}</p>
+              <p className="detailstext"><span className="labeltag">Package</span><p className="colontag">:</p>{duty === "Transfer" || duty === "Outstation" ? duty : calcpackage}</p>
               <p className="detailstext"><span className="labeltag">Segment</span><p className="colontag">:</p>{segment}</p>
             </div>
           </div>
@@ -446,17 +471,16 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                     <th >KMS</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   <tr>
                     <td> Closing </td>
                     <td>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</td>
-                    {customerData[0]?.hybrid === 1 ? <td>{'-'}</td> : <td>{trimSeconds(tripClosetime)}</td>}
-                    {customerData[0]?.hybrid !== 1 ? <td>{tripReleaseKm}</td> : <td>{'-'}</td>}
+                    {customerData[0]?.hybrid === 1 && duty !== "Outstation" ? <td>{'-'}</td> : <td>{trimSeconds(tripClosetime)}</td>}
+                    {customerData[0]?.hybrid !== 1  ? <td>{tripReleaseKm}</td> : <td>{'-'}</td>}
                   </tr>
                   {customerData[0]?.hybrid === 1 ? <tr>
                     <td>Releasing</td>
                     <td>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</td>
-                    {/* <td>{tripClosetime}</td> */}
                     <td>{trimSeconds(tripRelasingTime)}</td>
                     {customerData[0]?.hybrid == 1 ? <td>{hclKm}</td> : <td>{'-'}</td>}
                   </tr> : ""}
@@ -479,6 +503,77 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                     <td>{triptotaltime ? triptotaltime : 0.00}</td>
                     {customerData[0]?.hybrid === 1 ? <td> {hclKm}</td> : <td>{triptotalkms}</td>}
                   </tr>
+                </tbody> */}
+
+
+
+             <tbody>
+              {customerData[0]?.hybrid === 1 ?
+              <>
+                  <tr>
+                    <td> Closing </td>
+                    <td>{tripshedinDate ? dayjs(tripshedinDate).format('DD/MM/YYYY') : ''}</td>
+                    {customerData[0]?.hybrid === 1 && duty !== "Outstation" ? <td>{'-'}</td> : <td>{trimSeconds(tripRelasingTime)}</td>}
+                    {customerData[0]?.hybrid === 1 && duty === "Outstation"   ? <td>{tripReleaseKm}</td> : <td>{'-'}</td>}
+                  </tr>
+               <tr>
+                    <td>Releasing</td>
+                    <td>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</td>
+                    <td>{trimSeconds(tripClosetime)}</td>
+                    <td>{tripCloseKm}</td>
+                  </tr>
+                  <tr>
+                    <td>Reporting</td>
+                    <td>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</td>
+                    <td>{trimSeconds(tripStartTime)}</td>
+                    <td>{tripStartKm}</td>
+                  
+                  </tr> 
+                  <tr>
+                    <td>Starting</td>
+                    <td>{tripshedoutDate ? dayjs(tripshedoutDate).format('DD/MM/YYYY') : ''}</td>
+                    {/* <td>{trimSeconds(tripStartTime)}</td> */}
+                    {customerData[0]?.hybrid === 1 && duty === "Outstation"   ? <td>{trimSeconds(tripReporttime)}</td> : <td>{'-'}</td>}
+                     {/* <td>{tripStartKm}</td> */}
+                     {/* {customerData[0]?.hybrid === 1 && duty === "Outstation"   ? <td>{tripReportKm}</td> : <td>{'-'}</td>} */}
+                     <td>{'-'}</td>
+                  </tr>
+
+                  <tr>
+                    <td>Total </td>
+                    <td>{triptotaldays}</td>
+                    <td>{triptotaltime}</td>
+                    {customerData[0]?.hybrid === 1 && duty !== "Outstation" ? <td> {hclKm}</td> : <td>{triptotalkms}</td>}
+                  </tr>
+                  </>
+                  :
+                  <>
+
+                  <tr>
+                    <td> Closing </td>
+                    {/* <td>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</td> */}
+                    <td>{tripshedinDate ? dayjs(tripshedinDate).format('DD/MM/YYYY') : ''}</td>
+                    <td>{trimSeconds(tripRelasingTime)}</td>
+                    {/* <td>{trimSeconds(tripClosetime)}</td> */}
+                    <td>{tripReleaseKm}</td> 
+                  </tr>
+                
+                  <tr>
+                    <td>Starting</td>
+                    {/* <td>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</td> */}
+                    <td>{tripshedoutDate ? dayjs(tripshedoutDate).format('DD/MM/YYYY') : ''}</td>
+                    <td>{trimSeconds(tripReporttime)}</td>
+                    <td>{tripReportKm}</td> 
+                  </tr>
+
+                  <tr>
+                    <td>Total </td>
+                    <td>{triptotaldays}</td>
+                    <td>{triptotaltime}</td>
+                    <td>{triptotalkms}</td>
+                  </tr>
+                  </>
+                  }
                 </tbody>
               </table>
             </div>
@@ -499,7 +594,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
               <div className="parkingdiv">
                 <p>Total Parking: {totalparking ? totalparking : 0}</p>
                 <p>Total Permit: {totalpermit ? totalpermit : 0}</p>
-                <p>Total Fastag/Tollssss: {totaltoll ? totaltoll : 0}</p>
+                <p>Total Fastag/Toll: {totaltoll ? totaltoll : 0}</p>
               </div>
             </div>
             {routeData.length > 0 && (
@@ -519,13 +614,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
           {console.log(attachedImage,"pp")}
           <div>
             {attachedImage ? <p className="attachtext" style={{ marginTop: 180 }}>Attached Image</p> : <p className="attachtext"></p>}
-            {/* {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ?
-              attachedImage.map((image, index) => (
-                <img key={index} src={image} alt='' className="attachimage" />
-              ))
-              :
-              <div></div>
-            } */}
+       
 
               {attachedImage && Array.isArray(attachedImage) && attachedImage.length > 0 && attachedImage !== "" ? (
                                             <>

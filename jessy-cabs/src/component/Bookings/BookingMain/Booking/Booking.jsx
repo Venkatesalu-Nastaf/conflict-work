@@ -149,7 +149,7 @@ const Booking = ({ stationName, customerData }) => {
     edit, AvilableimageCount,
     // handleKeyEnterdriver,
     vehileName,
-    selectedCustomerdriver, handleimagedeletewithouttripid,
+    selectedCustomerdriver, handleimagedeletewithouttripid,deletefiledata,
     handleSelectAll, handlecheckbox, handlecheckbox1, selectAll, deletefile, handleButtonClickwithouttripid, dialogOpentrail, handleCloseDialogtrail, selectetImg,
 
     handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning,
@@ -1687,12 +1687,12 @@ const Booking = ({ stationName, customerData }) => {
                       </Document>
 
                     )}
-                    <Checkbox checked={deletefile.includes(img.name)} onClick={() => handlecheckbox1(img.name)} />
+                    <Checkbox checked={deletefiledata.includes(img.name)} onClick={() => handlecheckbox1(img.name)} />
                   </div>
                 ))}
             </div>
             <div>
-              <Button variant="contained" onClick={() => handleimagedeletewithouttripid(deletefile)}>
+              <Button variant="contained" onClick={() => handleimagedeletewithouttripid(deletefiledata)}>
                 Delete
               </Button>
             </div>

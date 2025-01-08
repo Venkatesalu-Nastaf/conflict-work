@@ -395,6 +395,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   const [tripsheetdate, setTripsheetdate] = useState('')
   const [tripStartDate, setTripStartDate] = useState('')
   const [tripCloseDate, setTripCloseDate] = useState('')
+   const [tripshedoutDate, setTripShedOutDate] = useState('')
+    const [tripshedinDate, setTripShedinDate] = useState('')
   // const [tripReporttime, setTripReporttime] = useState('')
   // const [tripClosetime, setTripClosetime] = useState('')
   const [tripReporttime, setTripReporttime] = useState('')
@@ -429,17 +431,17 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
   const organisationdetails = organisationdetail
 
-  const convertTimeFormat = (time) => {
+  // const convertTimeFormat = (time) => {
 
-    // const regex = /(\d+)h\s*(\d+)m/;
-    // const match = time.match(regex);
-    // if (match) {
-    //   const hours = match[1].padStart(2, '0');
-    //   const minutes = match[2].padStart(2, '0');
-    //   return `${hours}:${minutes}`;
-    // }
-    return time; // Return original if it doesn't match the pattern
-  };
+  //   // const regex = /(\d+)h\s*(\d+)m/;
+  //   // const match = time.match(regex);
+  //   // if (match) {
+  //   //   const hours = match[1].padStart(2, '0');
+  //   //   const minutes = match[2].padStart(2, '0');
+  //   //   return `${hours}:${minutes}`;
+  //   // }
+  //   return time; // Return original if it doesn't match the pattern
+  // };
 
   // const trimSeconds = (time) => {
   //   return time.slice(0, 5);
@@ -523,6 +525,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     let closekm = ''
     let reportkm = ''
     let releasekm = ''
+      let Tripshedoutdate = ''
+    let Tripshedindate = ''
 
     let bookingimagedata = []
     if (Array.isArray(particularPdf)) {
@@ -555,15 +559,28 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         Tripdate = li.tripsheetdate
         Tripstartdate = li.startdate
         TripClosedate = li.closedate
+        Tripshedoutdate = li.shedOutDate
+        Tripshedindate = li.shedInDate
 
-        Reporttime = li.starttime
-        Starttime = li.reporttime
+        // Reporttime = li.starttime
+        // Starttime = li.reporttime
+        // CloseTime = li.closetime
+        // Releasingtime = li.shedintime
+
+        
+        Starttime = li.starttime
+        Reporttime = li.reporttime
         CloseTime = li.closetime
         Releasingtime = li.shedintime
-        ReportKm = li.startkm
-        StartKm = li.shedout
-        CloseKm = li.shedin
-        ReleaseKm = li.closekm
+        // ReportKm = li.startkm
+        // StartKm = li.shedout
+        // CloseKm = li.shedin
+        // ReleaseKm = li.closekm
+
+        StartKm = li.startkm
+         ReportKm = li.shedout
+         ReleaseKm = li.shedin
+        CloseKm  = li.closekm
 
         // Reporttime = trimSeconds(li.reporttime)
         // startTime = trimSeconds(li.starttime)
@@ -574,8 +591,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         // reportkm = li.startkm;
         // releasekm = li.closekm;
         Totaldays = li.totaldays
-        Totaltime = convertTimeFormat(li.totaltime);
-        Totalkms = li.totalkm1
+        Totaltime = li.TotalTimeWithoutAddHours
+        Totalkms = parseInt(li.shedin) - parseInt(li.shedout) || 0
         TotalParking = li.parking
         TotalToll = li.toll
         TotalPermit = li.permit
@@ -589,7 +606,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
       })
     }
-    console.log(particularPdf,"pdfff")
+    console.log(particularPdf, "pdfff")
 
 
 
@@ -634,11 +651,13 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     setTripsheetdate(Tripdate)
     setTripStartDate(Tripstartdate)
     setTripCloseDate(TripClosedate)
+    setTripShedOutDate(Tripshedoutdate)
+    setTripShedinDate(Tripshedindate)
 
     setTripReporttime(Reporttime)
     setTripStartTime(Starttime)
-    setTripClosetime(Releasingtime)
-    setTripReleasingTime(CloseTime)
+    setTripClosetime(CloseTime)
+    setTripReleasingTime(Releasingtime)
     setTripReportKm(ReportKm)
     setTripStartKm(StartKm)
     setTripCloseKm(CloseKm)
@@ -669,9 +688,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   const firstSet = routemap.slice(0, 12);
   const nextSet = routemap.slice(12, 24);
   const remainingItems = routemap.slice(24);
-  const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripReportKm || 0)
-  console.log(tripCloseKm,tripReportKm,"kmmmm" )
-  console.log(bookimage, "bookimage",stationData,"stationData")
+  const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripStartKm || 0)
+  console.log(tripCloseKm, tripReportKm, "kmmmm")
+  console.log(bookimage, "bookimage", stationData, "stationData")
+  console.log(tripshedinDate,"tripshed",tripCloseDate)
 
   return (
     <>
@@ -703,7 +723,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   <View>
 
                     {/* <Text style={styles.gstno}>GSTIN: {organisationdetails[0].gstnumber}</Text> */}
-                        <Text style={styles.gstno}>GSTIN: {stationData[0]?.gstno}</Text>
+                    <Text style={styles.gstno}>GSTIN: {stationData[0]?.gstno}</Text>
                     {/* <Text style={styles.text2add}> {stationData[0]?.gstno}</Text> */}
 
                   </View>
@@ -770,7 +790,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                     <View style={styles.deatilssection}>
                       <Text style={styles.labelMidContainer}>Airport Transfer</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {report ? "Yes" : "No"}</Text>
+                      <Text style={styles.clientName}> {report}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labelMidContainer}>Ccode</Text>
@@ -855,7 +875,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Package</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {calcpackage}</Text>
+                      <Text style={styles.clientName}> {duty === "Transfer" || duty === "Outstation" ? duty : calcpackage}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Segment</Text>
@@ -875,10 +895,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                 </View>
 
                 <View style={styles.tablesigndiv}>
-                  <View style={styles.tablediv}>
-                    {/* <View>
-    
-  </View> */}
+                  {/* <View style={styles.tablediv}>
+                   
                     <View style={styles.tablehead}>
                       <View style={styles.labeltag1}>
                         <Text >{"  "}</Text>
@@ -896,7 +914,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                         <Text>KMS</Text>
 
                       </View>
-                      {/* <View></View> */}
+                 
                     </View>
 
                     <View style={styles.tablehead1}>
@@ -1019,6 +1037,233 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                     </View>
 
 
+                  </View> */}
+
+
+                  <View style={styles.tablediv}>
+                    <View style={styles.tablehead}>
+                      <View style={styles.labeltag1}>
+                        <Text >{"  "}</Text>
+
+                      </View>
+                      <View style={styles.labeltag2}>
+                        <Text >DATE</Text>
+
+                      </View>
+                      <View style={styles.labeltag3}>
+                        <Text >HOURS</Text>
+
+                      </View>
+                      <View style={styles.labeltag4}>
+                        <Text>KMS</Text>
+
+                      </View>
+
+                    </View>
+                    {customerData[0]?.hybrid === 1 ? <>
+                  
+                      <View style={styles.tablehead1}>
+                    <View style={styles.labeltag5}>
+                      <Text > Closing</Text>
+
+                    </View>
+
+
+                    <View style={styles.labeltag6}>
+                      {/* <Text>{dayjs(tripshedinDate).format('DD/MM/YYYY')}</Text> */}
+                      <Text>{tripshedinDate}</Text>
+
+                    </View>
+
+
+
+                    <View style={styles.labeltag6}>
+                      {duty !== "Outstation"  ? <Text>{'-'}</Text> : <Text> {trimSeconds(tripRelasingTime)}</Text>}
+
+                    </View>
+                    <View style={styles.labeltag6}>
+                      {duty === "Outstation" ? <Text>{tripReleaseKm}</Text> : <Text>{"-"}</Text>}
+
+                    </View>
+
+                  </View> 
+
+                  <View style={styles.tablehead2}>
+                   <View style={styles.labeltag9}>
+                     <Text >Releasing</Text>
+
+                   </View>
+
+
+                   <View style={styles.labeltag10}>
+                     <Text>{dayjs(tripCloseDate).format('DD/MM/YYYY')}</Text>
+
+                   </View>
+
+                   <View style={styles.labeltag10}>
+                     <Text>{trimSeconds(tripClosetime)}</Text>
+
+                   </View>
+                   <View style={styles.labeltag10}>
+                    <Text>{tripCloseKm}</Text>
+
+                   </View>
+                   </View>
+                   <View style={styles.tablehead3}>
+                        <View style={styles.labeltag13}>
+                          <Text >Reporting</Text>
+
+                        </View>
+
+
+                        <View style={styles.labeltag14}>
+                          <Text>{dayjs(tripStartDate).format('DD/MM/YYYY')}</Text>
+
+                        </View>
+
+
+
+                        <View style={styles.labeltag14}>
+                          <Text>{trimSeconds(tripStartTime)}</Text>
+
+                        </View>
+                        <View style={styles.labeltag14}>
+                          <Text> {tripStartKm} </Text>
+
+                        </View>
+
+                      </View> 
+                      <View style={styles.tablehead4}>
+                      <View style={styles.labeltag17}>
+                        <Text >Starting</Text>
+
+                      </View>
+
+
+                      <View style={styles.labeltag18}>
+                        <Text>{dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
+
+                      </View>
+                      <View style={styles.labeltag18}>
+                        {duty !== "Outstation" ? <Text>{"-"}</Text> : <Text> {trimSeconds(tripReporttime)} </Text>}
+
+                      </View>
+                      <View style={styles.labeltag18}>
+                        <Text>-</Text>
+
+                      </View>
+
+                    </View>
+                    <View style={styles.tablehead5}>
+                      <View style={styles.labeltag21}>
+                        <Text >Total</Text>
+
+                      </View>
+
+
+                      <View style={styles.labeltag22}>
+                        <Text>{triptotaldays ? triptotaldays : 0}</Text>
+
+                      </View>
+
+                      <View style={styles.labeltag22}>
+                        <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
+
+                      </View>
+                      <View style={styles.labeltag22}>
+                      {duty !== "Outstation" ?  <Text>{hclKm}</Text> : <Text>{triptotalkms}</Text>}
+
+                      </View>
+
+                    </View>
+
+
+
+
+
+
+                    </>
+
+
+                      : <>
+                      
+                      <View style={styles.tablehead1}>
+                    <View style={styles.labeltag5}>
+                      <Text > Closing</Text>
+
+                    </View>
+
+
+                    <View style={styles.labeltag6}>
+                      {/* <Text>{dayjs(tripshedinDate).format('DD/MM/YYYY')}</Text> */}
+                      <Text>{tripshedinDate}</Text>
+
+                    </View>
+
+
+
+                    <View style={styles.labeltag6}>
+                     <Text> {trimSeconds(tripRelasingTime)}</Text>
+
+                    </View>
+                    <View style={styles.labeltag6}>
+                      <Text>{tripReleaseKm}</Text>
+
+                    </View>
+
+                  </View> 
+
+                  <View style={styles.tablehead4}>
+                      <View style={styles.labeltag17}>
+                        <Text >Starting</Text>
+
+                      </View>
+
+
+                      <View style={styles.labeltag18}>
+                        <Text>{dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
+
+                      </View>
+                      <View style={styles.labeltag18}>
+                        <Text> {trimSeconds(tripReporttime)} </Text>
+
+                      </View>
+                      <View style={styles.labeltag18}>
+                        <Text>{tripReportKm}</Text>
+
+                      </View>
+                      <View style={styles.tablehead5}>
+                      <View style={styles.labeltag21}>
+                        <Text >Total</Text>
+
+                      </View>
+
+
+                      <View style={styles.labeltag22}>
+                        <Text>{triptotaldays ? triptotaldays : 0}</Text>
+
+                      </View>
+
+                      <View style={styles.labeltag22}>
+                        <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
+
+                      </View>
+                      <View style={styles.labeltag22}>
+                      <Text>{triptotalkms}</Text>
+
+                      </View>
+
+                    </View>
+
+                    </View>
+                      
+                      
+                      
+                      </>
+                    }
+
+
+
                   </View>
 
                   <View style={styles.signdiv}>
@@ -1033,7 +1278,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
 
                   </View>
-                  {/* </View> */}</View>
+                </View>
 
 
                 <View style={styles.mapdiv}>
@@ -1121,7 +1366,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   </View> : <></>}
 
 
-               
+
                 {/* {attachedImage && attachedImage.length > 0 ? (
                   <>
                    
@@ -1137,17 +1382,17 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   <></>
                 )} */}
 
-{attachedImage && attachedImage.length > 0 && (
+                {attachedImage && attachedImage.length > 0 && (
                   <>
-                  <View style={[styles.addimg, { width: '100%' }]}>
-                  {/* <View key={index} style={[styles.imgwidth, { padding: '3px' }]} > */}
+                    <View style={[styles.addimg, { width: '100%' }]}>
+                      {/* <View key={index} style={[styles.imgwidth, { padding: '3px' }]} > */}
                       {attachedImage.map((item, index) => {
                         const dataimgetype1 = item.attachedimageurl.split('.').pop();
                         // URL.createObjectURL(img)
                         if (dataimgetype1 !== "pdf") {
                           return (
                             // <View key={index} style={{ width: '100%' }}>
-                        <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
+                            <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
 
                               <Image src={`${apiUrl}/images/${item.attachedimageurl}`} />
                             </View>
@@ -1162,10 +1407,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   </>
                 )
                 }
-          
 
-{/* dont remove the code */}
-              
+
+                {/* dont remove the code */}
+
                 {/* {bookimage && bookimage.length > 0 && (
                   <>
                     <View style={{ width: '100%' }}>

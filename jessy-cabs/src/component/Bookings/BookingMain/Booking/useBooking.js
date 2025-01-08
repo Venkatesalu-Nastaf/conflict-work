@@ -46,10 +46,13 @@ const useBooking = () => {
     setPopupOpen(false);
     setpopupOpenmail(false);
   };
+  
   const [escort, setEscort] = useState('No');
   const [transferreport, setTransferreport] = useState('No')
   const [isAddbtnload,setisAddbtnload] = useState(false)
   const [isEditbtnload,setisEditbtnload] = useState(false)
+   const [deletefile, setDeleteFile] = useState([])
+   const [deletefiledata, setDeleteFiledata] = useState([])
   
   const [formValues, setFormValues] = useState({
     guestname: "",
@@ -688,7 +691,7 @@ const handleAirportTransferChange = (event) => {
   }
   const [triggerCount, setTriggerCount] = useState(false)
 
-  useEffect(() => {
+
     const getImageCount = async () => {
       try {
         if (!booking_id) return
@@ -710,8 +713,36 @@ const handleAirportTransferChange = (event) => {
    
       }
     }
-    getImageCount()
+    useEffect(()=>{
+
+      getImageCount()
   }, [file, triggerCount, apiUrl, booking_id,])
+  
+
+  // useEffect(() => {
+  //   const getImageCount = async () => {
+  //     try {
+  //       if (!booking_id) return
+  //       const response = await axios.get(`${apiUrl}/booking-docPDFView/${booking_id}`)
+  //       const count = response.data.files.length
+
+  //       if (count > 0) {
+  //         setAvilableimageCount(count)
+  //       }
+  //     }
+  //     catch (err) {
+  //       // console.log(err,"rtyuiopoih")
+  //       // const errdata=err.response;
+  //       // console.log(errdata,"weeee")
+  //       // if(err.response.status === 404){
+  //         setAvilableimageCount(0)
+  //       // }
+       
+   
+  //     }
+  //   }
+  //   getImageCount()
+  // }, [file, triggerCount, apiUrl, booking_id,])
 
     //--------------------------------------------------------------
 
@@ -1376,7 +1407,7 @@ useEffect(() => {
   };
   const [imagedata, setImagedata] = useState(null);
   const handleContextMenu = () => {
-    axios.delete(`${apiUrl}/booking_doc-delete/` + imagedata)
+    axios.delete(`${apiUrl}/booking_doc-delete/` + imagedata + "/" + booking_id)
       .then((res) => {
         if (res.data.success) {
           setTriggerCount(prev => !prev)
@@ -1406,7 +1437,7 @@ useEffect(() => {
     }
     setSelectAll(prevState => !prevState);
   };
-  const [deletefile, setDeleteFile] = useState([])
+ 
 
   const handlecheckbox = (fileName) => {
     if (deletefile.includes(fileName)) {
@@ -1428,25 +1459,25 @@ useEffect(() => {
     // console.log(index,"index",e)
     // e.preventDefault()
       if (deletefile.includes(e)) {
-      setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== e));
+      setDeleteFiledata(prevDeleteFile => prevDeleteFile.filter(file => file !== e));
     } else {
-      setDeleteFile(prevDeleteFile => [...prevDeleteFile,e]);
+      setDeleteFiledata(prevDeleteFile => [...prevDeleteFile,e]);
     }
     // setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
   }
   // console.log(deletefile,"deletefile")
 
-  const handleimagedeletewithouttripid =(deletefiledata) => {
-    if (deletefiledata.length > 0) {
+  const handleimagedeletewithouttripid =(deletefiledata1) => {
+    if (deletefiledata1.length > 0) {
       // const updatedSelectedImg = selectedImg.filter(file => file.name !== nameToRemove);
       // setSelectetImg((prevFileNames) => prevFileNames.filter(file => file.name !== nameToRemove));
       setSelectetImg((prevFileNames) =>
-        prevFileNames.filter(file => !deletefiledata.includes(file.name))
+        prevFileNames.filter(file => !deletefiledata1.includes(file.name))
       );
 
       // setDialogdeleteOpen(true);
       setDialogOpenTrail(true)
-      setDeleteFile([]);
+      setDeleteFiledata([]);
     }
   };
 
@@ -1591,7 +1622,7 @@ useEffect(() => {
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus, handletravelsAutocompleteChange, accountinfodata,
-    vehileName, infoMessage, handleImagechange2, selectetImg,handleimagedeletewithouttripid,
+    vehileName, infoMessage, handleImagechange2, selectetImg,handleimagedeletewithouttripid,deletefiledata,
     //  removeSelectedImage,
      imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning,
     handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort,

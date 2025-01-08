@@ -216,7 +216,8 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                     <div >
                                         {/* <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
                                 <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4> */}
-                                        {gstAmount1 !== 0 ?
+                                        {gstAmount1 !== null && gstAmount1 !== undefined ? 
+
                                             <>
                                                 <h4 style={{margin:"3px"}}>Amount :</h4>
                                                 <h4 style={{margin:"3px"}}>CGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
@@ -273,8 +274,8 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                         <div >
                                             <h4 style={{ fontWeight: 600, margin: "2px" }}>NOTE:</h4>
                                             <h4 style={{ padding: 2, wordSpacing: 3, margin: "2px" }}>
-                                                IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recepient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
-                                            </h4>
+                                                IGST@5% or both CGST@2.5% & SGST@2.5% of Rs: {(book.totalcalcAmount ? (book.totalcalcAmount * 0.05).toFixed(2) : '0.00')} is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
+                                                </h4>
                                         </div> : ""
                                     }
                                 </div>

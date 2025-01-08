@@ -536,7 +536,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <View style={styles.tableRow}>
 
                       <View style={styles.tableheadsno}><Text>S No</Text></View>
-                      <View style={styles.tableheading}><Text>Trip DT</Text></View>
+                      <View style={styles.tableheading}><Text>Trip Date</Text></View>
                       <View style={styles.tableheadtripno}><Text>Trip No</Text></View>
                       <View style={styles.tableheadingparticular}><Text>Particulars</Text></View>
                       <View style={styles.tableheadingpermit}><Text>Park/Permit/Toll</Text></View>
@@ -621,9 +621,16 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   {customerData[0]?.gstTax === 0 || customerData[0]?.gstTax === null ? (
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 15 }}>
                       <Text style={{ fontSize: 11 }}>NOTE:</Text>
-                      <Text style={{ fontSize: 10 }}>
+                      {/* <Text style={{ fontSize: 10 }}>
                         IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
-                      </Text>
+                      </Text> */}
+                      <Text style={{ fontSize: 10 }}>
+    IGST@5% or both CGST@2.5% & SGST@2.5% of Rs: 
+    {fullAmount > 0 && (
+      (fullAmount * 0.05).toFixed(2) // Calculate 5% and format to 2 decimal places
+    )} is to be paid by Service Recipient Under RCM as per Notification 22/2019 - Central tax (Rate) dated 30-09-2019
+  </Text>
+
                       <View>
                         <Text style={{ width: 200, fontSize: 11, paddingTop: 75, paddingLeft: 7 }}>
                           E.& O.E In Words-Rupees

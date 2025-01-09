@@ -106,11 +106,11 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                 </tr>
                 <tr>
                   <th id='table-header-hcl'><span>Report Add:</span></th>
-                  <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}</p></td>
+                  <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city} </p></td>
                 </tr>
                 <tr>
                   <th id='table-header-hcl'><span>Drop Address:</span></th>
-                  <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage}</p></td>
+                  <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage} </p></td>
                 </tr>
 
                 {/* <tr>
@@ -149,7 +149,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                 </tr>
                 <tr>
                   <th id='table-header-hcl'><span >Driver Name:</span></th>
-                  <td id='table-data'><span>{selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName}</span></td>
+                  <td id='table-data'><span>{selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName} </span></td>
                 </tr>
                 <tr>
                   <th id='table-header-hcl'><span >Driver Mobile:</span></th>
@@ -323,13 +323,13 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             </div>
           </div>
           <div className='total-values-hcl'>
-            <div id='Totals'><span id='title'>Total Parking  </span><span>{tripSheetData.parking || selectedCustomerData.parking || selectedCustomerDatas.parking || book.parking}</span></div>
-            <div id='Totals'><span id='title'>Total Toll  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
-            <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
+            <div id='Totals'><span id='title' style={{fontWeight:"600"}}>Total Parking:  </span><span>{tripSheetData.parking || selectedCustomerData.parking || selectedCustomerDatas.parking || book.parking}</span></div>
+            <div id='Totals'><span id='title' style={{fontWeight:"600"}}>Total Toll:  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
+            <div id='Totals'><span id='title' style={{fontWeight:"600"}}>Total Permit:  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
           </div>
 
 
-          <div style={{ display: "flex", gap: "6px" }}>
+          <div className='total-map-section' >
 
             <div className='tripsheet-location-img-hcl'>
 
@@ -340,11 +340,11 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             <div className="tripsheet-RouteSummary-hcl">
               {routeData.length > 0 && (
                 <div >
-                  <h2 style={{ marginTop: "0px" }}>Route Summary</h2>
+                  <h2 style={{ margin: "0px",textAlign:"center" ,fontSize:"17px",fontWeight:'600'}}>Route Summary</h2>
                   <ol type="1">
                     {routeData.map((data, index) => (
                       <li key={index}>
-                        <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                        <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p>
                       </li>
                     ))}
                   </ol>

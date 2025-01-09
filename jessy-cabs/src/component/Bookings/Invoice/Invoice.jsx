@@ -65,7 +65,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                 </tr>
                 <tr>
                   <th id='table-header'><span>Address:</span></th>
-                  <td id='table-data'><span >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}</span></td>
+                  <td id='table-data'><span >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city} jkfgy  uy gdu h ouy giyhi bgihbgxib h v xu gu gvuzbvi go sv gdvu oy yz  bjhi a v zxy bgyo xzi  hoyibh ix db </span></td>
                 </tr>
                 <tr>
                   <th id='table-header'><span>Ordered By:</span></th>
@@ -194,9 +194,9 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             </div>
           </div>
           <div className='total-values'>
-            <div id='Totals'><span id='title'>Total Parking  </span><span>{tripSheetData.parking || selectedCustomerData.parking || selectedCustomerDatas.parking || book.parking}</span></div>
-            <div id='Totals'><span id='title'>Total Toll  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
-            <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
+            <div id='Totals'><span id='title'>Total Parking: </span><span>{tripSheetData.parking || selectedCustomerData.parking || selectedCustomerDatas.parking || book.parking}</span></div>
+            <div id='Totals'><span id='title'>Total Toll:  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
+            <div id='Totals'><span id='title'>Total Permit:  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
           </div>
 
           <div style={{ display: "flex", gap: "6px" }}>
@@ -207,7 +207,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
               {/* <img src={GmapimageUrl} alt='mapimage' /> */}
               {GmapimageUrl !== "" ?
                 <img src={GmapimageUrl} alt='mapimage' style={{ width: "100%", height: "100%" }} /> : <></>}
-            </div>
+            </div> 
             {/* <div className="tripsheet-RouteSummary">
             <h2>Route Summary</h2>
             <ol type="1">
@@ -219,11 +219,11 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             <div className="tripsheet-RouteSummary-normal">
               {routeData.length > 0 && (
                 <div>
-                  <h2 style={{ margin: "0px" }}>Route Summary</h2>
-                  <ol type="1">
+                  <h2 style={{ margin: "0px",textAlign:"center" ,fontSize:"17px",fontWeight:'600' }}>Route Summary</h2>
+                  <ol type="1" style={{fontSize:'11px'}}>
                     {routeData.map((data, index) => (
                       <li key={index}>
-                        <p><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                        <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p>
                       </li>
                     ))}
                   </ol>
@@ -293,7 +293,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             </ol>
           </div>
 
-          <div className="attached-toll">
+          <div className="attached-toll1">
             <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
               {Array.isArray(attachedImage) &&
                 attachedImage.map((file, index) => {

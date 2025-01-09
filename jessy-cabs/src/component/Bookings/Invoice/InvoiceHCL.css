@@ -41,8 +41,10 @@
   }
   
   .tripsheet-RouteSummary-hcl ol {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
+    margin-top: 3px;
+    margin-bottom: 3px;
   }
 
   .upload-pdf-hcl {
@@ -51,16 +53,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 20px;
-    padding-bottom: 16px;
-    /* border: 5px solid rgb(255, 255, 255); */
+    padding-top: 25px;
+    padding-bottom: 20px;
     border: 5px solid rgb(255, 255, 255);
   }
 
   .upload-img-hcl {
     /* padding-top: 35%;
     padding-bottom: 35%; */
-    margin-top: 5%;
+    margin-top: 7%;
+    margin-bottom: 0.5%;
+    /* padding-top: 10px; */
 
     margin-right: auto;
     margin-left: auto;
@@ -82,8 +85,9 @@
   }
 
   .table-data-add-hcl{
-    width: 300px;
+    width: 350px;
     margin: 0%;
+    font-size: 12px;
   }
 
   
@@ -110,4 +114,10 @@
   padding: 2px 6px;
   border-radius: 2px;
   border: 1px solid #ccc;
+}
+
+.total-map-section{
+display: flex;
+gap: 6px;
+/* background-color: red; */
 }

@@ -28,6 +28,8 @@
     font-weight: 600;
 }
 .image-div{
+    width: 40%;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -117,6 +119,11 @@
 }
 .amount-div{
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+    padding-right: 30px;
     width: 175px;
 }
 .amounttext{
@@ -126,15 +133,21 @@
 .sign-text{
     font-size: 18px;
     font-weight: 600;
+    display: flex;
+    justify-content: center;
 }
 .attach-text{
     text-align: center;
     font-size: 18px;
     font-weight: 600;
 }
-.dialogboximg {
+.dialogboximg-iv {
     height: 100px;
     width: 100px;
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
   
   }
   .tripsheet-RouteSummary p {

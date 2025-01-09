@@ -35,7 +35,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
     }
 
     const formatAddress = (address) => {
-        return address?.split('\n').map((line, index) => <p key={index}>{line}</p>);
+        return address?.split('\n').map((line, index) => <p key={index} style={{marginTop:'0px'}}>{line}</p>);
     }
     // console.log(otherStations,"pppp",otherStations?.data)
 
@@ -119,7 +119,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                 <div style={{ display: 'flex', flexDirection: 'column', width: '784px', padding: 20 }} ref={targetRef}>
                     <div className="outline-div">
                         <div className="header-div">
-                            <div>
+                            <div style={{width:"60%"}}>
                                 <p className="org-name">{organizationdata.organizationname}</p>
                                 {otherStations.data6 !== null ? (
                                     // <h2 className="organisationtext">{commonState.address}</h2>
@@ -151,8 +151,11 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                 {/* <p className="receiver-details">{customerData.customer}</p> */}
                                 <div style={{ width: '300px' }}>
                                     {/* {formatAddress(customerData.address1)} */}
-                                    {formatAddress(otherStations.data2)}
+                                    {formatAddress(otherStations.data2)}bhfbvgbiobgsdeu  fygeuy vus vgofeg vyg gvxgduyr kzxd  
+
+                                    
                                 </div>
+                                
                                 {/* <p className="receiver-details">GSTIN : {customerData.gstnumber}</p> */}
                                 <p className="receiver-details">GSTIN : {otherStations.data3}</p>
                             </div>
@@ -281,9 +284,9 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                 </div>
                             </div>
                             <div style={{ paddingBottom: '10px', paddingRight: '10px', width: "30%", }}>
-                                <p className="sign-text" style={{ display: "flex", marginLeft: "80px" }}>For JessyCabs</p>
+                                <p className="sign-text" >For JessyCabs</p>
                                 {signimageUrl !== "" ?
-                                    <img className='dialogboximg' src={signimageUrl} alt=" " style={{ marginLeft: "100px" }} /> : <div className='dialogboximg' ></div>}
+                                    <img className='dialogboximg-iv' src={signimageUrl} alt=" " /> : <div className='dialogboximg-iv' ></div>}
                                 <p className="sign-text" style={{ display: "flex", justifyContent: "flex-end" }}>Authorised Signature</p>
                             </div>
                         </div>
@@ -325,7 +328,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
 
                         </div> :
                         
-                        <div style={{height:'50px', border:"2px solid red"}}>
+                        <div style={{height:'50px', border:"2px solid white"}}>
                         </div>
                         }
 

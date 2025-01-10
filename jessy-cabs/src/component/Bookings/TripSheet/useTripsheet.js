@@ -133,6 +133,7 @@ const useTripsheet = () => {
     });
     const [conflictLoad, setConflictLoad] = useState(null)
     const [selectedStatuschecking, setSelectedStatuschecking] = useState('');
+    const [openModalConflict,setOpenModalConflict] = useState(null)
     // ----------------------------------------vendorinfo-------------------
     // const [lockdata, setLockData] = useState(false)
     const [lockdata, setLockData] = useState(true)
@@ -1156,7 +1157,7 @@ const useTripsheet = () => {
 
     const status1 = formData.status || selectedCustomerData.status || book.status
     const dayhcl1 = hybridhclcustomer || hybridhclnavigate
-    console.log(mapimageUrls1, "urls", typeof (mapimageUrls1), mapimageUrls)
+    // console.log(mapimageUrls1, "urls", typeof (mapimageUrls1), mapimageUrls)
     const checksignatureandmap = async () => {
         // handleTripmapClick()
         await handleTripmapverify()
@@ -1241,7 +1242,7 @@ const useTripsheet = () => {
         checksignatureandmap()
     }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate, signimageUrl, mapimageUrls1])
 
-    console.log(checksignandMapverify, "userStatusdata", typeof (checksignandMapverify))
+    // console.log(checksignandMapverify, "userStatusdata", typeof (checksignandMapverify))
 
     const handleEdit = async () => {
         // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
@@ -4624,15 +4625,15 @@ const useTripsheet = () => {
         const amount8 = parseFloat(vendorinfo?.vendorparking) || 0;
         const amount9 = parseFloat(vendorinfo.fuelamount) || 0;
 
-        console.log(amount, "1", amount1, "2", amount2, "3", amount3, "4", amount4, "5", amount5, "6", amount6, "8", amount8)
+        // console.log(amount, "1", amount1, "2", amount2, "3", amount3, "4", amount4, "5", amount5, "6", amount6, "8", amount8)
 
 
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount8;
         // const fullAmount = totalAmount - amount7 - amount9;
         const fullAmount1 = totalAmount - amount7
-        console.log(fullAmount1, "totalAmount2check", amount7)
+        // console.log(fullAmount1, "totalAmount2check", amount7)
         const fullAmount = fullAmount1 - amount9;
-        console.log(fullAmount, "fullcheck")
+        // console.log(fullAmount, "fullcheck")
         const fullamountdata = Math.ceil(fullAmount);
         setVendorbilldata({ ...vendorbilldata, Vendor_FULLTotalAmount: fullamountdata })
         // return totalAmount;
@@ -5365,7 +5366,7 @@ const useTripsheet = () => {
             const hcldata = await axios.get(`${apiUrl}/get-CancelTripDataforHcl/${vehicleRegisterNo}`)
             const hclkmdatas = hcldata.data;
             const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun1)
-            console.log(mapdata, "opssssS")
+            // console.log(mapdata, "opssssS")
             if (mapdata.length > 0) {
                 const allValues = mapdata.flatMap(trip => [
                     Number(trip.shedout) || 0,
@@ -5384,19 +5385,19 @@ const useTripsheet = () => {
                 });
                 let hclcustomerhybrid = 0
                 let hcltripid = 0
-                console.log(maxTrip, "opttt", maxValue)
+                // console.log(maxTrip, "opttt", maxValue)
                 if (hclkmdatas.length > 0) {
                     hclcustomerhybrid = Number(hclkmdatas[0]?.totalCloseKm || 0);
                     hcltripid = Number(hclkmdatas[0]?.tripid || 0)
-                    console.log(hclcustomerhybrid);
+                    // console.log(hclcustomerhybrid);
                 }
                 // const hclcustomerhybrid = Number(hclkmdatas[0]?.totalCloseKm)
                 // const hcltripid = Number(hclkmdatas[0]?.tripid)
-                console.log(hcltripid, typeof (hcltripid), "opppp")
-                console.log(hclcustomerhybrid, typeof (hcltripid), "opppp")
+                // console.log(hcltripid, typeof (hcltripid), "opppp")
+                // console.log(hclcustomerhybrid, typeof (hcltripid), "opppp")
                 const datamaxhybrid = maxValue > hclcustomerhybrid ? maxValue : hclcustomerhybrid
                 const datamaxtripid = maxValue > hclcustomerhybrid ? maxTrip?.tripid : hcltripid
-                console.log(datamaxhybrid, "opclllll")
+                // console.log(datamaxhybrid, "opclllll")
                 // console.log(hclcustomerhybrid,"hclhybridhcllllll",maxValue)
                 // Find the maximum value 
                 // setMaxConflict({ maxconflictdata: maxValue || 0, maxTripid: maxTrip.tripid })
@@ -6446,7 +6447,7 @@ const useTripsheet = () => {
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
     const superAdminAccess = localStorage.getItem("SuperAdmin")
-    console.log(superAdminAccess, "ssssssssss", statusCheck);
+    // console.log(superAdminAccess, "ssssssssss", statusCheck);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -6457,7 +6458,7 @@ const useTripsheet = () => {
                 const data = response.data;
                 const station = data?.map(li => li.stationname.split(",")).flat();
                 setUserStatus(station)
-                console.log(station, "userstation444444", statusCheck, station.includes('Chennai'));
+                // console.log(station, "userstation444444", statusCheck, station.includes('Chennai'));
                 if (statusCheck === "Temporary Closed" && (station.includes("All") || station.includes("Chennai"))) {
 
                     setTemporaryStatus(false);
@@ -6552,7 +6553,7 @@ const useTripsheet = () => {
                     vehicleNo: vehicleNo,
                     dateCheck: datecheck
                 });
-                console.log(response.data, "conflictdataaaa");
+                // console.log(response.data, "conflictdataaaa");
 
                 const mainDatas = response.data;
                 const minData = mainDatas.reduce((min, current) => {
@@ -6754,7 +6755,7 @@ const useTripsheet = () => {
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
-        minTimeData, maxTimeData, shedInTimeData, conflictLoad,setConflictLoad,selectedStatuschecking
+        minTimeData, maxTimeData, shedInTimeData, conflictLoad,setConflictLoad,selectedStatuschecking,openModalConflict,setOpenModalConflict
 
     };
 };

@@ -469,13 +469,20 @@
 }
 
 .invalid-km {
-  margin: 0;
-  padding: 0;
+  /* margin: 0; */
+  /* padding: 0; */
   text-align: center;
-  color: red;
-  font-size: 15px;
-  padding-bottom: 5px;
-  margin-top: -23px;
+  color:black;
+  font-size: 12px;
+  word-spacing: 3px;
+  /* padding-bottom: 5px; */
+  /* margin-top: -23px; */
+}
+.No-Data{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
 }
 
 .tripsheet-top-division {

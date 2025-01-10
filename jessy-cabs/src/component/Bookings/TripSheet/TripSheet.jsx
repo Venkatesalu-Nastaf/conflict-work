@@ -269,7 +269,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     // timeToggle,HclKMCalculation,
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
-    userStatus,minTimeData,maxTimeData,shedInTimeData,conflictLoad,selectedStatuschecking
+    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -614,7 +614,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     const shedinTimeFormat = reportTime?.replace(":", ".")
     const finalshedinTimeFormat = parseFloat(shedinTimeFormat)?.toFixed(2);
     const lastestTimeFormat = conflictCompareDatas?.latestTime?.replace(":", ".")
-    const leastTimeFormat = conflictCompareDatas?.leastTime?.replace(":",".")
+    const leastTimeFormat = conflictCompareDatas?.leastTime?.replace(":", ".")
     const finallastestTimeFormat = parseFloat(lastestTimeFormat)?.toFixed(2)
     const finalleastTimeFormat = parseFloat(leastTimeFormat)?.toFixed(2)
     const parseDate = (dateStr) => {
@@ -627,22 +627,22 @@ const TripSheet = ({ stationName, logoImage }) => {
     finalmaxtime?.setHours(0, 0, 0, 0);
 
     const finalShedoutFormat = parseFloat(finalshedinTimeFormat).toFixed(2)
-    const finalLatestFormat =  parseFloat(finallastestTimeFormat).toFixed(2)
-    
+    const finalLatestFormat = parseFloat(finallastestTimeFormat).toFixed(2)
+
     const isEqual = (
 
       // isEditMode &&
       conflictCompareDatas?.conflictmaxdate !== null &&
       conflictCompareDatas?.tripids !== null &&
       conflictCompareDatas?.tripids !== tripid &&
-      finalshedouttime.getDate() === finalmaxtime.getDate()  &&
-      finalshedouttime.getMonth() === finalmaxtime.getMonth()  &&
-      finalshedouttime.getFullYear() === finalmaxtime.getFullYear()  &&
+      finalshedouttime.getDate() === finalmaxtime.getDate() &&
+      finalshedouttime.getMonth() === finalmaxtime.getMonth() &&
+      finalshedouttime.getFullYear() === finalmaxtime.getFullYear() &&
 
       // !shedindate &&
       // reportTime <= conflictCompareDatas?.latestTime &&
-      parseFloat(finalShedoutFormat || 0) === parseFloat(finalLatestFormat || 0) 
-    //  (parseFloat(a || 0) === parseFloat(b || 0) || parseFloat(a) < parseFloat(b) )
+      parseFloat(finalShedoutFormat || 0) === parseFloat(finalLatestFormat || 0)
+      //  (parseFloat(a || 0) === parseFloat(b || 0) || parseFloat(a) < parseFloat(b) )
       // shedOutDate === conflictCompareDatas?.conflictmaxdate
 
     )
@@ -653,142 +653,142 @@ const TripSheet = ({ stationName, logoImage }) => {
       conflictCompareDatas?.tripids !== null &&
       // conflictCompareDatas?.tripids !== tripID &&
       // !shedindate &&
-      finalshedouttime.getDate() === finalmaxtime.getDate()  &&
-      finalshedouttime.getMonth() === finalmaxtime.getMonth()  &&
-      finalshedouttime.getFullYear() === finalmaxtime.getFullYear() && 
+      finalshedouttime.getDate() === finalmaxtime.getDate() &&
+      finalshedouttime.getMonth() === finalmaxtime.getMonth() &&
+      finalshedouttime.getFullYear() === finalmaxtime.getFullYear() &&
       parseFloat(finalShedoutFormat) === parseFloat(finalleastTimeFormat) &&
       parseFloat(finalShedoutFormat) <= parseFloat(finalLatestFormat)
       // Check if shedOutDate is less than conflictenddate
     );
 
 
-    return  isEqual ;
+    return isEqual;
   };
 
 
-const checkingMinimumData = () => {
+  const checkingMinimumData = () => {
 
-  const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
-  const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
-  const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-  const shedintime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime || '';
-  const shedintimeformat = shedintime.replace(":",".");
-  const finalshedincalc = parseFloat(shedintimeformat).toFixed(2);
-  const shedoutTimeFormat = reportTime?.replace(":", ".")
-  const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
-  const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
-  const parseDate = (dateStr) => {
-    const [day, month, year] = dateStr?.split('-');
-    return new Date(`${year}-${month}-${day}`);
-  };
-  const minDate = dayjs(minTimeData?.date).format("DD-MM-YYYY")
-  const maxDate = dayjs(maxTimeData?.date).format("DD-MM-YYYY")
-  const finalshedoutdate = parseDate(shedOutDate || "");
-  finalshedoutdate?.setHours(0, 0, 0, 0);
-  const finalMindate = parseDate(minDate || "")
-  finalMindate?.setHours(0, 0, 0, 0);
-  const finalMaxdate = parseDate(maxDate || "")
-  finalMaxdate?.setHours(0, 0, 0, 0);
+    const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+    const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
+    const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+    const shedintime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime || '';
+    const shedintimeformat = shedintime.replace(":", ".");
+    const finalshedincalc = parseFloat(shedintimeformat).toFixed(2);
+    const shedoutTimeFormat = reportTime?.replace(":", ".")
+    const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
+    const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
+    const parseDate = (dateStr) => {
+      const [day, month, year] = dateStr?.split('-');
+      return new Date(`${year}-${month}-${day}`);
+    };
+    const minDate = dayjs(minTimeData?.date).format("DD-MM-YYYY")
+    const maxDate = dayjs(maxTimeData?.date).format("DD-MM-YYYY")
+    const finalshedoutdate = parseDate(shedOutDate || "");
+    finalshedoutdate?.setHours(0, 0, 0, 0);
+    const finalMindate = parseDate(minDate || "")
+    finalMindate?.setHours(0, 0, 0, 0);
+    const finalMaxdate = parseDate(maxDate || "")
+    finalMaxdate?.setHours(0, 0, 0, 0);
 
-  const equalDateCheck = (
-    minTimeData?.tripid !== undefined &&
-    tripid !== parseInt(minTimeData?.tripid) &&
-    tripid !== parseInt(maxTimeData?.tripid) &&
-    finalshedoutdate.getDate() === finalMindate.getDate()  &&
-    finalshedoutdate.getMonth() === finalMindate.getMonth()  &&
-    finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
-    parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
-    parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
-       
-  )
+    const equalDateCheck = (
+      minTimeData?.tripid !== undefined &&
+      tripid !== parseInt(minTimeData?.tripid) &&
+      tripid !== parseInt(maxTimeData?.tripid) &&
+      finalshedoutdate.getDate() === finalMindate.getDate() &&
+      finalshedoutdate.getMonth() === finalMindate.getMonth() &&
+      finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
+      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
+      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
 
-  const minimumTimeNotAllowed = (
-    minTimeData?.tripid !== undefined &&
-    tripid !== parseInt(minTimeData?.tripid) &&
-    finalshedoutdate.getDate() === finalMindate.getDate()  &&
-    finalshedoutdate.getMonth() === finalMindate.getMonth()  &&
-    finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
-    !parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
-    !parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)  )
+    )
 
-  const maximumTimeNotAllowed = (
-    maxTimeData?.tripid !== undefined &&
-    tripid !== parseInt(maxTimeData?.tripid) &&
-    finalshedoutdate.getDate() === finalMindate.getDate()  &&
-    finalshedoutdate.getMonth() === finalMindate.getMonth()  &&
-    finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
-    parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
-    parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
-  )
+    const minimumTimeNotAllowed = (
+      minTimeData?.tripid !== undefined &&
+      tripid !== parseInt(minTimeData?.tripid) &&
+      finalshedoutdate.getDate() === finalMindate.getDate() &&
+      finalshedoutdate.getMonth() === finalMindate.getMonth() &&
+      finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
+      !parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
+      !parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time))
+
+    const maximumTimeNotAllowed = (
+      maxTimeData?.tripid !== undefined &&
+      tripid !== parseInt(maxTimeData?.tripid) &&
+      finalshedoutdate.getDate() === finalMindate.getDate() &&
+      finalshedoutdate.getMonth() === finalMindate.getMonth() &&
+      finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
+      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
+      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
+    )
 
 
-  
-return equalDateCheck  || minimumTimeNotAllowed 
-}
 
-const maxShedInDate = ()=>{
-  const shedindate = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format("DD-MM-YYYY");
-  const maximumShedInDate = dayjs(shedInTimeData?.[0]?.shedindate || "")?.format("DD-MM-YYYY")
-  const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
-  const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
-  const shedoutTimeFormat = reportTime?.replace(":", ".")
-  const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
+    return equalDateCheck || minimumTimeNotAllowed
+  }
 
-  const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
-  const parseDate = (dateStr) => {
-    const [day, month, year] = dateStr?.split('-');
-    return new Date(`${year}-${month}-${day}`);
-  };
+  const maxShedInDate = () => {
+    const shedindate = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format("DD-MM-YYYY");
+    const maximumShedInDate = dayjs(shedInTimeData?.[0]?.shedindate || "")?.format("DD-MM-YYYY")
+    const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
+    const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+    const shedoutTimeFormat = reportTime?.replace(":", ".")
+    const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
 
-  const minDate = dayjs(minTimeData?.date).format("DD-MM-YYYY")
-  const maxDate = dayjs(maxTimeData?.date).format("DD-MM-YYYY")
-  const finalShedInDate = parseDate(shedindate || "")
-  finalShedInDate?.setHours(0, 0, 0, 0);
-  const finalMaximumShedInDate = parseDate(maximumShedInDate || "");
-  finalMaximumShedInDate?.setHours(0, 0, 0, 0);
-  const finalshedoutdate = parseDate(shedOutDate || "");
-  finalshedoutdate?.setHours(0, 0, 0, 0);
-  const finalMindate = parseDate(minDate || "")
-  finalMindate?.setHours(0, 0, 0, 0);
-  const finalMaxdate = parseDate(maxDate || "")
-  finalMaxdate?.setHours(0, 0, 0, 0);
+    const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
+    const parseDate = (dateStr) => {
+      const [day, month, year] = dateStr?.split('-');
+      return new Date(`${year}-${month}-${day}`);
+    };
 
-  const shedInDateChecking = (
-    parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
-    shedInTimeData?.length > 0 &&
-    shedindate !== "" && 
-    finalMaximumShedInDate.getDate() !== finalshedoutdate.getDate() &&
-    finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() && 
-    finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
-    parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
-  );
-  const shedInDateLessTime = (
-    parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
-    parseFloat(maxTimeData?.tripid) !== tripid &&
-    parseFloat(minTimeData?.tripid) !== tripid &&
-    shedInTimeData?.length > 0 &&
-    shedindate !== "" && 
-    finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
-    finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() && 
-    finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
-    parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
-    parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) 
-  );
-  const maxminTime = (
-    parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
-    parseFloat(minTimeData?.tripid) !== tripid &&
-    shedInTimeData?.length > 0 &&
-    shedindate !== "" && 
-    finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
-    finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() && 
-    finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
-    parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
-    parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) 
-  );
-  
-  return shedInDateChecking || shedInDateLessTime
+    const minDate = dayjs(minTimeData?.date).format("DD-MM-YYYY")
+    const maxDate = dayjs(maxTimeData?.date).format("DD-MM-YYYY")
+    const finalShedInDate = parseDate(shedindate || "")
+    finalShedInDate?.setHours(0, 0, 0, 0);
+    const finalMaximumShedInDate = parseDate(maximumShedInDate || "");
+    finalMaximumShedInDate?.setHours(0, 0, 0, 0);
+    const finalshedoutdate = parseDate(shedOutDate || "");
+    finalshedoutdate?.setHours(0, 0, 0, 0);
+    const finalMindate = parseDate(minDate || "")
+    finalMindate?.setHours(0, 0, 0, 0);
+    const finalMaxdate = parseDate(maxDate || "")
+    finalMaxdate?.setHours(0, 0, 0, 0);
 
-}
+    const shedInDateChecking = (
+      parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
+      shedInTimeData?.length > 0 &&
+      shedindate !== "" &&
+      finalMaximumShedInDate.getDate() !== finalshedoutdate.getDate() &&
+      finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
+      finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
+      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
+    );
+    const shedInDateLessTime = (
+      parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
+      parseFloat(maxTimeData?.tripid) !== tripid &&
+      parseFloat(minTimeData?.tripid) !== tripid &&
+      shedInTimeData?.length > 0 &&
+      shedindate !== "" &&
+      finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
+      finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
+      finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
+      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
+      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time)
+    );
+    const maxminTime = (
+      parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
+      parseFloat(minTimeData?.tripid) !== tripid &&
+      shedInTimeData?.length > 0 &&
+      shedindate !== "" &&
+      finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
+      finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
+      finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
+      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
+      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time)
+    );
+
+    return shedInDateChecking || shedInDateLessTime
+
+  }
 
   const handleCloseMapPopUp = () => {
     setMapPopUp(false)
@@ -863,8 +863,17 @@ const maxShedInDate = ()=>{
     }
 
   }
-  
-  const signaturedisabled = signimageUrl ==="" && temporaryStatus ? true : false
+
+  const handleConflictPopup = () => {
+    setOpenModalConflict(false)
+  }
+
+  const handleConflictModal = () => {
+    setOpenModalConflict(true)
+  }
+  const conflictModalbox = (checkingMinimumData() && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null)) || (maxShedInDate() && conflictLoad !== null);
+
+  const signaturedisabled = signimageUrl === "" && temporaryStatus ? true : false
 
   const shedoutDisabled = temporaryStatus ? hideField : hideField
   return (
@@ -940,15 +949,15 @@ const maxShedInDate = ()=>{
                     //   label: option.Option,
                     // }))}
                     options={
-                      !userStatus?.includes('Chennai') && !userStatus?.includes('All') 
+                      !userStatus?.includes('Chennai') && !userStatus?.includes('All')
                         ? OuststationStatus?.map((option) => ({
-                            label: option.Option,
-                          }))
+                          label: option.Option,
+                        }))
                         : Status.map((option) => ({
-                            label: option.Option,
-                          }))
+                          label: option.Option,
+                        }))
                     }
-                    
+
                     getOptionLabel={(option) => option.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                     renderInput={(params) => {
                       return (
@@ -1435,19 +1444,84 @@ const maxShedInDate = ()=>{
                   </Box>
                 </div>
                 {emptyState ? "" :
-                  <div className="input" style={{ display: "grid" }}>
+                  <div className="input" style={{ display: "grid", position:"relative" }}>
                     {/* {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
                       Conflict tripid: {conflictCompareDatas?.tripids}, Time: {conflictCompareDatas?.latestTime}, conflictdate:{conflictCompareDatas?.conflictmaxdate}
                     </label>} */}
-                    { checkingMinimumData() && conflictLoad!==null && (shedInTimeData?.length === 0 || shedInTimeData === null )  && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
-                      Conflict Date: {  dayjs(minTimeData?.date).format("DD-MM-YYYY")} MinTripId:  {minTimeData?.tripid} MinTime : {minTimeData?.time} - MaxTripId : {maxTimeData?.tripid} MaxTime : {maxTimeData?.time} 
+                    {/* {checkingMinimumData() && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null) && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
+                      Conflict Date: {dayjs(minTimeData?.date).format("DD-MM-YYYY")} MinTripId:  {minTimeData?.tripid} MinTime : {minTimeData?.time} - MaxTripId : {maxTimeData?.tripid} MaxTime : {maxTimeData?.time}
                     </label>}
                     {
-                      maxShedInDate() && conflictLoad!==null &&
-                      <label  className='invalid-km' style={{ paddingBottom: '5px' }}> Shed in Date Achieved :{shedInTimeData[0]?.Tripid} {'\n'}  conflict Date :{dayjs(shedInTimeData[0]?.shedindate).format("DD-MM-YYYY")}  MinTripId:  {minTimeData?.tripid} MinTime : {minTimeData?.time} - MaxTripId : {maxTimeData?.tripid} MaxTime : {maxTimeData?.time}   </label> 
-                    }
+                      maxShedInDate() && conflictLoad !== null &&
+                      <label className='invalid-km' style={{ paddingBottom: '5px' }}> Shed in Date Achieved :{shedInTimeData[0]?.Tripid} {'\n'}  conflict Date :{dayjs(shedInTimeData[0]?.shedindate).format("DD-MM-YYYY")}  MinTripId:  {minTimeData?.tripid} MinTime : {minTimeData?.time} - MaxTripId : {maxTimeData?.tripid} MaxTime : {maxTimeData?.time}   </label>
+                    } */}
 
-                    <div style={{ display: "flex" }}>
+                    <Modal
+                      open={openModalConflict}
+                      onClose={handleConflictPopup}
+                      aria-labelledby="modal-title"
+                      aria-describedby="modal-description"
+                    >
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: '48%',
+                          left: '14%',
+                          transform: 'translate(-50%, -50%)',
+                          width: '250px',
+                          height: '100px',
+                          bgcolor: 'white',
+                          // border: '1px solid #000',
+                          borderRadius:3,
+                          textAlign:'center',
+                          boxShadow: 24,
+                          p: 1,
+                          overflowY: 'auto'
+                        }}
+                      >
+                        {conflictModalbox ? (
+                          <>
+                            {checkingMinimumData() &&
+                              conflictLoad !== null &&
+                              (shedInTimeData?.length === 0 || shedInTimeData === null) && (
+                                <label className="invalid-km" >
+                                  Conflict Date: {dayjs(minTimeData?.date).format("DD-MM-YYYY")}<br />
+                                  MinTripId: {minTimeData?.tripid}{'\n'}
+                                  MinTime: {minTimeData?.time} <br />
+                                  MaxTripId: {maxTimeData?.tripid}{'\n'}
+                                  MaxTime: {maxTimeData?.time}
+                                </label>
+                              )}
+                            {maxShedInDate() &&
+                              conflictLoad !== null && (
+                                <label className="invalid-km" >
+                                  Shed in Date Achieved : {shedInTimeData[0]?.Tripid}<br />
+                                  Conflict Date : {dayjs(shedInTimeData[0]?.shedindate).format("DD-MM-YYYY")}<br />
+                                  MinTripId : {minTimeData?.tripid}{'\n'}
+                                  MinTime : {minTimeData?.time} <br />
+                                  MaxTripId : {maxTimeData?.tripid}{'\n'}
+                                  MaxTime : {maxTimeData?.time}
+                                </label>
+                              )}
+
+                          </>
+                        ) : (
+                          <>
+                          <div className='No-Data'>
+                          <label > No Conflict Data</label>
+
+                          </div>
+                          </>
+                         
+                        )}
+
+
+                      </Box>
+                    </Modal>
+                    <div style={{ top: -17, left:27 ,cursor:'pointer',position: 'absolute', width: '18px', height: '18px', borderRadius: '50%', backgroundColor: conflictModalbox ? 'red' : 'green' }} onClick={handleConflictModal}>
+                      </div>
+                    <div style={{  display: "flex" }}>
+                      
                       <div className="icone" >
                         <CalendarMonthIcon color="action" />
                       </div>
@@ -3979,33 +4053,33 @@ const maxShedInDate = ()=>{
                       />
                     </div> */}
 
-            <div className="input">
-              <div className="icone">
-                <AirlineSeatReclineExtraIcon color="action" />
-              </div>
-              <Autocomplete
-                fullWidth
-                size="small"
-                id="driverName"
-                freeSolo
-                sx={{ width: "100%" }}
-                disabled={hideField && superAdminAccess === "0"}
-                onChange={(event, value) => handleDriverChange(event, value, "driverName")}
-                onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
-                // onKeyDown={handleKeyEnterdriver}
-                value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
-                options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
-                getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''} // Adjust to show input value or option label
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Driver Name"
-                    name="driverName"
-                    inputRef={params.inputRef}
-                  />
-                )}
-              />
-            </div>
+                    <div className="input">
+                      <div className="icone">
+                        <AirlineSeatReclineExtraIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="driverName"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        disabled={hideField && superAdminAccess === "0"}
+                        onChange={(event, value) => handleDriverChange(event, value, "driverName")}
+                        onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
+                        // onKeyDown={handleKeyEnterdriver}
+                        value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
+                        options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
+                        getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''} // Adjust to show input value or option label
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Driver Name"
+                            name="driverName"
+                            inputRef={params.inputRef}
+                          />
+                        )}
+                      />
+                    </div>
 
                     <div className="input">
                       <div className="icone">
@@ -4316,7 +4390,7 @@ const maxShedInDate = ()=>{
 
                   <div>
                     {/* {selectedStatus !== "Temporary Closed" && ( */}
-                    {selectedStatuschecking!== "Temporary Closed" && (
+                    {selectedStatuschecking !== "Temporary Closed" && (
                       <div className="tripsheet-table1 Scroll-Style">
                         <table className="table-condensed table-striped fixed_header">
                           <thead className="BI_tablehead">

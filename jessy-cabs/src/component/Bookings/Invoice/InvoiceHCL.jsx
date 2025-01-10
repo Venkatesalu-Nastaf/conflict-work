@@ -67,13 +67,13 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
               {selectedImage && <img src={selectedImage} alt={"Logo"} />}
             </div>
             <div className="invoice-address">
-              <address >
-                <p className='invoice-address-detials'>{organizationdata?.addressLine1}
+              <div style={{height:"110px",}}>
+                <p className='invoice-address-detials-hcl'>{organizationdata?.addressLine1}
                   {organizationdata?.addressLine2}
                   {organizationdata?.city}<br />
                   {organizationdata?.contactEmail}</p>
-                <p className='invoice-contact-details'>Contact:-{organizationdata?.contactPhoneNumber}</p>
-              </address>
+                <p className='invoice-contact-details-hcl'>Contact:-{organizationdata?.contactPhoneNumber}</p>
+              </div>
             </div>
           </div>
           <div className="main-invoice-container">
@@ -436,7 +436,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                               style={{
                                 // pageBreakAfter: "always", 
                                 pageBreakAfter: isPdf ? "always" : "auto",
-                                padding: "20px",
+                                // padding: "20px",
                                 // marginBottom: "50",
                               }}
                               className='li-files'
@@ -556,7 +556,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                               style={{
                                 // pageBreakAfter: "always", 
                                 // pageBreakAfter: isPdf ? "always" : "auto",
-                                padding: "20px 20px 0px 20px",
+                                // padding: "20px 20px 0px 20px",
                                 // marginBottom: "50",
                               }}
                               className='li-files'

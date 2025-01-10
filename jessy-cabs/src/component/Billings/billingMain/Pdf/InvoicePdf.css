@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-top: 20px;
+    /* padding-top: 20px; */
     padding-bottom: 10px;
 }
 .org-name{
@@ -32,6 +32,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 .image {
     height: 100px;
@@ -206,7 +207,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 20px;
+    padding-top: 25px;
     padding-bottom: 6px;
     /* margin-bottom: 20px; */
     /* border: 5px solid rgb(255, 255, 255); */
@@ -214,15 +215,12 @@
   }
 
   .uploading-img {
-    /* padding-top: 35%;
-    padding-bottom: 35%; */
-    margin-top: 6.5%;
-    /* padding-bottom: 5%; */
-
+    margin-top: 35px;
+padding-top: 4.2%;
     margin-right: auto;
     margin-left: auto;
     width: 500px !important;
-    height: 500px !important;
+    height: 510px !important;
     border: 5px solid rgb(255, 255, 255);
   }
   .map-section-in{

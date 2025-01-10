@@ -17,7 +17,8 @@ const styles = StyleSheet.create({
     padding: '20px',
     boxSizing: 'border-box',
     pageBreakInside: 'avoid',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    // width:'100%',
   },
 
 
@@ -252,8 +253,12 @@ const styles = StyleSheet.create({
   totalrupeesword: {
     // marginTop: "20px",
     flexDirection: 'row',
-    paddingLeft:'20px'
-  }
+    paddingLeft:'5px',
+    width:"100%",
+  },
+  signone :{
+height:"50px"
+  },
 
 
 });
@@ -623,8 +628,12 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                 </View>
               </View>
               <View style={styles.totalsum}>
-                <View style={styles.totalsuminitial}>
                   {customerData[0]?.gstTax === 0 || customerData[0]?.gstTax === null ? (
+
+                  <View style={styles.totalsuminitial}>
+
+
+
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 15 }}>
                       <Text style={{ fontSize: 11 }}>NOTE:</Text>
                       {/* <Text style={{ fontSize: 10 }}>
@@ -652,8 +661,9 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       </View>
 
                     </View>
+                    </View>
                   ) : (
-                    <>
+                    <View style={{width:"100%"}}>
                       <View>
                         <Text style={{ width: 200, fontSize: 11, paddingTop: 150, paddingLeft: 7 }}>
                           E.& O.E In Words-Rupees
@@ -661,13 +671,13 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       </View>
                       <View style={styles.totalrupeesword}>
                         <Text style={[styles.rupeestext, { paddingBottom: 10, marginBottom: 5 }]}>
-                          {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
+                          {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Onlyss
                         </Text>
                       </View>
-                    </>
+                    </View>
 
                   )}
-                </View>
+                {/* </View> */}
                 <View style={styles.grandtotal}>
                   {/* <View >
                     <Text style={styles.total}>SUB TOTAL: </Text>
@@ -684,7 +694,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={styles.text2}>{parkpermit}</Text>
                     <Text style={styles.text2}>{formattedFullAmount}</Text>
                   </View> */}
-                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end' }}>
+                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end',paddingRight:20, }}>
                     {fullAmount > 0 && (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
                         <Text style={{ width: '130px', fontSize: 10 }}>SUB TOTAL: </Text>
@@ -741,7 +751,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     )}
 
                     {advance > 0 && (
-                      <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
+                      <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000',width:"100%" }}>
                         <Text style={{ width: '130px', fontSize: 10 }}>Customer Advance (-)</Text>
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{advance}.00</Text>
                       </View>
@@ -800,7 +810,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
                   <View style={[styles.companyName, { flexDirection: 'row' }]}>
 
-                    <Text style={[styles.jessytext, { paddingTop: 15, fontSize: "12px" }]}>For Jessy Cabs</Text>
+                    <Text style={[styles.jessytext, { paddingTop: 15, fontSize: "12px" }]}>For Jessy Cabs Pvt Ltd</Text>
 
                   </View>
                   {/* <View style={[styles.companyName, { marginBottom: 100 }]}>  

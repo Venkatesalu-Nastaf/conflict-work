@@ -420,7 +420,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                             <View style={styles.lastFirstdiv}>
                                 <Text style={{ fontSize: '12px' }} >Amount in Words :-</Text>
-                                <Text style={{ fontSize: '14px', paddingTop: 5 , width:'80%'}}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text>
+                                <Text style={{ fontSize: '14px', paddingTop: 5 , width:'80%'}}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees only</Text>
                                 <Text style={{ fontSize: '13px', paddingTop: 10 }}>For JESSY CABS PVT LTD</Text>
                                 {/* <Text style={{ padding: 20 }}></Text> */}
                                 <Text style={{ fontSize: '13px', paddingTop: 30 }}>Authorised Signature</Text>
@@ -470,7 +470,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                                 }
                                 <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
                                     <Text style={{ width: '120px', fontSize: '11px' }}>Parking & Permit: </Text>
-                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{tollparkpermit}</Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '100px', textAlign: 'right',paddingRight:15 }}>{tollparkpermit}.00</Text>
                                 </View>
                                 {/* {customStateDatas.length > 0 && customStateDatas[0]?.gstno !== "" && customStateDatas[0]?.gstno !== undefined ?
                                     <>
@@ -491,7 +491,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                                 {advance !== 0 ? <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
                                     <Text style={{ width: '130px', fontSize: '11px' }}>Customer Advance (-)</Text>
-                                    <Text style={{ fontSize: '12px', padding: '5px', width: '100px', textAlign: 'right',paddingRight:15 }}>{advance}</Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '100px', textAlign: 'right',paddingRight:18 }}>{advance}.00</Text>
                                 </View> : ""}
 
                                 <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>

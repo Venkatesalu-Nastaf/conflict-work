@@ -47,13 +47,13 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
               {selectedImage && <img src={selectedImage} alt={"Logo"} />}
             </div>
             <div className="invoice-address">
-              <address >
+              <div style={{height:"110px"}} >
                 <p className='invoice-address-detials'>{organizationdata?.addressLine1}
                   {organizationdata?.addressLine2}
                   {organizationdata?.city}<br />
                   {organizationdata?.contactEmail}</p>
                 <p className='invoice-contact-details'>Contact:-{organizationdata?.contactPhoneNumber}</p>
-              </address>
+              </div>
             </div>
           </div>
           <div className="main-invoice-container">
@@ -63,9 +63,9 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                   <th id='table-header'><span>Client Name:</span></th>
                   <td id='table-data'><span >{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}</span></td>
                 </tr>
-                <tr>
+                <tr className='tr-height'>
                   <th id='table-header'><span>Address:</span></th>
-                  <td id='table-data'><span >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city} jkfgy  uy gdu h ouy giyhi bgihbgxib h v xu gu gvuzbvi go sv gdvu oy yz  bjhi a v zxy bgyo xzi  hoyibh ix db </span></td>
+                  <td id='table-data' ><span className='tr-height' >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}  </span></td>
                 </tr>
                 <tr>
                   <th id='table-header'><span>Ordered By:</span></th>
@@ -199,7 +199,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             <div id='Totals'><span id='title'>Total Permit:  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
           </div>
 
-          <div style={{ display: "flex", gap: "6px" }}>
+          <div style={{ display: "flex", gap: "6px", height:"480px" }}>
 
 
             <div className='tripsheet-location-img'>
@@ -307,7 +307,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                           key={index}
                           style={{
                             pageBreakAfter: "always",
-                            padding: "20px",
+                            // padding: "20px",
                             // marginBottom: "140px",
 
                           }}

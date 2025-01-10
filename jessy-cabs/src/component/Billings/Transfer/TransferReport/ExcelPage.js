@@ -83,7 +83,7 @@ const useExeclpage = () => {
         { key: "withoutTaxes", header: "Total Amount", width: 150 },
         // { key: "PenaltyAmount", header: "Penalty Amount", width: 150 },
         { key: "gstTaxes", header: "GST%", width: 100 },
-        { key: "gstTax1", header: "GST Amonunt", width: 100 },
+        { key: "gstTax1", header: "GST Amount", width: 100 },
         { key: "permit", header: "Permit", width: 120 },
         { key: "parking", header: "Parking", width: 120 },
         { key: "toll", header: "Toll", width: 100 },
@@ -335,7 +335,7 @@ const useExeclpage = () => {
                 const totalRow = worksheet.addRow({});
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amonunt') + 1).value =  totalAmountgstAmount;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
                 totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
                 totalRow.eachCell((cell) => {
@@ -598,7 +598,7 @@ const useExeclpage = () => {
                 const totalRow = worksheet.addRow({});
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amonunt') + 1).value =  totalAmountgstAmount;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
                 totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
                 totalRow.eachCell((cell) => {

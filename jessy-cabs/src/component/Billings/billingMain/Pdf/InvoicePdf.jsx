@@ -116,6 +116,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
 
 
     // };
+    // console.log(otherStations , "dfghjk");
     return (
         <>
             <div className="refdiv">
@@ -126,10 +127,14 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                 <p className="org-name">{organizationdata.organizationname}</p>
                                 {otherStations.data6 !== null ? (
                                     // <h2 className="organisationtext">{commonState.address}</h2>
-                                    <h2 className="organisationtext">{otherStations.data5}sufgbf fvugyugoy   </h2>
+                                    <h2 className="organisationtext"  style={{height:"70px"}}>
+                                        {/* {otherStations.data5} */}
+                                    no. 55 thiruvalluvar purakm west tambaram chemnnai irumbiyur chengalpattu 45
+
+                                        </h2>
                                 ) : (
                                     <>
-                                        <h2 className="org-address">{organizationdata.addressLine1}SSSSSSS SSSSSSSSSS SSSSSSSSSSSS SSS SSSSSSS</h2>
+                                        <h2 className="org-address" style={{height:"70px"}}>{organizationdata.addressLine1}</h2>
                                         {/* <h2 className="org-address">{orgaddress3}</h2> */}
                                     </>
                                 )}
@@ -152,11 +157,9 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                             <div>
                                 <p className="details-receiver">Details of Receiver : {customerData.customer}</p>
                                 {/* <p className="receiver-details">{customerData.customer}</p> */}
-                                <div style={{ width: '300px' }}>
+                                <div style={{ width: '300px',height:"80px" }}>
                                     {/* {formatAddress(customerData.address1)} */}
-                                    {formatAddress(otherStations.data2)}bhfbvgbiobgsdeu  fygeuy vus vgofeg vyg gvxgduyr kzxd  
-
-                                    
+                                    {formatAddress(otherStations.data2)}
                                 </div>
                                 
                                 {/* <p className="receiver-details">GSTIN : {customerData.gstnumber}</p> */}
@@ -175,7 +178,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                 <thead>
                                     <tr>
                                         <th>SNO</th>
-                                        <th>TRIP DT</th>
+                                        <th>TRIP DATE</th>
                                         <th>TRIP NO</th>
                                         <th>PARTICULARS</th>
                                         <th>PARKING/PERMIT</th>
@@ -201,7 +204,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                         </td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking) + parseInt(book.toll) || 0}.00</td>
                                         {/* <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}.00</td> */}
-                                        <td className="tabledata" style={{ textAlign: '' }}>{totalAmount}.00</td>
+                                        <td className="tabledata" style={{  }}>{totalAmount}.00</td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -210,7 +213,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                         <td></td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking) + parseInt(book.toll) || 0}.00</td>
                                         {/* <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}.00</td> */}
-                                        <td className="tabledata" style={{ textAlign: '' }}>{totalAmount}.00</td>
+                                        <td className="tabledata" style={{  }}>{totalAmount}.00</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -294,7 +297,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                 </div>
                             </div>
                             <div style={{ paddingBottom: '10px', paddingRight: '10px', width: "30%", }}>
-                                <p className="sign-text" >For JessyCabs</p>
+                                <p className="sign-text" >For JessyCabs Pvt Ltd</p>
                                 {signimageUrl !== "" ?
                                     <img className='dialogboximg-iv' src={signimageUrl} alt=" " /> : <div className='dialogboximg-iv' ></div>}
                                 <p className="sign-text" style={{ display: "flex", justifyContent: "flex-end" }}>Authorised Signature</p>
@@ -338,7 +341,8 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
 
                         </div> :
                         
-                        <div style={{height:'50px', border:"2px solid white"}}>
+                        // <div style={{height:'50px', border:"2px solid white"}}>
+                        <div >
                         </div>
                         }
 
@@ -479,7 +483,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                   style={{
                     // pageBreakAfter: "always", 
                     // pageBreakAfter: isPdf ? "always" : "auto",
-                    padding: "20px 20px 0px 20px",
+                    padding: "0px 20px 0px 20px",
                     // marginBottom: "50",
                   }}
                   className='li-files'

@@ -163,6 +163,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     const [extraKmAmount, setExtraKmAmount] = useState('')
     const [parking, setParking] = useState('')
     const [permit, setPermit] = useState('')
+    const [toll, setToll] = useState('')
     const [gst, setGst] = useState('')
     const [gstAmount, setGstAmount] = useState(0)
     const [advance, setAdvance] = useState();
@@ -176,13 +177,15 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
         if (invdata) {
             let totalamount = 0
             let parkingamount = 0
+            let Tollamount = 0
             let permitamount = 0
             let exkmamount = 0
             let advanceamount = 0
             let gstamount = 0
             invdata?.map((li) => {
                 totalamount += parseInt(li.totalcalcAmount || 0)
-                parkingamount += parseInt(li.parking || 0)
+                parkingamount += parseInt(li.parking || 0) 
+                Tollamount += parseInt(li.toll || 0)
                 permitamount += parseInt(li.permit || 0)
                 exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
                 advanceamount += parseInt(li.customeradvance || 0)
@@ -190,6 +193,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                 return null
             })
             setTotalAmount(totalamount)
+            setToll(Tollamount)
             setParking(parkingamount)
             setPermit(permitamount)
             setExtraKmAmount(exkmamount)
@@ -212,8 +216,12 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
             setGst(gstno)
         }
     }, [apiUrl, customeraddress])
+    const park = parseInt(parking)
+    const permitcharge = parseInt(permit)
+    const tollcharge = parseInt(toll)
+    const tollparkpermit = park + permitcharge + tollcharge
 
-    const fullAmount = parseInt(totalAmount)
+    const fullAmount = parseInt(totalAmount) - tollparkpermit
     const calgst = gstAmount / 2;
     const cgst = Math.round(fullAmount * calgst / 100)
     const sgst = Math.round(fullAmount * calgst / 100)
@@ -223,11 +231,14 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     const billingGroupCGST = Math.round(fullAmount * groupgst / 100 || 0)
     const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
 
-    const park = parseInt(parking)
-    const permitcharge = parseInt(permit)
+    // const park = parseInt(parking)
+    // const permitcharge = parseInt(permit)
+    // const tollcharge = parseInt(toll)
     // const parkpermit = park + permitcharge
     const FullAmount = billingGroupDetails.length > 0 ? fullAmount + billingGroupCGST + billingGroupCGST - parseInt(advance) : fullAmount + cgst + sgst - parseInt(advance)
-    const formattedFullAmount = FullAmount.toFixed(0);
+    const formattedFullwithtollpark = FullAmount + tollparkpermit;
+    // const formattedFullAmount = FullAmount.toFixed(0);
+    const formattedFullAmount = formattedFullwithtollpark.toFixed(0);
     // const igstFullAmount = fullAmount + igst - parseInt(advance);
     const igstFullAmount = billingGroupDetails.length > 0 ? fullAmount + billingGroupIGST - parseInt(advance) : fullAmount + igst - parseInt(advance)
     const igstFullFormattedAmount = igstFullAmount.toFixed(0)
@@ -457,6 +468,10 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                                     // customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ?
 
                                 }
+                                <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+                                    <Text style={{ width: '120px', fontSize: '11px' }}>Parking & Permit: </Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{tollparkpermit}</Text>
+                                </View>
                                 {/* {customStateDatas.length > 0 && customStateDatas[0]?.gstno !== "" && customStateDatas[0]?.gstno !== undefined ?
                                     <>
                                         <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>

@@ -793,15 +793,29 @@ const useGroupbilling = () => {
         return time;
       }
 
-      function addPercentage(amount, percent) {
+    //   function addPercentage(amount, percent) {
      
-        let percentageValue = (amount * percent) / 100;
+    //     let percentageValue = (amount * percent) / 100;
       
-        const datapercent = amount + percentageValue
-        const datas = Math.round(datapercent)
+    //     const datapercent = amount + percentageValue
+    //     const datas = Math.round(datapercent)
      
-        return `${datas}.00`
-    }
+    //     return `${datas}.00`
+    // }
+    function addPercentage(amount1, percent1,toll1) {
+    
+        let amount = parseFloat(amount1) || 0;
+        let percent = parseFloat(percent1) || 0;
+        let  tollamount = parseFloat(toll1) || 0;
+        console.log(amount,percent,tollamount,'zipgstadddd')
+     
+       
+     
+         const datapercent = amount + percent + tollamount;
+         console.log(datapercent,'zipgstaddddpercent',Math.round(datapercent))
+     
+         return Math.round(datapercent);
+     }
 
       function withoutTaxesdata(total,toll,parking,permit) {
         let withoutaxValue = total-toll-parking-permit;
@@ -1124,6 +1138,21 @@ const useGroupbilling = () => {
     //     }
     // };
 
+    function totalamountgst(gst,total) {
+        console.log(gst,total,'zipgst')
+        let gsttax = (gst * total) / 100;
+        console.log(gsttax,'zipgst')
+        return gsttax.toFixed(2);
+
+    }
+
+    function addTollparkparking(toll, parking, permit) {
+        console.log(toll, parking, permit, 'zip');
+        let tollparkparking = (Number(toll) || 0) + (Number(parking) || 0) + (Number(permit) || 0);
+        console.log(tollparkparking, 'ziptotal');
+        return tollparkparking;
+    }
+
     const handleExcelDownload = async (customerData) => {
         if (rows.length === 0) {
             setError(true);
@@ -1168,12 +1197,15 @@ const useGroupbilling = () => {
                 { key: "driverBeta", header: "Driver Bhatta" },
                 { key: "OutstationCharges", header: "Outstation Charges" },
                 { key: "withoutTaxes", header: "Total Amount" },
+                { key: "gsttaxdatanumber", header: "GST%" },
                 { key: "gsttaxdata", header: "GST%" },
                 { key: "permit", header: "Permit" },
                 { key: "parking", header: "Parking" },
                 { key: "toll", header: "Toll" },
-                { key: "driverBeta_amount", header: "DND/Toll/Parking Amount" },
+                { key: "TOTALtollandpark", header: "DND/Toll/Parking Amount" },
                 { key: "totalcalcAmount1", header: "Amount With All Taxes" },
+
+                
             ];
     
             worksheet.columns = columns;
@@ -1207,7 +1239,7 @@ const useGroupbilling = () => {
                 singleData["parking"] = singleData["parking"] || 0;
                 singleData["permit"] = singleData["permit"] || 0;
                 singleData["Vendor"] = "Jessy Cabs";
-                singleData["gsttaxdata"] = `${customerData[0]?.gstTax || 0}%`;
+                singleData["gsttaxdatanumber"] = `${customerData[0]?.gstTax || 0}%`;
                 singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : "";
     
                 if (singleData["tripsheetdate"] && dayjs(singleData["tripsheetdate"]).isValid()) {
@@ -1227,9 +1259,12 @@ const useGroupbilling = () => {
                 } else {
                     singleData["shedintime"] = "";
                 }
-    
+                singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                singleData["OutstationCharges"]= 0
                 singleData["withoutTaxes"] = withoutTaxesdata(singleData["totalcalcAmount"], singleData["toll"] || 0, singleData["parking"] || 0, singleData["permit"] || 0);
-                singleData["totalcalcAmount1"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] || 0 : addPercentage(singleData["totalcalcAmount"] || 0, customerData[0]?.gstTax);
+                singleData["gsttaxdata"] = totalamountgst(customerData[0]?.gstTax,singleData["withoutTaxes"])
+                singleData["TOTALtollandpark"] =  addTollparkparking(singleData["toll"],singleData["parking"],singleData["permit"])
+                singleData["totalcalcAmount1"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["withoutTaxes"],singleData["gsttaxdata"], singleData["TOTALtollandpark"])
     
                 worksheet.addRow(singleData);
     

@@ -85,7 +85,7 @@ const Billing = ({Statename}) => {
         bankOptions,
         handlePopupClose,
         // organizationaddress1,
-        handleKeyenterinvoicdeno,
+        handleKeyenterinvoicdeno,popupOpen,
         total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount,invoicestate,
         discound_PercentageCalc,invoiceno,setInvoiceNo,billadd,dataotherStations,handleserviceInputChange,datastate,
         balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,edit,selectbillingdata,billingdate,stateDetails,setStateDetails
@@ -1261,8 +1261,9 @@ const Billing = ({Statename}) => {
                             </Button>
                         </DialogActions>
                     </Dialog> */}
+                </form>
 
-                    <Modal open={particularPdf} onClose={handlePopupClose} aria-labelledby="modal-title"
+                    <Modal open={popupOpen} onClose={handlePopupClose} aria-labelledby="modal-title"
                         aria-describedby="modal-description">
                         <Box
                             sx={{
@@ -1322,7 +1323,6 @@ const Billing = ({Statename}) => {
                             /> */}
 
                     </Modal>
-                </form>
                 <div className='alert-popup-main'>
                     {error &&
                         <div className='alert-popup Error' >

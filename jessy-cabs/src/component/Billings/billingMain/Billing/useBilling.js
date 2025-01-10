@@ -217,6 +217,7 @@ const useBilling = () => {
         //     setError(true);
         //     setErrorMessage("Please enter Invoice No");
         // } else {
+        setPopupOpen(true)
           
             setParticularRefNo(tripid)
             setParticularPdf(true);

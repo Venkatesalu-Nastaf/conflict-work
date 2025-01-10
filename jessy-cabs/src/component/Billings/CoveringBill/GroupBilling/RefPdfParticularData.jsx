@@ -177,8 +177,14 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
         (sum, li) => sum + Number(li.customeradvance || 0),
         0
     );
-    const totalSumcalc = pdfData?.reduce(
-        (sum, li) => sum + Number(li.totalcalcAmount || 0),
+    // const totalSumcalc = pdfData?.reduce(
+    //     (sum, li) => sum + Number(li.totalcalcAmount || 0),
+    //     0
+    // );
+
+    const totalSumcalc= pdfData?.reduce(
+        (sum, li) =>
+            sum + (Number(li.totalcalcAmount || 0) - (Number(li.parking || 0) + Number(li.permit || 0) + Number(li.toll || 0))),
         0
     );
     //   const totalAmountdata = Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)
@@ -187,7 +193,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     //   const totalAmountdata = Number(42870)
 
     const cgstAmount = totalAmountdata * cgstcalc / 100 || 0;
-    const paymentValue = totalAmountdata + cgstAmount + cgstAmount || 0;
+    const paymentValue = totalAmountdata + cgstAmount + cgstAmount + totalSum || 0;
     const roundamount = paymentValue.toFixed(0)
     const igstcalc = customerData[0]?.gstTax;
     const igstAmount = totalAmountdata * igstcalc / 100 || 0
@@ -402,7 +408,9 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                     <td className="tdata">{[li.parking, li.permit, li.toll].reduce((sum, value) => sum + Number(value), 0)}</td>
 
                                     <td className="tdata">{li.customeradvance || 0}</td>
-                                    <td className="tdata">{li.totalcalcAmount}</td>
+                                    {/* <td className="tdata">{li.totalcalcAmount -  (li.parking+li.permit, li.toll)}</td> */}
+                                    <td className="tdata">{li.totalcalcAmount - (Number(li.parking || 0) + Number(li.permit || 0) + Number(li.toll || 0))} </td>
+
                                     {/* <td className="tdata">
   {[li.parking, li.permit, li.toll, li.customeradvance || 0, li.totalcalcAmount || 0].reduce((sum, value) => sum + Number(value), 0)}
 </td> */}
@@ -511,6 +519,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
 
                                         {/* <h4>CGST {Gst}% on {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}:</h4> */}
                                         <h4>SGST {Gst}% on {Number(totalSumcalc)}:</h4>
+                                        <h4>Parking & Permit:</h4>
 
                                         <h4>Total Amount :</h4> </> : <>
                                         <h4>Amount :</h4> <h4></h4>
@@ -519,13 +528,13 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                     </>}
                             </div>
                             <div className="amount-div">
-                                {/* <div style={{textAlign:'center',width:'75px'}}> */}
-                                {/* <p className="amounttext">{Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}.00</p> */}
+                             
                                 <p className="amounttext">{Number(totalSumcalc)}.00</p>
 
 
                                 <p className="amounttext" style={{ marginTop: '23px', paddingLeft: "14px" }}>{cgstAmount.toFixed(2)}</p>
                                 <p className="amounttext" style={{ marginTop: '23px', paddingLeft: "14px" }}>{cgstAmount.toFixed(2)}</p>
+                                <p className="amounttext" style={{ marginTop: '23px', paddingLeft: "14px" }}>{totalSum}.00</p>
                                 <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
                             </div>
                         </> : <>

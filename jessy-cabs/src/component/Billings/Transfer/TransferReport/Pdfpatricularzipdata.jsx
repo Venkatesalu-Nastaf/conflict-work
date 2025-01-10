@@ -392,7 +392,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   const [department, setDepartment] = useState('')
   const [escort, setEscort] = useState('')
   const [Tripidno, setTripidno] = useState('')
-  const [tripsheetdate, setTripsheetdate] = useState('')
+  // const [tripsheetdate, setTripsheetdate] = useState('')
   const [tripStartDate, setTripStartDate] = useState('')
   const [tripCloseDate, setTripCloseDate] = useState('')
    const [tripshedoutDate, setTripShedOutDate] = useState('')
@@ -497,7 +497,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     let Department = ''
     let Escort = ''
     let Tripid = ''
-    let Tripdate = ''
+    // let Tripdate = ''
     let Tripstartdate = ''
     let TripClosedate = ''
     let Reporttime = ''
@@ -538,7 +538,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         empname = li.guestname
         guestmobile = li.guestmobileno
         dutytype = li.duty
-        vehtype = li.vehType
+        vehtype = li.vehicleName
         vehno = li.vehRegNo
         request = li.request
         drivernames = li.driverName
@@ -556,7 +556,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         Department = li.department
         Escort = li.escort
         Tripid = li.tripid
-        Tripdate = li.tripsheetdate
+        // Tripdate = li.tripsheetdate
         Tripstartdate = li.startdate
         TripClosedate = li.closedate
         Tripshedoutdate = li.shedOutDate
@@ -597,7 +597,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         TotalToll = li.toll
         TotalPermit = li.permit
         CustomerCode = li.customercode
-        Categorygroups = li.Groups
+        Categorygroups = li.orderedby
         customeraddress1 = li.Customeraddress1
 
 
@@ -648,7 +648,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     setDepartment(Department)
     setEscort(Escort)
     setTripidno(Tripid)
-    setTripsheetdate(Tripdate)
+    // setTripsheetdate(Tripdate)
     setTripStartDate(Tripstartdate)
     setTripCloseDate(TripClosedate)
     setTripShedOutDate(Tripshedoutdate)
@@ -692,6 +692,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   console.log(tripCloseKm, tripReportKm, "kmmmm")
   console.log(bookimage, "bookimage", stationData, "stationData")
   console.log(tripshedinDate,"tripshed",tripCloseDate)
+  console.log(vehicletype,"zip")
 
   return (
     <>
@@ -832,7 +833,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
                       <Text style={styles.labeltag}>Date</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {tripsheetdate}</Text>
+                      <Text style={styles.clientName}> {dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Duty Type</Text>

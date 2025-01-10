@@ -44,7 +44,10 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
     // const billingdate = startDate.format('YYYY-MM-DD');
     // const startDate = dayjs(book.startdate);
     // const billingdate = book.startdate ? dayjs(book.startdate).format('YYYY-MM-DD') : boo
-    const totalAmount = parseInt(book.totalcalcAmount); // Ensure the total amount is parsed as a number
+    const tollparking = parseInt(book.permit | 0) + parseInt(book.parking || 0) + parseInt(book.toll || 0);
+    const totalAmount = parseInt(book.totalcalcAmount || 0) - tollparking
+    console.log(totalAmount,"booktotal")
+    // const totalAmount = parseInt(book.totalcalcAmount); // Ensure the total amount is parsed as a number
     // const gstAmount = customerData?.gstTax / 2
     const gstAmount1 = otherStations?.data / 2;
     const othergst = otherStations?.data
@@ -53,7 +56,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
 
     const cgst = totalAmount * gstAmount1 / 100 || 0;
     const sgst = totalAmount * gstAmount1 / 100 || 0;
-    const paymentValue = totalAmount + cgst + sgst || 0;
+    const paymentValue = totalAmount + cgst + sgst + tollparking || 0;
     const paymentValue1 = paymentValue.toFixed(0)
     console.log(paymentValue1, "ooooo")
     const AmountInWords = numWords(parseInt(paymentValue1)) || 0;
@@ -194,10 +197,11 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                             Extra Hrs {book.extraHR} @ Rs . {book.extrahr_amount} <br />
                                             Night Bata {book.nightCount} Night @ Rs . {book.nightBta} <br />
                                             Driver Bata {book.driverbeta_Count} @ Rs . {book.driverBeta} <br />
-                                            {book.pickup}
+                                            {book.useage}
                                         </td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking) + parseInt(book.toll) || 0}.00</td>
-                                        <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}.00</td>
+                                        {/* <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}.00</td> */}
+                                        <td className="tabledata" style={{ textAlign: '' }}>{totalAmount}.00</td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -205,7 +209,8 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                         <td></td>
                                         <td></td>
                                         <td className="tabledata" style={{ textAlign: '' }}>{parseInt(book.permit) + parseInt(book.parking) + parseInt(book.toll) || 0}.00</td>
-                                        <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}.00</td>
+                                        {/* <td className="tabledata" style={{ textAlign: '' }}>{book.totalcalcAmount || 0}.00</td> */}
+                                        <td className="tabledata" style={{ textAlign: '' }}>{totalAmount}.00</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -223,17 +228,21 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
 
                                             <>
                                                 <h4 style={{margin:"3px"}}>Amount :</h4>
-                                                <h4 style={{margin:"3px"}}>CGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
-                                                <h4 style={{margin:"3px"}}>SGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
+                                                {/* <h4 style={{margin:"3px"}}>CGST {gstAmount1}% on {book.totalcalcAmount} :</h4>
+                                                <h4 style={{margin:"3px"}}>SGST {gstAmount1}% on {book.totalcalcAmount} :</h4> */}
+                                                <h4 style={{margin:"3px"}}>CGST {gstAmount1}% on {totalAmount} :</h4>
+                                                <h4 style={{margin:"3px"}}>SGST {gstAmount1}% on {totalAmount} :</h4>
+                                                <h4 style={{margin:"3px"}}>Parking & Permit:</h4>
                                                 <h4 style={{margin:"3px"}}>Total Amount :</h4>
                                             </>:''}
                                     </div>
                                     <div className="amount-div">
-                                        <p className="amounttext" style={{ marginTop: '3px' }}>{book.totalcalcAmount || 0}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '3px' }}>{totalAmount || 0}.00</p>
                                         {/* <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}.00</p>
                                         <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}.00</p> */}
                                         <p className="amounttext" style={{ marginTop: '3px', paddingLeft: "14px" }}>{cgst.toFixed(2)}</p>
                                         <p className="amounttext" style={{ marginTop: '3px', paddingLeft: "14px" }}>{sgst.toFixed(2)}</p>
+                                        <p className="amounttext" style={{ marginTop: '3px', paddingLeft: "14px" }}>{tollparking}.00</p>
                                         <p className="amounttext" style={{ marginTop: '3px' }}>{paymentValue.toFixed(0)}.00</p>
                                     </div>
                                 </div>
@@ -243,14 +252,15 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                     <div>
                                         {/* <h4>CGST {gstAmount}% on {book.totalcalcAmount} :</h4>
                                 <h4>SGST {gstAmount}% on {book.totalcalcAmount} :</h4> */}
-                                        <h4>IGST {othergst}% on {book.totalcalcAmount} :</h4>
-
+                                        <h4>IGST {othergst}% on {totalAmount} :</h4>
+                                        <h4>Parking & Permit:</h4>
                                         <h4>Total Amount :</h4>
                                     </div>
                                     <div className="amount-div">
                                         {/* <p className="amounttext" style={{ marginTop: '23px' }}>{cgst.toFixed(0)}.00</p>
                                 <p className="amounttext" style={{ marginTop: '23px' }}>{sgst.toFixed(0)}.00</p> */}
                                         <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '23px' }}>{tollparking}.00</p>
                                         <p className="amounttext" style={{ marginTop: '23px' }}>{paymentValue.toFixed(0)}.00</p>
 
                                     </div>
@@ -277,7 +287,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                         <div >
                                             <h4 style={{ fontWeight: 600, margin: "2px" }}>NOTE:</h4>
                                             <h4 style={{ padding: 2, wordSpacing: 3, margin: "2px" }}>
-                                                IGST@5% or both CGST@2.5% & SGST@2.5% of Rs: {(book.totalcalcAmount ? (book.totalcalcAmount * 0.05).toFixed(2) : '0.00')} is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
+                                                IGST@5% or both CGST@2.5% & SGST@2.5% of Rs: {(totalAmount ? (totalAmount * 0.05).toFixed(2) : '0.00')} is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
                                                 </h4>
                                         </div> : ""
                                     }

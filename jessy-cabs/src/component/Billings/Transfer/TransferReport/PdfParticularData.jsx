@@ -147,7 +147,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
         empname = li.guestname
         guestmobile = li.guestmobileno
         dutytype = li.duty
-        vehtype = li.vehType
+        vehtype = li.vehicleName
         vehno = li.vehRegNo
         drivernames = li.driverName
         remarks = li.remark
@@ -191,7 +191,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
         TotalToll = li.toll
         TotalPermit = li.permit
         CustomerCode = li.customercode
-        Categorygroups = li.Groups
+        Categorygroups = li.orderedby
         AddressCustomer1 = li.CustomerAddress1
 
 
@@ -253,15 +253,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     setCalcPackages(packages)
   }, [particularPdf, segment])
 
-  // useEffect(() => {
-  //     let customername = '';
-  //     if (Array.isArray(particularPdf)) {
-  //         particularPdf.forEach((li) => {
-  //             customername = li.customer;
-  //         });
-  //     }
-  //     setCustomer(customername);
-  // }, [particularPdf]);
+
 
   // signimage fetch 
   useEffect(() => {

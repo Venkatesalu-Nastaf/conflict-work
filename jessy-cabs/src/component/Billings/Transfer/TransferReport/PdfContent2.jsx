@@ -35,23 +35,23 @@ const styles = StyleSheet.create({
     },
     billtext: {
         fontSize: '13px',
-        padding: 5,
+        // padding: 5,
         width: '70px'
     },
     billtextinvoice: {
         fontSize: '13px',
-        padding: 5,
+        // padding: 5,
         width: '70px'
     },
     billtextdate: {
         fontSize: '13px',
-        padding: 5,
+        // padding: 5,
         width: '70px'
     },
     billtextdatetext: {
         fontSize: '13px',
         width: '70px',
-        marginTop: '5px'
+        // marginTop: '5px'
     },
     clientdiv: {
         borderBottom: '1px solid black',
@@ -362,13 +362,13 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                             </View>
 
                             <View>
-                                <View style={{ flexDirection: 'row',alignItems:"baseline"}}>
+                                <View style={{ flexDirection: 'row',alignItems:"baseline",marginTop:1,}}>
                                     <Text style={styles.billtext}>Bill No</Text>
                                     <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
 
                                     <Text style={styles.billtextinvoice}>{invoiceno}</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row' ,alignItems:"baseline"}}>
+                                <View style={{ flexDirection: 'row' ,alignItems:"baseline",marginTop:1,}}>
                                     <Text style={styles.billtextdate}>Bill Date</Text>
                                     <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
 
@@ -410,7 +410,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                             </View>
 
                             <View style={styles.Amount}>
-                                <Text style={{ fontSize: '12px', textAlign: 'center', alignItems: 'center' }}>{fullAmount}</Text>
+                                <Text style={{ fontSize: '12px', textAlign: 'right', alignItems: 'center',paddingRight:15, }}>{fullAmount}.00</Text>
                             </View>
 
 
@@ -420,8 +420,8 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                             <View style={styles.lastFirstdiv}>
                                 <Text style={{ fontSize: '12px' }} >Amount in Words :-</Text>
-                                <Text style={{ fontSize: '14px', paddingTop: 5 }}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text>
-                                <Text style={{ fontSize: '13px', paddingTop: 10 }}>For JESSY CABS</Text>
+                                <Text style={{ fontSize: '14px', paddingTop: 5 , width:'80%'}}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text>
+                                <Text style={{ fontSize: '13px', paddingTop: 10 }}>For JESSY CABS PVT LTD</Text>
                                 {/* <Text style={{ padding: 20 }}></Text> */}
                                 <Text style={{ fontSize: '13px', paddingTop: 30 }}>Authorised Signature</Text>
                             </View>
@@ -446,24 +446,24 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                             <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end' }}>
                                 <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
                                     <Text style={{ width: '120px', fontSize: '11px' }}>SUB TOTAL: </Text>
-                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{fullAmount || 0}</Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '100px', textAlign: 'right',paddingRight:15, }}>{fullAmount || 0}.00</Text>
                                 </View>
                                 {
                                     customerData[0].state === stationData[0].state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ?
                                         <>
                                             <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
                                                 <Text style={{ width: '120px', fontSize: '11px' }}>CGST {cgstcalc}% on {fullAmount}: </Text>
-                                                <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgstAmount}.00</Text>
+                                                <Text style={{ fontSize: '12px', padding: '5px', width: '100px', textAlign: 'right',paddingRight:15 }}>{cgstAmount}.00</Text>
                                             </View>
                                             <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', }}>
                                                 <Text style={{ width: '120px', fontSize: '11px' }}>SGST {sgstcalc}% on {fullAmount}:</Text>
-                                                <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{cgstAmount}.00</Text>
+                                                <Text style={{ fontSize: '12px', padding: '5px', width: '100px', textAlign: 'right',paddingRight:15, }}>{cgstAmount}.00</Text>
                                             </View>
                                         </>
                                         :
                                         <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', }}>
                                             {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ width: '120px', fontSize: '11px' }}>IGST {igstcalc}% on {fullAmount}:</Text> : <Text style={{ width: '120px', fontSize: '11px' }}>GST</Text>}
-                                            {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{igstAmount}</Text> : <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>0</Text>}
+                                            {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ fontSize: '12px', padding: '5px', width: '100px', textAlign: 'right',paddingRight:15 }}>{igstAmount}.00</Text> : <Text style={{ fontSize: '12px', padding: '5px', width: '100px', textAlign: 'right',paddingRight:15 }}>0</Text>}
                                         </View>
                                     // customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ?
 
@@ -491,7 +491,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
                                 {advance !== 0 ? <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
                                     <Text style={{ width: '130px', fontSize: '11px' }}>Customer Advance (-)</Text>
-                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{advance}</Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '100px', textAlign: 'right',paddingRight:15 }}>{advance}</Text>
                                 </View> : ""}
 
                                 <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
@@ -499,7 +499,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                                     {/* {customStateDatas.length > 0 && customStateDatas[0]?.gstno!=="" && customStateDatas[0]?.gstno!==undefined  ?
                                     <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{formattedFullAmount}</Text> :
                                     <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{formattedFullAmount}</Text> } */}
-                                    <Text style={{ fontSize: '12px', padding: '5px', width: '60px', textAlign: 'right' }}>{formattedFullAmount}</Text>
+                                    <Text style={{ fontSize: '12px', padding: '5px', width: '100px', textAlign: 'right',paddingRight:15, }}>{formattedFullAmount}.00</Text>
                                 </View>
                             </View>
 

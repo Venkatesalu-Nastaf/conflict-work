@@ -439,7 +439,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                             // display: "block",
                             width: "100%", // Let the width adjust automatically
                             // margin: "20px auto", // Add spacing for better display
-                            border:"2px solid red",
+                            // border:"2px solid red",
                           }}
                         />
                       ))}

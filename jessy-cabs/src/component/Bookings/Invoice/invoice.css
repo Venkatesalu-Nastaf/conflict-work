@@ -436,7 +436,7 @@ height: 730px !important;
   align-items: center;
   padding-top: 25px;
   padding-bottom: 17px;
-  border: 5px solid rgb(0, 0, 0);
+  border: 5px solid rgb(255, 255, 255);
 }
 .upload-img{
   /* margin-top: 5.5%;
@@ -459,7 +459,7 @@ height: 730px !important;
   margin-left: auto;
   width: 420px !important;
   height: 400px !important;
-  border: 5px solid rgb(0, 0, 0);
+  border: 5px solid rgb(255, 255, 255);
 }
 
 .li-files {

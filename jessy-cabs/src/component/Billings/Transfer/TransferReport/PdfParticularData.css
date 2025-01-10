@@ -1,4 +1,9 @@
-.organisationtext {
+/* .organisationtext {
+  font-size: 17px;
+  margin: 0px;
+} */
+
+.organisationtext-pdf-particular {
   font-size: 17px;
   margin: 0px;
 }
@@ -17,7 +22,8 @@
   font-weight: 900;
 }
 
-.image {
+
+.image-pdf-particular{
   height: 100px;
   width: 110px;
 }
@@ -27,6 +33,12 @@
   justify-content: center;
   align-items: center;
   align-content: center;
+}
+.Taxinvoicediv-pdf-particular{
+  padding: 5px;
+  width: 30%;
+  justify-content: center;
+  display: flex;
 }
 
 .invoice {
@@ -40,7 +52,7 @@
 }
 
 .detailstext {
-  font-size: 13.5px;
+  font-size: 12px;
   white-space: nowrap;
   /* font-weight: bold; */
   display: flex;
@@ -57,14 +69,12 @@
   /* font-weight: 400; */
   text-align: left;
 }
-.clientFistDiv{
-  
-}
+
 
 .colontag {
   padding-left: 10px;
   padding-right: 10px;
-  margin: 9px 9px;
+  margin: 6px 6px;
   /* font-weight: 400; */
 }
 
@@ -76,17 +86,7 @@
 }
 
 
-.clientSecondDiv {
-  /* justify-content: center; */
-  /* align-items: center; */
-  align-content: center;
 
-  
-}
-.clientThirdDiv{
-  padding-right: 40px;
-
-}
 
 .labeltagsecond {
   width: 90px;
@@ -115,13 +115,13 @@
 .table th {
   border: 1px solid #000;
   border-top: none;
-  padding: 8px;
+  padding: 1px 8px;
   text-align: center;
 }
 
 .table td {
   border: 1px solid #000;
-  padding: 8px;
+  padding: 1px 8px;
   text-align: center;
 }
 
@@ -160,12 +160,9 @@
 }
 
 .parkingdiv {
-  display: grid;
-  flex-direction: row;
-  /* gap: 100px; */
+  display: flex;
+  gap: 20px;
   padding-bottom: 6px;
-  width: 100%;
-  justify-content: center;
 }
 
 .mapimage {
@@ -189,8 +186,8 @@
 .attachtext {
   text-align: center;
   font-weight: bold;
-  margin-top: 50px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .print {
@@ -210,12 +207,12 @@
   justify-content: space-between;
 }
 
-.tripsheet-RouteSummary {
-  width: 80%;
-  font-size: 13px;
+.tripsheet-RouteSummary-pdf-particular {
+  width: 100%;
+  font-size: 11px;
 }
 
-.tripsheet-RouteSummary p {
+.tripsheet-RouteSummary-pdf-particular p {
   font-weight: 600;
 }
 
@@ -237,4 +234,99 @@
   white-space: normal;
   /* font-weight: 400; */
   text-align: left;
+}
+
+.pdf-data-header{
+  display: flex;
+  /* flex-direction: row; */
+  justify-content: space-between;
+  /* gap: 50px; */
+  align-items: center;
+
+}
+
+.customerdiv{
+  width: 30%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.imagediv-pdf-particular{
+  width: 30%;
+  display: flex;
+  justify-content: flex-end;
+}
+.con-phone{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.org-gst{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.table-division-pdf-particular{
+  display: flex;
+  /* gap: 20px; */
+  justify-content: space-between;
+  border: 1.5px solid #000000;
+  align-items: center;
+}
+.clientFistDiv{
+  width: 40%;
+}
+
+.clientSecondDiv {
+width: 20%;
+  
+}
+.clientThirdDiv{
+  padding-right: 20px;
+  /* width: 30%; */
+  display: flex;
+  justify-content: flex-end;
+}
+
+.total-map-sum-pdf-particular{
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+/* background-color: red; */
+height: 250px;
+}
+
+.attachments-pdf-particular{
+  border: 1px solid rgb(255, 255, 255);
+  /* margin-top: 28%; */
+}
+
+.upload-pdf-particular {
+  height: 1080px !important;
+  width: 700px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 25px;
+  padding-bottom: 20px;
+  border: 2px solid rgb(255, 255, 255);
+}
+
+.upload-img-pdf-particular {
+  /* padding-top: 35%;
+  padding-bottom: 35%; */
+  margin-top: 10%;
+  margin-bottom: 2%;
+
+  margin-right: auto;
+  margin-left: auto;
+  width: 450px !important;
+  height: 450px !important;
+  border: 2px solid rgb(255, 255, 255);
+}
+
+.image-pdf-particular{
+  width: 100% !important;
+  height: 100% !important;
 }

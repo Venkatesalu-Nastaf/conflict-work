@@ -83,9 +83,9 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                   <th id='table-header-hcl'><span>Client Name:</span></th>
                   <td id='table-data'><span >{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}</span></td>
                 </tr>
-                <tr>
+                <tr style={{height:"60px"}}>
                   <th id='table-header-hcl'><span>Address:</span></th>
-                  <td id='table-data  '><p className='table-data-add-hcl'>{customerAddress}</p></td>
+                  <td id='table-data' style={{padding:"2px 6px"}}><p className='table-data-add-hcl'>{customerAddress}</p></td>
                 </tr>
                 <tr>
                   <th id='table-header-hcl'><span>Category:</span></th>
@@ -104,11 +104,11 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                   <th id='table-header-hcl'><span>Emp.Name:</span></th>
                   <td id='table-data'><span>{tripSheetData.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname || book.guestname}</span></td>
                 </tr>
-                <tr>
+                <tr style={{height:"60px"}}>
                   <th id='table-header-hcl'><span>Report Add:</span></th>
                   <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city} </p></td>
                 </tr>
-                <tr>
+                <tr style={{height:"60px"}}>
                   <th id='table-header-hcl'><span>Drop Address:</span></th>
                   <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage} </p></td>
                 </tr>

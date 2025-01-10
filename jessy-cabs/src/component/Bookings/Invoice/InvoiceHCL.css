@@ -59,11 +59,8 @@
   }
 
   .upload-img-hcl {
-    /* padding-top: 35%;
-    padding-bottom: 35%; */
-    margin-top: 7%;
-    margin-bottom: 0.5%;
-    /* padding-top: 10px; */
+    margin-top: 6.5%;
+    /* margin-bottom: 0.5%; */
 
     margin-right: auto;
     margin-left: auto;
@@ -120,4 +117,5 @@
 display: flex;
 gap: 6px;
 /* background-color: red; */
+height: 330px;
 }

@@ -131,7 +131,8 @@ const useTripsheet = () => {
         Hours: '',
         duty: '',
     });
-    const [conflictLoad,setConflictLoad] = useState(null)
+    const [conflictLoad, setConflictLoad] = useState(null)
+    const [selectedStatuschecking, setSelectedStatuschecking] = useState('');
     // ----------------------------------------vendorinfo-------------------
     // const [lockdata, setLockData] = useState(false)
     const [lockdata, setLockData] = useState(true)
@@ -207,7 +208,7 @@ const useTripsheet = () => {
     })
     const [minTimeData, setMinTimeData] = useState(null)
     const [maxTimeData, setMaxTimeData] = useState(null)
-    const [shedInTimeData,setShedInTimeData] = useState(null)
+    const [shedInTimeData, setShedInTimeData] = useState(null)
     const [conflictkm, setConflictKMData] = useState({
         maximumkm: 0,
         maxtripid: "",
@@ -243,7 +244,7 @@ const useTripsheet = () => {
 
     const [temporaryStatus, setTemporaryStatus] = useState(null);
     const [emptyState, setEmptyState] = useState(false);
-    const [userStatus,setUserStatus] = useState(null);
+    const [userStatus, setUserStatus] = useState(null);
 
     const [routeData, setRouteData] = useState('');
     const [tripSheetData, setTripSheetData] = useState({
@@ -279,8 +280,8 @@ const useTripsheet = () => {
     // })
     const [checkstatusapps, setCheckStatusApp] = useState([])
     const usernamedata = localStorage.getItem("username");
-    const[checksignandMapverify,setCheckSignandMapVerify] = useState(false)
-    const [checksignmapmessage,setCheckSignMapMessage] = useState('')
+    const [checksignandMapverify, setCheckSignandMapVerify] = useState(false)
+    const [checksignmapmessage, setCheckSignMapMessage] = useState('')
     const maplogcolumns = [
         { field: "id", headerName: "Sno", width: 70 },
         { field: "tripid", headerName: "TripSheet No", width: 120 },
@@ -303,9 +304,9 @@ const useTripsheet = () => {
                     onClick={() => handleEditMapLogPoint(params)}
                     aria-label="open-dialog"
                     // disabled={!Tripsheet_modify1}
-                    disabled={!Tripsheet_modify1 || (superAdminAccess==="0" && temporaryStatus)}
+                    disabled={!Tripsheet_modify1 || (superAdminAccess === "0" && temporaryStatus)}
                 >
-                    <Button disabled={!Tripsheet_modify1 || (superAdminAccess==="0" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button disabled={!Tripsheet_modify1 || (superAdminAccess === "0" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <FiEdit3 style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -320,9 +321,9 @@ const useTripsheet = () => {
                     onClick={() => handleRemoveMapLogPoint(params)}
                     aria-label="open-dialog"
                     // disabled={!Tripsheet_delete1}
-                    disabled={!Tripsheet_delete1 || (superAdminAccess==="0" && temporaryStatus)}
+                    disabled={!Tripsheet_delete1 || (superAdminAccess === "0" && temporaryStatus)}
                 >
-                    <Button disabled={!Tripsheet_delete1 || (superAdminAccess==="0" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button disabled={!Tripsheet_delete1 || (superAdminAccess === "0" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <RiDeleteBinLine style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -482,18 +483,18 @@ const useTripsheet = () => {
             //     throw new Error(`HTTP error! Status: ${response.status}`);
             // }
             const response = await axios.get(`${apiUrl}/getmapimagesverfiy/${tripid}`);
-            
+
             const responseData = response.data
             // console.log(responseData,"urlstripiii")
-            if(responseData.length>0){
+            if (responseData.length > 0) {
                 // setCheckSignandMapVerify(true)
                 // setCheckSignMapMessage("Map and Signature Verified")
                 setMapImageUrls1(responseData);
-            }else{
-            
-            // Assuming you want to display the image directly
-            // const imageUrl = URL.createObjectURL(responseData);
-            setMapImageUrls1("");
+            } else {
+
+                // Assuming you want to display the image directly
+                // const imageUrl = URL.createObjectURL(responseData);
+                setMapImageUrls1("");
             }
             // setMapimgPopupOpen(true);
         } catch {
@@ -636,12 +637,11 @@ const useTripsheet = () => {
         setHybridHclNavigate(HCLDATA)
         setTimeToggleNaviagate(timetoggledata)
         setTimeToggleVendorNaviagate(timetogglevendor)
-
         setTransferreport(tranreport)
         setEscort(escort)
+        setConflictLoad((prevConflictLoad) => !prevConflictLoad);
         //----------------------
-
-        const formData = {};
+     const formData = {};
         const parameterKeys = [
             'dispatchcheck', 'vehType', 'shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
         ];
@@ -669,7 +669,7 @@ const useTripsheet = () => {
         if (formData['dispatchcheck'] === 'true' && formData['status'] === "pending") {
             formData['status'] = "Opened"
             // setIsEditMode(true);
-            
+
             setIsEditMode(false);
         }
         else if (formData['dispatchcheck'] === 'true' && formData['status'] !== 'pending') {
@@ -690,7 +690,8 @@ const useTripsheet = () => {
         setTripSheetData(formData);
         setBook(formData);
         setFormData(formData);
-        setSelectedStatus( formData['status'])
+        setSelectedStatus(formData['status'])
+        setSelectedStatuschecking(formData['status'])
         ///calc--------------------------------------
         setcalcPackage(calcPackage);
         setExtraHR(extraHR);
@@ -1152,107 +1153,107 @@ const useTripsheet = () => {
     useEffect(() => {
         hybridatahcldatakm()
     }, [datakm1, hclOutstation])
-   
+
     const status1 = formData.status || selectedCustomerData.status || book.status
     const dayhcl1 = hybridhclcustomer || hybridhclnavigate
-    console.log(mapimageUrls1,"urls",typeof(mapimageUrls1),mapimageUrls)
+    console.log(mapimageUrls1, "urls", typeof (mapimageUrls1), mapimageUrls)
     const checksignatureandmap = async () => {
         // handleTripmapClick()
         await handleTripmapverify()
         // await getSignatureImage()
         getSignatureImageverify()
         // console.log(tripID1, "userStatusdatatripi", typeof (tripID1))
-    //    const status1 = formData.status || selectedCustomerData.status || book.status
-  if(tripID1 && userStatus !== null) {
-    // console.log(tripID1, "userStatusdatatripienetr", typeof (tripID1))
-    //     const station = userStatus
-    //     const dayhcl1 = hybridhclcustomer || hybridhclnavigate
-    
-        // if (stationmap.includes("All") || stationmap.includes("Chennai")) {
+        //    const status1 = formData.status || selectedCustomerData.status || book.status
+        if (tripID1 && userStatus !== null) {
+            // console.log(tripID1, "userStatusdatatripienetr", typeof (tripID1))
+            //     const station = userStatus
+            //     const dayhcl1 = hybridhclcustomer || hybridhclnavigate
+
+            // if (stationmap.includes("All") || stationmap.includes("Chennai")) {
             if (userStatus.includes("All") || userStatus.includes("Chennai")) {
-            if(dayhcl1 === 1 && status1 === "Closed"){
+                if (dayhcl1 === 1 && status1 === "Closed") {
 
-                if(!signimageUrl && !mapimageUrls1 && mapimageUrls1 === ""){
-                    setCheckSignandMapVerify(true)
-                    setCheckSignMapMessage("Please upload the signature and Map")
-                    return true;
-                }
-               else if(!signimageUrl){
-                    setCheckSignandMapVerify(true)
-                    setCheckSignMapMessage("Please upload the signature")
-                    // setError(true);
-                    // setErrorMessage("Please upload the signature");
-                    return true;
-                }else if(!mapimageUrls1 && mapimageUrls1 === ""){
-                    setCheckSignandMapVerify(true)
-                    setCheckSignMapMessage("Please upload the map image")
-                    // setError(true);
-                    // setErrorMessage("Please upload the map image");
-                    return true;
-                }
-                else{
-                setCheckSignandMapVerify(false)
-                return false
-                }
+                    if (!signimageUrl && !mapimageUrls1 && mapimageUrls1 === "") {
+                        setCheckSignandMapVerify(true)
+                        setCheckSignMapMessage("Please upload the signature and Map")
+                        return true;
+                    }
+                    else if (!signimageUrl) {
+                        setCheckSignandMapVerify(true)
+                        setCheckSignMapMessage("Please upload the signature")
+                        // setError(true);
+                        // setErrorMessage("Please upload the signature");
+                        return true;
+                    } else if (!mapimageUrls1 && mapimageUrls1 === "") {
+                        setCheckSignandMapVerify(true)
+                        setCheckSignMapMessage("Please upload the map image")
+                        // setError(true);
+                        // setErrorMessage("Please upload the map image");
+                        return true;
+                    }
+                    else {
+                        setCheckSignandMapVerify(false)
+                        return false
+                    }
 
-            }else{
-                // if(dayhcl1 === 0 && status1 === "Closed"){
-                     if(!signimageUrl && status1 === "Closed"){
-                    setCheckSignandMapVerify(true)
-                    setCheckSignMapMessage("Please upload the signature")
-                    // setError(true);
-                    // setErrorMessage("Please upload the signature");
-                    return true;
+                } else {
+                    // if(dayhcl1 === 0 && status1 === "Closed"){
+                    if (!signimageUrl && status1 === "Closed") {
+                        setCheckSignandMapVerify(true)
+                        setCheckSignMapMessage("Please upload the signature")
+                        // setError(true);
+                        // setErrorMessage("Please upload the signature");
+                        return true;
+                    }
+                    // }
+                    else {
+                        console.log("withoyttripid")
+                        setCheckSignandMapVerify(false)
+                        return false
+                    }
+
+
                 }
-            // }
-                else{
-                    console.log("withoyttripid")
-                    setCheckSignandMapVerify(false)
-                    return false
-                }
-                
 
             }
+            // else if( !stationmap.includes('Chennai') && !stationmap.includes('All')){
+            //     else if( !userStatus.includes('Chennai') && !userStatus.includes('All')){
+            //     if(!signimageUrl && status1 === "Temporary Closed"){
+            //         setCheckSignandMapVerify(true)
+            //         setCheckSignMapMessage("Please upload the signature")
+            //         // setError(true);
+            //         // setErrorMessage("Please upload the signature");
+            //         return;
+            //     }
 
+            // }
+            else {
+                setCheckSignandMapVerify(false);
+                return false;
+            }
         }
-        // else if( !stationmap.includes('Chennai') && !stationmap.includes('All')){
-        //     else if( !userStatus.includes('Chennai') && !userStatus.includes('All')){
-        //     if(!signimageUrl && status1 === "Temporary Closed"){
-        //         setCheckSignandMapVerify(true)
-        //         setCheckSignMapMessage("Please upload the signature")
-        //         // setError(true);
-        //         // setErrorMessage("Please upload the signature");
-        //         return;
-        //     }
-
-        // }
-        else{
+        else {
             setCheckSignandMapVerify(false);
-            return false;
+            return false
         }
     }
-    else{
-        setCheckSignandMapVerify(false);
-        return false
-    }
-    }
-    useEffect(()=>{
+    useEffect(() => {
         checksignatureandmap()
-    },[isEditMode,status1,hybridhclcustomer,hybridhclnavigate,signimageUrl,mapimageUrls1])
+    }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate, signimageUrl, mapimageUrls1])
 
-    console.log(checksignandMapverify,"userStatusdata",typeof(checksignandMapverify))
+    console.log(checksignandMapverify, "userStatusdata", typeof (checksignandMapverify))
 
     const handleEdit = async () => {
         // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
         // handleTripmapClick()
         await checksignatureandmap()
-        
+
         const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
         const checkdata = statusdata[0];
         const superpower = localStorage.getItem("SuperAdmin")
         const tripidbookno = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
-        
+
         // Log the type of superpower
         if (
             (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && Number(superpower) === 0) ||
@@ -1262,7 +1263,7 @@ const useTripsheet = () => {
             setErrorMessage(`Tripsheet has been ${checkdata?.status}`);
             return;
         }
-        if(checksignandMapverify){
+        if (checksignandMapverify) {
             setError(true);
             setErrorMessage(checksignmapmessage);
             return;
@@ -1422,9 +1423,9 @@ const useTripsheet = () => {
                 setLockDatavendorBill(true)
                 setLockDatacustomerBill(true)
                 setCheckSignandMapVerify(false)
-            //    const data2= await  checksignatureandmap()
-            //    console.log(data2,"userStatusdata2")
-                
+                //    const data2= await  checksignatureandmap()
+                //    console.log(data2,"userStatusdata2")
+
                 handleClose()
             } catch (err) {
                 // console.log(err, "erredit")
@@ -1753,7 +1754,7 @@ const useTripsheet = () => {
         const selectedOption = value ? value.label : '';
 
         if (name === "status") { // Or any specific criteria
-            setSelectedStatus(selectedOption || 'Opened');
+            setSelectedStatuschecking(selectedOption || 'Opened');
         }
 
         setBook((prevBook) => ({
@@ -3648,8 +3649,9 @@ const useTripsheet = () => {
 
     const handleChange = (event) => {
         const { name, value, checked } = event.target;
-
-        setConflictLoad(null)
+        if (name === "tripid") {
+            setConflictLoad(null)
+        }
         setPackageData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -3784,7 +3786,7 @@ const useTripsheet = () => {
                             setSelectedCustomerData(bookingDetails);
                             setSelectedCustomerId(bookingDetails.tripid);
                             setSelectedStatus(bookingDetails.status); // Set selected status based on booking details
-
+                            setSelectedStatuschecking(bookingDetails.status)
                             if (lockdata) {
 
 
@@ -3824,7 +3826,7 @@ const useTripsheet = () => {
                             setDriverSMS(false)
                             setSuccess(true);
                             setSuccessMessage("Successfully listed");
-                            setConflictLoad((prevConflictLoad) => !prevConflictLoad); 
+                            setConflictLoad((prevConflictLoad) => !prevConflictLoad);
                             // setisenterTripid(true)
                             setIsEditMode(true);
                             // setLockData(false)
@@ -5676,7 +5678,7 @@ const useTripsheet = () => {
             setErrorMessage("Successfully Deleted")
             handleTripmapverify()
             setMapImageUrls1("")
-            
+
             setMapimgPopupOpen(false)
         }
         catch (error) {
@@ -6407,7 +6409,6 @@ const useTripsheet = () => {
         // console.log("Formatted Trip Report Date Type:", typeof (formattedTripReportDate), "Formatted Trip Report Date:", formattedTripReportDate);
         // console.log("Current Date Object:", currentDateObj);
         // console.log("Formatted Trip Report Date Object:", formattedDateObj);
-        const a = parseFloat(finalreportTimecalc).toFixed(2)
         // console.log(finalreportTimecalc,"reporttimecalccccc",finalCurrentTimecalc,typeof(finalreportTimecalc),typeof(finalCurrentTimecalc),a);
 
 
@@ -6473,21 +6474,21 @@ const useTripsheet = () => {
                     setTemporaryStatus(true)
                     setHideField(true)
                 }
-                else if (statusCheck === 'Closed' &&  station.includes('All')) {
+                else if (statusCheck === 'Closed' && station.includes('All')) {
 
                     setTemporaryStatus(true)
                     setHideField(true)
                 }
                 else if (
-                    (statusCheck === "Closed") && 
+                    (statusCheck === "Closed") &&
                     (superAdminAccess === "0") &&
                     (!station.includes('Chennai') && !station.includes('All'))
-                  ) {
-                    
+                ) {
+
                     setTemporaryStatus(true);
                     setEmptyState(true)
                     setHideField(true);
-                  }
+                }
                 else if ((statusCheck === "Closed" || statusCheck === "Billed") && superAdminAccess === "0") {
                     setEmptyState(true)
                     return
@@ -6539,12 +6540,11 @@ const useTripsheet = () => {
 
     // getVehcileHistoryData in vehcileHistoryData
 
-    const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
 
     useEffect(() => {
         const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo;
         const datecheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate;
-        const shedincheck = formData?.shedInDate || selectedCustomerData?.shedInDate || book?.shedInDate
+     
         const fetchData = async () => {
 
             try {
@@ -6572,9 +6572,7 @@ const useTripsheet = () => {
                     return parseFloat(minCurrentRow.time) < parseFloat(min.time) ? minCurrentRow : min;
                 }, { time: Infinity, date: null, tripid: null }); // Start with an impossibly high time
                 setMinTimeData(minData)
-                console.log("Minimum Time:", minData.time);
-                console.log("Minimum Date:", minData.date);
-                console.log("Min Tripid:", minData.tripid);
+
 
 
                 const maxData = mainDatas.reduce((max, current) => {
@@ -6594,15 +6592,20 @@ const useTripsheet = () => {
                     return parseFloat(maxCurrentRow.time) > parseFloat(max.time) ? maxCurrentRow : max;
                 }, { time: -Infinity, date: null, tripid: null }); // Start with an impossibly low time
                 setMaxTimeData(maxData)
-                console.log("Maximum Time:", maxData.time);
-                console.log("Maximum Date:", maxData.date);
-                console.log("Max Tripid:", maxData.tripid);
 
-                const rowsWithShedInDate = mainDatas?.filter(current =>
+
+                // const rowsWithShedInDate = mainDatas?.filter(current =>
+                //     current?.shedindate !== null && current?.shedindate !== datecheck
+                // );
+                const notEqualRows = mainDatas?.filter(current =>
+                    current?.shedindate !== null && current?.shedindate !== datecheck
+                );
+
+                const equalRows = mainDatas?.filter(current =>
                     current?.shedindate !== null && current?.shedindate === datecheck
                 );
-                console.log("Rows with shedindate:", rowsWithShedInDate, datecheck);
-                console.log(rowsWithShedInDate, datecheck);
+                const rowsWithShedInDate = notEqualRows?.length > 0 ? notEqualRows : equalRows;
+
                 setShedInTimeData(rowsWithShedInDate)
 
 
@@ -6750,8 +6753,8 @@ const useTripsheet = () => {
         groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
-        hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,userStatus,conflictMinimumTimeDatas,
-        minTimeData, maxTimeData,shedInTimeData,conflictLoad
+        hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
+        minTimeData, maxTimeData, shedInTimeData, conflictLoad,setConflictLoad,selectedStatuschecking
 
     };
 };

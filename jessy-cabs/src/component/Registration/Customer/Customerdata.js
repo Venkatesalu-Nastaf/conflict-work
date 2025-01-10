@@ -115,7 +115,7 @@ export const allStations = [
   "Raipur", "Rajnandgaon", "Sukma", "Surajpur", "Surguja", "North Goa", "South Goa", "Ahmedabad", "Amreli", "Anand",
   "Aravalli", "Banas Kantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dangs", "Gandhinagar",
   "Gir Somnath", "Jamnagar", "Junagadh", "Kutch", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari",
-  "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara",
+  "Panchmahal", "Patan", "Porbandar", "Gujarat", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara",
   "Valsad", "Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal",
   "Karnal", "Kurukshetra", "Mahendragarh", "Mewat", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa",
   "Sonipat", "Yamunanagar", "Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kullu", "Kinnaur", "Mandi", "Shimla", "Sirmaur",
@@ -344,7 +344,7 @@ export const stateToStations = {
   [ "Ahmedabad", "Amreli", "Anand", "Aravalli", "Banas Kantha", "Bharuch", "Bhavnagar",
     "Botad", "Chhota Udepur", "Dahod", "Dangs", "Gandhinagar", "Gir Somnath", "Jamnagar",
     "Junagadh", "Kutch", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari",
-    "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar",
+    "Panchmahal", "Patan", "Porbandar", "Gujarat", "Sabarkantha", "Surat", "Surendranagar",
     "Tapi", "Vadodara", "Valsad"
   ],
   "Haryana":
@@ -1279,7 +1279,7 @@ export const states = [
       "Panchmahal (Godhra)",
       "Patan",
       "Porbandar",
-      "Rajkot",
+      "Gujarat",
       "Sabarkantha (Himmatnagar)",
       "Surat",
       "Surendranagar",

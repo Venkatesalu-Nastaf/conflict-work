@@ -179,6 +179,10 @@ export const Department = [
     optionvalue: "INDORE",
   },
   {
+    option: "Gujarat",
+    optionvalue: "gujarat",
+  },
+  {
     option: "Jaipur",
     optionvalue: "jaipur",
   },
@@ -905,7 +909,7 @@ export const states = [
       "Panchmahal (Godhra)",
       "Patan",
       "Porbandar",
-      "Rajkot",
+      "Gujarat",
       "Sabarkantha (Himmatnagar)",
       "Surat",
       "Surendranagar",

@@ -87,7 +87,7 @@ const Billing = ({Statename}) => {
         // organizationaddress1,
         handleKeyenterinvoicdeno,popupOpen,
         total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount,invoicestate,
-        discound_PercentageCalc,invoiceno,setInvoiceNo,billadd,dataotherStations,handleserviceInputChange,datastate,
+        discound_PercentageCalc,invoiceno,setInvoiceNo,billadd,dataotherStations,handleserviceInputChange,datastate,handlefullTotalAmount,hanldetollpark,
         balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,edit,selectbillingdata,billingdate,stateDetails,setStateDetails
 
         // ... (other state variables and functions)
@@ -1065,11 +1065,39 @@ const Billing = ({Statename}) => {
                                     <TextField
                                         size="small"
                                         id="AfterTaxAmount"
-                                        label="After Tax Amount"
+                                        label="Tax Amount"
                                         name="AfterTaxAmount"
                                         autoComplete="new-password"
                                         value={book.AfterTaxAmount || gst_taxAmountCalc() || ''}
                                         onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="input input-billing">
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faShapes} size="lg" />
+                                    </div>
+                                    <TextField
+                                        size="small"
+                                        id="TotalTollPark"
+                                        label="Parking & Toll"
+                                        name="Parking & Toll"
+                                        autoComplete="new-password"
+                                        value={hanldetollpark()}
+                                        // onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="input input-billing">
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faShapes} size="lg" />
+                                    </div>
+                                    <TextField
+                                        size="small"
+                                        id="Total Amount With Tax"
+                                        label="Total Amount With Tax"
+                                        name="Total Amount With Tax"
+                                        autoComplete="new-password"
+                                        value={handlefullTotalAmount()}
+                                        // onChange={handleChange}
                                     />
                                 </div>
                                 <div className="input input-billing">

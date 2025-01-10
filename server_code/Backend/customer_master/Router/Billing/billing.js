@@ -290,6 +290,25 @@ const getNextInvoiceNo1 = (state) => {
   });
 };
 
+// router.post('/dummyinvoice', async (req, res) => {
+
+//   const {Trip_id,State} = req.body;
+//   console.log(Trip_id,State, 'groupbill');
+//   Trip_id.map(async (tripId, index) => {
+//     // const nextInvoiceNo = await getNextInvoiceNo1(State);
+
+ 
+
+//       const nextInvoiceNo = await getNextInvoiceNo1(State);
+//       console.log((parseInt(1, 10) + index).toString().padStart(3, '0'),"index")
+//       const newInvoiceNo = (parseInt(nextInvoiceNo, 10) + index).toString().padStart(3, '0');
+//       console.log(`IV${newInvoiceNo}`, "pp",typeof(index),index,typeof(nextInvoiceNo),nextInvoiceNo,newInvoiceNo)
+      
+    
+//     });
+  
+// })
+
 
 router.post('/billgeneratecoveringbill', async (req, res) => {
   const { InvoiceDate, Trip_id, ReferenceNo, State, Invoiceno } = req.body;
@@ -310,7 +329,10 @@ router.post('/billgeneratecoveringbill', async (req, res) => {
 
       const nextInvoiceNo = await getNextInvoiceNo1(State);
       console.log(`IV${nextInvoiceNo + index}`, "pp")
-      db.query(insertBillingQuery, [ReferenceNo, `IV${nextInvoiceNo + index}`, tripId, State], (invoiceErr, invoiceResult) => {
+      const newInvoiceNo = (parseInt(nextInvoiceNo, 10) + index).toString().padStart(3, '0');
+      // console.log(`IV${nextInvoiceNo + index}`, "pp",typeof(index),index,typeof(nextInvoiceNo),nextInvoiceNo,newInvoiceNo)
+
+      db.query(insertBillingQuery, [ReferenceNo, `IV${newInvoiceNo}`, tripId, State], (invoiceErr, invoiceResult) => {
         if (invoiceErr) {
           reject(invoiceErr);
         } else {

@@ -292,7 +292,7 @@ const useBilling = () => {
         // const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll } = book;
         const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount, permit, parking, toll,} = book;
         // const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll].map((value) =>
-            const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount, permit, parking, toll].map((value) =>
+            const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount].map((value) =>
             isNaN(Number(value)) ? 0 : Number(value)
         );
         return parsedValues.reduce((add, num) => add + num, 0);
@@ -304,10 +304,44 @@ const useBilling = () => {
     
         const GrossAmount = Number(total_GrossAmount() || book.GrossAmount||0);
     
-        const parsedValues = GrossAmount + (GrossAmount * (gst / 100))
+        // const parsedValues = GrossAmount + (GrossAmount * (gst / 100))
+        const parsedValues = GrossAmount * (gst / 100)
     
         return parsedValues.toFixed(2);
     }
+
+const hanldetollpark = () => {
+    const {permit, parking, toll} = book;
+   
+    
+        // Ensure the values are numbers and sum them up
+        const totalAmount = (parseFloat(permit) || 0) + (parseFloat(parking) || 0) + (parseFloat(toll) || 0);
+    
+        return totalAmount;
+  
+}
+
+const handlefullTotalAmount = () => {
+   
+
+        // Calculate the total gross amount
+        const grossAmount = total_GrossAmount();
+    
+        // Calculate the GST tax amount
+        const gstTaxAmount = gst_taxAmountCalc();
+    
+        // Calculate the toll and parking amount
+        const tollParkAmount = hanldetollpark();
+    
+        // Sum the total gross amount, GST tax amount, and toll/parking amount
+        const totalAmount = grossAmount + parseFloat(gstTaxAmount) + tollParkAmount;
+    
+        return totalAmount.toFixed(2); // Return the total amount with two decimal points
+    };
+    
+
+
+
 
     const discound_PercentageCalc = () => {
         const { DiscountAmount, DiscountAmount2 } = book;
@@ -812,7 +846,7 @@ const useBilling = () => {
         handleKeyenterinvoicdeno,
         setInvoiceNo,billadd,invoicestate,dataotherStations,handleserviceInputChange,datastate,
         mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,edit,selectbillingdata,billingdate,
-        stateDetails,setStateDetails
+        stateDetails,setStateDetails,handlefullTotalAmount,hanldetollpark
     };
 };
 

@@ -13,7 +13,7 @@ const columns = [
   { field: "Invoice_No", headerName: "Invoice No", width: 130 },
   { field: "billing_no", headerName: "Billing_no", width: 150 },
   { field: "Customer", headerName: "Organization", width: 130 },
-  { field: "Bill_Date", headerName: "Bill Date", width: 130 },
+  { field: "Bill_Date", headerName: "Bill Date", width: 130,valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "Amount", headerName: "Total Amount", width: 130 },
   { field: "Status", headerName: "Status", width: 130 },
   { field: "guestname", headerName: "Guestname", width: 130 },
@@ -176,7 +176,7 @@ const handlePdfDownload = () => {
   const pdf = new jsPDF();
   pdf.setFontSize(12);
   pdf.setFont("helvetica", "normal");
-  pdf.text("Customer Details", 10, 10);
+  pdf.text("Individual Billing Details", 10, 10);
 
   // Map over the rows and format the Bill_Date
   const tableData = rows.map((row) => [

@@ -1052,8 +1052,12 @@ const getNextInvoiceNo = (state) => {
         reject(err); // Reject on error
       } else if (result.length > 0) {
 
-        const nextInvoiceNo = `IV${result[0].max_invoiceno}`;
+        // const nextInvoiceNo = `IV${result[0].max_invoiceno}`;
+        const nextInvoiceNo1 = result[0].max_invoiceno;
+        const newInvoiceNo2 = parseInt(nextInvoiceNo1, 10).toString().padStart(3, '0');
+        // const formattedInvoiceNo = String(nextInvoiceNo).padStart(3, '0');
         // const nextInvoiceNo = result[0].max_invoiceno
+        const nextInvoiceNo = `IV${newInvoiceNo2}`;
         resolve(nextInvoiceNo); // Resolve with the next invoice number
       } else {
         resolve(null); // Handle case where no result is found
@@ -1061,6 +1065,16 @@ const getNextInvoiceNo = (state) => {
     });
   });
 };
+
+// router.get('/max-invoiceno/:state', async (req, res) => {
+//   const { state } = req.params;
+//   const nextInvoiceNo = await getNextInvoiceNo(state);
+//   console.log(nextInvoiceNo, 'nextInvoiceNo');
+//   return res.status(200).json(nextInvoiceNo)
+
+
+
+// })
 router.put('/statusChangeTransfer/:invoiceno/:State', async (req, res) => {
   const { invoiceno, State } = req.params;
   const nextInvoiceNo = await getNextInvoiceNo(State);

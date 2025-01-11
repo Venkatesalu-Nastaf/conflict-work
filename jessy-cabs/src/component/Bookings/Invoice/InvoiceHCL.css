@@ -49,28 +49,29 @@
   }
 
   .upload-pdf-hcl {
-    height: 900px !important;
+    height: 1060px !important;
     width: 700px !important;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
-    margin-bottom: 30px;
+    margin-top: 15px;
+    margin-bottom: 35px;
     padding-top: 25px;
     padding-bottom: 20px;
     /* border: 5px solid rgb(0, 0, 0); */
     /* background-color: green; */
+    overflow: hidden;
   }
 
   .upload-img-hcl {
-    margin-top: 35px;
+    margin-top: 40px;
     margin-bottom: 15px;
     padding-top: 25px;
 
     margin-right: auto;
     margin-left: auto;
     width: 400px !important;
-    height: 425px !important;
+    height: 495px !important;
     /* background-color: orange; */
     /* border: 5px solid rgb(0, 0, 0); */
   }
@@ -125,7 +126,8 @@
 display: flex;
 gap: 6px;
 /* background-color: red; */
-height: 263px;
+height: 420px !important;
+border: 1px solid rgb(255, 255, 255);
 }
 
 .invoice-address-detials-hcl {
@@ -133,9 +135,19 @@ height: 263px;
   font-size: 14px;
   /* font-family: 'Courier New', Courier, monospace; */
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji !important;
- 
+ margin-top:0px ;
 }
 .invoice-contact-details-hcl{
   font-size: 14px;
+  margin-top:0px ;
+
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji !important;
 }
+
+.page-content{
+  display: block;
+  margin: 0 auto; /* Center the page */
+  padding: 0; /* Remove any padding */
+  overflow: hidden; /* Avoid white space from overflowing content */
+}
+

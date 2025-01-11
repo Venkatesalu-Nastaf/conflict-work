@@ -437,13 +437,13 @@ height: 730px !important;
 
 .upload-pdf {
  
-  height: 930px;
+  height: 1065px;
   width: 700px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding-top: 25px;
-  padding-bottom: 17px;
+  padding-bottom: 18px;
   /* background-color: orange; */
   /* border: 5px solid rgb(255, 255, 255); */
 }
@@ -465,15 +465,19 @@ height: 730px !important;
   margin-right: auto;
   margin-left: auto;
   width: 400px !important;
-  height: 445px !important;
+  height: 495px !important;
 
 
 }
 
-.li-files {
-  background-color: #ffffff;
+.map-invoice{
+display: flex;
+gap: 6px;
+height: 570px !important;
+border: 1px solid rgb(255, 255, 255);;
 }
 
+/* style={{ display: "flex", gap: "6px", height:"480px" }} */
 .tr-height{
   height: 60px !important;
   /* background-color: red; */

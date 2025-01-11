@@ -199,7 +199,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             <div id='Totals'><span id='title'>Total Permit:  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
           </div>
 
-          <div style={{ display: "flex", gap: "6px", height:"480px" }}>
+          <div className='map-invoice'>
 
 
             <div className='tripsheet-location-img'>
@@ -252,7 +252,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                           key={index}
                           style={{
                             pageBreakAfter: "always",
-                            padding: "20px",
+                            padding: "20px 20px 0px 20px",
                             // marginBottom: "140px",
 
                           }}
@@ -347,7 +347,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
         filename: `TS${tripidlable}E-tripsheet.pdf`, resolution: 3,
         method: 'save',
         page: {
-          margin: { top: 10, right: 10, bottom: 38, left: 10 },
+          margin: { top: 10, right: 10, bottom: 10, left: 10 },
           format: "a4",
           orientation: "portrait",
         },

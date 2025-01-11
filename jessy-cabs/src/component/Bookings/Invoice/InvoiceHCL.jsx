@@ -617,7 +617,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             resolution: 3,
             method: "save",
             page: {
-              margin: { top: 10, right: 10, bottom: 49, left: 10 },
+              margin: { top: 10, right: 10, bottom: 10, left: 10 },
               format: "a4",
               orientation: "portrait",
             },

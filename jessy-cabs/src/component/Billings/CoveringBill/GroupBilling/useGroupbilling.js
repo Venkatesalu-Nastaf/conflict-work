@@ -1198,7 +1198,7 @@ const useGroupbilling = () => {
                 { key: "OutstationCharges", header: "Outstation Charges" },
                 { key: "withoutTaxes", header: "Total Amount" },
                 { key: "gsttaxdatanumber", header: "GST%" },
-                { key: "gsttaxdata", header: "GST%" },
+                { key: "gsttaxdata", header: "GST Amount" },
                 { key: "permit", header: "Permit" },
                 { key: "parking", header: "Parking" },
                 { key: "toll", header: "Toll" },

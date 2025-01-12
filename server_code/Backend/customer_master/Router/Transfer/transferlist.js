@@ -1037,13 +1037,21 @@ router.delete('/deleteTransfer/:groupid', (req, res) => {
 
 
 const getNextInvoiceNo = (state) => {
+  // const query = `
+  //   SELECT GREATEST(
+  //       COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_no, 3) AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
+  //       COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
+  //       COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
+  //   ) + 1 AS max_invoiceno;
+  // `;
+
   const query = `
-    SELECT GREATEST(
-        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_no, 3) AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
-        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
-        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
-    ) + 1 AS max_invoiceno;
-  `;
+  SELECT GREATEST(
+      COALESCE((SELECT MAX(CAST(Invoice_no AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
+      COALESCE((SELECT MAX(CAST(Invoice_No AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
+      COALESCE((SELECT MAX(CAST(Invoice_No AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
+  ) + 1 AS max_invoiceno;
+`;
 
   // Run the query to find the maximum invoice number
   return new Promise((resolve, reject) => {
@@ -1057,7 +1065,8 @@ const getNextInvoiceNo = (state) => {
         const newInvoiceNo2 = parseInt(nextInvoiceNo1, 10).toString().padStart(3, '0');
         // const formattedInvoiceNo = String(nextInvoiceNo).padStart(3, '0');
         // const nextInvoiceNo = result[0].max_invoiceno
-        const nextInvoiceNo = `IV${newInvoiceNo2}`;
+        // const nextInvoiceNo = `IV${newInvoiceNo2}`;
+        const nextInvoiceNo = newInvoiceNo2
         resolve(nextInvoiceNo); // Resolve with the next invoice number
       } else {
         resolve(null); // Handle case where no result is found
@@ -1066,15 +1075,8 @@ const getNextInvoiceNo = (state) => {
   });
 };
 
-// router.get('/max-invoiceno/:state', async (req, res) => {
-//   const { state } = req.params;
-//   const nextInvoiceNo = await getNextInvoiceNo(state);
-//   console.log(nextInvoiceNo, 'nextInvoiceNo');
-//   return res.status(200).json(nextInvoiceNo)
 
 
-
-// })
 router.put('/statusChangeTransfer/:invoiceno/:State', async (req, res) => {
   const { invoiceno, State } = req.params;
   const nextInvoiceNo = await getNextInvoiceNo(State);

@@ -266,13 +266,21 @@ router.post('/GroupBillingList', (req, res) => {
 
 
 const getNextInvoiceNo1 = (state) => {
+  // const query = `
+  //   SELECT GREATEST(
+  //       COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_no, 3) AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
+  //       COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
+  //       COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
+  //   ) + 1 AS max_invoiceno;
+  // `;
+
   const query = `
-    SELECT GREATEST(
-        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_no, 3) AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
-        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
-        COALESCE((SELECT MAX(CAST(SUBSTRING(Invoice_No, 3) AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
-    ) + 1 AS max_invoiceno;
-  `;
+  SELECT GREATEST(
+      COALESCE((SELECT MAX(CAST(Invoice_no AS UNSIGNED)) FROM Transfer_list WHERE State = ?), 0),
+      COALESCE((SELECT MAX(CAST(Invoice_No AS UNSIGNED)) FROM Individual_Billing WHERE State = ?), 0),
+      COALESCE((SELECT MAX(CAST(Invoice_No AS UNSIGNED)) FROM GroupBillinginvoice_no WHERE State = ?), 0)
+  ) + 1 AS max_invoiceno;
+`;
 
   // Run the query to find the maximum invoice number
   return new Promise((resolve, reject) => {
@@ -302,7 +310,7 @@ const getNextInvoiceNo1 = (state) => {
 //       const nextInvoiceNo = await getNextInvoiceNo1(State);
 //       console.log((parseInt(1, 10) + index).toString().padStart(3, '0'),"index")
 //       const newInvoiceNo = (parseInt(nextInvoiceNo, 10) + index).toString().padStart(3, '0');
-//       console.log(`IV${newInvoiceNo}`, "pp",typeof(index),index,typeof(nextInvoiceNo),nextInvoiceNo,newInvoiceNo)
+//       console.log(  newInvoiceNo,"pp",typeof(index),index,typeof(newInvoiceNo),nextInvoiceNo,nextInvoiceNo + index)
       
     
 //     });
@@ -332,7 +340,7 @@ router.post('/billgeneratecoveringbill', async (req, res) => {
       const newInvoiceNo = (parseInt(nextInvoiceNo, 10) + index).toString().padStart(3, '0');
       // console.log(`IV${nextInvoiceNo + index}`, "pp",typeof(index),index,typeof(nextInvoiceNo),nextInvoiceNo,newInvoiceNo)
 
-      db.query(insertBillingQuery, [ReferenceNo, `IV${newInvoiceNo}`, tripId, State], (invoiceErr, invoiceResult) => {
+      db.query(insertBillingQuery, [ReferenceNo, newInvoiceNo, tripId, State], (invoiceErr, invoiceResult) => {
         if (invoiceErr) {
           reject(invoiceErr);
         } else {

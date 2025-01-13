@@ -1006,7 +1006,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', width:"280px" }}>
                   <FormControlLabel
                     value="smsguest"
                     control={
@@ -1043,7 +1043,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   )}
                 </div>
 
-                <div className="">
+                <div className="" style={{width:"200px"}}>
                   <FormControlLabel
                     value="DriverSMS"
                     control={

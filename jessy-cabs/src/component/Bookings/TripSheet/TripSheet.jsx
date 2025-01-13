@@ -269,7 +269,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     // timeToggle,HclKMCalculation,
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
-    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict
+    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,
+    setError, setErrorMessage
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -875,7 +876,15 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const signaturedisabled = signimageUrl === "" && temporaryStatus ? true : false
 
-  const shedoutDisabled = temporaryStatus ? hideField : hideField
+  const shedoutDisabled = temporaryStatus ? hideField : hideField;
+  // status for conflict message
+  useEffect(() => {
+    if (conflictModalbox === true) {
+      setError(true)
+      setErrorMessage("Conflict Error")
+    }
+  }, [conflictModalbox])
+
   return (
     <div className="form-container form-container-tripsheet">
       <div className="Tripsheet-form main-content-container">
@@ -1444,7 +1453,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </Box>
                 </div>
                 {emptyState ? "" :
-                  <div className="input" style={{ display: "grid", position:"relative" }}>
+                  <div className="input" style={{ display: "grid", position: "relative" }}>
                     {/* {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
                       Conflict tripid: {conflictCompareDatas?.tripids}, Time: {conflictCompareDatas?.latestTime}, conflictdate:{conflictCompareDatas?.conflictmaxdate}
                     </label>} */}
@@ -1472,8 +1481,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                           height: '100px',
                           bgcolor: 'white',
                           // border: '1px solid #000',
-                          borderRadius:3,
-                          textAlign:'center',
+                          borderRadius: 3,
+                          textAlign: 'center',
                           boxShadow: 24,
                           p: 1,
                           overflowY: 'auto'
@@ -1507,21 +1516,24 @@ const TripSheet = ({ stationName, logoImage }) => {
                           </>
                         ) : (
                           <>
-                          <div className='No-Data'>
-                          <label > No Conflict Data</label>
+                            <div className='No-Data'>
+                              <label > No Conflict Data</label>
 
-                          </div>
+                            </div>
                           </>
-                         
+
                         )}
 
 
                       </Box>
                     </Modal>
-                    <div style={{ top: -17, left:27 ,cursor:'pointer',position: 'absolute', width: '18px', height: '18px', borderRadius: '50%', backgroundColor: conflictModalbox ? 'red' : 'green' }} onClick={handleConflictModal}>
-                      </div>
-                    <div style={{  display: "flex" }}>
-                      
+                    {/* <div style={{ top: -17, left:27 ,cursor:'pointer',position: 'absolute', width: '18px', height: '18px', borderRadius: '50%', backgroundColor: conflictModalbox ? 'red' : 'green' }} onClick={handleConflictModal}>
+                      </div> */}
+                    <div style={{ top: -42, left: 27, cursor: 'pointer', position: 'absolute', }} onClick={handleConflictModal}>
+                      <p style={{ color: conflictModalbox ? 'red' : 'green', fontSize: '20px' }}>!!!</p>
+                    </div>
+                    <div style={{ display: "flex" }}>
+
                       <div className="icone" >
                         <CalendarMonthIcon color="action" />
                       </div>
@@ -1533,6 +1545,8 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           id="shedOutDate"
                           value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
+                          // value={formData?.shedOutDate || selectedCustomerData?.shedOutDate}
+
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             setKmValue((prev) => ({ ...prev, shedOutDate: date }));
@@ -1588,6 +1602,50 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>}
 
                 {emptyState ? "" :
+                  // <div className="input" style={{ display: "grid" }}>
+                  //   {closeDateCheckFun()}
+                  //   <div style={{ display: "flex" }}>
+                  //     <div className="icone">
+                  //       <CalendarMonthIcon color="action" />
+                  //     </div>
+                  //     <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  //       <DatePicker
+                  //         label="Close Date"
+                  //         id="closedate"
+                  //         disabled={temporaryStatus && superAdminAccess === "0"}
+                  //         value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : dayjs(selectedCustomerData?.shedOutDate).format('DD/MM/YYYY') || book.closedate ? dayjs(book.closedate) : null}
+                  //         format="DD/MM/YYYY"
+                  //         onChange={(date) => {
+
+                  //           handleDateChange(date, 'closedate')
+                  //           setKmValue(prev => ({ ...prev, closeDate: date }))
+
+                  //           // const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
+                  //           // const closeDate = date
+                  //           // const shedindate = kmValue.shedInDate
+
+                  //           // if (startDate && closeDate) {
+                  //           //   const startDateObj = dayjs(startDate);
+                  //           //   const closeDateObj = dayjs(closeDate);
+                  //           //   const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+                  //           //   setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
+                  //           // }
+
+                  //           // if (shedindate && closeDate) {
+                  //           //   const closedateObj = dayjs(closeDate);
+                  //           //   const shedindateObj = dayjs(shedindate);
+                  //           //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                  //           //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                  //           // }
+                  //         }}
+                  //       >
+                  //         {({ inputProps, inputRef }) => (
+                  //           <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate || selectedCustomerData?.shedOutDate} />
+                  //         )}
+                  //       </DatePicker>
+                  //     </LocalizationProvider>
+                  //   </div>
+                  // </div>
                   <div className="input" style={{ display: "grid" }}>
                     {closeDateCheckFun()}
                     <div style={{ display: "flex" }}>
@@ -1599,39 +1657,58 @@ const TripSheet = ({ stationName, logoImage }) => {
                           label="Close Date"
                           id="closedate"
                           disabled={temporaryStatus && superAdminAccess === "0"}
-                          value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
+                          value={
+                            formData?.closedate ||
+                              selectedCustomerData?.closedate
+                              ? dayjs(selectedCustomerData.closedate)
+                              : selectedCustomerData?.shedOutDate
+                                ? dayjs(selectedCustomerData.shedOutDate)
+                                : null ||
+                                  book?.closedate ? dayjs(book?.closedate) : dayjs(book?.shedOutDate)
+                          }
                           format="DD/MM/YYYY"
                           onChange={(date) => {
+                            handleDateChange(date, 'closedate');
+                            setKmValue((prev) => ({ ...prev, closeDate: date }));
 
-                            handleDateChange(date, 'closedate')
-                            setKmValue(prev => ({ ...prev, closeDate: date }))
-
-                            // const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
-                            // const closeDate = date
-                            // const shedindate = kmValue.shedInDate
+                            // Uncomment and use if you want to handle additional calculations
+                            // const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
+                            // const closeDate = date;
+                            // const shedindate = kmValue.shedInDate;
 
                             // if (startDate && closeDate) {
                             //   const startDateObj = dayjs(startDate);
                             //   const closeDateObj = dayjs(closeDate);
                             //   const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-                            //   setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
+                            //   setKmValue((prev) => ({ ...prev, close_totalDays: totalDays }));
                             // }
 
                             // if (shedindate && closeDate) {
                             //   const closedateObj = dayjs(closeDate);
                             //   const shedindateObj = dayjs(shedindate);
-                            //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
-                            //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                            //   const totalDays = closedateObj.diff(shedindateObj, 'days') + 1;
+                            //   setKmValue((prev) => ({ ...prev, close_shedOut_totalDays: totalDays }));
                             // }
                           }}
                         >
                           {({ inputProps, inputRef }) => (
-                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
+                            <TextField
+                              {...inputProps}
+                              inputRef={inputRef}
+                              value={
+                                selectedCustomerData?.closedate ||
+                                selectedCustomerData?.shedOutDate ||
+                                ""
+                              }
+                            />
                           )}
                         </DatePicker>
                       </LocalizationProvider>
                     </div>
-                  </div>}
+                  </div>
+
+                }
+
 
                 {emptyState ? "" :
                   <div className="input" style={{ display: "grid" }}>

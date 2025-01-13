@@ -6755,7 +6755,7 @@ const useTripsheet = () => {
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
-        minTimeData, maxTimeData, shedInTimeData, conflictLoad,setConflictLoad,selectedStatuschecking,openModalConflict,setOpenModalConflict
+        minTimeData, maxTimeData, shedInTimeData, conflictLoad,setConflictLoad,selectedStatuschecking,openModalConflict,setOpenModalConflict,setError,setErrorMessage
 
     };
 };

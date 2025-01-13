@@ -899,3 +899,12 @@
   display: flex;
   justify-content: end;
 } */
+
+.gt-sms-st{
+display: flex;
+min-width: 350px !important;
+/* width: 280px !important; */
+gap: 5px;
+justify-content: space-between;
+}
+/* style={{ display: 'flex', width:"280px" }} */

@@ -705,7 +705,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={styles.text2}>{parkpermit}</Text>
                     <Text style={styles.text2}>{formattedFullAmount}</Text>
                   </View> */}
-                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end',paddingRight:30, }}>
+                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end',paddingRight:25, }}>
                     {fullAmount > 0 && (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
                         <Text style={{ width: '200px', fontSize: 10 }}>SUB TOTAL: </Text>

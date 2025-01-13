@@ -880,7 +880,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   // status for conflict message
   useEffect(() => {
     let timeout;
-    console.log(conflictModalbox,"conflictttttttttttt")
+    console.log(conflictModalbox, "conflictttttttttttt")
     if (conflictModalbox) {
       timeout = setTimeout(() => {
         setError(true);
@@ -1006,7 +1006,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-                <div style={{ display: 'flex', width:"280px" }}>
+                <div className='gt-sms-st' >
                   <FormControlLabel
                     value="smsguest"
                     control={
@@ -1030,7 +1030,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     label="Email"
                   />
-
+                  <FormControlLabel
+                    value="DriverSMS"
+                    control={
+                      <Checkbox
+                        size="small"
+                        checked={DriverSMS}
+                        onChange={(event) => setDriverSMS(event.target.checked)}
+                      />
+                    }
+                    label="Driver SMS"
+                  />
                   {isEditMode && !sendEmail && (
                     <>
                       <Button variant="outlined" size="small" onClick={handlecopiedemailcontent}>
@@ -1043,7 +1053,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   )}
                 </div>
 
-                <div className="" style={{width:"200px"}}>
+                {/* <div className="" style={{width:"200px"}}>
                   <FormControlLabel
                     value="DriverSMS"
                     control={
@@ -1055,7 +1065,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     label="Driver SMS"
                   />
-                </div>
+                </div> */}
 
                 <div className="input">
                   <TextField

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
@@ -13,7 +13,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CopyEmailHtmlBooking from "./CopyEmailBooking";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import InputLabel from '@mui/material/InputLabel';
-import { Document, Page, pdfjs } from 'react-pdf';
 import {
   Duty,
   Hire,
@@ -76,7 +75,7 @@ import { MdDataUsage } from "react-icons/md";
 import Select from '@mui/material/Select';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -90,14 +89,14 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const Booking = ({ stationName, customerData }) => {
-  const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
+const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
 
   // to tranform datas based on 
   const stationOptions = stationName?.filter(option => option?.Stationname !== "All").map(option => option?.Stationname)
   const apiUrl = APIURL;
   const {
-    selectedCustomerData, handleImagechange2,
-
+    selectedCustomerData, handleImagechange2, 
+  
     selectedCustomerId,
     error, orderByDropDown,
     success,
@@ -149,11 +148,11 @@ const Booking = ({ stationName, customerData }) => {
     edit, AvilableimageCount,
     // handleKeyEnterdriver,
     vehileName,
-    selectedCustomerdriver, handleimagedeletewithouttripid,deletefiledata,
-    handleSelectAll, handlecheckbox, handlecheckbox1, selectAll, deletefile, handleButtonClickwithouttripid, dialogOpentrail, handleCloseDialogtrail, selectetImg,
+    selectedCustomerdriver,
+    handleSelectAll, handlecheckbox, selectAll, deletefile,
 
-    handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning,
-    handleBookEscortChange, handleAirportTransferChange, transferreport, setTransferreport, escort, setEscort, isAddbtnload, setisAddbtnload, isEditbtnload, setisEditbtnload
+     handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning,
+     handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort,isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload
   } = useBooking();
 
   const { getHtmlContentdata } = CopyEmailHtmlBooking();
@@ -163,7 +162,6 @@ const Booking = ({ stationName, customerData }) => {
   const Booking_new = permissions[1]?.new;
   const Booking_modify = permissions[1]?.modify;
   const Booking_delete = permissions[1]?.delete;
-  const [numPages, setNumPages] = useState(null);
 
 
   // varibale setting for
@@ -258,11 +256,6 @@ const Booking = ({ stationName, customerData }) => {
     }
   }
 
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-
-  }
-
   return (
     <div className="booking-form main-content-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
@@ -284,7 +277,7 @@ const Booking = ({ stationName, customerData }) => {
                 onKeyDown={handleKeyDown}
               />
             </span>
-
+          
             <div className="radio booking-top-division-status-div">
               <label>Status</label>
               <Box sx={{ width: '100%' }}>
@@ -320,7 +313,7 @@ const Booking = ({ stationName, customerData }) => {
               <label className="tripsheet-top-division-date-label">Booking Date</label>
               <div className="tripsheet-top-division-date">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-
+                
                   <DatePicker
                     id="bookdate"
                     value={
@@ -349,7 +342,7 @@ const Booking = ({ stationName, customerData }) => {
                   getCurrentTime() ||
                   ""
                 }
-                readOnly
+               readOnly
               />
             </span>
 
@@ -392,10 +385,10 @@ const Booking = ({ stationName, customerData }) => {
                 )}
               </div>
             </span>
-
+           
           </div>
-
-
+        
+      
         </div>
         <div>
           <div className="second-division second-division-booking">
@@ -449,8 +442,8 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "orderedby")
                 }
-                onInputChange={(event, value) => handleAutocompleteChange(event, value, "orderedby")}
-
+                onInputChange={(event, value) => handleAutocompleteChange(event, value, "orderedby")} 
+  
                 value={
                   formData.orderedby ||
                   selectedCustomerData.orderedby ||
@@ -493,7 +486,7 @@ const Booking = ({ stationName, customerData }) => {
                   selectedCustomerDatas?.orderByMobileNo ||
                   ""
                 }
-
+                
                 onChange={handleChange}
                 label="Order by Mobile No"
                 id="orderByMobileNo"
@@ -501,7 +494,7 @@ const Booking = ({ stationName, customerData }) => {
                 size="small"
               />
             </div>
-
+            
 
             <div className="input">
               <div className="icone">
@@ -513,7 +506,7 @@ const Booking = ({ stationName, customerData }) => {
                 autoComplete="new-password"
                 value={
                   selectedCustomerData.orderByEmail ||
-                  book.orderByEmail ||
+                  book.orderByEmail || 
                   book.orderbyemail ||
                   formData.orderByemail ||
                   selectedCustomerDatas.orderByEmail ||
@@ -526,7 +519,7 @@ const Booking = ({ stationName, customerData }) => {
                 size="small"
               />
             </div>
-
+       
             <div className="input service-station-input">
               <div className="icone">
                 <DomainAddIcon color="action" />
@@ -951,7 +944,7 @@ const Booking = ({ stationName, customerData }) => {
                 </div>
               </div>
             </div>
-
+            
             <div>
               <div className="input time booking-start-time-input">
                 <div className="icone icone-with-margin-top">
@@ -1026,7 +1019,7 @@ const Booking = ({ stationName, customerData }) => {
             <div className='input time booking-start-time-input'>
 
 
-              <FormControl fullWidth size="small" sx={{ marginTop: "20px", width: "85%", marginLeft: "30px" }}>
+              <FormControl fullWidth size="small" sx={{marginTop:"20px", width:"85%",marginLeft:"30px"}}>
                 <InputLabel id="demo-simple-select-label">Escort</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -1037,7 +1030,7 @@ const Booking = ({ stationName, customerData }) => {
                   onChange={(event) => {
                     const selectedValue = event.target.value || "No";
                     setFormData({ ...formData, escort: selectedValue });
-                    setSelectedCustomerData({ ...selectedCustomerData, escort: selectedValue });
+                    setSelectedCustomerData({ ...selectedCustomerData, escort:selectedValue });
                     setBook({ ...book, escort: event.target.value });
                     setEscort(selectedValue);
                   }}
@@ -1047,30 +1040,30 @@ const Booking = ({ stationName, customerData }) => {
 
                 </Select>
               </FormControl>
+                
+                  </div>
 
-            </div>
-
-            <div className='input time booking-start-time-input'>
-              <FormControl fullWidth size="small" sx={{ marginTop: "20px", width: "85%", marginLeft: "25px" }}>
-                <InputLabel className="input-type-grid">Airport Transfer</InputLabel>
-                <Select
-                  labelId="demo-simple-select-labelescort"
-                  id="demo-simple-select"
-                  value={formData.transferreport || selectedCustomerData.transferreport || book.transferreport || "No"}
-                  label='transferreport'
-                  // onChange={handleAirportTransferChange}
-                  onChange={(event) => {
-                    setFormData({ ...formData, transferreport: event.target.value });
-                    setSelectedCustomerData({ ...selectedCustomerData, transferreport: event.target.value });
-                    setBook({ ...book, transferreport: event.target.value });
-                    setTransferreport(event.target.value);
-                  }}
-                >
-                  <MenuItem value={'Yes'}>Yes</MenuItem>
-                  <MenuItem value={'No'}>No</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
+                  <div className='input time booking-start-time-input'>
+                    <FormControl fullWidth size="small" sx={{marginTop:"20px", width:"85%",marginLeft:"25px"}}>
+                      <InputLabel className="input-type-grid">Airport Transfer</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-labelescort"
+                        id="demo-simple-select"
+                        value={formData.transferreport || selectedCustomerData.transferreport || book.transferreport || "No"}
+                        label='transferreport'
+                        // onChange={handleAirportTransferChange}
+                        onChange={(event) => {
+                          setFormData({ ...formData, transferreport: event.target.value });
+                          setSelectedCustomerData({ ...selectedCustomerData,transferreport: event.target.value });
+                          setBook({ ...book,transferreport: event.target.value });
+                          setTransferreport(event.target.value);
+                        }}
+                      >
+                        <MenuItem value={'Yes'}>Yes</MenuItem>
+                        <MenuItem value={'No'}>No</MenuItem>
+                      </Select>
+                    </FormControl>
+                </div>
 
 
             {isEditMode ? (
@@ -1120,22 +1113,6 @@ const Booking = ({ stationName, customerData }) => {
                     />
                   </Button>
                 </div>
-                {selectetImg.length > 0 && (
-                  <>
-                <div className="input-dummy" style={{ marginLeft: "10px" }}>
-                  <Button
-                    variant="outlined"
-                    onClick={handleButtonClickwithouttripid}
-                  >
-                    View
-                  </Button>
-                </div>
-                <div className="input-dummy" style={{ marginLeft: "10px" }}>
-                  <p>Image Count : {selectetImg?.length}</p>
-                </div>
-                </>
-)}
-
               </div>
             )}
 
@@ -1169,9 +1146,9 @@ const Booking = ({ stationName, customerData }) => {
                   // <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
                   //   Edit
                   // </Button>
-                  <LoadingButton loading={isEditbtnload} variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
-                    Edit
-                  </LoadingButton>
+                  <LoadingButton  loading={isEditbtnload} variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
+                  Edit
+                </LoadingButton>
                 ) : (
                   // <Button
                   //   disabled={!Booking_new}
@@ -1181,17 +1158,17 @@ const Booking = ({ stationName, customerData }) => {
                   //   Add
                   // </Button>
                   <LoadingButton
-                    disabled={!Booking_new}
-                    variant="contained"
-                    onClick={handleAdd}
-                    loading={isAddbtnload}
-                  >
-                    Add
-                  </LoadingButton>
+                  disabled={!Booking_new}
+                  variant="contained"
+                  onClick={handleAdd}
+                  loading={isAddbtnload}
+                >
+                  Add
+                </LoadingButton>
                 )}
               </div>
             </div>
-          </div>
+          </div> 
         </div>
         <Box className='common-speed-dail'>
           <StyledSpeedDial
@@ -1207,7 +1184,7 @@ const Booking = ({ stationName, customerData }) => {
                 onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
               />
             )}
-            {Booking_delete === 1 && isEditMode && (
+            {Booking_delete === 1 &&  isEditMode &&  (
               <SpeedDialAction
                 key="delete"
                 icon={<DeleteIcon />}
@@ -1215,7 +1192,7 @@ const Booking = ({ stationName, customerData }) => {
                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
               />
             )}
-            {Booking_new === 1 && !isEditMode && (
+            {Booking_new === 1 && !isEditMode &&  (
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}
@@ -1256,7 +1233,7 @@ const Booking = ({ stationName, customerData }) => {
                 options={Hire.map((option) => ({
                   label: option.Option,
                 }))}
-                getOptionLabel={(option) =>
+                getOptionLabel={(option) => 
                   option.label ||
                   selectedCustomerData.hireTypes ||
                   book.hireTypes || selectedCustomerdriver.hireTypes ||
@@ -1315,7 +1292,7 @@ const Booking = ({ stationName, customerData }) => {
                 fullWidth
                 size="small"
                 id="vehicleRegno"
-                freeSolo
+                freeSolo  
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
                 onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
@@ -1333,7 +1310,6 @@ const Booking = ({ stationName, customerData }) => {
                 )}
               />
             </div>
-         
             <div className="input">
               <div className="icone">
                 <PiCarSimpleFill color="action" />
@@ -1343,15 +1319,10 @@ const Booking = ({ stationName, customerData }) => {
                 id="vehiclemodule"
                 freeSolo
                 size="small"
-                // value={
-                //   selectedCustomerData.vehiclemodule ||
-                //   book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||
-                //   ""
-                // }
                 value={
                   selectedCustomerData.vehiclemodule ||
                   book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||
-                  "A/C"
+                  ""
                 }
                 options={vehicaleinfos?.map((option) => ({
                   label: option?.Option,
@@ -1428,14 +1399,11 @@ const Booking = ({ stationName, customerData }) => {
                 className="full-width"
                 autoComplete="new-password"
                 value={
-                  selectedCustomerData?.mobileNo ||
-                  book.mobileNo ||
-                  selectedCustomerdriver?.mobileNo ||
+                  selectedCustomerData.mobileNo ||
+                  book.mobileNo || selectedCustomerdriver.mobileNo ||
                   ""
                 }
-                onChange={(event) => handleChange(event, "mobileNo")} // Pass the field name
-                onInputChange={(event, value) => handleChange(event, value, "driverName")}  // Handle manual input
-
+                onChange={handleChange}
                 label="Driver Phone"
                 id="mobileNo"
                 margin="normal"
@@ -1467,22 +1435,22 @@ const Booking = ({ stationName, customerData }) => {
             <div>
               {
                 edit ?
-                  <LoadingButton
-                    disabled={!Booking_new}
-                    variant="contained"
-                    onClick={handleAdd}
-                    loading={isAddbtnload}
-                  >
-                    Add New
-                  </LoadingButton>
-
+                <LoadingButton
+                disabled={!Booking_new}
+                variant="contained"
+                onClick={handleAdd}
+                loading={isAddbtnload}
+              >
+                Add New
+              </LoadingButton>
+                
                   // <Button
                   //   variant="contained"
                   //   onClick={handleAdd}
                   //   disabled={!Booking_new}
                   // >
                   //   Add New</Button>
-                  : <></>
+                     : <></>
               }
             </div>
           </div>
@@ -1588,7 +1556,7 @@ const Booking = ({ stationName, customerData }) => {
             </div>
           }
         </div>
-     
+
         <Dialog open={dialogOpen} onClose={handleCloseDialog}>
           <DialogContent>
             <div className="vehicle-info-dailog-box-div1" style={{ width: "600px" }}>
@@ -1606,23 +1574,12 @@ const Booking = ({ stationName, customerData }) => {
                       />
                     )}
                     {img.mimetype === "pdf" && (
-                      // <embed
-                      //   src={`${apiUrl}/images/${img.path}`}
-                      //   type="application/pdf"
-                      //   style={{ width: "100%", height: "600px", display: "block", border: "none" }}
-                      //   key={img.path}  // Use key to prevent re-rendering
-                      // />
-                      <Document
-                      file={`${apiUrl}/images/${img.path}`}
-                      onLoadSuccess={onDocumentLoadSuccess}
-                    >
-                      {Array.from(new Array(numPages), (el, index) => (
-
-                        <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-
-                      ))}
-
-                    </Document>
+                      <embed
+                        src={`${apiUrl}/images/${img.path}`}
+                        type="application/pdf"
+                        style={{ width: "100%", height: "600px", display: "block", border: "none" }}
+                        key={img.path}  // Use key to prevent re-rendering
+                      />
                     )}
                     <Checkbox checked={deletefile.includes(img.path)} onClick={() => handlecheckbox(img.path)} />
                   </div>
@@ -1643,58 +1600,6 @@ const Booking = ({ stationName, customerData }) => {
                 <Button onClick={handleContextMenu}>yes</Button>
                 <Button onClick={handleClosedeleteDialog}>No</Button>
               </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-
-
-
-
-
-        {/* without adding booking dialogbox */}
-
-        <Dialog open={dialogOpentrail} onClose={handleCloseDialogtrail}>
-          <DialogContent>
-            <div className="vehicle-info-dailog-box-div1" style={{ width: "600px" }}>
-              {/* <Button variant="contained" style={{ margin: "5px" }} onClick={handleSelectAll}>
-                {selectAll ? "Deselect All" : "Select All"}
-              </Button> */}
-              {Array.isArray(selectetImg) &&
-                selectetImg.map((img, index) => (
-
-                  <div key={index} className="vehicle-info-dailog-box-btn-division" style={{ marginBottom: "10px" }}>
-
-                    {img.type.includes("image") && (
-
-                      <img
-                        src={URL.createObjectURL(img)}
-                        alt="vehicle_docimage"
-                        style={{ width: "100%", height: "400px", objectFit: "contain" }}
-                      />
-                    )}
-                    {img.type === "application/pdf" && (
-
-                      <Document
-                        file={img}
-                        onLoadSuccess={onDocumentLoadSuccess}
-                      >
-                        {Array.from(new Array(numPages), (el, index) => (
-
-                          <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-
-                        ))}
-
-                      </Document>
-
-                    )}
-                    <Checkbox checked={deletefiledata.includes(img.name)} onClick={() => handlecheckbox1(img.name)} />
-                  </div>
-                ))}
-            </div>
-            <div>
-              <Button variant="contained" onClick={() => handleimagedeletewithouttripid(deletefiledata)}>
-                Delete
-              </Button>
             </div>
           </DialogContent>
         </Dialog>

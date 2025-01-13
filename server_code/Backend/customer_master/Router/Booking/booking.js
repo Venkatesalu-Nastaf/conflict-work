@@ -982,9 +982,11 @@ router.post('/upload-booking-image', booking_uploadfile.single("file"), async (r
     const path = req.file.path;
     const { created_at } = req.body;
     console.log(booking_id, "ll", fileName, "ll", fileType, path)
+    const dynamicfileType = fileType.replace(/^[^/]+\//, "Booking Attachment/");
+
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;
-    db.query(sql, [booking_id, fileName, fileType, created_at], (err, result) => {
+    db.query(sql, [booking_id, fileName, dynamicfileType, created_at], (err, result) => {
         if (err) {
             return res.json({ Message: "Error" });
         }

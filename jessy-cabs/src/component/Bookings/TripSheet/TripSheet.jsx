@@ -107,8 +107,8 @@ import { WhatsappShareButton } from 'react-share';
 import LoadingButton from '@mui/lab/LoadingButton';
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "documenttype", headerName: "Document Type", width: 140 },
+  { field: "id", headerName: "Sno", width: 60 },
+  { field: "documenttype", headerName: "Document Type", width: 180 },
   { field: "path", headerName: "Attach Path", width: 160 },
   { field: "tripid", headerName: "TripID", width: 100 },
   { field: "booking_id", headerName: "Booking ID", width: 110 },
@@ -879,11 +879,16 @@ const TripSheet = ({ stationName, logoImage }) => {
   const shedoutDisabled = temporaryStatus ? hideField : hideField;
   // status for conflict message
   useEffect(() => {
-    if (conflictModalbox === true) {
-      setError(true)
-      setErrorMessage("Conflict Error")
+    let timeout;
+    console.log(conflictModalbox,"conflictttttttttttt")
+    if (conflictModalbox) {
+      timeout = setTimeout(() => {
+        setError(true);
+        setErrorMessage("Conflict Error");
+      }, 300);
     }
-  }, [conflictModalbox])
+    return () => clearTimeout(timeout);
+  }, [conflictModalbox]);
 
   return (
     <div className="form-container form-container-tripsheet">

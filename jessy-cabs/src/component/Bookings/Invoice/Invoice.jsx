@@ -264,7 +264,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                               style={{
                                 width: "595px", // Width for A4 page
                                 // height: "auto",
-                                height: "595px",
+                                height: "100%",
                                 margin: "auto",
 
                               }}

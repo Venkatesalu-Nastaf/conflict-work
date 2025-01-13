@@ -356,3 +356,24 @@ align-items: center;
 .detail-container-main-vehicale{
   border-bottom: 1px solid #ccc;
 }
+
+.vech-modal{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.det-btn{
+  padding: 5px 10px !important;
+  background-color: #ff0000 !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+}
+
+.edit-btn{
+  padding: 5px 10px !important;
+  background-color: #1976d2 !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+}

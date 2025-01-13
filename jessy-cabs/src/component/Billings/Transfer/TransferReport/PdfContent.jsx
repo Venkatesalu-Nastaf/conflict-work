@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 
 
   section: {
-    marginTop: 10
+    marginTop: 10,
 
   },
   tableRow: {
@@ -162,7 +162,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: '20px',
-    padding: 10
+    padding: 10,
+    marginBottom:20,
   },
   totalsum: {
     display: 'flex',
@@ -173,6 +174,8 @@ const styles = StyleSheet.create({
   },
   totalsuminitial: {
     width: '45%',
+    flexDirection:'column',
+    justifyContent:"flex-end",
   },
   total: {
     fontSize: 12
@@ -254,11 +257,19 @@ const styles = StyleSheet.create({
     // marginTop: "20px",
     flexDirection: 'row',
     paddingLeft:'5px',
+    // width:"60%",
     width:"100%",
   },
   signone :{
-height:"50px"
+  height:"50px"
   },
+  textRupees:{
+  width:"100%",
+  flexDirection:'column',
+  justifyContent: 'flex-end',
+  gap:'5px',
+
+  }
 
 
 });
@@ -434,7 +445,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
                   <View>
                     <Text style={styles.underlinetext}>{organisationdetailfill[0]?.organizationname}</Text>
-                    <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                    <Text style={[styles.text2, { fontSize: 11.5, width:'50%', }]}>
                       {stationData[0]?.address}
                     </Text>
                     <Text style={[styles.text2, { fontSize: 11.5 }]}>
@@ -647,7 +658,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       </Text>
                       <View>
                         <View>
-                          <Text style={{ width: 200, fontSize: 11, paddingTop: 75, paddingLeft: 7 }}>
+                          <Text style={{ width: 200, fontSize: 11,  paddingLeft: 7 }}>
                             E.& O.E In Words-Rupees
                           </Text>
                         </View>
@@ -663,15 +674,15 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     </View>
                     </View>
                   ) : (
-                    <View style={{width:"100%"}}>
+                    <View style={styles.textRupees}>
                       <View>
-                        <Text style={{ width: 200, fontSize: 11, paddingTop: 150, paddingLeft: 7 }}>
+                        <Text style={{ width: 200, fontSize: 11,  paddingLeft: 7 }}>
                           E.& O.E In Words-Rupees
                         </Text>
                       </View>
                       <View style={styles.totalrupeesword}>
-                        <Text style={[styles.rupeestext, { paddingBottom: 10, marginBottom: 5 }]}>
-                          {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Onlyss
+                        <Text style={[styles.rupeestext, { paddingBottom: 3, }]}>
+                          {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
                         </Text>
                       </View>
                     </View>
@@ -694,10 +705,10 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={styles.text2}>{parkpermit}</Text>
                     <Text style={styles.text2}>{formattedFullAmount}</Text>
                   </View> */}
-                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end',paddingRight:20, }}>
+                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end',paddingRight:30, }}>
                     {fullAmount > 0 && (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>SUB TOTAL: </Text>
+                        <Text style={{ width: '200px', fontSize: 10 }}>SUB TOTAL: </Text>
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{fullAmount}.00</Text>
                       </View>
                     )}
@@ -726,18 +737,18 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     {
                       customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ?
                         <>
-                          <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1 }}>
-                            <Text style={{ width: '130px', fontSize: 10 }}>CGST {cgstcalc}% on {fullAmount}:</Text>
+                          <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1, }}>
+                            <Text style={{ width: '200px', fontSize: 10,}}> {cgstcalc}% on {fullAmount}:</Text>
                             <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgstAmount}.00</Text>
                           </View>
                           <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1 }}>
-                            <Text style={{ width: '130px', fontSize: 10 }}>SGST {sgstcalc}% on {fullAmount}:</Text>
+                            <Text style={{ width: '200px', fontSize: 10 }}>SGST {sgstcalc}% on {fullAmount}:</Text>
                             <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgstAmount}.00</Text>
                           </View>
                         </> :
 
                         <View View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1 }}>
-                          {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ width: '130px', fontSize: 10 }}>IGST {igstcalc}% on {fullAmount}:</Text> : <Text style={{ width: '130px', fontSize: 10 }}> </Text>}
+                          {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ width: '200px', fontSize: 10 }}>IGST {igstcalc}% on {fullAmount}:</Text> : <Text style={{ width: '200px', fontSize: 10 }}> </Text>}
                           {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{igstAmount}.00</Text> : <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>0.00</Text>}
                         </View>
                     }
@@ -745,21 +756,21 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
                     {parkpermit > 0 && (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1 }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>Parking & Permit:</Text>
+                        <Text style={{ width: '200px', fontSize: 10 }}>Parking & Permit:</Text>
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{parkpermit}.00</Text>
                       </View>
                     )}
 
                     {advance > 0 && (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000',width:"100%" }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>Customer Advance (-)</Text>
+                        <Text style={{ width: '200px', fontSize: 10 }}>Customer Advance (-)</Text>
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{advance}.00</Text>
                       </View>
                     )}
 
                     {formattedFullAmount > 0 && (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>Total Amount:</Text>
+                        <Text style={{ width: '200px', fontSize: 10 }}>Total Amount:</Text>
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{formattedFullAmount}.00</Text>
                       </View>
                     )}

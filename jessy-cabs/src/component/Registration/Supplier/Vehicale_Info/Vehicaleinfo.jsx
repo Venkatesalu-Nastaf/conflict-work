@@ -65,6 +65,8 @@ import VehicleAddData from './VehicleAdddata';
 import axios from 'axios'
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -119,22 +121,22 @@ export const fueltypes = [
 ];
 export const Hire = [
   {
-    Option:"Attached Vehicle",
-    optionvalue:"Attached Vehicle",
+    Option: "Attached Vehicle",
+    optionvalue: "Attached Vehicle",
   },
   {
-    Option:"OutSide Travels",
-    optionvalue:"OutSide Travels",
+    Option: "OutSide Travels",
+    optionvalue: "OutSide Travels",
   },
   {
-    Option:"Own Vehicle",
-    optionvalue:"Own Vehicle",
+    Option: "Own Vehicle",
+    optionvalue: "Own Vehicle",
   },
   {
-    Option:"DCO Vehicle",
-    optionvalue:"DCO Vehicle",
+    Option: "DCO Vehicle",
+    optionvalue: "DCO Vehicle",
   }
- 
+
 
 ];
 const Vehicaleinfo = ({ stationName }) => {
@@ -193,15 +195,15 @@ const Vehicaleinfo = ({ stationName }) => {
     handleDocumentDownload,
     drivername,
     handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
-    loading,isVButonLoading,
+    loading, isVButonLoading,
   } = useVehicleinfo();
   const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1
   } = VehicleAddData()
 
   // useEffect(() => {
-    
+
   //     handleClick('List');
-    
+
   // }, [handleClick]);
 
 
@@ -213,6 +215,70 @@ const Vehicaleinfo = ({ stationName }) => {
     setIsOpenvehicle(false)
   }
 
+  const Addcolumns = [
+    { field: 'id', headerName: 'ID', width: 90 },
+    {
+      field: 'firstName',
+      headerName: 'First name',
+      width: 150,
+      editable: true,
+    },
+    {
+      field: 'lastName',
+      headerName: 'Last name',
+      width: 150,
+      editable: true,
+    },
+    {
+      field: 'age',
+      headerName: 'Age',
+      type: 'number',
+      width: 110,
+      editable: true,
+    },
+    {
+      field: 'edit',
+      headerName: 'Edit',
+      width: 110,
+      renderCell: (params) => (
+        <IconButton color="primary" onClick={() => handleEdit(params.row)} className='edit-btn'>
+          <EditIcon style={{fontSize:"20px"}}/>
+        </IconButton>
+      ),
+    },
+    {
+      field: 'delete',
+      headerName: 'Delete',
+      width: 110,
+      renderCell: (params) => (
+        <IconButton color="error" onClick={() => handleDelete(params.row)} className='det-btn'>
+          <DeleteIcon style={{fontSize:"20px"}}/>
+        </IconButton>
+      ),
+    },
+
+  ];
+
+  const Addrows = [
+    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14 },
+    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
+    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
+    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
+    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+  ];
+  const handleView = (row) => {
+    console.log('View row:', row);
+    // Add your view logic here
+  };
+
+  const handleDelete = (row) => {
+    console.log('Delete row:', row);
+    // Add your delete logic here
+  };
   useEffect(() => {
     const fetchgetvehicleNames = async () => {
       try {
@@ -462,19 +528,42 @@ const Vehicaleinfo = ({ stationName }) => {
                     }
                     <Dialog open={isOpenvehcile} onClose={handleClose}>
                       <DialogContent>
-                        <TextField
+                        <div className='vech-modal'>
 
-                          id="name"
-                          label="Vehicle Name"
-                          type="text"
-                          fullWidth
-                          variant="outlined"
-                          value={vechiclevalue || ""}
-                          onChange={handleinputchnagevehicle}
-                        />
+
+                          <TextField
+
+                            id="name"
+                            label="Vehicle Name"
+                            type="text"
+                            // fullWidth
+                            variant="outlined"
+                            value={vechiclevalue || ""}
+                            onChange={handleinputchnagevehicle}
+                          />
+                          <Button onClick={handleADDvehicledata}>Done</Button>
+
+                        </div>
+                        <Box
+                          sx={{ padding: "20px" }}
+                        >
+                          <DataGrid
+                            rows={Addrows}
+                            columns={Addcolumns}
+                            initialState={{
+                              pagination: {
+                                paginationModel: {
+                                  pageSize: 5,
+                                },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                          // checkboxSelection
+                          // disableRowSelectionOnClick
+                          />
+                        </Box>
                       </DialogContent>
 
-                      <Button onClick={handleADDvehicledata}>Done</Button>
 
                     </Dialog>
                   </div>
@@ -1137,7 +1226,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 onClick={() => handleClick("List")}
               />
             )}
-            {Supllier_modify === 1 && isEditMode &&(
+            {Supllier_modify === 1 && isEditMode && (
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
@@ -1161,7 +1250,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 onClick={(event) => handleClick(event, "Add")}
               />
             ))} */}
-             {Supllier_new === 1 && !isEditMode && (
+            {Supllier_new === 1 && !isEditMode && (
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}
@@ -1177,7 +1266,7 @@ const Vehicaleinfo = ({ stationName }) => {
             />
           </StyledSpeedDial>
         </Box>
-        <div style={{ display: "flex", gap: "20px", alignItems: "center", flexWrap: "wrap",marginTop:"20px",paddingBottom:"15px" }}>
+        <div style={{ display: "flex", gap: "20px", alignItems: "center", flexWrap: "wrap", marginTop: "20px", paddingBottom: "15px" }}>
 
 
           <div className="Download-btn-vehiecleinfo">
@@ -1289,26 +1378,26 @@ const Vehicaleinfo = ({ stationName }) => {
                 },
               }}
             >
-               {loading ? ( 
-                                <Box
-                                    sx={{
-                                        position: 'absolute', 
-                                        top: '50%',
-                                        left: '50%', 
-                                        transform: 'translate(-50%, -50%)', 
-                                    }}
-                                >
-                                    <CircularProgress />
-                                </Box>
-                            ) : (
+              {loading ? (
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
 
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                onRowClick={handleRowClick1}
-                pageSize={5}
-              />
-                            )}
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  onRowClick={handleRowClick1}
+                  pageSize={5}
+                />
+              )}
             </Box>
 
           </div>
@@ -1332,7 +1421,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 ))}
               </div>
               <div className='vehicle-info-dailog-box-delete-print-division'>
-                <Button  disabled={!Supllier_delete}variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                <Button disabled={!Supllier_delete} variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
                 <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
               </div>
             </DialogContent>

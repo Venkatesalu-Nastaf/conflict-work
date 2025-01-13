@@ -437,8 +437,8 @@ height: 730px !important;
 
 .upload-pdf {
  
-  height: 1065px;
-  width: 700px;
+  height: 1065px !important;
+  width: 700px !important;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -474,7 +474,7 @@ height: 730px !important;
 display: flex;
 gap: 6px;
 height: 570px !important;
-border: 1px solid rgb(255, 255, 255);;
+border: 1px solid rgb(253, 253, 253);;
 }
 
 /* style={{ display: "flex", gap: "6px", height:"480px" }} */

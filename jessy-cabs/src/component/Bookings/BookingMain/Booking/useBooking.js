@@ -1456,16 +1456,17 @@ useEffect(() => {
   // };
 
   const handlecheckbox1 = (e) => {
-    // console.log(index,"index",e)
+    console.log(e,"ee")
     // e.preventDefault()
-      if (deletefile.includes(e)) {
+      // if (deletefile.includes(e)) {
+        if (deletefiledata.includes(e)) {
       setDeleteFiledata(prevDeleteFile => prevDeleteFile.filter(file => file !== e));
     } else {
       setDeleteFiledata(prevDeleteFile => [...prevDeleteFile,e]);
     }
     // setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
   }
-  // console.log(deletefile,"deletefile")
+  // console.log(deletefiledata,"deletefile")
 
   const handleimagedeletewithouttripid =(deletefiledata1) => {
     if (deletefiledata1.length > 0) {
@@ -1480,6 +1481,8 @@ useEffect(() => {
       setDeleteFiledata([]);
     }
   };
+  // console.log(deletefile,"deletefile")
+  // console.log(selectetImg,"selecetdimg")
 
   const handleimagedelete = (imageName) => {
     if (deletefile.length > 0) {

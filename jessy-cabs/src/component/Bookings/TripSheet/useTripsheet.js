@@ -85,6 +85,8 @@ const useTripsheet = () => {
     const [manualTripID, setManualTripID] = useState([])
     const [editMap, setEditMap] = useState(false)
     const [mapPopUp, setMapPopUp] = useState(false)
+    const [outStationHide,setOutStationHide] = useState(false);
+    const [enterTrigger,setEnterTrigger] = useState(null)
     // const [conflicthcldatavalue, setConflictHCLDataValue] = useState([])
     const [conflicthcldatavalue, setConflictHCLDataValue] = useState({
         Hcldatakmvalue: 0,
@@ -3816,7 +3818,7 @@ const useTripsheet = () => {
                             setHybridHclCustomer(bookingDetails.Hybriddata)
                             setTimeToggle(bookingDetails.TimeToggleData)
                             setTimeToggleVendor(bookingDetails.VendorTimeToggle)
-
+                            setEnterTrigger((prev) => !prev)
                             //---------------------------
 
                             setEscort(bookingDetails.escort)
@@ -6381,8 +6383,8 @@ const useTripsheet = () => {
     // console.log(startdatecalc, 'reporttimeeeeee', formattedReportTime, "ee33eeee", convertReportTime);
 
     const finalCurrentTime = parseFloat(formattedCurrentTime || 0).toFixed(2)
-
-
+    
+    
     useEffect(() => {
         // const currentDateObj = new Date(CurrentDate);
         // const formattedDateObj = new Date(formattedTripReportDate);
@@ -6441,7 +6443,9 @@ const useTripsheet = () => {
             setHideField(true);
             console.log("Both dates are equal not allowed");
         }
-    }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
+    }, [enterTrigger]);
+
+    // }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
 
     const loginusername = localStorage.getItem("username")
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
@@ -6463,6 +6467,9 @@ const useTripsheet = () => {
 
                     setTemporaryStatus(false);
                     return
+                }
+                else if (!station.includes('Chennai') && !station.includes('All')){
+                  setOutStationHide(true)
                 }
                 else if (statusCheck === "Temporary Closed") {
 
@@ -6755,7 +6762,8 @@ const useTripsheet = () => {
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
-        minTimeData, maxTimeData, shedInTimeData, conflictLoad,setConflictLoad,selectedStatuschecking,openModalConflict,setOpenModalConflict,setError,setErrorMessage
+        minTimeData, maxTimeData, shedInTimeData, conflictLoad,setConflictLoad,selectedStatuschecking,openModalConflict,setOpenModalConflict,setError,setErrorMessage,
+        outStationHide
 
     };
 };

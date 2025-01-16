@@ -270,7 +270,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,
-    setError, setErrorMessage
+    setError, setErrorMessage,outStationHide
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -1544,10 +1544,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </Modal>
                     {/* <div style={{ top: -17, left:27 ,cursor:'pointer',position: 'absolute', width: '18px', height: '18px', borderRadius: '50%', backgroundColor: conflictModalbox ? 'red' : 'green' }} onClick={handleConflictModal}>
                       </div> */}
-                    <div style={{ top: -42, left: 27, cursor: 'pointer', position: 'absolute', }} onClick={handleConflictModal}>
-                      <p style={{ color: conflictModalbox ? 'red' : 'green', fontSize: '20px' }}>!!!</p>
+                    <div style={{ top: -24, left: 27, cursor: 'pointer', position: 'absolute', }} onClick={handleConflictModal}>
+                      <p style={{ backgroundColor: conflictModalbox ? 'red' : '#457cdc', fontSize: '9px',height:'15px',width:'15px',textAlign:'center',borderRadius:'15px',color: '#fff',border: '1px solid',}}>!</p>
+                    
                     </div>
-                    <div style={{ display: "flex" }}>
+                    <div style={{ display: "flex",marginTop:'2px' }}>
 
                       <div className="icone" >
                         <CalendarMonthIcon color="action" />
@@ -2021,7 +2022,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             additionalTime.additionaltime ||
                             ''
                           }
-                          disabled={temporaryStatus && superAdminAccess === "0"}
+                          disabled={temporaryStatus && superAdminAccess === "0" || outStationHide}
                           onChange={handleChange}
                           id="additionaltime"
                           size="small"
@@ -2236,7 +2237,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           handleChange(e)
                         }
                       }}
-                      disabled={temporaryStatus && superAdminAccess === "0"}
+                      disabled={temporaryStatus && superAdminAccess === "0" || outStationHide}
                       label="Add KM"
                       type="number"
                       id="shedkm"

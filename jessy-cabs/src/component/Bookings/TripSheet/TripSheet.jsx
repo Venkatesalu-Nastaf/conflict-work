@@ -3772,6 +3772,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size="small"
                     name="remark"
                     value={formData.remark || selectedCustomerData.remark || book.remark || ''}
+                    disabled={temporaryStatus && superAdminAccess === "0"}
                     onChange={(e) => {
                       handleChange(e);
 

@@ -6461,58 +6461,93 @@ const useTripsheet = () => {
                 });
                 const data = response.data;
                 const station = data?.map(li => li.stationname.split(",")).flat();
-                setUserStatus(station)
-                // console.log(station, "userstation444444", statusCheck, station.includes('Chennai'));
-                if (statusCheck === "Temporary Closed" && (station.includes("All") || station.includes("Chennai"))) {
-
-                    setTemporaryStatus(false);
-                    return
-                }
-                else if (!station.includes('Chennai') && !station.includes('All')){
-                  setOutStationHide(true)
-                }
-                else if (statusCheck === "Temporary Closed") {
-
-                    setTemporaryStatus(true)
-                    setEmptyState(false)
-                    return
-                }
-                else if (statusCheck === 'Closed' && (station.includes('Chennai') || station.includes('All'))) {
-
-                    setTemporaryStatus(true)
-                    setHideField(true)
-                }
-                else if (statusCheck === 'Closed' && station.includes('All')) {
-
-                    setTemporaryStatus(true)
-                    setHideField(true)
-                }
-                else if (
-                    (statusCheck === "Closed") &&
-                    (superAdminAccess === "0") &&
-                    (!station.includes('Chennai') && !station.includes('All'))
+                setUserStatus(station);
+    
+                console.log("Debugging Inputs:");
+                console.log("statusCheck:", statusCheck);
+                console.log("station:", station);
+                console.log("superAdminAccess:", superAdminAccess);
+    
+                // Normalize station data for consistency
+                const normalizedStation = station.map(s => s.trim().toLowerCase());
+    
+                // Condition 1: Temporary Closed with All or Chennai
+                if (
+                    statusCheck === "Temporary Closed" &&
+                    (normalizedStation.includes("all") || normalizedStation.includes("chennai"))
                 ) {
-
+                    console.log("Condition 1: Temporary Closed with All or Chennai");
+                    setTemporaryStatus(false);
+                    return;
+                }
+    
+                // Condition 2: Temporary Closed without All or Chennai
+                if (
+                    statusCheck === "Temporary Closed" &&
+                    (!normalizedStation.includes("chennai") || !normalizedStation.includes("all"))
+                ) {
+                    console.log("Condition 2: Temporary Closed without All or Chennai");
                     setTemporaryStatus(true);
-                    setEmptyState(true)
+                    setEmptyState(false);
+                    return;
+                }
+    
+                // Condition 3: No Chennai or All in Station
+                if (!normalizedStation.includes("chennai") && !normalizedStation.includes("all")) {
+                    console.log("Condition 3: No Chennai or All in Station");
+                    setOutStationHide(true);
+                    return;
+                }
+    
+                // Condition 4: Closed with Chennai or All
+                if (
+                    statusCheck === "Closed" &&
+                    (normalizedStation.includes("chennai") || normalizedStation.includes("all"))
+                ) {
+                    console.log("Condition 4: Closed with Chennai or All");
+                    setTemporaryStatus(true);
                     setHideField(true);
+                    return;
                 }
-                else if ((statusCheck === "Closed" || statusCheck === "Billed") && superAdminAccess === "0") {
-                    setEmptyState(true)
-                    return
+    
+                // Condition 5: Closed and superAdminAccess is 0
+                if (
+                    statusCheck === "Closed" &&
+                    superAdminAccess === "0" &&
+                    (!normalizedStation.includes("chennai") && !normalizedStation.includes("all"))
+                ) {
+                    console.log("Condition 5: Closed without Chennai or All and superAdminAccess 0");
+                    setTemporaryStatus(true);
+                    setEmptyState(true);
+                    setHideField(true);
+                    return;
                 }
-                else if (statusCheck !== "Closed") {
-                    setEmptyState(false)
-                    setTemporaryStatus(false)
-                    return
+    
+                // Condition 6: Closed or Billed and superAdminAccess is 0
+                if (
+                    (statusCheck === "Closed" || statusCheck === "Billed") &&
+                    superAdminAccess === "0"
+                ) {
+                    console.log("Condition 6: Closed or Billed and superAdminAccess is 0");
+                    setEmptyState(true);
+                    return;
                 }
-
+    
+                // Condition 7: Not Closed
+                if (statusCheck !== "Closed") {
+                    console.log("Condition 7: Not Closed");
+                    setEmptyState(false);
+                    setTemporaryStatus(false);
+                    return;
+                }
             } catch (error) {
-                console.error('Error fetching user details:', error);
+                console.error("Error fetching user details:", error);
             }
         };
+    
         fetchData();
-    }, [loginusername, apiUrl, tripno, statusCheck]);
+    }, [loginusername, apiUrl, statusCheck, superAdminAccess, enterTrigger]);
+    
     // Edit Button Hide
 
     const statuschecking = selectedStatus;

@@ -402,7 +402,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
             <div className="customerdiv">
               <div>
                 <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{orgname}</h2>
-                <h2 className="organisationtext-pdf-particular" style={{height:"60px"}}>{stationData[0]?.address}</h2>
+                <h2 className="organisationtext-pdf-particular">{stationData[0]?.address}</h2>
                 {/* <h2 className="organisationtext-pdf-particular">{orgaddress3}</h2> */}
               </div>
 

@@ -6473,27 +6473,44 @@ const useTripsheet = () => {
     
                 // Condition 1: Temporary Closed with All or Chennai
                 if (
-                    statusCheck === "Temporary Closed" &&
-                    (normalizedStation.includes("all") || normalizedStation.includes("chennai"))
+                    (statusCheck === "Temporary Closed" )&&
+                    (superAdminAccess === "0") &&
+                    (station.includes("Chennai") || station.includes("All"))
                 ) {
                     console.log("Condition 1: Temporary Closed with All or Chennai");
                     setTemporaryStatus(false);
+                    setEmptyState(false)
                     return;
                 }
-    
+                 if(statusCheck === "Opened"){
+                    setTemporaryStatus(false);
+                    setEmptyState(false)
+                    return
+                 }
                 // Condition 2: Temporary Closed without All or Chennai
                 if (
-                    statusCheck === "Temporary Closed" &&
-                    (!normalizedStation.includes("chennai") || !normalizedStation.includes("all"))
+                    (statusCheck === "Temporary Closed" )&&
+                    (superAdminAccess === "0") &&
+                    (!station.includes("Chennai") || !station.includes("All"))
                 ) {
                     console.log("Condition 2: Temporary Closed without All or Chennai");
                     setTemporaryStatus(true);
                     setEmptyState(false);
                     return;
                 }
+                  if (
+                    ( statusCheck === "Closed" )&&
+                    (superAdminAccess === "0") &&
+                    (!station.includes("Chennai") || !station.includes("All"))
+                ) {
+                    console.log("Condition 33: Temporary Closed without All or Chennai");
+                    setEmptyState(true);
+                    setTemporaryStatus(true);
+                    return;
+                }
     
                 // Condition 3: No Chennai or All in Station
-                if (!normalizedStation.includes("chennai") && !normalizedStation.includes("all")) {
+                if (!station.includes("Chennai") && !station.includes("All")) {
                     console.log("Condition 3: No Chennai or All in Station");
                     setOutStationHide(true);
                     return;
@@ -6502,7 +6519,7 @@ const useTripsheet = () => {
                 // Condition 4: Closed with Chennai or All
                 if (
                     statusCheck === "Closed" &&
-                    (normalizedStation.includes("chennai") || normalizedStation.includes("all"))
+                    (station.includes("Chennai") || station.includes("All"))
                 ) {
                     console.log("Condition 4: Closed with Chennai or All");
                     setTemporaryStatus(true);
@@ -6514,7 +6531,7 @@ const useTripsheet = () => {
                 if (
                     statusCheck === "Closed" &&
                     superAdminAccess === "0" &&
-                    (!normalizedStation.includes("chennai") && !normalizedStation.includes("all"))
+                    (!station.includes("Chennai") && !station.includes("All"))
                 ) {
                     console.log("Condition 5: Closed without Chennai or All and superAdminAccess 0");
                     setTemporaryStatus(true);
@@ -6546,7 +6563,7 @@ const useTripsheet = () => {
         };
     
         fetchData();
-    }, [loginusername, apiUrl, statusCheck, superAdminAccess, enterTrigger]);
+    }, [ enterTrigger]);
     
     // Edit Button Hide
 

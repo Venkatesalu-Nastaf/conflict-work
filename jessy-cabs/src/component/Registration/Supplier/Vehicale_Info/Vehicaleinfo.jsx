@@ -67,6 +67,10 @@ import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import Modal from '@mui/material/Modal';
+import { Typography, } from '@mui/material';
+import CloseIcon from "@mui/icons-material/Close";
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -79,6 +83,37 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
+
+const style = {
+  // display: 'flex',
+  // alignItems: 'center',
+  // justifyContent: 'center',
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 'fit-content', // Adjust height dynamically based on content
+  bgcolor: 'background.paper',
+  // border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+const deletestyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  height: 100,
+  bgcolor: 'background.paper',
+  // border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 export const vehicaleinfos = [
   {
@@ -197,7 +232,9 @@ const Vehicaleinfo = ({ stationName }) => {
     handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
     loading, isVButonLoading,
   } = useVehicleinfo();
-  const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1
+  const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1,
+    vehicleNamesList, handleVehicleDeleteName, handleVehicleEditName, editModal, setEditModal, deleteModal, setDeleteModal, vehicleNameEditFun,
+    editData, setEditData, vehicleNameDeleteFun
   } = VehicleAddData()
 
   // useEffect(() => {
@@ -216,33 +253,21 @@ const Vehicaleinfo = ({ stationName }) => {
   }
 
   const Addcolumns = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    { field: 'id', headerName: 'S No', width: 90 },
     {
-      field: 'firstName',
-      headerName: 'First name',
+      field: 'VechicleNames',
+      headerName: 'Vehicle Names',
       width: 150,
       editable: true,
     },
-    {
-      field: 'lastName',
-      headerName: 'Last name',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 110,
-      editable: true,
-    },
+
     {
       field: 'edit',
       headerName: 'Edit',
       width: 110,
       renderCell: (params) => (
-        <IconButton color="primary" onClick={() => handleEdit(params.row)} className='edit-btn'>
-          <EditIcon style={{fontSize:"20px"}}/>
+        <IconButton onClick={() => handleVehicleEditName(params.row)} className='edit-btn'>
+          <EditIcon style={{ fontSize: "20px" }} />
         </IconButton>
       ),
     },
@@ -251,25 +276,14 @@ const Vehicaleinfo = ({ stationName }) => {
       headerName: 'Delete',
       width: 110,
       renderCell: (params) => (
-        <IconButton color="error" onClick={() => handleDelete(params.row)} className='det-btn'>
-          <DeleteIcon style={{fontSize:"20px"}}/>
+        <IconButton color="error" onClick={() => handleVehicleDeleteName(params.row)} className='det-btn'>
+          <DeleteIcon style={{ fontSize: "20px" }} />
         </IconButton>
       ),
     },
 
   ];
 
-  const Addrows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-  ];
   const handleView = (row) => {
     console.log('View row:', row);
     // Add your view logic here
@@ -300,6 +314,25 @@ const Vehicaleinfo = ({ stationName }) => {
   const Supllier_new = permissions[12]?.new;
   const Supllier_modify = permissions[12]?.modify;
   const Supllier_delete = permissions[12]?.delete;
+
+  const handleEditmodalClose = () => {
+    setEditModal(false)
+  }
+
+  const handleEditVehicleData = (e) => {
+    const { name, value } = e.target; // Extract name and value from the event
+    setEditData((prevState) => ({
+      ...prevState, // Spread the previous state to retain other properties
+      [name]: value, // Update only the property that matches `name`
+    }));
+  };
+
+  const handleDeleteNot = () => {
+    setDeleteModal(false)
+  }
+  const handleDeletemodalClose = () => {
+    setDeleteModal(false)
+  }
   return (
     <div className="main-content-form">
       <form action="">
@@ -536,19 +569,30 @@ const Vehicaleinfo = ({ stationName }) => {
                             id="name"
                             label="Vehicle Name"
                             type="text"
+                            className='vehicleInput'
                             // fullWidth
                             variant="outlined"
                             value={vechiclevalue || ""}
                             onChange={handleinputchnagevehicle}
+                            sx={{
+                              "& .MuiOutlinedInput-root": {
+                                height: "40px",
+                                padding: "5px",// Adjust the height here
+                              },
+                              "& .MuiInputLabel-root": {
+                                lineHeight: "0.7", // Adjust label height alignment
+                              },
+                            }}
+
                           />
-                          <Button onClick={handleADDvehicledata}>Done</Button>
+                          <Button onClick={handleADDvehicledata}>ADD</Button>
 
                         </div>
                         <Box
                           sx={{ padding: "20px" }}
                         >
                           <DataGrid
-                            rows={Addrows}
+                            rows={vehicleNamesList}
                             columns={Addcolumns}
                             initialState={{
                               pagination: {
@@ -1401,6 +1445,57 @@ const Vehicaleinfo = ({ stationName }) => {
             </Box>
 
           </div>
+          {/* edit Vehicle name modal */}
+          <Modal
+            open={editModal}
+            onClose={handleEditmodalClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <div>
+                <TextField
+                  size="small"
+                  id="searchText"
+                  // className='full-width'
+                  label="vehicle Name"
+                  name="VechicleNames"
+                  value={editData?.VechicleNames}
+                  onChange={handleEditVehicleData}
+                />
+                <Button onClick={() => vehicleNameEditFun()}>Edit</Button>
+              </div>
+            </Box>
+          </Modal>
+
+          {/* Delete vehicle name modal */}
+
+          <Modal open={deleteModal} onClose={handleDeletemodalClose} aria-labelledby="modal-title">
+            <Box sx={style}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Typography id="modal-title" variant="h6">
+                  Confirm Action
+                </Typography>
+                <IconButton onClick={handleDeletemodalClose}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              <Typography variant="body1" mb={3}>
+                Are you sure you want to Delete?
+              </Typography>
+
+              <Box display="flex" justifyContent="flex-end" gap={2}>
+                <Button variant="contained" color="primary" onClick={() => vehicleNameDeleteFun()}>
+                  Yes
+                </Button>
+                <Button variant="outlined" color="secondary" onClick={() => handleDeleteNot()}>
+                  No
+                </Button>
+              </Box>
+            </Box>
+          </Modal>
+
           <Dialog open={dialogOpen} onClose={handleCloseDialog} >
             <DialogContent>
               <div className='vehicle-info-dailog-box-div1'>

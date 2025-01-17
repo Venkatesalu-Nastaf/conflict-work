@@ -33,5 +33,51 @@ router.get('/getVehicleParticularInfo', (req, res) => {
     });
 });
 
+router.get('/getVehicleNamesList', (req, res) => {
+    const sqlQuery = "SELECT id,VechicleNames FROM VehicleName";
+
+    db.query(sqlQuery, (error, result) => {
+        if (error) {
+            console.error("Database query failed:", error);
+            return res.status(500).json({ error: "Database query failed" });
+        }
+
+        return res.status(200).json(result);
+    });
+});
+
+router.post('/updateVehicleNamesList', (req, res) => {
+    const { vehicleName, id } = req.body;
+    console.log(vehicleName, "vehiclenameeeeeeee", id);
+
+    const sqlQuery = "UPDATE VehicleName SET VechicleNames = ? WHERE id = ?";
+
+    db.query(sqlQuery, [vehicleName, id], (error, result) => {
+        if (error) {
+            console.log(error, "error");
+        }
+        res.status(200).json({ message: 'Status updated successfully' });
+    })
+})
+
+router.post('/deleteVehicleNamesList', (req, res) => {
+    const { id } = req.body; 
+    console.log(id, "delete vehicle id");
+
+    const sqlquery = "DELETE FROM VehicleName WHERE id = ?"; 
+    db.query(sqlquery, [id], (error, result) => {
+        if (error) {
+            console.error(error, "error");
+            return res.status(500).json({ error: "Database query failed" });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "No record found to delete" });
+        }
+        return res.status(200).json({ message: "Data deleted successfully" });
+    });
+});
+
+
+
 
 module.exports = router

@@ -810,13 +810,16 @@ const handleAirportTransferChange = (event) => {
   //   setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
   // }
   const handleImagechange2 = (e) => {
+    console.log(e.target.files,"etarget")
     const files = Array.from(e.target.files);
     setSelectetImg((prevImg) => [...prevImg, ...files]);
+    console.log(files,"filesdataaddnewimage")
     
     // if (files.length > 0) {
     //   setImageDialogOpen(true);
     // }
   };
+  console.log(selectetImg,"selectimag lentgh")
   const handleCloseImageDialog = () => {
     setImageDialogOpen(false)
   }
@@ -837,7 +840,7 @@ const handleAirportTransferChange = (event) => {
         startdate: logupdatabookdetails.startdate,
         duty: logupdatabookdetails.duty,
         useage: logupdatabookdetails.useage,
-        travelsname: logupdatabookdetails.travelsname,
+        travelsname: logupdatabookdetails.travelsname || null,
         vehRegNo: logupdatabookdetails.vehRegNo,
         customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
         Log_Date: dayjs().format("DD-MM-YYYY"),

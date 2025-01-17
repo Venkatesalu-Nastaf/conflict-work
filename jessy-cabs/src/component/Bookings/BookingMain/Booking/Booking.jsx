@@ -1579,7 +1579,7 @@ const Booking = ({ stationName, customerData }) => {
             </div>
           }
         </div>
-        {console.log(allFile, "filealll")}
+        {/* {console.log(allFile, "filealll")} */}
 
         <Dialog open={dialogOpen} onClose={handleCloseDialog}>
           <DialogContent>

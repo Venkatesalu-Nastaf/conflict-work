@@ -136,6 +136,7 @@ const useTripsheet = () => {
     const [conflictLoad, setConflictLoad] = useState(null)
     const [selectedStatuschecking, setSelectedStatuschecking] = useState('');
     const [openModalConflict,setOpenModalConflict] = useState(null)
+    const [openConflictKMPopup,setOpenConflictKMPopup] = useState(null);
     // ----------------------------------------vendorinfo-------------------
     // const [lockdata, setLockData] = useState(false)
     const [lockdata, setLockData] = useState(true)
@@ -5470,7 +5471,7 @@ const useTripsheet = () => {
             }
         }
         fetchData()
-    }, [apiUrl, vehicleRegisterNo, shedoutkm])
+    }, [apiUrl, vehicleRegisterNo, shedoutkm,enterTrigger])
 
     const generateAndCopyLinkdata = async () => {
         const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
@@ -6815,7 +6816,7 @@ const useTripsheet = () => {
         isAddload, setisAddload, isEditload, setisEditload,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
         minTimeData, maxTimeData, shedInTimeData, conflictLoad,setConflictLoad,selectedStatuschecking,openModalConflict,setOpenModalConflict,setError,setErrorMessage,
-        outStationHide
+        outStationHide,openConflictKMPopup,setOpenConflictKMPopup
 
     };
 };

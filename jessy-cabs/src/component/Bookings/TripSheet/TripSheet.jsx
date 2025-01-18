@@ -270,7 +270,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,
-    setError, setErrorMessage,outStationHide
+    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -868,15 +868,23 @@ const TripSheet = ({ stationName, logoImage }) => {
   const handleConflictPopup = () => {
     setOpenModalConflict(false)
   }
+  const handleKMConflictPopup = () => {
+    setOpenConflictKMPopup(false)
+  }
 
   const handleConflictModal = () => {
     setOpenModalConflict(true)
+  }
+  const handleKmConflictModal = () => {
+    setOpenConflictKMPopup(true)
   }
   const conflictModalbox = (checkingMinimumData() && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null)) || (maxShedInDate() && conflictLoad !== null);
 
   const signaturedisabled = signimageUrl === "" && temporaryStatus ? true : false
 
   const shedoutDisabled = temporaryStatus ? hideField : hideField;
+  const shedoutkm = formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout
+  const conflictModalKmBox = (tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && shedoutkm !== null && shedoutkm !== "")
   // status for conflict message
   useEffect(() => {
     let timeout;
@@ -884,11 +892,22 @@ const TripSheet = ({ stationName, logoImage }) => {
     if (conflictModalbox) {
       timeout = setTimeout(() => {
         setError(true);
-        setErrorMessage("Conflict Error");
+        setErrorMessage("Conflict Time And Date Error");
       }, 300);
     }
     return () => clearTimeout(timeout);
   }, [conflictModalbox]);
+
+  useEffect(() => {
+    let timeout;
+    if (conflictModalKmBox) {
+      timeout = setTimeout(() => {
+        setError(true);
+        setErrorMessage("Conflict KM Error");
+      }, 300);
+    }
+    return () => clearTimeout(timeout);
+  }, [conflictModalKmBox]);
 
   return (
     <div className="form-container form-container-tripsheet">
@@ -1468,7 +1487,23 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </Box>
                 </div>
                 {emptyState ? "" :
+
+
+
+
+
+
+
+
+
+
+
+
                   <div className="input" style={{ display: "grid", position: "relative" }}>
+                    <div style={{ top: -24, left: 27, cursor: 'pointer', position: 'absolute', }} onClick={handleConflictModal}>
+                      <p style={{ backgroundColor: conflictModalbox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p>
+
+                    </div>
                     {/* {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
                       Conflict tripid: {conflictCompareDatas?.tripids}, Time: {conflictCompareDatas?.latestTime}, conflictdate:{conflictCompareDatas?.conflictmaxdate}
                     </label>} */}
@@ -1489,14 +1524,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                       <Box
                         sx={{
                           position: 'absolute',
-                          top: '48%',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          top: '40%',
                           left: '14%',
                           transform: 'translate(-50%, -50%)',
                           width: '250px',
                           height: '100px',
                           bgcolor: 'white',
                           // border: '1px solid #000',
-                          borderRadius: 3,
+                          borderRadius: 2,
                           textAlign: 'center',
                           boxShadow: 24,
                           p: 1,
@@ -1544,11 +1582,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </Modal>
                     {/* <div style={{ top: -17, left:27 ,cursor:'pointer',position: 'absolute', width: '18px', height: '18px', borderRadius: '50%', backgroundColor: conflictModalbox ? 'red' : 'green' }} onClick={handleConflictModal}>
                       </div> */}
-                    <div style={{ top: -24, left: 27, cursor: 'pointer', position: 'absolute', }} onClick={handleConflictModal}>
-                      <p style={{ backgroundColor: conflictModalbox ? 'red' : '#457cdc', fontSize: '9px',height:'15px',width:'15px',textAlign:'center',borderRadius:'15px',color: '#fff',border: '1px solid',}}>!</p>
-                    
-                    </div>
-                    <div style={{ display: "flex",marginTop:'2px' }}>
+
+                    <div style={{ display: "flex", marginTop: '2px' }}>
 
                       <div className="icone" >
                         <CalendarMonthIcon color="action" />
@@ -1576,6 +1611,29 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </LocalizationProvider>
                     </div>
                   </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 }
                 {emptyState ? "" :
                   <div style={{ display: "grid" }} className="input">
@@ -2060,60 +2118,117 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>}
 
                 {emptyState ? "" :
-                  <div className="input" style={{ display: "grid" }} >
-                    {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
-                    {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
-                    {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
-                    {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
-                    {/* <br></br> */}
-                    {/* {conflictkm?.maximumkm !== 0 && dayhcl === 0 && tripID !== conflictkm.maxtripid && data === undefined && (
+                  <>
+
+                    <div className="input" style={{ display: "grid", position: "relative" }} >
+                      <div className='kmConflict' onClick={handleKmConflictModal}>
+                        <p style={{ backgroundColor: conflictModalKmBox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p>
+
+                      </div>
+                      {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                      {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                      {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
+                      {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
+                      {/* <br></br> */}
+                      {/* {conflictkm?.maximumkm !== 0 && dayhcl === 0 && tripID !== conflictkm.maxtripid && data === undefined && (
                       (Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && (
                         <label className='invalid-km' style={{ paddingBottom: '18px' }}>
                           Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}
                         </label>
                       )
                     )} */}
-                    {data === undefined && tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
+                      {/* {data === undefined && tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
                       <label className='invalid-km'>
                         Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
                       </label>
 
-                    )}
-                    <div style={{ display: "flex" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                    )} */}
+
+                      <Modal
+                        open={openConflictKMPopup}
+                        onClose={handleKMConflictPopup}
+                        aria-labelledby="modal-title"
+                        aria-describedby="modal-description"
+                      >
+                        <Box
+                          sx={{
+                            position: 'absolute',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            top: '49%',
+                            left: '7.5%',
+                            // transform: 'translate(-50%, -50%)',
+                            width: '250px',
+                            height: '80px',
+                            bgcolor: 'white',
+                            // border: '1px solid #000',
+                            borderRadius: 2,
+                            textAlign: 'center',
+                            boxShadow: 24,
+                            p: 1,
+                            // overflowY: 'auto'
+                          }}
+                        >
+                          {conflictModalKmBox ? (
+                            <>
+                              <label className='invalid-km'>
+                                Conflict MaxTripid : {maxconflict?.maxTripid}<br />
+                                KM : {maxconflict?.maxconflictdata}
+                              </label>
+
+
+                            </>
+                          ) : (
+                            <>
+                              <div className='No-Data'>
+                                <label > No Conflict Data</label>
+
+                              </div>
+                            </>
+
+                          )}
+
+
+                        </Box>
+                      </Modal>
+
+                      <div style={{ display: "flex" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faRoad} size="lg" />
+                        </div>
+                        <TextField
+                          name="shedout"
+                          value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
+                          onChange={(e) => {
+                            let value = e.target.value;
+                            if (value >= 0) {
+                              handleChange(e)
+                              setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
+                              // if (!lockdata && dayhcl === 0) {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              // }
+                              // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              // }
+                              if (lockdata && dayhcl === 0) {
+                                setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              }
+                              if (lockdata && dayhcl === 1 && duty === "Outstation") {
+                                setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              }
+                            }
+                          }}
+                          disabled={temporaryStatus && superAdminAccess === "0"}
+                          label="Shed Out"
+                          id="shedout"
+                          size='small'
+                          type="number"
+                          autoComplete="password"
+                        />
                       </div>
-                      <TextField
-                        name="shedout"
-                        value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
-                        onChange={(e) => {
-                          let value = e.target.value;
-                          if (value >= 0) {
-                            handleChange(e)
-                            setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
-                            // if (!lockdata && dayhcl === 0) {
-                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                            // }
-                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                            // }
-                            if (lockdata && dayhcl === 0) {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                            }
-                            if (lockdata && dayhcl === 1 && duty === "Outstation") {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                            }
-                          }
-                        }}
-                        disabled={temporaryStatus && superAdminAccess === "0"}
-                        label="Shed Out"
-                        id="shedout"
-                        size='small'
-                        type="number"
-                        autoComplete="password"
-                      />
                     </div>
-                  </div>}
+                  </>}
 
                 {emptyState ? "" :
                   <div style={{ display: "grid" }} className="input">

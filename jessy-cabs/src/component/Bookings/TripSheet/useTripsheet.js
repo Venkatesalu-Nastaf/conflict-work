@@ -85,8 +85,8 @@ const useTripsheet = () => {
     const [manualTripID, setManualTripID] = useState([])
     const [editMap, setEditMap] = useState(false)
     const [mapPopUp, setMapPopUp] = useState(false)
-    const [outStationHide,setOutStationHide] = useState(false);
-    const [enterTrigger,setEnterTrigger] = useState(null)
+    const [outStationHide, setOutStationHide] = useState(false);
+    const [enterTrigger, setEnterTrigger] = useState(null)
     // const [conflicthcldatavalue, setConflictHCLDataValue] = useState([])
     const [conflicthcldatavalue, setConflictHCLDataValue] = useState({
         Hcldatakmvalue: 0,
@@ -135,8 +135,8 @@ const useTripsheet = () => {
     });
     const [conflictLoad, setConflictLoad] = useState(null)
     const [selectedStatuschecking, setSelectedStatuschecking] = useState('');
-    const [openModalConflict,setOpenModalConflict] = useState(null)
-    const [openConflictKMPopup,setOpenConflictKMPopup] = useState(null);
+    const [openModalConflict, setOpenModalConflict] = useState(null)
+    const [openConflictKMPopup, setOpenConflictKMPopup] = useState(null);
     // ----------------------------------------vendorinfo-------------------
     // const [lockdata, setLockData] = useState(false)
     const [lockdata, setLockData] = useState(true)
@@ -645,7 +645,7 @@ const useTripsheet = () => {
         setEscort(escort)
         setConflictLoad((prevConflictLoad) => !prevConflictLoad);
         //----------------------
-     const formData = {};
+        const formData = {};
         const parameterKeys = [
             'dispatchcheck', 'vehType', 'shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
         ];
@@ -1030,7 +1030,7 @@ const useTripsheet = () => {
                 closedate: logupdatabookdetails.closedate,
                 shedInDate: logupdatabookdetails.shedInDate,
                 totaldays: logupdatabookdetails.totaldays,
-                ShedOutTime:removeSeconds(logupdatabookdetails.reporttime),
+                ShedOutTime: removeSeconds(logupdatabookdetails.reporttime),
                 Reporttime: removeSeconds(logupdatabookdetails.starttime),
                 closetime: removeSeconds(logupdatabookdetails.closetime),
                 shedintime: removeSeconds(logupdatabookdetails.shedintime),
@@ -3653,8 +3653,12 @@ const useTripsheet = () => {
 
     const handleChange = (event) => {
         const { name, value, checked } = event.target;
+        if (name === "shedout") {
+            setEnterTrigger((prev) => !prev)
+        }
         if (name === "tripid") {
             setConflictLoad(null)
+            setEnterTrigger(null)
         }
         setPackageData((prevData) => ({
             ...prevData,
@@ -5471,7 +5475,7 @@ const useTripsheet = () => {
             }
         }
         fetchData()
-    }, [apiUrl, vehicleRegisterNo, shedoutkm,enterTrigger])
+    }, [apiUrl, vehicleRegisterNo, shedoutkm, enterTrigger])
 
     const generateAndCopyLinkdata = async () => {
         const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
@@ -6384,8 +6388,8 @@ const useTripsheet = () => {
     // console.log(startdatecalc, 'reporttimeeeeee', formattedReportTime, "ee33eeee", convertReportTime);
 
     const finalCurrentTime = parseFloat(formattedCurrentTime || 0).toFixed(2)
-    
-    
+
+
     useEffect(() => {
         // const currentDateObj = new Date(CurrentDate);
         // const formattedDateObj = new Date(formattedTripReportDate);
@@ -6463,18 +6467,18 @@ const useTripsheet = () => {
                 const data = response.data;
                 const station = data?.map(li => li.stationname.split(",")).flat();
                 setUserStatus(station);
-    
+
                 console.log("Debugging Inputs:");
                 console.log("statusCheck:", statusCheck);
                 console.log("station:", station);
                 console.log("superAdminAccess:", superAdminAccess);
-    
+
                 // Normalize station data for consistency
                 const normalizedStation = station.map(s => s.trim().toLowerCase());
-    
+
                 // Condition 1: Temporary Closed with All or Chennai
                 if (
-                    (statusCheck === "Temporary Closed" )&&
+                    (statusCheck === "Temporary Closed") &&
                     (superAdminAccess === "0") &&
                     (station.includes("Chennai") || station.includes("All"))
                 ) {
@@ -6483,14 +6487,14 @@ const useTripsheet = () => {
                     setEmptyState(false)
                     return;
                 }
-                 if(statusCheck === "Opened"){
+                if (statusCheck === "Opened") {
                     setTemporaryStatus(false);
                     setEmptyState(false)
                     return
-                 }
+                }
                 // Condition 2: Temporary Closed without All or Chennai
                 if (
-                    (statusCheck === "Temporary Closed" )&&
+                    (statusCheck === "Temporary Closed") &&
                     (superAdminAccess === "0") &&
                     (!station.includes("Chennai") || !station.includes("All"))
                 ) {
@@ -6499,8 +6503,8 @@ const useTripsheet = () => {
                     setEmptyState(false);
                     return;
                 }
-                  if (
-                    ( statusCheck === "Closed" )&&
+                if (
+                    (statusCheck === "Closed") &&
                     (superAdminAccess === "0") &&
                     (!station.includes("Chennai") || !station.includes("All"))
                 ) {
@@ -6509,14 +6513,14 @@ const useTripsheet = () => {
                     setTemporaryStatus(true);
                     return;
                 }
-    
+
                 // Condition 3: No Chennai or All in Station
                 if (!station.includes("Chennai") && !station.includes("All")) {
                     console.log("Condition 3: No Chennai or All in Station");
                     setOutStationHide(true);
                     return;
                 }
-    
+
                 // Condition 4: Closed with Chennai or All
                 if (
                     statusCheck === "Closed" &&
@@ -6527,7 +6531,7 @@ const useTripsheet = () => {
                     setHideField(true);
                     return;
                 }
-    
+
                 // Condition 5: Closed and superAdminAccess is 0
                 if (
                     statusCheck === "Closed" &&
@@ -6540,7 +6544,7 @@ const useTripsheet = () => {
                     setHideField(true);
                     return;
                 }
-    
+
                 // Condition 6: Closed or Billed and superAdminAccess is 0
                 if (
                     (statusCheck === "Closed" || statusCheck === "Billed") &&
@@ -6550,7 +6554,7 @@ const useTripsheet = () => {
                     setEmptyState(true);
                     return;
                 }
-    
+
                 // Condition 7: Not Closed
                 if (statusCheck !== "Closed") {
                     console.log("Condition 7: Not Closed");
@@ -6562,10 +6566,10 @@ const useTripsheet = () => {
                 console.error("Error fetching user details:", error);
             }
         };
-    
+
         fetchData();
-    }, [ enterTrigger]);
-    
+    }, [enterTrigger]);
+
     // Edit Button Hide
 
     const statuschecking = selectedStatus;
@@ -6605,7 +6609,7 @@ const useTripsheet = () => {
     useEffect(() => {
         const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo;
         const datecheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate;
-     
+
         const fetchData = async () => {
 
             try {
@@ -6815,8 +6819,8 @@ const useTripsheet = () => {
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
-        minTimeData, maxTimeData, shedInTimeData, conflictLoad,setConflictLoad,selectedStatuschecking,openModalConflict,setOpenModalConflict,setError,setErrorMessage,
-        outStationHide,openConflictKMPopup,setOpenConflictKMPopup
+        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage,
+        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger
 
     };
 };

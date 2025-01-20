@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback, useEffect, useRef } from 'react';
-import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer,Polyline } from '@react-google-maps/api';
 // import { IconButton, Button } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import IconButton from '@mui/material/IconButton';
@@ -110,32 +110,32 @@ const VehicleInformationDrawer = () => {
         setDirectionRendererKey(0)
         setDirectionsResponse(null)
         let index = 1; // Start from the second point since the first is fixed
-    
+
         const directionsService = new window.google.maps.DirectionsService();
-    
+
         const intervalId = setInterval(() => {
             if (index >= chennaiCoordinates.length) {
                 clearInterval(intervalId); // Stop when all points are covered
                 return;
             }
-    
+
             // Fixed initial position as the origin
             const origin = {
                 lat: chennaiCoordinates[0]?.latitude,
                 lng: chennaiCoordinates[0]?.longitude,
             };
-    
+
             // Dynamic destination for the current step
             const destination = {
                 lat: chennaiCoordinates[index]?.latitude,
                 lng: chennaiCoordinates[index]?.longitude,
             };
-    
+
             const waypoints = chennaiCoordinates.slice(1, index).map(coord => ({
                 location: { lat: coord.latitude, lng: coord.longitude },
                 stopover: false,
             }));
-    
+
             directionsService.route(
                 {
                     origin,
@@ -151,11 +151,11 @@ const VehicleInformationDrawer = () => {
                     }
                 }
             );
-    
+
             index += 1; // Move to the next destination
         }, 2000); // Update every 1 second
     };
-    
+
 
     // Load the Google Maps script with your API key and necessary libraries
     const { isLoaded } = useLoadScript({
@@ -175,7 +175,8 @@ const VehicleInformationDrawer = () => {
     const [popupPosition, setPopupPosition] = useState(null); // State for popup position
     const [directionsResponse, setDirectionsResponse] = useState(null);
     const [lastPointIndex, setLastPointIndex] = useState(0);
-
+    const [currentIndex, setCurrentIndex] = useState(0); // Current index of the marker
+    const [markerPosition, setMarkerPosition] = useState(chennaiCoordinates[0]); // Initial marker position
     // Marker location based on latitude and longitude
     const markerLocation = lat && long ? { lat, lng: long } : null;
 
@@ -263,7 +264,7 @@ const VehicleInformationDrawer = () => {
     if (!isLoaded) {
         return <div>Loading...</div>;
     }
-
+   
     return (
         <>
             <div>
@@ -497,18 +498,36 @@ const VehicleInformationDrawer = () => {
                                 </div>
 
                                 <div className='vehicle-info-content-map'>
-                                    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}
+                                    <GoogleMap
+                                        mapContainerStyle={containerStyle}
+                                        center={center}
+                                        zoom={14}
+                                        onLoad={(map) => console.log("Map loaded")}
+                                    >
+                                        {/* Draw the path using Polyline */}
+                                        <Polyline
+                                            path={chennaiCoordinates.map((coord) => ({
+                                                lat: coord.latitude,
+                                                lng: coord.longitude,
+                                            }))}
+                                            options={{
+                                                strokeColor: "#FF0000",
+                                                strokeOpacity: 0.8,
+                                                strokeWeight: 2,
+                                            }}
+                                        />
+
+                                        {/* Marker that moves along the path */}
+                                        <MarkerF
+                                            position={{
+                                                lat: markerPosition?.latitude,
+                                                lng: markerPosition?.longitude,
+                                            }}
+                                        />
+                                    </GoogleMap>
+                                    {/* <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}
                                         onLoad={handleMapLoad}
                                     >
-                                        {/* {chennaiCoordinates && chennaiCoordinates.length > 0 && (
-                                            <MarkerF
-                                                position={{
-                                                    lat: chennaiCoordinates[0]?.latitude,
-                                                    lng: chennaiCoordinates[0]?.longitude,
-                                                }}
-                                                // label="Shed out"
-                                            />
-                                        )} */}
                                         {chennaiCoordinates && chennaiCoordinates.some(coord => coord?.TripType === "start") && (
                                             <MarkerF
                                                 position={{
@@ -520,73 +539,64 @@ const VehicleInformationDrawer = () => {
                                         )}
 
                                         {/* End Marker based on TripType */}
-                                        {chennaiCoordinates && chennaiCoordinates.some(coord => coord?.TripType === "End") && (
-                                            <MarkerF
-                                                position={{
-                                                    lat: chennaiCoordinates.find(coord => coord?.TripType === "End")?.latitude,
-                                                    lng: chennaiCoordinates.find(coord => coord?.TripType === "End")?.longitude,
-                                                }}
-                                                label="End"
-                                            />
-                                        )}
-                                        {/* {chennaiCoordinates && chennaiCoordinates?.length > 1 && (
-                                            <MarkerF
-                                                position={{
-                                                    lat: chennaiCoordinates[chennaiCoordinates?.length - 1]?.latitude,
-                                                    lng: chennaiCoordinates[chennaiCoordinates?.length - 1]?.longitude,
-                                                }}
-                                                // label="Last"
-                                            />
-                                        )} */}
+                                    {chennaiCoordinates && chennaiCoordinates.some(coord => coord?.TripType === "End") && (
+                                        <MarkerF
+                                            position={{
+                                                lat: chennaiCoordinates.find(coord => coord?.TripType === "End")?.latitude,
+                                                lng: chennaiCoordinates.find(coord => coord?.TripType === "End")?.longitude,
+                                            }}
+                                            label="End"
+                                        />
+                                    )}
+                                    {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
 
-                                        {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
+                                    {/* </GoogleMap>  */}
 
-                                        {openPopup && popupPosition && (
-                                            <InfoWindow
-                                                position={popupPosition}
-                                                onCloseClick={handleClosePopup} // Close popup when the close button is clicked
-                                            >
-                                                <div className='map-popup'>
-                                                    <h4>6744TN11BE6744</h4>
-                                                    <p>Group: Hyderabad|Driver: Vijayakumar</p>
-                                                    <p><span className='red-indication'></span>Last updated:22 Aug 24, 02:13:10 PM</p>
-                                                    <div className='status-from'>
-                                                        <p>Status: Parked</p>
-                                                        <p>From: An Hour</p>
-                                                    </div>
-                                                    <div className='location-near'>
-                                                        <p>Location:
-                                                            Perumalpattu - Kottamedu Road, Oragadam Industrial Corridor, Perinjambakkam, Kanchipuram, Tamil Nadu
-                                                        </p>
-                                                        <p>
-                                                            Nearest
-                                                            Address:
-                                                            46.9 km from JESSY CABS ( Office )
-                                                        </p>
-                                                    </div>
-
-                                                    <div className='btns-section'>
-                                                        <button className='popup-last-btns'>Nearby</button>
-                                                        <button className='popup-last-btns'>Add Address</button>
-                                                        <button className='popup-last-btns'>Create Job</button>
-                                                        <button className='popup-last-btns'>History</button>
-                                                    </div>
-
+                                    {openPopup && popupPosition && (
+                                        <InfoWindow
+                                            position={popupPosition}
+                                            onCloseClick={handleClosePopup} // Close popup when the close button is clicked
+                                        >
+                                            <div className='map-popup'>
+                                                <h4>6744TN11BE6744</h4>
+                                                <p>Group: Hyderabad|Driver: Vijayakumar</p>
+                                                <p><span className='red-indication'></span>Last updated:22 Aug 24, 02:13:10 PM</p>
+                                                <div className='status-from'>
+                                                    <p>Status: Parked</p>
+                                                    <p>From: An Hour</p>
                                                 </div>
-                                            </InfoWindow>
-                                        )}
+                                                <div className='location-near'>
+                                                    <p>Location:
+                                                        Perumalpattu - Kottamedu Road, Oragadam Industrial Corridor, Perinjambakkam, Kanchipuram, Tamil Nadu
+                                                    </p>
+                                                    <p>
+                                                        Nearest
+                                                        Address:
+                                                        46.9 km from JESSY CABS ( Office )
+                                                    </p>
+                                                </div>
+
+                                                <div className='btns-section'>
+                                                    <button className='popup-last-btns'>Nearby</button>
+                                                    <button className='popup-last-btns'>Add Address</button>
+                                                    <button className='popup-last-btns'>Create Job</button>
+                                                    <button className='popup-last-btns'>History</button>
+                                                </div>
+
+                                            </div>
+                                        </InfoWindow>
+                                    )}
 
 
 
-                                        <div style={{ zIndex: 1, position: 'absolute', top: '400px', right: '60px' }} onClick={handleOpenPopup}>
-                                            <IconButton onClick={handleCenterButtonClick} style={{ backgroundColor: 'red', color: 'white' }}>
-                                                <NavigationIcon />
-                                            </IconButton>
-                                        </div>
+                                    <div style={{ zIndex: 1, position: 'absolute', top: '400px', right: '60px' }} onClick={handleOpenPopup}>
+                                        <IconButton onClick={handleCenterButtonClick} style={{ backgroundColor: 'red', color: 'white' }}>
+                                            <NavigationIcon />
+                                        </IconButton>
+                                    </div>
 
-                                    </GoogleMap>
                                     <div className='playButton'>
-                                        <button onClick={()=>handleDrawPaths()}>Play</button>
+                                        <button onClick={() => handleDrawPaths()}>Play</button>
                                     </div>
                                 </div>
                             </div>

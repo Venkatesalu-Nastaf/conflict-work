@@ -270,7 +270,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,
-    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup
+    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -884,7 +884,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const shedoutDisabled = temporaryStatus ? hideField : hideField;
   const shedoutkm = formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout
-  const conflictModalKmBox = (tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && shedoutkm !== null && shedoutkm !== "")
+  const conflictModalKmBox = (tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && enterTrigger !== null && shedoutkm !== null && shedoutkm !== "")
   // status for conflict message
   useEffect(() => {
     let timeout;
@@ -892,7 +892,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     if (conflictModalbox) {
       timeout = setTimeout(() => {
         setError(true);
-        setErrorMessage("Conflict Time And Date Error");
+        setErrorMessage("There is a conflict with this trip sheet in Date and Time");
       }, 300);
     }
     return () => clearTimeout(timeout);
@@ -903,7 +903,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     if (conflictModalKmBox) {
       timeout = setTimeout(() => {
         setError(true);
-        setErrorMessage("Conflict KM Error");
+        setErrorMessage("There is a conflict with this trip sheet in KM");
       }, 300);
     }
     return () => clearTimeout(timeout);

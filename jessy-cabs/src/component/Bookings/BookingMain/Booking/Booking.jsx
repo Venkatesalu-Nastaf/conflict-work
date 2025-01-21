@@ -150,7 +150,7 @@ const Booking = ({ stationName, customerData }) => {
     edit, AvilableimageCount,
     // handleKeyEnterdriver,
     vehileName,
-    selectedCustomerdriver,
+    selectedCustomerdriver,setNoChangeData,nochangedata,
     handleSelectAll, handlecheckbox, selectAll, deletefile, handleButtonClickwithouttripid, dialogOpentrail, handleCloseDialogtrail, handlecheckbox1, selectetImg, deletefiledata,
     handleimagedeletewithouttripid,
     handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning,
@@ -969,6 +969,7 @@ const Booking = ({ stationName, customerData }) => {
                       setreporttime(event.target.value);
                       setFormData({ ...formData, reporttime: event.target.value });
                       setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value, });
+                      setNoChangeData({ ...nochangedata, reporttime: event.target.value, });
                     }}
                   />
                 </div>
@@ -991,6 +992,7 @@ const Booking = ({ stationName, customerData }) => {
                       setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
                       setBook({ ...book, starttime: event.target.value });
                       setStartTime(event.target.value);
+                      setNoChangeData({ ...nochangedata,starttime: event.target.value  });
                     }}
                     name="starttime"
                   />
@@ -1040,6 +1042,7 @@ const Booking = ({ stationName, customerData }) => {
                     setSelectedCustomerData({ ...selectedCustomerData, escort: selectedValue });
                     setBook({ ...book, escort: event.target.value });
                     setEscort(selectedValue);
+                    setNoChangeData({ ...nochangedata, escort: event.target.value });
                   }}
                 >
                   <MenuItem value={"Yes"}>Yes</MenuItem>
@@ -1064,6 +1067,7 @@ const Booking = ({ stationName, customerData }) => {
                     setSelectedCustomerData({ ...selectedCustomerData, transferreport: event.target.value });
                     setBook({ ...book, transferreport: event.target.value });
                     setTransferreport(event.target.value);
+                    setNoChangeData({ ...nochangedata, transferreport: event.target.value });
                   }}
                 >
                   <MenuItem value={'Yes'}>Yes</MenuItem>
@@ -1284,7 +1288,7 @@ const Booking = ({ stationName, customerData }) => {
                 id="free-solo-travelmail"
                 freeSolo
                 sx={{ width: "100%" }}
-                onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
+                onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname")}
                 value={
                   formData.travelsname ||
                   selectedCustomerData.travelsname ||

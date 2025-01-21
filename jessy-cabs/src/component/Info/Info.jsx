@@ -48,6 +48,7 @@ const Info = () => {
   const Mailers = permissions[18]?.read;
   const Fuel_Info = permissions[19]?.read;
   const Employee = permissions[20]?.read;
+  const Agreement = permissions[21]?.read;
   const handleMenuItemClick = (menuItem, alt, e) => {
 
     localStorage.setItem('activeMenuItem', menuItem);
@@ -67,7 +68,7 @@ const Info = () => {
         hasPermission = Employee;
         break;
       case "Agreement":
-        hasPermission = Employee;
+        hasPermission = Agreement;
         break;
       default:
         break;
@@ -149,10 +150,10 @@ const Info = () => {
               handleMenuItemClick={handleMenuItemClick}
             /> : <></>}
 
-          {Employee ?
+          {Agreement ?
             <MenuItem
               label="Agreement"
-              to={Employee && ("/home/info/agreement")}
+              to={Agreement && ("/home/info/agreement")}
               alt={"/home/info/agreement"}
               menuItemKey="Agreement"
               activeMenuItem={activeMenuItem}

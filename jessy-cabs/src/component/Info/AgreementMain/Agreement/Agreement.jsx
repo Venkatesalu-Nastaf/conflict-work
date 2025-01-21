@@ -144,10 +144,10 @@ const Agreement = ({organizationNames}) => {
 
   // permissions
   const { permissions } = useContext(PermissionContext)
-  const Employee_read = permissions[20]?.read;
-  const Employee_new = permissions[20]?.new;
-  const Employee_modify = permissions[20]?.modify;
-  const Employee_delete = permissions[20]?.delete;
+  const Agreement_read = permissions[21]?.read;
+  const Agreement_new = permissions[21]?.new;
+  const Agreement_modify = permissions[21]?.modify;
+  const Agreement_delete = permissions[21]?.delete;
 
   // const [fileName, setFileName] = useState("");
 
@@ -308,7 +308,7 @@ const Agreement = ({organizationNames}) => {
                                         </LocalizationProvider>
                                     </div>
                                 </div> */} 
-                                {console.log(selectedCustomerData.todate, "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"ll",book.todate)}
+                                {/* {console.log(selectedCustomerData.todate, "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"ll",book.todate)} */}
 
                         {/* <div className="input driver-input">
                             <div className="icone">
@@ -338,7 +338,7 @@ const Agreement = ({organizationNames}) => {
                             </LocalizationProvider>
                         </div> */}
 
-                      {console.log(dayjs(selectedCustomerData.todate), "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"kkkkkk",book.todate)}
+                      {/* {console.log(dayjs(selectedCustomerData.todate), "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"kkkkkk",book.todate)} */}
                       <div className="input">
                                     <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
@@ -504,7 +504,7 @@ const Agreement = ({organizationNames}) => {
                   }}
                 />    
                 <label htmlFor="file-upload">
-                  <Button variant="outlined" component="span">
+                  <Button variant="outlined" disabled={isEditMode ? !Agreement_modify : !Agreement_new} component="span">
                     Upload
                   </Button>
                 </label>
@@ -533,9 +533,9 @@ const Agreement = ({organizationNames}) => {
 
               <div className="input">
                 {isEditMode ? (
-                  <Button variant="contained" disabled={!Employee_modify} onClick={handleEdit}>Edit</Button>
+                  <Button variant="contained" disabled={!Agreement_modify} onClick={handleEdit}>Edit</Button>
                 ) : ( 
-                  <Button variant="contained" disabled={!Employee_new} onClick={handleAdd}>Add</Button>
+                  <Button variant="contained" disabled={!Agreement_new} onClick={handleAdd}>Add</Button>
                 )}
               </div>
             </div>
@@ -597,7 +597,7 @@ const Agreement = ({organizationNames}) => {
             icon={<SpeedDialIcon />}
             direction="left"
           >
-            {Employee_read === 1 && (
+            {Agreement_read === 1 && (
               <SpeedDialAction
                 key="list"
                 icon={<ChecklistIcon />}
@@ -605,7 +605,7 @@ const Agreement = ({organizationNames}) => {
                 onClick={(event) => handleClick(event, "List")}
               />
             )}
-            {Employee_modify === 1 && isEditMode && (
+            {Agreement_modify === 1 && isEditMode && (
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
@@ -613,7 +613,7 @@ const Agreement = ({organizationNames}) => {
                 onClick={(event) => handleClick(event, "Edit")}
               />
             )}
-            {Employee_delete === 1 && isEditMode && (
+            {Agreement_delete === 1 && isEditMode && (
               <SpeedDialAction
                 key="delete"
                 icon={<DeleteIcon />}
@@ -621,7 +621,7 @@ const Agreement = ({organizationNames}) => {
                 onClick={(event) => handleClick(event, "Delete")}
               />
             )}
-            {Employee_new === 1 && !isEditMode && (
+            {Agreement_new === 1 && !isEditMode && (
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}
@@ -813,7 +813,7 @@ const Agreement = ({organizationNames}) => {
     
     <div style={{ display: 'flex' }}>
       <Button
-        disabled={!Employee_delete}
+        disabled={!Agreement_delete}
         variant="contained"
         onClick={() => handleimagedelete(deletefile)}
       >

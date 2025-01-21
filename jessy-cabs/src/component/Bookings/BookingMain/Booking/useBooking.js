@@ -46,6 +46,7 @@ const useBooking = () => {
     setPopupOpen(false);
     setpopupOpenmail(false);
   };
+  const [nochangedata,setNoChangeData]=useState({})
   
   const [escort, setEscort] = useState('No');
   const [transferreport, setTransferreport] = useState('No')
@@ -246,6 +247,7 @@ const useBooking = () => {
     setSelectedCustomerdriver({})
     setIsEditMode(false);
     setSelectetImg([])
+    setNoChangeData({})
   };
 
   useEffect(() => {
@@ -291,6 +293,10 @@ const useBooking = () => {
           ...prevValues,
           [name]: checked,
         }));
+        setNoChangeData((prevValues) => ({
+          ...prevValues,
+          [name]: checked,
+        }));
       } else if (type === "radio") {
         setBook((prevBook) => ({
           ...prevBook,
@@ -305,6 +311,10 @@ const useBooking = () => {
           [name]: value,
         }));
         setFormValues((prevValues) => ({
+          ...prevValues,
+          [name]: value,
+        }));
+        setNoChangeData((prevValues) => ({
           ...prevValues,
           [name]: value,
         }));
@@ -348,7 +358,13 @@ const useBooking = () => {
           ...prevValues,
           [name]: fieldValue,
         }));
+        if(name !== "bookingno")
+        setNoChangeData((prevValues) => ({
+          ...prevValues,
+          [name]: fieldValue,
+        }));
       }
+     
     },
     [
       setBook,
@@ -357,6 +373,7 @@ const useBooking = () => {
       setFormValues,
       setSelectedCustomerDatas,
       setSelectedCustomerdriver,
+      
     ]
   );
 
@@ -401,6 +418,14 @@ const handleAirportTransferChange = (event) => {
           Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
           hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
         }));
+
+        // setNoChangeData((prevState) => ({
+        //   ...prevState,
+        //   vehRegNo: manualInput,
+        //   vehiclemodule: selectedVehicle?.vehType || prevState.vehiclemodule,  // Keep current value if not found
+        //   Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
+        //   hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
+        // }));
       }
     }
   };
@@ -450,6 +475,13 @@ const handleAirportTransferChange = (event) => {
           // servicestation: selectedOrder.servicestation
         }));
 
+        setNoChangeData((prevState) => ({
+          ...prevState,
+          orderedby: value?.label,
+          orderByMobileNo: selectedOrder.orderByMobileNo,
+          orderByEmail: selectedOrder.orderByEmail,
+        }));
+
       } 
       else { 
         // If no match is found, clear the fields or handle it as necessary
@@ -469,6 +501,10 @@ const handleAirportTransferChange = (event) => {
           orderedby: value,
         
         }));
+        // setNoChangeData((prevValues) => ({
+        //   ...prevValues,
+        //   orderedby: value,
+        // }));
       }
     } else {
       setBook(prevState => ({
@@ -481,6 +517,10 @@ const handleAirportTransferChange = (event) => {
       }));
       setFormData((prevData) => ({
         ...prevData,
+        [name]: selectedOption,
+      }));
+      setNoChangeData((prevValues) => ({
+        ...prevValues,
         [name]: selectedOption,
       }));
     }
@@ -533,6 +573,13 @@ const handleAirportTransferChange = (event) => {
           driverName: manualInput,
           mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Same logic as above
         }));
+
+
+        // setNoChangeData((prevState) => ({
+        //   ...prevState,
+        //   driverName: manualInput,
+        //   mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, 
+        // }));
       }
     }
   };
@@ -570,6 +617,10 @@ const handleAirportTransferChange = (event) => {
       [name]: data,
     }));
     setSelectedCustomerData((prevValues) => ({
+      ...prevValues,
+      [name]: data,
+    }));
+    setNoChangeData((prevValues) => ({
       ...prevValues,
       [name]: data,
     }));
@@ -612,6 +663,7 @@ const handleAirportTransferChange = (event) => {
     };
     fetchData();
   }, [apiUrl, datatrigger]);
+  // console.log(nochangedata,"nochnage")
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -819,7 +871,7 @@ const handleAirportTransferChange = (event) => {
     //   setImageDialogOpen(true);
     // }
   };
-  console.log(selectetImg,"selectimag lentgh")
+  // console.log(selectetImg,"selectimag lentgh")
   const handleCloseImageDialog = () => {
     setImageDialogOpen(false)
   }
@@ -1123,6 +1175,14 @@ useEffect(() => {
   };
 
   const handleEdit = async (userid) => {
+
+    
+if (Object.keys(nochangedata).length === 0) {
+  // console.error("Error: Data not changed");
+  setError(true);
+  setErrorMessage("Data not modifeid");
+  return
+}
     
     try {
       setisEditbtnload(true)
@@ -1550,6 +1610,11 @@ useEffect(() => {
       ...prevData,
       [name]: selectedOption,
     }));
+    setNoChangeData((prevValues) => ({
+      ...prevValues,
+      [name]: selectedOption,
+    }));
+    
     travelsdatafetch(selectedOption)
   };
 
@@ -1631,7 +1696,7 @@ useEffect(() => {
     vehileName, infoMessage, handleImagechange2, selectetImg,handleimagedeletewithouttripid,deletefiledata,
     //  removeSelectedImage,
      imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning,
-    handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort,
+    handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort,setNoChangeData,nochangedata,
     isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload,handleButtonClickwithouttripid,dialogOpentrail,handleCloseDialogtrail,handlecheckbox1
   };
 };

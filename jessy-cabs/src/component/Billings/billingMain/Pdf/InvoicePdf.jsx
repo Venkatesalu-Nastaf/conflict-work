@@ -128,8 +128,8 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
                                 {otherStations.data6 !== null ? (
                                     // <h2 className="organisationtext">{commonState.address}</h2>
                                     <h2 className="organisationtext"  style={{height:"70px"}}>
-                                        {/* {otherStations.data5} */}
-                                    no. 55 thiruvalluvar purakm west tambaram chemnnai irumbiyur chengalpattu 45
+                                        {otherStations.data5}
+                                    {/* no. 55 thiruvalluvar purakm west tambaram chemnnai irumbiyur chengalpattu 45 */}
 
                                         </h2>
                                 ) : (

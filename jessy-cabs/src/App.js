@@ -154,14 +154,25 @@ function App() {
   const INFO_FuelInfo = permissions[19]?.read ;
   
   const INFO_Employee =  permissions[20]?.read 
-  const Dashbord_read = permissions[21]?.read 
+
+
+  // const Dashbord_read = permissions[21]?.read 
+  // // this for map page
+  // const Maps = permissions[22]?.read 
+  // const Map_Realtime = permissions[23]?.read
+  // const Map_Vehicle = permissions[24]?.read 
+  // const Map_Reminders = permissions[25]?.read 
+  // const Map_History = permissions[26]?.read 
+  // const Map_Records = permissions[27]?.read 
+  const INFO_Agreement = permissions[21]?.read
+  const Dashbord_read = permissions[22]?.read 
   // this for map page
-  const Maps = permissions[22]?.read 
-  const Map_Realtime = permissions[23]?.read
-  const Map_Vehicle = permissions[24]?.read 
-  const Map_Reminders = permissions[25]?.read 
-  const Map_History = permissions[26]?.read 
-  const Map_Records = permissions[27]?.read 
+  const Maps = permissions[23]?.read 
+  const Map_Realtime = permissions[24]?.read
+  const Map_Vehicle = permissions[25]?.read 
+  const Map_Reminders = permissions[26]?.read 
+  const Map_History = permissions[27]?.read 
+  const Map_Records = permissions[28]?.read 
 
 
 
@@ -170,8 +181,8 @@ function App() {
   const Register_page_permission = permissions[9]?.read || permissions[10]?.read || permissions[11]?.read || permissions[12]?.read ||permissions[13]?.read;
   const Setting_page_permission = permissions[14]?.read || permissions[15]?.read || permissions[16]?.read 
   
-  const Map_page_permission = permissions[22]?.read||permissions[23]?.read || permissions[24]?.read ||permissions[25]?.read ||permissions[26]?.read  || permissions[27]?.read
-  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read
+  const Map_page_permission = permissions[23]?.read||permissions[24]?.read || permissions[25]?.read ||permissions[26]?.read ||permissions[27]?.read  || permissions[28]?.read
+  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read || permissions[21]?.read
 
 
   const { orgName, logo, setLogo, setLogoTrigger, logotrigger,isstationtrigger } = useData() 
@@ -657,7 +668,7 @@ function App() {
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
                 <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 && INFO_FuelInfo !== undefined  ? (<FuelInfo />) : (<NoPermission /> )} />
                 <Route path="/home/info/employee" element={INFO_Employee !== 0 &&  INFO_Employee !== undefined   ?  ( <Employes />):(<NoPermission />)} />
-                <Route path="/home/info/agreement" element={INFO_Employee !== 0 &&  INFO_Employee !== undefined   ?  ( <AgreementMain  organizationNames={organizationNames}/>):(<NoPermission />)} />                
+                <Route path="/home/info/agreement" element={INFO_Agreement !== 0 &&  INFO_Agreement !== undefined   ?  ( <AgreementMain  organizationNames={organizationNames}/>):(<NoPermission />)} />                
               </Route>
               <Route path="/home/billing" element={BILLING !== 0 ? <Billings /> :<NoPermission />}>
 

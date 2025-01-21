@@ -70,9 +70,13 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </td>
             </tr>
 
-            <tr className='user-permission-dashboard-row'>
+            {/* <tr className='user-permission-dashboard-row'>
               <td className='td-content Booking-table user-permission-table-title'>Dashboard </td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[21]?.read} onChange={handleCheckboxChange(21, 'read')} /></td>
+            </tr> */}
+             <tr className='user-permission-dashboard-row'>
+              <td className='td-content Booking-table user-permission-table-title'>Dashboard </td>
+              <td className='td-content'><input type="checkbox" checked={permissionsData[22]?.read} onChange={handleCheckboxChange(22, 'read')} /></td>
             </tr>
 
 
@@ -300,14 +304,14 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               {/* <td className='td-content Booking-table'  ><span>Info</span>{isinfoDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' style={{ color: 'red' }} />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
               <td className='td-content user-permission-table-title' onClick={() => togglerow("INFO")}>Info {INFO ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}
                 <Switch
-                  checked={permissionsData[17]?.read && permissionsData[18]?.read && permissionsData[19]?.read && permissionsData[20]?.read} onChange={handleSwitchforallrows(17, 20)}
+                  checked={permissionsData[17]?.read && permissionsData[18]?.read && permissionsData[19]?.read && permissionsData[20]?.read && permissionsData[21]?.read} onChange={handleSwitchforallrows(17, 21)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 />
               </td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.read} onChange={handleCheckboxChangealldata(17, 20, 'read')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.new} onChange={handleCheckboxChangealldata(17, 20, 'new')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.modify} onChange={handleCheckboxChangealldata(17, 20, 'modify')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.delete} onChange={handleCheckboxChangealldata(17, 20, 'delete')} /></td>
+              <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.read} onChange={handleCheckboxChangealldata(17, 21, 'read')} /></td>
+              <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.new} onChange={handleCheckboxChangealldata(17, 21, 'new')} /></td>
+              <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.modify} onChange={handleCheckboxChangealldata(17, 21, 'modify')} /></td>
+              <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.delete} onChange={handleCheckboxChangealldata(17, 21, 'delete')} /></td>
             </tr>
 
             {INFO && <>
@@ -343,13 +347,22 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[20]?.modify} onChange={handleCheckboxChange(20, 'modify')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[20]?.delete} onChange={handleCheckboxChange(20, 'delete')} /></td>
               </tr>
+              <tr className='user-permission-even-no-rows'>
+                <td className='td-content'>Agreement <Switch
+                  checked={permissionsData[21]?.read && permissionsData[21]?.new && permissionsData[21]?.modify && permissionsData[21]?.delete} onChange={handleSwitchforthatrow(21)}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                /></td>
+                <td className='td-content'><input type="checkbox" checked={permissionsData[21]?.read} onChange={handleCheckboxChange(21, 'read')} /></td>
+                <td className='td-content'><input type="checkbox" checked={permissionsData[21]?.new} onChange={handleCheckboxChange(21, 'new')} /></td>
+                <td className='td-content'><input type="checkbox" checked={permissionsData[21]?.modify} onChange={handleCheckboxChange(21, 'modify')} /></td>
+                <td className='td-content'><input type="checkbox" checked={permissionsData[21]?.delete} onChange={handleCheckboxChange(21, 'delete')} /></td>
+              </tr>
 
             </>
 
             }
 
-            <tr>
-              {/* <td className='td-content Booking-table'  ><span>Info</span>{isinfoDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' style={{ color: 'red' }} />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
+            {/* <tr>
               <td className='td-content user-permission-table-title' onClick={() => togglerow("MAP")}>Map {MAP ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}
                 <Switch
                   checked={permissionsData[22]?.read && permissionsData[23]?.read && permissionsData[24]?.read && permissionsData[25]?.read && permissionsData[26]?.read && permissionsData[27]?.read} onChange={handleSwitchforallrows(22, 27)}
@@ -360,8 +373,20 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               <td className='td-content'><input type="checkbox" checked={permissionsData[22]?.new} onChange={handleCheckboxChangealldata(22, 27, 'new')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[22]?.modify} onChange={handleCheckboxChangealldata(22, 27, 'modify')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[22]?.delete} onChange={handleCheckboxChangealldata(22, 27, 'delete')} /></td>
+            </tr> */}
+              <tr>
+              <td className='td-content user-permission-table-title' onClick={() => togglerow("MAP")}>Map {MAP ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}
+                <Switch
+                  checked={permissionsData[23]?.read && permissionsData[24]?.read && permissionsData[25]?.read && permissionsData[26]?.read && permissionsData[27]?.read && permissionsData[28]?.read} onChange={handleSwitchforallrows(23, 28)}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </td>
+              <td className='td-content'><input type="checkbox" checked={permissionsData[23]?.read} onChange={handleCheckboxChangealldata(23, 28, 'read')} /></td>
+              <td className='td-content'><input type="checkbox" checked={permissionsData[23]?.new} onChange={handleCheckboxChangealldata(23, 28, 'new')} /></td>
+              <td className='td-content'><input type="checkbox" checked={permissionsData[23]?.modify} onChange={handleCheckboxChangealldata(23, 28, 'modify')} /></td>
+              <td className='td-content'><input type="checkbox" checked={permissionsData[23]?.delete} onChange={handleCheckboxChangealldata(23, 28, 'delete')} /></td>
             </tr>
-            {MAP && <>
+            {/* {MAP && <>
 
               <tr>
                 <td className='td-content'>RealTime<Switch
@@ -417,7 +442,65 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </tr>
 
             </>
-            }
+            } */}
+
+{MAP && <>
+
+<tr>
+  <td className='td-content'>RealTime<Switch
+    checked={permissionsData[24]?.read && permissionsData[24]?.new && permissionsData[24]?.modify && permissionsData[24]?.delete} onChange={handleSwitchforthatrow(24)}
+    inputProps={{ 'aria-label': 'controlled' }}
+  /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[24]?.read} onChange={handleCheckboxChange(24, 'read')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[24]?.new} onChange={handleCheckboxChange(24, 'new')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[24]?.modify} onChange={handleCheckboxChange(24, 'modify')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[24]?.delete} onChange={handleCheckboxChange(24, 'delete')} /></td>
+</tr>
+<tr>
+  <td className='td-content'>Vehicle<Switch
+    checked={permissionsData[25]?.read && permissionsData[25]?.new && permissionsData[25]?.modify && permissionsData[25]?.delete} onChange={handleSwitchforthatrow(25)}
+    inputProps={{ 'aria-label': 'controlled' }}
+  /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[25]?.read} onChange={handleCheckboxChange(25, 'read')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[25]?.new} onChange={handleCheckboxChange(25, 'new')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[25]?.modify} onChange={handleCheckboxChange(25, 'modify')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[25]?.delete} onChange={handleCheckboxChange(25, 'delete')} /></td>
+</tr>
+
+
+<tr>
+  <td className='td-content'>Reminders<Switch
+    checked={permissionsData[26]?.read && permissionsData[26]?.new && permissionsData[26]?.modify && permissionsData[26]?.delete} onChange={handleSwitchforthatrow(26)}
+    inputProps={{ 'aria-label': 'controlled' }}
+  /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[26]?.read} onChange={handleCheckboxChange(26, 'read')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[26]?.new} onChange={handleCheckboxChange(26, 'new')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[26]?.modify} onChange={handleCheckboxChange(26, 'modify')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[26]?.delete} onChange={handleCheckboxChange(26, 'delete')} /></td>
+</tr>
+<tr>
+  <td className='td-content'>History<Switch
+    checked={permissionsData[27]?.read && permissionsData[27]?.new && permissionsData[27]?.modify && permissionsData[27]?.delete} onChange={handleSwitchforthatrow(27)}
+    inputProps={{ 'aria-label': 'controlled' }}
+  /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[27]?.read} onChange={handleCheckboxChange(27, 'read')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[27]?.new} onChange={handleCheckboxChange(27, 'new')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[27]?.modify} onChange={handleCheckboxChange(27, 'modify')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[27]?.delete} onChange={handleCheckboxChange(27, 'delete')} /></td>
+</tr>
+<tr>
+  <td className='td-content'>Records<Switch
+    checked={permissionsData[28]?.read && permissionsData[28]?.new && permissionsData[28]?.modify && permissionsData[28]?.delete} onChange={handleSwitchforthatrow(28)}
+    inputProps={{ 'aria-label': 'controlled' }}
+  /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[28]?.read} onChange={handleCheckboxChange(28, 'read')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[28]?.new} onChange={handleCheckboxChange(28, 'new')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[28]?.modify} onChange={handleCheckboxChange(28, 'modify')} /></td>
+  <td className='td-content'><input type="checkbox" checked={permissionsData[28]?.delete} onChange={handleCheckboxChange(28, 'delete')} /></td>
+</tr>
+
+</>
+}
           </tbody>
         </table>
       </div>

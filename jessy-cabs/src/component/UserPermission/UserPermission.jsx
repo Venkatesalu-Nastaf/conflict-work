@@ -46,16 +46,16 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
         <table>
           <thead>
             <tr className='table-header'>
-              <th className='th-content'>PERMISSION</th>
+              <th className='th-content th-border'>PERMISSION</th>
               <th className='th-content th-headings'>READ</th>
               <th className='th-content th-headings'>CREATE</th>
               <th className='th-content th-headings'>MODIFY</th>
-              <th className='th-content th-headings'>DELETE</th>
+              <th className='th-content th-headings th-border-last'>DELETE</th>
             </tr>
           </thead>
           <tbody className='table-body'>
             <tr className='user-permission-even-no-rows'>
-              <td className='td-content user-permission-table-title user-permission-table-first-row'>Full Permission</td>
+              <td className='td-content-og user-permission-table-title user-permission-table-first-row'>Full Permission</td>
               <td className='td-content user-permission-table-first-row'>
                 <Switch checked={readState} onChange={handleSwitchChange('read')} />
               </td>
@@ -71,19 +71,19 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
             </tr>
 
             {/* <tr className='user-permission-dashboard-row'>
-              <td className='td-content Booking-table user-permission-table-title'>Dashboard </td>
+              <td className='td-content Booking-table-og user-permission-table-title'>Dashboard </td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[21]?.read} onChange={handleCheckboxChange(21, 'read')} /></td>
             </tr> */}
              <tr className='user-permission-dashboard-row'>
-              <td className='td-content Booking-table user-permission-table-title'>Dashboard </td>
+              <td className='td-content-og Booking-table-og user-permission-table-title'>Dashboard </td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[22]?.read} onChange={handleCheckboxChange(22, 'read')} /></td>
             </tr>
 
 
             <tr className='user-permission-even-no-rows'>
-              {/* <td className='td-content Booking-table' onClick={toggleDropdown}> <span>BOOKING</span>{isDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)} */}
-              <td className='td-content Booking-table user-permission-table-title' onClick={() => togglerow("BOOKING")}>
-                Booking {BOOKING ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}
+              {/* <td className='td-content Booking-table-og' onClick={toggleDropdown}> <span>BOOKING</span>{isDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)} */}
+              <td className='td-content-og Booking-table-og user-permission-table-title' onClick={() => togglerow("BOOKING")}>
+                Booking {BOOKING ? (<span style={{marginTop:"10px"}}> <FaChevronUp /> </span>) : (<span style={{marginTop:"10px"}}><FaChevronDown /></span>)}
                 <Switch
                   checked={permissionsData[0]?.read && permissionsData[1]?.read && permissionsData[2]?.read && permissionsData[3]?.read} onChange={handleSwitchforallrows(0, 3)}
                   inputProps={{ 'aria-label': 'controlled' }}
@@ -97,7 +97,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
             {BOOKING && <>
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>
+                <td className='td-content-og'>
                   Booking <Switch
                     checked={permissionsData[1]?.read && permissionsData[1]?.new && permissionsData[1]?.modify && permissionsData[1]?.delete} onChange={handleSwitchforthatrow(1)}
                     inputProps={{ 'aria-label': 'controlled' }}
@@ -112,7 +112,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </tr>
 
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>Trip Status  <Switch
+                <td className='td-content-og'>Trip Status  <Switch
                   checked={permissionsData[2]?.read && permissionsData[2]?.new && permissionsData[2]?.modify && permissionsData[2]?.delete} onChange={handleSwitchforthatrow(2)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -123,7 +123,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </tr>
 
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>Trip sheet  <Switch
+                <td className='td-content-og'>Trip sheet  <Switch
                   checked={permissionsData[3]?.read && permissionsData[3]?.new && permissionsData[3]?.modify && permissionsData[3]?.delete} onChange={handleSwitchforthatrow(3)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -136,14 +136,14 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
 
             <tr >
-              <td className='td-content Booking-table user-permission-table-title' onClick={() => togglerow("BILLING")}>
-                Billing {BILLING ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}
+              <td className='td-content-og Booking-table-og user-permission-table-title' onClick={() => togglerow("BILLING")}>
+                Billing {BILLING ? (<span style={{marginTop:"10px"}}> <FaChevronUp /> </span>) : (<span style={{marginTop:"10px"}}><FaChevronDown /></span>)}
                 <Switch
                   checked={permissionsData[4]?.read && permissionsData[5]?.read && permissionsData[6]?.read && permissionsData[7]?.read} onChange={handleSwitchforallrows(4, 8)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 />
               </td>
-              {/* <td className='td-content  Booking-table'  ><span>BILLING</span>{isbillingDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
+              {/* <td className='td-content  Booking-table-og'  ><span>BILLING</span>{isbillingDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
               <td className='td-content'><input type="checkbox" checked={permissionsData[4]?.read} onChange={handleCheckboxChangealldata(4, 8, 'read')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[4]?.new} onChange={handleCheckboxChangealldata(4, 8, 'new')} /></td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[4]?.modify} onChange={handleCheckboxChangealldata(4, 8, 'modify')} /></td>
@@ -152,7 +152,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
             {BILLING && <>
               <tr>
-                <td className='td-content'>Billing <Switch
+                <td className='td-content-og'>Billing <Switch
                   checked={permissionsData[5]?.read && permissionsData[5]?.new && permissionsData[5]?.modify && permissionsData[5]?.delete} onChange={handleSwitchforthatrow(5)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -163,7 +163,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </tr>
 
               <tr>
-                <td className='td-content'>Transfer <Switch
+                <td className='td-content-og'>Transfer <Switch
                   checked={permissionsData[6]?.read && permissionsData[6]?.new && permissionsData[6]?.modify && permissionsData[6]?.delete} onChange={handleSwitchforthatrow(6)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -174,7 +174,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </tr>
 
               <tr>
-                <td className='td-content'>Covering Bill <Switch
+                <td className='td-content-og'>Covering Bill <Switch
                   checked={permissionsData[7]?.read && permissionsData[7]?.new && permissionsData[7]?.modify && permissionsData[7]?.delete} onChange={handleSwitchforthatrow(7)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -185,7 +185,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </tr>
 
               <tr>
-                <td className='td-content'>Reports <Switch
+                <td className='td-content-og'>Reports <Switch
                   checked={permissionsData[8]?.read && permissionsData[8]?.new && permissionsData[8]?.modify && permissionsData[8]?.delete} onChange={handleSwitchforthatrow(8)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -198,8 +198,8 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
             </>}
 
             <tr className='user-permission-even-no-rows'>
-              {/* <td className='td-content Booking-table'  ><span>REGISTER</span>{isregisterDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
-              <td className='td-content Booking-table user-permission-table-title' onClick={() => togglerow("REGISTER")}>Register {REGISTER ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}
+              {/* <td className='td-content Booking-table-og'  ><span>REGISTER</span>{isregisterDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
+              <td className='td-content-og Booking-table-og user-permission-table-title' onClick={() => togglerow("REGISTER")}>Register {REGISTER ? (<span style={{marginTop:"10px"}}> <FaChevronUp /> </span>) : (<span style={{marginTop:"10px"}}><FaChevronDown /></span>)}
                 <Switch
                   checked={permissionsData[9]?.read && permissionsData[10]?.read && permissionsData[11]?.read && permissionsData[12]?.read && permissionsData[13]?.read} onChange={handleSwitchforallrows(9, 13)}
                   inputProps={{ 'aria-label': 'controlled' }}
@@ -212,7 +212,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
             {REGISTER && <>
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>Rate Type<Switch
+                <td className='td-content-og'>Rate Type<Switch
                   checked={permissionsData[10]?.read && permissionsData[10]?.new && permissionsData[10]?.modify && permissionsData[10]?.delete} onChange={handleSwitchforthatrow(10)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -222,7 +222,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[10]?.delete} onChange={handleCheckboxChange(10, 'delete')} /></td>
               </tr>
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>Customer <Switch
+                <td className='td-content-og'>Customer <Switch
                   checked={permissionsData[11]?.read && permissionsData[11]?.new && permissionsData[11]?.modify && permissionsData[11]?.delete} onChange={handleSwitchforthatrow(11)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -233,7 +233,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </tr>
 
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>Supllier <Switch
+                <td className='td-content-og'>Supllier <Switch
                   checked={permissionsData[12]?.read && permissionsData[12]?.new && permissionsData[12]?.modify && permissionsData[12]?.delete} onChange={handleSwitchforthatrow(12)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -244,7 +244,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </tr>
 
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>Station Creation <Switch
+                <td className='td-content-og'>Station Creation <Switch
                   checked={permissionsData[13]?.read && permissionsData[13]?.new && permissionsData[13]?.modify && permissionsData[13]?.delete} onChange={handleSwitchforthatrow(13)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -258,8 +258,8 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
 
             <tr >
-              {/* <td className='td-content Booking-table'  ><span>REGISTER</span>{issettingDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
-              <td className='td-content user-permission-table-title' onClick={() => togglerow("SETTING")}>Setting {SETTING ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}
+              {/* <td className='td-content Booking-table-og'  ><span>REGISTER</span>{issettingDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
+              <td className='td-content-og Booking-table-og user-permission-table-title' onClick={() => togglerow("SETTING")}>Setting {SETTING ? (<span style={{marginTop:"10px"}}> <FaChevronUp /> </span>) : (<span style={{marginTop:"10px"}}><FaChevronDown /></span>)}
                 <Switch
                   checked={permissionsData[14]?.read && permissionsData[15]?.read && permissionsData[16]?.read} onChange={handleSwitchforallrows(14, 16)}
                   inputProps={{ 'aria-label': 'controlled' }}
@@ -273,7 +273,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
             {SETTING && <>
               <tr>
-                <td className='td-content'>User Creation <Switch
+                <td className='td-content-og'>User Creation <Switch
                   checked={permissionsData[15]?.read && permissionsData[15]?.new && permissionsData[15]?.modify && permissionsData[15]?.delete} onChange={handleSwitchforthatrow(15)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -284,7 +284,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </tr>
 
               <tr>
-                <td className='td-content'>Main Setting <Switch
+                <td className='td-content-og'>Main Setting <Switch
                   checked={permissionsData[16]?.read && permissionsData[16]?.new && permissionsData[16]?.modify && permissionsData[16]?.delete} onChange={handleSwitchforthatrow(16)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -301,8 +301,8 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
 
             <tr className='user-permission-even-no-rows'>
-              {/* <td className='td-content Booking-table'  ><span>Info</span>{isinfoDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' style={{ color: 'red' }} />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
-              <td className='td-content user-permission-table-title' onClick={() => togglerow("INFO")}>Info {INFO ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}
+              {/* <td className='td-content Booking-table-og'  ><span>Info</span>{isinfoDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' style={{ color: 'red' }} />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
+              <td className='td-content-og Booking-table-og user-permission-table-title' onClick={() => togglerow("INFO")}>Info {INFO ? (<span style={{marginTop:"10px"}}> <FaChevronUp /> </span>) : (<span style={{marginTop:"10px"}}><FaChevronDown /></span>)}
                 <Switch
                   checked={permissionsData[17]?.read && permissionsData[18]?.read && permissionsData[19]?.read && permissionsData[20]?.read && permissionsData[21]?.read} onChange={handleSwitchforallrows(17, 21)}
                   inputProps={{ 'aria-label': 'controlled' }}
@@ -317,7 +317,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
             {INFO && <>
 
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>Mailers  <Switch
+                <td className='td-content-og'>Mailers  <Switch
                   checked={permissionsData[18]?.read && permissionsData[18]?.new && permissionsData[18]?.modify && permissionsData[18]?.delete} onChange={handleSwitchforthatrow(18)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -328,7 +328,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               </tr>
 
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>Fuel Info <Switch
+                <td className='td-content-og'>Fuel Info <Switch
                   checked={permissionsData[19]?.read && permissionsData[19]?.new && permissionsData[19]?.modify && permissionsData[19]?.delete} onChange={handleSwitchforthatrow(19)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -338,7 +338,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[19]?.delete} onChange={handleCheckboxChange(19, 'delete')} /></td>
               </tr>
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>Employee <Switch
+                <td className='td-content-og'>Employee <Switch
                   checked={permissionsData[20]?.read && permissionsData[20]?.new && permissionsData[20]?.modify && permissionsData[20]?.delete} onChange={handleSwitchforthatrow(20)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -348,7 +348,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[20]?.delete} onChange={handleCheckboxChange(20, 'delete')} /></td>
               </tr>
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content'>Agreement <Switch
+                <td className='td-content-og'>Agreement <Switch
                   checked={permissionsData[21]?.read && permissionsData[21]?.new && permissionsData[21]?.modify && permissionsData[21]?.delete} onChange={handleSwitchforthatrow(21)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>
@@ -375,7 +375,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
               <td className='td-content'><input type="checkbox" checked={permissionsData[22]?.delete} onChange={handleCheckboxChangealldata(22, 27, 'delete')} /></td>
             </tr> */}
               <tr>
-              <td className='td-content user-permission-table-title' onClick={() => togglerow("MAP")}>Map {MAP ? (<span> <FaChevronUp /> </span>) : (<span><FaChevronDown /></span>)}
+              <td className='td-content-og Booking-table-og user-permission-table-title' onClick={() => togglerow("MAP")}>Map {MAP ? (<span style={{marginTop:"10px"}}> <FaChevronUp /> </span>) : (<span style={{marginTop:"10px"}}><FaChevronDown /></span>)}
                 <Switch
                   checked={permissionsData[23]?.read && permissionsData[24]?.read && permissionsData[25]?.read && permissionsData[26]?.read && permissionsData[27]?.read && permissionsData[28]?.read} onChange={handleSwitchforallrows(23, 28)}
                   inputProps={{ 'aria-label': 'controlled' }}
@@ -447,7 +447,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 {MAP && <>
 
 <tr>
-  <td className='td-content'>RealTime<Switch
+  <td className='td-content-og'>RealTime<Switch
     checked={permissionsData[24]?.read && permissionsData[24]?.new && permissionsData[24]?.modify && permissionsData[24]?.delete} onChange={handleSwitchforthatrow(24)}
     inputProps={{ 'aria-label': 'controlled' }}
   /></td>
@@ -457,7 +457,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
   <td className='td-content'><input type="checkbox" checked={permissionsData[24]?.delete} onChange={handleCheckboxChange(24, 'delete')} /></td>
 </tr>
 <tr>
-  <td className='td-content'>Vehicle<Switch
+  <td className='td-content-og'>Vehicle<Switch
     checked={permissionsData[25]?.read && permissionsData[25]?.new && permissionsData[25]?.modify && permissionsData[25]?.delete} onChange={handleSwitchforthatrow(25)}
     inputProps={{ 'aria-label': 'controlled' }}
   /></td>
@@ -469,7 +469,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
 
 <tr>
-  <td className='td-content'>Reminders<Switch
+  <td className='td-content-og'>Reminders<Switch
     checked={permissionsData[26]?.read && permissionsData[26]?.new && permissionsData[26]?.modify && permissionsData[26]?.delete} onChange={handleSwitchforthatrow(26)}
     inputProps={{ 'aria-label': 'controlled' }}
   /></td>
@@ -479,7 +479,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
   <td className='td-content'><input type="checkbox" checked={permissionsData[26]?.delete} onChange={handleCheckboxChange(26, 'delete')} /></td>
 </tr>
 <tr>
-  <td className='td-content'>History<Switch
+  <td className='td-content-og'>History<Switch
     checked={permissionsData[27]?.read && permissionsData[27]?.new && permissionsData[27]?.modify && permissionsData[27]?.delete} onChange={handleSwitchforthatrow(27)}
     inputProps={{ 'aria-label': 'controlled' }}
   /></td>
@@ -489,7 +489,7 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
   <td className='td-content'><input type="checkbox" checked={permissionsData[27]?.delete} onChange={handleCheckboxChange(27, 'delete')} /></td>
 </tr>
 <tr>
-  <td className='td-content'>Records<Switch
+  <td className='td-content-og'>Records<Switch
     checked={permissionsData[28]?.read && permissionsData[28]?.new && permissionsData[28]?.modify && permissionsData[28]?.delete} onChange={handleSwitchforthatrow(28)}
     inputProps={{ 'aria-label': 'controlled' }}
   /></td>

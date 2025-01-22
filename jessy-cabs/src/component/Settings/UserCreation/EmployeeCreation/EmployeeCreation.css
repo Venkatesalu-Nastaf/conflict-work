@@ -202,3 +202,21 @@ div .user-name-text , div .user-details-text{
     zoom: 77%;
   }
 }
+
+.role-input{
+ width: 300px;
+
+}
+.role-input-divi{
+  width: 100%;
+  background-color: #fff;
+  z-index: 9999;
+  position: sticky !important;
+  top: 0px;
+padding: 20px;
+  display: block;
+}
+
+/* style={{ width: '100%',
+  position: 'sticky',                      
+  top: 0}} */

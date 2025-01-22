@@ -17,6 +17,8 @@ import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup,
 // import Avatar from "../../../../assets/img/avatar.png"
 import { UserPermission } from '../../../UserPermission/UserPermission'
 import { PermissionContext } from '../../../context/permissionContext';
+import { FaPlusCircle } from "react-icons/fa";
+import { Modal } from '@mui/material';
 
 //material ui
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -50,6 +52,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useEmplyeecreation from './useEmplyeecreation';
 import Avatar from "@mui/material/Avatar";
+import { PermissionTableEmp } from './PermissionTableEmp/PermissionTableEmp';
 
 
 
@@ -167,6 +170,10 @@ setSationNameforUser(updatedData);
       user.username.toLowerCase().includes(searchUser.toLowerCase())
     );
   }, [rows, searchUser]);
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
 
   return (
     <div className="EmployeeCreation-main">
@@ -191,7 +198,6 @@ setSationNameforUser(updatedData);
                     style={{ width: '100%' }}
                   />
                 </div>
-
                 <div className="input">
                   <div className='full-width' style={{ display: 'grid' }}>
                     <span className='full-width' style={{ display: 'flex' }}>
@@ -363,6 +369,70 @@ setSationNameforUser(updatedData);
                     />
                   </FormControl>
                 </div>
+
+                <div className="input" style={{ paddingRight: '15px'}}>
+                  <div className="icone">
+                    <BadgeIcon color="action" />
+                  </div>
+                  <div style={{display:"flex", alignItems:"center", gap:"5px"}}>
+                  <TextField
+                    size="small"
+                    name="Role"
+                    // value={book.organizationname || ''}
+                    // onChange={handleChange}
+                    label="Role"
+                    id="Role"
+                    style={{ width: '100%' }}
+                  />
+                 
+                    <FaPlusCircle style={{fontSize:"30px",color:"#1976d2",cursor:"pointer"}} onClick={()=>handleOpenModal()}/>
+                  </div>
+                </div>
+                <Modal open={isModalOpen} onClose={handleCloseModal}>
+                  <Box 
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: '70%',
+                      height:"500px",
+                      overflow:"auto",
+                      bgcolor: '#fff',
+                      boxShadow: 24,
+                      p: '0px 32px 32px 32px',
+                      borderRadius: 2,
+                    }}
+                  >
+                    
+                  <div className='role-input-divi'>
+                  <TextField
+                    size="small"
+                    name="Selected Role"
+                    // value={book.organizationname || ''}
+                    // onChange={handleChange}
+                    label="Selected Role"
+                    id="Selected Role"
+                  
+                      className='role-input'
+                  />
+                  </div>
+                  <PermissionTableEmp 
+                    userid={selectedUserId}
+                  permissionsData={permissionsData}
+                  handleSwitchChange={handleSwitchChange}
+                  handleCheckboxChange={handleCheckboxChange}
+                  setReadState={setReadState}
+                  readState={readState}
+                  newState={newState}
+                  modifyState={modifyState}
+                  deleteState={deleteState}
+                  handleSwitchforthatrow={handleSwitchforthatrow}
+                  handleSwitchforallrows={handleSwitchforallrows}
+                  handleCheckboxChangealldata={handleCheckboxChangealldata} />
+                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleCloseModal}>Close</Button>
+                  </Box>
+                </Modal>
                 <div className="input radio">
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">

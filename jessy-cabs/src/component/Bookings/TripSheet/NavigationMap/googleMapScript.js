@@ -513,7 +513,6 @@ function handleMapClick(latLng) {
 //     });
 //     popup.open(map);
 // }
-console.log(allLatitudeValues, allLongitudeValues, 'lat3333');
 
 // Edit Map Function to draw the way
 function handleEditMapPoints() {

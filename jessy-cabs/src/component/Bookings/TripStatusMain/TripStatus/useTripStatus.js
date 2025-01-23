@@ -635,7 +635,6 @@ const useDispatched = () => {
   // new working code
   const handleShow = useCallback(async () => {  
     setLoading(true)
-    console.log(isStations,"Station names ")
     if (!statusvalue) {
       setError(true);
       setErrorMessage("ENTER THE STATUS");
@@ -649,13 +648,9 @@ const useDispatched = () => {
       // );
      
       //  console.log(stationsParam ,'stationsParam')
-       console.log(isStations ,'isstationsParam')
        const filteredStations = isStations
     .filter(station => station.Stationname !== 'All')
-    .map(station => station.Stationname);
-
-console.log(filteredStations,'station values'); 
-
+    .map(station => station.Stationname); 
 
       const response = await axios.get(
         `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}&isStations=${filteredStations}`
@@ -665,8 +660,6 @@ console.log(filteredStations,'station values');
       if(data && data.length > 0){
         setLoading(false); // Stop loading
     }
-    console.log(data,'booking datas');
-    
   
       if (statusvalue !== "All") {
         if (data.length > 0) {
@@ -676,7 +669,6 @@ console.log(filteredStations,'station values');
             id1: index + 1,
             starttime: removeSeconds(row.starttime),
           }));
-          console.log(rowsWithUniqueId,"rows")
           setRows(rowsWithUniqueId);
           setColumnShowall(false);
           setSuccess(true);

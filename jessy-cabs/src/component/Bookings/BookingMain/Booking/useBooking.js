@@ -173,7 +173,7 @@ const useBooking = () => {
     setBookingStatus(formData["status"])
     setBook(formData);
     setFormData(formData);
-    console.log(formData,"ll")
+    // console.log(formData,"ll")
   }, [location]);
 
   useEffect(() => {
@@ -274,7 +274,7 @@ const useBooking = () => {
   const handleChange = useCallback(
     (event) => {
       const { name, value, checked, type } = event.target;
-      console.log("wq",name,value)
+      // console.log("wq",name,value)
 
       if (type === "checkbox") {
         setBook((prevBook) => ({
@@ -458,7 +458,7 @@ const useBooking = () => {
 
     if (name === "orderedby") {
       const selectedOrder = orderByDropDown?.find(option => option?.orderedby === value?.label);
-      console.log(selectedOrder)
+      // console.log(selectedOrder)
       if (selectedOrder) {
         setBook(prevState => ({
           ...prevState,
@@ -548,7 +548,7 @@ const useBooking = () => {
 
         if (resData.success) {
           setOrderByDropDown(resData.data)
-          console.log(resData,"jjj")
+          // console.log(resData,"jjj")
           
           
           setBook(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
@@ -875,10 +875,10 @@ const useBooking = () => {
   //   setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
   // }
   const handleImagechange2 = (e) => {
-    console.log(e.target.files,"etarget")
+    // console.log(e.target.files,"etarget")
     const files = Array.from(e.target.files);
     setSelectetImg((prevImg) => [...prevImg, ...files]);
-    console.log(files,"filesdataaddnewimage")
+    // console.log(files,"filesdataaddnewimage")
     
     // if (files.length > 0) {
     //   setImageDialogOpen(true);
@@ -1129,7 +1129,7 @@ useEffect(() => {
         hybridhcldata:hybdridatabooking
 
       };
-      console.log(updatedBook,"pppp")
+      // console.log(updatedBook,"pppp")
 
       setSendmailGuestsms(true)
       await axios.post(`${apiUrl}/booking`, updatedBook);

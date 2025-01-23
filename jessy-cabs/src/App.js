@@ -232,7 +232,7 @@ function App() {
   
     // Handle redirection once loading is complete
     if (!isLoading && location.pathname !== '/') {
-      console.log("enetr")
+      // console.log("enetr")
       if (location.pathname !== window.location.pathname) {
         navigate(location.pathname, { replace: true });
       }

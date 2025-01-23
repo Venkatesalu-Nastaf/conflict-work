@@ -359,9 +359,9 @@ const handlefullTotalAmount = () => {
         const customeradvance = parseFloat(book.customeradvance || 0);
         console.log(customeradvance,"advance",discound_PercentageCalc())
         const discountAmount = parseFloat(discound_PercentageCalc() || book.DiscountAmount || 0);
-        console.log(discountAmount,"disca",total_GrossAmount())
+        // console.log(discountAmount,"disca",total_GrossAmount())
         const GrossAmount = parseFloat(total_GrossAmount() || book.GrossAmount || 0);
-        console.log(GrossAmount,"grosssbalance")
+        // console.log(GrossAmount,"grosssbalance")
 
         if (customeradvance || discountAmount) {
             const result = GrossAmount - (discountAmount + customeradvance)

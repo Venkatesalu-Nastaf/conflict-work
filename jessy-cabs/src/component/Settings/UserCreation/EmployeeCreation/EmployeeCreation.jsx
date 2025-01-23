@@ -397,10 +397,10 @@ setSationNameforUser(updatedData);
                       transform: 'translate(-50%, -50%)',
                       width: '70%',
                       height:"500px",
-                      overflow:"auto",
+                      overflowY:"auto",
                       bgcolor: '#fff',
                       boxShadow: 24,
-                      p: '0px 32px 32px 32px',
+                      p: '0px 12px 12px 12px',
                       borderRadius: 2,
                     }}
                   >
@@ -430,7 +430,7 @@ setSationNameforUser(updatedData);
                   handleSwitchforthatrow={handleSwitchforthatrow}
                   handleSwitchforallrows={handleSwitchforallrows}
                   handleCheckboxChangealldata={handleCheckboxChangealldata} />
-                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleCloseModal}>Close</Button>
+                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleCloseModal}>Done</Button>
                   </Box>
                 </Modal>
                 <div className="input radio">

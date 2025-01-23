@@ -43,7 +43,7 @@ export const PermissionTableEmp = ( {userid, permissionsData, handleSwitchChange
     <>
 
         <div className="table-containerr">
-                <table>
+                <table className='full-table-modal'>
                   <thead>
                     <tr className='table-header-per'>
                       <th className='th-content'>PERMISSION</th>

@@ -284,6 +284,7 @@ const useTripsheet = () => {
     // })
     const [checkstatusapps, setCheckStatusApp] = useState([])
     const usernamedata = localStorage.getItem("username");
+    const [nochangedata,setNoChangeData]=useState({})
     const [checksignandMapverify, setCheckSignandMapVerify] = useState(false)
     const [checksignmapmessage, setCheckSignMapMessage] = useState('')
     const maplogcolumns = [
@@ -1741,6 +1742,10 @@ const useTripsheet = () => {
                 ...prevBook,
                 [name]: selectedOption,
             }))
+            setNoChangeData((prevData) => ({
+                ...prevData,
+                [name]: selectedOption,
+            }))
         }
     }
     const handleDatevendorChange = (date, name) => {
@@ -1749,6 +1754,10 @@ const useTripsheet = () => {
         if (!lockdata) {
             setVendorinfodata((prevBook) => ({
                 ...prevBook,
+                [name]: parsedDate,
+            }))
+            setNoChangeData((prevData) => ({
+                ...prevData,
                 [name]: parsedDate,
             }))
         }
@@ -1781,7 +1790,10 @@ const useTripsheet = () => {
             ...prevValues,
             [name]: selectedOption,
         }));
-
+         setNoChangeData((prevValues) => ({
+            ...prevValues,
+            [name]: selectedOption,
+        }));
         // Uncomment if you want to control VendorInfo visibility based on `lockdata`
         // if (!lockdata) {
         //     setVendorinfodata((prevValues) => ({
@@ -1829,6 +1841,10 @@ const useTripsheet = () => {
             ...prevValues,
             [name]: selectedOption,
         }));
+        setNoChangeData((prevValues) => ({
+            ...prevValues,
+            [name]: selectedOption,
+        }));
         travelsdatafetch(selectedOption)
 
     };
@@ -1854,6 +1870,11 @@ const useTripsheet = () => {
             ...prevValues,
             [name]: parsedDate,
         }));
+        setNoChangeData((prevValues) => ({
+            ...prevValues,
+            [name]: parsedDate,
+        }));
+        
         if (lockdata) {
             if (name === "shedOutDate") {
                 setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: parsedDate }))
@@ -3684,6 +3705,10 @@ const useTripsheet = () => {
             ...prevData,
             [name]: value,
         }));
+        setNoChangeData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
 
         if (event.target.type === 'checkbox') {
             setBook((prevBook) => ({
@@ -3706,6 +3731,10 @@ const useTripsheet = () => {
                 ...prevValues,
                 [name]: checked,
             }));
+            setNoChangeData((prevData) => ({
+                ...prevData,
+                [name]: checked,
+            }));
 
         } else {
             if (name === 'starttime') {
@@ -3725,6 +3754,10 @@ const useTripsheet = () => {
                 setTripSheetData((prevData) => ({
                     ...prevData,
                     [name]: formattedTime,
+                }));
+                setNoChangeData((prevData) => ({
+                    ...prevData,
+                    [name]:formattedTime,
                 }));
             } else {
                 setBook((prevBook) => ({
@@ -3758,6 +3791,10 @@ const useTripsheet = () => {
                 setAdditionalTime((prevValues) => ({
                     ...prevValues,
                     [name]: value,
+                }));
+                setNoChangeData((prevData) => ({
+                    ...prevData,
+                    [name]:value,
                 }));
 
             }
@@ -4854,6 +4891,10 @@ const useTripsheet = () => {
                 ...prevBook,
                 [name]: value,
             }))
+            setNoChangeData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
         }
         else {
             setWarning(true);
@@ -4872,6 +4913,10 @@ const useTripsheet = () => {
                     ...data,
                     [name]: value,
                 }))
+                setNoChangeData((prevData) => ({
+                    ...prevData,
+                    [name]: value,
+                }));
             }
             else if (name === "vendorRemarks") {
                 vendorinfo.remark = ""
@@ -4879,6 +4924,11 @@ const useTripsheet = () => {
                     ...data,
                     [name]: value,
                 }))
+
+                setNoChangeData((prevData) => ({
+                    ...prevData,
+                    [name]: value,
+                }));
             }
             else {
                 vendorinfo.shedin = ""
@@ -4886,6 +4936,10 @@ const useTripsheet = () => {
                     ...data,
                     [name]: value,
                 }))
+                setNoChangeData((prevData) => ({
+                    ...prevData,
+                    [name]: value,
+                }));
             }
         }
 
@@ -5167,9 +5221,18 @@ const useTripsheet = () => {
 
     const handleEscortChange = (event) => {
         setEscort(event.target.value);
+        setNoChangeData((prevData) => ({
+            ...prevData,
+            [escort]:event.target.value,
+        }));
+        
     };
     const handleTransferChange = (event) => {
         setTransferreport(event.target.value);
+        setNoChangeData((prevData) => ({
+            ...prevData,
+            [transferreport]:event.target.value,
+        }));
     };
 
     /// fro cal dialog box
@@ -6820,7 +6883,7 @@ const useTripsheet = () => {
         isAddload, setisAddload, isEditload, setisEditload,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
         minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage,
-        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger
+        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata
 
     };
 };

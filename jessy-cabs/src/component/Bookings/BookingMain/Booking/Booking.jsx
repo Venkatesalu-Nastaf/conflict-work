@@ -154,7 +154,14 @@ const Booking = ({ stationName, customerData }) => {
     handleSelectAll, handlecheckbox, selectAll, deletefile, handleButtonClickwithouttripid, dialogOpentrail, handleCloseDialogtrail, handlecheckbox1, selectetImg, deletefiledata,
     handleimagedeletewithouttripid,
     handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning,
-    handleBookEscortChange, handleAirportTransferChange, transferreport, setTransferreport, escort, setEscort, isAddbtnload, setisAddbtnload, isEditbtnload, setisEditbtnload
+    // handleBookEscortChange,handleAirportTransferChange,
+    //  transferreport, 
+     setTransferreport, 
+    //  escort,
+      setEscort, isAddbtnload, 
+      // setisAddbtnload,
+       isEditbtnload, 
+      //  setisEditbtnload
   } = useBooking();
 
   const { getHtmlContentdata } = CopyEmailHtmlBooking();
@@ -178,6 +185,7 @@ const Booking = ({ stationName, customerData }) => {
   const handleStatusChange = (event) => {
     setBookingStatus(event.target.value);
     setSelectedCustomerData({ ...selectedCustomerData, status: event.target.value })
+    setNoChangeData({ ...nochangedata, status: event.target.value })
   };
 
   const shedOutDateObj = new Date(formData?.shedOutDate || selectedCustomerDatas?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate || dayjs())
@@ -449,7 +457,12 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "orderedby")
                 }
-                onInputChange={(event, value) => handleAutocompleteChange(event, value, "orderedby")}
+                onInputChange={(event, value) =>{
+                  if(event !== null){
+                  setNoChangeData({ ...nochangedata,orderedby: event.target.value })
+                  }
+                   handleAutocompleteChange(event, value, "orderedby")
+                }}
 
                 value={
                   formData.orderedby ||
@@ -1322,7 +1335,13 @@ const Booking = ({ stationName, customerData }) => {
                 freeSolo
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
-                onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
+                // onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
+                onInputChange={(event, value) =>{
+                  if(event !== null){
+                    setNoChangeData({ ...nochangedata,vehRegNo: value });
+                  }
+                   handleVehicleChange(event, value, "vehRegNo")
+                  }} 
                 // onKeyDown={handleKeyEnterdriver}
                 value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}  // Reflect vehRegNo correctly
                 options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}  // Map vehRegNo from data
@@ -1402,7 +1421,13 @@ const Booking = ({ stationName, customerData }) => {
                 freeSolo
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleDriverChange(event, value, "driverName")}
-                onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
+                // onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
+                          onInputChange={(event, value) =>{ 
+                            if(event !== null){
+                              setNoChangeData({ ...nochangedata,driverName: value });
+                            }
+                            handleDriverChange(event, value, "driverName")
+                          }}
                 // onKeyDown={handleKeyEnterdriver}
                 value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
                 options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data

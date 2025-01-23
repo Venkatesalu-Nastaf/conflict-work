@@ -377,10 +377,10 @@ const useBooking = () => {
     ]
   );
 
-  const handleBookEscortChange = (event) => {
-    setEscort(event.target.value);
-    // console.log(escort,"escoret data")
-};
+//   const handleBookEscortChange = (event) => {
+//     setEscort(event.target.value);
+//     // console.log(escort,"escoret data")
+// };
   // const handleBookEscortChange = (event) => {
   //   const selectedValue = event.target.value; // Get selected value
   //   setEscort(selectedValue); // Update state
@@ -388,17 +388,25 @@ const useBooking = () => {
   //   console.log(escort,'escort update')
   // };
  
-const handleAirportTransferChange = (event) => {
-  // const selectedValue = event.target.value;
-    setTransferreport(event.target.value);
-    // console.log(transferreport,"Airport data")
-};
+// const handleAirportTransferChange = (event) => {
+//   // const selectedValue = event.target.value;
+//     setTransferreport(event.target.value);
+//     // console.log(transferreport,"Airport data")
+// };
 
 
   //Entering Manually...
+  // console.log(nochangedata,"data")
   const handleVehicleChange = (event, value, name) => {
+    console.log(name,value)
     if (name === "vehRegNo") {
       const manualInput = typeof value === "string" ? value : value?.label;
+
+        // setNoChangeData((prevState) => ({
+        //   ...prevState,
+        //   vehRegNo: value,
+      
+        // }));
 
       if (manualInput) {
         const selectedVehicle = vechiledata?.find(option => option?.vehRegNo === manualInput);
@@ -557,7 +565,7 @@ const handleAirportTransferChange = (event) => {
   }, [custmorName, apiUrl])
 
   const handleDriverChange = (event, value, name) => {
-    console.log(value,name,"driver")
+   
     if (name === "driverName") {
       const manualInput = typeof value === "string" ? value : value?.label;
       if (manualInput) {
@@ -583,6 +591,11 @@ const handleAirportTransferChange = (event) => {
       }
     }
   };
+
+
+ 
+
+  
 
   const handleDateChange = (date, name) => {
     // const formattedDate = dayjs(date).format("DD-MM-YYYY");
@@ -1180,7 +1193,7 @@ useEffect(() => {
 if (Object.keys(nochangedata).length === 0) {
   // console.error("Error: Data not changed");
   setError(true);
-  setErrorMessage("Data not modifeid");
+  setErrorMessage("Nothing To Change");
   return
 }
     
@@ -1696,7 +1709,9 @@ if (Object.keys(nochangedata).length === 0) {
     vehileName, infoMessage, handleImagechange2, selectetImg,handleimagedeletewithouttripid,deletefiledata,
     //  removeSelectedImage,
      imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning,
-    handleBookEscortChange,handleAirportTransferChange,transferreport,setTransferreport,escort,setEscort,setNoChangeData,nochangedata,
+    // handleBookEscortChange,
+    // handleAirportTransferChange,
+    transferreport,setTransferreport,escort,setEscort,setNoChangeData,nochangedata,
     isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload,handleButtonClickwithouttripid,dialogOpentrail,handleCloseDialogtrail,handlecheckbox1
   };
 };

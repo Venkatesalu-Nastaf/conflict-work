@@ -191,7 +191,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     sendEmail,
     setSendEmail,
     handleDriverChange,
-    handleKeyEnterdriver,
+    // handleKeyEnterdriver,
     drivername,
     formValues,
     selectedCustomerDatas,
@@ -270,7 +270,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,
-    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger
+    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -1881,6 +1881,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                             setBook({ ...book, reporttime: event.target.value });
                             setreporttime(event.target.value);
+                            setNoChangeData({ ...nochangedata, reporttime: event.target.value });
                             // if (!lockdata && dayhcl === 0) {
                             //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                             // }
@@ -1930,6 +1931,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           setStartTime(rTime);
                           setFormData({ ...formData, starttime: rTime });
                           setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
+                          setNoChangeData({ ...nochangedata, starttime: rTime });
                           // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
                           //   setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
                           // }
@@ -1972,6 +1974,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: rTime });
                           setBook({ ...book, closetime: rTime });
                           setCloseTime(rTime);
+                          setNoChangeData({ ...nochangedata, closetime: rTime });
                           // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
                           //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                           // }
@@ -2022,6 +2025,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
                           setBook({ ...book, shedintime: rTime });
                           setshedintime(rTime);
+                          setNoChangeData({ ...nochangedata,shedintime: rTime });
 
                           // Check if the day difference is 1, and validate the time
                           if (calculateTotalDay() === 1) {
@@ -2424,6 +2428,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                           ...vendorinfo,
                           vendor_vpermettovendor: value, vpermettovendor: value
                         });
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vpermettovendor: value, 
+                      }));
                       }}
                       disabled={temporaryStatus && superAdminAccess === "0"}
                       label="Permit"
@@ -2472,6 +2480,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                           ...prevState,
                           vendorparking: value,
                         }));
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vendorparking: value,
+                      }));
                       }}
                       disabled={temporaryStatus && superAdminAccess === "0"}
                       label="Parking"
@@ -2520,6 +2532,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                           ...prevState,
                           vendortoll: value,
                         }));
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vendortoll: value,
+                      }));
+                        
                       }}
                       disabled={temporaryStatus && superAdminAccess === "0"}
                       label="Toll"
@@ -3099,6 +3116,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         onChange={(event) => {
                                           if (!lockdata) {
                                             setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                            setNoChangeData((prevData) => ({
+                                              ...prevData,
+                                              vendorreporttime: event.target.value
+                                          }));
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -3124,6 +3145,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       onChange={(event) => {
                                         if (!lockdata) {
                                           setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                                          setNoChangeData((prevData) => ({
+                                            ...prevData,
+                                            vendorshedintime: event.target.value
+                                        }));
                                         }
                                         else {
                                           setWarning(true);
@@ -3472,6 +3497,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         onChange={(e) => {
                                           if (!lockdatacustomerbill) {
                                             setExtraKM(e.target.value)
+                                            setNoChangeData({...nochangedata,extraKM:e.target.value})
+
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -3496,6 +3523,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                           if (!lockdatacustomerbill) {
                                             setextrakm_amount(e.target.value)
+                                            setNoChangeData({...nochangedata,extrakm_amount:e.target.value})
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -3538,6 +3566,8 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                           if (!lockdatacustomerbill) {
                                             setExtraHR(e.target.value)
+                                            setNoChangeData({...nochangedata,extraHR:e.target.value})
+                                            
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -3565,6 +3595,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                           if (!lockdatacustomerbill) {
                                             setextrahr_amount(e.target.value)
+                                            setNoChangeData({...nochangedata,extrahr_amount:e.target.value})
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -3604,6 +3635,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         onChange={(e) => {
                                           if (!lockdatacustomerbill) {
                                             setNightBeta(e.target.value)
+                                            setNoChangeData({...nochangedata,nightBta:e.target.value})
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -3631,6 +3663,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                           if (!lockdatacustomerbill) {
                                             setNightCount(e.target.value)
+                                            setNoChangeData({...nochangedata,nightCount:e.target.value})
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -3670,6 +3703,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         onChange={(e) => {
                                           if (!lockdatacustomerbill) {
                                             setdriverBeta(e.target.value)
+                                            setNoChangeData({...nochangedata,driverBeta:e.target.value})
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -3696,6 +3730,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         onChange={(e) => {
                                           if (!lockdatacustomerbill) {
                                             setdriverbeta_Count(e.target.value)
+                                            setNoChangeData({...nochangedata,driverbeta_Count:e.target.value})
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -3928,6 +3963,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                       onChange={(e) => {
                         // handleChange(e)
                         setVendorinfodata({ ...vendorinfo, fuelamount: e.target.value })
+                        setNoChangeData({...nochangedata,fuelamount:e.target.value})
+                        
                       }}
                       disabled={temporaryStatus && superAdminAccess === "0"}
                       label="Fuel Amount"
@@ -4100,11 +4137,19 @@ const TripSheet = ({ stationName, logoImage }) => {
                         size="small"
                         id="vehicleRegno"
                         freeSolo
-                        sx={{ width: "100%" }}
+                        sx={{ width: "100%" }} 
                         disabled={hideField && superAdminAccess === "0"}
                         onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
                         onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
-                        onKeyDown={handleKeyEnterdriver}
+                        // onInputChange={(event, value) =>{
+                        //   if(event !== null){
+                        //     setNoChangeData({ ...nochangedata,vehRegNo: value });
+                        //   }
+                        //    handleVehicleChange(event, value, "vehRegNo")}
+                          
+                        //   } 
+
+                        // onKeyDown={handleKeyEnterdriver}
                         value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}  // Reflect vehRegNo correctly
                         options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}  // Map vehRegNo from data
                         getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''}  // Adjust to show input value or option label

@@ -2112,7 +2112,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               : ""
                           }
                           disabled={temporaryStatus && superAdminAccess === "0"}
-                          onChange={handleChange}
+                          // onChange={handleChange}
                           id="totaltime"
                           size='small'
                           autoComplete="password"
@@ -2374,7 +2374,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       name="totalkm1"
                       value={calculateTotalKilometers()}
                       disabled={temporaryStatus && superAdminAccess === "0"}
-                      onChange={handleChange}
+                      // onChange={handleChange}
                       label="Total KM"
                       id="totalkm1"
                       type="number"
@@ -2684,12 +2684,18 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         <div>
                                           <TextField type="date"
                                             value={selectedMapRow?.date || ''}
-                                            onChange={(e) => setSelectedMapRow({ ...selectedMapRow, date: e.target.value })} />
+                                            onChange={(e) =>{
+                                              setSelectedMapRow({ ...selectedMapRow, date: e.target.value })
+                                              setNoChangeData({...nochangedata,date: e.target.value})
+                                              }} />
                                         </div>
                                         <div>
                                           <TextField type="time"
                                             value={selectedMapRow?.time || ''}
-                                            onChange={(e) => setSelectedMapRow({ ...selectedMapRow, time: e.target.value })} />
+                                            onChange={(e) =>{
+                                              setSelectedMapRow({ ...selectedMapRow, time: e.target.value })
+                                              setNoChangeData({...nochangedata,time: e.target.value})
+                                            }} />
                                         </div>
                                         <div>
                                           <Button disabled={!Tripsheet_modify} onClick={handleEditMapDetails}>Submit</Button>
@@ -4140,14 +4146,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                         sx={{ width: "100%" }} 
                         disabled={hideField && superAdminAccess === "0"}
                         onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
-                        onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
-                        // onInputChange={(event, value) =>{
-                        //   if(event !== null){
-                        //     setNoChangeData({ ...nochangedata,vehRegNo: value });
-                        //   }
-                        //    handleVehicleChange(event, value, "vehRegNo")}
+                        // onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
+                        onInputChange={(event, value) =>{
+                          if(event !== null){
+                            setNoChangeData({ ...nochangedata,vehRegNo: value });
+                          }
+                           handleVehicleChange(event, value, "vehRegNo")}
                           
-                        //   } 
+                          } 
 
                         // onKeyDown={handleKeyEnterdriver}
                         value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}  // Reflect vehRegNo correctly
@@ -4319,7 +4325,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                         sx={{ width: "100%" }}
                         disabled={hideField && superAdminAccess === "0"}
                         onChange={(event, value) => handleDriverChange(event, value, "driverName")}
-                        onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
+                        // onInputChange={(event, value) => handleDriverChange(event, value, "driverName")} 
+                        onInputChange={(event, value) =>{
+                          if(event !== null){
+                            setNoChangeData({ ...nochangedata,driverName: value });
+                          }
+                          handleDriverChange(event, value, "driverName")} 
+                          
+                          }  // Handle manual input
                         // onKeyDown={handleKeyEnterdriver}
                         value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
                         options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
@@ -4529,6 +4542,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 onChange={(event) => {
                                   if (!lockdata) {
                                     setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                    setNoChangeData({ ...nochangedata, vendorreporttime: event.target.value });
                                   } else {
                                     setWarning(true);
                                     setWarningMessage("IS not locked,locked Enter Again");
@@ -4554,6 +4568,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               onChange={(event) => {
                                 if (!lockdata) {
                                   setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                                  setNoChangeData({ ...nochangedata, vendorshedintime: event.target.value });
                                 }
                                 else {
                                   setWarning(true);

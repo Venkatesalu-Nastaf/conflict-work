@@ -895,6 +895,7 @@ const useTripsheet = () => {
             maxconflictdata: 0,
             maxTripid: "",
         })
+        setNoChangeData({})
         // setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
         // setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
         localStorage.removeItem('selectedTripid');
@@ -1273,6 +1274,12 @@ const useTripsheet = () => {
             setErrorMessage(checksignmapmessage);
             return;
         }
+        if (Object.keys(nochangedata).length === 0) {
+            // console.error("Error: Data not changed");
+            setError(true);
+            setErrorMessage("Nothing To Change");
+            return
+          }
 
         try {
             setisEditload(true)
@@ -1946,6 +1953,7 @@ const useTripsheet = () => {
             const data = Date.now().toString();
             const formData = new FormData();
             formData.append('image', file);
+            setNoChangeData({...nochangedata,uploaddata:file})
             try {
                 await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
                 setSuccess(true);
@@ -3705,6 +3713,7 @@ const useTripsheet = () => {
             ...prevData,
             [name]: value,
         }));
+        if(name !== "tripid")
         setNoChangeData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -3792,14 +3801,20 @@ const useTripsheet = () => {
                     ...prevValues,
                     [name]: value,
                 }));
-                setNoChangeData((prevData) => ({
-                    ...prevData,
-                    [name]:value,
-                }));
+                // setNoChangeData((prevData) => ({
+                //     ...prevData,
+                //     [name]:value,
+                // }));
+                if(name !== "tripid")
+                    setNoChangeData((prevData) => ({
+                        ...prevData,
+                        [name]: value,
+                    }));
 
             }
         }
     };
+    // console.log(nochangedata,"data")
 
 
     // prob004
@@ -4124,6 +4139,7 @@ const useTripsheet = () => {
         if (file !== null) {
             const datadate = Date.now().toString();
             const formData = new FormData();
+            setNoChangeData({...nochangedata,signatureimagedata:file})
             formData.append("signature_image", file);
             try {
                 await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}/${datadate}`, formData);
@@ -4903,6 +4919,7 @@ const useTripsheet = () => {
 
     }
 
+    // console.log(nochangedata,"datachnage")
     const handlevendorinfofata = (event) => {
         const { name, value } = event.target;
         console.log(name, "value", value)
@@ -5223,7 +5240,7 @@ const useTripsheet = () => {
         setEscort(event.target.value);
         setNoChangeData((prevData) => ({
             ...prevData,
-            [escort]:event.target.value,
+            escort:event.target.value,
         }));
         
     };
@@ -5231,7 +5248,7 @@ const useTripsheet = () => {
         setTransferreport(event.target.value);
         setNoChangeData((prevData) => ({
             ...prevData,
-            [transferreport]:event.target.value,
+            transferreport:event.target.value,
         }));
     };
 

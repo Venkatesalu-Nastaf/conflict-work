@@ -394,6 +394,7 @@ const indexRanges = [
         active: false,
         superAdmin: false,
     });
+    const [rolefield,setRoleField]=useState('')
 
     // TABLE END
 
@@ -960,6 +961,7 @@ const indexRanges = [
         handleMouseDownPasswords,
         isEditMode,
         handleEdit, handleChangeuniquecreation, cerendentialdata, showPermission, setShowPermission, handleCheckboxChangealldata,
+        rolefield,setRoleField,
 
         //ffor permission
         permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows

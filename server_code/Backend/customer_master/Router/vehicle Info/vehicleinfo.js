@@ -3,7 +3,9 @@ const router = express.Router();
 const db = require('../../../db');
 const moment = require('moment'); // or import dayjs from 'dayjs';
 const multer = require('multer');
+const nodemailer = require('nodemailer');
 const path = require('path');
+const cron = require('node-cron');
 
 
 router.use(express.static('customer_master'));
@@ -106,6 +108,240 @@ router.put('/vehicleinfo/:vehicleId', (req, res) => {
     return res.status(200).json({ message: 'Data updated successfully' });
   });
 });
+
+
+// FC DATE SCHEDULER-----------------------------------
+// const queryAsync = (query, params = []) => {
+//   return new Promise((resolve, reject) => {
+//     db.query(query, params, (err, results) => {
+//       if (err) return reject(err);
+//       resolve(results);
+//     });
+//   });
+// }; 
+
+// const getEmailCredentials = async () => {
+//   const results = await queryAsync("SELECT EmailApp_Password, Sender_mail FROM usercreation LIMIT 1");
+//   if (results.length > 0) {
+//     // console.log(results)
+//     return results[0];
+//   } else {
+//     throw new Error('No credentials found in the table.');
+//   }
+// };
+
+// const createTransporter = async () => {
+//   try {
+//     const credentials = await getEmailCredentials(); 
+//     const transporter = nodemailer.createTransport({
+//       service: 'gmail',
+//       auth: {
+//         user: credentials.Sender_mail,
+//         pass: credentials.EmailApp_Password,
+//       },
+//     });
+//     return { transporter, from: credentials.Sender_mail }; 
+//     // console.log('Transporter created successfully');
+//     // return transporter;
+//   } catch (error) {
+//     console.error('Failed to create transporter:', error);
+//     throw error;
+//   }
+// };
+
+// // Function to parse and validate dates
+// const parseDate = (dateStr) => {
+//   console.log(`Attempting to parse: "${dateStr}"`);
+  
+//   const validFormats = [
+//     "DD-MM-YYYY",
+//     "MM/DD/YYYY",
+//     "YYYY-MM-DD",
+//     "ddd, D MMM YYYY HH:mm:ss [GMT]",
+//     "YYYY-MM-DDTHH:mm:ssZ",
+//     "DD/MM/YYYY"
+//   ];
+
+//   for (const format of validFormats) {
+//     const parsedDate = moment(dateStr, format, true); 
+//     if (parsedDate.isValid()) {
+//       console.log(`Parsed successfully with format "${format}": ${parsedDate.format("DD-MM-YYYY")}`);
+//       return parsedDate;
+//     }
+//   }
+
+//   console.error(`Failed to parse: "${dateStr}"`);
+//   return null;
+// };
+// --------------------------------------------------------------------------
+// const sendSubscriptionReminders = async () => {
+//   const today = moment();
+
+//   db.query("SELECT fcdate, email FROM vehicleinfo WHERE fcdate IS NOT NULL AND fcdate != ''", async (err, results) => {
+//     if (err) {
+//       console.error("Error fetching subscriptions:", err);
+//       return; 
+//     }
+
+//     for (const user of results) {
+//       if (!user.fcdate) {
+//         console.error(`Missing date for ${user.email}`);
+//         continue;
+//       }
+
+//       const subscriptionEnd = parseDate(user.fcdate.trim());
+
+//       if (!subscriptionEnd) {
+//         console.error(`Invalid subscription end date for ${user.email} with date: ${user.fcdate}`);
+//         continue;
+//       }
+
+//       // Calculate the reminder period for the last 45 days
+//       const reminderStart = subscriptionEnd.clone().subtract(45, "days");
+//       const reminderEnd = subscriptionEnd;
+
+//       console.log(`Reminder period for ${user.email}: ${reminderStart.format("DD-MM-YYYY")} to ${reminderEnd.format("DD-MM-YYYY")}`);
+
+//       if (today.isSameOrAfter(reminderStart) && today.isSameOrBefore(reminderEnd)) {
+//         try {
+//           // Create the transporter
+//           const { transporter, from } = await createTransporter();
+
+//           // Send reminder email to customer
+//           await transporter.sendMail({
+//             from,
+//             to: user.email,
+//             subject: 'Subscription Reminder',
+//             html: `
+//               <p>Dear ${user.customer},</p>
+//               <p>This is a friendly reminder that your subscription is approaching its expiration date.</p>
+//               <p>Expiry Date: ${subscriptionEnd.format("DD-MM-YYYY")}</p>
+//               <p>Thank you for your continued support!</p>
+//             `,
+//           });
+
+//           console.log(`Reminder sent to ${user.email}`);
+//         } catch (error) {
+//           console.error(`Failed to send email to ${user.email}:`, error);
+//         }
+//       } else {
+//         console.log(`No reminder needed for ${user.email} today.`);
+//       }
+//     }
+//   });
+// };
+
+// // Schedule the job to run daily
+// cron.schedule('17 10 * * *', () => {
+//   console.log('Running daily subscription reminder job...');
+//   sendSubscriptionReminders();
+// });
+
+
+// --------------------------------------------------------------------
+
+// const sendSubscriptionReminders = async () => {
+//   const today = moment();
+
+//   // Fetch both fcdate and insduedate
+//   db.query(
+//     "SELECT fcdate, insduedate, email FROM vehicleinfo WHERE (fcdate IS NOT NULL AND fcdate != '') OR (insduedate IS NOT NULL AND insduedate != '')",
+//     async (err, results) => {
+//       if (err) {
+//         console.error("Error fetching subscriptions:", err);
+//         return;
+//       }
+
+//       for (const user of results) {
+//         if (!user.fcdate && !user.insduedate) {
+//           console.error(`Missing dates for ${user.email}`);
+//           continue;
+//         }
+
+//         // Process `fcdate`
+//         if (user.fcdate) {
+//           const subscriptionEnd = parseDate(user.fcdate.trim());
+
+//           if (!subscriptionEnd) {
+//             console.error(`Invalid fcdate for ${user.email}: ${user.fcdate}`);
+//           } else {
+//             await sendReminderEmail(
+//               today,
+//               subscriptionEnd,
+//               user,
+//               "Subscription Reminder",
+//               `
+//                 <p>Dear ${user.customer},</p>
+//                 <p>This is a friendly reminder that your subscription is approaching its expiration date.</p>
+//                 <p>FC Expiry Date: ${subscriptionEnd.format("DD-MM-YYYY")}</p>
+//                 <p>Thank you for your continued support!</p>
+//               `
+//             );
+//           }
+//         }
+
+//         // Process `insduedate`
+//         if (user.insduedate) {
+//           const insuranceDueDate = parseDate(user.insduedate.trim());
+
+//           if (!insuranceDueDate) {
+//             console.error(`Invalid insduedate for ${user.email}: ${user.insduedate}`);
+//           } else {
+//             await sendReminderEmail(
+//               today,
+//               insuranceDueDate,
+//               user,
+//               "Insurance Due Reminder",
+//               `
+//                 <p>Dear ${user.customer},</p>
+//                 <p>This is a friendly reminder that your vehicle insurance is approaching its due date.</p>
+//                 <p>Insurance Due Date: ${insuranceDueDate.format("DD-MM-YYYY")}</p>
+//                 <p>Kindly renew your insurance at the earliest.</p>
+//               `
+//             );
+//           }
+//         }
+//       }
+//     }
+//   );
+// };
+
+// // Helper function to send reminder email
+// const sendReminderEmail = async (today, endDate, user, subject, emailTemplate) => {
+//   const reminderStart = endDate.clone().subtract(45, "days");
+//   const reminderEnd = endDate;
+
+//   console.log(`Reminder period for ${user.email}: ${reminderStart.format("DD-MM-YYYY")} to ${reminderEnd.format("DD-MM-YYYY")}`);
+
+//   if (today.isSameOrAfter(reminderStart) && today.isSameOrBefore(reminderEnd)) {
+//     try {
+//       // Create the transporter
+//       const { transporter, from } = await createTransporter();
+
+//       // Send email
+//       await transporter.sendMail({
+//         from,
+//         to: user.email,
+//         subject,
+//         html: emailTemplate,
+//       });
+
+//       console.log(`Reminder sent to ${user.email} with subject "${subject}"`);
+//     } catch (error) {
+//       console.error(`Failed to send email to ${user.email}:`, error);
+//     }
+//   } else {
+//     console.log(`No reminder needed for ${user.email} today for subject "${subject}".`);
+//   }
+// };
+
+// // Schedule the job to run daily
+// cron.schedule("30 10 * * *", () => {
+//   console.log("Running daily subscription reminder job...");
+//   sendSubscriptionReminders();
+// });
+
+//--------------X---------------------X-------------------------X---------
 
 
 router.get('/searchvehicleinfo', (req, res) => {

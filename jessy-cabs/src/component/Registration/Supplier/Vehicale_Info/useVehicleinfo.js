@@ -24,6 +24,7 @@ const useVehicleinfo = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage, setWarningMessage] = useState({});
+    const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
     const [drivername, setDrivername] = useState([]);
@@ -929,11 +930,12 @@ const useVehicleinfo = () => {
 
             const data = { ...book }
             await axios.post(`${apiUrl}/vehicleinfo`, data);
-            const response = await axios.get(`${apiUrl}/lastvechileinfogetid`);
+            const response = await axios.get(`${apiUrl}/lastvechileinfogetid`); 
             const lastvehicleidno = response.data.vehicleId;
             addFcCopy_copy(lastvehicleidno);
             addRcBook_copy(lastvehicleidno);
             addStatePermit_copy(lastvehicleidno);
+            handlecheckmaildriver(book.fcdate);
             addNationalPermit_copy(lastvehicleidno);
             addInsurence_copy(lastvehicleidno);
             handleCancel();
@@ -1055,6 +1057,51 @@ const useVehicleinfo = () => {
                 setErrorMessage("An unexpected error occurred: " + error.message);
                 setisVButtonLoading(false)
             }
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                      console.log(userDataArray,'userdata');
+                    if (userDataArray.length > 0) {
+                        setOrganisationSendEmail(userDataArray[0])
+                        // setDatatrigger(!datatrigger)
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }   
+                }
+            }
+            catch {
+            }
+        };
+        fetchData();
+    }, [apiUrl]);
+
+    const handlecheckmaildriver = async () => {
+        try {
+            // Add templateMessageData to the dataToSend object
+            const dataToSend = {
+                email: book.email,
+                fcdate:book.fcdate,
+                // todate:book.todate,
+                Sendmailauth: organistaionsendmail.Sendmailauth,
+                Mailauthpass: organistaionsendmail.Mailauthpass,
+                // templateMessageData
+            };
+    
+            console.log("Sending data:", dataToSend); // For debugging purposes
+            // await axios.post(`${apiUrl}/send-emailagreementdata`, dataToSend);
+            setSuccess(true);
+            setSuccessMessage("Mail Sent Successfully");
+        } catch (error) {
+            console.error("Error sending email:", error); // Added console log for debugging
+            setError(true);
+            setErrorMessage("An error occurred while sending mail");
         }
     };
 

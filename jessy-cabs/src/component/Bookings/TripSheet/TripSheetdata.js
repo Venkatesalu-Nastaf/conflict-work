@@ -1038,6 +1038,7 @@ export const states = [
       "Chitradurga",
       "Dakshina Kannada",
       "Davangere",
+      "Hubli",
       "Dharwad",
       "Gadag",
       "Hassan",

@@ -121,7 +121,7 @@ export const allStations = [
   "Sonipat", "Yamunanagar", "Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kullu", "Kinnaur", "Mandi", "Shimla", "Sirmaur",
   "Solan", "Una", "Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "Giridih", "Godda", "Gumla", "Hazaribagh",
   "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj",
-  "Seraikela Kharsawan", "Simdega", "West Singhbhum", "Bagalkot", "Ballari", "Belagavi", "Bangalore", "Bidar", "Chamarajanagar", "Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada",
+  "Seraikela Kharsawan", "Simdega", "West Singhbhum", "Bagalkot", "Ballari", "Belagavi", "Bangalore", "Bidar", "Chamarajanagar","Hubli","Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada",
   "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru",
   "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir", "Alappuzha",
   "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad",
@@ -362,7 +362,7 @@ export const stateToStations = {
   ],
   "Karnataka":
    [ "Bagalkot", "Ballari", "Belagavi", "Bangalore", "Bidar", "Chamarajanagar",
-    "Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad",
+    "Chikkaballapur", "Chikkamagaluru","Hubli", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad",
     "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya",
     "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada",
     "Vijayapura", "Yadgir"
@@ -1406,6 +1406,7 @@ export const states = [
       "Chikballapur",
       "Chikkamagaluru (Chikmagalur)",
       "Chitradurga",
+      "Hubli",
       "Dakshina Kannada",
       "Davangere",
       "Dharwad",

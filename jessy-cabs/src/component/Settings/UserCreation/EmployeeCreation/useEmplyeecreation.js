@@ -27,8 +27,8 @@ const useEmplyeecreation = () => {
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [cerendentialdata, setCredentialData] = useState()
     const [showPermission, setShowPermission] = useState(true);
-    const [rolefiledsdata,setRoleFieldData] =useState([])
-    console.log(rolefiledsdata)
+    // const [rolefiledsdata,setRoleFieldData] =useState([])
+    // console.log(rolefiledsdata)
 
 
     ////-------------permission --------------------------
@@ -969,44 +969,44 @@ const indexRanges = [
 
 
 
-    const rolenamefield= useCallback(async () => {
-        // setLoading(true);
-        setError(false);
-        setErrorMessage("");
+    // const rolenamefield= useCallback(async () => {
+    //     // setLoading(true);
+    //     setError(false);
+    //     setErrorMessage("");
 
-        try {
-            const response = await axios.get(`${apiUrl}/getAllrolefield`);
-            const data = response.data;
-            // const rowsWithUniqueId = data.map((row, index) => ({
-            //     ...row,
-            //     id: index + 1,
-            // }));
-            // setRows(rowsWithUniqueId);
-            if(data.length > 0 ){
-            console.log(data,"data")
-            const names = data.map(res => res.userRole_name)
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/getAllrolefield`);
+    //         const data = response.data;
+    //         // const rowsWithUniqueId = data.map((row, index) => ({
+    //         //     ...row,
+    //         //     id: index + 1,
+    //         // }));
+    //         // setRows(rowsWithUniqueId);
+    //         if(data.length > 0 ){
+    //         console.log(data,"data")
+    //         const names = data.map(res => res.userRole_name)
        
-            setRoleFieldData(names)
-            }
+    //         setRoleFieldData(names)
+    //         }
 
           
-        } catch (err) {
-            console.error(err);
+    //     } catch (err) {
+    //         console.error(err);
 
-            if (err.message === 'Network Error') {
-                setErrorMessage("Check network connection.");
-            } else {
-                setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
-            }
-            setError(true);
-            // setLoading(false);
-        } 
-    }, [apiUrl]);
+    //         if (err.message === 'Network Error') {
+    //             setErrorMessage("Check network connection.");
+    //         } else {
+    //             setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+    //         }
+    //         setError(true);
+    //         // setLoading(false);
+    //     } 
+    // }, [apiUrl]);
 
 
-    useEffect(() => {
-        rolenamefield();
-    }, [rolenamefield]);
+    // useEffect(() => {
+    //     rolenamefield();
+    // }, [rolenamefield]);
 
 
 

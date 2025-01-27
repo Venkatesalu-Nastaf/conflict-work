@@ -389,6 +389,26 @@ router.get("/getAllUserNames", (req, res) => {
   })
 })
 
+router.get("/getAllrolefield", (req, res) => {
+  db.query("SELECT userRole_name FROM  Role_fielddata", (error, result) => {
+    if (error) {
+      console.log(error);
+    }
+    return res.status(200).json(result)
+  })
+})
+
+
+router.get("/getAllrolefieldunique/:rolename", (req, res) => {
+  const rolename= req.params.rolename;
+  db.query("SELECT * FROM  Role_fielddata where  userRole_name = ? ",[rolename], (error, result) => {
+    if (error) {
+      console.log(error);
+    }
+    return res.status(200).json(result)
+  })
+})
+
 
 router.put("/usercreationdataupdate/:editid", (req, res) => {
   const editid = req.params.editid

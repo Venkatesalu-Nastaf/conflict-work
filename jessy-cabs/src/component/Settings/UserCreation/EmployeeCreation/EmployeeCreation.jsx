@@ -99,7 +99,8 @@ const EmployeeCreation = ({ stationName }) => {
     handleClickShowPasswords,
     handleMouseDownPasswords, handleAutocompleteChangeStationName, handleChangeuniquecreation, cerendentialdata,
     isEditMode,
-    handleEdit, showPermission, setShowPermission, handleCheckboxChangealldata,
+    handleEdit, showPermission, setShowPermission, handleCheckboxChangealldata, 
+    // rolefield,rolefielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
     permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
   } = useEmplyeecreation();
@@ -369,6 +370,7 @@ setSationNameforUser(updatedData);
                     />
                   </FormControl>
                 </div>
+                {/* {console.log(rolefield,"role",rolefielddropdown)} */}
 
                 <div className="input" style={{ paddingRight: '15px'}}>
                   <div className="icone">
@@ -378,12 +380,46 @@ setSationNameforUser(updatedData);
                   <TextField
                     size="small"
                     name="Role"
-                    // value={book.organizationname || ''}
+                    value={book.organizationname || ''}
                     // onChange={handleChange}
                     label="Role"
                     id="Role"
                     style={{ width: '100%' }}
                   />
+                          {/* {console.log(rolefield,"field")} */}
+                        {/* <Autocomplete
+                                  fullWidth
+                                  size="small"
+                                  id="Role"
+                                  freeSolo
+                                  sx={{ width: "100%" }}
+                                  onChange={(event, value) =>
+                                    // setRoleFielddropdown(value)
+                                    handleRoleChange(event, value)
+                                    }
+                                  onInputChange={(event, value) => handleRoleChange1(event, value)}  // Handle manual input
+                                  // onInputChange={(event, value) =>{
+                                  //   if(event !== null){
+                                  //     setNoChangeData({ ...nochangedata,vehRegNo: value });
+                                  //     setRoleFielddropdown(value)
+                                    
+                                  //   }
+                                    
+                                    // }}
+                                  // onKeyDown={handleKeyEnterdriver}
+                                  value={rolefielddropdown || rolefield}  // Reflect vehRegNo correctly
+                                  options={rolefiledsdata?.map((option) => ({ label: option }))}  // Map vehRegNo from data
+                                  getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''}  // Adjust to show input value or option label
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      label="Role"
+                                      // name="vehRegNo"
+                                       name="Role"
+                                      inputRef={params.inputRef}
+                                    />
+                                  )}
+                                /> */}
                  
                     <FaPlusCircle style={{fontSize:"30px",color:"#1976d2",cursor:"pointer"}} onClick={()=>handleOpenModal()}/>
                   </div>
@@ -409,7 +445,7 @@ setSationNameforUser(updatedData);
                   <TextField
                     size="small"
                     name="Selected Role"
-                    // value={book.organizationname || ''}
+                    // value={rolefielddropdown || ''}
                     // onChange={handleChange}
                     label="Selected Role"
                     id="Selected Role"
@@ -430,7 +466,10 @@ setSationNameforUser(updatedData);
                   handleSwitchforthatrow={handleSwitchforthatrow}
                   handleSwitchforallrows={handleSwitchforallrows}
                   handleCheckboxChangealldata={handleCheckboxChangealldata} />
-                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleCloseModal}>Done</Button>
+
+                  {/* {rolefield ? 
+                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleCloseModal}>edit</Button>:
+                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleCloseModal}>Add</Button>} */}
                   </Box>
                 </Modal>
                 <div className="input radio">

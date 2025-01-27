@@ -138,8 +138,8 @@ const useTripsheet = () => {
     const [openModalConflict, setOpenModalConflict] = useState(null)
     const [openConflictKMPopup, setOpenConflictKMPopup] = useState(null);
     // ----------------------------------------vendorinfo-------------------
-    // const [lockdata, setLockData] = useState(false)
-    const [lockdata, setLockData] = useState(true)
+    const [lockdata, setLockData] = useState(false)
+    // const [lockdata, setLockData] = useState(true)
     const [vendorinfo, setVendorinfodata] = useState({
         vehicleName: '',
         // duty:"",
@@ -639,11 +639,14 @@ const useTripsheet = () => {
         const HCLDATA = Number(params.get('hybriddatahcl')) || 0
         const timetoggledata = Number(params.get('TimeToggle')) || 0
         const timetogglevendor = Number(params.get('VendorTimeToggle')) || 0
+        const lockdatavendor = Number(params.get('lockdatavalue'))
+        console.log(lockdatavendor,"lockvendorlog")
         setHybridHclNavigate(HCLDATA)
         setTimeToggleNaviagate(timetoggledata)
         setTimeToggleVendorNaviagate(timetogglevendor)
         setTransferreport(tranreport)
         setEscort(escort)
+        setLockData(lockdatavendor)
         setConflictLoad((prevConflictLoad) => !prevConflictLoad);
         //----------------------
         const formData = {};
@@ -1374,6 +1377,7 @@ const useTripsheet = () => {
                     VendorTimeToggle: timeTogglevendor,
                     Hcldatakmvalue: conflicthcldatavalue.Hcldatakmvalue,
                     HclMaxConflctdata: conflicthcldatavalue.HclMaxConflctdata,
+                    lockdatavalue:lockdata
 
                 };
                 const VehcileHistory = {
@@ -1428,10 +1432,10 @@ const useTripsheet = () => {
                 handleCancel();
                 setisEditload(false)
                 setSuccessMessage("Successfully updated");
-                // setLockData(false)
+                setLockData(false)
                 // setLockDatavendorBill(false)
                 // setLockDatacustomerBill(false)
-                setLockData(true)
+                // setLockData(true)
                 setLockDatavendorBill(true)
                 setLockDatacustomerBill(true)
                 setCheckSignandMapVerify(false)
@@ -1671,7 +1675,8 @@ const useTripsheet = () => {
                 TimeToggleData: timeToggle,
                 VendorTimeToggle: timeTogglevendor,
                 HclMaxConflctdata: 0,
-                Hcldatakmvalue: 0
+                Hcldatakmvalue: 0,
+                lockdatavalue:lockdata
             };
             // console.log(updatedBook," book")
             const VehcileHistory = {
@@ -1707,10 +1712,10 @@ const useTripsheet = () => {
             handlecheck();
             setisAddload(false)
             setSuccessMessage("Successfully Added");
-            // setLockData(false)
+            setLockData(false)
             // setLockDatavendorBill(false)
             // setLockDatacustomerBill(false)
-            setLockData(true)
+            // setLockData(true)
             setLockDatavendorBill(true)
             setLockDatacustomerBill(true)
         }
@@ -1882,7 +1887,7 @@ const useTripsheet = () => {
             [name]: parsedDate,
         }));
         
-        if (lockdata) {
+        if (!lockdata) {
             if (name === "shedOutDate") {
                 setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: parsedDate }))
             }
@@ -3814,7 +3819,7 @@ const useTripsheet = () => {
             }
         }
     };
-    // console.log(nochangedata,"data")
+    // console.log(lockdata,"lockdatamovess")
 
 
     // prob004
@@ -3847,12 +3852,12 @@ const useTripsheet = () => {
                             setSelectedCustomerId(bookingDetails.tripid);
                             setSelectedStatus(bookingDetails.status); // Set selected status based on booking details
                             setSelectedStatuschecking(bookingDetails.status)
-                            if (lockdata) {
+                            // if (!lockdata) {
 
 
                                 setVendorinfodata(restdatavendor)
                                 setVendorbilldata(bookingDetails)
-                            }
+                            // }
 
                             //--------------calc---------
 
@@ -3890,9 +3895,10 @@ const useTripsheet = () => {
                             // setisenterTripid(true)
                             setIsEditMode(true);
                             // setLockData(false)
+                            setLockData(bookingDetails.lockdatavalue)
                             // setLockDatavendorBill(false)
                             // setLockDatacustomerBill(false)
-                            setLockData(true)
+                            // setLockData(true)
                             setLockDatavendorBill(true)
                             setLockDatacustomerBill(true)
                             localStorage.setItem('selectedTripid', tripid);
@@ -3936,7 +3942,7 @@ const useTripsheet = () => {
 
     const handleRowClick = (params) => {
         setSelectedCustomerDatas(params);
-        if (lockdata) {
+        if (!lockdata) {
             // setVendorinfodata(params.vechicleName)
             setVendorinfodata({ ...vendorinfo, vendor_ratename: params.rateType })
             setRate_name(params.rateType)

@@ -143,7 +143,8 @@ router.post('/tripsheet-add', (req, res) => {
         TimeToggleData,
         VendorTimeToggle,
         HclMaxConflctdata,
-        Hcldatakmvalue
+        Hcldatakmvalue,
+        lockdatavalue
 
     } = req.body
     const addCustomerData = {
@@ -278,7 +279,7 @@ router.post('/tripsheet-add', (req, res) => {
         TotalTimeWithoutAddHours,
         Hybriddata,
         TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
-        Hcldatakmvalue
+        Hcldatakmvalue,lockdatavalue
     }
     console.log(addCustomerData, 'tripsheetadddata');
 
@@ -939,7 +940,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount, TotalTimeWithoutAddHours, Hybriddata, TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
-        Hcldatakmvalue } = req.body
+        Hcldatakmvalue,lockdatavalue } = req.body
 
 
     const updatedCustomerData = {
@@ -1072,7 +1073,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
         TotalTimeWithoutAddHours, Hybriddata, TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
-        Hcldatakmvalue
+        Hcldatakmvalue,lockdatavalue
     }
     // console.log(updatedCustomerData,"llll")
 

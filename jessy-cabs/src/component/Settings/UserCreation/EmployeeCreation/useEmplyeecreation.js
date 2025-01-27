@@ -27,6 +27,8 @@ const useEmplyeecreation = () => {
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [cerendentialdata, setCredentialData] = useState()
     const [showPermission, setShowPermission] = useState(true);
+    const [rolefiledsdata,setRoleFieldData] =useState([])
+    console.log(rolefiledsdata)
 
 
     ////-------------permission --------------------------
@@ -395,6 +397,7 @@ const indexRanges = [
         superAdmin: false,
     });
     const [rolefield,setRoleField]=useState('')
+    // const [rolefielddropdown,setRoleFielddropdown]=useState()
 
     // TABLE END
 
@@ -932,6 +935,83 @@ const indexRanges = [
     };
 
 
+    // const uniquevechicleRegno = async (veghnodata) => {
+    //     if (veghnodata) {
+
+    //         const response = await axios.get(`${apiUrl}/getAllrolefieldunique/${veghnodata}`)
+    //         const responsedata = response.data;
+    //         if (responsedata?.length >= 1) {
+
+    //             setRoleField(true)
+    //             // return true;
+    //         }
+    //         else {
+    //             setRoleField(false)
+    //             // return false;
+    //         }
+    //     }
+    // }
+
+    // const handleRoleChange=(event,value)=>{
+    //     const seleteddata = value ? value.label :""
+    
+    //     console.log(value,"vv",seleteddata)
+    //     const data = uniquevechicleRegno(seleteddata)
+    //       setRoleFielddropdown(seleteddata)
+
+    // }
+    // const handleRoleChange1=(event,value)=>{
+    //     // const seleteddata = value ? value.label :value
+    //     console.log(value,"vv22")
+    //     const data = uniquevechicleRegno(value)
+    //       setRoleFielddropdown(value)
+    // }
+
+
+
+    const rolenamefield= useCallback(async () => {
+        // setLoading(true);
+        setError(false);
+        setErrorMessage("");
+
+        try {
+            const response = await axios.get(`${apiUrl}/getAllrolefield`);
+            const data = response.data;
+            // const rowsWithUniqueId = data.map((row, index) => ({
+            //     ...row,
+            //     id: index + 1,
+            // }));
+            // setRows(rowsWithUniqueId);
+            if(data.length > 0 ){
+            console.log(data,"data")
+            const names = data.map(res => res.userRole_name)
+       
+            setRoleFieldData(names)
+            }
+
+          
+        } catch (err) {
+            console.error(err);
+
+            if (err.message === 'Network Error') {
+                setErrorMessage("Check network connection.");
+            } else {
+                setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+            }
+            setError(true);
+            // setLoading(false);
+        } 
+    }, [apiUrl]);
+
+
+    useEffect(() => {
+        rolenamefield();
+    }, [rolenamefield]);
+
+
+
+
+
 
     return {
 
@@ -962,6 +1042,7 @@ const indexRanges = [
         isEditMode,
         handleEdit, handleChangeuniquecreation, cerendentialdata, showPermission, setShowPermission, handleCheckboxChangealldata,
         rolefield,setRoleField,
+        // rolefielddropdown,setRoleFielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
         //ffor permission
         permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows

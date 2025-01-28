@@ -578,9 +578,13 @@ useEffect(() => {
             defaultValue="1. USER CREATION : ${username} - Username , ${userpassword} - Password
 2. DRIVER INFO : ${Drivername} - Driver Name , ${userid} - Driver UserID, ${UserName} - Driver Username , ${password} -Driver App Password
 3. AGREEMENT MAIL FOR CUSTOMER : ${user.customer} - Customer Name , ${subscriptionEnd.format} - Agreement End Date , ${previousDay.format} - Previous Date 
-4. AGREEMENT MAIL FOR OWNER : ${user.customer} - Customer Name , (${user.email}) - Customer Email ID , ${subscriptionEnd.format} - Agreement End Date"
+4. AGREEMENT MAIL FOR OWNER : ${user.customer} - Customer Name , (${user.email}) - Customer Email ID , ${subscriptionEnd.format} - Agreement End Date
+5. DRIVER FC DATE RENEWAL: ${driverName} - Driver Name , ${date} - Driver FC Date Renewal
+6. DRIVER STATE PERMIT DATE RENEWAL: ${driverName} - Driver Name , ${date} - Driver State Permit Date Renewal 
+7. DRIVER NATIONAL PERMIT DATE RENEWAL: ${driverName} - Driver Name , ${date} - Driver National Permit Date Renewal
+8. DRIVER INSURANCE DATE RENEWAL: ${driverName} - Driver Name , ${date} - Driver Insurance Date Renewal"
 
-            InputProps={{
+                InputProps={{
                 readOnly: true,
             }}
         />

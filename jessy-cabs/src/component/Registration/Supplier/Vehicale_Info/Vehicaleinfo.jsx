@@ -153,6 +153,15 @@ export const fueltypes = [
     Option: "Diesel",
     // optionvalue: "non_a/c",
   },
+  {
+    Option: "CNG",
+    // optionvalue: "non_a/c",
+  },
+  {
+    Option: "EV",
+    // optionvalue: "non_a/c",
+  },
+
 ];
 export const Hire = [
   {

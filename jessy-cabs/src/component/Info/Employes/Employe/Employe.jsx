@@ -236,20 +236,23 @@ const Employe = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <div className="icone">
-                  <TransgenderRoundedIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  id="gender"
-                  className="full-width"
-                  label="Gender"
-                  name="gender"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.gender || book.gender}
-                  onChange={handleChange}
-                />
-              </div>
+  <div className="icone">
+    <TransgenderRoundedIcon color="action" />
+  </div>
+  <TextField
+    select
+    size="small"
+    id="gender"
+    className="full-width"
+    label="Gender"
+    name="gender"
+    value={selectedCustomerData?.gender || book.gender || ''}
+    onChange={handleChange}
+  >
+    <MenuItem value="Male">Male</MenuItem>
+    <MenuItem value="Female">Female</MenuItem>
+  </TextField>
+</div>
               <div className="input">
                 <div className="icone">
                   <BloodtypeIcon color="action" />

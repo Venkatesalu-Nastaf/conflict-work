@@ -22,6 +22,7 @@ const useVehicleinfo = () => {
     const [warning, setWarning] = useState(false);
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
+    const [templateMessageData, setTemplateMessageData] = useState('');
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage, setWarningMessage] = useState({});
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
@@ -1082,6 +1083,82 @@ const useVehicleinfo = () => {
         fetchData();
     }, [apiUrl]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/TemplateforFCdate`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } 
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/Templateforstatepermitdate`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } 
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/Templateforinsuranceduedate`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } 
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/Templatefornationalpermitdate`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } 
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+
     const handlecheckmaildriver = async () => {
         try {
             // Add templateMessageData to the dataToSend object
@@ -1091,7 +1168,7 @@ const useVehicleinfo = () => {
                 // todate:book.todate,
                 Sendmailauth: organistaionsendmail.Sendmailauth,
                 Mailauthpass: organistaionsendmail.Mailauthpass,
-                // templateMessageData
+                templateMessageData
             };
     
             console.log("Sending data:", dataToSend); // For debugging purposes
@@ -1395,6 +1472,8 @@ const useVehicleinfo = () => {
         allFile,
         handleCloseDialog,
         handleUploadFile,
+        templateMessageData,
+        setTemplateMessageData,
         dialogOpen,
         isEditMode,
         handleEdit,

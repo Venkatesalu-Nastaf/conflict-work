@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
@@ -172,6 +172,13 @@ const Booking = ({ stationName, customerData }) => {
   const Booking_modify = permissions[1]?.modify;
   const Booking_delete = permissions[1]?.delete;
   const [numPages, setNumPages] = useState(null);
+  const shedOutTimeRef = useRef(null);
+  const reportTimeRef = useRef(null);
+  
+    const [prevHours, setPrevHours] = useState({
+      shedOutTime:"",
+      reportTime:""
+    });
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -270,6 +277,7 @@ const Booking = ({ stationName, customerData }) => {
       setWarningMessage("Check Your Trip Status")
     }
   }
+console.log(prevHours,"timeeeeeeee+++++++++++");
 
   return (
     <div className="booking-form main-content-form Scroll-Style-hide">
@@ -976,8 +984,18 @@ const Booking = ({ stationName, customerData }) => {
                     type="time"
                     id="reporttime"
                     name="reporttime"
+                    ref={shedOutTimeRef}
                     value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ""}
                     onChange={(event) => {
+                      let value = event.target.value;
+                      const [hours, minutes] = value.split(':');
+                      setPrevHours((prevState) => ({
+                        ...prevState,
+                        shedOutTime:hours
+                      }));                          
+                      if (shedOutTimeRef.current && (parseInt(minutes)===59) && prevHours?.shedOutTime === hours) {
+                        shedOutTimeRef.current.focus();
+                      }
                       setBook({ ...book, reporttime: event.target.value });
                       setreporttime(event.target.value);
                       setFormData({ ...formData, reporttime: event.target.value });
@@ -1000,7 +1018,18 @@ const Booking = ({ stationName, customerData }) => {
                     type="time"
                     id="starttime"
                     value={formData.starttime || selectedCustomerData.starttime || book.starttime || ""}
+                    ref={reportTimeRef}
                     onChange={(event) => {
+                      let value = event.target.value;
+                      const [hours, minutes] = value.split(':');
+                      
+                      setPrevHours((prevState) => ({
+                        ...prevState,
+                        reportTime:hours
+                      }));                          
+                      if (reportTimeRef.current && (parseInt(minutes)===59) && prevHours?.reportTime === hours) {
+                        reportTimeRef.current.focus();
+                      }
                       setFormData({ ...formData, starttime: event.target.value });
                       setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
                       setBook({ ...book, starttime: event.target.value });

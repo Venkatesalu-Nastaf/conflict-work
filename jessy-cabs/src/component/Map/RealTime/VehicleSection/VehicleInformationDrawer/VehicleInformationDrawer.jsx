@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback, useEffect, useRef } from 'react';
-import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer,Polyline } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer, Polyline } from '@react-google-maps/api';
 // import { IconButton, Button } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import IconButton from '@mui/material/IconButton';
@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import TabList from '@mui/lab/TabList';
 import { FaShare } from "react-icons/fa";
-import { Drawer } from '@mui/material';
+import { Button, Drawer } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
@@ -24,9 +24,11 @@ import { PermissionContext } from '../../../../context/permissionContext';
 import "./VehicleInformationDrawer.css"
 import { useNavigate } from 'react-router-dom';
 import { chennaiCoordinates } from '../../MapSection/mapData';
-
-
-
+import mapicon from "./mapicon.png"
+import blackicon from "./blackmapicon.png"
+import startPointIcon from "./startPointIcon.png"
+import useDetailsVehicle from '../useDetailsVehicle';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 /* global google */
 // Define the container style for the map
@@ -37,14 +39,17 @@ const containerStyle = {
 };
 
 // Set the default map center (Chennai)
-const center = {
-    lat: 13.0827,
-    lng: 80.2707,
-};
+
 
 
 
 const VehicleInformationDrawer = () => {
+
+    const { vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying,
+        startMarkerPosition, setStartMarkerPosition, handleDrawPaths, dynamicPolyline, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths,
+        handledefault10xDrawPaths,speedState,address,jessyCabsDistance
+
+    } = useDetailsVehicle()
     //vehicle section drawer
     const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer, vehicleListData, setVehicleListData } = useContext(PermissionContext);
     const navigate = useNavigate();
@@ -106,56 +111,6 @@ const VehicleInformationDrawer = () => {
         setNumber(event.target.value);
     };
 
-    const handleDrawPaths = () => {
-        setDirectionRendererKey(0)
-        setDirectionsResponse(null)
-        let index = 1; // Start from the second point since the first is fixed
-
-        const directionsService = new window.google.maps.DirectionsService();
-
-        const intervalId = setInterval(() => {
-            if (index >= chennaiCoordinates.length) {
-                clearInterval(intervalId); // Stop when all points are covered
-                return;
-            }
-
-            // Fixed initial position as the origin
-            const origin = {
-                lat: chennaiCoordinates[0]?.latitude,
-                lng: chennaiCoordinates[0]?.longitude,
-            };
-
-            // Dynamic destination for the current step
-            const destination = {
-                lat: chennaiCoordinates[index]?.latitude,
-                lng: chennaiCoordinates[index]?.longitude,
-            };
-
-            const waypoints = chennaiCoordinates.slice(1, index).map(coord => ({
-                location: { lat: coord.latitude, lng: coord.longitude },
-                stopover: false,
-            }));
-
-            directionsService.route(
-                {
-                    origin,
-                    destination,
-                    waypoints,
-                    travelMode: window.google.maps.TravelMode.DRIVING,
-                },
-                (result, status) => {
-                    if (status === window.google.maps.DirectionsStatus.OK) {
-                        setDirectionsResponse(result);
-                    } else {
-                        console.error(`Error fetching directions: ${status}`);
-                    }
-                }
-            );
-
-            index += 1; // Move to the next destination
-        }, 2000); // Update every 1 second
-    };
-
 
     // Load the Google Maps script with your API key and necessary libraries
     const { isLoaded } = useLoadScript({
@@ -168,18 +123,13 @@ const VehicleInformationDrawer = () => {
     const [map, setMap] = useState(null);
     const [lat, setLat] = useState(13.0827); // Default latitude (Chennai)
     const [long, setLong] = useState(80.2707); // Default longitude (Chennai)
-    const [direction, setDirection] = useState(false);
-    const [directionRendererKey, setDirectionRendererKey] = useState(0);
-    const [directionRoute, setDirectionRoute] = useState(null);
     const [openPopup, setOpenPopup] = useState(false); // State to handle popup open/close
     const [popupPosition, setPopupPosition] = useState(null); // State for popup position
     const [directionsResponse, setDirectionsResponse] = useState(null);
-    const [lastPointIndex, setLastPointIndex] = useState(0);
-    const [currentIndex, setCurrentIndex] = useState(0); // Current index of the marker
-    const [markerPosition, setMarkerPosition] = useState(chennaiCoordinates[0]); // Initial marker position
     // Marker location based on latitude and longitude
     const markerLocation = lat && long ? { lat, lng: long } : null;
 
+    const [mapiconBase64, setMapiconBase64] = useState('');
 
 
     // Center button click handler
@@ -264,7 +214,84 @@ const VehicleInformationDrawer = () => {
     if (!isLoaded) {
         return <div>Loading...</div>;
     }
-   
+    const center = { lat: currentPosition.lat, lng: currentPosition.lng };
+    const base64Image = `data:image/png;base64,${mapicon}`;
+    console.log(base64Image, "llllllllllllllllllllllllllllllllllllll");
+
+    function convertToBase64(imagePath, callback) {
+        fetch(imagePath)
+            .then((res) => res.blob())
+            .then((blob) => {
+                const reader = new FileReader();
+                reader.onloadend = () => callback(reader.result);
+                reader.readAsDataURL(blob);
+            })
+            .catch((err) => console.error('Error converting image to Base64:', err));
+    }
+
+    // Use the function
+    convertToBase64('/static/media/mapicon.b6f6d6a97abc01b5785e.png ', (base64Image) => {
+        setMapiconBase64(base64Image)
+    });
+
+
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer();
+
+    const startLat = chennaiCoordinates[0]?.latitude;
+    const startLng = chennaiCoordinates[0]?.longitude;
+
+    const endLat = chennaiCoordinates[chennaiCoordinates.length - 1].latitude;
+    const endLng = chennaiCoordinates[chennaiCoordinates.length - 1].longitude;
+
+    // Waypoints: All coordinates except the first and last
+    const waypoints = chennaiCoordinates.slice(1, chennaiCoordinates.length - 1).map(coord => ({
+        location: new google.maps.LatLng(coord.latitude, coord.longitude),
+        stopover: true,
+    }));
+
+    // Log start, end, and waypoints
+    console.log("Start:", startLat, startLng);
+    console.log("End:", endLat, endLng);
+    console.log("Waypoints:", waypoints);
+    const request = {
+        origin: new google.maps.LatLng(startLat, startLng),
+        destination: new google.maps.LatLng(endLat, endLng),
+        waypoints: waypoints, // Add waypoints here
+        travelMode: google.maps.TravelMode.DRIVING, // Travel mode: Driving
+    };
+    directionsService.route(request, (response, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+            directionsRenderer.setDirections(response);
+            const steps = response.routes[0].legs[0].steps;
+            console.log(steps, "angleeeeeeeeeeeee22222222", response);
+
+            steps.forEach((step, index) => {
+                const instruction = step.instructions; // Direction instruction, e.g., "Turn left onto Main St."
+                const distance = step.distance.text; // Distance for this step
+                const angle = step.travelMode === google.maps.TravelMode.DRIVING ? getBearingFromStep(step) : 0;
+
+                // Analyze the instructions to determine direction
+                if (instruction.includes("left")) {
+                    console.log("Left Turn", distance, angle);
+                }
+                else if (instruction.includes("east")) {
+                    console.log("east", instruction);
+
+                }
+
+            });
+        }
+    });
+
+    // Function to get bearing angle based on direction of travel
+    function getBearingFromStep(step) {
+        const startLatLng = new google.maps.LatLng(step?.start_location.lat(), step?.start_location.lng());
+        const endLatLng = new google.maps.LatLng(step?.end_location.lat(), step?.end_location.lng());
+        return google.maps.geometry.spherical.computeHeading(startLatLng, endLatLng);
+    }
+
+
     return (
         <>
             <div>
@@ -363,9 +390,12 @@ const VehicleInformationDrawer = () => {
                                                     </div>
                                                     <div className='overview-content'>
                                                         <span className='overview-left'>Current Location:</span>
-                                                        <span>Patel G Kulappa Road, Ramaswamipalya, Banasawadi, Bengaluru, Bangalore Urban, Karnataka</span>
+                                                        <span>{address}</span>
                                                     </div>
-
+                                                    <div className='overview-content'>
+                                                        <span className='overview-left'>Nearest Address :</span>
+                                                        <span>{jessyCabsDistance} km from Jessy Cabs (office)</span>
+                                                    </div>
                                                     <div className='overview-content'>
                                                         <span className='overview-left'>Model:</span>
                                                         <span>{vehicleListData[0]?.yearModel}</span>
@@ -498,59 +528,103 @@ const VehicleInformationDrawer = () => {
                                 </div>
 
                                 <div className='vehicle-info-content-map'>
+
                                     <GoogleMap
                                         mapContainerStyle={containerStyle}
                                         center={center}
-                                        zoom={14}
-                                        onLoad={(map) => console.log("Map loaded")}
+                                        zoom={18}
+                                        onLoad={() => console.log("Map loaded")}
                                     >
-                                        {/* Draw the path using Polyline */}
-                                        <Polyline
-                                            path={chennaiCoordinates.map((coord) => ({
-                                                lat: coord.latitude,
-                                                lng: coord.longitude,
-                                            }))}
-                                            options={{
-                                                strokeColor: "#FF0000",
-                                                strokeOpacity: 0.8,
-                                                strokeWeight: 2,
-                                            }}
-                                        />
-
-                                        {/* Marker that moves along the path */}
-                                        <MarkerF
-                                            position={{
-                                                lat: markerPosition?.latitude,
-                                                lng: markerPosition?.longitude,
-                                            }}
-                                        />
-                                    </GoogleMap>
-                                    {/* <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}
-                                        onLoad={handleMapLoad}
-                                    >
-                                        {chennaiCoordinates && chennaiCoordinates.some(coord => coord?.TripType === "start") && (
-                                            <MarkerF
-                                                position={{
-                                                    lat: chennaiCoordinates.find(coord => coord?.TripType === "start")?.latitude,
-                                                    lng: chennaiCoordinates.find(coord => coord?.TripType === "start")?.longitude,
+                                        {dynamicPolyline.length > 0 ? (
+                                            <Polyline
+                                                path={dynamicPolyline}
+                                                options={{
+                                                    strokeColor: "#189df3",
+                                                    strokeOpacity: 0.8,
+                                                    strokeWeight: 6,
                                                 }}
-                                                label="Start"
                                             />
-                                        )}
+                                        )
+                                            : <Polyline
+                                                path={chennaiCoordinates.map((coord) => ({
+                                                    lat: coord.latitude,
+                                                    lng: coord.longitude,
+                                                }))}
+                                                options={{
+                                                    strokeColor: "#189df3",
+                                                    strokeOpacity: 0.8,
+                                                    strokeWeight: 6,
+                                                }}
+                                            />
+                                        }
 
-                                        {/* End Marker based on TripType */}
-                                    {chennaiCoordinates && chennaiCoordinates.some(coord => coord?.TripType === "End") && (
+                                        {/* Start Marker */}
                                         <MarkerF
                                             position={{
-                                                lat: chennaiCoordinates.find(coord => coord?.TripType === "End")?.latitude,
-                                                lng: chennaiCoordinates.find(coord => coord?.TripType === "End")?.longitude,
+                                                lat: startMarkerPosition.latitude,
+                                                lng: startMarkerPosition.longitude,
                                             }}
-                                            label="End"
+                                            icon={{
+                                                url: startPointIcon,
+                                                scaledSize: new window.google.maps.Size(24, 24),
+                                                origin: new window.google.maps.Point(0, 0),
+                                                anchor: new window.google.maps.Point(12, 12),
+                                            }}
                                         />
-                                    )}
-                                    {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
 
-                                    {/* </GoogleMap>  */}
+                                        {/* Animated Marker */}
+
+
+                                        {/* <MarkerF
+    position={{
+        lat: currentPosition.lat,
+        lng: currentPosition.lng,
+    }}
+    icon={{
+        url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
+                <g transform="rotate(${currentPosition.angle || 0}, 80, 80)">
+                    <image href="${mapiconBase64}" x="25" y="25" width="100" height="100" />
+                </g>
+            </svg>
+        `)}`,
+        scaledSize: new google.maps.Size(140, 140), // Increased scaled size
+        anchor: new google.maps.Point(70, 70), // Adjust the anchor to the center of the icon
+    }}
+/> */}
+
+                                        <MarkerF
+                                            position={{
+                                                lat: currentPosition.lat,
+                                                lng: currentPosition.lng,
+                                            }}
+                                            icon={{
+                                                url: blackicon,
+                                                scaledSize: new window.google.maps.Size(24, 24),
+                                                origin: new window.google.maps.Point(0, 0),
+                                                anchor: new window.google.maps.Point(12, 12),
+                                            }}    // icon={{
+                                        //     url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+                                        //         <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
+                                        //             <!-- Red top section -->
+                                        //             <rect x="0" y="0" width="150" height="50" fill="red" />
+
+                                        //             <!-- Image part of the icon -->
+                                        //             <g transform="rotate(${currentPosition.angle || 0}, 80, 80)">
+                                        //                 <image href="${mapiconBase64}" x="25" y="50" width="100" height="100" />
+                                        //             </g>
+                                        //         </svg>
+                                        //     `)}`,
+                                        //     scaledSize: new google.maps.Size(140, 140), // Adjusted icon size
+                                        //     anchor: new google.maps.Point(70, 70), // Center the anchor at the middle
+                                        // }}
+                                        />
+
+
+
+
+
+                                    </GoogleMap>
 
                                     {openPopup && popupPosition && (
                                         <InfoWindow
@@ -596,7 +670,32 @@ const VehicleInformationDrawer = () => {
                                     </div>
 
                                     <div className='playButton'>
-                                        <button onClick={() => handleDrawPaths()}>Play</button>
+                                        <div>
+                                        </div>
+                                        <div className='playArrow'>
+                                            <Button onClick={() => handledefault10xDrawPaths()}><PlayArrowIcon /> </Button>
+                                        </div>
+                                        <div className='playspeed'>
+
+                                            <p style={{ textAlign: 'center', margin: 0 }}>Play Speed</p>
+                                            <Button sx={{
+                                                backgroundColor: speedState === 1000 ? 'gray' : 'white',
+                                                color: speedState === 1000 ? 'white' : 'black',
+                                                '&:hover': { backgroundColor: 'lightgray' },
+                                            }} onClick={() => handle10xDrawPaths()}>10X</Button>
+
+                                            <Button sx={{
+                                                backgroundColor: speedState === 500 ? 'gray' : 'white',
+                                                color: speedState === 500 ? 'white' : 'black',
+                                                '&:hover': { backgroundColor: 'lightgray' },
+                                            }} onClick={() => handle20xDrawPaths()}>20X</Button>
+
+                                            <Button sx={{
+                                                backgroundColor: speedState === 100 ? 'gray' : 'white',
+                                                color: speedState === 100 ? 'white' : 'black',
+                                                '&:hover': { backgroundColor: 'lightgray' },
+                                            }} onClick={() => handle50xDrawPaths()}>50X</Button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

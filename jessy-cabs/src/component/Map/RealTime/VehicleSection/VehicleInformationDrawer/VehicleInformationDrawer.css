@@ -115,17 +115,37 @@
 }
 
 @media screen and (max-width:1000px) {
-    .vehicle-info-content-info{
-        width: 100% !important ;
-        }
-        .vehicle-info-content-map{
-            width: 100% !important;
-        }
+    .vehicle-info-content-info {
+        width: 100% !important;
+    }
+
+    .vehicle-info-content-map {
+        width: 100% !important;
+    }
 }
 
-.vehicle-info-content-info{
-width: 48%;
-}
-.vehicle-info-content-map{
+.vehicle-info-content-info {
     width: 48%;
+}
+
+.vehicle-info-content-map {
+    width: 48%;
+}
+
+.playButton {
+    display: flex;
+    justify-content:space-between
+    /* justify-content: flex-end; */
+}
+
+.playArrow {
+    display: flex;
+    justify-content: right;
+}
+
+.playspeed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }

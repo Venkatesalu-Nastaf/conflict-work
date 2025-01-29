@@ -346,7 +346,7 @@ const sendSubscriptionReminders = async () => {
 };
 
 // Schedule the job
-cron.schedule("21 15 * * *", () => {
+cron.schedule("00 09 * * *", () => {
   console.log("Running daily subscription reminder job...");
   sendSubscriptionReminders();
 });

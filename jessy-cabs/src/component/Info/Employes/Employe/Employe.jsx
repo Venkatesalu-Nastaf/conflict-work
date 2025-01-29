@@ -366,7 +366,7 @@ const Employe = () => {
                   size="small"
                   id="esino"
                   className="full-width"
-                  label="ESI No"
+                  label="ESIC No"
                   name="esino"
                   autoComplete="new-password"
                   value={selectedCustomerData?.esino || book.esino}

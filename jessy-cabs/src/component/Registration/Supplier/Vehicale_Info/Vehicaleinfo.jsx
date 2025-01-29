@@ -622,7 +622,7 @@ const Vehicaleinfo = ({ stationName }) => {
                   </div>
                 </div>
               </div>
-              <div className="vehicaleinfo-container-right">
+              {/* <div className="vehicaleinfo-container-right">
                 <div className="vehicaleinfo-update-main">
                   <div className="vehicaleinfo-update">
                     <div
@@ -665,7 +665,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="input-field vehicleinfo-inputfeild">
@@ -1068,6 +1068,44 @@ const Vehicaleinfo = ({ stationName }) => {
                 value={selectedCustomerData?.rcbookno || book.rcbookno || ""}
                 onChange={handleChange}
                 label="RC Book No"
+                id="rcbookno"
+              />
+              <div className='rc-book-copy-tooltip'>
+                <Button size="md" component="label" className='vehicle-info-upload-btn'>
+                  <span class=" vehicle-info-upload-btn-width">
+                    <span className='upload-icon'>
+                      <RiFileUploadLine />
+
+                    </span>
+                    <input
+                      id="rc_book"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        setRcbook(e.target.files[0])
+                        console.log('File selected:', e.target.files[0]);
+                        handleUploadFile(e);
+                      }}
+
+                    />
+                  </span>
+                </Button>
+                <span class="rc-book-copy-tooltiptext">Upload RC-Book Copy</span>
+              </div>
+            </div>
+
+            <div className="input-permit-no">
+            <div className="icone">
+                    <AirportShuttleIcon color="action" />
+                  </div>
+              <TextField
+                // margin="normal"
+                size="small"
+                className='full-width'
+                name="rcbookno"
+                value={selectedCustomerData?.rcbookno || book.rcbookno || ""}
+                onChange={handleChange}
+                label="Chassis / Engine No"
                 id="rcbookno"
               />
               <div className='rc-book-copy-tooltip'>

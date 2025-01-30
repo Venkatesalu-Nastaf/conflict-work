@@ -18,7 +18,6 @@ const useDetailsVehicle = () => {
     const [speedState,setSpeedState] = useState(1000);
     const [speedValuename,setSpeedValuename] = useState("10x")
     const [address, setAddress] = useState("");
-    const [jessyCabsDistance,setJessyCabsDistance] = useState(null)
 
     const [rotation, setRotation] = useState(0);
     //   get All vehicles List
@@ -278,7 +277,6 @@ const useDetailsVehicle = () => {
     return {
         vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying, setStartMarkerPosition, startMarkerPosition, dynamicPolyline,
         handleDrawPaths,handledefault10xDrawPaths, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths,rotation,speedState,address,
-        jessyCabsDistance
         
     }
 }

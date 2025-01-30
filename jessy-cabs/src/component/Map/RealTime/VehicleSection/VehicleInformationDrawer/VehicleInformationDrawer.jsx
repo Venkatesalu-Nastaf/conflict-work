@@ -29,7 +29,7 @@ import blackicon from "./blackmapicon.png"
 import startPointIcon from "./startPointIcon.png"
 import useDetailsVehicle from '../useDetailsVehicle';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-
+import { VehicleMapData } from '../../../vehicleMapContext/vehcileMapContext';
 /* global google */
 // Define the container style for the map
 const containerStyle = {
@@ -47,14 +47,19 @@ const VehicleInformationDrawer = () => {
 
     const { vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying,
         startMarkerPosition, setStartMarkerPosition, handleDrawPaths, dynamicPolyline, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths,
-        handledefault10xDrawPaths,speedState,address,jessyCabsDistance
+        handledefault10xDrawPaths,speedState,address
 
     } = useDetailsVehicle()
     //vehicle section drawer
     const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer, vehicleListData, setVehicleListData } = useContext(PermissionContext);
     const navigate = useNavigate();
     const [currentPointIndex, setCurrentPointIndex] = useState(0);
-
+    const {jessyCabsDistance, setJessyCabsDistance} = VehicleMapData();
+    // const {jessyCabsLocation,setJessyCabsLocation} = useState({lat:13.031207,lng:80.239396});
+    const jessyCabsLocation = {
+        lat:13.031207,
+        lng:80.239396
+    }
     const mapRef = useRef(null)
     const handleopenHistoryDrawer = () => {
         // setOpenHistoryDrawer(true);
@@ -284,13 +289,42 @@ const VehicleInformationDrawer = () => {
         }
     });
 
-    // Function to get bearing angle based on direction of travel
     function getBearingFromStep(step) {
         const startLatLng = new google.maps.LatLng(step?.start_location.lat(), step?.start_location.lng());
         const endLatLng = new google.maps.LatLng(step?.end_location.lat(), step?.end_location.lng());
         return google.maps.geometry.spherical.computeHeading(startLatLng, endLatLng);
     }
 
+// distance calculate
+const calculateDistance = () => {
+
+    const origin = new window.google.maps.LatLng(jessyCabsLocation?.lat, jessyCabsLocation?.lng);
+    const destination = new window.google.maps.LatLng(currentPosition?.lat, currentPosition?.lng);
+
+    const service = new window.google.maps.DistanceMatrixService();
+    service.getDistanceMatrix(
+      {
+        origins: [origin],
+        destinations: [destination],
+        travelMode: "DRIVING",
+      },
+      (response, status) => {
+        console.log(status,"distanceeeeeeeeeeeeeeee;;;;;;;;;;;;;;;;;;;;;;;;;");
+        
+        if (status === "OK") {
+          const distanceText = response.rows[0].elements[0].distance.text;
+          console.log(distanceText,"distanceeeeeeeeeeeeeeee");
+          
+        //   setDistance(distanceText);
+          setJessyCabsDistance(distanceText)
+        } else {
+        //   alert("Error calculating distance");
+        console.log(response,"distanceeeeeeeeeeeeeeeeresssssssssssssss");
+        
+        }
+      }
+    );
+  };
 
     return (
         <>
@@ -391,10 +425,6 @@ const VehicleInformationDrawer = () => {
                                                     <div className='overview-content'>
                                                         <span className='overview-left'>Current Location:</span>
                                                         <span>{address}</span>
-                                                    </div>
-                                                    <div className='overview-content'>
-                                                        <span className='overview-left'>Nearest Address :</span>
-                                                        <span>{jessyCabsDistance} km from Jessy Cabs (office)</span>
                                                     </div>
                                                     <div className='overview-content'>
                                                         <span className='overview-left'>Model:</span>
@@ -695,6 +725,7 @@ const VehicleInformationDrawer = () => {
                                                 color: speedState === 100 ? 'white' : 'black',
                                                 '&:hover': { backgroundColor: 'lightgray' },
                                             }} onClick={() => handle50xDrawPaths()}>50X</Button>
+                                            <Button onClick={()=>calculateDistance()}>kmmm</Button>
                                         </div>
                                     </div>
                                 </div>

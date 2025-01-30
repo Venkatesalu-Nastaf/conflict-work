@@ -1,0 +1,20 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+const VehicleMapContext = createContext();
+
+export const VehicleMapData = () => {
+    return useContext(VehicleMapContext);
+};
+
+export const VehicleMapDataProvider = ({ children }) => {
+    const [jessyCabsDistance, setJessyCabsDistance] = useState(null)
+
+
+    return (
+        <VehicleMapContext.Provider value={{
+            jessyCabsDistance, setJessyCabsDistance
+        }}>
+            {children}
+        </VehicleMapContext.Provider>
+    );
+};

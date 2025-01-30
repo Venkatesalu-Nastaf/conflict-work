@@ -6542,7 +6542,6 @@ const useTripsheet = () => {
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
     const superAdminAccess = localStorage.getItem("SuperAdmin")
-    // console.log(superAdminAccess, "ssssssssss", statusCheck);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -6556,7 +6555,7 @@ const useTripsheet = () => {
 
                 console.log("Debugging Inputs:");
                 console.log("statusCheck:", statusCheck);
-                console.log("station:", station);
+                console.log("condititonstation:", station);
                 console.log("superAdminAccess:", superAdminAccess);
 
                 // Normalize station data for consistency
@@ -6589,6 +6588,17 @@ const useTripsheet = () => {
                     setEmptyState(false);
                     return;
                 }
+                  // Condition 4: Closed with Chennai or All
+                  if (
+                    (statusCheck === "Closed") &&
+                    (station.includes("Chennai") || station.includes("All"))
+                ) {
+                    console.log("Condition 4: Closed with Chennai or All");
+                    setTemporaryStatus(true);
+                    setHideField(true);
+                    setEmptyState(false)
+                    return;
+                }
                 if (
                     (statusCheck === "Closed") &&
                     (superAdminAccess === "0") &&
@@ -6607,16 +6617,7 @@ const useTripsheet = () => {
                     return;
                 }
 
-                // Condition 4: Closed with Chennai or All
-                if (
-                    statusCheck === "Closed" &&
-                    (station.includes("Chennai") || station.includes("All"))
-                ) {
-                    console.log("Condition 4: Closed with Chennai or All");
-                    setTemporaryStatus(true);
-                    setHideField(true);
-                    return;
-                }
+              
 
                 // Condition 5: Closed and superAdminAccess is 0
                 if (
@@ -6634,10 +6635,11 @@ const useTripsheet = () => {
                 // Condition 6: Closed or Billed and superAdminAccess is 0
                 if (
                     (statusCheck === "Closed" || statusCheck === "Billed") &&
-                    superAdminAccess === "0"
+                    (superAdminAccess === "0")
                 ) {
                     console.log("Condition 6: Closed or Billed and superAdminAccess is 0");
                     setEmptyState(true);
+                    setHideField(true)
                     return;
                 }
 
@@ -6654,7 +6656,7 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [enterTrigger]);
+    }, [enterTrigger,book]);
 
     // Edit Button Hide
 

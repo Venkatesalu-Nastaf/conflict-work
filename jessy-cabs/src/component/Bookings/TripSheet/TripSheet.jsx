@@ -907,7 +907,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   useEffect(() => {
     let timeout;
     console.log(conflictModalbox, "conflictttttttttttt")
-    if (conflictModalbox) {
+    if (conflictModalbox && emptyState!==true) {
       timeout = setTimeout(() => {
         setError(true);
         setErrorMessage("There is a conflict with this trip sheet in Date and Time");

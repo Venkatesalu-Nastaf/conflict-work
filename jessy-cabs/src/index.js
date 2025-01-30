@@ -11,6 +11,7 @@ import { PdfDataProvider } from "./component/Billings/Transfer/TransferReport/Pd
 import { RefPdfDataProvider } from "./component/Billings/CoveringBill/GroupBilling/GroupBillingContext";
 import { MailerTemplateDataProvider } from "./component/Info/Mailer/MailerContext";
 import { PermissionProvider } from "./component/context/permissionContext";
+import { VehicleMapDataProvider } from "./component/Map/vehicleMapContext/vehcileMapContext";
 // import { ReportProvider } from "./component/Registration/Report/Context/ReportContext";
 import { ReportProvider } from "./component/Billings/Report/Context/ReportContext";
 // import { EditMapProvider } from "./component/Bookings/TripSheet/NavigationMap/EditMapContext";
@@ -21,6 +22,7 @@ root.render(
   <BrowserRouter>
     <RefPdfDataProvider>
       <PdfDataProvider>
+        <VehicleMapDataProvider>
         <MailerTemplateDataProvider>
           <EditMapProvider>
           <ReportProvider>
@@ -38,7 +40,7 @@ root.render(
           </ReportProvider>
           </EditMapProvider>
         </MailerTemplateDataProvider>
-
+        </VehicleMapDataProvider>
       </PdfDataProvider>
     </RefPdfDataProvider>
 

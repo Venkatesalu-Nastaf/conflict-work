@@ -25,7 +25,7 @@ import Detailsvehicle from "./Detailsvehicle/Detailsvehicle"
 import VehicleInformationDrawer from "./VehicleInformationDrawer/VehicleInformationDrawer"
 import { useNavigate } from 'react-router-dom';
 import useDetailsVehicle from './useDetailsVehicle';
-
+import { VehicleMapData } from '../../vehicleMapContext/vehcileMapContext';
 import "./VehicleSection.css"
 
 
@@ -60,7 +60,7 @@ const VehicleSection = () => {
     vehicleSearchDetails,setVehicleSearchDetails
    } = useContext(PermissionContext)
   const { vehiclesData } = useDetailsVehicle()
-
+  const {jessyCabsDistance, setJessyCabsDistance} = VehicleMapData()
   const [selectedOption, setSelectedOption] = useState('Vehicle');
   const [searchTerm, setSearchTerm] = useState('');
   const [dropdownValue, setDropdownValue] = useState('');
@@ -222,7 +222,7 @@ const VehicleSection = () => {
                     <p className='indidual-para driver-para text-color' onClick={toggleDrawer(true)}>speed: <span className='text-warning'>25 km/h</span></p>
                   </div>
                   <p className='indidual-para margins' onClick={toggleDrawer(true)}> <span><CiLocationOn /></span> <span>5-7, Sholinganallur Main Road, Sholinganallur, Chennai, Kanchipuram, TamilNadu</span></p>
-                  <p className='indidual-para margins vehicle-nearest-address' onClick={toggleDrawer(true)} > NEAREST ADDRESS: 21 km from JESSY CABS ( Office )</p>
+                  <p className='indidual-para margins vehicle-nearest-address' onClick={toggleDrawer(true)} > NEAREST ADDRESS: {jessyCabsDistance} km from JESSY CABS ( Office )</p>
                   <div className='vehicle-indiduals-cards'>
                     <p className='indidual-para margins' onClick={toggleDrawer(true)}> <span><GiPathDistance /></span> <span className='not-on-job-vehicle-info'>Not On Job</span></p>
                     <div className='call-share-message'>

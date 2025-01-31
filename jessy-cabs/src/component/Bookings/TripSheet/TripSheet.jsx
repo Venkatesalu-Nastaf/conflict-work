@@ -695,7 +695,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     const finalshedincalc = parseFloat(shedintimeformat).toFixed(2);
     const shedoutTimeFormat = reportTime?.replace(":", ".")
     const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
-    const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';
+    const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';    
     const parseDate = (dateStr) => {
       const [day, month, year] = dateStr?.split('-');
       return new Date(`${year}-${month}-${day}`);
@@ -753,7 +753,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     const shedoutTimeFormat = reportTime?.replace(":", ".")
     const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
 
-    const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
+    const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';
     const parseDate = (dateStr) => {
       const [day, month, year] = dateStr?.split('-');
       return new Date(`${year}-${month}-${day}`);

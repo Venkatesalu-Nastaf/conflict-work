@@ -6534,7 +6534,7 @@ const useTripsheet = () => {
             setHideField(true);
             console.log("Both dates are equal not allowed");
         }
-    }, [enterTrigger]);
+    }, [enterTrigger,book]);
 
     // }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
 
@@ -6586,6 +6586,7 @@ const useTripsheet = () => {
                     console.log("Condition 2: Temporary Closed without All or Chennai");
                     setTemporaryStatus(true);
                     setEmptyState(false);
+                    setHideField(true)
                     return;
                 }
                   // Condition 4: Closed with Chennai or All

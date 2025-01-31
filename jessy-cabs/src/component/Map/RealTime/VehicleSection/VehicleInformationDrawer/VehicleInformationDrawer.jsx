@@ -47,7 +47,7 @@ const VehicleInformationDrawer = () => {
 
     const { vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying,
         startMarkerPosition, setStartMarkerPosition, handleDrawPaths, dynamicPolyline, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths,
-        handledefault10xDrawPaths,speedState,address
+        handledefault10xDrawPaths,speedState,address,startTripLocation,endTripLocation
 
     } = useDetailsVehicle()
     //vehicle section drawer
@@ -317,6 +317,7 @@ const calculateDistance = () => {
           
         //   setDistance(distanceText);
           setJessyCabsDistance(distanceText)
+          return
         } else {
         //   alert("Error calculating distance");
         console.log(response,"distanceeeeeeeeeeeeeeeeresssssssssssssss");
@@ -325,7 +326,13 @@ const calculateDistance = () => {
       }
     );
   };
+console.log(calculateDistance(),"checkdistanceeeeeeeeeeeeeeeeeeeeeee");
+const handleStartTrip = ()=>{
 
+}
+const handleEndTrip = ()=>{
+    
+}
     return (
         <>
             <div>
@@ -601,10 +608,35 @@ const calculateDistance = () => {
                                                 anchor: new window.google.maps.Point(12, 12),
                                             }}
                                         />
-
-                                        {/* Animated Marker */}
-
-
+                                       
+                                           {/* Trip Start Point */}
+                                        <MarkerF
+                                            position={{
+                                                lat: startTripLocation?.latitude,
+                                                lng: startTripLocation?.longitude,
+                                            }}
+                                            onClick={()=>handleStartTrip()}
+                                            icon={{
+                                                url: startPointIcon,
+                                                scaledSize: new window.google.maps.Size(24, 24),
+                                                origin: new window.google.maps.Point(0, 0),
+                                                anchor: new window.google.maps.Point(12, 12),
+                                            }}
+                                        />
+                                           {/* Trip end Point */}
+                                           <MarkerF
+                                            position={{
+                                                lat: endTripLocation?.latitude,
+                                                lng: endTripLocation?.longitude,
+                                            }}
+                                            onClick={()=>handleEndTrip()}
+                                            icon={{
+                                                url: startPointIcon,
+                                                scaledSize: new window.google.maps.Size(24, 24),
+                                                origin: new window.google.maps.Point(0, 0),
+                                                anchor: new window.google.maps.Point(12, 12),
+                                            }}
+                                        />
                                         {/* <MarkerF
     position={{
         lat: currentPosition.lat,
@@ -725,7 +757,6 @@ const calculateDistance = () => {
                                                 color: speedState === 100 ? 'white' : 'black',
                                                 '&:hover': { backgroundColor: 'lightgray' },
                                             }} onClick={() => handle50xDrawPaths()}>50X</Button>
-                                            <Button onClick={()=>calculateDistance()}>kmmm</Button>
                                         </div>
                                     </div>
                                 </div>

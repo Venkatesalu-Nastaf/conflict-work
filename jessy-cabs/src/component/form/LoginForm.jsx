@@ -55,42 +55,53 @@ const Login = () => {
     }
   }, [error, success, warning, info]);
 
-
+  
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
 
 
+  
+  
 
-  const formSubmitter = async (e) => {
+    const formSubmitter = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(`${apiUrl}/login`, input);
+      // const response = await axios.post(`/login`, input);
+      
+      
       if (response.status === 200) {
-        const data=response.data.user;        
-        setUserdashboard(true) // its for logo trigger
-        setLogoTrigger(prev => !prev)
-        // loginUser(input.username);
+        const data = response.data.user;
+  
+        setUserdashboard(true); // its for logo trigger
+        setLogoTrigger((prev) => !prev);
         loginUser(data.username);
         localStorage.setItem("username", data.username);
-        localStorage.setItem("SuperAdmin",data.superAdmin)
-        localStorage.setItem("useridno",data.userid)
+        localStorage.setItem("SuperAdmin", data.superAdmin);
+        localStorage.setItem("useridno", data.userid);  
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");
         localStorage.setItem("auth", true);
-    
-
-      }
-      else {
+      } else {
         setError(true);
         setErrorMessage("Check your Network Connection");
       }
-    } catch {
-      setError(true);
-      setErrorMessage("An error occurred while logging in.");
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        // Handle incorrect username or password
+        setError(true);
+        setErrorMessage("Username or password is incorrect");
+        
+      } else {
+        // Handle general errors  
+        setError(true);
+        setErrorMessage("An error occurred while logging in.");
+      } 
     }
   };
+  
 
   return (
     <div className="portal-container">

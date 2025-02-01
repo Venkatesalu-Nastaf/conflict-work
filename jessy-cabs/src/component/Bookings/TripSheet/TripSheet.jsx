@@ -3023,8 +3023,27 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 <div style={{ display: "blocks" }}>
                                   <Button disabled={!Tripsheet_modify} onClick={generateAndCopyLinkdata}>Generate Link</Button>
-                                </div>
-                                {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+                                </div>                               
+                                {/* {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+                                  <button>Share on WhatsApp</button>
+                                </WhatsappShareButton>
+                                } */}
+
+                                 {appsstatus !== "Closed" && signaturelinkwhatsapp && 
+                                // <WhatsappShareButton url={signaturelinkwhatsapp} title={"Trip details from JESSY CABS Guest Name ${guestname} . Please Click the link to close E-Tripsheet-"} separator=" - ">
+                                <WhatsappShareButton 
+  url={signaturelinkwhatsapp} 
+title={`Trip details from JESSY CABS, 
+  Guest Name: ${formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''} 
+  Contact no: ${formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''} 
+  T.S no: ${formData.tripid || selectedCustomerData.tripid || book.tripid || ''} 
+  Reporting Date: ${(formData.startdate || selectedCustomerData.startdate || book.startdate) ? dayjs(formData.startdate || selectedCustomerData.startdate || book.startdate).format("DD/MM/YYYY") : ''} 
+  Reporting Time: ${(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime) ? dayjs(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime, "HH:mm:ss").format("HH:mm") : ''} 
+  Reporting Address: ${formData.address1 || selectedCustomerData.address1 || book.address1 || ''}.JESSYCABS.
+
+Please Click the link to close E-Tripsheet-`} 
+ separator=" - "
+>
                                   <button>Share on WhatsApp</button>
                                 </WhatsappShareButton>
                                 }

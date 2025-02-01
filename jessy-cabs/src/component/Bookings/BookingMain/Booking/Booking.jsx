@@ -277,7 +277,7 @@ const Booking = ({ stationName, customerData }) => {
       setWarningMessage("Check Your Trip Status")
     }
   }
-console.log(prevHours,"timeeeeeeee+++++++++++");
+// console.log(prevHours,"timeeeeeeee+++++++++++");
 
   return (
     <div className="booking-form main-content-form Scroll-Style-hide">

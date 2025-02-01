@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { APIURL } from "../../../url";
 import axios from 'axios';
 import { PermissionContext } from "../../../context/permissionContext";
@@ -21,8 +21,19 @@ const useDetailsVehicle = () => {
   const [address, setAddress] = useState("");
   const { vehcilecurrentAddress, setVehiclecurrentAddress } = VehicleMapData();
   const [startTripLocation, setStartTripLocation] = useState({ latitude: null, longitude: null });
-  const [endTripLocation,setEndTripLocation] = useState({ latitude: null, longitude: null });
+  const [endTripLocation, setEndTripLocation] = useState({ latitude: null, longitude: null });
+  const [selectedTripid, setSelectedTripid] = useState(null);
+  // const [isPlaying, setIsPlaying] = useState(false);
+  const [playInterval, setPlayInterval] = useState(null);
 
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      setIsPlaying(false);
+      clearInterval(playInterval); // Stop the animation
+    } else {
+      handledefault10xDrawPaths(); // Start the animation
+    }
+  };
 
   const [rotation, setRotation] = useState(0);
   //   get All vehicles List
@@ -103,7 +114,7 @@ const useDetailsVehicle = () => {
     const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // Convert radians to degrees
     return angle;
   };
-   
+
 
   // const handleDrawPaths = () => {
   //     setTrigger((pre) => !pre)
@@ -172,32 +183,61 @@ const useDetailsVehicle = () => {
 
 
 
-
-
+  const stepRef = useRef(0); // Persist step across re-renders
 
   const handledefault10xDrawPaths = () => {
-    setTrigger((pre) => !pre)
+    if (stepRef.current >= chennaiCoordinates.length) {
+      stepRef.current = 0; // Reset when reaching the last point
+      setDynamicPolyline([]); // Clear the polyline
+    }
+    setTrigger((prev) => !prev);
     setIsPlaying(true);
-    setDynamicPolyline([]);
-    let step = 0;
+
     const totalSteps = chennaiCoordinates.length - 1;
 
     const interval = setInterval(() => {
-      if (step <= totalSteps && speedState) {
+      if (stepRef.current <= totalSteps && speedState) {
         const newPoint = {
-          lat: chennaiCoordinates[step].latitude,
-          lng: chennaiCoordinates[step].longitude,
+          lat: chennaiCoordinates[stepRef.current].latitude,
+          lng: chennaiCoordinates[stepRef.current].longitude,
         };
         setCurrentPosition(newPoint);
-
         setDynamicPolyline((prevPolyline) => [...prevPolyline, newPoint]);
-        step++;
+
+        stepRef.current++; // Persist step count
       } else {
         clearInterval(interval);
         setIsPlaying(false);
       }
+      setPlayInterval(interval);
     }, speedState);
-  }
+  };
+
+
+  // const handledefault10xDrawPaths = () => {
+  //   setTrigger((pre) => !pre)
+  //   setIsPlaying(true);
+  //   setDynamicPolyline([]);
+  //   let step = 0;
+  //   const totalSteps = chennaiCoordinates.length - 1;
+
+  //   const interval = setInterval(() => {
+  //     if (step <= totalSteps && speedState) {
+  //       const newPoint = {
+  //         lat: chennaiCoordinates[step].latitude,
+  //         lng: chennaiCoordinates[step].longitude,
+  //       };
+  //       setCurrentPosition(newPoint);
+
+  //       setDynamicPolyline((prevPolyline) => [...prevPolyline, newPoint]);
+  //       step++;
+  //     } else {
+  //       clearInterval(interval);
+  //       setIsPlaying(false);
+  //     }
+  //     setPlayInterval(interval);
+  //   }, speedState);
+  // }
   const handle10xDrawPaths = () => {
     setSpeedState(1000)
   }
@@ -277,56 +317,56 @@ const useDetailsVehicle = () => {
   //   };
   const getAddress = async () => {
     try {
-        const response = await axios.get(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentPosition?.lat},${currentPosition?.lng}&key=${API_KEY}`
-        );
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentPosition?.lat},${currentPosition?.lng}&key=${API_KEY}`
+      );
 
-        if (response.data.status === "OK") {
-            const addressComponents = response.data.results[0]?.address_components;
-            let road = "";
-            let area = "";
-            let district = "";
-            let city = "";
-            let state = "";
-            let pincode = "";
+      if (response.data.status === "OK") {
+        const addressComponents = response.data.results[0]?.address_components;
+        let road = "";
+        let area = "";
+        let district = "";
+        let city = "";
+        let state = "";
+        let pincode = "";
 
-            addressComponents.forEach(component => {
-                if (component.types.includes("route")) {
-                    road = component.long_name; // Road name
-                }
-                if (component.types.includes("sublocality") || component.types.includes("sublocality_level_1")) {
-                    area = component.long_name; // Area name
-                }
-                if (component.types.includes("administrative_area_level_2")) {
-                    district = component.long_name; // District (or city in some cases)
-                }
-                if (component.types.includes("locality")) {
-                    city = component.long_name; // City (if needed)
-                }
-                if (component.types.includes("administrative_area_level_1")) {
-                    state = component.long_name; // State
-                }
-                if (component.types.includes("postal_code")) {
-                    pincode = component.long_name; // Pincode
-                }
-            });
+        addressComponents.forEach(component => {
+          if (component.types.includes("route")) {
+            road = component.long_name; // Road name
+          }
+          if (component.types.includes("sublocality") || component.types.includes("sublocality_level_1")) {
+            area = component.long_name; // Area name
+          }
+          if (component.types.includes("administrative_area_level_2")) {
+            district = component.long_name; // District (or city in some cases)
+          }
+          if (component.types.includes("locality")) {
+            city = component.long_name; // City (if needed)
+          }
+          if (component.types.includes("administrative_area_level_1")) {
+            state = component.long_name; // State
+          }
+          if (component.types.includes("postal_code")) {
+            pincode = component.long_name; // Pincode
+          }
+        });
 
-            // If district is empty, use city (sometimes district info is stored as locality)
-            if (!district) {
-                district = city;
-            }
-
-            const formattedAddress = `${road}, ${area}, ${district}, ${state} - ${pincode}`;
-            setAddress(formattedAddress || "Address not found");
-            setVehiclecurrentAddress(formattedAddress || "Address not found");
-        } else {
-            setAddress("Unable to fetch address");
+        // If district is empty, use city (sometimes district info is stored as locality)
+        if (!district) {
+          district = city;
         }
+
+        const formattedAddress = `${road}, ${area}, ${district}, ${state} - ${pincode}`;
+        setAddress(formattedAddress || "Address not found");
+        setVehiclecurrentAddress(formattedAddress || "Address not found");
+      } else {
+        setAddress("Unable to fetch address");
+      }
     } catch (error) {
-        console.error("Error fetching address:", error);
-        setAddress("Error occurred while fetching address");
+      console.error("Error fetching address:", error);
+      setAddress("Error occurred while fetching address");
     }
-};
+  };
 
 
   useEffect(() => {
@@ -338,16 +378,19 @@ const useDetailsVehicle = () => {
     if (startPoint) {
       setStartTripLocation({ latitude: startPoint.latitude, longitude: startPoint.longitude });
     }
-    if(endPoint){
-      setEndTripLocation({latitude:endPoint?.latitude,longitude:endPoint?.longitude})
+    if (endPoint) {
+      setEndTripLocation({ latitude: endPoint?.latitude, longitude: endPoint?.longitude })
     }
   }, [currentPosition])
   console.log(address, "current address");
-
+  const tripidOptions = useMemo(() => {
+    const uniqueTripids = [...new Set(chennaiCoordinates.map(item => item.Tripid))].filter(id => id !== "null");
+    return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
+  }, []);
   return {
     vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying, setStartMarkerPosition, startMarkerPosition, dynamicPolyline,
-    handleDrawPaths, handledefault10xDrawPaths, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths, rotation, speedState, address,startTripLocation,
-    endTripLocation
+    handleDrawPaths, handledefault10xDrawPaths, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths, rotation, speedState, address, startTripLocation,
+    endTripLocation, tripidOptions, selectedTripid, setSelectedTripid, togglePlayPause
   }
 }
 export default useDetailsVehicle;

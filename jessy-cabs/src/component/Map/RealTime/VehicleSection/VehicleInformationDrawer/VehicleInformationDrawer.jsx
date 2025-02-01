@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useContext, useCallback, useEffect, useRef, useMemo } from 'react';
 import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer, Polyline } from '@react-google-maps/api';
 // import { IconButton, Button } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
@@ -29,7 +29,11 @@ import blackicon from "./blackmapicon.png"
 import startPointIcon from "./startPointIcon.png"
 import useDetailsVehicle from '../useDetailsVehicle';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 import { VehicleMapData } from '../../../vehicleMapContext/vehcileMapContext';
+import TripDetailModal from '../../../Modal/TripDetailModal';
+import Autocomplete from "@mui/material/Autocomplete";
+
 /* global google */
 // Define the container style for the map
 const containerStyle = {
@@ -47,18 +51,19 @@ const VehicleInformationDrawer = () => {
 
     const { vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying,
         startMarkerPosition, setStartMarkerPosition, handleDrawPaths, dynamicPolyline, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths,
-        handledefault10xDrawPaths,speedState,address,startTripLocation,endTripLocation
+        handledefault10xDrawPaths, speedState, address, startTripLocation, endTripLocation, tripidOptions, selectedTripid, setSelectedTripid,
+        togglePlayPause
 
     } = useDetailsVehicle()
     //vehicle section drawer
     const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer, vehicleListData, setVehicleListData } = useContext(PermissionContext);
     const navigate = useNavigate();
     const [currentPointIndex, setCurrentPointIndex] = useState(0);
-    const {jessyCabsDistance, setJessyCabsDistance} = VehicleMapData();
+    const { jessyCabsDistance, setJessyCabsDistance, tripModalOpen, setTripModalOpen } = VehicleMapData();
     // const {jessyCabsLocation,setJessyCabsLocation} = useState({lat:13.031207,lng:80.239396});
     const jessyCabsLocation = {
-        lat:13.031207,
-        lng:80.239396
+        lat: 13.031207,
+        lng: 80.239396
     }
     const mapRef = useRef(null)
     const handleopenHistoryDrawer = () => {
@@ -135,6 +140,7 @@ const VehicleInformationDrawer = () => {
     const markerLocation = lat && long ? { lat, lng: long } : null;
 
     const [mapiconBase64, setMapiconBase64] = useState('');
+    const [clickPosition, setClickPosition] = useState({ top: 0, left: 0 });
 
 
     // Center button click handler
@@ -295,44 +301,63 @@ const VehicleInformationDrawer = () => {
         return google.maps.geometry.spherical.computeHeading(startLatLng, endLatLng);
     }
 
-// distance calculate
-const calculateDistance = () => {
+    // distance calculate
+    const calculateDistance = () => {
 
-    const origin = new window.google.maps.LatLng(jessyCabsLocation?.lat, jessyCabsLocation?.lng);
-    const destination = new window.google.maps.LatLng(currentPosition?.lat, currentPosition?.lng);
+        const origin = new window.google.maps.LatLng(jessyCabsLocation?.lat, jessyCabsLocation?.lng);
+        const destination = new window.google.maps.LatLng(currentPosition?.lat, currentPosition?.lng);
 
-    const service = new window.google.maps.DistanceMatrixService();
-    service.getDistanceMatrix(
-      {
-        origins: [origin],
-        destinations: [destination],
-        travelMode: "DRIVING",
-      },
-      (response, status) => {
-        console.log(status,"distanceeeeeeeeeeeeeeee;;;;;;;;;;;;;;;;;;;;;;;;;");
-        
-        if (status === "OK") {
-          const distanceText = response.rows[0].elements[0].distance.text;
-          console.log(distanceText,"distanceeeeeeeeeeeeeeee");
-          
-        //   setDistance(distanceText);
-          setJessyCabsDistance(distanceText)
-          return
-        } else {
-        //   alert("Error calculating distance");
-        console.log(response,"distanceeeeeeeeeeeeeeeeresssssssssssssss");
-        
-        }
-      }
-    );
-  };
-console.log(calculateDistance(),"checkdistanceeeeeeeeeeeeeeeeeeeeeee");
-const handleStartTrip = ()=>{
+        const service = new window.google.maps.DistanceMatrixService();
+        service.getDistanceMatrix(
+            {
+                origins: [origin],
+                destinations: [destination],
+                travelMode: "DRIVING",
+            },
+            (response, status) => {
+                console.log(status, "distanceeeeeeeeeeeeeeee;;;;;;;;;;;;;;;;;;;;;;;;;");
 
-}
-const handleEndTrip = ()=>{
-    
-}
+                if (status === "OK") {
+                    const distanceText = response.rows[0].elements[0].distance.text;
+                    console.log(distanceText, "distanceeeeeeeeeeeeeeee");
+
+                    //   setDistance(distanceText);
+                    setJessyCabsDistance(distanceText)
+                    return
+                } else {
+                    //   alert("Error calculating distance");
+                    console.log(response, "distanceeeeeeeeeeeeeeeeresssssssssssssss");
+
+                }
+            }
+        );
+    };
+    console.log(calculateDistance(), "checkdistanceeeeeeeeeeeeeeeeeeeeeee");
+    const handleStartTrip = (event) => {
+        setClickPosition({
+            lat: startTripLocation?.latitude,
+            lng: startTripLocation?.longitude,
+            pixelX: event?.domEvent?.clientX,
+            pixelY: event?.domEvent?.clientY,
+        });
+        setTripModalOpen(true);
+    };
+    const handleEndTrip = (event) => {
+        setClickPosition({
+            lat: endTripLocation?.latitude,
+            lng: endTripLocation?.longitude,
+            pixelX: event?.domEvent?.clientX,
+            pixelY: event?.domEvent?.clientY,
+        });
+        setTripModalOpen(true)
+
+    }
+
+
+
+    const handleTripidChange = (event, value) => {
+        setSelectedTripid(value?.value || null);
+    };
     return (
         <>
             <div>
@@ -447,9 +472,23 @@ const handleEndTrip = ()=>{
                                                         <span>{vehicleListData[0]?.fueltype}</span>
                                                     </div>
 
-                                                    <div className='overview-content'>
-                                                        <span className='overview-left'>Distance:</span>
-                                                        <span>1.2 km</span>
+                                                    <div className='overview-content-dropdown'>
+                                                        <div>
+                                                            <span className='overview-left'>Distance:</span>
+                                                            <span>1.2 km</span>
+                                                        </div>
+                                                        <div>
+                                                            <Autocomplete
+                                                                fullWidth
+                                                                // size="small"
+                                                                sx={{ width: 180 }}
+                                                                options={tripidOptions || ""}
+                                                                value={tripidOptions.find(option => option.value === selectedTripid) || null}
+                                                                onChange={handleTripidChange}
+                                                                getOptionLabel={option => option.label}
+                                                                renderInput={(params) => <TextField {...params} label="Select Trip ID" />}
+                                                            />
+                                                        </div>
                                                     </div>
 
                                                     <div className='overview-content-border'>
@@ -608,35 +647,41 @@ const handleEndTrip = ()=>{
                                                 anchor: new window.google.maps.Point(12, 12),
                                             }}
                                         />
-                                       
-                                           {/* Trip Start Point */}
-                                        <MarkerF
-                                            position={{
-                                                lat: startTripLocation?.latitude,
-                                                lng: startTripLocation?.longitude,
-                                            }}
-                                            onClick={()=>handleStartTrip()}
-                                            icon={{
-                                                url: startPointIcon,
-                                                scaledSize: new window.google.maps.Size(24, 24),
-                                                origin: new window.google.maps.Point(0, 0),
-                                                anchor: new window.google.maps.Point(12, 12),
-                                            }}
-                                        />
-                                           {/* Trip end Point */}
-                                           <MarkerF
-                                            position={{
-                                                lat: endTripLocation?.latitude,
-                                                lng: endTripLocation?.longitude,
-                                            }}
-                                            onClick={()=>handleEndTrip()}
-                                            icon={{
-                                                url: startPointIcon,
-                                                scaledSize: new window.google.maps.Size(24, 24),
-                                                origin: new window.google.maps.Point(0, 0),
-                                                anchor: new window.google.maps.Point(12, 12),
-                                            }}
-                                        />
+
+                                        {/* Trip Start Point */}
+                                        <div>
+                                            <MarkerF
+                                                position={{
+                                                    lat: startTripLocation?.latitude,
+                                                    lng: startTripLocation?.longitude,
+                                                }}
+                                                onClick={handleStartTrip}
+                                                icon={{
+                                                    url: startPointIcon,
+                                                    scaledSize: new window.google.maps.Size(24, 24),
+                                                    origin: new window.google.maps.Point(0, 0),
+                                                    anchor: new window.google.maps.Point(12, 12),
+                                                }}
+                                            />
+                                            {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
+                                        </div>
+                                        {/* Trip end Point */}
+                                        <div>
+                                            <MarkerF
+                                                position={{
+                                                    lat: endTripLocation?.latitude,
+                                                    lng: endTripLocation?.longitude,
+                                                }}
+                                                onClick={handleEndTrip}
+                                                icon={{
+                                                    url: startPointIcon,
+                                                    scaledSize: new window.google.maps.Size(24, 24),
+                                                    origin: new window.google.maps.Point(0, 0),
+                                                    anchor: new window.google.maps.Point(12, 12),
+                                                }}
+                                            />
+                                            {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
+                                        </div>
                                         {/* <MarkerF
     position={{
         lat: currentPosition.lat,
@@ -735,7 +780,10 @@ const handleEndTrip = ()=>{
                                         <div>
                                         </div>
                                         <div className='playArrow'>
-                                            <Button onClick={() => handledefault10xDrawPaths()}><PlayArrowIcon /> </Button>
+                                            <Button onClick={togglePlayPause}>
+                                                {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                                            </Button>
+
                                         </div>
                                         <div className='playspeed'>
 

@@ -9,11 +9,12 @@ export const VehicleMapData = () => {
 export const VehicleMapDataProvider = ({ children }) => {
     const [jessyCabsDistance, setJessyCabsDistance] = useState(null);
     const [vehcilecurrentAddress,setVehiclecurrentAddress] = useState(null);
+    const [tripModalOpen,setTripModalOpen] = useState(null);
 
 
     return (
         <VehicleMapContext.Provider value={{
-            jessyCabsDistance, setJessyCabsDistance,vehcilecurrentAddress,setVehiclecurrentAddress
+            jessyCabsDistance, setJessyCabsDistance,vehcilecurrentAddress,setVehiclecurrentAddress,tripModalOpen,setTripModalOpen
         }}>
             {children}
         </VehicleMapContext.Provider>

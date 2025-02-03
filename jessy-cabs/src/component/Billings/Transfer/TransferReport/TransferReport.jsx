@@ -685,8 +685,7 @@ const TransferReport = ({ stationName }) => {
                     className='full-width'
                     label="Invoice Date"
                     // value={dayjs(invoiceDate).format('DD-MM-YYYY')}
-                    value={invoiceDate ? dayjs(invoiceDate).format('DD-MM-YYYY') : ''}
-
+                    value={invoiceDate ? dayjs(invoiceDate).format('DD/MM/YYYY') : ''}
                     name="Billdate"
                     autoComplete='off'
                   />
@@ -700,8 +699,8 @@ const TransferReport = ({ stationName }) => {
                     id="id"
                     className='full-width'
                     label="From Date"
-                    // value={dayjs(fromDate).format('DD-MM-YYYY')}
-                    value={fromDate ? dayjs(fromDate).format('DD-MM-YYYY') : ''}
+                    // value={dayjs(fromDate).fo  rmat('DD-MM-YYYY')}
+                    value={fromDate ? dayjs(fromDate).format('DD/MM/YYYY') : ''}
                     name="fromdate"
                     autoComplete='off'
                   />
@@ -716,7 +715,7 @@ const TransferReport = ({ stationName }) => {
                     className='full-width'
                     label="To Date"
                     // value={dayjs(endDate).format('DD-MM-YYYY')}
-                    value={endDate ? dayjs(endDate).format('DD-MM-YYYY') : ''}
+                    value={endDate ? dayjs(endDate).format('DD/MM/YYYY') : ''}
                     name="todate"
                     autoComplete='off'
                   />

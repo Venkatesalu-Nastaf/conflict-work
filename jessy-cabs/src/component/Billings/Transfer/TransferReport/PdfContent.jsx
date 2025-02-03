@@ -580,9 +580,16 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                             </View>
                             <View style={styles.tablecellparticular}>
                               <Text style={{ fontSize: 10 }}>{item.guestname}</Text>
-                              <Text style={{ fontSize: 10 }}>
+                              {/* <Text style={{ fontSize: 10 }}>
                                 {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
-                              </Text>
+                                / {item.vehicleName2}
+                              </Text> */}
+                              <Text style={{ fontSize: 10 }}>
+                              {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
+                            </Text>
+                            <Text style={{ fontSize: 10 }}>
+                               {item.vehicleName2} {item.vehType}
+                            </Text>
                               <Text style={{ fontSize: 10 }}>Vehicle Hire Charges For : {item.calcPackage}</Text>
 
                               {item.extraKM > 0 && item.extrakm_amount > 0 ? (

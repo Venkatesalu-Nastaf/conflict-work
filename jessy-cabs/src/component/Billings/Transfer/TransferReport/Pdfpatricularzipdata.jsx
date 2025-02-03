@@ -10,8 +10,9 @@ const styles = StyleSheet.create({
     // padding: 10,
   },
   heading: {
-    border: '2px solid #000000',
-    padding: '20px'
+    border: '2px solid rgb(0, 0, 0)',
+    padding: '20px',
+    // height: "",
   },
 
   section: {
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   },
   text2add: {
     fontSize: '11px',
-    width: "40%"
+    width: "100%"
 
   },
 
@@ -57,10 +58,15 @@ const styles = StyleSheet.create({
   headingsection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems:'center',
+    height:"100px"
   },
   logodiv: {
     // marginBottom: 10
-    padding: '0px'
+    width:"25%",
+    padding: '0px',
+    flexDirection:'row',
+    justifyContent:'flex-end'
   },
   maintabble: {
     border: '1px solid #000000',
@@ -117,7 +123,8 @@ const styles = StyleSheet.create({
   clientName1: {
     fontSize: '10px',
     color: '#545151',
-    textAlign: 'center'
+    // textAlign: 'center',
+    width:"80%",
 
   },
   clientAddress: {
@@ -130,12 +137,12 @@ const styles = StyleSheet.create({
   },
   remarksection: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems:"flex-start",
     gap: '10px',
     borderLeft: '1px solid #000000',
     borderRight: '1px solid #000000',
-
-    height: 30,
+    // height: 30,
+    padding:"5px"
 
 
   }, tablesigndiv: {
@@ -147,6 +154,9 @@ const styles = StyleSheet.create({
     width: '60%',
     // border: '1px solid green',
     // flexDirection:'row',
+    padding:"20px",
+    // borderLeft:"1px solid #000000",
+    // borderRight:"1px solid #000000",
 
   },
   signdiv: {
@@ -169,6 +179,8 @@ const styles = StyleSheet.create({
     width: '25%',
     // textAlign: 'center',
     borderRight: '1px solid #000000',
+    borderTop: '1px solid #000000',
+    borderLeft: '1px solid #000000',
   },
   labeltagremark: {
     textAlign: 'center',
@@ -183,7 +195,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: '10px',
     padding: '1px',
-
+    borderTop:"1px solid #000000",
     borderRight: '1px solid #000000'
   },
 
@@ -194,7 +206,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: '10px',
     padding: '1px',
-
+    borderTop:"1px solid #000000",
     borderRight: '1px solid #000000'
   },
   labeltag4: {
@@ -205,6 +217,7 @@ const styles = StyleSheet.create({
     fontSize: '10px',
     padding: '1px',
     borderRight: '1px solid #000000',
+    borderTop:"1px solid #000000",
 
   },
 
@@ -213,6 +226,7 @@ const styles = StyleSheet.create({
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
+    borderLeft: '1px solid #000000',
     padding: '2px'
   },
   labeltag6: {
@@ -220,6 +234,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: '10px',
     borderRight: '1px solid #000000',
+
     padding: '2px'
   },
 
@@ -258,6 +273,7 @@ const styles = StyleSheet.create({
     fontSize: '10px',
     width: '25%',
     textAlign: 'center',
+    borderLeft: '1px solid #000000',
 
     borderRight: '1px solid #000000',
     padding: '2px'
@@ -275,8 +291,7 @@ const styles = StyleSheet.create({
     fontSize: '10px',
     width: '25%',
     textAlign: 'center',
-
-
+    borderLeft: '1px solid #000000',
     borderRight: '1px solid #000000',
     padding: '2px'
   },
@@ -313,7 +328,7 @@ const styles = StyleSheet.create({
   },
   tablehead5: {
     flexDirection: 'row',
-    // borderBottom: '1px solid #000000',
+    borderBottom: '1px solid #000000',
 
   }, signimg: {
     flexDirection: 'row',
@@ -336,7 +351,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     // alignItems:'center',
     gap: "30px",
-    padding: '3px'
+    padding: '3px',
+    height:"190px",
+    // backgroundColor:"red",
   },
   topmap: {
     marginTop: "40px"
@@ -357,8 +374,20 @@ const styles = StyleSheet.create({
 
   imgwidth: {
     width: '50%',
+   
 
-  }
+  },
+
+  headerSecond : {
+    width:"25%",
+    flexDirection:"row",
+    justifyContent:"flex-start"
+  },
+  
+  firstHeader: {
+    width:"48%"
+  },
+
 
 
 });
@@ -702,12 +731,12 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
             <View style={styles.borderoutsite}>
               <View style={styles.section}>
                 <View style={styles.headingsection}>
-                  <View>
+                  <View style={styles.firstHeader}>
                     <Text style={styles.text1}>{orgname}</Text>
                     <Text style={styles.text2add}> {stationData[0]?.address}</Text>
                     {/* <Text style={styles.text2}>{orgaddress3} </Text> */}
                   </View>
-                  <View>
+                  <View style={styles.headerSecond}>
                     <Text style={{ fontSize: '13px', fontWeight: 'bold', textAlign: 'center' }}>LOG SHEET</Text>
                   </View>
                   <View style={styles.logodiv}>
@@ -1061,8 +1090,9 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                       </View>
 
                     </View>
-                    {customerData[0]?.hybrid === 1 ? <>
-                  
+                    {customerData[0]?.hybrid === 1 ? 
+                    <>
+                 
                       <View style={styles.tablehead1}>
                     <View style={styles.labeltag5}>
                       <Text > Closing</Text>
@@ -1180,6 +1210,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
 
 
+                   
 
 
 
@@ -1187,7 +1218,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
 
                       : <>
-                      
+                  
+                                       
                       <View style={styles.tablehead1}>
                     <View style={styles.labeltag5}>
                       <Text > Closing</Text>
@@ -1233,7 +1265,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                         <Text>{tripReportKm}</Text>
 
                       </View>
-                      <View style={styles.tablehead5}>
+                     
+
+                    </View>
+                    <View style={styles.tablehead5}>
                       <View style={styles.labeltag21}>
                         <Text >Total</Text>
 
@@ -1255,11 +1290,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                       </View>
 
                     </View>
-
-                    </View>
                       
-                      
-                      
+                   
                       </>
                     }
 

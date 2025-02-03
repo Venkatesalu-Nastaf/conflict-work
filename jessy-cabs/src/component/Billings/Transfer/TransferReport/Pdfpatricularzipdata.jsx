@@ -40,7 +40,9 @@ const styles = StyleSheet.create({
   },
   text2add: {
     fontSize: '11px',
-    width: "100%"
+    width: "80%",
+    textAlign:"justify",
+    // backgroundColor:"red"
 
   },
 
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
     fontSize: '10px',
     color: '#000000',
     fontWeight: 'extrabold',
-    textAlign: 'left',
+    textAlign: 'justify',
     lineHeight: '1.3px',
     width: '50%'
   },
@@ -243,6 +245,7 @@ const styles = StyleSheet.create({
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
+    borderLeft: '1px solid #000000',
     padding: '2px'
   },
 
@@ -259,6 +262,7 @@ const styles = StyleSheet.create({
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
+    borderLeft: '1px solid #000000',
     padding: '2px'
   },
   labeltag14: {

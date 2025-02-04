@@ -736,7 +736,7 @@ const useTransferreport = () => {
             InvoiceNo: InvoiceNo
           }
         });
-        const Result = response.data;
+        const Result = response.data;        
         if (Result.length > 0) {
 
           setSuccess(true)
@@ -754,6 +754,10 @@ const useTransferreport = () => {
           setInvoiceDate(InvoiceDate)
           const groupTripid = Result?.map(li => li.Grouptrip_id)
           setGroupTripid(groupTripid)
+          const Status = Result?.map(li => li.Status)
+
+          const checkStatus = Status[0];          
+          setBilledStatusCheck(checkStatus)
           // const tripid = Result?.map(li =>li.Trip_id)
           const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
 
@@ -811,7 +815,7 @@ const useTransferreport = () => {
           setTotalTransferAmount(Amount)
           const Status = Result?.map(li => li.Status)
 
-          const checkStatus = Status[0];
+          const checkStatus = Status[0];          
           setBilledStatusCheck(checkStatus)
           const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
 

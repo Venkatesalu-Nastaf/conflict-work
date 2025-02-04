@@ -369,11 +369,10 @@ const useDetailsVehicle = () => {
   };
 
 
-  useEffect(() => {
+  useEffect(() => {    
     getAddress()
     const startPoint = chennaiCoordinates.find((point) => point.TripType === "start");
     const endPoint = chennaiCoordinates.find((point) => point.TripType === "end");
-
 
     if (startPoint) {
       setStartTripLocation({ latitude: startPoint.latitude, longitude: startPoint.longitude });
@@ -382,11 +381,11 @@ const useDetailsVehicle = () => {
       setEndTripLocation({ latitude: endPoint?.latitude, longitude: endPoint?.longitude })
     }
   }, [currentPosition])
-  console.log(address, "current address");
+
   const tripidOptions = useMemo(() => {
     const uniqueTripids = [...new Set(chennaiCoordinates.map(item => item.Tripid))].filter(id => id !== "null");
     return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
-  }, []);
+  }, [chennaiCoordinates]);
   return {
     vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying, setStartMarkerPosition, startMarkerPosition, dynamicPolyline,
     handleDrawPaths, handledefault10xDrawPaths, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths, rotation, speedState, address, startTripLocation,

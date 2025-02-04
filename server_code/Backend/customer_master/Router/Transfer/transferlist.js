@@ -66,7 +66,7 @@ router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => 
   const tripid = req.params.tripid.split(',');
   const decodedCustomer = decodeURIComponent(customer);
   // Query to get tripsheet details
-  db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?)', [decodedCustomer, tripid], (err, result) => {
+  db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?) ORDER BY startdate', [decodedCustomer, tripid], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
     }

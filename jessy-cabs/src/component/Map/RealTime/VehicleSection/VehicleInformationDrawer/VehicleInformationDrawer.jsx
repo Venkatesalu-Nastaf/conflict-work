@@ -33,6 +33,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import { VehicleMapData } from '../../../vehicleMapContext/vehcileMapContext';
 import TripDetailModal from '../../../Modal/TripDetailModal';
 import Autocomplete from "@mui/material/Autocomplete";
+import MapParticularTrip from '../MapParticulaTrip/MapParticularTrip';
 
 /* global google */
 // Define the container style for the map
@@ -332,7 +333,6 @@ const VehicleInformationDrawer = () => {
             }
         );
     };
-    console.log(calculateDistance(), "checkdistanceeeeeeeeeeeeeeeeeeeeeee");
     const handleStartTrip = (event) => {
         setClickPosition({
             lat: startTripLocation?.latitude,
@@ -355,7 +355,7 @@ const VehicleInformationDrawer = () => {
 
 
 
-    const handleTripidChange = (event, value) => {
+    const handleTripidChange = (value) => {
         setSelectedTripid(value?.value || null);
     };
     return (
@@ -484,7 +484,7 @@ const VehicleInformationDrawer = () => {
                                                                 sx={{ width: 180 }}
                                                                 options={tripidOptions || ""}
                                                                 value={tripidOptions.find(option => option.value === selectedTripid) || null}
-                                                                onChange={handleTripidChange}
+                                                                onChange={(label, value) => handleTripidChange(value)} // Correcting onChange
                                                                 getOptionLabel={option => option.label}
                                                                 renderInput={(params) => <TextField {...params} label="Select Trip ID" />}
                                                             />
@@ -604,136 +604,7 @@ const VehicleInformationDrawer = () => {
                                 </div>
 
                                 <div className='vehicle-info-content-map'>
-
-                                    <GoogleMap
-                                        mapContainerStyle={containerStyle}
-                                        center={center}
-                                        zoom={18}
-                                        onLoad={() => console.log("Map loaded")}
-                                    >
-                                        {dynamicPolyline.length > 0 ? (
-                                            <Polyline
-                                                path={dynamicPolyline}
-                                                options={{
-                                                    strokeColor: "#189df3",
-                                                    strokeOpacity: 0.8,
-                                                    strokeWeight: 6,
-                                                }}
-                                            />
-                                        )
-                                            : <Polyline
-                                                path={chennaiCoordinates.map((coord) => ({
-                                                    lat: coord.latitude,
-                                                    lng: coord.longitude,
-                                                }))}
-                                                options={{
-                                                    strokeColor: "#189df3",
-                                                    strokeOpacity: 0.8,
-                                                    strokeWeight: 6,
-                                                }}
-                                            />
-                                        }
-
-                                        {/* Start Marker */}
-                                        <MarkerF
-                                            position={{
-                                                lat: startMarkerPosition.latitude,
-                                                lng: startMarkerPosition.longitude,
-                                            }}
-                                            icon={{
-                                                url: startPointIcon,
-                                                scaledSize: new window.google.maps.Size(24, 24),
-                                                origin: new window.google.maps.Point(0, 0),
-                                                anchor: new window.google.maps.Point(12, 12),
-                                            }}
-                                        />
-
-                                        {/* Trip Start Point */}
-                                        <div>
-                                            <MarkerF
-                                                position={{
-                                                    lat: startTripLocation?.latitude,
-                                                    lng: startTripLocation?.longitude,
-                                                }}
-                                                onClick={handleStartTrip}
-                                                icon={{
-                                                    url: startPointIcon,
-                                                    scaledSize: new window.google.maps.Size(24, 24),
-                                                    origin: new window.google.maps.Point(0, 0),
-                                                    anchor: new window.google.maps.Point(12, 12),
-                                                }}
-                                            />
-                                            {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
-                                        </div>
-                                        {/* Trip end Point */}
-                                        <div>
-                                            <MarkerF
-                                                position={{
-                                                    lat: endTripLocation?.latitude,
-                                                    lng: endTripLocation?.longitude,
-                                                }}
-                                                onClick={handleEndTrip}
-                                                icon={{
-                                                    url: startPointIcon,
-                                                    scaledSize: new window.google.maps.Size(24, 24),
-                                                    origin: new window.google.maps.Point(0, 0),
-                                                    anchor: new window.google.maps.Point(12, 12),
-                                                }}
-                                            />
-                                            {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
-                                        </div>
-                                        {/* <MarkerF
-    position={{
-        lat: currentPosition.lat,
-        lng: currentPosition.lng,
-    }}
-    icon={{
-        url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-            <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
-                <g transform="rotate(${currentPosition.angle || 0}, 80, 80)">
-                    <image href="${mapiconBase64}" x="25" y="25" width="100" height="100" />
-                </g>
-            </svg>
-        `)}`,
-        scaledSize: new google.maps.Size(140, 140), // Increased scaled size
-        anchor: new google.maps.Point(70, 70), // Adjust the anchor to the center of the icon
-    }}
-/> */}
-
-                                        <MarkerF
-                                            position={{
-                                                lat: currentPosition.lat,
-                                                lng: currentPosition.lng,
-                                            }}
-                                            icon={{
-                                                url: blackicon,
-                                                scaledSize: new window.google.maps.Size(24, 24),
-                                                origin: new window.google.maps.Point(0, 0),
-                                                anchor: new window.google.maps.Point(12, 12),
-                                            }}    // icon={{
-                                        //     url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-                                        //         <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
-                                        //             <!-- Red top section -->
-                                        //             <rect x="0" y="0" width="150" height="50" fill="red" />
-
-                                        //             <!-- Image part of the icon -->
-                                        //             <g transform="rotate(${currentPosition.angle || 0}, 80, 80)">
-                                        //                 <image href="${mapiconBase64}" x="25" y="50" width="100" height="100" />
-                                        //             </g>
-                                        //         </svg>
-                                        //     `)}`,
-                                        //     scaledSize: new google.maps.Size(140, 140), // Adjusted icon size
-                                        //     anchor: new google.maps.Point(70, 70), // Center the anchor at the middle
-                                        // }}
-                                        />
-
-
-
-
-
-                                    </GoogleMap>
-
-                                    {openPopup && popupPosition && (
+      {openPopup && popupPosition && (
                                         <InfoWindow
                                             position={popupPosition}
                                             onCloseClick={handleClosePopup} // Close popup when the close button is clicked
@@ -767,6 +638,101 @@ const VehicleInformationDrawer = () => {
                                             </div>
                                         </InfoWindow>
                                     )}
+                                    {selectedTripid !== null ? <MapParticularTrip selectedTripid={selectedTripid} /> : <GoogleMap
+                                        mapContainerStyle={containerStyle}
+                                        center={center}
+                                        zoom={18}
+                                        onLoad={() => console.log("Map loaded")}
+                                    >
+                                        {dynamicPolyline.length > 0 ? (
+                                            <Polyline
+                                                path={dynamicPolyline}
+                                                options={{
+                                                    strokeColor: "#189df3",
+                                                    strokeOpacity: 0.8,
+                                                    strokeWeight: 6,
+                                                }}
+                                            />
+                                        )
+                                            : <Polyline
+                                                path={chennaiCoordinates.map((coord) => ({
+                                                    lat: coord.latitude,
+                                                    lng: coord.longitude,
+                                                }))}
+                                                options={{
+                                                    strokeColor: "#189df3",
+                                                    strokeOpacity: 0.8,
+                                                    strokeWeight: 6,
+                                                }}
+                                            />
+                                        }
+
+                                        <MarkerF
+                                            position={{
+                                                lat: startMarkerPosition.latitude,
+                                                lng: startMarkerPosition.longitude,
+                                            }}
+                                            icon={{
+                                                url: startPointIcon,
+                                                scaledSize: new window.google.maps.Size(24, 24),
+                                                origin: new window.google.maps.Point(0, 0),
+                                                anchor: new window.google.maps.Point(12, 12),
+                                            }}
+                                        />
+
+                                        <div>
+                                            <MarkerF
+                                                position={{
+                                                    lat: startTripLocation?.latitude,
+                                                    lng: startTripLocation?.longitude,
+                                                }}
+                                                onClick={handleStartTrip}
+                                                icon={{
+                                                    url: startPointIcon,
+                                                    scaledSize: new window.google.maps.Size(24, 24),
+                                                    origin: new window.google.maps.Point(0, 0),
+                                                    anchor: new window.google.maps.Point(12, 12),
+                                                }}
+                                            />
+                                            {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
+                                        </div>
+                                        <div>
+                                            <MarkerF
+                                                position={{
+                                                    lat: endTripLocation?.latitude,
+                                                    lng: endTripLocation?.longitude,
+                                                }}
+                                                onClick={handleEndTrip}
+                                                icon={{
+                                                    url: startPointIcon,
+                                                    scaledSize: new window.google.maps.Size(24, 24),
+                                                    origin: new window.google.maps.Point(0, 0),
+                                                    anchor: new window.google.maps.Point(12, 12),
+                                                }}
+                                            />
+                                            {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
+                                        </div>
+
+
+                                        <MarkerF
+                                            position={{
+                                                lat: currentPosition.lat,
+                                                lng: currentPosition.lng,
+                                            }}
+                                            icon={{
+                                                url: blackicon,
+                                                scaledSize: new window.google.maps.Size(24, 24),
+                                                origin: new window.google.maps.Point(0, 0),
+                                                anchor: new window.google.maps.Point(12, 12),
+                                            }}
+                                        />
+
+
+
+
+
+                                    </GoogleMap>}
+
 
 
 

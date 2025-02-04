@@ -1622,7 +1622,7 @@ const useTripsheet = () => {
                 shedout: formData.shedout || book.shedout || selectedCustomerData.shedout,
                 shedOutDate: formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
                 startdate: formData.startdate || selectedCustomerDatas.startdate || selectedCustomerData.startdate || book.startdate,
-                closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate,
+                closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate ||formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
                 shedInDate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
                 startkm: book.startkm,
                 orderbyemail: formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail,
@@ -1865,7 +1865,7 @@ const useTripsheet = () => {
 
     const handleDateChange = (date, name) => {
         const formattedDate = dayjs(date).format('YYYY-MM-DD');
-        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
+        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');        
         setBook((prevBook) => ({
             ...prevBook,
             [name]: parsedDate,

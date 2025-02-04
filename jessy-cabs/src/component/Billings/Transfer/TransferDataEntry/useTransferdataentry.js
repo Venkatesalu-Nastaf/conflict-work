@@ -1807,15 +1807,13 @@ const useTransferdataentry = () => {
                 console.log(validTrips, 'Valid Trips for posting');
 
 
-                // console.log(tripDetails, 'Selected Trip IDs and Amounts');
-
+                // console.log(tripDetails, 'Selected Trip IDs and Amounts');                 
                 await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
                 setSuccess(true);
                 setisbtnloading(false)
                 setAddEditTrigger(true)
                 setSuccessMessage("Successfully added");
                 setRows([])
-                console.log(transferlist, 'listtransfer');
 
             }
             // catch (error) {
@@ -1826,6 +1824,7 @@ const useTransferdataentry = () => {
                 // console.error("Error occurredddddd:", error);
 
                 // Check if there's no response, indicating a network error
+                
                 if (error.message) {
                     setError(true);
                     setisbtnloading(false)

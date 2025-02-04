@@ -169,17 +169,6 @@ const useDetailsVehicle = () => {
     }, 1000); // Update interval (1 second per step)
   };
 
-  useEffect(() => {
-    if (speedValuename === "10x") {
-      setSpeedState(1000)
-    }
-    if (speedValuename === "20x") {
-      setSpeedState(500)
-    }
-    if (speedValuename === "50x") {
-      setSpeedState(100)
-    }
-  }, [speedValuename])
 
 
 

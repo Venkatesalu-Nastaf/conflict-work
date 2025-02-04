@@ -638,7 +638,7 @@ const VehicleInformationDrawer = () => {
                                             </div>
                                         </InfoWindow>
                                     )}
-                                    {selectedTripid !== null ? <MapParticularTrip selectedTripid={selectedTripid} /> : <GoogleMap
+                                    {selectedTripid !== null ? <MapParticularTrip selectedTripid={selectedTripid} /> : <><GoogleMap
                                         mapContainerStyle={containerStyle}
                                         center={center}
                                         zoom={18}
@@ -731,7 +731,7 @@ const VehicleInformationDrawer = () => {
 
 
 
-                                    </GoogleMap>}
+                                    </GoogleMap>
 
 
 
@@ -772,7 +772,7 @@ const VehicleInformationDrawer = () => {
                                                 '&:hover': { backgroundColor: 'lightgray' },
                                             }} onClick={() => handle50xDrawPaths()}>50X</Button>
                                         </div>
-                                    </div>
+                                    </div></>}
                                 </div>
                             </div>
 

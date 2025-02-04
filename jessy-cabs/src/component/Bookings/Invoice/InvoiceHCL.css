@@ -72,13 +72,13 @@
     margin-left: auto;
     width: 400px !important;
     height: 495px !important;
-    /* background-color: orange; */
-    /* border: 5px solid rgb(0, 0, 0); */
+   
   }
 
   .image-hcl{
-    width: 100% !important;
-    height: 100% !important;
+    max-width: 100%;  /* Prevents stretching */
+    height: auto;  /* Maintains aspect ratio */
+    object-fit: contain; /* Ensures proper scaling */
   }
   .react-pdf__Page__canvas{
     width: 535px !important;

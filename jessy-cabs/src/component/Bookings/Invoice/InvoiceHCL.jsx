@@ -559,25 +559,19 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                 // padding: "20px 20px 0px 20px",
                                 // marginBottom: "50",
                               }}
-                              className='li-files'
-                            >
+                              className='li-files'>
 
 
 
-                              <div
-
-                                className='upload-img-hcl'
-                              >
-                                <img
+                              <div className='upload-img-hcl'>
+                                {/* <img
                                   src={file}
-                                  alt={`image_${index}`}
-                                  // style={{
-                                  //   width: "100%",
-                                  //   height: "100%",
-                                  //   // marginBottom: "50px"
-                                  // }}
+                                  alt={`image_${index}`}                             
                                   className='image-hcl'
-                                />
+                                 
+                                /> */}
+                                <img src={`${file}?t=${new Date().getTime()}`} alt={`image_${index}`} className='image-hcl' />
+
                               </div>
 
 

@@ -264,8 +264,8 @@ const styles = StyleSheet.create({
   height:"50px"
   },
   textRupees:{
-  // width:"45%",
-  width:"100%",
+  width:"45%",
+  // width:"100%",
   flexDirection:'column',
   justifyContent: 'flex-end',
   gap:'5px',

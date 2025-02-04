@@ -207,7 +207,7 @@ div .user-name-text , div .user-details-text{
  width: 300px;
 
 }
-.role-input-divi{
+/* .role-input-divi{
   width: 95%;
   background-color: #fff;
   z-index: 9999;
@@ -215,7 +215,21 @@ div .user-name-text , div .user-details-text{
   top: 0px;
   padding: 20px 25px 20px 20px;
   display: block;
+}  */
+
+.role-input-divi {
+  width: 95%;
+  background-color: #fff;
+  z-index: 9999;
+  position: sticky !important;
+  top: 0;
+  padding: 20px 25px 20px 20px;
+  display: flex;
+  align-items: center;  /* Align textfield and button vertically */
+  justify-content: space-between; /* Position them with space between */
 }
+
+
 
 /* style={{ width: '100%',
   position: 'sticky',                      

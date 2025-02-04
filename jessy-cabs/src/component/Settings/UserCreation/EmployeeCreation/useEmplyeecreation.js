@@ -6,8 +6,10 @@ import dayjs from 'dayjs';
 // import { faMobilePhone } from '@fortawesome/free-solid-svg-icons';
 
 
+
 const useEmplyeecreation = () => {
     const apiUrl = APIURL;
+  
     const [showPasswords, setShowPasswords] = useState(false);
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -27,7 +29,12 @@ const useEmplyeecreation = () => {
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [cerendentialdata, setCredentialData] = useState()
     const [showPermission, setShowPermission] = useState(true);
+    const [emptyrole,setEmptyrole] = useState(true);
+  
+   
     // const [rolefiledsdata,setRoleFieldData] =useState([])
+    // const [rolefield,setRoleField]=useState('')
+    // const [rolefielddropdown,setRoleFielddropdown]=useState()
     // console.log(rolefiledsdata)
 
 
@@ -256,7 +263,7 @@ const useEmplyeecreation = () => {
             prevData.map((permission, id) => {
                 for (let i = id1; i <= id2; i++) {
                     // newState[i][field] = checked;
-                    console.log(i, "ll")
+                    // console.log(i, "ll")
 
                     if (id === i) {
                         return {
@@ -395,9 +402,9 @@ const indexRanges = [
         Sender_Mail:'',
         active: false,
         superAdmin: false,
+        RoleUser:""
     });
-    const [rolefield,setRoleField]=useState('')
-    // const [rolefielddropdown,setRoleFielddropdown]=useState()
+  
 
     // TABLE END
 
@@ -448,6 +455,7 @@ const indexRanges = [
             EmailApp_Password: '',
             Sender_Mail:'',
             active: false,
+             RoleUser:" ",
             superAdmin: false
         }));
 
@@ -457,6 +465,8 @@ const indexRanges = [
         setModifyState(false)
         setNewState(false);
         setIsEditMode(false)
+        setEmptyrole(false)
+    
     };
     
     // useEffect(() => {
@@ -534,6 +544,8 @@ const indexRanges = [
         };
         fetchData();
     }, [apiUrl]);   
+
+    // console.log(book,"book")
 
     // useEffect(() => {
     //     const fetchTemplateMessage = async () => {
@@ -1007,8 +1019,103 @@ const indexRanges = [
     // useEffect(() => {
     //     rolenamefield();
     // }, [rolenamefield]);
+    const updatePermissionsStateforrole = (permissionsData1) => {
+
+        const isReadAllOne = !permissionsData1.some(permission => permission.read === 0);
+        const isModifyAllOne = !permissionsData1.some(permission => permission.modify === 0);
+        const isNewAllOne = !permissionsData1.some(permission => permission.new === 0);
+        const isDeleteAllOne = !permissionsData1.some(permission => permission.delete === 0);
 
 
+        setReadState(isReadAllOne);
+        setNewState(isNewAllOne);
+        setModifyState(isModifyAllOne);
+        setDeleteState(isDeleteAllOne);
+    };
+
+    const permisiionrolefield = async(datas)=>{
+        console.log(datas,"resusedtatw")
+        if(datas){
+        try{
+            
+    
+            const response = await axios.get(`${apiUrl}/userrole-permissiongetroless/${datas}`)
+            const responsedata = response.data;
+            console.log(responsedata,"resuseperrrr")
+          
+            setPermissionsData(responsedata)
+            updatePermissionsStateforrole(responsedata)
+            
+                // setPermissionsData(responsedata)
+                // updatePermissionsState1(responsedata)
+                // setRoleDataUsers(responsedata)
+                // setRoleField(true)
+                // return true;
+        }
+        catch(err){
+          console.log(err)
+        }
+    }
+    else{
+        console.log(datas,"resuse esle")
+        setPermissionsData(initialPermissionsData)
+    }
+           
+      
+    
+    }
+    
+    const handlerolepermissiondata = async (event,veghnodata) => {
+          const seleteddata = veghnodata ? veghnodata.label :""
+          console.log(seleteddata,"resusesele")
+          
+        
+      
+    try{
+            const response = await axios.get(`${apiUrl}/getAllrolefieldunique/${seleteddata}`)
+            const responsedata = response.data;
+            console.log(responsedata,"resuseponse")
+            if(responsedata.length > 0){
+            console.log(responsedata.length,"resuses",responsedata[0].userRole_id)
+            setBook((prevBook) => ({
+                ...prevBook,
+                RoleUser:seleteddata,
+            }));
+       
+                // console.log(responsedata,"veh")
+                permisiionrolefield(responsedata[0].userRole_id)
+        }
+        else{
+            setBook((prevBook) => ({
+                ...prevBook,
+                RoleUser:"",
+            }));
+            setPermissionsData(initialPermissionsData)
+            setReadState(false)
+            setDeleteState(false)
+            setModifyState(false)
+            setNewState(false);
+
+        }
+            // }
+    }
+    catch(err){
+      console.log(err,"resuseee")
+    }
+
+              
+                // return true;
+        
+        
+    }
+
+   const handlenochangedatarole=(value)=>{
+    setBook((prevBook) => ({
+        ...prevBook,
+        RoleUser:value,
+    }));
+   }
+  
 
 
 
@@ -1039,13 +1146,13 @@ const indexRanges = [
         showPasswords,
         handleClickShowPasswords,
         handleMouseDownPasswords,
-        isEditMode,
-        handleEdit, handleChangeuniquecreation, cerendentialdata, showPermission, setShowPermission, handleCheckboxChangealldata,
-        rolefield,setRoleField,
+        isEditMode,handlenochangedatarole,setBook,emptyrole,setEmptyrole,
+        handleEdit, handleChangeuniquecreation, cerendentialdata, showPermission, setShowPermission, handleCheckboxChangealldata,setPermissionsData,handlerolepermissiondata,
+        // rolefield,setRoleField,
         // rolefielddropdown,setRoleFielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
         //ffor permission
-        permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
+        permissionsData, handleSwitchChange, handleCheckboxChange, setReadState,setModifyState,setDeleteState,setNewState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
     };
 };
 

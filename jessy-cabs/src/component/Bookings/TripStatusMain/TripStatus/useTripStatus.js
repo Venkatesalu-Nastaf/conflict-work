@@ -87,7 +87,53 @@ const columns = [
   { field: "permit", headerName: "Permit", width: 90 },
   { field: "parking", headerName: "Parking", width: 80 },
   { field: "totalcalcAmount", headerName: "TotalAmount", width: 100 },
+  
 ];
+
+const columnsnormaluser = [
+  { field: "id", headerName: "Sno", width: 50 },
+  { field: "bookingno", headerName: "Booking No", width: 110 },
+  { field: "tripid", headerName: "Tripsheet No", width: 110 },
+  { field: "status", headerName: "Status", width: 110 },
+  { field: "customer", headerName: "Customer", width: 130 },
+  { field: "servicestation", headerName: "Service Station", width: 130 },
+  { field: "guestname", headerName: "Guest Name", width: 140 },
+  { field: "address1", headerName: "Address", width: 130 },
+  { field: "duty", headerName: "Duty", width: 100 },
+  { field: "flightno", headerName: "Flight No", width: 130 },
+  { field: "vehicleName", headerName: "Vehicle Name", width: 130 },
+  { field: "reporttime", headerName: "ShedOut Time", width: 110 },
+  { field: "starttime", headerName: "Start Time", width: 100 },
+  { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
+  { field: "shedOutDate", headerName: "ShedOut Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+  { field: "startdate", headerName: "Start Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+  // { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
+  { field: "bookingdate", headerName: "Booking Date", width: 120, valueFormatter: (params) => params.value ? dayjs(params.value).format('DD/MM/YYYY') : "" },
+  { field: "tripsheetdate", headerName: "Tripsheet Date", width: 120, valueFormatter: (params) => params.value ? dayjs(params.value).format('DD/MM/YYYY') : "" },
+  { field: "email", headerName: "Email", width: 130 },
+  { field: "employeeno", headerName: "Employee No", width: 110 },
+ // { field: "report", headerName: "Report", width: 130 },
+  { field: "driverName", headerName: "Driver Name", width: 130 },
+  { field: "mobileNo", headerName: "Driver MobNo", width: 130 },
+  { field: "vehType", headerName: "Rate For", width: 130 },
+  { field: "customercode", headerName: "Cost Code", width: 110 },
+  { field: "registerno", headerName: "Request Id", width: 130 },
+  { field: "orderByEmail", headerName: "OrderedBy Email", width: 150 },
+  { field: "remarks", headerName: "Remark", width: 130 },
+  { field: "vehiclemodule", headerName: "Vehicle Type", width: 110 },
+  { field: "paymenttype", headerName: "Payment Type", width: 130 },
+  { field: "advance", headerName: "Advance", width: 90 },
+  { field: "totaltime", headerName: "TotalHR", width: 90 },
+  { field: "totalkm1", headerName: "TotalKM", width: 100 },
+  { field: "toll", headerName: "Toll", width: 70 },
+  { field: "permit", headerName: "Permit", width: 90 },
+  { field: "parking", headerName: "Parking", width: 80 },
+
+  
+];
+
+
+
 
 
 
@@ -114,6 +160,8 @@ const useDispatched = () => {
 
   const [loading, setLoading] = useState(false);
   const [isStations, setisStations] = useState([])
+  const Roledatauser = localStorage.getItem("SuperAdmin");
+const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
 
 
   //---------------------popup----------------------------
@@ -134,7 +182,15 @@ const useDispatched = () => {
   }, [error, success, warning, info]);
 
   //--------------------------------------------------------
-  const filteredColumns = columns.filter(col => {
+  // const filteredColumns = columns.filter(col => {
+  //   // Columns to hide when status is "pending" or "cancelled"
+  //   const hideColumns = ["totalkm1", "permit", "totaltime", "toll", "totalcalcAmount", "parking"];
+
+  //   // Hide the columns when status is "pending" or "cancelled"
+  //   return !hideColumns.includes(col.field) || (statusvalue !== "pending" && statusvalue !== "Cancelled");
+  // });
+
+  const filteredColumns = columsnew.filter(col => {
     // Columns to hide when status is "pending" or "cancelled"
     const hideColumns = ["totalkm1", "permit", "totaltime", "toll", "totalcalcAmount", "parking"];
 
@@ -313,7 +369,8 @@ const useDispatched = () => {
     try {
       const fileName = "Pending Reports";
       const worksheet = workbook.addWorksheet(workSheetName);
-      const columndata = columns.map(key => ({ key: key.field, header: key.headerName }));
+      // const columndata = columns.map(key => ({ key: key.field, header: key.headerName }));
+      const columndata = columsnew.map(key => ({ key: key.field, header: key.headerName }));
       const filteredcolumnsdata = filteredColumns.map(key => ({ key: key.field, header: key.headerName }));
       const newcolumndata = statusvalue === "pending" || statusvalue === "Cancelled" ? filteredcolumnsdata : columndata;
   
@@ -505,7 +562,7 @@ const useDispatched = () => {
     pdf.setFont('helvetica', 'normal');
     pdf.text("Booking Details", 10, 10);
   
-    const fullcoumndata = columns.map(key => (key.field));
+    const fullcoumndata =columsnew.map(key => (key.field));
     const filteredcolumnsdata = filteredColumns.map(key => (key.field));
     const header = statusvalue === "pending" || statusvalue === "Cancelled" ? filteredcolumnsdata : fullcoumndata;
   
@@ -978,7 +1035,7 @@ const useDispatched = () => {
     selectedRow,
     handleTripsheetClick,
     columns, handleBookingClick,
-    filteredColumns,
+    filteredColumns,columsnew,
     columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,loading,setLoading,isStations,setisStations
   };
 };

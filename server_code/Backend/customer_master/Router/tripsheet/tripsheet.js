@@ -1356,6 +1356,7 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
     console.log("tripid", tripid, "username", username)
 
     let data = '';
+    let datarole = null;
 
     if (!username) {
         return res.status(500).json({ error: "username is undefined" })
@@ -1372,12 +1373,13 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
         }
         if (results.length > 0) {
 
-            db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
+            db.query("SELECT Stationname, RoleUser FROM usercreation WHERE username=?", [username], async (err, results) => {
                 if (err) {
                     return res.status(500).json({ error: "there some issue ffetching station name " })
                 }
 
                 data = await results[0]?.Stationname;
+                datarole = await results[0]?.RoleUser || null;
 
                 console.log("data", data)
                 const arryData = data.split(',');
@@ -1386,17 +1388,34 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
 
                 if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
                     // its for fetch by All
-                    await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" `, tripid, (err, result) => {
+                    // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" `, tripid, (err, result) => {
+                        if(datarole === "SuperAdmin" || datarole === "Assistant CFO") {
+                            console.log(datarole,"inside")
+                        await db.query(`SELECT * FROM tripsheet WHERE tripid = ?   `, tripid, (err, result) => {
                         if (err) {
                             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
                         }
                         if (result.length === 0) {
 
-                            return res.status(404).json({ error: 'status is billed all' });
+                            return res.status(404).json({ error:"Tripsheet not found" });
                         }
                         const bookingDetails = result[0]; // Assuming there is only one matching booking
                         return res.status(200).json(bookingDetails);
                     });
+                } else{
+                    console.log(datarole,"outnside")
+                    await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND  status != "Billed"  `, tripid, (err, result) => {
+                        if (err) {
+                            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                        }
+                        if (result.length === 0) {
+
+                            return res.status(404).json({ error: 'Status Is Billed ' });
+                        }
+                        const bookingDetails = result[0]; // Assuming there is only one matching booking
+                        return res.status(200).json(bookingDetails);
+                    });
+                }
                 }
                 else if (arryData) {
                     await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND department IN (?)  `, [tripid, arryData], (err, result) => {
@@ -1409,7 +1428,22 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
                             return res.status(404).json({ error: 'You Dont Have Accesss To This Tripsheet Based On Service Station' });
                         }
                         else if (result.length > 0) {
-                            db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
+                              if(datarole === "SuperAdmin" || datarole === "Assistant CFO") {
+                            // db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
+                                db.query(`SELECT * FROM tripsheet WHERE tripid = ?  AND department IN (?) `, [tripid, arryData], (err, result) => {
+                                if (err) {
+                                    return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                                }
+                                if (result.length === 0) {
+                                    return res.status(404).json({ error: "Tripsheet not found" });
+                                }
+                                const bookingDetails = result[0];
+                                console.log(bookingDetails, "mmmm") // Assuming there is only one matching booking
+                                return res.status(200).json(bookingDetails);
+                            });
+                        }
+                        else{
+                            db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Billed"`, [tripid], (err, result) => {
                                 if (err) {
                                     return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
                                 }
@@ -1420,6 +1454,7 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
                                 console.log(bookingDetails, "mmmm") // Assuming there is only one matching booking
                                 return res.status(200).json(bookingDetails);
                             });
+                        }
                         }
 
                     });

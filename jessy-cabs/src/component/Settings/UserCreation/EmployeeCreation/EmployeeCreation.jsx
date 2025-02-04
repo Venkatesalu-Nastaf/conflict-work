@@ -20,6 +20,7 @@ import { PermissionContext } from '../../../context/permissionContext';
 import { FaPlusCircle } from "react-icons/fa";
 import { Modal } from '@mui/material';
 
+
 //material ui
 import { AiOutlineSearch } from 'react-icons/ai';
 
@@ -53,6 +54,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useEmplyeecreation from './useEmplyeecreation';
 import Avatar from "@mui/material/Avatar";
 import { PermissionTableEmp } from './PermissionTableEmp/PermissionTableEmp';
+import useEmplyeecreationrole from './PermissionTableEmp/usepermissionRoletype';
 
 
 
@@ -97,13 +99,16 @@ const EmployeeCreation = ({ stationName }) => {
     // handleAutocompleteChange,
     showPasswords,
     handleClickShowPasswords,
-    handleMouseDownPasswords, handleAutocompleteChangeStationName, handleChangeuniquecreation, cerendentialdata,
-    isEditMode,
+    handleMouseDownPasswords, handleAutocompleteChangeStationName, handleChangeuniquecreation, cerendentialdata,handlerolepermissiondata,
+    isEditMode,handlenochangedatarole,emptyrole,setBook,
     handleEdit, showPermission, setShowPermission, handleCheckboxChangealldata, 
+    // setPermissionsData,setModifyState,setDeleteState,setNewState,
     // rolefield,rolefielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
-    permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
+    permissionsData, handleSwitchChange, handleCheckboxChange, setEmptyrole,setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
   } = useEmplyeecreation();
+
+  const {permissionsData1,setRoleFielddropdown,emptyroletype,setEmptyroletype,handleCheckboxChangealldata1,modalrolefield,error1,errormessage1,handleButtondeleteClickrole, handleEditrole,hidePopup1,handleAddrole, handleSwitchChange1,handleOpenModal,isModalOpen,successMessage1,success1, handleCloseModal,handleCheckboxChange1, readState1, newState1, modifyState1, deleteState1, handleSwitchforthatrow1, handleSwitchforallrows1,rolefield,rolefielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1}=useEmplyeecreationrole();
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -148,6 +153,24 @@ setSationNameforUser(updatedData);
     setShowPermission(true);
     setSelectedUserId(row.userid)
   };
+  useEffect(()=>{
+    if(!emptyrole){
+      setRoleFielddropdown('')
+      setEmptyrole(true)
+      // console.log(1,"down")
+    }
+  },[emptyrole,setRoleFielddropdown,setEmptyrole])
+  useEffect(()=>{
+    if(!emptyroletype){
+      setBook((prevBook) => ({
+        ...prevBook,
+        RoleUser:'',
+    }));
+      setEmptyroletype(true)
+      // console.log(2,"down")
+    }
+  },[emptyroletype,setEmptyroletype])
+  // console.log(rolefielddropdown,"down",book.RoleUser,emptyrole)
 
 
   // Permission ------------
@@ -171,10 +194,23 @@ setSationNameforUser(updatedData);
       user.username.toLowerCase().includes(searchUser.toLowerCase())
     );
   }, [rows, searchUser]);
-  const [isModalOpen, setModalOpen] = useState(false);
+  // const [isModalOpen, setModalOpen] = useState(false);
+ 
 
-  const handleOpenModal = () => setModalOpen(true);
-  const handleCloseModal = () => setModalOpen(false);
+  // const handleOpenModal = () =>{
+  //   if(!rolefielddropdown){
+
+  //   }
+  //    setModalOpen(true);
+  // }
+  // const handleCloseModal = () => setModalOpen(false);
+
+
+  // const handlerolepermissiondata = (event,value)=>{
+  //   console.log(value,"kk")
+  // }
+  // console.log(permissionsData,"pm")
+
 
   return (
     <div className="EmployeeCreation-main">
@@ -277,6 +313,7 @@ setSationNameforUser(updatedData);
                     checked={book.superAdmin}
                   />
                 </div>
+              
                 <div className="input user-creation-station-select-main">
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
@@ -338,6 +375,7 @@ setSationNameforUser(updatedData);
                     name="organizationname"
                     value={book.organizationname || ''}
                     onChange={handleChange}
+
                     label="Organization"
                     id="organizationname"
                     // variant="standard"
@@ -371,13 +409,14 @@ setSationNameforUser(updatedData);
                   </FormControl>
                 </div>
                 {/* {console.log(rolefield,"role",rolefielddropdown)} */}
+                {/* {console.log(rolefielddropdown,"qdownrole",book.RoleUser)} */}
 
                 <div className="input" style={{ paddingRight: '15px'}}>
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
                   <div style={{display:"flex", alignItems:"center", gap:"5px"}}>
-                  <TextField
+                  {/* <TextField
                     size="small"
                     name="Role"
                     value={book.organizationname || ''}
@@ -385,19 +424,29 @@ setSationNameforUser(updatedData);
                     label="Role"
                     id="Role"
                     style={{ width: '100%' }}
-                  />
-                          {/* {console.log(rolefield,"field")} */}
-                        {/* <Autocomplete
+                  /> */}
+                        
+                        <Autocomplete
                                   fullWidth
                                   size="small"
                                   id="Role"
                                   freeSolo
                                   sx={{ width: "100%" }}
-                                  onChange={(event, value) =>
+                                  onChange={(event, value) =>{
                                     // setRoleFielddropdown(value)
                                     handleRoleChange(event, value)
+                                    handlerolepermissiondata(event,value)
+                                  }
                                     }
-                                  onInputChange={(event, value) => handleRoleChange1(event, value)}  // Handle manual input
+                                  onInputChange={(event, value) =>
+                                    {
+                                      if(event !== null){
+                                      handleRoleChange1(event, value)
+                                      handlenochangedatarole(value)
+                                      
+                                    }} }
+                                    
+                                    // Handle manual input
                                   // onInputChange={(event, value) =>{
                                   //   if(event !== null){
                                   //     setNoChangeData({ ...nochangedata,vehRegNo: value });
@@ -407,7 +456,7 @@ setSationNameforUser(updatedData);
                                     
                                     // }}
                                   // onKeyDown={handleKeyEnterdriver}
-                                  value={rolefielddropdown || rolefield}  // Reflect vehRegNo correctly
+                                  value={rolefielddropdown || book.RoleUser || ''}  // Reflect vehRegNo correctly
                                   options={rolefiledsdata?.map((option) => ({ label: option }))}  // Map vehRegNo from data
                                   getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''}  // Adjust to show input value or option label
                                   renderInput={(params) => (
@@ -415,13 +464,15 @@ setSationNameforUser(updatedData);
                                       {...params}
                                       label="Role"
                                       // name="vehRegNo"
+                                      value={rolefielddropdown || book.RoleUser || ''}  
                                        name="Role"
                                       inputRef={params.inputRef}
+                                      style={{ width: '185px' }}
                                     />
                                   )}
-                                /> */}
+                                />
                  
-                    <FaPlusCircle style={{fontSize:"30px",color:"#1976d2",cursor:"pointer"}} onClick={()=>handleOpenModal()}/>
+                    <FaPlusCircle style={{fontSize:"30px",color:"#1976d2",cursor:"pointer"}} onClick={()=>handleOpenModal(rolefielddropdown,book?.RoleUser)}/>
                   </div>
                 </div>
                 <Modal open={isModalOpen} onClose={handleCloseModal}>
@@ -446,30 +497,44 @@ setSationNameforUser(updatedData);
                     size="small"
                     name="Selected Role"
                     // value={rolefielddropdown || ''}
+                    value={modalrolefield || ''}
                     // onChange={handleChange}
                     label="Selected Role"
                     id="Selected Role"
                   
                       className='role-input'
                   />
+                  
+          <div>
+          {rolefield ?
+             <Button
+            // disabled={!Mailer_delete}
+            onClick={handleButtondeleteClickrole}
+            aria-label="delete"
+            sx={{ color: 'red' }}
+          >
+            <DeleteIcon />
+          </Button> : <></>
+}
+          </div>
                   </div>
                   <PermissionTableEmp 
                     userid={selectedUserId}
-                  permissionsData={permissionsData}
-                  handleSwitchChange={handleSwitchChange}
-                  handleCheckboxChange={handleCheckboxChange}
-                  setReadState={setReadState}
-                  readState={readState}
-                  newState={newState}
-                  modifyState={modifyState}
-                  deleteState={deleteState}
-                  handleSwitchforthatrow={handleSwitchforthatrow}
-                  handleSwitchforallrows={handleSwitchforallrows}
-                  handleCheckboxChangealldata={handleCheckboxChangealldata} />
+                  permissionsData={permissionsData1}
+                  handleSwitchChange={handleSwitchChange1}
+                  handleCheckboxChange={handleCheckboxChange1}
+                  readState={readState1}
+                  newState={newState1}
+                  modifyState={modifyState1}
+                  deleteState={deleteState1}
+                  handleSwitchforthatrow={handleSwitchforthatrow1}
+                  handleSwitchforallrows={handleSwitchforallrows1}
+                  handleCheckboxChangealldata={handleCheckboxChangealldata1} />
 
-                  {/* {rolefield ? 
-                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleCloseModal}>edit</Button>:
-                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleCloseModal}>Add</Button>} */}
+                  {rolefield ? 
+                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleEditrole}>edit</Button>:
+                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleAddrole}>Add</Button>}
+                        {/* <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handlechnagedatadirecttouser}>link to user</Button>: */}
                   </Box>
                 </Modal>
                 <div className="input radio">
@@ -589,6 +654,13 @@ setSationNameforUser(updatedData);
                   <p>{errorMessage}</p>
                 </div>
               }
+               {error1 &&
+                <div className='alert-popup Error' >
+                  <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup1}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{errormessage1}</p>
+                </div>
+              }
               {warning &&
                 <div className='alert-popup Warning' >
                   <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
@@ -601,6 +673,13 @@ setSationNameforUser(updatedData);
                   <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                   <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                   <p>{successMessage}</p>
+                </div>
+              }
+               {success1 &&
+                <div className='alert-popup Success' >
+                  <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup1}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{successMessage1}</p>
                 </div>
               }
               {info &&

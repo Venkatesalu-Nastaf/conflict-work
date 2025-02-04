@@ -89,6 +89,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     columns,
     filteredColumns,
     columnshowall,
+    columsnew,
      //setCutomerName,
      // setVehNo, 
       handleBookingClick,
@@ -134,6 +135,13 @@ useEffect(() => {
         <p></p>
     </div>
 );
+
+const Roledatauser = localStorage.getItem("SuperAdmin")
+
+const filteredStatus =
+Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO"
+    ? Status // Show all statuses for superAdmin and CFo
+    : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
 
   return (
     <div className="TripStatus-form main-content-form Scroll-Style-hide">
@@ -182,9 +190,10 @@ useEffect(() => {
                     freeSolo
                     size="small"
                     value={statusvalue}
-                    options={Status.map((option) => ({
-                      label: option.option,
-                    }))}
+                    // options={Status.map((option) => ({
+                    //   label: option.option,
+                    // }))}
+                    options={filteredStatus.map((option) => ({ label: option.option }))}
                     onChange={(event, value) => handlestatusChange(event, value)}
                     renderInput={(params) => {
                       return (
@@ -475,7 +484,8 @@ useEffect(() => {
         >
             <DataGrid
                 rows={reversedRows}
-                columns={columnshowall ? columns : filteredColumns}
+                // columns={columnshowall ? columns : filteredColumns}
+                columns={columnshowall ? columsnew : filteredColumns}
                 onRowClick={(event) => handleButtonClick(event.row)}
                 pageSize={5}
                // loading={loading} // This will show the built-in loading overlay

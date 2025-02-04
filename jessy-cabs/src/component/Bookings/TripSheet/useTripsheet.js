@@ -20,6 +20,10 @@ const useTripsheet = () => {
     // const signatureurlinkurl = "https://jessycabs.com/SignatureGenerate"
     //  const signatureurlinkurl = "https://192.168.1.79/SignatureGenerate"
     const apiUrl = APIURL;
+    const superAdminAccess = localStorage.getItem("SuperAdmin")
+    const loginusername = localStorage.getItem("username")
+    // const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    // const statusCheck = formData.status || selectedCustomerData.status || book.status;
     // THIS APIURL TRANSFER FRO DRIVER APP
     const apiurltransfer = Apiurltransfer;
     //  const signatureurlinkurl=`http://localhost:3000/SignatureGenerate`
@@ -137,6 +141,8 @@ const useTripsheet = () => {
     const [selectedStatuschecking, setSelectedStatuschecking] = useState('');
     const [openModalConflict, setOpenModalConflict] = useState(null)
     const [openConflictKMPopup, setOpenConflictKMPopup] = useState(null);
+    const [overetripsheetstatus,setOverViewETripsheet]=useState(false)
+    const [overetripsheetoutstation,setOverViewETripsheetOutstation]=useState(null)
     // ----------------------------------------vendorinfo-------------------
     const [lockdata, setLockData] = useState(false)
     // const [lockdata, setLockData] = useState(true)
@@ -287,6 +293,8 @@ const useTripsheet = () => {
     const [nochangedata,setNoChangeData]=useState({})
     const [checksignandMapverify, setCheckSignandMapVerify] = useState(false)
     const [checksignmapmessage, setCheckSignMapMessage] = useState('')
+   
+    
     const maplogcolumns = [
         { field: "id", headerName: "Sno", width: 70 },
         { field: "tripid", headerName: "TripSheet No", width: 120 },
@@ -309,9 +317,10 @@ const useTripsheet = () => {
                     onClick={() => handleEditMapLogPoint(params)}
                     aria-label="open-dialog"
                     // disabled={!Tripsheet_modify1}
-                    disabled={!Tripsheet_modify1 || (superAdminAccess === "0" && temporaryStatus)}
+                    // disabled={!Tripsheet_modify1 || (superAdminAccess === "0" && temporaryStatus)}
+                    disabled={!Tripsheet_modify1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
                 >
-                    <Button disabled={!Tripsheet_modify1 || (superAdminAccess === "0" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button disabled={!Tripsheet_modify1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <FiEdit3 style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -326,9 +335,9 @@ const useTripsheet = () => {
                     onClick={() => handleRemoveMapLogPoint(params)}
                     aria-label="open-dialog"
                     // disabled={!Tripsheet_delete1}
-                    disabled={!Tripsheet_delete1 || (superAdminAccess === "0" && temporaryStatus)}
+                    disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
                 >
-                    <Button disabled={!Tripsheet_delete1 || (superAdminAccess === "0" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <RiDeleteBinLine style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -846,6 +855,8 @@ const useTripsheet = () => {
     }
 
     const [book, setBook] = useState(bookData);
+    const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    const statusCheck = formData.status || selectedCustomerData.status || book.status;
     const handleCancel = () => {
         setBook(bookData);
         setSelectedCustomerDatas({});
@@ -951,6 +962,11 @@ const useTripsheet = () => {
         }
         if (!isEditMode) {
 
+            return
+        }
+        if(overetripsheetstatus && overetripsheetoutstation === "oustation") {
+            setWarning(true);
+            setWarningMessage("Status is closed, u dont have permission open this E-Tripsheet.");
             return
         }
         else {
@@ -1260,13 +1276,18 @@ const useTripsheet = () => {
         const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
         const checkdata = statusdata[0];
-        const superpower = localStorage.getItem("SuperAdmin")
+        // const superpower = localStorage.getItem("SuperAdmin")
         const tripidbookno = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
 
         // Log the type of superpower
+        // if (
+        //     (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && Number(superpower) === 0) ||
+        //     (checkdata?.status === "Closed" && checkdata?.apps === "Closed" && Number(superpower) === 0)
+        // ) {
+
         if (
-            (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && Number(superpower) === 0) ||
-            (checkdata?.status === "Closed" && checkdata?.apps === "Closed" && Number(superpower) === 0)
+            (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && superAdminAccess  !== "SuperAdmin") ||
+            (checkdata?.status === "Closed" && checkdata?.apps === "Closed" && superAdminAccess  !== "SuperAdmin" )
         ) {
             setError(true);
             setErrorMessage(`Tripsheet has been ${checkdata?.status}`);
@@ -1622,6 +1643,7 @@ const useTripsheet = () => {
                 shedout: formData.shedout || book.shedout || selectedCustomerData.shedout,
                 shedOutDate: formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
                 startdate: formData.startdate || selectedCustomerDatas.startdate || selectedCustomerData.startdate || book.startdate,
+                // closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate,
                 closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate ||formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
                 shedInDate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
                 startkm: book.startkm,
@@ -1865,7 +1887,7 @@ const useTripsheet = () => {
 
     const handleDateChange = (date, name) => {
         const formattedDate = dayjs(date).format('YYYY-MM-DD');
-        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');        
+        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
         setBook((prevBook) => ({
             ...prevBook,
             [name]: parsedDate,
@@ -2107,7 +2129,62 @@ const useTripsheet = () => {
     //     return '';
     // }
 
+// -----------this for E-trisheet and overview hide based on status and station"
 
+const Etripsheetoverview = ()=>{
+  const userdatastatusstation = userStatus
+  if(userdatastatusstation !== null){
+
+  if (statusCheck === "Closed" && superAdminAccess !== "SuperAdmin" &&
+    (!userdatastatusstation.includes("Chennai") && !userdatastatusstation.includes("All"))
+)
+{
+setOverViewETripsheet(true)
+setOverViewETripsheetOutstation("oustation")
+
+return
+}
+
+else if( 
+    (statusCheck === "Closed") && superAdminAccess !== "SuperAdmin" &&
+    (userdatastatusstation.includes("Chennai") || userdatastatusstation.includes("All"))
+){
+    setOverViewETripsheet(true)
+    setOverViewETripsheetOutstation("Instation")
+    return
+}
+else{
+    setOverViewETripsheet(false)
+    setOverViewETripsheetOutstation(null)
+    return
+}
+  }
+  else{
+    setOverViewETripsheet(false)
+    setOverViewETripsheetOutstation(null)
+    
+    return
+  }
+
+
+
+}
+
+
+
+
+useEffect(() => {
+    Etripsheetoverview();
+  }, [statusCheck, userStatus, superAdminAccess]);
+
+
+
+
+
+
+
+
+// ------------------------------------------
 
     const calculateExkmAmount = () => {
         const exkm = formData.exkm || selectedCustomerData.exkm || book.exkm || packageDetails[0]?.extraKMS;
@@ -5019,7 +5096,7 @@ const useTripsheet = () => {
 
     }
 
-
+console.log(userStatus,"sssss")
     useEffect(() => {
         const a = calculateTotalDay()
 
@@ -5265,7 +5342,15 @@ const useTripsheet = () => {
         // if(!isentertripID){
         //     return
         // }
+
+        console.log(overetripsheetoutstation ,overetripsheetstatus,"over")
         if (!isEditMode) {
+            return
+        }
+        // oustation")Instation
+        if(overetripsheetstatus && (overetripsheetoutstation === "Instation" ||overetripsheetoutstation === "oustation") ){
+            setWarning(true);
+            setWarningMessage("Status is closed, u dont have permission open this Overview.");
             return
         }
 
@@ -6538,10 +6623,10 @@ const useTripsheet = () => {
 
     // }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
 
-    const loginusername = localStorage.getItem("username")
-    const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
-    const statusCheck = formData.status || selectedCustomerData.status || book.status;
-    const superAdminAccess = localStorage.getItem("SuperAdmin")
+    // const loginusername = localStorage.getItem("username")
+    // const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    // const statusCheck = formData.status || selectedCustomerData.status || book.status;
+    // const superAdminAccess = localStorage.getItem("SuperAdmin")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -6562,11 +6647,17 @@ const useTripsheet = () => {
                 const normalizedStation = station.map(s => s.trim().toLowerCase());
 
                 // Condition 1: Temporary Closed with All or Chennai
+                // if (
+                //     (statusCheck === "Temporary Closed") &&
+                //     (superAdminAccess === "0") &&
+                //     (station.includes("Chennai") || station.includes("All"))
+                // )
                 if (
                     (statusCheck === "Temporary Closed") &&
-                    (superAdminAccess === "0") &&
+                    (superAdminAccess !== "SuperAdmin" ) &&
                     (station.includes("Chennai") || station.includes("All"))
-                ) {
+                )
+                 {
                     console.log("Condition 1: Temporary Closed with All or Chennai");
                     setTemporaryStatus(false);
                     setEmptyState(false)
@@ -6578,11 +6669,18 @@ const useTripsheet = () => {
                     return
                 }
                 // Condition 2: Temporary Closed without All or Chennai
+                // if (
+                //     (statusCheck === "Temporary Closed") &&
+                //     (superAdminAccess === "0") &&
+                //     (!station.includes("Chennai") || !station.includes("All"))
+                // ) 
+
                 if (
                     (statusCheck === "Temporary Closed") &&
-                    (superAdminAccess === "0") &&
+                    (superAdminAccess !== "SuperAdmin") &&
                     (!station.includes("Chennai") || !station.includes("All"))
-                ) {
+                ) 
+                {
                     console.log("Condition 2: Temporary Closed without All or Chennai");
                     setTemporaryStatus(true);
                     setEmptyState(false);
@@ -6600,11 +6698,17 @@ const useTripsheet = () => {
                     setEmptyState(false)
                     return;
                 }
+                // if (
+                //     (statusCheck === "Closed") &&
+                //     (superAdminAccess === "0") &&
+                //     (!station.includes("Chennai") || !station.includes("All"))
+                // ) 
                 if (
                     (statusCheck === "Closed") &&
-                    (superAdminAccess === "0") &&
+                    (superAdminAccess !== "SuperAdmin") &&
                     (!station.includes("Chennai") || !station.includes("All"))
-                ) {
+                ) 
+                {
                     console.log("Condition 33: Temporary Closed without All or Chennai");
                     setEmptyState(true);
                     setTemporaryStatus(true);
@@ -6621,11 +6725,17 @@ const useTripsheet = () => {
               
 
                 // Condition 5: Closed and superAdminAccess is 0
+                // if (
+                //     statusCheck === "Closed" &&
+                //     superAdminAccess === "0" &&
+                //     (!station.includes("Chennai") && !station.includes("All"))
+                // )
                 if (
                     statusCheck === "Closed" &&
-                    superAdminAccess === "0" &&
+                    superAdminAccess !== "SuperAdmin" &&
                     (!station.includes("Chennai") && !station.includes("All"))
-                ) {
+                )
+                 {
                     console.log("Condition 5: Closed without Chennai or All and superAdminAccess 0");
                     setTemporaryStatus(true);
                     setEmptyState(true);
@@ -6634,10 +6744,15 @@ const useTripsheet = () => {
                 }
 
                 // Condition 6: Closed or Billed and superAdminAccess is 0
+                // if (
+                //     (statusCheck === "Closed" || statusCheck === "Billed") &&
+                //     (superAdminAccess === "0")
+                // ) 
                 if (
                     (statusCheck === "Closed" || statusCheck === "Billed") &&
-                    (superAdminAccess === "0")
-                ) {
+                    (superAdminAccess !== "SuperAdmin")
+                ) 
+                {
                     console.log("Condition 6: Closed or Billed and superAdminAccess is 0");
                     setEmptyState(true);
                     setHideField(true)
@@ -6691,6 +6806,8 @@ const useTripsheet = () => {
     useEffect(() => {
         EditButtonHide()
     }, [statuschecking])
+
+    
 
     // getVehcileHistoryData in vehcileHistoryData
 
@@ -6909,7 +7026,7 @@ const useTripsheet = () => {
         isAddload, setisAddload, isEditload, setisEditload,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
         minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage,
-        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata
+        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata,
 
     };
 };

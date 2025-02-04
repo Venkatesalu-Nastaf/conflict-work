@@ -79,7 +79,9 @@ const Login = () => {
         setLogoTrigger((prev) => !prev);
         loginUser(data.username);
         localStorage.setItem("username", data.username);
-        localStorage.setItem("SuperAdmin", data.superAdmin);
+        const datarole = data.RoleUser || null
+        localStorage.setItem("SuperAdmin",datarole);
+        // localStorage.setItem("SuperAdmin", data.superAdmin);
         localStorage.setItem("useridno", data.userid);  
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");

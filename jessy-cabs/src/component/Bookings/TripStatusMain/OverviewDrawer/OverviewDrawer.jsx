@@ -72,6 +72,14 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
+
+  const Roledatauser = localStorage.getItem("SuperAdmin")
+  
+  const filteredStatus =
+  Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO"
+      ? Status // Show all statuses for superAdmin and CFo
+      : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
+
   const {
     popupOpen,
     handlePopupClose,
@@ -115,6 +123,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     successMessage,
     info,
     infoMessage,
+    columsnew,
     // map and img functions
     selectedCustomerId,
     setSignImageUrl,
@@ -223,9 +232,10 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                 freeSolo
                 size="small"
                 value={statusvalue}
-                options={Status.map((option) => ({
-                  label: option.option,
-                }))}
+                // options={Status.map((option) => ({
+                //   label: option.option,
+                // }))}
+                options={filteredStatus.map((option) => ({ label: option.option }))}
                 onChange={(event, value) => handlestatusChange(event, value)}
                 renderInput={(params) => {
                   return (
@@ -539,7 +549,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                     )}
                     <DataGrid
                         rows={reversedRows}
-                        columns={columnshowall ? columns : filteredColumns}
+                        columns={columnshowall ? columsnew : filteredColumns}
                         onRowClick={(event) => handleRowClick(event.row)}
                         pageSize={5}
                         components={{

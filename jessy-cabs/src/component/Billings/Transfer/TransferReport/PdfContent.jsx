@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
     width: '45%',
     flexDirection:'column',
     justifyContent:"flex-end",
+    
   },
   total: {
     fontSize: 12
@@ -243,7 +244,11 @@ const styles = StyleSheet.create({
 
   },
   rupeestext: {
-    fontSize: '12px',
+    fontSize: '17px',
+    textTransform: 'capitalize'
+  },
+  rupeestexteo: {
+    // fontSize: "10px",
     textTransform: 'capitalize'
   },
   signtext: {
@@ -658,7 +663,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       {/* <Text style={{ fontSize: 10 }}>
                         IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
                       </Text> */}
-                      <Text style={{ fontSize: 10, marginBottom:5}}>
+                      <Text style={{ fontSize: 10, marginBottom:10}}>
                         IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:
                         {fullAmount > 0 && (
                           (fullAmount * 0.05).toFixed(2) // Calculate 5% and format to 2 decimal places
@@ -672,7 +677,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                         </View>
 
                         <View style={styles.totalrupeesword}>
-                          <Text style={[styles.rupeestext, { paddingBottom: 10, marginBottom: 5 }]}>
+                          <Text style={[styles.rupeestexteo, { paddingBottom: 10, marginBottom: 5 ,fontSize:10}]}>
                             {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
                           </Text>
                         </View>
@@ -684,12 +689,12 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   ) : (
                     <View style={styles.textRupees}>
                       <View>
-                        <Text style={{ width: 200, fontSize: 11,  paddingLeft: 7 }}>
+                        <Text style={{ width: 200, fontSize: 7,  paddingLeft: 7 }}>
                           E.& O.E In Words-Rupees
                         </Text>
                       </View>
                       <View style={styles.totalrupeesword}>
-                        <Text style={[styles.rupeestext, { paddingBottom: 3,paddingLeft: 7 }]}>
+                        <Text style={[styles.rupeestexteo, { paddingBottom: 3,paddingLeft: 7,fontSize:10 }]}>
                           {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
                         </Text>
                       </View>

@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     fontWeight: 'extrabold',
     textAlign: 'justify',
     lineHeight: '1.3px',
-    width: '50%'
+    width: '45%'
   },
   remarksection: {
     flexDirection: 'row',

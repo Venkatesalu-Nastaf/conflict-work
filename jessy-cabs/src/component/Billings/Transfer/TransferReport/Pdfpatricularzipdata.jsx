@@ -1376,7 +1376,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                     <View style={{ width: "48%" }}>
                       {nextSet.map((item, index) => (
                         <View key={index + 12} style={{ flexDirection: 'row' }}>
-                          <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                          <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px', }}>
                             {index + 13} .
                           </Text>
                           <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
@@ -1421,7 +1421,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
                 {attachedImage && attachedImage.length > 0 && (
                   <>
-                    <View style={[styles.addimg, { width: '100%' }]}>
+                    <View style={[styles.addimg, { width: '550px' ,}]}>
                       {/* <View key={index} style={[styles.imgwidth, { padding: '3px' }]} > */}
                       {attachedImage.map((item, index) => {
                         const dataimgetype1 = item.attachedimageurl.split('.').pop();

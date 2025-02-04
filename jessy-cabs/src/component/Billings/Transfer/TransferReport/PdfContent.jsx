@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   heading: {
-    border: '2px solid #000000',
+    border: '2px solidrgb(255, 0, 0)',
     padding: '20px',
     boxSizing: 'border-box',
     pageBreakInside: 'avoid',
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   totalrupeesword: {
     // marginTop: "20px",
     flexDirection: 'row',
-    paddingLeft:'5px',
+    // paddingLeft:'5px',
     // width:"60%",
     width:"100%",
   },
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   height:"50px"
   },
   textRupees:{
-  width:"100%",
+  width:"45%",
   flexDirection:'column',
   justifyContent: 'flex-end',
   gap:'5px',
@@ -652,12 +652,12 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
 
 
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 15 }}>
-                      <Text style={{ fontSize: 11 }}>NOTE:</Text>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap',width:'100%', paddingLeft: 12}}>
+                      <Text style={{ fontSize: 11,marginTop:5 }}>NOTE:</Text>
                       {/* <Text style={{ fontSize: 10 }}>
                         IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
                       </Text> */}
-                      <Text style={{ fontSize: 10 }}>
+                      <Text style={{ fontSize: 10, marginBottom:5}}>
                         IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:
                         {fullAmount > 0 && (
                           (fullAmount * 0.05).toFixed(2) // Calculate 5% and format to 2 decimal places
@@ -665,7 +665,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                       </Text>
                       <View>
                         <View>
-                          <Text style={{ width: 200, fontSize: 11,  paddingLeft: 7 }}>
+                          <Text style={{ width: 200, fontSize: 11,}}>
                             E.& O.E In Words-Rupees
                           </Text>
                         </View>
@@ -688,7 +688,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                         </Text>
                       </View>
                       <View style={styles.totalrupeesword}>
-                        <Text style={[styles.rupeestext, { paddingBottom: 3, }]}>
+                        <Text style={[styles.rupeestext, { paddingBottom: 3,paddingLeft: 7 }]}>
                           {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
                         </Text>
                       </View>
@@ -712,7 +712,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={styles.text2}>{parkpermit}</Text>
                     <Text style={styles.text2}>{formattedFullAmount}</Text>
                   </View> */}
-                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end',paddingRight:25, }}>
+                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end',paddingRight:5,marginLeft:33 }}>
                     {fullAmount > 0 && (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
                         <Text style={{ width: '200px', fontSize: 10 }}>SUB TOTAL: </Text>

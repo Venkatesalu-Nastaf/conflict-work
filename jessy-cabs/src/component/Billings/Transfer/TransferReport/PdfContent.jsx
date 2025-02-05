@@ -8,12 +8,14 @@ import numWords from 'num-words'
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
-    padding: 10,
+    padding: 3,
     pageBreakInside: 'avoid',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    border: '2px solid rgb(0, 0, 0)',
+
   },
   heading: {
-    border: '2px solidrgb(255, 0, 0)',
+    // border: '2px solid rgb(255, 0, 0)',
     padding: '20px',
     boxSizing: 'border-box',
     pageBreakInside: 'avoid',
@@ -139,6 +141,11 @@ const styles = StyleSheet.create({
     fontSize: '11px',
     borderRight: '1px solid #000000',
     wordWrap: 'break-word',
+  },
+  tablecellparticularInside:{
+    width: '90%',
+    // backgroundColor:"red",
+    flexWrap:'wrap'
   },
   tableheadingpermit: {
     width: '16%',
@@ -531,8 +538,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={[styles.underlinetext, { fontSize: 11 }]}>
                       Details of Receiver | Billed to:
                     </Text>
-                    <Text style={[styles.customername, { width: 300, fontSize: 12.5, fontWeight: 600 }]}>{customer}</Text>
-                    <Text style={[styles.text2, { fontSize: 10, width: 220 }]}>{customerData[0]?.address1}asdfguiyt</Text>
+                    <Text style={[styles.customername, { width: 300, fontSize: 12, fontWeight: 600 }]}>{customer}</Text>
+                    <Text style={[styles.text2, { fontSize: 10, width: 220 }]}>{customerData[0]?.address1}</Text>
                     <Text style={[styles.text2, { fontSize: 10 }]}>{customerData[0]?.state}</Text>
                     <Text style={[styles.text2, { fontSize: 10 }]}>GSTIN: {customerData[0]?.gstnumber}</Text>
                   </View>
@@ -577,71 +584,74 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                         <View style={styles.tablevalueRow} key={index}>
                           <React.Fragment>
                             <View style={styles.tablecellsno}>
-                              <Text style={{ fontSize: 10 }}>{index + 1}</Text>
+                              <Text style={{ fontSize: 9 }}>{index + 1}</Text>
                             </View>
                             <View style={styles.tableCelldate}>
-                            <Text style={{ fontSize: 10 }}>{dayjs(item.startdate).format('DD/MM/YYYY')}</Text>                            </View>
+                            <Text style={{ fontSize: 9 }}>{dayjs(item.startdate).format('DD/MM/YYYY')}</Text>                            </View>
                             <View style={styles.tablecelltripno}>
-                              <Text style={{ fontSize: 10 }}>{item.tripid}</Text>
+                              <Text style={{ fontSize: 9 }}>{item.tripid}</Text>
                             </View>
                             <View style={styles.tablecellparticular}>
-                              <Text style={{ fontSize: 10 }}>{item.guestname}</Text>
+                            <View style={styles.tablecellparticularInside} >
+                              <Text style={{ fontSize: 9 }}>{item.guestname}</Text>
                               {/* <Text style={{ fontSize: 10 }}>
                                 {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
                                 / {item.vehicleName2}
                               </Text> */}
-                              <Text style={{ fontSize: 10 }}>
+                              <Text style={{ fontSize: 9,width:'75%' }}>
                               {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
                             </Text>
-                            <Text style={{ fontSize: 10 }}>
+                            <Text style={{ fontSize: 9 }}>
                                {item.vehicleName2} {item.vehType}
                             </Text>
-                              <Text style={{ fontSize: 10 }}>Vehicle Hire Charges For : {item.calcPackage}</Text>
+                              <Text style={{ fontSize: 9 }}>Vehicle Hire Charges For : {item.calcPackage}</Text>
 
                               {item.extraKM > 0 && item.extrakm_amount > 0 ? (
-                                <Text style={{ fontSize: 10 }}>Extra Kms : {item.extraKM} Kms @ Rs.{item.extrakm_amount}</Text>
+                                <Text style={{ fontSize: 9 }}>Extra Kms : {item.extraKM} Kms @ Rs.{item.extrakm_amount}</Text>
                               ) : null}
 
                               {item.extraHR > 0 && item.extrahr_amount > 0 ? (
-                                <Text style={{ fontSize: 10 }}>Extra Hrs : {item.extraHR} hrs @ Rs.{item.extrahr_amount}</Text>
+                                <Text style={{ fontSize: 9 }}>Extra Hrs : {item.extraHR} hrs @ Rs.{item.extrahr_amount}</Text>
                               ) : null}
 
                               {item.nightBta > 0 && item.nightCount > 0 ? (
-                                <Text style={{ fontSize: 10 }}>Night Bata : {item.nightCount} Night @ Rs.{item.nightBta}</Text>
+                                <Text style={{ fontSize: 9 }}>Night Bata : {item.nightCount} Night @ Rs.{item.nightBta}</Text>
                               ) : null}
 
                               {item.driverBeta > 0 && item.driverbeta_Count > 0 ? (
-                                <Text style={{ fontSize: 10 }}>Driver Bata : {item.driverbeta_Count} Days @ Rs.{item.driverBeta}</Text>
+                                <Text style={{ fontSize: 9 }}>Driver Bata : {item.driverbeta_Count} Days @ Rs.{item.driverBeta}</Text>
                               ) : null}
 
-                              <Text style={{ fontSize: 10 }}>{item.pickup}</Text>
+                              <Text style={{ fontSize: 9 }}>{item.pickup}</Text>
+                              </View>
+
                             </View>
 
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
                             <View style={styles.tableCellpermit}>
-                              <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-                              <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-                              <Text style={[styles.permittext, { fontSize: 10 }]}>
+                              <Text style={{ fontSize: 9 }}>{'\n'}</Text>
+                              <Text style={{ fontSize: 9 }}>{'\n'}</Text>
+                              <Text style={[styles.permittext, { fontSize: 9 }]}>
                                 {(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}.00
                               </Text>
                             </View>
                             <View style={[styles.tableCell, { paddingRight: 15 }]}>
-                              <Text style={{ fontSize: 10 }}>{'\n'}</Text>
-                              <Text style={{ fontSize: 10 }}>{'\n'}</Text>
+                              <Text style={{ fontSize: 9 }}>{'\n'}</Text>
+                              <Text style={{ fontSize: 9 }}>{'\n'}</Text>
                               {item.package_amount > 0 && (
-                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 26 }}>{item.package_amount}.00</Text>
+                                <Text style={{ fontSize: 9, textAlign: 'right', paddingRight: 26 }}>{item.package_amount}.00</Text>
                               )}
                               {item.extraKM > 0 && item.ex_kmAmount > 0 && (
-                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 26 }}>{item.ex_kmAmount}.00</Text>
+                                <Text style={{ fontSize: 9, textAlign: 'right', paddingRight: 26 }}>{item.ex_kmAmount}.00</Text>
                               )}
                               {item.extraHR > 0 && item.ex_hrAmount > 0 && (
-                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 26 }}>{item.ex_hrAmount}.00</Text>
+                                <Text style={{ fontSize: 9, textAlign: 'right', paddingRight: 26 }}>{item.ex_hrAmount}.00</Text>
                               )}
                               {item.nightBta > 0 && item.night_totalAmount > 0 && (
-                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 26 }}>{item.night_totalAmount}.00</Text>
+                                <Text style={{ fontSize: 9, textAlign: 'right', paddingRight: 26 }}>{item.night_totalAmount}.00</Text>
                               )}
                               {item.driverBeta > 0 && item.driverBeta_amount > 0 && (
-                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 26 }}>{item.driverBeta_amount}.00</Text>
+                                <Text style={{ fontSize: 9, textAlign: 'right', paddingRight: 26 }}>{item.driverBeta_amount}.00</Text>
                               )}
                             </View>
                           </React.Fragment>
@@ -689,7 +699,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                   ) : (
                     <View style={styles.textRupees}>
                       <View>
-                        <Text style={{ width: 200, fontSize: 7,  paddingLeft: 7 }}>
+                        <Text style={{ width: 200, fontSize: 11,  paddingLeft: 7 }}>
                           E.& O.E In Words-Rupees
                         </Text>
                       </View>

@@ -77,6 +77,19 @@ router.post('/deleteVehicleNamesList', (req, res) => {
     });
 });
 
+router.post('/store-location', (req, res) => {
+    const { latitude, longitude } = req.body;
+  
+    // Insert the latitude, longitude, and timestamp into MySQL
+    const query = 'INSERT INTO gps_records (Latitude, Longitude) VALUES (?, ?)';
+    db.execute(query, [latitude, longitude], (err, result) => {
+      if (err) {
+        console.error('Error inserting data:', err);
+        return res.status(500).send('Error storing location data');
+      }
+      res.send('Location data stored successfully');
+    });
+  });
 
 
 

@@ -1548,6 +1548,7 @@ export const states = [
       "Mirzapur",
       "Moradabad",
       "Muzaffarnagar",
+      "Noida",
       "Pilibhit",
       "Pratapgarh",
       "RaeBareli",

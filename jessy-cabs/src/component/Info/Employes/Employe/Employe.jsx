@@ -20,6 +20,7 @@ import DialogContent from '@mui/material/DialogContent';
 
 // ICONS
 import useEmployee from "./useEmployee";
+import { SiStatuspal } from "react-icons/si";
 import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from "@mui/icons-material/Email";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -373,6 +374,25 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
+
+              <div className="input">
+              <div className="icone">
+                                  <SiStatuspal color="action" />
+                                </div>
+  <TextField
+    select
+    size="small"
+    id="empsts"
+    className="full-width"
+    label="Employee Status"
+    name="empsts"
+    value={selectedCustomerData?.empsts|| book.empsts || ''}
+    onChange={handleChange}
+  >
+    <MenuItem value="Temporary">Temporary</MenuItem>
+    <MenuItem value="Permanent">Permanent</MenuItem>
+  </TextField>
+</div>
               <div className="input-licence">
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
@@ -409,6 +429,8 @@ const Employe = () => {
 
                
               </div>
+
+              
             
 
 

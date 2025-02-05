@@ -169,7 +169,7 @@ export const allStations = [
 
     //uttar
     "Agra", "Aligarh", "Allahabad", "Ambedkar Nagar", "Auraiya", "Azamgarh", "Baghpat",
-    "Bahraich", "Ballia", "Banda", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor",
+    "Bahraich", "Ballia", "Banda","Noida", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor",
     "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad",
     "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur",
     "Gonda", "Hamirpur", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Jind", "Kanpur",
@@ -458,7 +458,7 @@ export const stateToStations = {
   "Uttar Pradesh":
    [
     "Agra", "Aligarh", "Allahabad", "Ambedkar Nagar", "Auraiya", "Azamgarh", "Baghpat",
-    "Bahraich", "Ballia", "Banda", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor",
+    "Bahraich", "Ballia", "Banda","Noida", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor",
     "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad",
     "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur",
     "Gonda", "Hamirpur", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Jind", "Kanpur",
@@ -1917,6 +1917,7 @@ export const states = [
       "Mirzapur",
       "Moradabad",
       "Muzaffarnagar",
+      "Noida",
       "Pilibhit",
       "Pratapgarh",
       "RaeBareli",

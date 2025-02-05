@@ -61,8 +61,33 @@ const useEmployee = () => {
                 </Button>
             ),
         },
+        {
+            field: "empsts",
+            headerName: "Employee Status",
+            width: 130,
+            renderCell: (params) => {
+              return (
+                <span
+                  style={{
+                    display: "inline-block",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    backgroundColor: params.value === "Temporary" ? "#FFCDD2" : params.value === "Permanent" ? "#C8E6C9" : "#E0E0E0",
+                    color: params.value === "Temporary" ? "red" : params.value === "Permanent" ? "green" : "black",
+                    fontWeight: "bold",
+                    fontSize: "15px",
+                    textAlign: "center",
+                    minWidth: "80px",
+                  }}
+                >
+                  {params.value}
+                </span>
+              );
+            },
+          },
         { field: "empid", headerName: "Employe ID", width: 140 },
         { field: "empname", headerName: "Name", width: 130 },
+       
         { field: "empemailid", headerName: "Email", width: 130 },
         { field: "empmobile", headerName: "Mobile", width: 130 },
         { field: "jobroll", headerName: "Job Roll", width: 130 },
@@ -73,6 +98,9 @@ const useEmployee = () => {
         { field: "uanid", headerName: "UAN ID", width: 140 },
         { field: "esino", headerName: "ESI NO", width: 140 },
         { field: "fixedsalary", headerName: "Net Salary", width: 130 },
+        
+          
+          
         { field: "licenceno", headerName: "Driving Licence No", width: 140 },
     ];
     // TABLE END
@@ -421,6 +449,7 @@ const useEmployee = () => {
         jobroll: '',
         joiningdate: '',
         gender: '',
+        empsts:'',
         bloodgroup: '',
         address1: '',
         aadharcard: '',
@@ -478,6 +507,7 @@ const useEmployee = () => {
             jobroll: '',
             joiningdate: '',
             gender: '',
+            empsts: '',
             bloodgroup: '',
             address1: '',
             aadharcard: '',

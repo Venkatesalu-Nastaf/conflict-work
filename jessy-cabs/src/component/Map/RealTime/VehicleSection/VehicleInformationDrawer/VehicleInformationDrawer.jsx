@@ -34,6 +34,9 @@ import { VehicleMapData } from '../../../vehicleMapContext/vehcileMapContext';
 import TripDetailModal from '../../../Modal/TripDetailModal';
 import Autocomplete from "@mui/material/Autocomplete";
 import MapParticularTrip from '../MapParticulaTrip/MapParticularTrip';
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 /* global google */
 // Define the container style for the map
@@ -53,7 +56,7 @@ const VehicleInformationDrawer = () => {
     const { vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying,
         startMarkerPosition, setStartMarkerPosition, handleDrawPaths, dynamicPolyline, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths,
         handledefault10xDrawPaths, speedState, address, startTripLocation, endTripLocation, tripidOptions, selectedTripid, setSelectedTripid,
-        togglePlayPause
+        togglePlayPause,filterDate,handleChange
 
     } = useDetailsVehicle()
     //vehicle section drawer
@@ -408,6 +411,26 @@ const VehicleInformationDrawer = () => {
                                             </Select>
                                         </FormControl>
                                     </div>
+                                    <div>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DatePicker
+                                                label="filterDate"// Set dynamic label
+                                                id="shedOutDate"
+                                                format="DD/MM/YYYY"
+                                                value={filterDate}
+                                                onChange={(date) => {handleChange(date) }}
+                                            >
+                                                {({ inputProps, inputRef }) => (
+                                                    <TextField
+                                                        {...inputProps}
+                                                        inputRef={inputRef}
+                                                        // value={selectedCustomerData?.shedOutDate}
+                                                    />
+                                                )}
+                                            </DatePicker>
+                                        </LocalizationProvider>
+
+                                    </div>
 
                                     <div className='vehicle-info-button-content' onClick={handleopenHistoryDrawer}>
                                         <MdChangeHistory />
@@ -604,7 +627,7 @@ const VehicleInformationDrawer = () => {
                                 </div>
 
                                 <div className='vehicle-info-content-map'>
-      {openPopup && popupPosition && (
+                                    {openPopup && popupPosition && (
                                         <InfoWindow
                                             position={popupPosition}
                                             onCloseClick={handleClosePopup} // Close popup when the close button is clicked
@@ -736,43 +759,43 @@ const VehicleInformationDrawer = () => {
 
 
 
-                                    <div style={{ zIndex: 1, position: 'absolute', top: '400px', right: '60px' }} onClick={handleOpenPopup}>
-                                        <IconButton onClick={handleCenterButtonClick} style={{ backgroundColor: 'red', color: 'white' }}>
-                                            <NavigationIcon />
-                                        </IconButton>
-                                    </div>
-
-                                    <div className='playButton'>
-                                        <div>
+                                        <div style={{ zIndex: 1, position: 'absolute', top: '400px', right: '60px' }} onClick={handleOpenPopup}>
+                                            <IconButton onClick={handleCenterButtonClick} style={{ backgroundColor: 'red', color: 'white' }}>
+                                                <NavigationIcon />
+                                            </IconButton>
                                         </div>
-                                        <div className='playArrow'>
-                                            <Button onClick={togglePlayPause}>
-                                                {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-                                            </Button>
 
-                                        </div>
-                                        <div className='playspeed'>
+                                        <div className='playButton'>
+                                            <div>
+                                            </div>
+                                            <div className='playArrow'>
+                                                <Button onClick={togglePlayPause}>
+                                                    {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                                                </Button>
 
-                                            <p style={{ textAlign: 'center', margin: 0 }}>Play Speed</p>
-                                            <Button sx={{
-                                                backgroundColor: speedState === 1000 ? 'gray' : 'white',
-                                                color: speedState === 1000 ? 'white' : 'black',
-                                                '&:hover': { backgroundColor: 'lightgray' },
-                                            }} onClick={() => handle10xDrawPaths()}>10X</Button>
+                                            </div>
+                                            <div className='playspeed'>
 
-                                            <Button sx={{
-                                                backgroundColor: speedState === 500 ? 'gray' : 'white',
-                                                color: speedState === 500 ? 'white' : 'black',
-                                                '&:hover': { backgroundColor: 'lightgray' },
-                                            }} onClick={() => handle20xDrawPaths()}>20X</Button>
+                                                <p style={{ textAlign: 'center', margin: 0 }}>Play Speed</p>
+                                                <Button sx={{
+                                                    backgroundColor: speedState === 1000 ? 'gray' : 'white',
+                                                    color: speedState === 1000 ? 'white' : 'black',
+                                                    '&:hover': { backgroundColor: 'lightgray' },
+                                                }} onClick={() => handle10xDrawPaths()}>10X</Button>
 
-                                            <Button sx={{
-                                                backgroundColor: speedState === 100 ? 'gray' : 'white',
-                                                color: speedState === 100 ? 'white' : 'black',
-                                                '&:hover': { backgroundColor: 'lightgray' },
-                                            }} onClick={() => handle50xDrawPaths()}>50X</Button>
-                                        </div>
-                                    </div></>}
+                                                <Button sx={{
+                                                    backgroundColor: speedState === 500 ? 'gray' : 'white',
+                                                    color: speedState === 500 ? 'white' : 'black',
+                                                    '&:hover': { backgroundColor: 'lightgray' },
+                                                }} onClick={() => handle20xDrawPaths()}>20X</Button>
+
+                                                <Button sx={{
+                                                    backgroundColor: speedState === 100 ? 'gray' : 'white',
+                                                    color: speedState === 100 ? 'white' : 'black',
+                                                    '&:hover': { backgroundColor: 'lightgray' },
+                                                }} onClick={() => handle50xDrawPaths()}>50X</Button>
+                                            </div>
+                                        </div></>}
                                 </div>
                             </div>
 

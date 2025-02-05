@@ -11,8 +11,15 @@ const useMapParticularData = ()=>{
     const [isPlaying, setIsPlaying] = useState(false); // State to control animation
     const [playInterval, setPlayInterval] = useState(null);
     const [speedValuename, setSpeedValuename] = useState("10x")
-    
+    const [currentPosition, setCurrentPosition] = useState({ lat: chennaiCoordinates[chennaiCoordinates.length - 1].latitude, lng: chennaiCoordinates[chennaiCoordinates.length - 1].longitude }); 
+    const stepRef = useRef(0); // Persist step across re-renders
 
+    const resetData = () => {
+      setDynamicPolyline([]); // Clear previous path
+      stepRef.current = 0; // Reset step counter
+      setIsPlaying(false);
+      if (playInterval) clearInterval(playInterval); // Clear existing interval
+    };
     useEffect(() => {
       if (speedValuename === "10x") {
         setSpeedState(1000)
@@ -26,6 +33,7 @@ const useMapParticularData = ()=>{
     }, [speedValuename])
 
   useEffect(() => {    
+    resetData();
     const startPoint = chennaiCoordinates.find(
         (point) => point.TripType === "start" && String(point.Tripid) === String(selectTripid)
     );
@@ -58,7 +66,7 @@ const useMapParticularData = ()=>{
       handledefault10xDrawPaths(); // Start the animation
     }
   };
-  const stepRef = useRef(0); // Persist step across re-renders
+
 
   const handledefault10xDrawPaths = ()=>{
     if (stepRef.current >= fullPathTrip.length) {
@@ -76,7 +84,7 @@ const useMapParticularData = ()=>{
           lat: fullPathTrip[stepRef.current].latitude,
           lng: fullPathTrip[stepRef.current].longitude,
         };
-        // setCurrentPosition(newPoint);
+        setCurrentPosition(newPoint);
         setDynamicPolyline((prevPolyline) => [...prevPolyline, newPoint]);
 
         stepRef.current++; // Persist step count
@@ -102,7 +110,7 @@ const useMapParticularData = ()=>{
 
     return{
          startTripLocation,endTripLocation,setSelectTripid,selectTripid,dynamicPolyline,setDynamicPolyline,fullPathTrip,
-         handle10xDrawPaths,handle20xDrawPaths,handle50xDrawPaths,speedState,isPlaying,togglePlayPause,
+         handle10xDrawPaths,handle20xDrawPaths,handle50xDrawPaths,speedState,isPlaying,togglePlayPause,currentPosition
     }
 }
 export default useMapParticularData;

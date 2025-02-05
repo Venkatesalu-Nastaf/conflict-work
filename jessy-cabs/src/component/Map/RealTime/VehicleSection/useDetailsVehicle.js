@@ -5,6 +5,7 @@ import { PermissionContext } from "../../../context/permissionContext";
 import { useContext } from "react";
 import { chennaiCoordinates } from "../MapSection/mapData";
 import { VehicleMapData } from "../../vehicleMapContext/vehcileMapContext";
+import dayjs from "dayjs";
 
 const useDetailsVehicle = () => {
   const apiUrl = APIURL;
@@ -25,6 +26,8 @@ const useDetailsVehicle = () => {
   const [selectedTripid, setSelectedTripid] = useState(null);
   // const [isPlaying, setIsPlaying] = useState(false);
   const [playInterval, setPlayInterval] = useState(null);
+  const [filterDate,setFilterDate] = useState(null)
+  const [dateWiseFilter,setDateWiseFilter] = useState(null);
 
   const togglePlayPause = () => {
     if (isPlaying) {
@@ -370,15 +373,58 @@ const useDetailsVehicle = () => {
       setEndTripLocation({ latitude: endPoint?.latitude, longitude: endPoint?.longitude })
     }
   }, [currentPosition])
+  // useEffect(() => {    
+  //   getAddress();
+
+  //   const filteredCoordinates = chennaiCoordinates.filter((point) => point.TripDate === filterDate);
+
+  //   // Find all start and end points within the filtered data
+  //   const startPoints = filteredCoordinates.filter((point) => point.TripType === "start");
+  //   const endPoints = filteredCoordinates.filter((point) => point.TripType === "end");
+
+  //   console.log(startPoints, "Start Points");
+  //   console.log(endPoints, "End Points");
+
+  //   // Set multiple start locations as an array
+  //   if (startPoints.length > 0) {
+  //     setStartTripLocation(startPoints.map(point => ({ latitude: point.latitude, longitude: point.longitude })));
+  //   }
+
+  //   // Set multiple end locations as an array (if needed)
+  //   if (endPoints.length > 0) {
+  //     setEndTripLocation(endPoints.map(point => ({ latitude: point.latitude, longitude: point.longitude })));
+  //   }
+
+  // }, [currentPosition, filterDate]);
+
+
+
+  useEffect(()=>{
+    const filteredCoordinates = chennaiCoordinates.filter((point) => point.TripDate === filterDate);
+    console.log(filteredCoordinates,"ffilterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrffffffffffffffffffffffffffffffff");
+    
+      setDateWiseFilter(filteredCoordinates)
+  },[chennaiCoordinates,filterDate])
+  console.log(filterDate,"ffilterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+  
 
   const tripidOptions = useMemo(() => {
     const uniqueTripids = [...new Set(chennaiCoordinates.map(item => item.Tripid))].filter(id => id !== "null");
     return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
   }, [chennaiCoordinates]);
+
+  const handleChange = (date) => {
+    console.log(date,"dateeeeeeeeeeeeeeeeeeeee");
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+    console.log(formattedDate,"dateeeeeeeeeeeee+++++++++++++++++++");
+    
+    
+    setFilterDate(formattedDate);
+  };
   return {
     vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying, setStartMarkerPosition, startMarkerPosition, dynamicPolyline,
     handleDrawPaths, handledefault10xDrawPaths, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths, rotation, speedState, address, startTripLocation,
-    endTripLocation, tripidOptions, selectedTripid, setSelectedTripid, togglePlayPause
+    endTripLocation, tripidOptions, selectedTripid, setSelectedTripid, togglePlayPause,filterDate,handleChange
   }
 }
 export default useDetailsVehicle;

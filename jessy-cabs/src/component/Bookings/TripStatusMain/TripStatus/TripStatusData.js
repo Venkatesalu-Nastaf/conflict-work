@@ -1,28 +1,29 @@
 export const Status = [
+
   {
-    option: "Opened",
-    optionvalue: "Opened",
-  },
-  {
-    option: "Closed",
-    optionvalue: "Closed",
-  },
-  {
-    option: "Temporary Closed",
-    optionvalue: "Temporary Closed",
+    option: "pending",
+    optionvalue: "pending",
   },
   {
     option: "Cancelled",
     optionvalue: "Cancelled",
   },
   {
-    option: "Billed",
-    optionvalue: "Billed",
+    option: "Opened",
+    optionvalue: "Opened",
+  },
+  {
+    option: "Temporary Closed",
+    optionvalue: "Temporary Closed",
+  },
+  {
+    option: "Closed",
+    optionvalue: "Closed",
   },
 
   {
-    option: "pending",
-    optionvalue: "pending",
+    option: "Billed",
+    optionvalue: "Billed",
   },
   {
     option: "All",

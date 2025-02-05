@@ -38,6 +38,7 @@ router.delete('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   db.query('DELETE FROM customers WHERE customerId = ?', customerId, (err, result) => {
     if (err) {
+      console.log(err,"oo")
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }
     if (result.affectedRows === 0) {
@@ -82,7 +83,6 @@ router.get('/searchCustomer', (req, res) => {
   // Filter by search text
   if (searchText) {
     const columnsToSearch = [
-      'customerId',
       'name',
       'customer',
       'customerType',
@@ -141,25 +141,53 @@ router.get('/customeraddress/:customername', (req, res) => {
 })
 
 router.get('/customersgroup', (req, res) => {
-  const query = `
-     SELECT
-      c.*,
-      GROUP_CONCAT(co.orderedby) AS orderedby,
-      GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
-      GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
-    FROM
-      customers c
-    INNER JOIN
-      customerOrderdata co ON c.customer = co.customer
-    GROUP BY
-      c.customer;
-  `;
+  // const query = `
+  //    SELECT
+  //     c.*,
+  //     GROUP_CONCAT(co.orderedby) AS orderedby,
+  //     GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
+  //     GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
+  //   FROM
+  //     customers c
+  //   INNER JOIN
+  //     customerOrderdata co ON c.customer = co.customer
+  //   GROUP BY
+  //     c.customer;
+  // `;
+//   const query = `
+//  SELECT
+//   c.*,
+//   GROUP_CONCAT(co.orderedby) AS orderedby,
+//   GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
+//   GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
+// FROM
+//   customers c
+// INNER JOIN
+//   customerOrderdata co ON c.customer = co.customer
+// GROUP BY
+//   c.customerId, c.customer
+// `;
+
+const query = `
+SELECT
+ c.*,
+ GROUP_CONCAT(co.orderedby) AS orderedby,
+ GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
+ GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
+FROM
+ customers c
+LEFT JOIN
+ customerOrderdata co ON c.customer = co.customer
+GROUP BY
+ c.customerId, c.customer
+`;
 
   db.query(query, (err, results) => {
     if (err) {
       console.log(err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
+    console.log(results,"kk")
     return res.status(200).json(results);
   });
 });
@@ -314,6 +342,7 @@ router.delete("/deletecustomerorderdatasdata/:id", (req, res) => {
 
   db.query("delete from customerOrderdata where id=?", [deleteid], (err, results) => {
     if (err) {
+      console.log("ordercustomer",err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
 
@@ -349,30 +378,27 @@ router.get("/Monthilywisedatatrip", (req, res) => {
   const { customer, fromDate, toDate } = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  console.log(formattedFromDate, "f", formattedToDate)
+  console.log(formattedFromDate, "f", formattedToDate,customer)
 
-  db.query('select * from customers where customerType=?', [customer], (err, results) => {
+
+  let query = 'SELECT * FROM customers';
+let params = [];
+
+if (customer !== "All") {
+    query += ' WHERE customerType = ?';
+    params.push(customer);
+}
+
+    db.query(query, params, (err, results) => {
     if (err) {
       return res.status(400).json(err)
     }
-    console.log(results)
+ 
     const datas = results?.map((data) => data.customer)
-    //  db.query('select customername,totalcalcAmount  from tripsheet WHERE tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) AND customer in (?)')
-    //    const sql=`SELECT 
-    //     customer, 
-    //     SUM(totalcalcAmount) AS totalAmount
-    // FROM 
-    //     tripsheet
-    // WHERE 
-    //     tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-    //     AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
-    //     AND customer IN (?)
-    // GROUP BY 
-    //     customer `;
     const sql = `
   SELECT 
     customer,orderbyemail,billingno,
-    SUM(totalcalcAmount) AS totalAmount
+    SUM(IFNULL(totalcalcAmount, 0))  AS totalAmount
   FROM 
     tripsheet
   WHERE 
@@ -380,8 +406,23 @@ router.get("/Monthilywisedatatrip", (req, res) => {
    AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
     AND customer IN (?)
   GROUP BY 
-    customer
+    customer,orderbyemail,billingno
 `;
+
+// const sql = `
+// SELECT 
+//   customer,
+//   SUM(IFNULL(totalcalcAmount, 0))  AS totalAmount
+// FROM 
+//   tripsheet
+// WHERE 
+//  tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+//  AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+//   AND customer IN (?)
+// GROUP BY 
+//   customer
+// `;
+
     db.query(sql, [fromDate, toDate, datas], (err, results1) => {
       if (err) {
         console.log(err)
@@ -403,7 +444,7 @@ router.get("/Monthilywisedatatrip", (req, res) => {
 })
 
 router.get('/montlywisedataall', (req, res) => {
-  db.query("select c.customerId,c.customerType as customertype,c.address1 as address,t.orderbyemail,t.billingno,sum(totalcalcAmount) as totalAmount,t.customer from customers c INNER JOIN  tripsheet t on c.customer = t.customer group by t.customer", (err, result) => {
+  db.query("select c.customerId,c.customerType as customertype,c.address1 as address,t.orderbyemail,t.billingno,sum(totalcalcAmount) as totalAmount,t.customer from customers c INNER JOIN  tripsheet t on c.customer = t.customer group by t.customer,c.customerId,t.orderbyemail,t.billingno", (err, result) => {
     if (err) {
       console.log(err)
     }
@@ -412,18 +453,18 @@ router.get('/montlywisedataall', (req, res) => {
   })
 })
 
-router.get('/getCustomer-hybrid/:customer', (req, res) => {
-  const customer = req.params.customer;
-  console.log("customer", customer)
-  db.query("select hybrid from customers where name=?", [customer], (err, result) => {
-    if (err) {
-      console.log("Error", err)
-      return res.status(500).json({ message: "somthing went wrong..", error: true })
-    }
-    console.log("result", result)
-    return res.status(200).json(result[0])
-  })
-})
+// router.get('/getCustomer-hybrid/:customer', (req, res) => {
+//   const customer = req.params.customer;
+//   console.log("customer", customer)
+//   db.query("select hybrid from customers where name=?", [customer], (err, result) => {
+//     if (err) {
+//       console.log("Error", err)
+//       return res.status(500).json({ message: "somthing went wrong..", error: true })
+//     }
+//     console.log("result", result)
+//     return res.status(200).json(result[0])
+//   })
+// })
 
 router.get("/getuniqueCustomerdata/:customer", (req, res) => {
   const customer = req.params.customer;

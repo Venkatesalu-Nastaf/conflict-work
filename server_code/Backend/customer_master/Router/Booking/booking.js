@@ -8,10 +8,12 @@ const path = require('path');
 
 //its for to use aysn/await 
 const util = require('util');
+const { error } = require('console');
 const query = util.promisify(db.query).bind(db)
 
-const attachedmailDirectory = path.join(__dirname, 'uploads');
-router.use('/images', express.static(attachedmailDirectory));
+// const attachedmailDirectory = path.join(__dirname, 'uploads');
+// console.log(attachedmailDirectory, "attachedmailDirectory")
+// router.use('/images', express.static(attachedmailDirectory));
 // router.use(express.static('customer_master'));
 // const upload = multer({ dest: 'uploads/' });
 
@@ -24,7 +26,7 @@ router.post('/booking', async (req, res) => {
         }
 
         // Check if the insertion was successful (affectedRows > 0)
-       
+
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: "Data inserted successfully", data: result });
         } else {
@@ -38,16 +40,16 @@ router.post('/bookinglogDetails', async (req, res) => {
 
     db.query('INSERT INTO BookingLogDetails SET ?', bookData, (err, result) => {
         if (err) {
-          console.log(err)
+            console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
 
         // Check if the insertion was successful (affectedRows > 0)
-        if (result.affectedRows ===  0) {
+        if (result.affectedRows === 0) {
             return res.status(400).json("data not inserted succefully")
-        } 
-            return res.status(200).json("data  inserted succefully")
-        
+        }
+        return res.status(200).json("data  inserted succefully")
+
     });
 })
 
@@ -84,7 +86,7 @@ router.get('/booking/:bookingno', (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
         if (result.length > 0) {
-            
+
 
             db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], async (err, results) => {
                 if (err) {
@@ -98,7 +100,7 @@ router.get('/booking/:bookingno', (req, res) => {
                 console.log("arryData", arryData)
                 if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
                     // its for fetch by All
-                    await db.query(`SELECT * FROM booking WHERE bookingno = ? `,bookingno, (err, result) => {
+                    await db.query(`SELECT * FROM booking WHERE bookingno = ? `, bookingno, (err, result) => {
                         if (err) {
                             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
                         }
@@ -118,29 +120,30 @@ router.get('/booking/:bookingno', (req, res) => {
                         }
                         if (result.length === 0) {
 
-                            return res.status(404).json({ error: 'u dont have accesss the page of stations' });
+                            // return res.status(404).json({ error: 'u dont have accesss the page of stations' });
+                            return res.status(404).json({ error: "you don't have access to this trip sheet based on service station" });
                         }
-                       
+
                         const bookingDetails = result[0]; // Assuming there is only one matching booking
                         return res.status(200).json(bookingDetails);
 
                     });
                 }
-     
+
             });
         }
     })
 });
 
 router.get('/drivernamedrivercreation', (req, res) => {
-  const sql = 'SELECT drivername,Mobileno FROM drivercreation';
-  db.query(sql, (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
-    }
-    // Assuming your `result` contains a field `drivername` and `Mobileno`
-    return res.status(200).json(result);
-  });
+    const sql = 'SELECT drivername,Mobileno FROM drivercreation';
+    db.query(sql, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
+        }
+        // Assuming your `result` contains a field `drivername` and `Mobileno`
+        return res.status(200).json(result);
+    });
 });
 
 router.get('/vehicleinfodatavehcile', (req, res) => {
@@ -162,7 +165,7 @@ router.get('/last-booking-no', (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
         const lastBooking = result[0];
-        return res.status(200).json(lastBooking);  
+        return res.status(200).json(lastBooking);
     });
 });
 
@@ -199,6 +202,34 @@ router.delete('/booking/:bookingno', async (req, res) => {
     // });
 
 });
+
+
+router.delete('/bookingDLETEUPLOAD/:bookingno', async (req, res) => {
+    const bookingno = req.params.bookingno;
+  
+    // Check if this booking added tripsheet or not
+    db.query('SELECT * FROM booking_doc WHERE booking_id = ?', [bookingno], (err1, result1) => {
+      if (err1) {
+        console.log(err1,"bb")
+        return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+      }
+  
+      if (result1.length > 0) {
+        // If booking exists, delete it
+        db.query('DELETE FROM booking_doc WHERE booking_id = ?', [bookingno], (err, result2) => {
+          if (err) {
+            console.log(err,"aa")
+            return res.status(500).json({ error: 'Failed to delete booking details from MySQL' });
+          }
+          return res.status(200).json("Successfully deleted");
+        });
+      } else {
+        // Booking not found
+        return res.status(200).json("Data not found");
+      }
+    });
+  });
+  
 
 
 // update booking details
@@ -435,7 +466,7 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
         return res.status(200).json(result);
     });
 });
-  
+
 // -------------------------------------------------------------end of tripsheet code api travrls name-------------------------
 
 
@@ -586,7 +617,8 @@ router.post('/send-email', async (req, res) => {
     try {
         const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehicleName, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass } = req.body;
         console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehicleName, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass, "mailto")
-        const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
+        const formattedFromDate = moment(startdate).format('DD-MM-YYYY');
+      
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -627,41 +659,41 @@ router.post('/send-email', async (req, res) => {
                     <tbody>
                         <tr>
                             <td style="padding: 8px;"><strong>Trip No:</strong></td>
-                            <td style="padding: 8px; color: #000">${bookingno}</td>
+                            <td style="padding: 8px; color: #000">${bookingno || ""}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Name of Guest:</strong></td>
-                            <td style="padding: 8px;color: #000"">${guestname}</td>
+                            <td style="padding: 8px;color: #000"">${guestname || ""}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Location:</strong></td>
-                            <td style="padding: 8px;color: #000"">${servicestation}</td>
+                            <td style="padding: 8px;color: #000"">${servicestation || ""}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Date:</strong></td>
-                            <td style="padding: 8px;color: #000"">${formattedFromDate}</td>
+                            <td style="padding: 8px;color: #000"">${formattedFromDate || ""}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Time (24):</strong></td>
-                            <td style="padding: 8px;color: #000"">${starttime} Hrs</td>
+                            <td style="padding: 8px;color: #000"">${starttime || ""} Hrs</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Car Sent:</strong></td>
-                            <td style="padding: 8px;color: #000"">${vehicleName}</td>
+                            <td style="padding: 8px;color: #000"">${vehicleName || ""}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
-                            <td style="padding: 8px;color: #000"">${vehRegNo}</td>
+                            <td style="padding: 8px;color: #000"">${vehRegNo || ""}</td>
                         </tr>
                           ${requestno ? `
                     <tr>
                      <td style="padding: 8px;"><strong>Request Id:</strong></td>
-                      <td style="padding: 8px; color: #000;">${requestno}</td>
+                      <td style="padding: 8px; color: #000;">${requestno || ""}</td>
                       </tr>
                        ` : ''}
                         <tr>
                             <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
-                            <td style="padding: 8px;color: #000"">${driverName}</td>
+                            <td style="padding: 8px;color: #000"">${driverName || ""}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -671,7 +703,7 @@ router.post('/send-email', async (req, res) => {
           `,
             };
 
-            
+
             await transporter.sendMail(customerMailOptions);
             // await transporter.sendMail(ownerMailOptions);
             res.status(200).json({ message: 'Email sent successfully' });
@@ -705,6 +737,12 @@ router.post('/send-email', async (req, res) => {
                             <td style="padding: 8px;"><strong>Contact Number :</strong></td>
                             <td style="padding: 8px;">${guestmobileno}</td>
                         </tr>
+
+                         </tr>
+                        <tr>
+                        <td style="padding: 8px;"><strong>Location :</strong></td>
+                        <td style="padding: 8px;color: #000"">${servicestation}</td>
+                    </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Reporting Date :</strong></td>
                             <td style="padding: 8px;">${formattedFromDate}</td>
@@ -750,7 +788,7 @@ router.post('/send-email', async (req, res) => {
             }
             // await transporter.sendMail(ownerMailOptions1);
 
-            
+
             await transporter.sendMail(customerMailOptions1);
             res.status(200).json({ message: 'Email sent successfully' });
 
@@ -923,12 +961,12 @@ router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req
     const booking_id = req.params.id;
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
-    const {created_at}=req.body;
-    console.log("booking_id", booking_id, fileType, fileName,created_at)
+    const { created_at } = req.body;
+    console.log("booking_id", booking_id, fileType, fileName, created_at)
     console.log("id", booking_id)
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;
-    db.query(sql, [booking_id, fileName, fileType,created_at], (err, result) => {
+    db.query(sql, [booking_id, fileName, fileType, created_at], (err, result) => {
         if (err) {
             return res.json({ Message: "Error" });
         }
@@ -942,11 +980,13 @@ router.post('/upload-booking-image', booking_uploadfile.single("file"), async (r
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
     const path = req.file.path;
-    const {created_at}=req.body;
-    console.log(booking_id,"ll", fileName,"ll", fileType,path)
+    const { created_at } = req.body;
+    console.log(booking_id, "ll", fileName, "ll", fileType, path)
+    const dynamicfileType = fileType.replace(/^[^/]+\//, "Booking Attachment/");
+
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;
-    db.query(sql, [booking_id, fileName, fileType,created_at], (err, result) => {
+    db.query(sql, [booking_id, fileName, dynamicfileType, created_at], (err, result) => {
         if (err) {
             return res.json({ Message: "Error" });
         }
@@ -986,14 +1026,41 @@ router.get('/booking-docPDFView/:bookingno', (req, res) => {
     });
 });
 
-router.get('/bookinglogdetailsget/:bookno', (req, res) => {
-    const id = req.params.bookno
-    const sql = 'select * from BookingLogDetails where bookingno=?';
-    db.query(sql, [id], (err, result) => {
-        if (err) return res.json({ Message: "error" })
+router.get('/bookinglogdetailsget', (req, res) => {
+    const { selectType, selectbookingId, fromDate, toDate, userName } = req.query;
+
+    console.log(selectType, selectbookingId, fromDate, toDate, userName, 'loggggg');
+
+    const AllDataQuery = `
+        SELECT * FROM BookingLogDetails 
+        WHERE bookingno = ? 
+        AND username = ?  
+        AND bookingdate >= ? 
+        AND bookingdate < DATE_ADD(?, INTERVAL 1 DAY)
+    `;
+    const withoutBookingNoQuery = `
+        SELECT * FROM BookingLogDetails 
+        WHERE username = ?  
+        AND bookingdate >= ? 
+        AND bookingdate < DATE_ADD(?, INTERVAL 1 DAY)
+    `;
+
+    const query = selectbookingId ? AllDataQuery : withoutBookingNoQuery;
+    const params = selectbookingId
+        ? [selectbookingId, userName, fromDate, toDate]
+        : [userName, fromDate, toDate];
+
+    db.query(query, params, (err, result) => {
+        if (err) {
+            console.error(err, 'Database Error');
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        console.log(result,'log resultsss');
+        
         return res.json(result);
-    })
-})
+    });
+});
+
 
 
 

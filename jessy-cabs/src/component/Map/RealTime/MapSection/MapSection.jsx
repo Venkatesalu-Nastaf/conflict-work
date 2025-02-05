@@ -1,6 +1,6 @@
 
 /* global google */
-import React, { useState, useCallback , useEffect} from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
 import { IconButton, Button } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
@@ -12,6 +12,7 @@ import L from 'leaflet';
 import markerIconPng from 'leaflet/dist/images/marker-icon.png';
 import markerShadowPng from 'leaflet/dist/images/marker-shadow.png';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { chennaiCoordinates } from './mapData'
 
 // Define the container style for the map
 const containerStyle = {
@@ -33,7 +34,7 @@ const MapSection = () => {
   // Load the Google Maps script with your API key and necessary libraries
   const { isLoaded } = useLoadScript({
     id: 'google-map-script',
-    // googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
+    googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
     libraries: ['places'], // Add any additional libraries you need
   });
 
@@ -52,6 +53,7 @@ const MapSection = () => {
 
   const [center, setCenter] = useState({ lat: 37.7749, lng: -122.4194 }); // Default to San Francisco
   const [userLocation, setUserLocation] = useState(null);
+  const [directionsResponse, setDirectionsResponse] = useState(null);
 
   useEffect(() => {
     // Get the user's current location
@@ -116,174 +118,18 @@ const MapSection = () => {
   const handleClosePopup = () => setOpenPopup(false);
 
   // Check if Google Maps API is loaded
-  if (!isLoaded) return <div>Loading...</div>;
+  // if (!isLoaded) return <div>Loading...</div>;
   const position = [51.505, -0.09]; // Latitude and Longitude for the map center
-
-
- 
 
   return (
     <>
-      {/* <div className='map-section'>
-
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          options={{
-            minZoom: 12,
-            maxZoom: 18,
-          }}
-          center={center}
-          zoom={10}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-        >
-          {markerLocation && (
-            <MarkerF
-              position={markerLocation}
-              icon={{
-                anchor: new google.maps.Point(137 / 2, 137 / 2),
-                scaledSize: new google.maps.Size(137, 137),
-              }}
-              onClick={handleOpenPopup}
-            />
-          )}
-
-          {openPopup && popupPosition && (
-            <InfoWindow
-              position={popupPosition}
-              onCloseClick={handleClosePopup} 
-            >
-              <div className='map-popup'>
-                <h4>6744TN11BE6744</h4>
-                <p>Group: Hyderabad|Driver: Vijayakumar</p>
-                <p><span className='red-indication'></span>Last updated:22 Aug 24, 02:13:10 PM</p>
-                <div className='status-from'>
-                  <p>Status: Parked</p>
-                  <p>From: An Hour</p>
-                </div>
-                <div className='location-near'>
-                  <p>Location:
-                    Perumalpattu - Kottamedu Road, Oragadam Industrial Corridor, Perinjambakkam, Kanchipuram, Tamil Nadu
-                  </p>
-                  <p>
-                    Nearest
-                    Address:
-                    46.9 km from JESSY CABS ( Office )
-                  </p>
-                </div>
-                
-                <div className='btns-section'>
-                  <button className='popup-last-btns'>Nearby</button>
-                  <button className='popup-last-btns'>Add Address</button>
-                  <button className='popup-last-btns'>Create Job</button>
-                  <button className='popup-last-btns'>History</button>
-                </div>
-
-              </div>
-            </InfoWindow>
-          )}
-
-
-
-          {direction && (
-            <DirectionsRenderer
-              key={directionRendererKey}
-              directions={directionRoute}
-              options={{
-                polylineOptions: {
-                  strokeColor: "#1FA445",
-                  strokeWeight: 7,
-                },
-              }}
-            />
-          )}
-        
-
-          <div style={{ zIndex: 1, position: 'absolute', top: '400px', right: '60px' }} onClick={handleOpenPopup}>
-            <IconButton onClick={handleCenterButtonClick} style={{ backgroundColor: 'red', color: 'white' }}>
-              <NavigationIcon />
-            </IconButton>
-          </div>
-
-        </GoogleMap>
-      </div>
-      <div style={{width:"100%", border:"2px solid #000000"}}>
-      <MapContainer center={position} zoom={13} style={{ height: "400px", width: "100%" }}>
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Marker position={position} icon={L.icon({ iconUrl: markerIconPng, shadowUrl: markerShadowPng })}>
-        <Popup>
-          Aaaaaaaaaaaaaaa pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
-    </MapContainer>
-      </div> */}
 
       <div className='map-section'>
-        {/* <FormControl variant="outlined" style={{ marginBottom: '20px' }}>
-          <InputLabel id="map-type-label">Map Type</InputLabel>
-          <Select
-            labelId="map-type-label"
-            value={mapType}
-            onChange={(e) => setMapType(e.target.value)}
-            label="Map Type">
-            <MenuItem value="google">Google Map</MenuItem>
-            <MenuItem value="os">OS Map</MenuItem>
-          </Select>
-        </FormControl> */}
+
         {mapType === 'google' && (
-          // <GoogleMap
-          //   mapContainerStyle={containerStyle}
-          //   options={{
-          //     minZoom: 12,
-          //     maxZoom: 18,
-          //   }}
-          //   center={center}
-          //   zoom={10}
-          //   onLoad={setMap}
-          //   onUnmount={() => setMap(null)}>
 
-<GoogleMap
-      mapContainerStyle={containerStyle}
-      center={center}
-      zoom={13}
-    >
-      {/* {userLocation && (
-        <MarkerF
-          position={userLocation}
-          icon={{
-            url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png', // Optional: Custom icon for current location
-          }}
-         
-          onClick={handleOpenPopup}
-        />
-      )} */}
-
-{userLocation && (
-              <MarkerF
-                position={userLocation}
-                icon={{
-                  anchor: new window.google.maps.Point(137 / 2, 137 / 2),
-                  scaledSize: new window.google.maps.Size(137, 137),
-                }}
-                onClick={handleOpenPopup}
-              />
-            )}
-
-
-            {/* {markerLocation && (
-              <MarkerF
-                position={markerLocation}
-                icon={{
-                  anchor: new window.google.maps.Point(137 / 2, 137 / 2),
-                  scaledSize: new window.google.maps.Size(137, 137),
-                }}
-                onClick={handleOpenPopup}
-              />
-            )} */}
-
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
+       
             {openPopup && popupPosition && (
               <InfoWindow
                 position={popupPosition}
@@ -325,18 +171,6 @@ const MapSection = () => {
               </InfoWindow>
             )}
 
-            {direction && (
-              <DirectionsRenderer
-                key={directionRendererKey}
-                directions={directionRoute}
-                options={{
-                  polylineOptions: {
-                    strokeColor: '#1FA445',
-                    strokeWeight: 7,
-                  },
-                }}
-              />
-            )}
 
             <div
               style={{
@@ -390,55 +224,31 @@ const MapSection = () => {
           </GoogleMap>
         )}
         {mapType === 'os' && (
-          // <MapContainer center={position} zoom={13} style={{ height: "400px", width: "100%" }}>
-          //   <TileLayer
-          //     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          //     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          //   />
-          //   <Marker position={position} icon={L.icon({ iconUrl: markerIconPng, shadowUrl: markerShadowPng })}>
-          //     <Popup>
-          //       Aaaaaaaaaaaaaaa pretty CSS3 popup. <br /> Easily customizable.
-          //     </Popup>
-          //   </Marker>
 
-          // </MapContainer>
 
           <div style={{ position: 'relative', width: '100%', height: '400px' }}>
-            {/* <MapContainer center={position} zoom={13} style={{ height: '100%', width: '100%' }}>
+
+
+            <MapContainer center={userPosition || position} zoom={13} style={{ height: '100%', width: '100%' }}>
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               />
-              <Marker
-                position={position}
-                icon={L.icon({ iconUrl: markerIconPng, shadowUrl: markerShadowPng })}
-              >
+
+              {userPosition && (
+                <Marker position={userPosition} icon={L.icon({ iconUrl: markerIconPng, shadowUrl: markerShadowPng })}>
+                  <Popup>
+                    You are here!
+                  </Popup>
+                </Marker>
+              )}
+
+              <Marker position={position} icon={L.icon({ iconUrl: markerIconPng, shadowUrl: markerShadowPng })}>
                 <Popup>
                   Aaaaaaaaaaaaaaa pretty CSS3 popup. <br /> Easily customizable.
                 </Popup>
               </Marker>
-            </MapContainer> */}
-
-<MapContainer center={userPosition || position} zoom={13} style={{ height: '100%', width: '100%' }}>
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-
-      {userPosition && (
-        <Marker position={userPosition} icon={L.icon({ iconUrl: markerIconPng, shadowUrl: markerShadowPng })}>
-          <Popup>
-            You are here!
-          </Popup>
-        </Marker>
-      )}
-
-      <Marker position={position} icon={L.icon({ iconUrl: markerIconPng, shadowUrl: markerShadowPng })}>
-        <Popup>
-          Aaaaaaaaaaaaaaa pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
-    </MapContainer>
+            </MapContainer>
 
             {/* Select Dropdown inside the Map */}
             <div

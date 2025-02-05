@@ -5,10 +5,24 @@ const CopyEmailHtmlBooking = () => {
 
     // HTML content for pending status
 
+    function removeSeconds(time) {
+        // Split the time string by colon (:)
+        const timeParts = time.split(':');
+      
+        // Check if there are seconds (length 3), return hours:minutes
+        if (timeParts.length === 3) {
+          return `${timeParts[0]}:${timeParts[1]}`;
+        }
+      
+        // If there's only hours:minutes, return it as is
+        return time;
+      }
+
     const pendingHtmlContent = (datatripsheet) => {
         const updatdata = datatripsheet
         const formattedDate = dayjs(updatdata?.startdate).format('YYYY-MM-DD');
-        const formattedFromDate = dayjs(formattedDate).format('YYYY-MM-DD');
+        const formattedFromDate = dayjs(formattedDate).format('DD-MM-YYYY');
+        const data = removeSeconds(updatdata?.starttime)
 
         return `
        <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
@@ -30,13 +44,17 @@ const CopyEmailHtmlBooking = () => {
                             <td style="padding: 8px;"><strong>Contact Number :</strong></td>
                             <td style="padding: 8px;">${updatdata?.guestmobileno}</td>
                         </tr>
+                          <tr>
+                            <td style="padding: 8px;"><strong>Location:</strong></td>
+                            <td style="padding: 8px;color: #000"">${updatdata?.servicestation}</td>
+                        </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Reporting Date :</strong></td>
                             <td style="padding: 8px;">${formattedFromDate}</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Reporting Time(24HR) :</strong></td>
-                            <td style="padding: 8px;">${updatdata?.starttime} Hrs</td>
+                              <td style="padding: 8px;">${data} Hrs</td>
                         </tr>
                        
                         <tr>
@@ -79,6 +97,7 @@ const CopyEmailHtmlBooking = () => {
         const updatdata = datatripsheet
         const formattedDate = dayjs(updatdata?.startdate).format('YYYY-MM-DD');
         const formattedFromDate = dayjs(formattedDate).format('YYYY-MM-DD');
+        const data = removeSeconds(updatdata?.starttime)
 
 
         return `
@@ -107,7 +126,7 @@ const CopyEmailHtmlBooking = () => {
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Time (24):</strong></td>
-                            <td style="padding: 8px;color: #000"">${updatdata?.starttime} Hrs</td>
+                            <td style="padding: 8px;color: #000"">${data} Hrs</td>
                         </tr>
                         <tr>
                             <td style="padding: 8px;"><strong>Car Sent:</strong></td>

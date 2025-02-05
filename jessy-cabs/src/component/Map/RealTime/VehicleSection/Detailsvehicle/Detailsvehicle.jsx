@@ -28,7 +28,6 @@ const Detailsvehicle = () => {
     setOpendetailsDrawer(false);
   };
 
-
   const [selectedValuesdetails, setSelectedValuesdetails] = useState([]);
   const optionsdetails = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
   const [valuedetailstabs, SetValuedetailstabs] = React.useState('1');

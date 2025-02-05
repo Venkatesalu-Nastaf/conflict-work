@@ -39,13 +39,25 @@
   width: 300px;
 }
 
+
 .invoice-address-detials {
   font-weight: 500;
+  font-size: 14px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji !important;
+ 
+}
+.invoice-contact-details{
+  font-size: 14px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji !important;
 }
 
 .invoice-address .invoice-contact-details {
   font-weight: 600;
   font-size: 14px;
+}
+
+.invoice-contact-details {
+  margin: 0%;
 }
 
 /* heading */
@@ -129,7 +141,7 @@ header img {
 
 .vehicale-details-table #table-headers,
 #table-datas {
-  padding: 6px;
+  padding: 2px 6px;
   border-radius: 2px;
   border: 1px solid #ccc;
 }
@@ -148,10 +160,13 @@ header img {
 .guest-signature-details .guest-sign {
   width: 45%;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
 }
 
 .guest-signature-details .guest-sign p {
-  position: absolute;
+  /* position: absolute; */
   bottom: 0;
   font-size: 10px;
   font-weight: bold;
@@ -179,19 +194,20 @@ header img {
 
 .invoice-wrapper #table-header {
   background: #EEE;
-  padding: 6px;
+  padding: 2px 6px;
   border: none;
 }
 
 .invoice-wrapper #table-data {
-  padding: 6px;
+  padding: 2px 6px;
   border: none;
+  font-size: 12px;
 }
 
 /* table firstTable */
 .invoice-wrapper #table-invoice.firstleftTable {
   float: left;
-  width: 45%;
+  width: 75%;
   height: 50%;
 }
 
@@ -225,6 +241,12 @@ header img {
 
 .total-values {
   display: flex;
+}
+
+.total-values-hcl {
+  display: flex;
+  gap: 30px;
+  /* margin-bottom: 50%; */
 }
 
 .total-values #Totals {
@@ -281,16 +303,44 @@ header img {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  margin-bottom: 0%;
+  height: 210px;
+  width: 40%;
+  
 }
 
 .tripsheet-location-img img {
-  height: 300px;
+  height: 100%;
   width: 100%;
 }
 
 .tripsheet-RouteSummary {
+  /* margin-top: -30%; */
+  position: relative;
+  top: 30%;
   width: 80%;
   font-size: 13px;
+  margin: 0 auto 0 auto;
+}
+
+/* .tripsheet-RouteSummary-normal {
+  position: relative;
+  height: 210px;
+  width: 100%;
+  font-size: 13px;
+
+} */
+.tripsheet-RouteSummary-normal {
+  /* margin-top: 10%; */
+  padding-bottom: 17px;
+  position: relative;
+  /* top: 30%; */
+  width: 60%;
+  font-size: 13px;
+  /* margin: 0 auto 0 auto; */
+  /* background-color: red; */
+  /* border: 2px solid rgb(255, 255, 255); */
+  height: 400px;
 }
 
 .tripsheet-RouteSummary p {
@@ -303,14 +353,17 @@ header img {
 }
 
 .attached-toll {
-  margin-top: 110px;
+  /* margin-top: 90px; */
+  /* margin-top: -10px; */
+  /* margin-bottom: 60px; */
+  /* margin-top: -40px; */
 }
 
-.attached-toll img {
+/* .attached-toll img {
   height: 350px;
   width: 100%;
   margin: 10px;
-}
+} */
 
 .invoice-remarks-main {
   font-weight: 600;
@@ -323,6 +376,109 @@ header img {
   padding: 10px;
 }
 
-.guest-sign-text{
+.guest-sign-text {
   text-align: center;
+  margin: 0%;
+}
+
+@media print {
+  .print-page {
+    page-break-before: always;
+    /* Force each item to start on a new page */
+    margin: 0;
+    padding: 0;
+  }
+
+  .pdf-page {
+    width: 100%;
+    /* Ensure PDF fits the page width */
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    page-break-inside: avoid;
+    /* Prevent page breaks inside PDF pages */
+  }
+
+  .image-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .print-image {
+    width: 100%;
+    /* Fit the width of the page */
+    height: auto;
+    /* Maintain aspect ratio */
+    margin: 0 auto;
+    display: block;
+    page-break-before: always;
+    /* Force new page for each image */
+  }
+}
+
+@media print {
+  li {
+    page-break-inside: avoid;
+    page-break-before: always;
+  }
+}
+
+/* .upload-img{
+margin: 25px auto ;
+width: 500px !important;
+height: 730px !important;
+/* background-color: green; */
+/* } */
+
+
+
+
+
+
+.upload-pdf {
+ 
+  height: 1065px !important;
+  width: 700px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 25px;
+  padding-bottom: 18px;
+  /* background-color: orange; */
+  /* border: 5px solid rgb(255, 255, 255); */
+}
+.upload-img{
+
+
+  /* padding-top: 20px;
+  margin-top: 10px;
+
+  margin-right: auto;
+  margin-left: auto;
+  width: 420px !important;
+  height: 435px !important; */
+  /* background-color: green; */
+  margin-top: 35px;
+  margin-bottom: 15px;
+  padding-top: 25px;
+
+  margin-right: auto;
+  margin-left: auto;
+  width: 400px !important;
+  height: 495px !important;
+
+
+}
+
+.map-invoice{
+display: flex;
+gap: 6px;
+height: 570px !important;
+border: 1px solid rgb(253, 253, 253);;
+}
+
+/* style={{ display: "flex", gap: "6px", height:"480px" }} */
+.tr-height{
+  height: 60px !important;
+  /* background-color: red; */
 }

@@ -13,7 +13,7 @@ const usePendingBill = () => {
         { field: 'BillDate', headerName: 'Bill Date', width: 180, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),  },
         { field: 'CustomerName', headerName: 'Customer Name', width: 180 },
         { field: 'TotalAmount', headerName: 'Bill Amount', width: 180 },
-        { field: 'Collected', headerName: 'Collected', width: 180 },
+        { field: 'TotalCollected', headerName: 'Collected', width: 180 },
         { field: 'TotalBalance', headerName: 'Balance', width: 180 },
         { field: 'Account', headerName: 'Account', width: 180 },
 
@@ -86,7 +86,7 @@ const usePendingBill = () => {
             const response = await axios.post(`${apiUrl}/${endpoint}`, { customerData });
 
             if (response.data && response.data.length > 0) {
-                const bills = addSerialNumber(response.data);
+                const bills = addSerialNumber(response.data);                
                 const totalAmount = bills.reduce((sum, bill) => sum + parseFloat(bill.TotalAmount), 0);
                 const totalBalance = bills.reduce((sum, bill) => sum + parseFloat(bill.TotalBalance), 0);
 
@@ -214,80 +214,162 @@ const usePendingBill = () => {
         }
     }, [error, success]);
 
-    const handlePdfDownload = () => {
-        const doc = new jsPDF();
+    // const handlePdfDownload = () => {
+    //     const doc = new jsPDF();
 
-        const columns = [
-            { field: 'sno', headerName: 'SNO' },
-            { field: 'uniqueid', headerName: 'Unique ID' },
-            { field: 'BillDate', headerName: 'Bill Date' },
-            { field: 'CustomerName', headerName: 'Customer Name' },
-            { field: 'TotalAmount', headerName: 'Total Amount' },
-            { field: 'Collected', headerName: 'Collected' },
-            { field: 'TotalBalance', headerName: 'Total Balance' },
-            { field: 'Account', headerName: 'Account' }
-        ];
+    //     const columns = [
+    //         { field: 'sno', headerName: 'SNO' },
+    //         { field: 'uniqueid', headerName: 'Unique ID' },
+    //         { field: 'BillDate', headerName: 'Bill Date' },
+    //         { field: 'CustomerName', headerName: 'Customer Name' },
+    //         { field: 'TotalAmount', headerName: 'Total Amount' },
+    //         { field: 'Collected', headerName: 'Collected' },
+    //         { field: 'TotalBalance', headerName: 'Total Balance' },
+    //         { field: 'Account', headerName: 'Account' }
+    //     ];
 
-        const tableColumn = columns.map(column => column.headerName);
+    //     const tableColumn = columns.map(column => column.headerName);
 
-        const totalSum = rows.reduce((acc, row) => acc + parseFloat(row.TotalAmount || 0), 0);
-        const totalCollected = rows.reduce((acc, row) => acc + parseFloat(row.Collected || 0), 0);
-        const totalBalance = rows.reduce((acc, row) => acc + parseFloat(row.TotalBalance || 0), 0);
+    //     const totalSum = rows.reduce((acc, row) => acc + parseFloat(row.TotalAmount || 0), 0);
+    //     const totalCollected = rows.reduce((acc, row) => acc + parseFloat(row.Collected || 0), 0);
+    //     const totalBalance = rows.reduce((acc, row) => acc + parseFloat(row.TotalBalance || 0), 0);
 
-        const totalRow = columns.map(column => {
-            if (column.field === 'TotalAmount') return totalSum;
-            if (column.field === 'Collected') return totalCollected;
-            if (column.field === 'TotalBalance') return totalBalance;
-            if (column.headerName === 'Customer Name') return 'Total';
-            return '';
-        });
+    //     const totalRow = columns.map(column => {
+    //         if (column.field === 'TotalAmount') return totalSum;
+    //         if (column.field === 'Collected') return totalCollected;
+    //         if (column.field === 'TotalBalance') return totalBalance;
+    //         if (column.headerName === 'Customer Name') return 'Total';
+    //         return '';
+    //     });
 
-        const tableRows = rows.map(row => [
-            row.sno, row.uniqueid, row.BillDate, row.CustomerName, row.TotalAmount,
-            row.Collected, row.TotalBalance, row.Account
-        ]);
+    //     const tableRows = rows.map(row => [
+    //         row.sno, row.uniqueid, row.BillDate, row.CustomerName, row.TotalAmount,
+    //         row.Collected, row.TotalBalance, row.Account
+    //     ]);
 
-        tableRows.push(totalRow);
+    //     tableRows.push(totalRow);
 
-        doc.autoTable({
-            head: [tableColumn],
-            body: tableRows,
-            columnStyles: {
-                0: { cellWidth: 'wrap' },
-                1: { cellWidth: 'wrap' },
-                2: { cellWidth: 'wrap' },
-                3: { cellWidth: 'wrap' },
-                4: { cellWidth: 'wrap' },
-                5: { cellWidth: 'wrap' },
-                6: { cellWidth: 'wrap' },
-                7: { cellWidth: 'wrap' }
-            },
-            styles: {
-                cellPadding: 2,
-                fontSize: 8,
-                overflow: 'linebreak',
-            },
-            margin: { top: 10, bottom: 10 },
-            tableWidth: 'auto',
-            halign: 'center',
-            willDrawCell: function (data) {
-                if (data.row.index === tableRows.length - 1) {
-                    const { cell, } = data;
-                    const { x, y, width, height } = cell;
+    //     doc.autoTable({
+    //         head: [tableColumn],
+    //         body: tableRows,
+    //         columnStyles: {
+    //             0: { cellWidth: 'wrap' },
+    //             1: { cellWidth: 'wrap' },
+    //             2: { cellWidth: 'wrap' },
+    //             3: { cellWidth: 'wrap' },
+    //             4: { cellWidth: 'wrap' },
+    //             5: { cellWidth: 'wrap' },
+    //             6: { cellWidth: 'wrap' },
+    //             7: { cellWidth: 'wrap' }
+    //         },
+    //         styles: {
+    //             cellPadding: 2,
+    //             fontSize: 8,
+    //             overflow: 'linebreak',
+    //         },
+    //         margin: { top: 10, bottom: 10 },
+    //         tableWidth: 'auto',
+    //         halign: 'center',
+    //         willDrawCell: function (data) {
+    //             if (data.row.index === tableRows.length - 1) {
+    //                 const { cell, } = data;
+    //                 const { x, y, width, height } = cell;
 
-                    doc.setFont('helvetica', 'bold');
-                    doc.setFontSize(10);
+    //                 doc.setFont('helvetica', 'bold');
+    //                 doc.setFontSize(10);
 
-                    doc.setDrawColor(0);
-                    doc.setLineWidth(0.5);
-                    doc.line(x, y, x + width, y);
-                    doc.line(x, y + height, x + width, y + height);
-                }
+    //                 doc.setDrawColor(0);
+    //                 doc.setLineWidth(0.5);
+    //                 doc.line(x, y, x + width, y);
+    //                 doc.line(x, y + height, x + width, y + height);
+    //             }
+    //         }
+    //     });
+
+    //     doc.save('gst_report.pdf');
+    // }
+
+const handlePdfDownload = () => {
+    const doc = new jsPDF();
+
+    const columns = [
+        { field: 'sno', headerName: 'SNO' },
+        { field: 'uniqueid', headerName: 'Unique ID' },
+        { field: 'BillDate', headerName: 'Bill Date' },
+        { field: 'CustomerName', headerName: 'Customer Name' },
+        { field: 'TotalAmount', headerName: 'Total Amount' },
+        { field: 'Collected', headerName: 'Collected' },
+        { field: 'TotalBalance', headerName: 'Total Balance' },
+        { field: 'Account', headerName: 'Account' }
+    ];
+
+    const tableColumn = columns.map(column => column.headerName);
+
+    const totalSum = rows.reduce((acc, row) => acc + parseFloat(row.TotalAmount || 0), 0);
+    const totalCollected = rows.reduce((acc, row) => acc + parseFloat(row.Collected || 0), 0);
+    const totalBalance = rows.reduce((acc, row) => acc + parseFloat(row.TotalBalance || 0), 0);
+
+    const totalRow = columns.map(column => {
+        if (column.field === 'TotalAmount') return totalSum;
+        if (column.field === 'Collected') return totalCollected;
+        if (column.field === 'TotalBalance') return totalBalance;
+        if (column.headerName === 'Customer Name') return 'Total';
+        return '';
+    });
+
+    const tableRows = rows.map(row => [
+        row.sno, 
+        row.uniqueid, 
+        row.BillDate ? dayjs(row.BillDate).format('DD-MM-YYYY') : '', // Format BillDate here
+        row.CustomerName, 
+        row.TotalAmount, 
+        row.Collected, 
+        row.TotalBalance, 
+        row.Account
+    ]);
+
+    tableRows.push(totalRow);
+
+    doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        columnStyles: {
+            0: { cellWidth: 'wrap' },
+            1: { cellWidth: 'wrap' },
+            2: { cellWidth: 'wrap' },
+            3: { cellWidth: 'wrap' },
+            4: { cellWidth: 'wrap' },
+            5: { cellWidth: 'wrap' },
+            6: { cellWidth: 'wrap' },
+            7: { cellWidth: 'wrap' }
+        },
+        styles: {
+            cellPadding: 2,
+            fontSize: 8,
+            overflow: 'linebreak',
+        },
+        margin: { top: 10, bottom: 10 },
+        tableWidth: 'auto',
+        halign: 'center',
+        willDrawCell: function (data) {
+            if (data.row.index === tableRows.length - 1) {
+                const { cell } = data;
+                const { x, y, width, height } = cell;
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(10);
+
+                doc.setDrawColor(0);
+                doc.setLineWidth(0.5);
+                doc.line(x, y, x + width, y);
+                doc.line(x, y + height, x + width, y + height);
             }
-        });
+        }
+    });
 
-        doc.save('gst_report.pdf');
-    }
+    doc.save('gst_report.pdf');
+};
+
 
 
 
@@ -350,7 +432,7 @@ const usePendingBill = () => {
                 const newRow = worksheet.addRow({
                     sno: row.sno,
                     uniqueid: row.uniqueid,
-                    BillDate: row.BillDate,
+                    BillDate: row.BillDate  ? dayjs(row.BillDate).format('DD-MM-YYYY') : '',
                     CustomerName: row.CustomerName,
                     TotalAmount: row.TotalAmount,
                     Collected: row.Collected,

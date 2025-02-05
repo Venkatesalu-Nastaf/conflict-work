@@ -62,7 +62,8 @@ import Employes from "./component/Info/Employes/Employes"
 import { Records } from "./component/Map/Records/Records";
 import { PendingBills } from "./component/Billings/Report/pendingBills/PendingBills";
 import is from "date-fns/esm/locale/is/index.js";
-
+import Agreement from "./component/Info/AgreementMain/Agreement/Agreement";
+import AgreementMain from "./component/Info/AgreementMain/AgreementMain";
 
 
 function App() {
@@ -153,14 +154,25 @@ function App() {
   const INFO_FuelInfo = permissions[19]?.read ;
   
   const INFO_Employee =  permissions[20]?.read 
-  const Dashbord_read = permissions[21]?.read 
+
+
+  // const Dashbord_read = permissions[21]?.read 
+  // // this for map page
+  // const Maps = permissions[22]?.read 
+  // const Map_Realtime = permissions[23]?.read
+  // const Map_Vehicle = permissions[24]?.read 
+  // const Map_Reminders = permissions[25]?.read 
+  // const Map_History = permissions[26]?.read 
+  // const Map_Records = permissions[27]?.read 
+  const INFO_Agreement = permissions[21]?.read
+  const Dashbord_read = permissions[22]?.read 
   // this for map page
-  const Maps = permissions[22]?.read 
-  const Map_Realtime = permissions[23]?.read
-  const Map_Vehicle = permissions[24]?.read 
-  const Map_Reminders = permissions[25]?.read 
-  const Map_History = permissions[26]?.read 
-  const Map_Records = permissions[27]?.read 
+  const Maps = permissions[23]?.read 
+  const Map_Realtime = permissions[24]?.read
+  const Map_Vehicle = permissions[25]?.read 
+  const Map_Reminders = permissions[26]?.read 
+  const Map_History = permissions[27]?.read 
+  const Map_Records = permissions[28]?.read 
 
 
 
@@ -169,26 +181,45 @@ function App() {
   const Register_page_permission = permissions[9]?.read || permissions[10]?.read || permissions[11]?.read || permissions[12]?.read ||permissions[13]?.read;
   const Setting_page_permission = permissions[14]?.read || permissions[15]?.read || permissions[16]?.read 
   
-  const Map_page_permission = permissions[22]?.read||permissions[23]?.read || permissions[24]?.read ||permissions[25]?.read ||permissions[26]?.read  || permissions[27]?.read
-  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read
+  const Map_page_permission = permissions[23]?.read||permissions[24]?.read || permissions[25]?.read ||permissions[26]?.read ||permissions[27]?.read  || permissions[28]?.read
+  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read || permissions[21]?.read
 
 
-
+  const { orgName, logo, setLogo, setLogoTrigger, logotrigger,isstationtrigger } = useData() 
   //--------   fetch station name ------------------------------------------------------------
 
 
   // loading with correction
 
-  useEffect(() => {
-    const auth = localStorage.getItem("auth") === 'true';
+  // useEffect(() => {
+  //   const auth = localStorage.getItem("auth");
+  //   console.log(auth,'authen')
+   
+  //   if (auth === null || auth === undefined) {
+  //     setIsLoading(false)
+  //     navigate('/', { replace: true });
+  //     return; 
+  //   }
   
+  // }, [isLoading, location.pathname, navigate, permissions]);
+
+
+  useEffect(() => {
+    const auth = localStorage.getItem("auth");
+    console.log(auth,typeof(auth),"auth")
+    // if (auth === null || auth === undefined) {
+      if (auth === "false") {
+      setIsLoading(false)
+      navigate('/', { replace: true });
+      return; 
+    }
     // Start a timer to stop loading
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 3500);
   
     // Check if the user is authenticated
-    if (auth) {
+    if (auth === "true") {
       // Keep loading if permissions are empty or undefined
       if (!permissions || permissions.length === 0) {
         setIsLoading(true);
@@ -201,6 +232,7 @@ function App() {
   
     // Handle redirection once loading is complete
     if (!isLoading && location.pathname !== '/') {
+      // console.log("enetr")
       if (location.pathname !== window.location.pathname) {
         navigate(location.pathname, { replace: true });
       }
@@ -244,8 +276,11 @@ function App() {
   
 
   const loginUserName = localStorage.getItem("username")
+  
+  const stationvalue = localStorage.getItem("stationValue");
 
   const [stationName, setStationName] = useState([]);
+
 
   useEffect(() => {
     const fetchSattionName = async () => {
@@ -253,12 +288,14 @@ function App() {
         const response = await axios.get(`${apiUrl}/getStation-name`, { params: { username: loginUserName } })
         const resData = response.data;
         setStationName(resData);
+        // localStorage.removeItem("stationValue");
       } catch (error) {
         console.log("error occur ", error);
       }
     }
     fetchSattionName();
-  }, [apiUrl, loginUserName])
+  
+  }, [apiUrl, loginUserName,stationvalue,isstationtrigger])
 
 // console.log(permissions,'permissinon datas come')
 //     const auth = localStorage.getItem("auth") === 'true';
@@ -322,7 +359,7 @@ function App() {
 
   //--------------------------------------------------------
   //fetch org logo
-  const { orgName, logo, setLogo, setLogoTrigger, logotrigger } = useData() // its for logo
+ // its for logo
 
   const ref = useRef(false)
   const organizationname = orgName || localStorage.getItem('usercompany');
@@ -362,6 +399,8 @@ function App() {
 
   //-------------------------------------------
   const [customer, setCustomer] = useState()
+  
+  const [Statename,setStateName] = useState([])
 
   useEffect(() => {
     const getCustomer = async () => {
@@ -369,6 +408,13 @@ function App() {
       setCustomer(response.data)
     }
     getCustomer()
+  }, [apiUrl])
+  useEffect(() => {
+    const getstationstate = async () => {
+      const response = await axios.get(`${apiUrl}/Statecreation`)
+      setStateName(response.data)
+    }
+    getstationstate()
   }, [apiUrl])
 
 
@@ -622,17 +668,17 @@ function App() {
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
                 <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 && INFO_FuelInfo !== undefined  ? (<FuelInfo />) : (<NoPermission /> )} />
                 <Route path="/home/info/employee" element={INFO_Employee !== 0 &&  INFO_Employee !== undefined   ?  ( <Employes />):(<NoPermission />)} />
-                
+                <Route path="/home/info/agreement" element={INFO_Agreement !== 0 &&  INFO_Agreement !== undefined   ?  ( <AgreementMain  organizationNames={organizationNames}/>):(<NoPermission />)} />                
               </Route>
               <Route path="/home/billing" element={BILLING !== 0 ? <Billings /> :<NoPermission />}>
 
-                <Route path="/home/billing/billing" element={BILLING_BillingMain !== 0 && BILLING_BillingMain !== undefined ? (<BillingMain organizationNames={organizationNames} />) : (<NoPermission />)} />
-                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 && Billing_Transfer !== undefined  ? (<Transfer stationName={stationName} organizationNames={organizationNames} /> ):( <NoPermission />)} />
+                <Route path="/home/billing/billing" element={BILLING_BillingMain !== 0 && BILLING_BillingMain !== undefined ? (<BillingMain  Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
+                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 && Billing_Transfer !== undefined  ? (<Transfer stationName={stationName}  Statename={Statename} organizationNames={organizationNames} /> ):( <NoPermission />)} />
                 <Route
                   path="/home/billing/coveringbill"
-                  element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} organizationNames={organizationNames} />) : ( <NoPermission />)}
+                  element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : ( <NoPermission />)}
                 />
-                <Route path="/home/billing/reports" element={Billing_Reports !== 0  && Billing_Reports !== undefined ? (<Reports stationName={stationName} organizationNames={organizationNames} />) : (<NoPermission />)} />
+                <Route path="/home/billing/reports" element={Billing_Reports !== 0  && Billing_Reports !== undefined ? (<Reports stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
               </Route>
 
              <Route path="/home/billing/reports/Pendingbills" element ={<PendingBills />}></Route>

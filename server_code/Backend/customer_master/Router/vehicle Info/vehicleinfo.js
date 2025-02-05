@@ -3,7 +3,9 @@ const router = express.Router();
 const db = require('../../../db');
 const moment = require('moment'); // or import dayjs from 'dayjs';
 const multer = require('multer');
+const nodemailer = require('nodemailer');
 const path = require('path');
+const cron = require('node-cron');
 
 
 router.use(express.static('customer_master'));
@@ -106,6 +108,251 @@ router.put('/vehicleinfo/:vehicleId', (req, res) => {
     return res.status(200).json({ message: 'Data updated successfully' });
   });
 });
+
+router.get('/TemplateforFCdate', async (req, res) => {
+  const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "FCdate"';
+  db.query(query, (err, results) => {
+      if (err) {
+          console.log('Database error:', err);
+          return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+      }
+      console.log('Database results:', results);
+      return res.status(200).json(results);
+  });
+});
+
+router.get('/Templateforstatepermitdate', async (req, res) => {
+  const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "StatePermitDate"';
+  db.query(query, (err, results) => {
+      if (err) {
+          console.log('Database error:', err);
+          return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+      }
+      console.log('Database results:', results);
+      return res.status(200).json(results);
+  });
+});
+router.get('/Templatefornationalpermitdate', async (req, res) => {
+  const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "NationalPermitDate"';
+  db.query(query, (err, results) => {
+      if (err) {
+          console.log('Database error:', err);
+          return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+      }
+      console.log('Database results:', results);
+      return res.status(200).json(results);
+  });
+});
+router.get('/Templateforinsuranceduedate', async (req, res) => {
+  const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "InsuranceDueDate"';
+  db.query(query, (err, results) => {
+      if (err) {
+          console.log('Database error:', err);
+          return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+      }
+      console.log('Database results:', results);
+      return res.status(200).json(results);
+  });
+});
+
+
+// FC DATE SCHEDULER-----------------------------------
+const queryAsync = (query, params = []) => {
+  return new Promise((resolve, reject) => {
+    db.query(query, params, (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+};
+
+// Get email credentials from the database
+const getEmailCredentials = async () => {
+  const results = await queryAsync("SELECT EmailApp_Password, Sender_mail FROM usercreation LIMIT 1");
+  if (results.length > 0) {
+    return results[0];
+  } else {
+    throw new Error("No email credentials found in the table.");
+  }
+};
+
+// Fetch email template for a given type
+const TemplateMessageData = async (type) => {
+  const results = await queryAsync(
+    "SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = ?",
+    [type]
+  );
+  if (results.length > 0) {
+    return results[0];
+  } else {
+    throw new Error(`No template message found for type: ${type}`);
+  }
+};
+
+// Create email transporter
+const createTransporter = async () => {
+  const credentials = await getEmailCredentials();
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: credentials.Sender_mail,
+      pass: credentials.EmailApp_Password,
+    },
+  });
+  return { transporter, from: credentials.Sender_mail };
+};
+
+// Parse and validate date
+const parseDate = (dateStr) => {
+  const validFormats = [
+    "DD-MM-YYYY",
+    "MM/DD/YYYY",
+    "YYYY-MM-DD",
+    "ddd, D MMM YYYY HH:mm:ss [GMT]",
+    "YYYY-MM-DDTHH:mm:ssZ",
+    "DD/MM/YYYY",
+  ];
+
+  for (const format of validFormats) {
+    const parsedDate = moment(dateStr, format, true);
+    if (parsedDate.isValid()) {
+      return parsedDate;
+    }
+  }
+  console.error(`Failed to parse date: "${dateStr}"`);
+  return null;
+};
+
+// Send reminder email
+const sendReminderEmail = async (today, endDate, user, subject, emailTemplate) => {
+  const reminderStart = endDate.clone().subtract(45, "days");
+  const reminderEnd = endDate;
+
+  if (today.isBetween(reminderStart, reminderEnd, null, "[]")) {
+    const { transporter, from } = await createTransporter();
+    await transporter.sendMail({
+      from,
+      to: user.email,
+      subject,
+      html: emailTemplate,
+    });
+    console.log(`Reminder sent to ${user.email} with subject "${subject}"`);
+  }
+};
+
+// Send subscription reminders
+const sendSubscriptionReminders = async () => {
+  const today = moment();
+
+  db.query(
+    `SELECT fcdate, insduedate, spdate, npdate, driverName, email FROM vehicleinfo 
+     WHERE (fcdate IS NOT NULL AND fcdate != '') 
+        OR (insduedate IS NOT NULL AND insduedate != '') 
+        OR (spdate IS NOT NULL AND spdate != '') 
+        OR (npdate IS NOT NULL AND npdate != '')`,
+    async (err, results) => {
+      if (err) {
+        console.error("Error fetching subscriptions:", err);
+        return;
+      }
+
+      for (const user of results) {
+        if (user.fcdate) {
+          const fcDate = parseDate(user.fcdate.trim());
+          if (fcDate) {
+            try {
+              const templateData = await TemplateMessageData("FCdate");
+              const emailMessage = templateData.TemplateMessageData.replace(
+                "${driverName}",
+                user.driverName || "Driver"
+              ).replace("${date}", fcDate.format("DD-MM-YYYY"));
+
+              await sendReminderEmail(today, fcDate, user, "FC Due Reminder", emailMessage);
+            } catch (error) {
+              console.error(`Failed to send FC Due Reminder to ${user.email}:`, error);
+            }
+          }
+        }
+
+        if (user.insduedate) {
+          const insDueDate = parseDate(user.insduedate.trim());
+          if (insDueDate) {
+            try {
+              const templateData = await TemplateMessageData("InsuranceDueDate");
+              const emailMessage = templateData.TemplateMessageData.replace(
+                "${driverName}",
+                user.driverName || "Driver"
+              ).replace("${date}", insDueDate.format("DD-MM-YYYY"));
+        
+              await sendReminderEmail(today, insDueDate, user, "Insurance Due Reminder", emailMessage);
+            } catch (error) {
+              console.error(`Failed to send Insurance Due Reminder to ${user.email}:`, error);
+            }
+          }
+        }
+        
+
+        // if (user.spdate) {
+        //   const spDueDate = parseDate(user.spdate.trim());
+        //   if (spDueDate) {
+        //     await sendReminderEmail(
+        //       today,
+        //       spDueDate,
+        //       user,
+        //       "State Permit Reminder",
+        //       `<p>Dear ${user.driverName || "Driver"},</p>
+        //        <p>Your state permit is nearing its expiration date.</p>
+        //        <p>State Permit Expiry Date: ${spDueDate.format("DD-MM-YYYY")}</p>`
+        //     );
+        //   }
+        // }
+
+        if (user.spdate) {
+          const spDueDate = parseDate(user.spdate.trim());
+          if (spDueDate) {
+            try {
+              const templateData = await TemplateMessageData("StatePermitDate");
+              const emailMessage = templateData.TemplateMessageData.replace(
+                "${driverName}",
+                user.driverName || "Driver"
+              ).replace("${date}", spDueDate.format("DD-MM-YYYY"));
+
+              await sendReminderEmail(today, spDueDate, user, "State Permit Due Reminder", emailMessage);
+            } catch (error) {
+              console.error(`Failed to send State Permit Due Reminder to ${user.email}:`, error);
+            }
+          }
+        }
+
+        if (user.npdate) {
+          const npDueDate = parseDate(user.npdate.trim());
+          if (npDueDate) {
+            try {
+              const templateData = await TemplateMessageData("NationalPermitDate");
+              const emailMessage = templateData.TemplateMessageData.replace(
+                "${driverName}",
+                user.driverName || "Driver"
+              ).replace("${date}", npDueDate.format("DD-MM-YYYY"));
+      
+              await sendReminderEmail(today, npDueDate, user, "National Permit Due Reminder", emailMessage);
+            } catch (error) {
+              console.error(`Failed to send National Permit Due Reminder to ${user.email}:`, error);
+            }
+          }
+        }
+      }
+    }
+  );
+};
+
+// Schedule the job
+cron.schedule("00 09 * * *", () => {
+  console.log("Running daily subscription reminder job...");
+  sendSubscriptionReminders();
+});
+
+
+//--------------X---------------------X-------------------------X---------
 
 
 router.get('/searchvehicleinfo', (req, res) => {

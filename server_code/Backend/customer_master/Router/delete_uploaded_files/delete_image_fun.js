@@ -172,41 +172,123 @@ router.delete('/tripsheet-imagedelete', (req, res) => {
 
 //delte attached doc  in BOOKING
 
-router.delete('/booking_doc-delete/:imagedata', (req, res) => {
-    const image = req.params.imagedata
-    const deleteImage = image.split(',')
-    const sql = 'delete from booking_doc where path=?'
-    const findImage = 'select * from booking_doc where path=?'
+// router.delete('/booking_doc-delete/:imagedata/:tripid', (req, res) => {
+//     const image = req.params.imagedata
+//     const deleteImage = image.split(',')
+// const  tripid = req.params.tripid;
+//     const sql = 'delete from booking_doc where path =? and booking_id'
+//     // const findImage = 'select * from booking_doc where booking_id = ?'
+// console.log("tripid",tripid,deleteImage)
+//     deleteImage.forEach((img) => {
+      
+          
+//                 db.query(sql, [img,tripid], (err, result) => {
+//                     if (err) {
+//                         console.log("err", err);
+//                         res.status(500).json({ message: "error inside server when deleteing image ", success: false })
+//                     }
+                
+            
+//             const deleteImagePath = path.join('./uploads', img)
+//             if (fs.existsSync(deleteImagePath)) {
+//                 try {
+//                     fs.unlinkSync(deleteImagePath)
+//                 } catch (err) {
+//                     console.log("err", err)
+//                 }
 
-    deleteImage.forEach((img) => {
-        db.query(findImage, [img], (err, result) => {
-            if (err) {
-                console.log("err", err)
-            }
-            if (result.length > 0) {
-                db.query(sql, [img], (err, result) => {
+//             } else {
+//                 console.log("file dosent exist")
+//             }
+
+//             res.json({ success: true, message: "sucess" })
+//         })
+//     })
+// })
+
+
+// Replace with your actual database connection
+
+router.delete('/booking_doc-delete/:imagedata/:tripid', async (req, res) => {
+    const image = req.params.imagedata;
+    const deleteImage = image.split(',');
+    const tripid = req.params.tripid;
+
+    const sql = 'DELETE FROM booking_doc WHERE path = ? AND booking_id = ?';
+
+    try {
+        // Create an array of promises for deletion
+        const deletePromises = deleteImage.map((img) => {
+            return new Promise((resolve, reject) => {
+                db.query(sql, [img, tripid], (err, result) => {
                     if (err) {
-                        console.log("err", err);
-                        res.status(500).json({ message: "error inside server when deleteing image ", success: false })
+                        reject(err);
+                    } else {
+                        const deleteImagePath = path.join('./uploads', img);
+                        if (fs.existsSync(deleteImagePath)) {
+                            try {
+                                fs.unlinkSync(deleteImagePath);
+                                resolve({ success: true, message: `Deleted ${img}` });
+                            } catch (err) {
+                                reject(err);
+                            }
+                        } else {
+                            console.log(`File ${img} does not exist`);
+                            resolve({ success: true, message: `File ${img} does not exist` });
+                        }
                     }
-                })
-            }
-            const deleteImagePath = path.join('./uploads', img)
-            if (fs.existsSync(deleteImagePath)) {
-                try {
-                    fs.unlinkSync(deleteImagePath)
-                } catch (err) {
-                    console.log("err", err)
-                }
+                });
+            });
+        });
 
-            } else {
-                console.log("file dosent exist")
-            }
+        // Wait for all deletion promises to resolve
+        const results = await Promise.all(deletePromises);
+        res.json({ success: true, message: "All files processed", results });
+    } catch (err) {
+        console.error("Error deleting images or database records", err);
+        res.status(500).json({ success: false, message: "Error processing request", error: err.message });
+    }
+});
 
-            res.json({ success: true, message: "sucess" })
-        })
-    })
-})
+
+
+
+// router.delete('/booking_doc-delete/:imagedata/:tripid', async (req, res) => {
+//     const image = req.params.imagedata;
+//     const  tripid = req.params.tripid;
+//     const deleteImage = image.split(',');
+
+//     const sql = 'DELETE FROM booking_doc WHERE path = ?';
+//     const findImage = 'SELECT * FROM booking_doc WHERE booking_id = ?';
+
+//     try {
+//         for (const img of deleteImage) {
+//             // Check if the image exists in the database
+//             const rows = await db.query(findImage, [tripid]);
+//             if (rows.length > 0) {
+//                 // Delete the image from the database
+//                 await db.query(sql, [img]);
+//             }
+
+//             // Delete the file from the file system
+//             const deleteImagePath = path.join('./uploads', img);
+//             if (fs.existsSync(deleteImagePath)) {
+//                 try {
+//                     fs.unlinkSync(deleteImagePath);
+//                 } catch (err) {
+//                     console.error(`Error deleting file: ${img}`, err);
+//                 }
+//             } else {
+//                 console.log(`File does not exist: ${img}`);
+//             }
+//         }
+
+//         res.json({ success: true, message: 'Success' });
+//     } catch (err) {
+//         console.error('Error processing request:', err);
+//         res.status(500).json({ success: false, message: 'Internal server error' });
+//     }
+// });
 
 
 

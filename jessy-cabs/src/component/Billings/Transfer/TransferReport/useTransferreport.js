@@ -50,6 +50,7 @@ const useTransferreport = () => {
   const [billingGroupDetails, setBillingGroupDetails] = useState('')
 
   const [loading, setLoading] = useState(false)
+  const [isButtonloading, setisButtonLoading] = useState(false)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const parameterKeys = [
@@ -83,7 +84,7 @@ const useTransferreport = () => {
       setTransferReport(false)
     }
   });
-  console.log(servicestation, 'stateee');
+  // console.log(servicestation, 'stateee');
 
   useEffect(() => {
     if (transferReport === false || transferReport === undefined) {
@@ -116,7 +117,7 @@ const useTransferreport = () => {
     const header = ["Sno", "Tripsheet No", "VCode", "Status", "Guest Name"];
     const csvData = [
       header,
-      ...tableData.map((row) => row.map((value) => `"${value}"`)),
+      ...tableData?.map((row) => row.map((value) => `"${value}"`)),
     ]
       .map((row) => row.join(","))
       .join("\n");
@@ -340,7 +341,7 @@ const useTransferreport = () => {
       } catch { }
     };
     fetchData();
-  }, [apiUrl]);
+  }, [apiUrl, location, customer]);
 
 
 
@@ -509,7 +510,7 @@ const useTransferreport = () => {
 
     console.log("Row Selection Model (Trip Sheet IDs):", tripsheetid);
   };
-
+  console.log(rowSelectionModel,"rrrrrr",rowSelectionModel.length);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -521,7 +522,8 @@ const useTransferreport = () => {
         const storedCustomer = localStorage.getItem("selectedcustomer");
         // console.log(rowSelectionModel,'Transferreport response')
         // const customer = decodeURIComponent(storedCustomer);
-
+        // console.log(tripID,"exceltrip",rowSelectionModel);
+        
         if (tripid.length >= 1) {
 
           // const response = await fetch(
@@ -530,25 +532,34 @@ const useTransferreport = () => {
           //   )}/${tripid}`
           // );
 
-          const response = await fetch(
+          const response = await axios.get(
             `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
               customer
             )}/${tripID}`
           );
 
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const tripData = await response.json();
-
-          setPdfzipdata(tripData)
+          const tripData =  response.data
+          // console.log(tripData,"exceltripppppppppppp");
+          
+          const flattenedTripData = tripData.flat();
+          // console.log(flattenedTripData,"flattenedTripData");
+          const uniqueData = flattenedTripData.filter((item, index, self) =>
+            index === self.findIndex((obj) => obj.tripid === item.tripid)
+          );
+          console.log(uniqueData,"flattenedTripDatauniqueData");
+          setPdfzipdata(uniqueData)
+          // setPdfzipdata(flattenedTripData)
+        
+          // console.log(flattenedTripData,"trip dtatas ")
           // setSuccess(true)
         }
         else {
           return
         }
-      } catch { }
+      } catch (err) {
+        console.log(err, 'error');
+      }
     };
     fetchData();
   }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
@@ -725,7 +736,7 @@ const useTransferreport = () => {
             InvoiceNo: InvoiceNo
           }
         });
-        const Result = response.data;
+        const Result = response.data;        
         if (Result.length > 0) {
 
           setSuccess(true)
@@ -743,6 +754,10 @@ const useTransferreport = () => {
           setInvoiceDate(InvoiceDate)
           const groupTripid = Result?.map(li => li.Grouptrip_id)
           setGroupTripid(groupTripid)
+          const Status = Result?.map(li => li.Status)
+
+          const checkStatus = Status[0];          
+          setBilledStatusCheck(checkStatus)
           // const tripid = Result?.map(li =>li.Trip_id)
           const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
 
@@ -800,7 +815,7 @@ const useTransferreport = () => {
           setTotalTransferAmount(Amount)
           const Status = Result?.map(li => li.Status)
 
-          const checkStatus = Status[0];
+          const checkStatus = Status[0];          
           setBilledStatusCheck(checkStatus)
           const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
 
@@ -939,7 +954,8 @@ const useTransferreport = () => {
     setBilledStatusCheck,
     loading, setLoading,
     billingGroupDetails,
-    setBillingGroupDetails
+    setBillingGroupDetails,
+    isButtonloading, setisButtonLoading
   };
 };
 

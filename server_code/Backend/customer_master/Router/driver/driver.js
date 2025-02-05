@@ -109,7 +109,7 @@ router.post('/driver-licencepdf/:id', uploadfileLicence.single("file"), async (r
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
   const {created_at}=req.body;
-  console.log(created_at)
+  console.log(created_at,"driverlicnese")
   if (fileName) {
     const sql = `insert into driver_proof(driverid,fileName,file_type,created_at)values('${userId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {

@@ -30,6 +30,7 @@ import dayjs from 'dayjs';
 import { MdCancelPresentation } from "react-icons/md";
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -66,7 +67,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
     handleEdit,
     // datevalidity,
     handleShow,
-    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata,loading,setLoading
+    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata,loading,setLoading,isbtnloading,setisbtnloading
 
   } = usePackagerateentry();
 
@@ -187,7 +188,10 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   <TextField
                     size="small"
                     id="Validity"
-                    sx={{ width: "300px" }}
+                    sx={{  
+                      minWidth: { xs: 200, sm: 350 }, // Responsive minWidth
+
+                    }}
                     label="Validity"
                     name="Validity"
                     autoComplete="new-password"
@@ -291,32 +295,6 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                     <TextField
                       type='number'
                       size="small"
-                      id="UptoHours"
-                      className='full-width'
-                      label="Upto Hours  "
-                      name="UptoHours"
-                      autoComplete="new-password"
-                      value={fieldSet.UptoHours || ""}
-                      onChange={(e) => handleChange(e, index)}
-                    />
-                  </div>
-                  <div className="input">
-                    <TextField
-                      type='number'
-                      size="small"
-                      id="UptoKMS"
-                      className='full-width'
-                      label="Upto KMS"
-                      name="UptoKMS"
-                      autoComplete="new-password"
-                      value={fieldSet.UptoKMS || ""}
-                      onChange={(e) => handleChange(e, index)}
-                    />
-                  </div>
-                  <div className="input">
-                    <TextField
-                      type='number'
-                      size="small"
                       id="extraHours"
                       className='full-width'
                       label="Extra Hours"
@@ -339,6 +317,33 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
+                  <div className="input">
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="UptoHours"
+                      className='full-width'
+                      label="Upto Hours  "
+                      name="UptoHours"
+                      autoComplete="new-password"
+                      value={fieldSet.UptoHours || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  <div className="input">
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="UptoKMS"
+                      className='full-width'
+                      label="Upto KMS"
+                      name="UptoKMS"
+                      autoComplete="new-password"
+                      value={fieldSet.UptoKMS || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  
                   <div className="input">
                     <TextField
                       type='number'
@@ -383,9 +388,11 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   </div>}
                   <div className="input package-rate-entry-edit-division" style={{ justifyContent: 'start' }}>
                     {isEditMode ? (
-                      <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
+                      // <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
+                      <LoadingButton loading={isbtnloading}variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</LoadingButton>
                     ) : (
-                      <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
+                      // <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
+                      <LoadingButton loading={isbtnloading} variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</LoadingButton>
                     )}
                   </div>
                 </div>

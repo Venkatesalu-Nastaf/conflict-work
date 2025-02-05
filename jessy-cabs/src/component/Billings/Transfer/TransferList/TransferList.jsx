@@ -26,7 +26,7 @@ import { CircularProgress } from '@mui/material';
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
-const TransferList = ({ stationName, organizationNames }) => {
+const TransferList = ({ stationName, organizationNames, Statename }) => {
     const {
         rows,
         actionName,
@@ -56,7 +56,7 @@ const TransferList = ({ stationName, organizationNames }) => {
         // setLoading
         info,
         infoMessage,
-        setUserStations
+        // setUserStations
 
     } = useTransferlist();
 
@@ -65,12 +65,17 @@ const TransferList = ({ stationName, organizationNames }) => {
 
     const Transfer_read = permissions[6]?.read;
     // console.log(stationName,"nn")
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (stationName?.length > 0) {
-            setUserStations(stationName)
-        }
-      }, [stationName])
+    //     if (stationName?.length > 0) {
+    //         setUserStations(stationName)
+    //     }
+    //   }, [stationName])
+    const getRowClassName = (params) => {
+
+        return params.row?.Invoice_no !== null ? 'green-row' : 'red-row';
+    }
+
 
     return (
         <div className="TransferList-form main-content-form Scroll-Style-hide">
@@ -176,8 +181,8 @@ const TransferList = ({ stationName, organizationNames }) => {
                                         size="small"
                                         value={servicestation}
                                         // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
-                                        options={stationName.map((option) => ({
-                                            label: option.Stationname,
+                                        options={Statename.map((option) => ({
+                                            label: option.state,
                                         }))}
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {
@@ -211,7 +216,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                 </div>
                 <div className="table-bookingCopy-TransferList">
                     <div className='transfer-list-table'>
-                       
+
                         <Box
                             sx={{
                                 height: 400,
@@ -254,7 +259,38 @@ const TransferList = ({ stationName, organizationNames }) => {
                                     pageSize={5}
                                     checkboxSelection
                                     getRowId={(row) => row.id}
+                                    getRowClassName={getRowClassName}
                                     disableRowSelectionOnClick
+                                    sx={{
+                                        height: '100%',
+                                        width: '100%',
+                                        // '& .green-row': {
+                                        //     backgroundColor: 'green',
+                                        //     color: 'white',
+                                        //     '&:hover': {
+                                        //         backgroundColor: 'darkgreen',
+                                        //     },
+                                        // },
+                                        // '& .red-row': {
+                                        //     backgroundColor: 'red',
+                                        //     color: 'white',
+                                        //     '&:hover': {
+                                        //         backgroundColor: 'darkred',
+                                        //     },
+                                        // },
+                                        // '& .Mui-selected.green-row': {
+                                        //     backgroundColor: 'green !important',
+                                        //     '&:hover': {
+                                        //         backgroundColor: 'darkgreen !important',
+                                        //     },
+                                        // },
+                                        // '& .Mui-selected.red-row': {
+                                        //     backgroundColor: 'red !important',
+                                        //     '&:hover': {
+                                        //         backgroundColor: 'darkred !important',
+                                        //     },
+                                        // },
+                                    }}
                                 />
                             )}
                         </Box>
@@ -285,7 +321,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                         <p>{warningMessage}</p>
                     </div>
                 }
-                 {info &&
+                {info &&
                     <div className='alert-popup Warning' >
                         <div className="popup-icon"> <ErrorOutlineIcon /> </div>
                         <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>

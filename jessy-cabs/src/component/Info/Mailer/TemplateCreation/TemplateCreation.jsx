@@ -177,24 +177,45 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
     }
   };
 
+  // const Attacheimagedata = async (lastno) => {
+  //   const formDataToSend = new FormData();
+  //   imagedata.forEach((file, index) => {
+  //     formDataToSend.append('imagestemplate', file); // Assuming imagedata is an array of File objects
+  //   });
+
+  //   try {
+  //     const response = await axios.post(`${apiurl}/templateattachmentimage/${lastno}`, formDataToSend)
+  //     console.log(response)
+  //     setImageData([])
+  //   }
+  //   catch (err) {
+  //     console.log(err)
+  //     setError(true);
+  //     setErrorMessage("Failed to Attach Image Template");
+
+  //   }
+  // }
+
   const Attacheimagedata = async (lastno) => {
+    if (imagedata.length === 0) {
+      return;
+    }
+  
     const formDataToSend = new FormData();
     imagedata.forEach((file, index) => {
       formDataToSend.append('imagestemplate', file); // Assuming imagedata is an array of File objects
     });
-
+  
     try {
-      const response = await axios.post(`${apiurl}/templateattachmentimage/${lastno}`, formDataToSend)
-      console.log(response)
-      setImageData([])
-    }
-    catch (err) {
-      console.log(err)
+      const response = await axios.post(`${apiurl}/templateattachmentimage/${lastno}`, formDataToSend);
+      console.log(response);
+      setImageData([]);
+    } catch (err) {
+      console.log(err);
       setError(true);
       setErrorMessage("Failed to Attach Image Template");
-
     }
-  }
+  };
 
   const handleEdit = async () => {
     const formDataeditToSend = new FormData();

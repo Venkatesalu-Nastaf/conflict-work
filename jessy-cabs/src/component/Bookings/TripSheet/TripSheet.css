@@ -13,6 +13,16 @@
   color: #000;
 }
 
+.green-button {
+  background-color: rgb(1, 147, 1) !important;
+  /* Override default styles */
+  color: white;
+}
+
+.green-button:hover {
+  background-color: rgb(2, 116, 2) !important;
+}
+
 .Tripsheet-header {
   border-top: solid 1px #ccc;
   /* background: var(--glass); */
@@ -308,12 +318,32 @@
   }
 }
 
-@media screen and (min-width: 320px) and (max-width: 768.99px) {
+@media screen and (min-width: 565px) and (max-width: 704.99px) {
 
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 93vw;
+    width: 97vw;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 705px) and (max-width: 768.99px) {
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    width: 99vw;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 565.99px) {
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
+    width: 92vw;
     justify-content: center;
   }
 }
@@ -439,13 +469,20 @@
 }
 
 .invalid-km {
-  margin: 0;
-  padding: 0;
+  /* margin: 0; */
+  /* padding: 0; */
   text-align: center;
-  color: red;
-  font-size: 15px;
-  padding-bottom: 5px;
-  margin-top: -23px;
+  color:black;
+  font-size: 12px;
+  word-spacing: 3px;
+  /* padding-bottom: 5px; */
+  /* margin-top: -23px; */
+}
+.No-Data{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100px; */
 }
 
 .tripsheet-top-division {
@@ -540,7 +577,7 @@
 .tripsheet-calculate-input button,
 .tripsheet-e-tripsheet-input button {
   width: 100%;
-  margin-left: 28px;
+  /* margin-left: 28px; */
 }
 
 .tripsheet-vendor-bill-main {
@@ -647,6 +684,7 @@
 .tripsheet-top-division-status-main .MuiOutlinedInput-root.MuiInputBase-sizeSmall {
   padding: 0px !important;
   font-size: 14px;
+  width: 137px;
 }
 
 .icone-margin-adjust {
@@ -751,35 +789,37 @@
   width: 200px;
 }
 
-.in-feild{
+.in-feild {
   display: flex;
-    align-items: center;
-    gap: 10px;
+  align-items: center;
+  gap: 10px;
   flex-wrap: nowrap;
 }
 
 @media screen and (min-width:744px) and (max-width:1125px) {
-  .in-feild{
+  .in-feild {
     display: flex;
-      align-items: center;
-      gap: 10px;
+    align-items: center;
+    gap: 10px;
     flex-wrap: wrap;
   }
 }
 
-.left-buttons{
+.left-buttons {
   width: 39%;
 }
-.right-buttons{
+
+.right-buttons {
   width: 55%;
 }
 
-@media screen  and (max-width:743.99px) {
-  .left-buttons{
+@media screen and (max-width:743.99px) {
+  .left-buttons {
     width: 100%;
     width: 39%;
   }
-  .right-buttons{
+
+  .right-buttons {
     width: 100%;
     width: 55%;
   }
@@ -821,7 +861,7 @@
     width: 125px !important;
   }
 
-  .tripsheet-vendor-info-main-popup .input-field .input-g{
+  .tripsheet-vendor-info-main-popup .input-field .input-g {
     width: 125px !important;
   }
 
@@ -836,4 +876,42 @@
 
 .tripsheet-division1 .input-g:hover {
   transform: translateY(-5px) scale(1.05);
+}
+
+.input-tripsheet-btns {
+  /* width: 212px ; */
+  display: flex;
+  align-items: center;
+  padding-right: 15px;
+}
+
+.input-tripsheet-btns-overview {
+  width: 150px ;
+  display: flex;
+  align-items: center;
+  padding-right: 15px;
+}
+.closebuttonhover:hover{
+  background-color: #ffff;
+}
+
+/* .closebuttonhover{
+  display: flex;
+  justify-content: end;
+} */
+
+.gt-sms-st{
+display: flex;
+min-width: 350px !important;
+/* width: 280px !important; */
+gap: 5px;
+justify-content: space-between;
+}
+/* style={{ display: 'flex', width:"280px" }} */
+
+.kmConflict{
+  top: -26px;
+  left: 27px;
+   cursor: pointer;
+   position: absolute;
 }

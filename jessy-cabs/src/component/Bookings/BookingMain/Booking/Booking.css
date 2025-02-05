@@ -356,6 +356,13 @@
   flex-wrap: wrap;
   /* gap: 0px; */
   width: 70%;
+  margin-bottom: 10px;
+}
+
+@media screen and (max-width: 944.95px) {
+  .input-feild-vehicle-confirm {
+    width: auto;
+  }
 }
 
 @media screen and (min-width: 1242px) and (max-width: 1321px) {
@@ -366,7 +373,8 @@
 
 @media screen and (max-width: 1241.95px) {
   .input-feild-vehicle-confirm {
-    width: 153vw;
+    /* width: 153vw; */
+    justify-content: center;
   }
 }
 
@@ -406,7 +414,7 @@
 
   .sub-section2,
   .sub-section2-driver {
-    width: 44% !important;
+    width: 46% !important;
   }
 }
 
@@ -702,7 +710,7 @@
   border-bottom: 2px solid #ddd;
 }
 
-.booking-table-new{
+.booking-table-new {
   border: 2px solid #ccc;
   border-radius: 10px;
 }

@@ -15,10 +15,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup,Switch} from "@mui/material";
 import { PermissionContext } from '../../../context/permissionContext';
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
@@ -104,7 +105,7 @@ const Accuntinfo = ({ stationName }) => {
     // fields,
     //  handleAutocompleteChangestations,
     handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata,
-    loading,
+    loading,isAButtonLoading
   } = useAccountinfo();
 
 
@@ -446,6 +447,18 @@ const Accuntinfo = ({ stationName }) => {
                 />
               </div>
 
+              <div className="input">
+                  <FormLabel htmlFor='TimeToggle'>TimeToggle</FormLabel>
+                  <Switch
+                    label='label'
+                    id="TimeToggleaccount"
+                    name="TimeToggle"
+                    onChange={handleChange}
+                    checked={selectedCustomerData.TimeToggle || book.TimeToggle ||  0}
+                  />
+                </div>
+              
+
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -470,9 +483,11 @@ const Accuntinfo = ({ stationName }) => {
 
               <div className="">
                 {isEditMode ? (
-                  <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
+                  // <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
+                  <LoadingButton  loading={isAButtonLoading} variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</LoadingButton>
                 ) : (
-                  <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
+                  // <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
+                  <LoadingButton loading={isAButtonLoading} variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</LoadingButton>
                 )}
               </div>
             </div>

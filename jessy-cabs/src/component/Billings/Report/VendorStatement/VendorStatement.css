@@ -204,3 +204,16 @@ VendorStatement.css
   justify-content: flex-end;
   margin-bottom: 5px;
 } */
+.vendor-down-section{
+display: flex;
+align-items: center;
+}
+
+@media screen and (max-width:500px) {
+  .vendor-down-section{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    }
+}

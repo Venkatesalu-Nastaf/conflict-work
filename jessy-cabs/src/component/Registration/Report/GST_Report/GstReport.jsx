@@ -130,7 +130,7 @@ export const GstReport = () => {
           </div>
         </div>
 
-        <div className='input-field'>
+        <div className='input-field gst-report-table-input-field'>
           <div className="input">
             <TextField
               name="orderByMobileNo"

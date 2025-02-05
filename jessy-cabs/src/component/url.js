@@ -4,7 +4,8 @@ module.exports = {
     // APIURL: "http://54.227.179.97:8081",
     APIURL: "http://localhost:8081",
     // this apiurl for driverapp
-    Apiurltransfer: "http://75.101.215.49:7000"
-    //   Apiurltransfer: "http://localhost:7000"
+    // Apiurltransfer: "http://75.101.215.49:7000"
+    Apiurltransfer: 'https://jessycabs.com:7001'
+      // Apiurltransfer: "http://localhost:7000"
 }
 

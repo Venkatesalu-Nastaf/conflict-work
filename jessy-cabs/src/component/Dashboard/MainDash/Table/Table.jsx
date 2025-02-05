@@ -104,7 +104,7 @@ const closeDateFunction = () => {
 
   const tripsheetfiltercurrntdate = async () => {
     try {
-      const response = await axios.get(`${apiurl}/tripsheet-maindashcuurentdate/${dateoftoday}`)
+      const response = await axios.get(`${apiurl}/tripsheet-maindashcuurentdate/${dateoftoday}/${stationarray}`)
       const response2 = await axios.get(`${apiurl}/customerreviewtoday/${stationarray}/${dateoftoday}`)
       const data2 = response2.data
       setTodayBooking(data2)
@@ -127,7 +127,7 @@ const closeDateFunction = () => {
 
   const tripsheetfiltercustomdate = async () => {
     try {
-      const response = await axios.get(`${apiurl}/tripsheet-maindashcuurentdate?fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}`)
+      const response = await axios.get(`${apiurl}/tripsheet-maindashcuurentdate?fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&station=${stationarray}`)
       const data = response.data;
 
       if (data.length >= 1) {
@@ -163,7 +163,7 @@ const closeDateFunction = () => {
 
   const fetchalldata = async () => {
     try {
-      const response = await fetch(`${apiurl}/tripsheet-maindash?fromDate=${datestart}&toDate=${dateEnd}`);
+      const response = await fetch(`${apiurl}/tripsheet-maindash?fromDate=${datestart}&toDate=${dateEnd}&Stations=${stationarray}`);
       if (response.status === 200) {
         if (response.ok) {
           const data = await response.json();
@@ -289,7 +289,9 @@ const closeDateFunction = () => {
             <TableRow className="driverdetails-table-header">
               <TableCell align="left" className="driverdetails-table-head">Driver Name</TableCell>
               <TableCell align="left" className="driverdetails-table-head">Tracking ID</TableCell>
+              <TableCell align="left" className="driverdetails-table-head">Station</TableCell>
               <TableCell align="left" className="driverdetails-table-head">Date</TableCell>
+              {/* <TableCell align="left" className="driverdetails-table-head">Station</TableCell> */}
               <TableCell align="left" className="driverdetails-table-head">Status</TableCell>
               <TableCell align="left" className="driverdetails-table-head">View</TableCell>
             </TableRow>
@@ -304,6 +306,7 @@ const closeDateFunction = () => {
                   >
                     <TableCell component="th" scope="row" className="driver-name">{trip.driverName ? trip.driverName : 'Not Assigned'}</TableCell>
                     <TableCell align="left" className="driver-trip-id">TS{trip.tripid}</TableCell>
+                    <TableCell align="left" className="driver-trip-id">{trip.department}</TableCell>
                     {/* <TableCell align="left">{trip.startdate}</TableCell> */}
                     <TableCell align="left" className="driver-trip-date">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
                     <TableCell className="driver-tripstatus"><span className="status" style={makeStyle(trip.apps)}>{trip.apps ? trip.apps : "Not Mentioned"}</span></TableCell>

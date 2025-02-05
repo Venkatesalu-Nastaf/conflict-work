@@ -39,19 +39,42 @@ export const Duty = [
 ];
 
 // hire type
+// export const Hire = [
+//   {
+//     Option: "Attached Vehicle",
+//     optionvalue: "attachedvehicle",
+//   },
+//   {
+//     Option: "Out Side Travels",
+//     optionvalue: "outsidetravels",
+//   },
+//   {
+//     Option: "Own  Vehicle",
+//     optionvalue: "ownvehicle",
+//   },
+//   {
+//     Option: "DCO Vehicle",
+//     optionvalue: "dcovehicle",
+//   },
+
+// ];
 export const Hire = [
   {
-    Option: "Attached Vehicle",
-    optionvalue: "attachedvehicle",
+    Option:"Attached Vehicle",
+    optionvalue:"Attached Vehicle",
   },
   {
-    Option: "Out Side Travels",
-    optionvalue: "outsidetravels",
+    Option:"OutSide Travels",
+    optionvalue:"OutSide Travels",
   },
   {
-    Option: "Own  Vehicle",
-    optionvalue: "ownvehicle",
+    Option:"Own Vehicle",
+    optionvalue:"Own Vehicle",
   },
+  {
+    Option:"DCO Vehicle",
+    optionvalue:"DCO Vehicle",
+  }
 
 ];
 

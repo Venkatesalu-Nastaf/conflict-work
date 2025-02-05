@@ -76,7 +76,8 @@ const MainDashboard = () => {
       if (e) {
         e.preventDefault();
       }
-      localStorage.removeItem("auth");
+      // localStorage.removeItem("auth");
+      localStorage.setItem("auth",false);
       localStorage.removeItem("username");
       localStorage.removeItem("useridno");
       localStorage.removeItem("selectedImage");
@@ -102,6 +103,8 @@ const MainDashboard = () => {
     },
     [navigate, setMakeRender, setPermission]
   );
+
+  
 
   // useEffect(() => {
 
@@ -136,6 +139,7 @@ const MainDashboard = () => {
   //   }
   // }, [navigate, handleLogout, IDLE_TIMEOUT_DURATION]);
   const IDLE_TIMEOUT_DURATION = 30 * 60 * 1000;
+  // const IDLE_TIMEOUT_DURATION = 1000;
 
   const useIdleTimeout = (handleLogoutdialog) => {
     const checkinactivity = useCallback(() => {
@@ -143,6 +147,8 @@ const MainDashboard = () => {
 
       if (expiretime && Number(expiretime) < Date.now()) {
         // console.log("logout");
+        // localStorage.removeItem("auth");
+        localStorage.setItem("auth",false);
         handleLogoutdialog();
       }
       // console.log("timeout");

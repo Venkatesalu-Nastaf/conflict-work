@@ -10,7 +10,7 @@ import Excel from 'exceljs';
 const useVehicleinfo = () => {
     const apiUrl = APIURL;
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
-    const createddata=dayjs().format('YYYY-MM-DD')
+    const createddata = dayjs().format('YYYY-MM-DD')
     const [actionName] = useState('');
     const [rows, setRows] = useState([]);
     const [rows1, setRows1] = useState([]);
@@ -22,17 +22,20 @@ const useVehicleinfo = () => {
     const [warning, setWarning] = useState(false);
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
+    const [templateMessageData, setTemplateMessageData] = useState('');
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage,setWarningMessage] = useState({});
+    const [warningMessage, setWarningMessage] = useState({});
+    const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
     const [drivername, setDrivername] = useState([]);
     const [vehiclenames, setVehilcNames] = useState([]);
     const [enterPressCount, setEnterPressCount] = useState(0);
     const [edit, setEdit] = useState(false)
-    const [cerendentialdata,setCredentialData]=useState()
+    const [cerendentialdata, setCredentialData] = useState()
 
     const [loading, setLoading] = useState(false)
+    const [isVButonLoading, setisVButtonLoading] = useState(false)
 
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -53,7 +56,8 @@ const useVehicleinfo = () => {
         },
         { field: "vehicleId", headerName: "Vehicle ID", width: 130 },
         { field: "vehicleName", headerName: "Vehicle Name", width: 130 },
-        {   field: "doadate", headerName: "Attached Date", width: 130,
+        {
+            field: "doadate", headerName: "Attached Date", width: 130,
             valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
         },
         { field: "vehRegNo", headerName: "Vehicle Reg No", width: 130 },
@@ -70,26 +74,31 @@ const useVehicleinfo = () => {
         { field: "insuranceno", headerName: "Insurance No", width: 130 },
         {
             field: "insduedate", headerName: "Insurance Due Date", width: 150,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            // valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            valueFormatter: (params) => params.value ? dayjs(params.value).format("DD/MM/YYYY") : '-',
+
         },
 
         { field: "nationalpermito", headerName: "Notional Permit No", width: 150 },
         {
             field: "npdate", headerName: "Notional Permit Date", width: 150,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            // valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            valueFormatter: (params) => params.value ? dayjs(params.value).format("DD/MM/YYYY") : '',
         },
         { field: "statepermito", headerName: "State Permit No", width: 130 },
         {
             field: "spdate", headerName: "State Permit Date", width: 130,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            // valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            valueFormatter: (params) => params.value ? dayjs(params.value).format("DD/MM/YYYY") : '',
         },
         {
             field: "rcbookno", headerName: "RC Book No", width: 130,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            // valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
         },
         {
             field: "fcdate", headerName: "FC Date", width: 130,
-            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            // valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+            valueFormatter: (params) => params.value ? dayjs(params.value).format("DD/MM/YYYY") : '',
         },
         { field: "avgmileage", headerName: "AVG Mileage", width: 130 },
         { field: "driverName", headerName: "Driver Name", width: 130 },
@@ -151,53 +160,146 @@ const useVehicleinfo = () => {
 
     //---------------------------------------
 
+    // const handleExcelDownload = async () => {
+    //     const workbook = new Excel.Workbook();
+    //     const workSheetName = 'Worksheet-1';
+    //     try {
+    //         const fileName = "VehicleStatement Reports"
+    //         // creating one worksheet in workbook
+    //         const worksheet = workbook.addWorksheet(workSheetName);
+    //         const headers = Object.keys(rows[0]);
+    //         //         console.log(headers,"hed")
+    //         const columnsExcel = headers.map(key => ({ key, header: key }));
+    //         worksheet.columns = columnsExcel;
+    //         // updated the font for first row.
+    //         worksheet.getRow(1).font = { bold: true };
+    //         // Set background color for header cells
+    //         worksheet.getRow(1).eachCell((cell, colNumber) => {
+    //             cell.fill = {
+    //                 type: 'pattern',
+    //                 pattern: 'solid',
+    //                 fgColor: { argb: '9BB0C1' } // Green background color
+    //             };
+    //         });
+    //         worksheet.getRow(1).height = 30;
+    //         // loop through all of the columns and set the alignment with width.
+    //         worksheet.columns.forEach((column) => {
+    //             column.width = column.header.length + 5;
+    //             column.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
+    //         rows.forEach((singleData, index) => {
+
+    //             console.log(singleData,'dats of vehicle info')
+    //             worksheet.addRow(singleData);
+    //             // Adjust column width based on the length of the cell values in the added row
+    //             worksheet.columns.forEach((column) => {
+    //                 const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+    //                 const cellLength = cellValue.toString().length; // Get length of cell value as a string
+    //                 const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+    //                 // Set column width to the maximum of current width and cell length plus extra space
+    //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
+    //             });
+    //         });
+
+    //         // loop through all of the rows and set the outline style.
+    //         worksheet.eachRow({ includeEmpty: false }, (row) => {
+    //             // store each cell to currentCell
+    //             const currentCell = row._cells;
+    //             // loop through currentCell to apply border only for the non-empty cell of excel
+    //             currentCell.forEach((singleCell) => {
+    //                 const cellAddress = singleCell._address;
+    //                 // apply border
+    //                 worksheet.getCell(cellAddress).border = {
+    //                     top: { style: 'thin' },
+    //                     left: { style: 'thin' },
+    //                     bottom: { style: 'thin' },
+    //                     right: { style: 'thin' },
+    //                 };
+    //             });
+    //         });
+    //         // write the content using writeBuffer
+    //         const buf = await workbook.xlsx.writeBuffer();
+    //         // download the processed file
+    //         saveAs(new Blob([buf]), `${fileName}.xlsx`);
+    //     } catch (error) {
+    //         console.error('<<<ERRROR>>>', error);
+    //         console.error('Something Went Wrong', error.message);
+    //     } finally {
+    //         // removing worksheet's instance to create new one
+    //         workbook.removeWorksheet(workSheetName);
+    //     }
+    // }
+
+
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
         try {
-            const fileName = "VehicleStatement Reports"
-            // creating one worksheet in workbook
+            const fileName = "VehicleStatement Reports";
+            // Creating one worksheet in workbook
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
-            //         console.log(headers,"hed")
+
+            // Preprocessing rows to format date fields and handle empty values
+            const transformDate = (dateStr) => {
+                return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+            };
+
+            const transformedRows = rows.map(row => {
+                const transformedRow = {};
+                for (const key in row) {
+                    if (row[key] === null || row[key] === '' || row[key] === undefined) {
+                        transformedRow[key] = null;
+                    } else if (
+                        ['created_at', 'doadate', 'fcdate', 'insduedate', 'npdate', 'spdate'].includes(key)
+                    ) {
+                        transformedRow[key] = transformDate(row[key]);
+                    } else {
+                        transformedRow[key] = row[key];
+                    }
+                }
+                return transformedRow;
+            });
+
+            // Set headers
             const columnsExcel = headers.map(key => ({ key, header: key }));
             worksheet.columns = columnsExcel;
-            // updated the font for first row.
+
+            // Update the font for the first row
             worksheet.getRow(1).font = { bold: true };
             // Set background color for header cells
             worksheet.getRow(1).eachCell((cell, colNumber) => {
                 cell.fill = {
                     type: 'pattern',
                     pattern: 'solid',
-                    fgColor: { argb: '9BB0C1' } // Green background color
+                    fgColor: { argb: '9BB0C1' }, // Blue background color
                 };
             });
             worksheet.getRow(1).height = 30;
-            // loop through all of the columns and set the alignment with width.
+
+            // Loop through all of the columns and set alignment and width
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
                 column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-            rows.forEach((singleData, index) => {
+
+            // Add rows to worksheet
+            transformedRows.forEach((singleData, index) => {
                 worksheet.addRow(singleData);
-                // Adjust column width based on the length of the cell values in the added row
+                // Adjust column width based on the cell values in the added row
                 worksheet.columns.forEach((column) => {
-                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
-                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
-                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-                    // Set column width to the maximum of current width and cell length plus extra space
-                    column.width = Math.max(currentColumnWidth, cellLength + 5);
+                    const cellValue = singleData[column.key] || ''; // Get cell value or use empty string
+                    const cellLength = cellValue.toString().length; // Get length of cell value
+                    const currentColumnWidth = column.width || 0; // Get current column width
+                    column.width = Math.max(currentColumnWidth, cellLength + 5); // Adjust column width
                 });
             });
 
-            // loop through all of the rows and set the outline style.
+            // Apply borders to all non-empty cells
             worksheet.eachRow({ includeEmpty: false }, (row) => {
-                // store each cell to currentCell
                 const currentCell = row._cells;
-                // loop through currentCell to apply border only for the non-empty cell of excel
                 currentCell.forEach((singleCell) => {
                     const cellAddress = singleCell._address;
-                    // apply border
                     worksheet.getCell(cellAddress).border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -206,91 +308,167 @@ const useVehicleinfo = () => {
                     };
                 });
             });
-            // write the content using writeBuffer
+
+            // Write the content using writeBuffer
             const buf = await workbook.xlsx.writeBuffer();
-            // download the processed file
+            // Download the processed file
             saveAs(new Blob([buf]), `${fileName}.xlsx`);
         } catch (error) {
-            console.error('<<<ERRROR>>>', error);
+            console.error('<<<ERROR>>>', error);
             console.error('Something Went Wrong', error.message);
         } finally {
-            // removing worksheet's instance to create new one
+            // Removing worksheet's instance to create a new one
             workbook.removeWorksheet(workSheetName);
         }
-    }
+    };
+
+
+    // const handlePdfDownload = () => {
+    //     const pdf = new jsPDF({
+    //         orientation: "landscape",
+    //         unit: "mm",
+    //         format: "tabloid" // [width, height] in inches
+    //     });
+    //     pdf.setFontSize(10);
+    //     pdf.setFont('helvetica', 'normal');
+    //     pdf.text("VehicleInfo Details", 10, 10);
+    //     const header = Object.keys(rows[0]);
+    //     // Extracting body
+    //     const body = rows.map(row => Object.values(row));
+    //     console.log(rows,'dats in pdf vehocle ')
+    //     let fontdata = 1;
+    //     if (header.length <= 13) {
+    //         fontdata = 16;
+    //     }
+    //     else if (header.length >= 14 && header.length <= 18) {
+    //         fontdata = 11;
+    //     }
+    //     else if (header.length >= 19 && header.length <= 20) {
+    //         fontdata = 10;
+    //     } else if (header.length >= 21 && header.length <= 23) {
+    //         fontdata = 9;
+    //     }
+    //     else if (header.length >= 24 && header.length <= 26) {
+    //         fontdata = 7;
+    //     }
+    //     else if (header.length >= 27 && header.length <= 30) {
+    //         fontdata = 6;
+    //     }
+    //     else if (header.length >= 31 && header.length <= 35) {
+    //         fontdata = 4;
+    //     }
+    //     else if (header.length >= 36 && header.length <= 40) {
+    //         fontdata = 4;
+    //     }
+    //     else if (header.length >= 41 && header.length <= 46) {
+    //         fontdata = 2;
+    //     }
+    //     pdf.autoTable({
+    //         head: [header],
+    //         body: body,
+    //         startY: 20,
+
+    //         headStyles: {
+    //             // fontSize: 5,
+    //             fontSize: fontdata,
+    //             cellPadding: 1.5, // Decrease padding in header
+    //             minCellHeigh: 8,
+    //             valign: 'middle',
+    //             font: 'helvetica', // Set font type for body
+    //             cellWidth: 'wrap',
+    //             // cellWidth: 'auto'
+    //         },
+    //         bodyStyles: {
+    //             // fontSize:4,
+    //             // fontSize: fontdata-1
+    //             fontSize: fontdata - 1,
+    //             valign: 'middle',
+    //             //  cellWidth: 'wrap',
+    //             cellWidth: 'auto'
+    //             // Adjust the font size for the body
+    //         },
+    //         columnWidth: 'auto'
+    //     });
+    //     const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+    //     console.log(scaleFactor, "SCALE")
+    //     // Scale content
+    //     pdf.scale(scaleFactor, scaleFactor);
+    //     const pdfBlob = pdf.output('blob');
+    //     saveAs(pdfBlob, 'VehicleStatementReports.pdf');
+    // };
 
     const handlePdfDownload = () => {
         const pdf = new jsPDF({
             orientation: "landscape",
             unit: "mm",
-            format: "tabloid" // [width, height] in inches
+            format: "tabloid", // [width, height] in inches
         });
+
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("VehicleInfo Details", 10, 10);
-        const header = Object.keys(rows[0]);
-        // Extracting body
-        const body = rows.map(row => Object.values(row));
+
+        // Transform date format
+        const transformDate = (dateStr) => {
+            return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+        };
+
+        // Preprocess the rows
+        const transformedRows = rows.map(row => {
+            const transformedRow = {};
+            for (const key in row) {
+                if (
+                    ['created_at', 'doadate', 'fcdate', 'insduedate', 'npdate', 'spdate'].includes(key)
+                ) {
+                    transformedRow[key] = transformDate(row[key]);
+                } else {
+                    transformedRow[key] = row[key] || null; // Replace empty strings with null
+                }
+            }
+            return transformedRow;
+        });
+
+        const header = Object.keys(transformedRows[0]);
+        const body = transformedRows.map(row => Object.values(row)); // Extract body from transformed rows
+
         let fontdata = 1;
-        if (header.length <= 13) {
-            fontdata = 16;
-        }
-        else if (header.length >= 14 && header.length <= 18) {
-            fontdata = 11;
-        }
-        else if (header.length >= 19 && header.length <= 20) {
-            fontdata = 10;
-        } else if (header.length >= 21 && header.length <= 23) {
-            fontdata = 9;
-        }
-        else if (header.length >= 24 && header.length <= 26) {
-            fontdata = 7;
-        }
-        else if (header.length >= 27 && header.length <= 30) {
-            fontdata = 6;
-        }
-        else if (header.length >= 31 && header.length <= 35) {
-            fontdata = 4;
-        }
-        else if (header.length >= 36 && header.length <= 40) {
-            fontdata = 4;
-        }
-        else if (header.length >= 41 && header.length <= 46) {
-            fontdata = 2;
-        }
+        if (header.length <= 13) fontdata = 16;
+        else if (header.length >= 14 && header.length <= 18) fontdata = 11;
+        else if (header.length >= 19 && header.length <= 20) fontdata = 10;
+        else if (header.length >= 21 && header.length <= 23) fontdata = 9;
+        else if (header.length >= 24 && header.length <= 26) fontdata = 7;
+        else if (header.length >= 27 && header.length <= 30) fontdata = 6;
+        else if (header.length >= 31 && header.length <= 35) fontdata = 4;
+        else if (header.length >= 36 && header.length <= 40) fontdata = 4;
+        else if (header.length >= 41 && header.length <= 46) fontdata = 2;
+
         pdf.autoTable({
             head: [header],
             body: body,
             startY: 20,
-
             headStyles: {
-                // fontSize: 5,
                 fontSize: fontdata,
-                cellPadding: 1.5, // Decrease padding in header
-                minCellHeigh: 8,
+                cellPadding: 1.5,
+                minCellHeight: 8,
                 valign: 'middle',
-                font: 'helvetica', // Set font type for body
+                font: 'helvetica',
                 cellWidth: 'wrap',
-                // cellWidth: 'auto'
             },
             bodyStyles: {
-                // fontSize:4,
-                // fontSize: fontdata-1
                 fontSize: fontdata - 1,
                 valign: 'middle',
-                //  cellWidth: 'wrap',
-                cellWidth: 'auto'
-                // Adjust the font size for the body
+                cellWidth: 'auto',
             },
-            columnWidth: 'auto'
+            columnWidth: 'auto',
         });
+
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-        console.log(scaleFactor, "SCALE")
-        // Scale content
         pdf.scale(scaleFactor, scaleFactor);
+
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'VehicleStatementReports.pdf');
     };
+
     // const handlePdfDownload = () => {
     //     const pdf = new jsPDF('p', 'pt', 'letter');
     //     pdf.setFontSize(16); // Increase font size for the title
@@ -369,7 +547,7 @@ const useVehicleinfo = () => {
                 const data = response.data
                 const names = data.map(res => res.drivername)
                 setDrivername(names)
-               
+
             }
             catch (error) {
                 console.log(error, "error");
@@ -407,7 +585,7 @@ const useVehicleinfo = () => {
         driverName: '',
         tankCap: '',
         active: 'yes',
-        created_at:dayjs(),
+        created_at: dayjs(),
     });
 
     const handleCancel = () => {
@@ -439,7 +617,7 @@ const useVehicleinfo = () => {
             driverName: '',
             tankCap: '',
             active: 'yes',
-            created_at:dayjs(),
+            created_at: dayjs(),
 
         }));
         setSelectedCustomerData({});
@@ -494,25 +672,26 @@ const useVehicleinfo = () => {
         }));
     };
 
-    const uniquevechicleRegno=async(veghnodata)=>{
-        if(veghnodata){
+    const uniquevechicleRegno = async (veghnodata) => {
+        if (veghnodata) {
 
-            const response= await axios.get(`${apiUrl}/uniquevechregnodata/${veghnodata}`)
-            const responsedata=response.data;
-            if(responsedata?.length >=1){
-                
+            const response = await axios.get(`${apiUrl}/uniquevechregnodata/${veghnodata}`)
+            const responsedata = response.data;
+            if (responsedata?.length >= 1) {
+
                 setCredentialData(true)
                 // return true;
             }
-            else{
+            else {
                 setCredentialData(false)
                 // return false;
             }
-        } }
+        }
+    }
 
-       const  handleChangecredent=(event)=>{
+    const handleChangecredent = (event) => {
         const { name, value } = event.target;
-        const data=uniquevechicleRegno(value)
+        const data = uniquevechicleRegno(value)
         console.log(data)
         setBook((prevBook) => ({
             ...prevBook,
@@ -523,7 +702,7 @@ const useVehicleinfo = () => {
             [name]: value,
         }));
 
-       }
+    }
 
     const handleKeyEnter = useCallback(
         async (event) => {
@@ -579,12 +758,12 @@ const useVehicleinfo = () => {
         if (insurance !== null) {
             const formData = new FormData();
             formData.append("file", insurance);
-            formData.append("created_at",createddata);
+            formData.append("created_at", createddata);
             try {
                 await axios.post(`${apiUrl}/insurance-pdf/${vehicleid}`, formData)
                 setInsurance(null)
             }
-            catch(err) {
+            catch (err) {
                 console.log(err)
                 setError(true);
                 setErrorMessage("failed to insert Insurance pdf");
@@ -601,7 +780,7 @@ const useVehicleinfo = () => {
         if (nationalPermit !== null) {
             const formData = new FormData();
             formData.append("file", nationalPermit);
-            formData.append("created_at",createddata);
+            formData.append("created_at", createddata);
             try {
                 await axios.post(`${apiUrl}/nationalPermit-pdf/${vehicleid}`, formData);
                 setNationalPermit(null);
@@ -622,7 +801,7 @@ const useVehicleinfo = () => {
         if (statePermit !== null) {
             const formData = new FormData();
             formData.append("file", statePermit);
-            formData.append("created_at",createddata);
+            formData.append("created_at", createddata);
             try {
                 await axios.post(`${apiUrl}/statePermit-pdf/${vechicleid}`, formData);
                 setStatePermit(null);
@@ -653,7 +832,7 @@ const useVehicleinfo = () => {
         if (rcBook !== null) {
             const formData = new FormData();
             formData.append("file", rcBook);
-            formData.append("created_at",createddata);
+            formData.append("created_at", createddata);
             try {
                 await axios.post(`${apiUrl}/rcBook-pdf/${vechicleid}`, formData);
                 setRcbook(null);
@@ -674,7 +853,7 @@ const useVehicleinfo = () => {
         if (fcCopy !== null) {
             const formData = new FormData();
             formData.append("file", fcCopy);
-            formData.append("created_at",createddata);
+            formData.append("created_at", createddata);
             try {
                 await axios.post(`${apiUrl}/fcCopy-pdf/${vechicleid}`, formData);
                 setFcCopy(null);
@@ -710,6 +889,7 @@ const useVehicleinfo = () => {
             setWarningMessage("Enter Groups");
             return;
         }
+
         if (!book.vehType) {
             setWarning(true);
             setWarningMessage("Choose vehicletype");
@@ -746,14 +926,17 @@ const useVehicleinfo = () => {
             setWarningMessage(" VehicleRegNo Already Exists");
             return;
         }
+        setisVButtonLoading(true)
         try {
+
             const data = { ...book }
             await axios.post(`${apiUrl}/vehicleinfo`, data);
-            const response = await axios.get(`${apiUrl}/lastvechileinfogetid`);
+            const response = await axios.get(`${apiUrl}/lastvechileinfogetid`); 
             const lastvehicleidno = response.data.vehicleId;
             addFcCopy_copy(lastvehicleidno);
             addRcBook_copy(lastvehicleidno);
             addStatePermit_copy(lastvehicleidno);
+            handlecheckmaildriver(book.fcdate);
             addNationalPermit_copy(lastvehicleidno);
             addInsurence_copy(lastvehicleidno);
             handleCancel();
@@ -762,6 +945,7 @@ const useVehicleinfo = () => {
             handleList();
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            setisVButtonLoading(false)
         }
         //  catch {
         //     setError(true);
@@ -769,33 +953,36 @@ const useVehicleinfo = () => {
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
+                setisVButtonLoading(false)
             } else if (error.response) {
                 setError(true);
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+                setisVButtonLoading(false)
             } else {
                 // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
+                setisVButtonLoading(false)
             }
         }
     };
 
     const [deletefile, setDeleteFile] = useState([])
     const handlecheckbox = (fileName) => {
-            if (deletefile.includes(fileName)) {
+        if (deletefile.includes(fileName)) {
             setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
         } else {
             setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
         }
     };
-    
+
     const handleDocumentDownload = async () => {
         try {
             // Filter selected files
@@ -828,7 +1015,9 @@ const useVehicleinfo = () => {
     };
 
     const handleEdit = async () => {
+        setisVButtonLoading(true)
         try {
+
             const { id, vehicleId, ...restselectedcustomerdata } = selectedCustomerData
             await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`, restselectedcustomerdata);
             addFcCopy_copy(selectedCustomerData.vehicleId);
@@ -842,79 +1031,205 @@ const useVehicleinfo = () => {
             setRows([])
             setSuccess(true);
             setSuccessMessage("Successfully Updated");
+            setisVButtonLoading(false)
             handleList();
-        } 
+        }
         // catch {
         //     setError(true);
         //     setErrorMessage("Failed to Edit Vehicle Detials");
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
+                setisVButtonLoading(false)
             } else if (error.response) {
                 setError(true);
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Edit Vehicle Details: " + (error.response.data.message || error.message));
+                setisVButtonLoading(false)
             } else {
                 // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
+                setisVButtonLoading(false)
             }
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                      console.log(userDataArray,'userdata');
+                    if (userDataArray.length > 0) {
+                        setOrganisationSendEmail(userDataArray[0])
+                        // setDatatrigger(!datatrigger)
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }   
+                }
+            }
+            catch {
+            }
+        };
+        fetchData();
+    }, [apiUrl]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/TemplateforFCdate`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } 
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/Templateforstatepermitdate`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } 
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/Templateforinsuranceduedate`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } 
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/Templatefornationalpermitdate`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+                    } 
+                } else {
+                    console.log("Failed to fetch data, status:", response.status);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        };
+        fetchData();
+    }, [apiUrl],[templateMessageData]);
+
+    const handlecheckmaildriver = async () => {
+        try {
+            // Add templateMessageData to the dataToSend object
+            const dataToSend = {
+                email: book.email,
+                fcdate:book.fcdate,
+                // todate:book.todate,
+                Sendmailauth: organistaionsendmail.Sendmailauth,
+                Mailauthpass: organistaionsendmail.Mailauthpass,
+                templateMessageData
+            };
+    
+            console.log("Sending data:", dataToSend); // For debugging purposes
+            // await axios.post(`${apiUrl}/send-emailagreementdata`, dataToSend);
+            setSuccess(true);
+            setSuccessMessage("Mail Sent Successfully");
+        } catch (error) {
+            console.error("Error sending email:", error); // Added console log for debugging
+            setError(true);
+            setErrorMessage("An error occurred while sending mail");
         }
     };
 
     const handleClick = async (actionName, vehicleId) => {
         // try{
-            if (actionName === 'List') {
-                const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
-                const data = response.data;
+        if (actionName === 'List') {
+            const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
+            const data = response.data;
 
-                if (data.length > 0) {
-                    const rowsWithUniqueId = data.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setRows(rowsWithUniqueId);
-                    setSuccess(true);
-                    setSuccessMessage('Successfully listed');
-                } else {
-                    setRows([]);
-                    setError(true);
-                    setErrorMessage('No data found');
-                }
-
-            }
-            else if (actionName === 'Cancel') {
-                handleCancel();
-                setRows1([]);
-                setRows([]);
-             
-            }
-            else if (actionName === 'Delete') {
-                await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`);
-                setSelectedCustomerData({});
-                handleCancel();
-                setRows([]);
-                setRows1([]);
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
                 setSuccess(true);
-                setSuccessMessage("Successfully Deleted");
+                setSuccessMessage('Successfully listed');
+            } else {
+                setRows([]);
+                setError(true);
+                setErrorMessage('No data found');
             }
-            else if (actionName === 'Edit') {
-                handleEdit()
-            }
-            else if (actionName === 'Add') {
-                handleAdd();
-            }
-        } 
-        // catch {
-        //     setError(true);
-        //     setErrorMessage("Check your Network Connection");
-        // }
+
+        }
+        else if (actionName === 'Cancel') {
+            handleCancel();
+            setRows1([]);
+            setRows([]);
+
+        }
+        else if (actionName === 'Delete') {
+            await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`);
+            setSelectedCustomerData({});
+            handleCancel();
+            setRows([]);
+            setRows1([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully Deleted");
+            handleList();
+        }
+        else if (actionName === 'Edit') {
+            handleEdit()
+        }
+        else if (actionName === 'Add') {
+            handleAdd();
+        }
+    }
+    // catch {
+    //     setError(true);
+    //     setErrorMessage("Check your Network Connection");
+    // }
     // };
 
     // useEffect(() => {
@@ -954,7 +1269,7 @@ const useVehicleinfo = () => {
         setLoading(true);
         setError(false);
         setErrorMessage("");
-    
+
         try {
             const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
             const data = response.data;
@@ -963,7 +1278,7 @@ const useVehicleinfo = () => {
                 id: index + 1,
             }));
             setRows(rowsWithUniqueId);
-    
+
             if (data.length > 0) {
                 setLoading(false);
             } else {
@@ -971,7 +1286,7 @@ const useVehicleinfo = () => {
             }
         } catch (err) {
             console.error(err);
-    
+
             if (err.message === 'Network Error') {
                 setErrorMessage("Check network connection.");
             } else {
@@ -983,11 +1298,11 @@ const useVehicleinfo = () => {
             setLoading(false);
         }
     }, [apiUrl]);
-    
-    
-      useEffect(() => {
+
+
+    useEffect(() => {
         handleList();
-      }, [handleList]);
+    }, [handleList]);
 
     //search funtion
     const handleSearch = async () => {
@@ -1009,16 +1324,16 @@ const useVehicleinfo = () => {
                 setError(true);
                 setErrorMessage("No data found")
             }
-        } 
+        }
         // catch {
         //     setError(true);
         //     setErrorMessage("failed to Fetch vehcile")
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
@@ -1049,7 +1364,7 @@ const useVehicleinfo = () => {
                         id: index + 1,
                     }));
                     setRows(rowsWithUniqueId);
-                    setSuccess(true);   
+                    setSuccess(true);
                     setSuccessMessage("successfully listed");
                 } else {
                     setRows([]);
@@ -1157,6 +1472,8 @@ const useVehicleinfo = () => {
         allFile,
         handleCloseDialog,
         handleUploadFile,
+        templateMessageData,
+        setTemplateMessageData,
         dialogOpen,
         isEditMode,
         handleEdit,
@@ -1167,8 +1484,8 @@ const useVehicleinfo = () => {
         setSelectAll,
         selectAll,
         handleSelectAll,
-        handleDocumentDownload, drivername, handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit,handleChangecredent,cerendentialdata,
-        vehiclenames,setVehilcNames,loading,setLoading
+        handleDocumentDownload, drivername, handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit, handleChangecredent, cerendentialdata,
+        vehiclenames, setVehilcNames, loading, setLoading, isVButonLoading, setisVButtonLoading,
     };
 };
 

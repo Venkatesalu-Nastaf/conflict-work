@@ -2,12 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 import dayjs from 'dayjs';
-import EmployeeCreation from './EmployeeCreation';
+// import EmployeeCreation from './EmployeeCreation';
 // import { faMobilePhone } from '@fortawesome/free-solid-svg-icons';
+
 
 
 const useEmplyeecreation = () => {
     const apiUrl = APIURL;
+  
     const [showPasswords, setShowPasswords] = useState(false);
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -16,8 +18,10 @@ const useEmplyeecreation = () => {
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
+    const [isOpenvehcile,setIsOpenvehicle] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
+    const [isEditable, setIsEditable] = useState(false);
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage, setWarningMessage] = useState({});
@@ -25,6 +29,13 @@ const useEmplyeecreation = () => {
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [cerendentialdata, setCredentialData] = useState()
     const [showPermission, setShowPermission] = useState(true);
+    const [emptyrole,setEmptyrole] = useState(true);
+  
+   
+    // const [rolefiledsdata,setRoleFieldData] =useState([])
+    // const [rolefield,setRoleField]=useState('')
+    // const [rolefielddropdown,setRoleFielddropdown]=useState()
+    // console.log(rolefiledsdata)
 
 
     ////-------------permission --------------------------
@@ -64,6 +75,47 @@ const useEmplyeecreation = () => {
     //     { id: 26, name: 'Records', read: false, new: false, modify: false, delete: false  },
     // ];
     // dummy
+    // const initialPermissionsData = [
+
+    //     { id: 0, name: 'BOOKING', read: false, new: false, modify: false, delete: false },
+    //     { id: 1, name: 'Booking', read: false, new: false, modify: false, delete: false },
+    //     { id: 2, name: 'Trip Status', read: false, new: false, modify: false, delete: false },
+    //     { id: 3, name: 'Trip sheet', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 4, name: 'BILLING', read: false, new: false, modify: false, delete: false },
+    //     { id: 5, name: 'Billing', read: false, new: false, modify: false, delete: false },
+    //     { id: 6, name: 'Transfer', read: false, new: false, modify: false, delete: false },
+    //     { id: 7, name: 'Covering Bill', read: false, new: false, modify: false, delete: false },
+    //     { id: 8, name: 'Reports', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 9, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
+    //     { id: 10, name: 'Rate Type', read: false, new: false, modify: false, delete: false },
+    //     { id: 11, name: 'Customer', read: false, new: false, modify: false, delete: false },
+    //     { id: 12, name: 'Supllier', read: false, new: false, modify: false, delete: false },
+    //     { id: 13, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
+    //     // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 14, name: 'SETTING', read: false, new: false, modify: false, delete: false },
+    //     { id: 15, name: 'User Creation', read: false, new: false, modify: false, delete: false },
+    //     { id: 16, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 17, name: 'INFO', read: false, new: false, modify: false, delete: false },
+    //     // { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
+    //     { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
+    //     { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
+    //     { id: 20, name: 'Employee', read: false, new: false, modify: false, delete: false },
+    //     { id: 21, name: 'Dashboard', read: false },
+    //     // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+    //     { id: 22, name: 'Map', read: false, new: false, modify: false, delete: false },
+    //     { id: 23, name: 'RealTime', read: false, new: false, modify: false, delete: false },
+    //     { id: 24, name: 'Vehicle', read: false, new: false, modify: false, delete: false },
+    //     { id: 25, name: 'Reminders', read: false, new: false, modify: false, delete: false },
+    //     { id: 26, name: 'History', read: false, new: false, modify: false, delete: false },
+    //     { id: 27, name: 'Records', read: false, new: false, modify: false, delete: false },
+    // ];
+
+
+
     const initialPermissionsData = [
 
         { id: 0, name: 'BOOKING', read: false, new: false, modify: false, delete: false },
@@ -93,19 +145,21 @@ const useEmplyeecreation = () => {
         { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
         { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
         { id: 20, name: 'Employee', read: false, new: false, modify: false, delete: false },
-        { id: 21, name: 'Dashboard', read: false },
+        { id: 21, name: 'Agreement', read: false, new: false, modify: false, delete: false },
+        { id: 22, name: 'Dashboard', read: false },
         // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
-        { id: 22, name: 'Map', read: false, new: false, modify: false, delete: false },
-        { id: 23, name: 'RealTime', read: false, new: false, modify: false, delete: false },
-        { id: 24, name: 'Vehicle', read: false, new: false, modify: false, delete: false },
-        { id: 25, name: 'Reminders', read: false, new: false, modify: false, delete: false },
-        { id: 26, name: 'History', read: false, new: false, modify: false, delete: false },
-        { id: 27, name: 'Records', read: false, new: false, modify: false, delete: false },
+        { id: 23, name: 'Map', read: false, new: false, modify: false, delete: false },
+        { id: 24, name: 'RealTime', read: false, new: false, modify: false, delete: false },
+        { id: 25, name: 'Vehicle', read: false, new: false, modify: false, delete: false },
+        { id: 26, name: 'Reminders', read: false, new: false, modify: false, delete: false },
+        { id: 27, name: 'History', read: false, new: false, modify: false, delete: false },
+        { id: 28, name: 'Records', read: false, new: false, modify: false, delete: false },
     ];
 
 
 
     const [permissionsData, setPermissionsData] = useState(initialPermissionsData);
+    // console.log(permissionsData,"fffff")
 
     const [readState, setReadState] = useState(false);
     const [newState, setNewState] = useState(false);
@@ -209,7 +263,7 @@ const useEmplyeecreation = () => {
             prevData.map((permission, id) => {
                 for (let i = id1; i <= id2; i++) {
                     // newState[i][field] = checked;
-                    console.log(i, "ll")
+                    // console.log(i, "ll")
 
                     if (id === i) {
                         return {
@@ -267,14 +321,23 @@ const useEmplyeecreation = () => {
 
 
 
- const indexRanges = [
-        { start: 1, end: 3 },
-        { start: 5, end: 8 },
-        { start: 10, end: 13 },
-        { start: 15, end: 16 },
-        { start: 18, end: 20 },
-        { start: 23, end: 27 }
-      ];
+//  const indexRanges = [
+//         { start: 1, end: 3 },
+//         { start: 5, end: 8 },
+//         { start: 10, end: 13 },
+//         { start: 15, end: 16 },
+//         { start: 18, end: 20 },
+//         { start: 23, end: 27 }
+//       ];
+
+const indexRanges = [
+    { start: 1, end: 3 },
+    { start: 5, end: 8 },
+    { start: 10, end: 13 },
+    { start: 15, end: 16 },
+    { start: 18, end: 21 },
+    { start: 24, end: 28 }
+  ];
       
       useEffect(()=>{
         datacahnges()
@@ -335,9 +398,13 @@ const useEmplyeecreation = () => {
         organizationname: '',
         employeeid:'',
         userpassword: '',
+        EmailApp_Password: '',
+        Sender_Mail:'',
         active: false,
         superAdmin: false,
+        RoleUser:""
     });
+  
 
     // TABLE END
 
@@ -385,7 +452,10 @@ const useEmplyeecreation = () => {
             organizationname: '',
             employeeid:'',
             userpassword: '',
+            EmailApp_Password: '',
+            Sender_Mail:'',
             active: false,
+             RoleUser:" ",
             superAdmin: false
         }));
 
@@ -395,14 +465,41 @@ const useEmplyeecreation = () => {
         setModifyState(false)
         setNewState(false);
         setIsEditMode(false)
+        setEmptyrole(false)
+    
     };
     
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         //   const organizationname = localStorage.getItem('usercompany');
+    //         try {
+    //             // if (!organizationname) return
+    //             const response = await fetch(`${apiUrl}/organizationdata`);
+    //             if (response.status === 200) {
+                     
+    //                 const userDataArray = await response.json();
+    //                 //   console.log(userDataArray,'userdata');
+    //                 if (userDataArray.length > 0) {
+    //                     setOrganisationSendEmail(userDataArray[0])
+    //                     // setDatatrigger(!datatrigger)
+    //                 } else {
+    //                     setErrorMessage('User data not found.');
+    //                     setError(true);
+    //                 }
+    //             }   
+    //         }
+    //         catch {
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl]);
+
     useEffect(() => {
         const fetchData = async () => {
             //   const organizationname = localStorage.getItem('usercompany');
             try {
                 // if (!organizationname) return
-                const response = await fetch(`${apiUrl}/organizationdata`);
+                const response = await fetch(`${apiUrl}/organisationdataforsendingemail`);
                 if (response.status === 200) {
                      
                     const userDataArray = await response.json();
@@ -414,7 +511,7 @@ const useEmplyeecreation = () => {
                         setErrorMessage('User data not found.');
                         setError(true);
                     }
-                }   
+                }
             }
             catch {
             }
@@ -434,7 +531,7 @@ const useEmplyeecreation = () => {
                     if (userDataArray.length > 0) {
                         setTemplateMessageData(userDataArray[0].TemplateMessageData);
                     } else {
-                        setErrorMessage('User data not found.');
+                        setErrorMessage('User data not found.',"fortempl");
                         setError(true);
                     }
 
@@ -447,7 +544,8 @@ const useEmplyeecreation = () => {
         };
         fetchData();
     }, [apiUrl]);   
-    console.log(templateMessageData,"shh")
+
+    // console.log(book,"book")
 
     // useEffect(() => {
     //     const fetchTemplateMessage = async () => {
@@ -529,6 +627,7 @@ const useEmplyeecreation = () => {
         const email = book.email
         const mobileno = book.mobileno
         const password = book.userpassword
+        // const EmailApp_Password=book.EmailApp_Password
 
 
 
@@ -587,8 +686,11 @@ const useEmplyeecreation = () => {
             setWarningMessage(" User Name Already Exists");
             return;
         }
-
+        // if (!EmailApp_Password) {
+        //     return;
+        // }
         try {
+
             const created_at = dayjs().format("YYYY-MM-DD")
             const data = { book, permissionsData, organistaionsendmail,templateMessageData, created_at }
             await axios.post(`${apiUrl}/usercreation-add`, data);
@@ -620,6 +722,7 @@ const useEmplyeecreation = () => {
             const email = book.email
             const mobileno = book.mobileno
             const password = book.userpassword
+            // const EmailApp_Password=book.EmailApp_Password
 
 
             // console.log("NASTAF Technologies", branchName, "book", book)
@@ -674,7 +777,9 @@ const useEmplyeecreation = () => {
                 setErrorMessage("Fill Active..");
                 return;
             }
-
+            // if (!EmailApp_Password) {
+            //     return;
+            // }
 
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...book, };
@@ -842,6 +947,178 @@ const useEmplyeecreation = () => {
     };
 
 
+    // const uniquevechicleRegno = async (veghnodata) => {
+    //     if (veghnodata) {
+
+    //         const response = await axios.get(`${apiUrl}/getAllrolefieldunique/${veghnodata}`)
+    //         const responsedata = response.data;
+    //         if (responsedata?.length >= 1) {
+
+    //             setRoleField(true)
+    //             // return true;
+    //         }
+    //         else {
+    //             setRoleField(false)
+    //             // return false;
+    //         }
+    //     }
+    // }
+
+    // const handleRoleChange=(event,value)=>{
+    //     const seleteddata = value ? value.label :""
+    
+    //     console.log(value,"vv",seleteddata)
+    //     const data = uniquevechicleRegno(seleteddata)
+    //       setRoleFielddropdown(seleteddata)
+
+    // }
+    // const handleRoleChange1=(event,value)=>{
+    //     // const seleteddata = value ? value.label :value
+    //     console.log(value,"vv22")
+    //     const data = uniquevechicleRegno(value)
+    //       setRoleFielddropdown(value)
+    // }
+
+
+
+    // const rolenamefield= useCallback(async () => {
+    //     // setLoading(true);
+    //     setError(false);
+    //     setErrorMessage("");
+
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/getAllrolefield`);
+    //         const data = response.data;
+    //         // const rowsWithUniqueId = data.map((row, index) => ({
+    //         //     ...row,
+    //         //     id: index + 1,
+    //         // }));
+    //         // setRows(rowsWithUniqueId);
+    //         if(data.length > 0 ){
+    //         console.log(data,"data")
+    //         const names = data.map(res => res.userRole_name)
+       
+    //         setRoleFieldData(names)
+    //         }
+
+          
+    //     } catch (err) {
+    //         console.error(err);
+
+    //         if (err.message === 'Network Error') {
+    //             setErrorMessage("Check network connection.");
+    //         } else {
+    //             setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
+    //         }
+    //         setError(true);
+    //         // setLoading(false);
+    //     } 
+    // }, [apiUrl]);
+
+
+    // useEffect(() => {
+    //     rolenamefield();
+    // }, [rolenamefield]);
+    const updatePermissionsStateforrole = (permissionsData1) => {
+
+        const isReadAllOne = !permissionsData1.some(permission => permission.read === 0);
+        const isModifyAllOne = !permissionsData1.some(permission => permission.modify === 0);
+        const isNewAllOne = !permissionsData1.some(permission => permission.new === 0);
+        const isDeleteAllOne = !permissionsData1.some(permission => permission.delete === 0);
+
+
+        setReadState(isReadAllOne);
+        setNewState(isNewAllOne);
+        setModifyState(isModifyAllOne);
+        setDeleteState(isDeleteAllOne);
+    };
+
+    const permisiionrolefield = async(datas)=>{
+        console.log(datas,"resusedtatw")
+        if(datas){
+        try{
+            
+    
+            const response = await axios.get(`${apiUrl}/userrole-permissiongetroless/${datas}`)
+            const responsedata = response.data;
+            console.log(responsedata,"resuseperrrr")
+          
+            setPermissionsData(responsedata)
+            updatePermissionsStateforrole(responsedata)
+            
+                // setPermissionsData(responsedata)
+                // updatePermissionsState1(responsedata)
+                // setRoleDataUsers(responsedata)
+                // setRoleField(true)
+                // return true;
+        }
+        catch(err){
+          console.log(err)
+        }
+    }
+    else{
+        console.log(datas,"resuse esle")
+        setPermissionsData(initialPermissionsData)
+    }
+           
+      
+    
+    }
+    
+    const handlerolepermissiondata = async (event,veghnodata) => {
+          const seleteddata = veghnodata ? veghnodata.label :""
+          console.log(seleteddata,"resusesele")
+          
+        
+      
+    try{
+            const response = await axios.get(`${apiUrl}/getAllrolefieldunique/${seleteddata}`)
+            const responsedata = response.data;
+            console.log(responsedata,"resuseponse")
+            if(responsedata.length > 0){
+            console.log(responsedata.length,"resuses",responsedata[0].userRole_id)
+            setBook((prevBook) => ({
+                ...prevBook,
+                RoleUser:seleteddata,
+            }));
+       
+                // console.log(responsedata,"veh")
+                permisiionrolefield(responsedata[0].userRole_id)
+        }
+        else{
+            setBook((prevBook) => ({
+                ...prevBook,
+                RoleUser:"",
+            }));
+            setPermissionsData(initialPermissionsData)
+            setReadState(false)
+            setDeleteState(false)
+            setModifyState(false)
+            setNewState(false);
+
+        }
+            // }
+    }
+    catch(err){
+      console.log(err,"resuseee")
+    }
+
+              
+                // return true;
+        
+        
+    }
+
+   const handlenochangedatarole=(value)=>{
+    setBook((prevBook) => ({
+        ...prevBook,
+        RoleUser:value,
+    }));
+   }
+  
+
+
+
 
     return {
 
@@ -850,6 +1127,8 @@ const useEmplyeecreation = () => {
         actionName,
         error,
         success,
+        isEditable,
+        setIsEditable,
         info,
         warning,
         successMessage,
@@ -860,16 +1139,20 @@ const useEmplyeecreation = () => {
         handleChange,
         handleRowClickUser,
         handleAdd,
+        isOpenvehcile,
+        setIsOpenvehicle,
         hidePopup,
         handleAutocompleteChange,
         showPasswords,
         handleClickShowPasswords,
         handleMouseDownPasswords,
-        isEditMode,
-        handleEdit, handleChangeuniquecreation, cerendentialdata, showPermission, setShowPermission, handleCheckboxChangealldata,
+        isEditMode,handlenochangedatarole,setBook,emptyrole,setEmptyrole,
+        handleEdit, handleChangeuniquecreation, cerendentialdata, showPermission, setShowPermission, handleCheckboxChangealldata,setPermissionsData,handlerolepermissiondata,
+        // rolefield,setRoleField,
+        // rolefielddropdown,setRoleFielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
         //ffor permission
-        permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
+        permissionsData, handleSwitchChange, handleCheckboxChange, setReadState,setModifyState,setDeleteState,setNewState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
     };
 };
 

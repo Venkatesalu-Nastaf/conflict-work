@@ -57,7 +57,7 @@
     border-radius: 10px;
     padding: 0px;
     background-color: var(--glass);
-    width: 90%;
+    width: 97%;
 }
 
 .organisation-details .input {
@@ -213,6 +213,13 @@
 .organisation-details-input-feilds {
     flex-wrap: wrap;
     /* justify-content: center; */
+}
+
+@media only screen and (min-width:563px) and (max-width:960px) {
+    .organisation-details-input-feilds {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 
 @media only screen and (min-width:964px) and (max-width:1241px) {

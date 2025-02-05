@@ -148,7 +148,7 @@ router.get('/gettemplateattachimage/:templateid', (req, res) => {
 router.post('/send-emailtemplate', async (req, res) => {
     try {
         const { templatemessage, emaildata, templateimagedata,Sendmailauth, Mailauthpass } = req.body;
-        console.log(templatemessage,emaildata,templateimagedata,Sendmailauth, Mailauthpass)
+        // console.log(templatemessage,emaildata,templateimagedata,Sendmailauth, Mailauthpass)
 
 
         // Create a Nodemailer transporter

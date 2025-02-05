@@ -4,19 +4,19 @@ import Menu from '@mui/material/Menu';
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+// import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from 'dayjs';
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+// import dayjs from 'dayjs';
+// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { styled } from "@mui/material/styles";
-import SpeedDial from "@mui/material/SpeedDial";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+// import { styled } from "@mui/material/styles";
+// import SpeedDial from "@mui/material/SpeedDial";
+// import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { PermissionContext } from '../../../context/permissionContext';
 
 // ICONS
@@ -27,28 +27,14 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useVehiclestatement from './useVendorstatement';
 import { IoBusinessSharp } from "react-icons/io5";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
-  position: "absolute",
-  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
-  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
-    top: theme.spacing(2),
-    left: theme.spacing(2),
-  },
-}));
 
 const VendorStatement = () => {
 
   const {
-    actionName,
-    selectedCustomerId,
-    handleClick,
+    
     rows,
     error,
     success,
@@ -74,11 +60,7 @@ const VendorStatement = () => {
 
 
 
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
+
 
   const { permissions } = useContext(PermissionContext)
   const TripStatus_read = permissions[2]?.read;
@@ -184,34 +166,10 @@ const VendorStatement = () => {
             </div>
           </div>
         </div>
-        <div className="SpeedDial SpeedDial-division">
-          <Box className='common-speed-dail'>
-            <StyledSpeedDial
-              ariaLabel="SpeedDial playground example"
-              icon={<SpeedDialIcon />}
-              direction="left"
-            >
+        
 
-              {TripStatus_read === 1 && (
-                <SpeedDialAction
-                  key="list"
-                  icon={<ChecklistIcon />}
-                  tooltipTitle="List"
-                  onClick={(event) => handleClick(event, "List", selectedCustomerId)}
-                />
-              )}
-              <SpeedDialAction
-                key="Cancel"
-                icon={<CancelPresentationIcon />}
-                tooltipTitle="Cancel"
-                onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
-              />
-            </StyledSpeedDial>
-          </Box>
-        </div>
-
-        <div style={{ display: "flex" }}>
-          <div className="Download-btn" style={{ paddingRight: '15px' }}>
+        <div className='vendor-down-section'>
+          <div className="Download-btn" style={{ paddingRight: '15px',paddingBottom:"0px" }}>
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>

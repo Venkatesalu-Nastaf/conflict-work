@@ -116,8 +116,10 @@ const HistoryLocationModal = () => {
   const handleClosePopup = () => setOpenPopup(false);
 
   // Check if Google Maps API is loaded
-  if (!isLoaded) return <div>Loading...</div>;
-
+  // if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+}
 
   return (
     <>
@@ -250,26 +252,6 @@ const HistoryLocationModal = () => {
               </div>
             </InfoWindow>
           )}
-
-
-
-          {direction && (
-            <DirectionsRenderer
-              key={directionRendererKey}
-              directions={directionRoute}
-              options={{
-                polylineOptions: {
-                  strokeColor: "#1FA445",
-                  strokeWeight: 7,
-                },
-              }}
-            />
-          )}
-          {/* <div style={{ zIndex: 1, position: 'absolute', top: '60px', right: '20px' }}>
-          <Button variant="contained" color="primary" onClick={handleOpenPopup}>
-            Open Popup
-          </Button>
-        </div> */}
 
           <div style={{ zIndex: 1, position: 'absolute', top: '400px', right: '60px' }} onClick={handleOpenPopup}>
             <IconButton onClick={handleCenterButtonClick} style={{ backgroundColor: 'red', color: 'white' }}>

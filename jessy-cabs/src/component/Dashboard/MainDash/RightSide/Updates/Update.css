@@ -1,9 +1,9 @@
 .Updates {
-    width: 85%;
+    /* width: 85%;97 */
     background: rgb(246, 244, 244);
     border-radius: 0.7rem;
     padding: 1rem;
-    gap: 1rem;
+    /* gap: 1rem; */
     display: flex;
     flex-direction: column;
     font-size: 13px;

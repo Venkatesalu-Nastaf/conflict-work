@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../../../db');
 
 router.get('/getFullBillWisedReport', (req, res) => {
-    db.query("SELECT TotalAmount,Collected,TotalBalance FROM  BillWiseReceipt", (error, result) => {
+    db.query("SELECT TotalAmount,TotalCollected,TotalBalance FROM  BillWiseReceipt", (error, result) => {
         if (error) {
             console.log(error);
             return res.status(500).json({ error: 'Database query error' });
@@ -16,7 +16,7 @@ router.get('/getFullBillWisedReport', (req, res) => {
 
 // get all data for dashboard cards 
 router.get('/getFullBillWisedReportcards', (req, res) => {
-    db.query("SELECT TotalAmount,Collected,TotalBalance,CustomerName,BillDate FROM  BillWiseReceipt", (error, result) => {
+    db.query("SELECT TotalAmount,TotalCollected,TotalBalance,CustomerName,BillDate FROM  BillWiseReceipt", (error, result) => {
         if (error) {
             console.log(error);
             return res.status(500).json({ error: 'Database query error' });
@@ -33,7 +33,7 @@ router.post('/getmonthwisedatas', (req, res) => {
     const { selectMonth } = req.body;
     console.log(selectMonth, 'selectmonthsbyme');
 
-    db.query("SELECT TotalAmount, Collected, TotalBalance, CustomerName, BillDate  FROM BillWiseReceipt WHERE MONTH(BillDate) = ?", [selectMonth], (error, result) => {
+    db.query("SELECT TotalAmount, TotalCollected, TotalBalance, CustomerName, BillDate  FROM BillWiseReceipt WHERE MONTH(BillDate) = ?", [selectMonth], (error, result) => {
         if (error) {
             console.log(error, 'error');
             return res.status(500).json({ error: 'Database query error' });
@@ -50,7 +50,7 @@ router.post('/getMonthWiseTotal', (req, res) => {
     const { selectMonth } = req.body;
     console.log(selectMonth, 'selectmonth');
 
-    db.query("SELECT TotalAmount, Collected, TotalBalance FROM BillWiseReceipt WHERE MONTH(BillDate) = ?", [selectMonth], (error, result) => {
+    db.query("SELECT TotalAmount, TotalCollected, TotalBalance FROM BillWiseReceipt WHERE MONTH(BillDate) = ?", [selectMonth], (error, result) => {
         if (error) {
             console.log(error, 'error');
             return res.status(500).json({ error: 'Database query error' });

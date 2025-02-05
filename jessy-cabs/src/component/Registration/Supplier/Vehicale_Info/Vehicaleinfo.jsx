@@ -64,6 +64,13 @@ import { FaBuilding } from "react-icons/fa";
 import VehicleAddData from './VehicleAdddata';
 import axios from 'axios'
 import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import Modal from '@mui/material/Modal';
+import { Typography, } from '@mui/material';
+import CloseIcon from "@mui/icons-material/Close";
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -76,6 +83,37 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
+
+const style = {
+  // display: 'flex',
+  // alignItems: 'center',
+  // justifyContent: 'center',
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 'fit-content', // Adjust height dynamically based on content
+  bgcolor: 'background.paper',
+  // border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+const deletestyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  height: 100,
+  bgcolor: 'background.paper',
+  // border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 export const vehicaleinfos = [
   {
@@ -115,20 +153,34 @@ export const fueltypes = [
     Option: "Diesel",
     // optionvalue: "non_a/c",
   },
+  {
+    Option: "CNG",
+    // optionvalue: "non_a/c",
+  },
+  {
+    Option: "EV",
+    // optionvalue: "non_a/c",
+  },
+
 ];
 export const Hire = [
   {
     Option: "Attached Vehicle",
-    optionvalue: "attachedvehicle",
+    optionvalue: "Attached Vehicle",
   },
   {
-    Option: "Out Side Travels",
-    optionvalue: "outsidetravels",
+    Option: "OutSide Travels",
+    optionvalue: "OutSide Travels",
   },
   {
-    Option: "Own  Vehicle",
-    optionvalue: "ownvehicle",
+    Option: "Own Vehicle",
+    optionvalue: "Own Vehicle",
   },
+  {
+    Option: "DCO Vehicle",
+    optionvalue: "DCO Vehicle",
+  }
+
 
 ];
 const Vehicaleinfo = ({ stationName }) => {
@@ -187,15 +239,17 @@ const Vehicaleinfo = ({ stationName }) => {
     handleDocumentDownload,
     drivername,
     handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
-    loading,setLoading
+    loading, isVButonLoading,
   } = useVehicleinfo();
-  const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1
+  const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1,
+    vehicleNamesList, handleVehicleDeleteName, handleVehicleEditName, editModal, setEditModal, deleteModal, setDeleteModal, vehicleNameEditFun,
+    editData, setEditData, vehicleNameDeleteFun
   } = VehicleAddData()
 
   // useEffect(() => {
-    
+
   //     handleClick('List');
-    
+
   // }, [handleClick]);
 
 
@@ -207,6 +261,47 @@ const Vehicaleinfo = ({ stationName }) => {
     setIsOpenvehicle(false)
   }
 
+  const Addcolumns = [
+    { field: 'id', headerName: 'S No', width: 90 },
+    {
+      field: 'VechicleNames',
+      headerName: 'Vehicle Names',
+      width: 150,
+      editable: true,
+    },
+
+    {
+      field: 'edit',
+      headerName: 'Edit',
+      width: 110,
+      renderCell: (params) => (
+        <IconButton onClick={() => handleVehicleEditName(params.row)} className='edit-btn'>
+          <EditIcon style={{ fontSize: "20px" }} />
+        </IconButton>
+      ),
+    },
+    {
+      field: 'delete',
+      headerName: 'Delete',
+      width: 110,
+      renderCell: (params) => (
+        <IconButton color="error" onClick={() => handleVehicleDeleteName(params.row)} className='det-btn'>
+          <DeleteIcon style={{ fontSize: "20px" }} />
+        </IconButton>
+      ),
+    },
+
+  ];
+
+  const handleView = (row) => {
+    console.log('View row:', row);
+    // Add your view logic here
+  };
+
+  const handleDelete = (row) => {
+    console.log('Delete row:', row);
+    // Add your delete logic here
+  };
   useEffect(() => {
     const fetchgetvehicleNames = async () => {
       try {
@@ -228,6 +323,25 @@ const Vehicaleinfo = ({ stationName }) => {
   const Supllier_new = permissions[12]?.new;
   const Supllier_modify = permissions[12]?.modify;
   const Supllier_delete = permissions[12]?.delete;
+
+  const handleEditmodalClose = () => {
+    setEditModal(false)
+  }
+
+  const handleEditVehicleData = (e) => {
+    const { name, value } = e.target; // Extract name and value from the event
+    setEditData((prevState) => ({
+      ...prevState, // Spread the previous state to retain other properties
+      [name]: value, // Update only the property that matches `name`
+    }));
+  };
+
+  const handleDeleteNot = () => {
+    setDeleteModal(false)
+  }
+  const handleDeletemodalClose = () => {
+    setDeleteModal(false)
+  }
   return (
     <div className="main-content-form">
       <form action="">
@@ -456,25 +570,59 @@ const Vehicaleinfo = ({ stationName }) => {
                     }
                     <Dialog open={isOpenvehcile} onClose={handleClose}>
                       <DialogContent>
-                        <TextField
+                        <div className='vech-modal'>
 
-                          id="name"
-                          label="Vehicle Name"
-                          type="text"
-                          fullWidth
-                          variant="outlined"
-                          value={vechiclevalue || ""}
-                          onChange={handleinputchnagevehicle}
-                        />
+
+                          <TextField
+
+                            id="name"
+                            label="Vehicle Name"
+                            type="text"
+                            className='vehicleInput'
+                            // fullWidth
+                            variant="outlined"
+                            value={vechiclevalue || ""}
+                            onChange={handleinputchnagevehicle}
+                            sx={{
+                              "& .MuiOutlinedInput-root": {
+                                height: "40px",
+                                padding: "5px",// Adjust the height here
+                              },
+                              "& .MuiInputLabel-root": {
+                                lineHeight: "0.7", // Adjust label height alignment
+                              },
+                            }}
+
+                          />
+                          <Button onClick={handleADDvehicledata}>ADD</Button>
+
+                        </div>
+                        <Box
+                          sx={{ padding: "20px" }}
+                        >
+                          <DataGrid
+                            rows={vehicleNamesList}
+                            columns={Addcolumns}
+                            initialState={{
+                              pagination: {
+                                paginationModel: {
+                                  pageSize: 5,
+                                },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                          // checkboxSelection
+                          // disableRowSelectionOnClick
+                          />
+                        </Box>
                       </DialogContent>
 
-                      <Button onClick={handleADDvehicledata}>Done</Button>
 
                     </Dialog>
                   </div>
                 </div>
               </div>
-              <div className="vehicaleinfo-container-right">
+              {/* <div className="vehicaleinfo-container-right">
                 <div className="vehicaleinfo-update-main">
                   <div className="vehicaleinfo-update">
                     <div
@@ -517,7 +665,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="input-field vehicleinfo-inputfeild">
@@ -945,6 +1093,44 @@ const Vehicaleinfo = ({ stationName }) => {
                 <span class="rc-book-copy-tooltiptext">Upload RC-Book Copy</span>
               </div>
             </div>
+
+            <div className="input-permit-no">
+            <div className="icone">
+                    <AirportShuttleIcon color="action" />
+                  </div>
+              <TextField
+                // margin="normal"
+                size="small"
+                className='full-width'
+                name="rcbookno"
+                value={selectedCustomerData?.rcbookno || book.rcbookno || ""}
+                onChange={handleChange}
+                label="Chassis / Engine No"
+                id="rcbookno"
+              />
+              <div className='rc-book-copy-tooltip'>
+                <Button size="md" component="label" className='vehicle-info-upload-btn'>
+                  <span class=" vehicle-info-upload-btn-width">
+                    <span className='upload-icon'>
+                      <RiFileUploadLine />
+
+                    </span>
+                    <input
+                      id="rc_book"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        setRcbook(e.target.files[0])
+                        console.log('File selected:', e.target.files[0]);
+                        handleUploadFile(e);
+                      }}
+
+                    />
+                  </span>
+                </Button>
+                <span class="rc-book-copy-tooltiptext">Upload RC-Book Copy</span>
+              </div>
+            </div>
             <div className="input-permit-no">
               <div className='icone'>
                 <CalendarMonthIcon />
@@ -1066,9 +1252,11 @@ const Vehicaleinfo = ({ stationName }) => {
             </div>
             <div className="input">
               {isEditMode ? (
-                <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
+                // <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
+                <LoadingButton loading={isVButonLoading} variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</LoadingButton>
               ) : (
-                <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
+                // <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
+                <LoadingButton loading={isVButonLoading} variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</LoadingButton>
               )}
             </div>
           </div>
@@ -1129,7 +1317,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 onClick={() => handleClick("List")}
               />
             )}
-            {Supllier_modify === 1 && isEditMode &&(
+            {Supllier_modify === 1 && isEditMode && (
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
@@ -1153,7 +1341,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 onClick={(event) => handleClick(event, "Add")}
               />
             ))} */}
-             {Supllier_new === 1 && !isEditMode && (
+            {Supllier_new === 1 && !isEditMode && (
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}
@@ -1169,7 +1357,7 @@ const Vehicaleinfo = ({ stationName }) => {
             />
           </StyledSpeedDial>
         </Box>
-        <div style={{ display: "flex", gap: "20px", alignItems: "center", flexWrap: "wrap",marginTop:"20px",paddingBottom:"15px" }}>
+        <div style={{ display: "flex", gap: "20px", alignItems: "center", flexWrap: "wrap", marginTop: "20px", paddingBottom: "15px" }}>
 
 
           <div className="Download-btn-vehiecleinfo">
@@ -1281,29 +1469,80 @@ const Vehicaleinfo = ({ stationName }) => {
                 },
               }}
             >
-               {loading ? ( 
-                                <Box
-                                    sx={{
-                                        position: 'absolute', 
-                                        top: '50%',
-                                        left: '50%', 
-                                        transform: 'translate(-50%, -50%)', 
-                                    }}
-                                >
-                                    <CircularProgress />
-                                </Box>
-                            ) : (
+              {loading ? (
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
 
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                onRowClick={handleRowClick1}
-                pageSize={5}
-              />
-                            )}
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  onRowClick={handleRowClick1}
+                  pageSize={5}
+                />
+              )}
             </Box>
 
           </div>
+          {/* edit Vehicle name modal */}
+          <Modal
+            open={editModal}
+            onClose={handleEditmodalClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <div>
+                <TextField
+                  size="small"
+                  id="searchText"
+                  // className='full-width'
+                  label="vehicle Name"
+                  name="VechicleNames"
+                  value={editData?.VechicleNames}
+                  onChange={handleEditVehicleData}
+                />
+                <Button onClick={() => vehicleNameEditFun()}>Edit</Button>
+              </div>
+            </Box>
+          </Modal>
+
+          {/* Delete vehicle name modal */}
+
+          <Modal open={deleteModal} onClose={handleDeletemodalClose} aria-labelledby="modal-title">
+            <Box sx={style}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Typography id="modal-title" variant="h6">
+                  Confirm Action
+                </Typography>
+                <IconButton onClick={handleDeletemodalClose}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              <Typography variant="body1" mb={3}>
+                Are you sure you want to Delete?
+              </Typography>
+
+              <Box display="flex" justifyContent="flex-end" gap={2}>
+                <Button variant="contained" color="primary" onClick={() => vehicleNameDeleteFun()}>
+                  Yes
+                </Button>
+                <Button variant="outlined" color="secondary" onClick={() => handleDeleteNot()}>
+                  No
+                </Button>
+              </Box>
+            </Box>
+          </Modal>
+
           <Dialog open={dialogOpen} onClose={handleCloseDialog} >
             <DialogContent>
               <div className='vehicle-info-dailog-box-div1'>
@@ -1324,7 +1563,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 ))}
               </div>
               <div className='vehicle-info-dailog-box-delete-print-division'>
-                <Button  disabled={!Supllier_delete}variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                <Button disabled={!Supllier_delete} variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
                 <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
               </div>
             </DialogContent>

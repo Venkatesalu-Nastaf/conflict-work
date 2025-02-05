@@ -34,11 +34,16 @@ const Map = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('');
   const { permissions } = useContext(PermissionContext)
   // const Maps = permissions[21]?.read;
-  const Map_Realtime = permissions[23]?.read || 0
-  const Map_Vehicle = permissions[24]?.read || 0
-  const Map_Reminders = permissions[25]?.read || 0
-  const Map_History = permissions[26]?.read || 0
-  const Map_Records = permissions[27]?.read || 0
+  // const Map_Realtime = permissions[23]?.read || 0
+  // const Map_Vehicle = permissions[24]?.read || 0
+  // const Map_Reminders = permissions[25]?.read || 0
+  // const Map_History = permissions[26]?.read || 0
+  // const Map_Records = permissions[27]?.read || 0
+  const Map_Realtime = permissions[24]?.read || 0
+  const Map_Vehicle = permissions[25]?.read || 0
+  const Map_Reminders = permissions[26]?.read || 0
+  const Map_History = permissions[27]?.read || 0
+  const Map_Records = permissions[28]?.read || 0
 
 
 

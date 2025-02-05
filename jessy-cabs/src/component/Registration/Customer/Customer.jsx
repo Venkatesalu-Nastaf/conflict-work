@@ -18,7 +18,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import { UnderGroup, states, Customertype, Select } from "./Customerdata";
+import { UnderGroup, states, Customertype, Select, stateToStations, allStations } from "./Customerdata";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { FaPercent } from "react-icons/fa";
 // ICONS
@@ -48,6 +48,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { FaHashtag } from "react-icons/fa";
 import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -62,7 +63,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const Customer = ({ stationName }) => {
- 
+
 
   const {
     selectedCustomerData,
@@ -102,8 +103,9 @@ const Customer = ({ stationName }) => {
     handleenterSearch,
     customerfieldSets,
     handleChangecustomer, deletedialogbox, setDeletedDialog,
-     setInfo, setInfoMessage,loading,
-    handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer, cerendentialdata
+    setInfo, setInfoMessage, loading,
+    handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer,
+    cerendentialdata, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStationChange, btnloading, setbtnLoading
   } = useCustomer();
 
   useEffect(() => {
@@ -161,7 +163,7 @@ const Customer = ({ stationName }) => {
 
                   />
                 </div>
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -180,7 +182,32 @@ const Customer = ({ stationName }) => {
                     {cerendentialdata ?
                       <p style={{ color: 'red' }}>customer Adlready exist</p> : ""}
                   </>
+                </div> */}
+
+                
+<div className="input">
+                <div className='full-width' style={{ display: 'grid' }}>
+                  <span className='full-width' style={{ display: 'flex' }}>
+                  <div className="icone">
+                    <BadgeIcon color="action" />
+                  </div>
+                    <TextField
+                    size="small"
+                    id="customer"
+                    className='full-width'
+                    label="Organization Name"
+                    value={selectedCustomerData?.customer || book.customer}
+                    autoComplete="new-password"
+                    // onChange={handleChange}
+                    onChange={handleChangeuniquecustomer}
+                    name="customer"
+                  />
+                  </span>
+                  <span style={{ textAlign: 'center' }}>
+                    <span style={{ color: "red" }}>{cerendentialdata ? `customer Adlready exist` : ""}</span>
+                  </span>
                 </div>
+              </div>
                 <div className="input">
                   <div className="icone">
                     <PermIdentityIcon color="action" />
@@ -334,7 +361,7 @@ const Customer = ({ stationName }) => {
                 <div>
 
                   {customerfieldSets.map((datafield, index) => (
-                     <React.Fragment key={datafield.id || index}>
+                    <React.Fragment key={datafield.id || index}>
                       <div className="input-field Customer-page-add-input-field" style={{ flexWrap: 'wrap', marginBottom: '20px' }}>
                         <div className="input" key={index}>
                           <div className="icone">
@@ -382,12 +409,16 @@ const Customer = ({ stationName }) => {
                           />
                         </div>
                         {index == 0 && (
-                          <Button disabled={!Customer_new} variant="contained" onClick={handleAddExtra} style={{ width: 'fit-content' }}>Add+</Button>
+                          <div className="input" style={{ justifyContent: 'flex-start' }}>
+                            <Button disabled={!Customer_new} variant="contained" onClick={handleAddExtra} style={{ width: 'fit-content' }}>Add+</Button>
+                          </div>
                         )}
                         {index >= 1 && (
-                          <Button variant="contained" color="error" onClick={handleClickOpen}>
-                            x
-                          </Button>
+                          <div className="input" style={{ justifyContent: 'flex-start' }}>
+                            <Button variant="contained" color="error" onClick={handleClickOpen}>
+                              x
+                            </Button>
+                          </div>
                         )}
 
                       </div>
@@ -409,7 +440,7 @@ const Customer = ({ stationName }) => {
                           </Button>
                         </DialogActions>
                       </Dialog>
-                      </React.Fragment>
+                    </React.Fragment>
                     // </>
                   ))}
 
@@ -458,11 +489,11 @@ const Customer = ({ stationName }) => {
                     }
                   />
                 </div> */}
-                 <div className="input">
+                <div className="input">
                   <div className="icone">
                     <DomainAddIcon color="action" />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     size="small"
                     id="servicestation"
@@ -480,6 +511,38 @@ const Customer = ({ stationName }) => {
                       )
                     }
                     }
+                  /> */}
+
+                  {/* <Autocomplete
+        fullWidth
+        size="small"
+        id="servicestation"
+        freeSolo
+        onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
+        value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || selectedStation ||''}
+        options={allStations.map((Stationname) => ({ label: Stationname }))}
+        getOptionLabel={(option) => option.label || selectedCustomerData.servicestation || book.servicestation || ''}
+        renderInput={(params) => (
+          <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
+        )}
+      /> */}
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="servicestation"
+                    freeSolo
+                    onChange={(event, value) => {
+                      handleAutocompleteChange(event, value, "servicestation");
+                      if (!value) {
+                        setSelectedState(''); // Clear selectedState if servicestation is empty
+                      }
+                    }}
+                    value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || selectedStation || ''}
+                    options={allStations.map((Stationname) => ({ label: Stationname }))}
+                    getOptionLabel={(option) => option.label || selectedCustomerData.servicestation || book.servicestation || ''}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
+                    )}
                   />
                 </div>
                 <div className="input">
@@ -526,7 +589,7 @@ const Customer = ({ stationName }) => {
                   <div className='icone'>
                     <GrSelect />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-state"
@@ -543,7 +606,56 @@ const Customer = ({ stationName }) => {
                       )
                     }
                     }
+                  /> */}
+                  {/* <Autocomplete
+        fullWidth
+        size="small"
+        id="free-solo-demo-state"
+        freeSolo
+        onChange={(event, value) => handleAutocompleteChange(event, value, "state")}
+        value={ book.state || selectedState || ''}
+        options={Object.keys(stateToStations).map((state) => ({ label: state }))}
+        renderInput={(params) => ( 
+          <TextField {...params} label="State" name="state" inputRef={params.inputRef}/>
+        )}
+      /> */}
+                  {/* <Autocomplete
+    fullWidth
+    size="small"
+    id="free-solo-demo-state"
+    freeSolo
+    value={selectedState ||book.state || ""}  // Make sure selectedState is used here
+    onChange={(event, value) => handleAutocompleteChange(event, value, "state")}
+    options={Object.keys(stateToStations)}  // List of available states
+    renderInput={(params) => (
+        <TextField {...params} label="State" name="state" inputRef={params.inputRef} />
+    )}
+/> */}
+                  {/* <TextField
+    fullWidth
+    size="small"
+    id="state-input"
+    value={selectedState || book.state || ""}
+    onChange={(event) => handleAutocompleteChange(event, event.target.value, "state")}
+    label="State"
+    name="state"
+    disabled
+/> */}
+                  <TextField
+                    fullWidth
+                    size="small"
+                    id="state-input"
+                    value={selectedState || book.state || ""}
+                    onChange={(event) => handleAutocompleteChange(event, event.target.value, "state")}
+                    label="State"
+                    name="state"
+                    disabled
                   />
+
+
+
+
+
                 </div>
                 <div className="input">
                   <div className='icone'>
@@ -571,7 +683,7 @@ const Customer = ({ stationName }) => {
                 <div className="input dropdown">
                   <label htmlFor="gstTax">GST</label>
                   <select id="gstTax" className='full-width' name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange}>
-                    <option value="" >None</option>
+                    <option value="0" >None</option>
                     <option value="5">5%</option>
                     <option value="12">12%</option>
                   </select>
@@ -582,14 +694,14 @@ const Customer = ({ stationName }) => {
                     <Switch label='label' id="billinggrouph" onClick={handleButtonClick} checked={isInputVisible} /> */}
                   </div>
                   <Autocomplete
-                  size='small'
-                  style={{ width: 180 }}
-                    options={BillingGroup}  
+                    size='small'
+                    style={{ width: 180 }}
+                    options={BillingGroup}
                     sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Billing Group" />}
                     onChange={(event, value) => handleAutocompleteChangebilling(event, value, "billingGroup")}
-                    value={selectedCustomerData?.billingGroup ||book.billingGroup}
-                    />
+                    value={selectedCustomerData?.billingGroup || book.billingGroup}
+                  />
 
                   {/* {isInputVisible && (
                     <Autocomplete
@@ -674,16 +786,25 @@ const Customer = ({ stationName }) => {
 
                 <div className="input">
                   {isEditMode ? (
-                    <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
+                    // <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
+                    <LoadingButton loading={btnloading} variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</LoadingButton>
                   ) : (
-                    <Button
+                    // <Button
+                    //   variant="contained"
+                    //   disabled={!Customer_new}
+                    //   onClick={handleAdd}
+                    //   style={{ marginRight: "100px" }}
+                    // >
+                    //   Add
+                    // </Button>
+                    <LoadingButton loading={btnloading}
                       variant="contained"
                       disabled={!Customer_new}
                       onClick={handleAdd}
                       style={{ marginRight: "100px" }}
                     >
                       Add
-                    </Button>
+                    </LoadingButton>
                   )}
                 </div>
               </div>
@@ -846,10 +967,10 @@ const Customer = ({ stationName }) => {
                 </div>
               </div>
               <div className="table-customer-lists">
-            
+
                 <Box
                   sx={{
-                    height: 400, 
+                    height: 400,
                     position: 'relative',// Adjust this value to fit your needs
                     '& .MuiDataGrid-virtualScroller': {
                       '&::-webkit-scrollbar': {
@@ -870,32 +991,32 @@ const Customer = ({ stationName }) => {
                     },
                   }}
                 >
-                  {loading ? ( 
-                                <Box
-                                    sx={{
-                                        position: 'absolute', 
-                                        top: '50%',
-                                        left: '50%', 
-                                        transform: 'translate(-50%, -50%)', 
-                                    }}
-                                >
-                                    <CircularProgress />
-                                </Box>
-                            ) : (
-                  <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    onRowClick={handleRowClick}
-                    initialState={{
-                      pagination: {
-                        paginationModel: { page: 0, pageSize: 5 },
-                      },
-                    }}
-                    pageSizeOptions={[5, 10]}
-                  />
-                            )}
+                  {loading ? (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                      }}
+                    >
+                      <CircularProgress />
+                    </Box>
+                  ) : (
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      onRowClick={handleRowClick}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                    />
+                  )}
                 </Box>
-                          
+
               </div>
             </div>
           </div>

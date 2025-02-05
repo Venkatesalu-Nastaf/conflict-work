@@ -4,6 +4,7 @@ import axios from 'axios';
 import { APIURL } from "../../url";
 import dayjs from 'dayjs';
 import { stateToStations,allStations } from "../Customer/Customerdata";
+import { useData } from '../../Dashboard/MainDash/Sildebar/DataContext2';
 
 const useStationCreation = () => {
     const apiUrl = APIURL;
@@ -23,12 +24,14 @@ const useStationCreation = () => {
     const [loading, setLoading] = useState(false)
     // const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
-    const [cerendentialdata, setCredentialData] = useState()
+    const [cerendentialdata, setCredentialData] = useState(false)
 
     const [selectedStation, setSelectedStation] = useState('');
     const [selectedState, setSelectedState] = useState('');
     const [stationUpdate,setstationUpdate] = useState(false)
+    const [isDisabled,setisDisabled] = useState(false)
 
+    const {isstationtrigger,setisStationtrigger} = useData()
     //-----------------popup---------------------
 
     const hidePopup = () => {
@@ -45,6 +48,8 @@ const useStationCreation = () => {
             return () => clearTimeout(timer);
         }
     }, [error, success, warning, info]);
+
+   
 
     //-------------------------------------------------
 
@@ -104,15 +109,18 @@ const useStationCreation = () => {
     };
 
 
-    const uniquestation = async (stationname) => {
+    const uniquestation = async (Stationname) => {
         // console.log(customerdataname,"namee")
-        if (stationname) {
+        console.log(Stationname,'station');
+        
+        if (Stationname) {
 
-            const response = await axios.get(`${apiUrl}/getcreduniquestationname/${stationname}`)
+            const response = await axios.get(`${apiUrl}/getcreduniquestationname/${Stationname}`)
             const responsedata = response.data;
+             console.log(responsedata,'unique station data')
 
             // console.log(response,"data")
-            // console.log(responsedata?.length,"reeee")
+            console.log(responsedata?.length,"reeee")
 
             if (responsedata?.length >= 1) {
                 setCredentialData(true)
@@ -122,6 +130,7 @@ const useStationCreation = () => {
                 setCredentialData(false)
                 // return false;
             }
+            setTimeout(() => setCredentialData(undefined), 1000); 
         }
 
 
@@ -205,32 +214,325 @@ const useStationCreation = () => {
 //     }
 // };
 
-const handleStationChange = (event, value) => {
+// const handleStationChange = (event, value) => {
+//     const station = value ? value.label : '';
+//     setSelectedStation(station);
+
+//     const foundState = Object.keys(stateToStations).find(state => 
+//       stateToStations[state].includes(station)
+//     );
+
+//     if (foundState) {
+//         setSelectedState(foundState);
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: foundState
+//         }));
+        
+//     } else {
+//         setSelectedState('');
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: ''
+//         }));
+//         setSelectedStation('');
+//         setSelectedState('');
+//     }
+// };
+
+// const handleStationChange = async (event, value) => {
+//     const station = value ? value.label : '';
+//     setSelectedStation(station);
+
+//     const foundState = Object.keys(stateToStations).find(state => 
+//       stateToStations[state].includes(station)
+//     );
+
+//     if (foundState) {
+//         setSelectedState(foundState);
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: foundState
+//         }));
+
+//         try {
+//             // Call the API to check if the state already has address and GST number
+//             const response = await axios.get(`${apiUrl}/stationcreation`);
+//             const stateData = response.data; // Assuming response data is an array of station details
+        
+//             // Find the matching state details based on the selected state
+//             const matchingStateData = stateData.find(
+//                 data => data.state === foundState
+//             );
+        
+//             if (matchingStateData) {
+//                 if (matchingStateData.address && matchingStateData.gstno) {
+//                     console.log('State has address and GST number:', matchingStateData);
+//                     setisDisabled(true)
+//                 } else {
+//                     console.log('No address and GST found for the state:', matchingStateData.state);
+//                     setisDisabled(isDisabled)
+//                 }
+//             } else {
+//                 console.log('No data found for the selected state.');
+//             }
+//         } catch (error) {
+//             console.error('Error fetching data from API:', error);
+//         }
+        
+
+//     } else {
+//         setSelectedState('');
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: ''
+//         }));
+//         setSelectedStation('');
+//         setSelectedState('');
+//     }
+// };
+
+// const handleStationChange = async (event, value) => {
+
+//     console.log('onChange event:', event);
+//     console.log('Selected value:', value);
+//     const station = value ? value.label : '';
+//     setSelectedStation(station);
+
+//     // If the input field is empty, reset states and enable the field
+//     if (!station) {
+//         setSelectedState('');
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: '',
+//             state: ''
+//         }));
+//         setisDisabled(false); // Enable the field when the input is empty
+//         return;
+//     }
+
+//     const foundState = Object.keys(stateToStations).find(state => 
+//         stateToStations[state].includes(station)
+//     );
+
+//     if (foundState) {
+//         setSelectedState(foundState);
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: foundState
+//         }));
+
+//         try {
+//             // Call the API to check if the state already has address and GST number
+//             const response = await axios.get(`${apiUrl}/stationcreation`);
+//             const stateData = response.data; // Assuming response data is an array of station details
+        
+//             // Find the matching state details based on the selected state
+//             const matchingStateData = stateData.find(
+//                 data => data.state === foundState
+//             );
+        
+//             if (matchingStateData) {
+//                 if (matchingStateData.address && matchingStateData.gstno) {
+//                     console.log('State has address and GST number:', matchingStateData);
+//                     setisDisabled(true); // Disable the field if address and GST exist
+//                 } else {
+//                     console.log('No address and GST found for the state:', matchingStateData.state);
+//                     setisDisabled(false); // Enable the field if no address or GST exists
+//                 }
+//             } else {
+//                 console.log('No data found for the selected state.');
+//                 setisDisabled(false); // Enable the field if no matching state data is found
+//             }
+//         } catch (error) {
+//             console.error('Error fetching data from API:', error);
+//         }
+
+//     } else {
+//         setSelectedState('');
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: ''
+//         }));
+//         setSelectedStation('');
+//         setSelectedState('');
+//         setisDisabled(false); // Enable the field if no state is found
+//     }
+// };
+
+// const handleStationChange = async (event, value) => {
+ 
+//     const station = value ? value.label : '';
+//     setSelectedStation(station);
+   
+
+//     if (!station) {
+
+//         setSelectedState('');
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: '',
+//             state: '',
+//             address:'',
+//             gstno:''
+//         }));
+//         setisDisabled(false);
+//         return;
+//     }
+
+//     const foundState = Object.keys(stateToStations).find(state => 
+//         stateToStations[state].includes(station)
+//     );
+
+//     if (foundState) {
+//         setSelectedState(foundState);
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: foundState,
+            
+//         }));
+//         setSelectedCustomerData(prevBook =>({
+//             ...prevBook,
+//             Stationname:station,
+//             State:foundState,
+            
+//         }))
+
+//         try {
+//             const response = await axios.get(`${apiUrl}/stationcreation`);
+//             const stateData = response.data;
+
+//             const matchingStateData = stateData.find(
+//                 data => data.state === foundState,
+
+//             );
+
+//             if (matchingStateData) {
+//                 const hasDetails = matchingStateData.address && matchingStateData.gstno;
+//                 console.log('Setting isDisabled to:', hasDetails);
+//                 setisDisabled(true);
+                
+//             } else {
+//                 setisDisabled(false);
+//             }
+//         } catch (error) {
+//             console.error('Error fetching data from API:', error);
+//         }
+//     } else {
+//         setSelectedState('');
+//         setBook(prevBook => ({
+//             ...prevBook,
+//             Stationname: station,
+//             state: '',
+//             address:book.address,
+//         }));
+//         setSelectedStation('');
+//         setSelectedState('');
+//         setisDisabled(false);
+//     }
+// };
+
+const handleStationChange = async (event, value) => {
     const station = value ? value.label : '';
     setSelectedStation(station);
 
+    if (!station) {
+        setSelectedState('');
+        setBook(prevBook => ({
+            ...prevBook,
+            Stationname: '',
+            state: '',
+            address: '',
+            gstno: ''
+        }));
+        setSelectedCustomerData(prevData => ({
+            ...prevData,
+            Stationname: '',
+            state: '',
+            address: '',
+            gstno: ''
+        }));
+        setisDisabled(false);
+        return;
+    }
+
     const foundState = Object.keys(stateToStations).find(state => 
-      stateToStations[state].includes(station)
+        stateToStations[state].includes(station)
     );
 
     if (foundState) {
         setSelectedState(foundState);
-        setBook(prevBook => ({
-            ...prevBook,
-            Stationname: station,
-            state: foundState
-        }));
+
+        try {
+            const response = await axios.get(`${apiUrl}/stationcreation`);
+            const stateData = response.data;
+
+            const matchingStateData = stateData.find(
+                data => data.state === foundState
+            );
+
+            if (matchingStateData) {
+                const { gstno = '' } = matchingStateData;
+
+                setBook(prevBook => ({
+                    ...prevBook,
+                    Stationname: station,
+                    state: foundState,
+                    gstno
+                }));
+                setSelectedCustomerData(prevData => ({
+                    ...prevData,
+                    Stationname: station,
+                    state: foundState,
+                    gstno
+                }));
+                setisDisabled(!!gstno);
+
+            } else {
+                setBook(prevBook => ({
+                    ...prevBook,
+                    Stationname: station,
+                    state: foundState,
+                    gstno: ''
+                }));
+                setSelectedCustomerData(prevData => ({
+                    ...prevData,
+                    Stationname: station,
+                    state: foundState,
+                    gstno: ''
+                }));
+                setisDisabled(false);
+            }
+        } catch (error) {
+            console.error('Error fetching data from API:', error);
+        }
     } else {
         setSelectedState('');
         setBook(prevBook => ({
             ...prevBook,
             Stationname: station,
-            state: ''
+            state: '',
+            gstno: ''
         }));
-        setSelectedStation('');
-        setSelectedState('');
+        setSelectedCustomerData(prevData => ({
+            ...prevData,
+            Stationname: station,
+            state: '',
+            gstno: ''
+        }));
+        setisDisabled(false);
     }
 };
+
+
+
 
  
 
@@ -251,10 +553,14 @@ const handleStationChange = (event, value) => {
     }
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
+        setSelectedStation(customerData?.Stationname || "");
+        setSelectedState(customerData?.state || ""); 
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
-        setIsEditMode(true);
-        console.log(customerData, "Customer data")
+     
+        setIsEditMode(true)
+        
+        
     }, []);
 
     // const handleAdd = async () => {
@@ -317,10 +623,11 @@ const handleStationChange = (event, value) => {
 
     const handleAdd = async () => {
         const Stationname = book.Stationname;
+        
         if (!Stationname) {
             setWarning(true);
             setWarningMessage("Fill Mandatory Fields");
-            setstationUpdate(true);
+            // setstationUpdate(true);
             return;
         }
         if (cerendentialdata === true) {
@@ -341,14 +648,18 @@ const handleStationChange = (event, value) => {
                 gstno: '',
                 created_at: dayjs(),
             });
+            setisStationtrigger(!isstationtrigger)
             setSelectedState(''); // Clear the selected state
             setSelectedStation('');
             setSelectedCustomerData({});
             setIsEditMode(false);
-            setRows([]); // Optionally clear rows if needed
+            setRows([]); 
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            setisDisabled(false)
+            setCredentialData(false)
             setstationUpdate(true);
+            uniquestation(Stationname)
         } catch (error) {
             if (error.message) {
                 setError(true);
@@ -365,43 +676,88 @@ const handleStationChange = (event, value) => {
     
 
 
+    // const handleEdit = async () => {
+        
+    //     try {
+    //         // const selectedCustomer = rows.find((row) => row.stationid === stationid);
+    //         // console.log(selectedCustomer,"slecu")
+    //         // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+    //         const {id,...restdata} = selectedCustomerData
+    //         // const updatedCustomer = {...restdata};
+    //         console.log(restdata,"rest")
+    //         console.log('editstation',selectedCustomerData?.stationid);
+            
+
+    //         await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`,restdata);
+    //         setSuccess(true);
+    //         setSuccessMessage("Successfully updated");
+    //         setstationUpdate(true);
+    //         setSelectedState(''); // Clear the selected state
+    //         setSelectedStation('');
+    //         setSelectedCustomerData({});
+    //         handleCancel();
+
+    //     }
+    //     //  catch {
+    //     //     setError(true);
+    //     //     setErrorMessage("Failed to Edit StationS");
+    //     // }
+    //     catch (error) {
+    //         // console.error("Error occurredddddd:", error);
+
+    //         // Check if there's no response, indicating a network error
+    //         if (error.message) {
+    //             setError(true);
+    //             setErrorMessage("Check your Network Connection");
+    //             // console.log('Network error');
+    //         } else if (error.response) {
+    //             setError(true);
+    //             // Handle other Axios errors (like 4xx or 5xx responses)
+    //             setErrorMessage("Failed to Edit Stations: " + (error.response.data.message || error.message));
+    //         } else {
+    //             // Fallback for other errors
+    //             setError(true);
+    //             setErrorMessage("An unexpected error occurred: " + error.message);
+    //         }
+    //     }
+    // };
+    // console.log(selectedCustomerData?.state, 'mainbranchstate===',selectedCustomerData);
+
     const handleEdit = async () => {
         try {
-            // const selectedCustomer = rows.find((row) => row.stationid === stationid);
-            // console.log(selectedCustomer,"slecu")
-            // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            const updatedCustomer = { ...selectedCustomerData };
-
-            await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`, updatedCustomer);
+            const { id, ...restdata } = selectedCustomerData;
+            console.log(selectedCustomerData,'customer datas',restdata)
+            await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`, restdata);
+            console.log(selectedCustomerData,'customer datas2',restdata)
+            setisStationtrigger(!isstationtrigger)
             setSuccess(true);
             setSuccessMessage("Successfully updated");
+            setCredentialData(false)
+            setstationUpdate(true);
+            setRows([]); 
+            setisDisabled(false)
+            setSelectedState('');
+            setSelectedStation('');
+            setSelectedCustomerData({});
+            setError(false);
+            setErrorMessage('');
             handleCancel();
-
-        }
-        //  catch {
-        //     setError(true);
-        //     setErrorMessage("Failed to Edit StationS");
-        // }
-        catch (error) {
-            // console.error("Error occurredddddd:", error);
-
-            // Check if there's no response, indicating a network error
+        } catch (error) {
             if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
-                // console.log('Network error');
+                setCredentialData(false)
             } else if (error.response) {
                 setError(true);
-                // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Edit Stations: " + (error.response.data.message || error.message));
+                setCredentialData(false)
             } else {
-                // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
             }
         }
     };
-    // console.log(selectedCustomerData?.state, 'mainbranchstate===',selectedCustomerData);
+    
 
     // get particular statedetails 
     useEffect(() => {
@@ -422,13 +778,13 @@ const handleStationChange = (event, value) => {
 
                         setSelectedCustomerData(prevData => ({
                             ...prevData,
-                            address: address,
+                            // address: address,
                             gstno: gst,
                         }));
                     } else {
                         setSelectedCustomerData(prevData => ({
                             ...prevData,
-                            address: "",
+                            // address: "",
                             gstno: ""
                         }));
                     }
@@ -443,6 +799,7 @@ const handleStationChange = (event, value) => {
 
     useEffect(() => {
         const handleList = async () => {
+
             setLoading(true);
             setError(false);
             setErrorMessage("");
@@ -450,6 +807,8 @@ const handleStationChange = (event, value) => {
             try {
                 const response = await axios.get(`${apiUrl}/stationcreation`);
                 const data = response.data;
+                console.log(data,'list of datas')
+                
 
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -458,6 +817,14 @@ const handleStationChange = (event, value) => {
                     }));
                     setRows(rowsWithUniqueId);
                     setLoading(false);
+                    setCredentialData(false)
+                    if (stationUpdate) {
+                        localStorage.setItem("stationValue", "stationupadted");
+                        console.log("Station updated and value set in localStorage.");
+                        
+                      }
+                    
+
                 } else {
                     setRows([]);
                     setLoading(false);
@@ -478,7 +845,8 @@ const handleStationChange = (event, value) => {
         };
 
         handleList();
-    }, [apiUrl,stationUpdate]);
+    }, [apiUrl,stationUpdate,isstationtrigger]);
+    
 
     // useEffect(() => {
     //     const handlelist = async () => {
@@ -531,6 +899,11 @@ const handleStationChange = (event, value) => {
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
                 setRows([]);
+                setSelectedState('');
+                setSelectedStation('');
+                setstationUpdate(true);
+                setisStationtrigger(!isstationtrigger)
+                setisDisabled(false)
 
             }
 
@@ -548,7 +921,7 @@ const handleStationChange = (event, value) => {
         if (actionName === 'List') {
             handleClick(null, 'List');
         }
-    });
+    },[isstationtrigger]);
 
     return {
         selectedCustomerData,
@@ -577,7 +950,7 @@ const handleStationChange = (event, value) => {
         setLoading,
         getStateFromStation,
         handleStationChange,
-        selectedStation, setSelectedStation,selectedState, setSelectedState
+        selectedStation, setSelectedStation,selectedState, setSelectedState,isDisabled,setisDisabled,cerendentialdata, setCredentialData
     };
 };
 

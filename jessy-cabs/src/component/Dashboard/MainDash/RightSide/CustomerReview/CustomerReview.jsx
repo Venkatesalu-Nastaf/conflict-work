@@ -42,6 +42,7 @@ const todaybook = todaybooking?.map((data) => data.count)
     options: {
       chart: {
         type: "line",
+        height: 320,
       },
       xaxis: {
         categories: getData().categories,
@@ -56,7 +57,7 @@ const todaybook = todaybooking?.map((data) => data.count)
     <div className="CustomerReview weekly-chart" id="areachart">
  <h3  className="area-text-chart">Area Chart</h3>
  {/* <p style={{margin:"0px"}}>zzzzzzzzzzzzz</p> */}
-      <Chart options={data.options} series={data.series} type="bar" />
+      <Chart options={data.options} series={data.series} type="bar" height={300} />
 
     </div>
   );

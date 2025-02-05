@@ -36,6 +36,18 @@
     gap: 0px;
     padding: 10px;
     border-radius: 10px;
+    /* justify-content: space-around; */
+}
+@media screen  and (max-width:573px){
+    .amount-calculator {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0px;
+        padding: 10px;
+        border-radius: 10px;
+        justify-content: space-around;
+    }
 }
 
 .total-inputs {
@@ -92,3 +104,12 @@
     }
 
 }
+
+.total-inputsss{
+    display: flex;
+    gap: 10px;
+    white-space: nowrap;
+    padding: 0px 10px;
+    align-items: center;
+    margin-top: 17px;
+    }

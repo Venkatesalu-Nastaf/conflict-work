@@ -25,10 +25,10 @@ import useTransferdataentry from './useTransferdataentry';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Box } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
-import {  CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const TransferDataEntry = ({ stationName, organizationNames }) => {
-
   const {
     rows,
     error,
@@ -53,7 +53,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     info,
     infoMessage,
     servicestation,
-    // handleserviceInputChange,
+    handleserviceInputChange,
     handleShow,
     handleCancel,
     handleClickGenerateBill,
@@ -76,9 +76,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     handleRemove,
     loading,
     setLoading,
-    // setServiceStation,
+    setServiceStation,
     setInfo,
-     setINFOMessage,
+    setINFOMessage,
+    handlecustomer, isbtnloading, setisbtnloading, iseditloading, setiseditloading, isbillloading, setisbillloading,
+    addEditTrigger, setAddEditTrigger
     //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
@@ -94,11 +96,17 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
   const Transfer_read = permissions[6]?.read;
   const Transfer_new = permissions[6]?.new;
   const Transfer_delete = permissions[6]?.new;
-  const groupdisable =groupId ? true : false
-//  const ddd = groupId ? "uedd" : "moo"
-//   console.log(servicestation ,"stst",selectedCustomerDatas.station,"stationnsnsnnnns")
-//   console.log(ddd,"sttenary",groupstation)
+  const groupdisable = groupId ? true : false
+  //  const ddd = groupId ? "uedd" : "moo"
+  //   console.log(servicestation ,"stst",selectedCustomerDatas.station,"stationnsnsnnnns")
+  //   console.log(ddd,"sttenary",groupstation)
 
+  const invoiceNoCheck = invoiceno === "" || invoiceno === null || invoiceno === undefined
+
+  const getRowClassName = (params) => {
+
+    return params.row.status === "Billed" ? 'green-row' : 'red-row';
+}
 
   return (
     <div className="TransferDataEntry-form main-content-form Scroll-Style-hide">
@@ -157,7 +165,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       autoComplete='off'
                       // onKeyDown={handleKeyenter}
                       disabled={groupdisable}
-                     
+
                     />
                   </div>
                   <div className="input">
@@ -172,25 +180,91 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       size="small"
                       value={customer || ''}
                       options={organizationNames}
-                      disabled={groupdisable} 
 
-                       onChange={(event, value) => {
-                        if (!groupId) {
-                          setCustomer(value)
-                        } else {
-                        
-                          setInfo(true)
-                          setINFOMessage("not change customer ")
-                        }
-                        }}
+                      onChange={(event, value) => handlecustomer(value)}
+
+                      //  onChange={(event, value) => {
+                      //   if (!groupId) {
+                      //     setCustomer(value)
+
+                      //   }
+                      //    else {
+
+                      //     setInfo(true)
+                      //     setINFOMessage("not change customer ")
+                      //   }
+                      //   }}
                       // onChange={(event, value) => setCustomer(value)}
                       renderInput={(params) => {
                         return (
-                          <TextField {...params} label="Organization" name='customer'  disabled={groupdisable} inputRef={params.inputRef} />
+                          <TextField {...params} label="Organization" name='customer' inputRef={params.inputRef} />
                         );
                       }}
                     />
                   </div>
+                  <div className="input" >
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faBuilding} size="xl" />
+                    </div>
+                    {/* <Autocomplete
+                      fullWidth
+                      id="free-station"
+                      className='full-width'
+                      freeSolo
+                     
+                      size="small"
+                      // value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
+                      value={servicestation || selectedCustomerDatas.station || ''}
+                      // value={groupId ? groupstation : servicestation }
+                      // inputValue={groupId ? groupstation : servicestation || ""}
+                      // inputValue={ servicestation || ""}
+                      options={Statename.map((option) => ({
+                          label:option.state
+                        }))}
+                        // options={stationName
+                        //   .filter((option) => option.Stationname !== "All") // Filter out "All" before mapping
+                        //   .map((option) => ({
+                        //     label:option.Stationname
+                        //   }))}
+                      // options={stationName.map((option) => ({
+                      //   label: option.Stationname,
+                      // }))}
+                      // onChange={(event, value) => {
+                      //   if (!groupId) {
+                      //     handleserviceInputChange(event, value)
+                      //   } else {
+                        
+                      //     setInfo(true)
+                      //     setINFOMessage("not change stations ")
+                      //   }
+
+                      // }}
+                      onChange={(event)=>setServiceStation(event.target.value)}
+                      // onChange={(event, value) => handleserviceInputChange(event, value)}
+                      renderInput={(params) => {
+                        return (
+                          <TextField {...params} label="State" name='station' inputRef={params.inputRef}
+                          //  value={groupId ? groupstation : servicestation }  
+                             />
+                        );
+                      }}
+                    /> */}
+
+
+
+                    <TextField
+                      size="small"
+                      id="freet-station"
+                      className='full-width'
+
+                      label="State"
+                      name='station'
+                      value={servicestation || ""}
+
+                      autoComplete='off'
+                    />
+                  </div>
+                  
                   <div className="input">
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -206,11 +280,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                               ? dayjs(fromDate || selectedCustomerDatas?.fromdate)
                               : fromDate || formDataTransfer?.FromDate
                                 ? dayjs(formDataTransfer?.FromDate)
-                                : dayjs() // Set today's date if no value is available
+                                : ""
                           }
                           format="DD/MM/YYYY"
                           onChange={(date) => {
-                            handleDateChange(date, 'fromdate');
+                            // handleDateChange(date, 'fromdate');
                             const formattedDate = dayjs(date).format('YYYY-MM-DD');
                             setFromDate(formattedDate);
                           }}
@@ -253,79 +327,28 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
-                  <div className="input" >
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faBuilding} size="xl" />
-                    </div>
-                    {/* <Autocomplete
-                      fullWidth
-                      id="free-station"
-                      className='full-width'
-                      freeSolo
-                     
-                      size="small"
-                      // value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                      value={servicestation || selectedCustomerDatas.station || ''}
-                      // value={groupId ? groupstation : servicestation }
-                      // inputValue={groupId ? groupstation : servicestation || ""}
-                      // inputValue={ servicestation || ""}
-                      // options={stationName.map((option) => ({
-                      //     label:option.Stationname
-                      //   }))}
-                        // options={stationName
-                        //   .filter((option) => option.Stationname !== "All") // Filter out "All" before mapping
-                        //   .map((option) => ({
-                        //     label:option.Stationname
-                        //   }))}
-                      // options={stationName.map((option) => ({
-                      //   label: option.Stationname,
-                      // }))}
-                      // onChange={(event, value) => {
-                      //   if (!groupId) {
-                      //     handleserviceInputChange(event, value)
-                      //   } else {
-                        
-                      //     setInfo(true)
-                      //     setINFOMessage("not change stations ")
-                      //   }
-
-                      // }}
-                      // onChange={(event, value) => handleserviceInputChange(event, value)}
-                      renderInput={(params) => {
-                        return (
-                          <TextField {...params} label="Stations" name='station' inputRef={params.inputRef}
-                          //  value={groupId ? groupstation : servicestation }  
-                             />
-                        );
-                      }}
-                    /> */}
-
-
-
-                   <TextField
-                      size="small"
-                       id="freet-station"
-                      className='full-width'
-                    
-                      label="State" 
-                      name='station'
-                      value={servicestation || ""}
-  
-                      autoComplete='off'
-                    />
-                  </div>
+                  
                   <div className="input">
-                    <Button variant="contained" disabled={!Transfer_read} onClick={handleShow} >List</Button>
+                    <Button variant="contained" disabled={!Transfer_read} onClick={() => handleShow()} >List</Button>
                   </div>
                   <div className="input">
                     <Button variant="contained" onClick={handleCancel}>Cancel</Button>
                   </div>
-                  <div className="input">
-                    <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button>
-                  </div>
-                  <div className="input">
-                    <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</Button>
-                  </div>
+                  {invoiceno ? <></> :
+                    <div className="input">
+                      {/* <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button> */}
+                      <LoadingButton loading={isbillloading} variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</LoadingButton>
+                    </div>
+                  }
+                  {groupId && customer && !addEditTrigger ? <div className="input">
+                    {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</Button> */}
+                    <LoadingButton loading={isbtnloading} variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >Edit</LoadingButton>
+                  </div> :
+                    <div className="input">
+                      {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</Button> */}
+                      <LoadingButton loading={isbtnloading} variant="contained" disabled={!Transfer_new} onClick={handleAddGroup} >ADD</LoadingButton>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
@@ -336,13 +359,13 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <>
-                  <Button variant="contained" disabled={!Transfer_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  {/* <Button variant="contained" disabled={!Transfer_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                     Download
-                  </Button>
+                  </Button> */}
                   <Menu {...bindMenu(popupState)}>
                     <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
                     <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                  </Menu> 
+                  </Menu>
                 </>
               )}
             </PopupState>
@@ -429,59 +452,108 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
               />
             </Box> */}
             <Box
-  sx={{
-    height: 400, // Adjust this value to fit your needs
-    position: 'relative', // Necessary for absolute positioning of the loading indicator
-    '& .MuiDataGrid-virtualScroller': {
-      '&::-webkit-scrollbar': {
-        width: '8px',
-        height: '8px',
-      },
-      '&::-webkit-scrollbar-track': {
-        backgroundColor: '#f1f1f1',
-      },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#457cdc',
-        borderRadius: '20px',
-        minHeight: '60px',
-      },
-      '&::-webkit-scrollbar-thumb:hover': {
-        backgroundColor: '#3367d6',
-      },
-    },
-  }}
->
-  {loading && (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 56,
-        left: 0,
-        right: 0,
-        bottom: 0, // Cover the entire DataGrid area
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center', // Center vertically
-        alignItems: 'center', // Center horizontally
-        zIndex: 1,
-        bgcolor: 'rgba(255, 255, 255, 0.8)', // Optional: add a slight background to distinguish loading
-      }}
-    >
-     <CircularProgress />
-    </Box>
-  )}
-  <DataGrid
-    rows={rows}
-    columns={columns}
-    onRowSelectionModelChange={(newRowSelectionModel) => {
-      setRowSelectionModel(newRowSelectionModel);
-      handleRowSelection(newRowSelectionModel);
-    }}
-    checkboxSelection
-    disableRowSelectionOnClick
-    sx={{ height: '100%', width: '100%' }} // Ensure DataGrid takes up full box size
-  />
-</Box>
+              sx={{
+                height: 400, // Adjust this value to fit your needs
+                position: 'relative', // Necessary for absolute positioning of the loading indicator
+                '& .MuiDataGrid-virtualScroller': {
+                  '&::-webkit-scrollbar': {
+                    width: '8px',
+                    height: '8px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                    minHeight: '60px',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
+                },
+              }}
+            >
+              {loading && (
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 56,
+                    left: 0,
+                    right: 0,
+                    bottom: 0, // Cover the entire DataGrid area
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center', // Center vertically
+                    alignItems: 'center', // Center horizontally
+                    zIndex: 1,
+                    bgcolor: 'rgba(255, 255, 255, 0.8)', // Optional: add a slight background to distinguish loading
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              )}
+              <DataGrid
+                // rows={combinedRowsTrigger ? combinedRows : rows}
+                rows={rows}
+                columns={columns}
+                onRowSelectionModelChange={(newRowSelectionModel) => {
+                  setRowSelectionModel(newRowSelectionModel);
+                  handleRowSelection(newRowSelectionModel);
+                }}
+                // getRowId={(row) => row.id}
+                getRowClassName={getRowClassName}
+                checkboxSelection
+                disableRowSelectionOnClick
+                // sx={{ height: '100%', width: '100%' }}
+                sx={{
+                  height: '100%',
+                  width: '100%',
+                  // '& .MuiDataGrid-row': {
+                  //   backgroundColor: invoiceNoCheck ? "red" : "green",
+                  //   color: 'white', // Optional for text visibility
+                  //   '&:hover': {
+                  //     backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Highlight on hover
+                  //   },
+                  // },
+                  // '& .Mui-selected': {
+                  //   // backgroundColor: invoiceno === "" ? 'red' : 'green', // Same color for selected row
+                  //   backgroundColor: invoiceNoCheck ? 'red !important' : 'green !important', // Prevent lighter selected row color
+
+                  //   '&:hover': {
+                  //     backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Same hover effect for selected row
+                  //   },
+                  // },
+                     '& .green-row': {
+                                            backgroundColor: invoiceNoCheck ? "#eb492f" : '#65B741' ,
+                                            color: 'white',
+                                            '&:hover': {
+                                                backgroundColor: invoiceNoCheck ? "red" : '#21b90f' ,
+
+                                            },
+                                        },
+                                        '& .red-row': {
+                                            backgroundColor: '#E72929',
+                                            color: 'white',
+                                            '&:hover': {
+                                                backgroundColor: '#ec2424',
+                                            },
+                                        },
+                                        '& .Mui-selected.green-row': {
+                                            backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
+                                            '&:hover': {
+                                                backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
+                                            },
+                                        },
+                                        '& .Mui-selected.red-row': {
+                                            backgroundColor: '#E72929 !important',
+                                            '&:hover': {
+                                                backgroundColor: '#ec2424 !important',
+                                            },
+                                        },
+                }}
+              />
+            </Box>
 
           </div>
           <div className='alert-popup-main'>

@@ -27,15 +27,35 @@ import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 
 
+// const customer_colums = [
+//   { field: 'id', headerName: 'S.no', width: 70 },
+//   { field: 'vehRegNo', headerName: 'Vehicle', width: 160 },
+//   { field: 'totalTime', headerName: 'Tot. Time', width: 120 },
+//   { field: 'totalKilometers', headerName: 'TKMS', width: 120 },
+//   { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
+//   { field: 'totalcustomeradvance', headerName: 'Driver Advance', width: 130 },
+//   { field: 'balance', headerName: 'Balance', width: 130 },
+//   { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+//   { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
+//   { field: "grandTotal", headerName: "TotalAmount", with: 100 }
+// ]
+
+
+
 const customer_colums = [
   { field: 'id', headerName: 'S.no', width: 70 },
   { field: 'vehRegNo', headerName: 'Vehicle', width: 160 },
   { field: 'totalTime', headerName: 'Tot. Time', width: 120 },
   { field: 'totalKilometers', headerName: 'TKMS', width: 120 },
-  { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
+  { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+  { field: "grandTotal", headerName: "TotalAmount", with: 100 },
+  // { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
   { field: 'totalcustomeradvance', headerName: 'Driver Advance', width: 130 },
-  { field: 'balance', headerName: 'Balance', width: 130 },
-  { field: "betaTotalAmount", headerName: "Beta", with: 100 }
+  // { field: 'balance', headerName: 'Balance', width: 130 },
+  // { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+  { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
+  { field: 'totalPackageAmount', headerName: 'Total Balance', width: 130 },
+  // { field: "grandTotal", headerName: "TotalAmount", with: 100 }
 ]
 
 
@@ -50,8 +70,8 @@ const VehicleStatement = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [success, setSuccess] = useState(false);
   const [warning, setWarning] = useState(false);
-  const [warningMessage] = useState({});
-  const [ setTableData] = useState([])
+  const [warningMessage, setWarningMessgae] = useState({});
+  const [setTableData] = useState([])
 
   const [totalValues, setTotalValues] = useState({
     fullTotalKM: '',
@@ -60,59 +80,81 @@ const VehicleStatement = () => {
     totalAdvance: "",
     totalBalance: "",
     totalBeta: '',
+    fuelamount:"",
+    grandTotal:""
+  
   })
 
   // customer--------------------------
 
-  const transformCustomer = (data) => {
-    const vehicleTotals = {};
+  // const transformCustomer = (data) => {
+  //   const vehicleTotals = {};
 
-    data?.forEach(element => {
-      const { vehRegNo, totalkm1, totalcalcAmount, totaltime, customeradvance, driverBeta_amount } = element;
+  //   data?.forEach(element => {
+  //     const { vehRegNo, totalkm1, totalcalcAmount, totaltime, customeradvance, driverBeta_amount } = element;
 
-      if (!vehicleTotals[vehRegNo]) {
-        vehicleTotals[vehRegNo] = {
-          totalKilometers: 0,
-          totalPackageAmount: 0,
-          totalTime: 0,
-          totalcustomeradvance: 0,
-          balance: 0,
-          betaTotalAmount: 0,
+  //     if (!vehicleTotals[vehRegNo]) {
+  //       vehicleTotals[vehRegNo] = {
+  //         totalKilometers: 0,
+  //         totalPackageAmount: 0,
+  //         totalTime: 0,
+  //         totalcustomeradvance: 0,
+  //         balance: 0,
+  //         betaTotalAmount: 0,
 
-        };
-      }
+  //       };
+  //     }
 
-      vehicleTotals[vehRegNo].totalKilometers += parseFloat(totalkm1) || 0;
-      vehicleTotals[vehRegNo].totalPackageAmount += parseFloat(totalcalcAmount) || 0;
-      vehicleTotals[vehRegNo].totalcustomeradvance += parseFloat(customeradvance) || 0;
-      vehicleTotals[vehRegNo].betaTotalAmount += parseFloat(driverBeta_amount) || 0;
-
-
-      const totalTimeMinutes = convertTotalTimeToMinutes(totaltime);
-      vehicleTotals[vehRegNo].totalTime += totalTimeMinutes || 0;
-    });
+  //     vehicleTotals[vehRegNo].totalKilometers += parseFloat(totalkm1) || 0;
+  //     vehicleTotals[vehRegNo].totalPackageAmount += parseFloat(totalcalcAmount) || 0;
+  //     vehicleTotals[vehRegNo].totalcustomeradvance += parseFloat(customeradvance) || 0;
+  //     vehicleTotals[vehRegNo].betaTotalAmount += parseFloat(driverBeta_amount) || 0;
 
 
-    return Object.keys(vehicleTotals).map((vehRegNo, index) => ({
-      id: index + 1,
-      vehRegNo,
-      totalKilometers: vehicleTotals[vehRegNo].totalKilometers,
-      totalPackageAmount: vehicleTotals[vehRegNo].totalPackageAmount,
-      totalTime: convertMinutesToTime(vehicleTotals[vehRegNo].totalTime),
-      totalcustomeradvance: vehicleTotals[vehRegNo].totalcustomeradvance,
-      balance: vehicleTotals[vehRegNo].totalPackageAmount - vehicleTotals[vehRegNo].totalcustomeradvance,
-      betaTotalAmount: vehicleTotals[vehRegNo].betaTotalAmount,
-    }));
-  };
+  //     const totalTimeMinutes = convertTotalTimeToMinutes(totaltime);
+  //     vehicleTotals[vehRegNo].totalTime += totalTimeMinutes || 0;
+  //   });
+
+
+  //   return Object.keys(vehicleTotals).map((vehRegNo, index) => ({
+  //     id: index + 1,
+  //     vehRegNo,
+  //     totalKilometers: vehicleTotals[vehRegNo].totalKilometers,
+  //     totalPackageAmount: vehicleTotals[vehRegNo].totalPackageAmount,
+  //     totalTime: convertMinutesToTime(vehicleTotals[vehRegNo].totalTime),
+  //     totalcustomeradvance: vehicleTotals[vehRegNo].totalcustomeradvance,
+  //     balance: vehicleTotals[vehRegNo].totalPackageAmount - vehicleTotals[vehRegNo].totalcustomeradvance,
+  //     betaTotalAmount: vehicleTotals[vehRegNo].betaTotalAmount,
+  //   }));
+  // };
 
 
   // TIME CONVERTION TYPE HH:MM
-  const convertTotalTimeToMinutes = (totaltime) => {
-    const [hoursPart, minutesPart] = totaltime.split(' ');
-    const hours = parseInt(hoursPart?.replace('h', ''), 10);
-    const minutes = parseInt(minutesPart?.replace('m', ''), 10);
 
-    return (hours * 60) + minutes;
+  // const convertTotalTimeToMinutes = (totaltime) => {
+
+
+  //   const [hoursPart, minutesPart] = totaltime.split(' ');
+  //   const hours = parseInt(hoursPart?.replace('h', ''), 10);
+  //   const minutes = parseInt(minutesPart?.replace('m', ''), 10);
+
+  //   return (hours * 60) + minutes;
+  // };
+  const convertTotalTimeToMinutes = (totaltime) => {
+    console.log(totaltime, "ee")
+    const hoursMatch = totaltime.match(/(\d+)h/);
+    // const minutesMatch = totaltime.match(/(\d+)m/);
+    const minutesMatch = totaltime.match(/(\d+)m/);
+
+    // Extract hours and minutes, defaulting to 0 if not present
+    const hours1 = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+    const minutes1 = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+    console.log(hours1, "match", minutes1)
+    // // const [hoursPart, minutesPart] = totaltime.split(' ');
+    // const hours = parseInt(hoursPart?.replace('h', ''), 10);
+    // const minutes = parseInt(minutesPart?.replace('m', ''), 10);
+
+    return (hours1 * 60) + minutes1;
   };
 
   const convertMinutesToTime = (minutes) => {
@@ -134,7 +176,7 @@ const VehicleStatement = () => {
     const vehicleTotals = {};
 
     data?.forEach(element => {
-      const { vehRegNo, vendortotalkm, vendorTotaltime, Vendor_FULLTotalAmount, advancepaidtovendor, Vendor_BataTotalAmount } = element;
+      const { vehRegNo, vendortotalkm, vendorTotaltime, Vendor_FULLTotalAmount, advancepaidtovendor, Vendor_BataTotalAmount,fuelamount,grandTotal} = element;
 
       if (!vehicleTotals[vehRegNo]) {
         vehicleTotals[vehRegNo] = {
@@ -143,7 +185,10 @@ const VehicleStatement = () => {
           totalTime: 0,
           totalcustomeradvance: 0,
           balance: 0,
-          betaTotalAmount: 0
+          betaTotalAmount: 0,
+          fuelamount:0,
+          grandTotal:0
+       
         };
       }
 
@@ -151,8 +196,12 @@ const VehicleStatement = () => {
       vehicleTotals[vehRegNo].totalPackageAmount += parseFloat(Vendor_FULLTotalAmount) || 0;
       vehicleTotals[vehRegNo].totalcustomeradvance += parseFloat(advancepaidtovendor) || 0;
       vehicleTotals[vehRegNo].betaTotalAmount += parseFloat(Vendor_BataTotalAmount) || 0;
+      vehicleTotals[vehRegNo].fuelamount += parseFloat(fuelamount) || 0;
+      vehicleTotals[vehRegNo].grandTotal += parseFloat(grandTotal) || 0;
+  
 
       const totalTimeMinutes = convertTotalTimeToMinutes(vendorTotaltime);
+      console.log(totalTimeMinutes, "min")
       vehicleTotals[vehRegNo].totalTime += totalTimeMinutes || 0;
     });
 
@@ -164,8 +213,11 @@ const VehicleStatement = () => {
       totalPackageAmount: vehicleTotals[vehRegNo].totalPackageAmount,
       totalTime: convertMinutesToTime(vehicleTotals[vehRegNo].totalTime),
       totalcustomeradvance: vehicleTotals[vehRegNo].totalcustomeradvance,
-      balance: vehicleTotals[vehRegNo].totalPackageAmount - vehicleTotals[vehRegNo].totalcustomeradvance,
+      // balance: vehicleTotals[vehRegNo].totalPackageAmount - vehicleTotals[vehRegNo].totalcustomeradvance,
+      balance: vehicleTotals[vehRegNo].totalPackageAmount,
       betaTotalAmount: vehicleTotals[vehRegNo].betaTotalAmount,
+      fuelamount :vehicleTotals[vehRegNo].fuelamount,
+      grandTotal:vehicleTotals[vehRegNo].grandTotal
     }));
   };
 
@@ -179,10 +231,12 @@ const VehicleStatement = () => {
       accumulator.totalAdvance += current.totalcustomeradvance || 0;
       accumulator.totaalBalance += current.balance || 0;
       accumulator.totalBeta += current.betaTotalAmount || 0;
+      accumulator.grandTotal += current.grandTotal || 0;
+      accumulator.fuelamount += current.fuelamount || 0;
 
 
       return accumulator
-    }, { totalPackageAmount: 0, totalKilometers: 0, totaalBalance: 0, totalTime: 0, totalAdvance: 0, totalBeta: 0 })
+    }, { totalPackageAmount: 0, totalKilometers: 0, totaalBalance: 0, totalTime: 0, totalAdvance: 0, totalBeta: 0,fuelamount : 0,grandTotal:0 })
 
     return result;
   }
@@ -268,108 +322,227 @@ const VehicleStatement = () => {
   // }
 
   // with try catch block
-  const showList = async (e) => {    
+  const showList = async (e) => {
     e.preventDefault();
-    
+    if (data.hireTypes === '') {
+      setCustomerData([]);
+      setWarning(true);
+      setWarningMessgae("Please Select Hire Types");
+      return
+
+    }
+
     try {
-        const response = await axios.get(`${APIURL}/getvehicleInfo`, { params: data });
-        const datas = response.data;    
+      const response = await axios.get(`${APIURL}/getvehicleInfo`, { params: data });
+      const datas = response.data;
 
-        if (data.hireTypes === "Own Vehicle") {
-            const parseData = transformCustomer(datas);
-            const reducedData = reduceFun(parseData);
+      if (data.hireTypes === "Own Vehicle") {
+        if(datas.length > 0){
+        
+        const parseData = transformAtached(datas);
+        // const parseData = transformCustomer(datas);
+        console.log(parseData,"ddd")
+        const reducedData = reduceFun(parseData);
 
-            if (reducedData &&
-                reducedData.totalKilometers !== 0 &&
-                reducedData.totalTime !== 0 &&
-                reducedData.totalPackageAmount !== 0 &&
-                reducedData.totalAdvance !== 0 &&
-                reducedData.totaalBalance !== 0 &&
-                reducedData.totalBeta !== 0) {
-                
-                setTotalValues(prev => ({
-                    ...prev,
-                    fullTotalKM: reducedData.totalKilometers,
-                    fullTotalHR: convertMinutesToTime(reducedData.totalTime),
-                    totalAmount: reducedData.totalPackageAmount,
-                    totalAdvance: reducedData.totalAdvance,
-                    totalBalance: reducedData.totaalBalance,
-                    totalBeta: reducedData.totalBeta,
-                }));
+        if (reducedData &&
+          reducedData.totalKilometers !== 0 &&
+          reducedData.totalTime !== 0 &&
+          reducedData.totalPackageAmount !== 0 &&
+          reducedData.totalAdvance !== 0 &&
+          reducedData.totaalBalance !== 0 &&
+          reducedData.totalBeta !== 0) {
 
-                setSuccess(true);
-                setSuccessMessage("Successfully Listed");
-            } else {
-                setTotalValues({});
-            }
+          setTotalValues(prev => ({
+            ...prev,
+            fullTotalKM: reducedData.totalKilometers,
+            fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+            // totalAmount: reducedData.totalPackageAmount,
+            totalAmount: reducedData.grandTotal,
+            totalAdvance: reducedData.totalAdvance || 0,
+            totalBalance: reducedData.totaalBalance,
+            totalBeta: reducedData.totalBeta,
+            fuelamount : reducedData.fuelamount,
+          }));
 
-            if (parseData.length > 0) {
-                setCustomerData(parseData);
-            } else {
-                setCustomerData([]);
-                setError(true);
-                setErrorMessage("No Data Found");
-            }
-
-        } else if (data.hireTypes === "Attached Vehicle") {
-            const parseData = transformAtached(datas);
-            if (parseData.length > 0) {
-                const reducedData = reduceFun(parseData);
-
-                if (reducedData) {
-                    setTotalValues(prev => ({
-                        ...prev,
-                        fullTotalKM: reducedData.totalKilometers,
-                        fullTotalHR: convertMinutesToTime(reducedData.totalTime),
-                        totalAmount: reducedData.totalPackageAmount,
-                        totalAdvance: reducedData.totalAdvance,
-                        totalBalance: reducedData.totaalBalance,
-                        totalBeta: reducedData.totalBeta,
-                    }));
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Listed");
-                } else {
-                    setTotalValues({});
-                }
-
-                setCustomerData(parseData);
-                setData(prev => ({ ...prev, hireTypes: "Attached Vehicle" }));
-            } else {
-                setCustomerData([]);
-                setError(true);
-                setErrorMessage("No Data Found");
-            }
-
+          setSuccess(true);
+          setSuccessMessage("Successfully Listed");
         } else {
-            setCustomerData([]);
-            setError(true);
-            setErrorMessage("Please Select Hire Types");
+          setTotalValues({});
         }
 
-    } 
+        if (parseData.length > 0) {
+          setCustomerData(parseData);
+        } else {
+          setCustomerData([]);
+          setTotalValues({});
+          setError(true);
+          setErrorMessage("No Data Found");
+        }
+      }
+      else{
+        setCustomerData([]);
+        setTotalValues({});
+        setError(true);
+        setErrorMessage("No Data Found");
+      }
+
+      } else if (data.hireTypes === "Attached Vehicle") {
+        if(datas.length > 0) {
+        const parseData = transformAtached(datas);
+        console.log(parseData,"ddd")
+        if (parseData.length > 0) {
+          const reducedData = reduceFun(parseData);
+          console.log(reducedData,"redu")
+
+          if (reducedData) {
+            setTotalValues(prev => ({
+              ...prev,
+              fullTotalKM: reducedData.totalKilometers,
+              fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+              totalAmount: reducedData.grandTotal,
+              // totalAmount: reducedData.totalPackageAmount,
+              totalAdvance: reducedData.totalAdvance || 0,
+              totalBalance: reducedData.totaalBalance,
+              totalBeta: reducedData.totalBeta,
+              fuelamount : reducedData.fuelamount,
+            }));
+            setSuccess(true);
+            setSuccessMessage("Successfully Listed");
+          } else {
+            setTotalValues({});
+          }
+
+          setCustomerData(parseData);
+          // setData(prev => ({ ...prev, hireTypes: "Attached Vehicle" }));
+        } else {
+          setCustomerData([]);
+          setTotalValues({});
+          setError(true);
+          setErrorMessage("No Data Found");
+        }
+      }
+      else{
+        setCustomerData([]);
+          setTotalValues({});
+          setError(true);
+          setErrorMessage("No Data Found");
+      }
+
+      }
+      else if (data.hireTypes === "Out Side Travels") {
+        if(datas.length > 0){
+
+        
+        const parseData = transformAtached(datas);
+        if (parseData.length > 0) {
+          const reducedData = reduceFun(parseData);
+
+          if (reducedData) {
+            setTotalValues(prev => ({
+              ...prev,
+              fullTotalKM: reducedData.totalKilometers,
+              fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+              totalAmount: reducedData.grandTotal,
+              // totalAmount: reducedData.totalPackageAmount,
+              totalAdvance: reducedData.totalAdvance || 0,
+              totalBalance: reducedData.totaalBalance,
+              totalBeta: reducedData.totalBeta,
+              fuelamount : reducedData.fuelamount,
+            }));
+            setSuccess(true);
+            setSuccessMessage("Successfully Listed");
+          } else {
+            setTotalValues({});
+          }
+
+          setCustomerData(parseData);
+          // setData(prev => ({ ...prev, hireTypes: "lease" }));
+        } else {
+          setCustomerData([]);
+          setTotalValues({});
+          setError(true);
+          setErrorMessage("No Data Found");
+        }
+      }
+      else{
+        setCustomerData([]);
+        setTotalValues({});
+        setError(true);
+        setErrorMessage("No Data Found");
+      }
+
+      } else if (data.hireTypes === "DCO Vehicle") {
+        if(datas.length > 0) {
+        const parseData = transformAtached(datas);
+        if (parseData.length > 0) {
+          const reducedData = reduceFun(parseData);
+
+          if (reducedData) {
+            setTotalValues(prev => ({
+              ...prev,
+              fullTotalKM: reducedData.totalKilometers,
+              fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+              // totalAmount: reducedData.totalPackageAmount,
+              totalAmount: reducedData.grandTotal,
+              totalAdvance: reducedData.totalAdvance || 0,
+              totalBalance: reducedData.totaalBalance,
+              totalBeta: reducedData.totalBeta,
+              fuelamount : reducedData.fuelamount,
+            }));
+            setSuccess(true);
+            setSuccessMessage("Successfully Listed");
+          } else {
+            setTotalValues({});
+          }
+
+          setCustomerData(parseData);
+          // setData(prev => ({ ...prev, hireTypes: "lease" }));
+        }
+        else {
+          setCustomerData([]);
+          setTotalValues({});
+          setError(true);
+          setErrorMessage("No Data Found");
+        }
+      }
+      else{
+        setCustomerData([]);
+        setTotalValues({});
+        setError(true);
+        setErrorMessage("No Data Found");
+      }
+
+      }
+      // else {
+      //         setCustomerData([]);
+      //         setWarning(true);
+      //         setWarningMessgae("Please Select Hire Types");
+      //     }
+
+    }
     // catch (error) {
     //     setError(true);
     //     setErrorMessage("An error occurred: " + error.message);
     // }
     catch (error) {
       // console.error("Error occurredddddd:", error);
-   
+
       // Check if there's no response, indicating a network error
-      if (error.message ) {
-          setError(true);
-          setErrorMessage("Check your Network Connection");
-          // console.log('Network error');
+      if (error.message) {
+        setError(true);
+        setErrorMessage("Check your Network Connection");
+        // console.log('Network error');
       } else if (error.response) {
-          setError(true);
-          // Handle other Axios errors (like 4xx or 5xx responses)
-          setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
+        setError(true);
+        // Handle other Axios errors (like 4xx or 5xx responses)
+        setErrorMessage("Failed to add organization: " + (error.response.data.message || error.message));
       } else {
-          // Fallback for other errors
-          setError(true);
-          setErrorMessage("An unexpected error occurred: " + error.message);
+        // Fallback for other errors
+        setError(true);
+        setErrorMessage("An unexpected error occurred: " + error.message);
       }
-  }
-};
+    }
+  };
 
 
   //Excel
@@ -410,7 +583,7 @@ const VehicleStatement = () => {
         column.alignment = { horizontal: 'center', vertical: 'middle' };
       });
 
-
+      console.log(Customerdata, "GG")
       Customerdata.forEach((Customer, index) => {
         // Add advancepaidtovendor to Vendor_FULLTotalAmount
         worksheet.addRow(Customer);
@@ -427,15 +600,29 @@ const VehicleStatement = () => {
 
 
       // Add the total row
+      // const totalRow = worksheet.addRow({});
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'Vehicle') + 1).value = 'TOTAL';
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'TTime') + 1).value = totalValues?.fullTotalHR;
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'TKMS') + 1).value = totalValues?.fullTotalKM;
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'Amount') + 1).value = totalValues?.totalAmount;
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'D.Advance') + 1).value = totalValues?.totalAdvance;
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'Balance') + 1).value = totalValues?.totalBalance;
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'Beta') + 1).value = totalValues?.totalBeta;
+      // console.log(totalRow,"ooo")
       const totalRow = worksheet.addRow({});
+      // console.log(totalRow,"ooo")
       totalRow.getCell(columns1.findIndex(col => col.header === 'Vehicle') + 1).value = 'TOTAL';
-      totalRow.getCell(columns1.findIndex(col => col.header === 'TTime') + 1).value = totalValues?.fullTotalHR;
+      totalRow.getCell(columns1.findIndex(col => col.header === 'Tot. Time') + 1).value = totalValues?.fullTotalHR;
       totalRow.getCell(columns1.findIndex(col => col.header === 'TKMS') + 1).value = totalValues?.fullTotalKM;
-      totalRow.getCell(columns1.findIndex(col => col.header === 'Amount') + 1).value = totalValues?.totalAmount;
-      totalRow.getCell(columns1.findIndex(col => col.header === 'D.Advance') + 1).value = totalValues?.totalAdvance;
-      totalRow.getCell(columns1.findIndex(col => col.header === 'Balance') + 1).value = totalValues?.totalBalance;
-      totalRow.getCell(columns1.findIndex(col => col.header === 'Beta') + 1).value = totalValues?.totalBeta;
 
+      // totalRow.getCell(columns1.findIndex(col => col.header === 'Amount') + 1).value = totalValues?.totalAmount;
+      totalRow.getCell(columns1.findIndex(col => col.header === 'TotalAmount') + 1).value = totalValues?.totalAmount;
+      totalRow.getCell(columns1.findIndex(col => col.header === 'Driver Advance') + 1).value = totalValues?.totalAdvance;
+//   { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
+      totalRow.getCell(columns1.findIndex(col => col.header === 'Fuel Amount') + 1).value = totalValues?.fuelamount;
+      totalRow.getCell(columns1.findIndex(col => col.header === 'Total Balance') + 1).value = totalValues?.totalBalance;
+      totalRow.getCell(columns1.findIndex(col => col.header === 'Beta') + 1).value = totalValues?.totalBeta;
+      // console.log(totalRow,"ooo")
 
       totalRow.eachCell((cell) => {
         cell.font = { bold: true };
@@ -519,11 +706,13 @@ const VehicleStatement = () => {
     // Create the total row
     const totalRow = customer_colums.map(column => {
       if (column.headerName === 'Vehicle') return "TOTAL";
-      if (column.headerName === 'TTime') return totalValues?.fullTotalHR;
+      if (column.headerName === 'Tot. Time') return totalValues?.fullTotalHR;
       if (column.headerName === 'TKMS') return totalValues?.fullTotalKM;
-      if (column.headerName === 'Amount') return totalValues?.totalAmount;
-      if (column.headerName === 'D.Advance') return totalValues?.totalAdvance;
-      if (column.headerName === 'Balance') return totalValues?.totalBalance;
+      // if (column.headerName === 'Amount') return totalValues?.totalAmount;
+      if (column.headerName === 'TotalAmount') return totalValues?.totalAmount;
+      if (column.headerName === 'Driver Advance') return totalValues?.totalAdvance;
+      if (column.headerName === 'Fuel Amount') return totalValues?.fuelamount;
+      if (column.headerName === 'Total Balance') return totalValues?.totalBalance;
       if (column.headerName === 'Beta') return totalValues?.totalBeta;
 
       return '';
@@ -621,11 +810,18 @@ const VehicleStatement = () => {
                 onChange={(e) => setData(prev => ({ ...prev, hireTypes: e.target.value }))}
               >
                 <MenuItem value="">
-                  <em>None</em>
+                  {/* <em>None</em> */}
                 </MenuItem>
+                {/* <MenuItem value={"Attached Vehicle"}>Attached Vehicle</MenuItem>
+                <MenuItem value={"Own Vehicle"}>Own Vehicle</MenuItem>
+                <MenuItem value={"OutSide Travels"}>OutSide Travels</MenuItem>
+                <MenuItem value={"DCO Vehicle"}>DCO Vehicle</MenuItem> */}
+
                 <MenuItem value={"Attached Vehicle"}>Attached Vehicle</MenuItem>
-                <MenuItem value={"Own  Vehicle"}>Own  Vehicle</MenuItem>
-                <MenuItem value={"lease"}>Lease</MenuItem>
+                <MenuItem value={"Own Vehicle"}>Own Vehicle</MenuItem>
+                <MenuItem value={"OutSide Travels"}>OutSide Travels</MenuItem>
+                <MenuItem value={"DCO Vehicle"}>DCO Vehicle</MenuItem>
+
               </Select>
             </FormControl>
           </div>
@@ -673,19 +869,33 @@ const VehicleStatement = () => {
         </div>
 
         <div className="Download-btn download-btn-purchase" style={{ display: "flex", gap: "15px" }}>
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
+          <div className="input">
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                    Download
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+          </div>
+          <div className='input'>
+            <TextField
+              name="fullTotalHR"
+              className='customer-bill-input'
+              value={totalValues.fullTotalHR || ''}
+              label="Full Total HR"
+              id="ex-fullTotalHR"
+              size="small"
+              autoComplete="password"
+              variant="standard"
+            />
+          </div>
 
           <div className='input'>
             <TextField
@@ -700,13 +910,14 @@ const VehicleStatement = () => {
             />
           </div>
 
+          
           <div className='input'>
             <TextField
-              name="fullTotalHR"
+              name="totalBeta"
               className='customer-bill-input'
-              value={totalValues.fullTotalHR || ''}
-              label="Full Total HR"
-              id="ex-fullTotalHR"
+              value={totalValues.totalBeta || ''}
+              label="Total Beta"
+              id="ex-totalBeta"
               size="small"
               autoComplete="password"
               variant="standard"
@@ -729,9 +940,21 @@ const VehicleStatement = () => {
             <TextField
               name="totalAdvance"
               className='customer-bill-input'
-              value={totalValues.totalAdvance || ''}
+              value={totalValues.totalAdvance || 0}
               label="Total Advance"
               id="ex-totalAdvance"
+              size="small"
+              autoComplete="password"
+              variant="standard"
+            />
+          </div>
+          <div className='input'>
+            <TextField
+              name="Fuelamount"
+              className='customer-bill-input'
+              value={totalValues.fuelamount || ''}
+              label="Total Fuel"
+              id="ex-totalBeta"
               size="small"
               autoComplete="password"
               variant="standard"
@@ -749,7 +972,7 @@ const VehicleStatement = () => {
               variant="standard"
             />
           </div>
-          <div className='input'>
+          {/* <div className='input'>
             <TextField
               name="totalBeta"
               className='customer-bill-input'
@@ -760,7 +983,19 @@ const VehicleStatement = () => {
               autoComplete="password"
               variant="standard"
             />
-          </div>
+          </div> */}
+          {/* <div className='input'>
+            <TextField
+              name="Fuelamount"
+              className='customer-bill-input'
+              value={totalValues.fuelamount || ''}
+              label="Total Fuel"
+              id="ex-totalBeta"
+              size="small"
+              autoComplete="password"
+              variant="standard"
+            />
+          </div> */}
         </div>
         <div className='alert-popup-main'>
           {error &&

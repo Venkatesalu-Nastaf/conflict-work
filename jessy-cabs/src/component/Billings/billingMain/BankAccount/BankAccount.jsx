@@ -99,8 +99,8 @@ const BankAccount = () => {
           </div>
         </div>
 
-        <div>
-          <div className='Scroll-Style bank-account-details-main'>
+        <div style={{width:"100%"}}>
+          <div className='Scroll-Style1 bank-account-details-main'>
             {showAddBankForm && (
               <div className="AddBankContainer-BankAccount">
                 <div className="input-field input-field-bankaccount">

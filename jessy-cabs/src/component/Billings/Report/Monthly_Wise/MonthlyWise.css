@@ -31,3 +31,19 @@
     width: 101vw;
   }
 }
+
+@media screen and (max-width: 691.95px) {
+  .monthly-wise-input-field {
+    justify-content: center;
+  }
+}
+
+.monthly-wise-show-all-btn {
+  left: 0px;
+}
+
+@media screen and (max-width: 936.95) {
+  .monthly-wise-show-all-btn {
+    left: 39px;
+  }
+}

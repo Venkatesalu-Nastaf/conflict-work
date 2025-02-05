@@ -7,6 +7,7 @@ import { FaRupeeSign, FaRegMoneyBillAlt } from "react-icons/fa";
 import useCard from "./useCard";
 import { APIURL } from "../../../url";
 import { BiPaste } from "react-icons/bi";
+import Updates from "../RightSide/Updates/Updates";
 //import numbro from 'numbro';
 import { PdfData } from "../../../Billings/Transfer/TransferReport/PdfContext";
 const apiUrl = APIURL;
@@ -20,7 +21,7 @@ const Cards = () => {
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
   const { totalAmountSum, selectedMonth2, setSelectedMonth2 } = useCard();
 
-  const {selectedMonths,setSelectedMonths} = PdfData();
+  const { selectedMonths, setSelectedMonths } = PdfData();
 
 
   const TotalNumber = (number) => {
@@ -154,7 +155,11 @@ const Cards = () => {
   const storedSums = JSON.parse(localStorage.getItem('sumValues'));
   const TotalValueNumber = TotalNumber(storedSums?.totalAmountSum);
   const PendingValueNumber = PendingNumber(storedSums?.totalBalanceSum);
-  const CollectedValueNumber = CollectedNumber(storedSums?.totalCollectedSum)
+  const CollectedValueNumber = CollectedNumber(storedSums?.totalCollectedSum);
+
+  const TotalValueAmount = storedSums?.totalAmountSum;
+  const PendingValueAmount = storedSums?.totalBalanceSum;
+  const CollectedValueAmout = storedSums?.totalCollectedSum;
 
   const salesData = billinggraph.map(item => ({
     date: item.Billingdate,
@@ -212,7 +217,7 @@ const Cards = () => {
       value: lastMonthTotalAmount.toLocaleString(),
       png: FaRupeeSign,
       series: [{ name: "Sales", data: salesData.map(data => data.value), categories: salesData.map(data => data.date) }],
-      totalamount: TotalValueNumber || 0
+      totalamount: TotalValueAmount || 0
     },
     {
       title: "Recived",
@@ -224,7 +229,7 @@ const Cards = () => {
       value: lastMonthTotalPaid.toLocaleString(),
       png: FaRegMoneyBillAlt,
       series: [{ name: "Revenue", data: revenueData.map(data => data.value), categories: revenueData.map(data => data.date) }],
-      totalamount: CollectedValueNumber || 0
+      totalamount: CollectedValueAmout || 0
     },
     {
       title: "Pending",
@@ -236,7 +241,7 @@ const Cards = () => {
       value: lastMonthTotalPending.toLocaleString(),
       png: BiPaste,
       series: [{ name: "Pending", data: pendingData.map(data => data.value), categories: pendingData.map(data => data.date) }],
-      totalamount: PendingValueNumber || 0
+      totalamount: PendingValueAmount || 0
     },
   ];
 
@@ -289,20 +294,25 @@ const Cards = () => {
           <option value="12">December</option>
         </select>
       </div>
-      <div className="Cards" >
-        {cardData.map((card, index) => (
-          <div className="parentContainer cards-dashboard" key={index} >
-            <Card
-              title={card.title}
-              color={card.color}
-              barValue={card.barValue}
-              value={card.value}
-              png={card.png}
-              series={card.series}
-              amount={card.totalamount}
-            />
-          </div>
-        ))}
+      <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
+        <div className="Cards" >
+          {cardData.map((card, index) => (
+            <div className="parentContainer cards-dashboard" key={index} >
+              <Card
+                title={card.title}
+                color={card.color}
+                barValue={card.barValue}
+                value={card.value}
+                png={card.png}
+                series={card.series}
+                amount={card.totalamount}
+              />
+            </div>
+          ))}
+        </div>
+        {/* <div>
+          <Updates />
+        </div> */}
       </div>
     </div>
   );

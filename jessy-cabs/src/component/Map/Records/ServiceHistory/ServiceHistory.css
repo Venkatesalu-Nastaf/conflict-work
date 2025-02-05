@@ -15,6 +15,12 @@
     zoom: 85%;
 }
 
+@media screen and (max-width: 388.95px) {
+    .service-history-btns {
+        justify-content: center;
+    }
+}
+
 .service-total-history {
     display: block;
     width: 100%;

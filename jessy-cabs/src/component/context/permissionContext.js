@@ -24,9 +24,10 @@ export const PermissionProvider = ({ children }) => {
     const [user_id, setUser_id] = useState("")
     
     const userid = localStorage.getItem('useridno') || user_id;
+    const [vehicleListData,setVehicleListData] = useState([]);
+    const [vehicleSearchDetails,setVehicleSearchDetails] = useState(null);
     // const token=localStorage.getItem("tokensdata")
-    
-
+ 
     useEffect(() => {
         const fetchPermission = async () => {
             try {
@@ -37,6 +38,7 @@ export const PermissionProvider = ({ children }) => {
 
                     const response = await axios.get(`${apiurl}/use-permissions/${userid}`)
                     const data = response.data;
+                    
                     setPermission(data);
                 }
                 else {
@@ -56,7 +58,9 @@ export const PermissionProvider = ({ children }) => {
 
 
     return (
-        <PermissionContext.Provider value={{ permissions, setPermission, makeRender, setMakeRender, setUser_id,openHistoryDrawer, setOpenHistoryDrawer,openmessage, setOpenmessage ,openshare, setOpenshare,openDriverModify, setOpenDriverModify,historyLocation, setHistoryLocation, openAddTag, setOpenAddTag ,opendetailsDrawer, setOpendetailsDrawer,open, setOpen, isDrawerOpen, setIsDrawerOpen}}>
+        <PermissionContext.Provider value={{ permissions, setPermission, makeRender, setMakeRender, setUser_id,openHistoryDrawer, setOpenHistoryDrawer,openmessage, setOpenmessage ,openshare, setOpenshare,openDriverModify, setOpenDriverModify,historyLocation, setHistoryLocation, openAddTag, setOpenAddTag ,opendetailsDrawer, setOpendetailsDrawer,open, setOpen, isDrawerOpen, setIsDrawerOpen,
+            vehicleListData,setVehicleListData,vehicleSearchDetails,setVehicleSearchDetails
+        }}>
             {children}
         </PermissionContext.Provider>
     )

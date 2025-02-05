@@ -20,7 +20,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import MenuItem from '@mui/material/MenuItem';
 import ClearIcon from '@mui/icons-material/Clear';
 import Autocomplete from "@mui/material/Autocomplete";
-import { Customertype } from "../../../Registration/Customer/Customerdata";
+import { Customertypefilterdata  } from "../../../Registration/Customer/Customerdata";
 const MonthlyWise = () => {
     const {
         successMessage,
@@ -46,7 +46,7 @@ const MonthlyWise = () => {
         <div className="MonthlyWise-main">
             <form >
                 <div className='main-content-form'>
-                    <div className='input-field' style={{ flexWrap: 'wrap' }}>
+                    <div className='input-field monthly-wise-input-field' style={{ flexWrap: 'wrap' }}>
                         <div className="input">
                             <div className="icone">
                                 <MdOutlineCalendarMonth color="action" />
@@ -89,7 +89,7 @@ const MonthlyWise = () => {
                                 sx={{ width: "100%" }}
                                 onChange={(event, value) => handleAutocompleteChange(event, value)}
                                 value={customertypedata}
-                                options={Customertype.map((option) => ({
+                                options={Customertypefilterdata.map((option) => ({
                                     label: option.Option,
                                 }))}
                                 renderInput={(params) => {
@@ -101,7 +101,7 @@ const MonthlyWise = () => {
                             />
                         </div>
  
-                        <div className='show-all-button'>
+                        <div className='show-all-button monthly-wise-show-all-btn'>
                             <div className="input" >
                                 <Button variant="outlined" onClick={handleShow} >Show</Button>
                             </div>

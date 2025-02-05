@@ -1,0 +1,50 @@
+
+.table-header-per {
+    position: sticky;
+    top: 71px;
+    z-index: 8;
+}
+
+.td-content {
+    text-align: center;
+    padding: 10px;
+}
+
+.table-header-per>.th-content {
+    text-align: center;
+    background-color: #1976d2;
+    color: #fff;
+}
+
+
+.Booking-table {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-up-down-icon {
+    font-size: 20px;
+}
+
+.user-permission-table-title {
+    font-size: 15px;
+    cursor: pointer;
+}
+
+
+
+.user-permission-table-first-row {
+    padding: 10px 10px;
+}
+
+.user-permission-even-no-rows {
+    background-color: #d6d6d68a;
+}
+
+.full-table-modal{
+    width: 98%;
+}
+
+

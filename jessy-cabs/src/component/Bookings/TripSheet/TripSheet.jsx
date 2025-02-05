@@ -11,6 +11,7 @@ import {
   Apps,
   Status,
   HireTypes,
+  OuststationStatus,
   DocumentType,
   Duty,
   // Email,
@@ -74,6 +75,7 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
+import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -102,10 +104,11 @@ import {
 import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 import { WhatsappShareButton } from 'react-share';
+import LoadingButton from '@mui/lab/LoadingButton';
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "documenttype", headerName: "Document Type", width: 140 },
+  { field: "id", headerName: "Sno", width: 60 },
+  { field: "documenttype", headerName: "Document Type", width: 180 },
   { field: "path", headerName: "Attach Path", width: 160 },
   { field: "tripid", headerName: "TripID", width: 100 },
   { field: "booking_id", headerName: "Booking ID", width: 110 },
@@ -137,19 +140,29 @@ const style = {
 const style1 = {
   position: 'absolute',
   top: '50%',
+  // height: '80%',
   height: 'fit-content',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 1100,
+  // width: 1300,
+  width: "90%",
   bgcolor: 'background.paper',
+  // bgcolor: 'yellow',
   // border: '1px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
+
 const TripSheet = ({ stationName, logoImage }) => {
 
   const stationOptions = stationName?.filter(option => option?.Stationname !== "All")
+
+  const superAdminAccess = localStorage.getItem("SuperAdmin")
+  const filteredStatus =
+  superAdminAccess === "SuperAdmin" || superAdminAccess === "Assistant CFO"
+      ? Status // Show all statuses for superAdmin and CFo
+      : Status.filter((option) => option.optionvalue !== "Billed");
 
   const {
     selectedCustomerData,
@@ -184,7 +197,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     sendEmail,
     setSendEmail,
     handleDriverChange,
-    handleKeyEnterdriver,
+    // handleKeyEnterdriver,
     drivername,
     formValues,
     selectedCustomerDatas,
@@ -195,7 +208,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     setFormData,
     setSelectedCustomerData,
     selectedStatus,
-    setSelectedStatus, 
+    // setSelectedStatus, 
     setCloseTime,
     organizationdata,
     popupOpen,
@@ -220,9 +233,10 @@ const TripSheet = ({ stationName, logoImage }) => {
     handleTripmaplogClick,
     maplogimgpopupOpen,
     row,
-    handleUpload, isHybridCustomer,
+    handleUpload,
+    //  isHybridCustomer,
     handleRefresh,
-    handleButtonClick,
+    // handleButtonClick,
     handleTripRowClick,
     imgpopupOpen,
     selectedRow,
@@ -254,16 +268,42 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
-    handleDeleteMap, copydatalink, setCopyDataLink, conflictenddate,
-    mapPopUp, setMapPopUp, manualTripID
+    handleDeleteMap, copydatalink, setCopyDataLink,
+    //  conflictenddate,
+    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess,
+    setSuccessMessage,
+    // timeToggle,HclKMCalculation,
+
+    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
+    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,
+    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata,
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
-
+  const dayhcl = hybridhclcustomer || hybridhclnavigate
+  // console.log(dayhcl,"dayhcl",hybridhclcustomer,"nnnnn",hybridhclnavigate)
   const apiurl = APIURL
   // Permission ------------ayyan
 
   const { permissions } = useContext(PermissionContext)
   const fileInputRefdata = useRef(null);
+  const reporttimeRef = useRef(null);
+  const closeTimeRef = useRef(null);
+  const shedinTimeRef = useRef(null);
+  const vendorinfoStartRef = useRef(null);
+  const vendorinfoCloseRef = useRef(null);
+  const vendorinfoOverviewStartRef = useRef(null);
+  const vendorinfoOverviewCloseRef = useRef(null);
+
+  const [prevHours, setPrevHours] = useState({
+    shedOutTime:"",
+    startTime:"",
+    closeTime:"",
+    ShedInTime:"",
+    vendorinfoStartTime:"",
+    vendorinfoCloseTime:"",
+    vendorinfoOverviewStartTime:"",
+    vendorinfoOverviewCloseTime:"",
+  });
 
   // const Tripsheet_read = permissions[3]?.read;
   const superpower = localStorage.getItem("SuperAdmin")
@@ -298,34 +338,110 @@ const TripSheet = ({ stationName, logoImage }) => {
     totalDays: '',
   })
 
+  // const handlesignatureimages = async () => {
+  //   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+  //   // await getSignatureImage()
+  //   if (!tripid) {
+
+  //     setWarning(true);
+  //     setWarningMessage("Enter The Tripid")
+  //     return
+  //   }
+  //   const response = await fetch(`${apiurl}/get-signimage/${tripid}`);   /// prob004
+  //   if (response.status === 200) {
+  //     const imageUrl = URL.createObjectURL(await response.blob());
+  //     setSignImageUrl(imageUrl);
+  //     setSignaturepopup(true);
+  //   }
+  //   else if (signimageUrl === "") {
+  //     if (fileInputRefdata.current) {
+  //       fileInputRefdata.current.click();
+  //       setSignatureupload(false)
+
+  //     } else {
+  //       console.error("File input ref is not available");
+  //     }
+  //   } else {
+  //     setSignaturepopup(true);
+  //     getSignatureImage()
+  //   }
+  // }
+
+  /// changes 
+  // const handlesignatureimages = async () => {
+  //   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+
+  //   if (!tripid) {
+  //     setWarning(true);
+  //     setWarningMessage("Enter The Tripid");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await fetch(`${apiurl}/get-signimage/${tripid}`);
+
+  //     if (response.status === 200) {
+  //       const imageUrl = URL.createObjectURL(await response.blob());
+  //       setSignImageUrl(imageUrl);
+  //       setSignaturepopup(true);
+  //       setSuccess(true)
+  //       setWarning(false);
+  //       setSuccessMessage("Signature loaded successfully!");
+  //     } else if (signimageUrl === "") {
+  //       if (fileInputRefdata.current) {
+  //         fileInputRefdata.current.click();
+  //         setSignatureupload(false);
+  //         setSuccessMessage("Please upload a signature image.");
+  //       } else {
+  //         console.error("File input ref is not available");
+  //       }
+  //     } else {
+  //       setSignaturepopup(true);
+  //       getSignatureImage();
+  //       setSuccessMessage("Signature loaded successfully!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching signature image:", error);
+  //     setWarning(true);
+  //     setWarningMessage("Failed to fetch signature image. Please try again.");
+  //   }
+  // };
+
   const handlesignatureimages = async () => {
     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-    // await getSignatureImage()
+
     if (!tripid) {
-
       setWarning(true);
-      setWarningMessage("Enter The Tripid")
-      return
+      setWarningMessage("Enter The Tripid");
+      return;
     }
-    const response = await fetch(`${apiurl}/get-signimage/${tripid}`);   /// prob004
-    if (response.status === 200) {
-      const imageUrl = URL.createObjectURL(await response.blob());
-      setSignImageUrl(imageUrl);
-      setSignaturepopup(true);
-    }
-    else if (signimageUrl === "") {
-      if (fileInputRefdata.current) {
-        fileInputRefdata.current.click();
-        setSignatureupload(false)
 
+    try {
+      const response = await fetch(`${apiurl}/get-signimage/${tripid}`);
+
+      if (response.status === 200) {
+        const imageUrl = URL.createObjectURL(await response.blob());
+        setSignImageUrl(imageUrl); // Update state
+        setSignaturepopup(true);
+        setSuccess(true);
+        setWarning(false);
+        setSuccessMessage("Signature loaded successfully!");
       } else {
-        console.error("File input ref is not available");
+        setSignImageUrl(""); // Clear state
+        if (fileInputRefdata.current) {
+          fileInputRefdata.current.click();
+          setSignatureupload(false);
+          setSuccessMessage("Please upload a signature image.");
+        } else {
+          console.error("File input ref is not available");
+        }
       }
-    } else {
-      setSignaturepopup(true);
-      getSignatureImage()
+    } catch (error) {
+      console.error("Error fetching signature image:", error);
     }
-  }
+  };
+
+
   // const textRef = useRef();
   //   const SignPage = async (event) => {
   //     event.preventDefault();
@@ -411,7 +527,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
   }, [mapPopUpbox])
 
-  const tripID = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+  const tripID = book.tripid || selectedCustomerData.tripid || formData.tripid;
   // const shedOuttime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
   const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
 
@@ -512,33 +628,192 @@ const TripSheet = ({ stationName, logoImage }) => {
   }
 
   const checkForConflict = () => {
+    // console.log(conflictCompareDatas, "data", conflictCompareDatas?.conflictmaxdate)
+    // console.log(conflictenddate, "data2")
     const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
-    const shedOutDate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+    const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
     const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+    const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
+    // const formattedLatestTime = maxDateData.row?.latestTime?.replace(":", ".")
+    // const finalLatestTime = parseFloat(formattedLatestTime).toFixed(2);
+    const shedinTimeFormat = reportTime?.replace(":", ".")
+    const finalshedinTimeFormat = parseFloat(shedinTimeFormat)?.toFixed(2);
+    const lastestTimeFormat = conflictCompareDatas?.latestTime?.replace(":", ".")
+    const leastTimeFormat = conflictCompareDatas?.leastTime?.replace(":", ".")
+    const finallastestTimeFormat = parseFloat(lastestTimeFormat)?.toFixed(2)
+    const finalleastTimeFormat = parseFloat(leastTimeFormat)?.toFixed(2)
+    const parseDate = (dateStr) => {
+      const [day, month, year] = dateStr?.split('-');
+      return new Date(`${year}-${month}-${day}`);
+    };
+    const finalshedouttime = parseDate(shedOutDate || "")
+    const finalmaxtime = parseDate(conflictCompareDatas?.conflictmaxdate || "")
+    finalshedouttime?.setHours(0, 0, 0, 0);
+    finalmaxtime?.setHours(0, 0, 0, 0);
+
+    const finalShedoutFormat = parseFloat(finalshedinTimeFormat).toFixed(2)
+    const finalLatestFormat = parseFloat(finallastestTimeFormat).toFixed(2)
 
     const isEqual = (
-      isEditMode &&
-      conflictenddate?.maxShedInDate !== null &&
-      conflictenddate?.TripIdconflictdate !== null &&
-      conflictenddate?.TripIdconflictdate !== tripID &&
-      !shedindate &&
-      reportTime <= conflictenddate?.conflictTimer &&
-      shedOutDate === conflictenddate?.maxShedInDate
+
+      // isEditMode &&
+      conflictCompareDatas?.conflictmaxdate !== null &&
+      conflictCompareDatas?.tripids !== null &&
+      conflictCompareDatas?.tripids !== tripid &&
+      finalshedouttime.getDate() === finalmaxtime.getDate() &&
+      finalshedouttime.getMonth() === finalmaxtime.getMonth() &&
+      finalshedouttime.getFullYear() === finalmaxtime.getFullYear() &&
+
+      // !shedindate &&
+      // reportTime <= conflictCompareDatas?.latestTime &&
+      parseFloat(finalShedoutFormat || 0) === parseFloat(finalLatestFormat || 0)
+      //  (parseFloat(a || 0) === parseFloat(b || 0) || parseFloat(a) < parseFloat(b) )
+      // shedOutDate === conflictCompareDatas?.conflictmaxdate
 
     )
+
     const isLessThan = (
-      isEditMode &&
-      conflictenddate?.maxShedInDate !== null &&
-      conflictenddate?.TripIdconflictdate !== null &&
-      conflictenddate?.TripIdconflictdate !== tripID &&
-      !shedindate &&
-      shedOutDate < conflictenddate?.maxShedInDate
+      // isEditMode &&
+      conflictCompareDatas?.conflictmaxdate !== null &&
+      conflictCompareDatas?.tripids !== null &&
+      // conflictCompareDatas?.tripids !== tripID &&
+      // !shedindate &&
+      finalshedouttime.getDate() === finalmaxtime.getDate() &&
+      finalshedouttime.getMonth() === finalmaxtime.getMonth() &&
+      finalshedouttime.getFullYear() === finalmaxtime.getFullYear() &&
+      parseFloat(finalShedoutFormat) === parseFloat(finalleastTimeFormat) &&
+      parseFloat(finalShedoutFormat) <= parseFloat(finalLatestFormat)
       // Check if shedOutDate is less than conflictenddate
     );
 
-    return isEqual || isLessThan;
+
+    return isEqual;
   };
 
+
+  const checkingMinimumData = () => {
+
+    const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+    const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
+    const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+    const shedintime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime || '';
+    const shedintimeformat = shedintime.replace(":", ".");
+    const finalshedincalc = parseFloat(shedintimeformat).toFixed(2);
+    const shedoutTimeFormat = reportTime?.replace(":", ".")
+    const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
+    const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';    
+    const parseDate = (dateStr) => {
+      const [day, month, year] = dateStr?.split('-');
+      return new Date(`${year}-${month}-${day}`);
+    };
+    const minDate = dayjs(minTimeData?.date).format("DD-MM-YYYY")
+    const maxDate = dayjs(maxTimeData?.date).format("DD-MM-YYYY")
+    const finalshedoutdate = parseDate(shedOutDate || "");
+    finalshedoutdate?.setHours(0, 0, 0, 0);
+    const finalMindate = parseDate(minDate || "")
+    finalMindate?.setHours(0, 0, 0, 0);
+    const finalMaxdate = parseDate(maxDate || "")
+    finalMaxdate?.setHours(0, 0, 0, 0);
+
+    const equalDateCheck = (
+      minTimeData?.tripid !== undefined &&
+      tripid !== parseInt(minTimeData?.tripid) &&
+      tripid !== parseInt(maxTimeData?.tripid) &&
+      finalshedoutdate.getDate() === finalMindate.getDate() &&
+      finalshedoutdate.getMonth() === finalMindate.getMonth() &&
+      finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
+      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
+      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
+
+    )
+
+    const minimumTimeNotAllowed = (
+      minTimeData?.tripid !== undefined &&
+      tripid !== parseInt(minTimeData?.tripid) &&
+      finalshedoutdate.getDate() === finalMindate.getDate() &&
+      finalshedoutdate.getMonth() === finalMindate.getMonth() &&
+      finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
+      !parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
+      !parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time))
+
+    const maximumTimeNotAllowed = (
+      maxTimeData?.tripid !== undefined &&
+      tripid !== parseInt(maxTimeData?.tripid) &&
+      finalshedoutdate.getDate() === finalMindate.getDate() &&
+      finalshedoutdate.getMonth() === finalMindate.getMonth() &&
+      finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
+      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
+      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
+    )
+
+
+
+    return equalDateCheck || minimumTimeNotAllowed
+  }
+
+  const maxShedInDate = () => {
+    const shedindate = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format("DD-MM-YYYY");
+    const maximumShedInDate = dayjs(shedInTimeData?.[0]?.shedindate || "")?.format("DD-MM-YYYY")
+    const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
+    const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+    const shedoutTimeFormat = reportTime?.replace(":", ".")
+    const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
+
+    const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';
+    const parseDate = (dateStr) => {
+      const [day, month, year] = dateStr?.split('-');
+      return new Date(`${year}-${month}-${day}`);
+    };
+
+    const minDate = dayjs(minTimeData?.date).format("DD-MM-YYYY")
+    const maxDate = dayjs(maxTimeData?.date).format("DD-MM-YYYY")
+    const finalShedInDate = parseDate(shedindate || "")
+    finalShedInDate?.setHours(0, 0, 0, 0);
+    const finalMaximumShedInDate = parseDate(maximumShedInDate || "");
+    finalMaximumShedInDate?.setHours(0, 0, 0, 0);
+    const finalshedoutdate = parseDate(shedOutDate || "");
+    finalshedoutdate?.setHours(0, 0, 0, 0);
+    const finalMindate = parseDate(minDate || "")
+    finalMindate?.setHours(0, 0, 0, 0);
+    const finalMaxdate = parseDate(maxDate || "")
+    finalMaxdate?.setHours(0, 0, 0, 0);
+
+    const shedInDateChecking = (
+      parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
+      shedInTimeData?.length > 0 &&
+      shedindate !== "" &&
+      finalMaximumShedInDate.getDate() !== finalshedoutdate.getDate() &&
+      finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
+      finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
+      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
+    );
+    const shedInDateLessTime = (
+      parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
+      parseFloat(maxTimeData?.tripid) !== tripid &&
+      parseFloat(minTimeData?.tripid) !== tripid &&
+      shedInTimeData?.length > 0 &&
+      shedindate !== "" &&
+      finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
+      finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
+      finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
+      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
+      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time)
+    );
+    const maxminTime = (
+      parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
+      parseFloat(minTimeData?.tripid) !== tripid &&
+      shedInTimeData?.length > 0 &&
+      shedindate !== "" &&
+      finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
+      finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
+      finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
+      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
+      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time)
+    );
+
+    return shedInDateChecking || shedInDateLessTime
+
+  }
 
   const handleCloseMapPopUp = () => {
     setMapPopUp(false)
@@ -547,10 +822,16 @@ const TripSheet = ({ stationName, logoImage }) => {
   const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || formData.closetime;
   const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
   const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
+  const tripShedInDate = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format('YYYY-MM-DD')
   const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
-
+  const tripshedoutdate = dayjs(formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate).format('YYYY-MM-DD')
   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
-
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString?.split(':');
+    return `${hours}.${minutes}`;
+  };
+  const formattedReportTime = formatTime(reportTimeVar || ""); // "20.08"
+  const formattedStartTime = formatTime(startTimeVar || ""); // "17.13"
 
 
   // for modal
@@ -585,7 +866,74 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
     setOpensnack(false); // Close the Snackbar
   };
+  const duty = formData.duty || selectedCustomerData.duty || book.duty;
 
+  // super Admin access
+  // const superAdminAccess = localStorage.getItem("SuperAdmin")
+  // console.log(superAdminAccess,'superadminnn',typeof(superAdminAccess));
+
+  function removeSeconds(time) {
+    const data = time || 0;
+    // Split the time string by colon (:)
+    if (data !== 0) {
+      const timeParts = time?.split(':');
+
+      // Check if there are seconds (length 3), return hours:minutes
+      if (timeParts.length === 3) {
+        return `${timeParts[0]}:${timeParts[1]}`;
+      }
+
+      // If there's only hours:minutes, return it as is
+      return time;
+    }
+
+  }
+
+  const handleConflictPopup = () => {
+    setOpenModalConflict(false)
+  }
+  const handleKMConflictPopup = () => {
+    setOpenConflictKMPopup(false)
+  }
+
+  const handleConflictModal = () => {
+    setOpenModalConflict(true)
+  }
+  const handleKmConflictModal = () => {
+    setOpenConflictKMPopup(true)
+  }
+  const conflictModalbox = (checkingMinimumData() && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null)) || (maxShedInDate() && conflictLoad !== null);
+
+  const signaturedisabled = signimageUrl === "" && temporaryStatus ? true : false
+
+  const shedoutDisabled = temporaryStatus ? hideField : hideField;
+  const shedoutkm = formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout
+  const conflictModalKmBox = (tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && enterTrigger !== null && shedoutkm !== null && shedoutkm !== "")
+  // status for conflict message
+  useEffect(() => {
+    let timeout;
+    console.log(conflictModalbox, "conflictttttttttttt")
+    if (conflictModalbox && emptyState!==true) {
+      timeout = setTimeout(() => {
+        setError(true);
+        setErrorMessage("There is a conflict with this trip sheet in Date and Time");
+      }, 300);
+    }
+    return () => clearTimeout(timeout);
+  }, [conflictModalbox]);
+
+  useEffect(() => {
+    let timeout;
+    if (conflictModalKmBox) {
+      timeout = setTimeout(() => {
+        setError(true);
+        setErrorMessage("There is a conflict with this trip sheet in KM");
+      }, 300);
+    }
+    return () => clearTimeout(timeout);
+  }, [conflictModalKmBox]);
+
+  // console.log(formData.reporttime, selectedCustomerData.reporttime, selectedCustomerDatas.reporttime, book.reporttime, 'rrrrrrrrrrrrrrr');
   return (
     <div className="form-container form-container-tripsheet">
       <div className="Tripsheet-form main-content-container">
@@ -594,7 +942,7 @@ const TripSheet = ({ stationName, logoImage }) => {
             <span className="Title-Name">Trip Sheet</span>
           </p>
           <div className="Tripsheet-header main-content-form">
-            
+
             <div>
               <div className='tripsheet-top-division'>
                 <span className="d-grid">
@@ -605,7 +953,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
                   // onChange={handleChange}
                   />
-                </span> 
+                </span>
 
                 <span className="d-grid">
                   <label>Billing No</label>
@@ -652,11 +1000,34 @@ const TripSheet = ({ stationName, logoImage }) => {
                     className='tripsheet-top-division-status-main'
                     freeSolo
                     sx={{ width: "100%" }}
+                    // disabled={editButtonStatusCheck && superAdminAccess !== "SuperAdmin"}
+                    
+                   disabled={editButtonStatusCheck && superAdminAccess !== "SuperAdmin"}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
                     value={Status.find((option) => option.optionvalue)?.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
-                    options={Status.map((option) => ({
-                      label: option.Option,
-                    }))}
+                    // options={Status.map((option) => ({
+                    //   label: option.Option,
+                    // }))}
+                    // options={
+                    //   !userStatus?.includes('Chennai') && !userStatus?.includes('All')
+                    //     ? OuststationStatus?.map((option) => ({
+                    //       label: option.Option,
+                    //     }))
+                    //     : Status.map((option) => ({
+                    //       label: option.Option,
+                    //     }))
+                    // }
+
+                    options={
+                      !userStatus?.includes('Chennai') && !userStatus?.includes('All')
+                        ? OuststationStatus?.map((option) => ({
+                          label: option.Option,
+                        }))
+                        : filteredStatus.map((option) => ({
+                          label: option.Option,
+                        }))
+                    }
+
                     getOptionLabel={(option) => option.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                     renderInput={(params) => {
                       return (
@@ -675,6 +1046,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     className='tripsheet-top-division-status-main'
                     freeSolo
                     sx={{ width: "100%" }}
+                    disabled={editButtonStatusCheck && superAdminAccess !== "SuperAdmin"}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "apps")}
                     value={Apps.find((option) => option.optionvalue)?.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
                     options={Apps.map((option) => ({
@@ -690,7 +1062,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   />
                 </div>
 
-                <div style={{ display: 'flex' }}>
+                <div className='gt-sms-st' >
                   <FormControlLabel
                     value="smsguest"
                     control={
@@ -714,7 +1086,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     label="Email"
                   />
-
+                  <FormControlLabel
+                    value="DriverSMS"
+                    control={
+                      <Checkbox
+                        size="small"
+                        checked={DriverSMS}
+                        onChange={(event) => setDriverSMS(event.target.checked)}
+                      />
+                    }
+                    label="Driver SMS"
+                  />
                   {isEditMode && !sendEmail && (
                     <>
                       <Button variant="outlined" size="small" onClick={handlecopiedemailcontent}>
@@ -727,7 +1109,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   )}
                 </div>
 
-                <div className="">
+                {/* <div className="" style={{width:"200px"}}>
                   <FormControlLabel
                     value="DriverSMS"
                     control={
@@ -739,7 +1121,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     }
                     label="Driver SMS"
                   />
-                </div>
+                </div> */}
 
                 <div className="input">
                   <TextField
@@ -804,6 +1186,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
                     onChange={handleChange}
                     label="Customer"
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     id="standard-size-customer"
                     required
                     autoComplete="password"
@@ -815,6 +1199,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </div>
                   <TextField
                     name="orderedby"
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    
                     size="small"
                     value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
                     onChange={handleChange}
@@ -834,6 +1221,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
                     onChange={handleChange}
                     label="Mobile"
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     id="standard-size-mobile"
                     size="small"
                     autoComplete="password"
@@ -849,6 +1238,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     name="orderbyemail"
                     value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
                     onChange={handleChange}
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     label="Order By Email"
                     id="orderbyemail"
                     size="small"
@@ -866,6 +1257,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     id="free-solo-department"
                     freeSolo
                     sx={{ width: "100%" }}
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
                     value={stationOptions?.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                     options={stationOptions?.map((option) => ({
@@ -890,6 +1283,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     id="guestname"
                     label="Guest Name"
                     name="guestname"
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
                     onChange={handleChange}
                     size="small"
@@ -905,6 +1300,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     name="guestmobileno"
                     value={formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
                     onChange={handleChange}
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     label="Phone (Cell)"
                     id="guestmobileno"
                     size="small"
@@ -920,6 +1317,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     name="email"
                     value={formData.email || selectedCustomerData.email || formValues.email || book.email || ''}
                     onChange={handleChange}
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     label="Email"
                     id="email"
                     size="small"
@@ -938,6 +1337,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     label="Address"
                     name="address1"
                     multiline
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     rows={2}
                     sx={{ width: "100%" }}
                     autoComplete="new-password"
@@ -954,6 +1355,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     margin="normal"
                     size="small"
                     name="useage"
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
                     onChange={handleChange}
                     label="Usage"
@@ -972,11 +1375,16 @@ const TripSheet = ({ stationName, logoImage }) => {
                     id="free-solo-duty"
                     freeSolo
                     sx={{ width: "100%" }}
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     onChange={(event, value) => {
                       handleAutocompleteChange(event, value, "duty")
                       if (!lockdata) {
                         setVendorinfodata({ ...vendorinfo, vendor_duty: value.label })
                       }
+                      // if (lockdata) {
+                      //   setVendorinfodata({ ...vendorinfo, vendor_duty: value.label })
+                      // }
                     }}
                     value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                     options={Duty.map((option) => ({
@@ -999,6 +1407,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <TextField
                     size="small"
                     name="request"
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
                     onChange={handleChange}
                     label="Request"
@@ -1040,6 +1450,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     name="customercode"
                     value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
                     onChange={handleChange}
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     label="Cost Code"
                     id="customer-customercode"
                     autoComplete="password"
@@ -1055,6 +1467,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
                     onChange={handleChange}
                     name="employeeno"
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                     label="Employee No"
                     id="employeeno"
                     autoComplete="password"
@@ -1070,6 +1484,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         labelId="demo-simple-select-labelescort"
                         id="demo-simple-select"
                         // value={bookingStatus}
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         value={escort}
                         // label="Status"
                         onChange={handleEscortChange}
@@ -1114,6 +1530,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         labelId="demo-simple-select-labelescort"
                         id="demo-simple-select"
                         value={transferreport}
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         onChange={handleTransferChange}
                       >
                         <MenuItem value={'Yes'}>Yes</MenuItem>
@@ -1122,536 +1540,977 @@ const TripSheet = ({ stationName, logoImage }) => {
                     </FormControl>
                   </Box>
                 </div>
+                {emptyState ? "" :
 
-                <div className="input" style={{ display: "grid" }}>
-                  {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
-                    Conflict tripid: {conflictenddate?.TripIdconflictdate}, Time: {conflictenddate?.conflictTimer}, conflictdate:{conflictenddate?.maxShedInDate}
-                  </label>}
-                  <div style={{ display: "flex" }}>
-                    <div className="icone" >
-                      <CalendarMonthIcon color="action" />
+
+
+
+
+
+
+
+
+
+
+
+                  <div className="input" style={{ display: "grid", position: "relative" }}>
+                    <div style={{ top: -24, left: 27, cursor: 'pointer', position: 'absolute', }} onClick={handleConflictModal}>
+                      <p style={{ backgroundColor: conflictModalbox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p>
+
                     </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Shed Out Date"
-                        id="shedOutDate"
-                        value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-                          setKmValue((prev) => ({ ...prev, shedOutDate: date }));
-                          handleDateChange(date, 'shedOutDate')
+                    {/* {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
+                      Conflict tripid: {conflictCompareDatas?.tripids}, Time: {conflictCompareDatas?.latestTime}, conflictdate:{conflictCompareDatas?.conflictmaxdate}
+                    </label>} */}
+                    {/* {checkingMinimumData() && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null) && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
+                      Conflict Date: {dayjs(minTimeData?.date).format("DD-MM-YYYY")} MinTripId:  {minTimeData?.tripid} MinTime : {minTimeData?.time} - MaxTripId : {maxTimeData?.tripid} MaxTime : {maxTimeData?.time}
+                    </label>}
+                    {
+                      maxShedInDate() && conflictLoad !== null &&
+                      <label className='invalid-km' style={{ paddingBottom: '5px' }}> Shed in Date Achieved :{shedInTimeData[0]?.Tripid} {'\n'}  conflict Date :{dayjs(shedInTimeData[0]?.shedindate).format("DD-MM-YYYY")}  MinTripId:  {minTimeData?.tripid} MinTime : {minTimeData?.time} - MaxTripId : {maxTimeData?.tripid} MaxTime : {maxTimeData?.time}   </label>
+                    } */}
+
+                    <Modal
+                      open={openModalConflict}
+                      onClose={handleConflictPopup}
+                      aria-labelledby="modal-title"
+                      aria-describedby="modal-description"
+                    >
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          top: '40%',
+                          left: '14%',
+                          transform: 'translate(-50%, -50%)',
+                          width: '250px',
+                          height: '100px',
+                          bgcolor: 'white',
+                          // border: '1px solid #000',
+                          borderRadius: 2,
+                          textAlign: 'center',
+                          boxShadow: 24,
+                          p: 1,
+                          overflowY: 'auto'
                         }}
                       >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.shedOutDate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
-                  </div>
-                </div>
+                        {conflictModalbox ? (
+                          <>
+                            {checkingMinimumData() &&
+                              conflictLoad !== null &&
+                              (shedInTimeData?.length === 0 || shedInTimeData === null) && (
+                                <label className="invalid-km" >
+                                  Conflict Date: {dayjs(minTimeData?.date).format("DD-MM-YYYY")}<br />
+                                  MinTripId: {minTimeData?.tripid}{'\n'}
+                                  MinTime: {minTimeData?.time} <br />
+                                  MaxTripId: {maxTimeData?.tripid}{'\n'}
+                                  MaxTime: {maxTimeData?.time}
+                                </label>
+                              )}
+                            {maxShedInDate() &&
+                              conflictLoad !== null && (
+                                <label className="invalid-km" >
+                                  Shed in Date Achieved : {shedInTimeData[0]?.Tripid}<br />
+                                  Conflict Date : {dayjs(shedInTimeData[0]?.shedindate).format("DD-MM-YYYY")}<br />
+                                  MinTripId : {minTimeData?.tripid}{'\n'}
+                                  MinTime : {minTimeData?.time} <br />
+                                  MaxTripId : {maxTimeData?.tripid}{'\n'}
+                                  MaxTime : {maxTimeData?.time}
+                                </label>
+                              )}
 
-                <div style={{ display: "grid" }} className="input">
-                  {startDateCheckFun()}
-                  <div style={{ display: "flex" }}>
+                          </>
+                        ) : (
+                          <>
+                            <div className='No-Data'>
+                              <label > No Conflict Data</label>
+
+                            </div>
+                          </>
+
+                        )}
+
+
+                      </Box>
+                    </Modal>
+                    {/* <div style={{ top: -17, left:27 ,cursor:'pointer',position: 'absolute', width: '18px', height: '18px', borderRadius: '50%', backgroundColor: conflictModalbox ? 'red' : 'green' }} onClick={handleConflictModal}>
+                      </div> */}
+
+                    <div style={{ display: "flex", marginTop: '2px' }}>
+
+                      <div className="icone" >
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Shed Out Date"
+                          // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
+                          // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
+
+                          disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+
+                          id="shedOutDate"
+                          value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
+                          // value={formData?.shedOutDate || selectedCustomerData?.shedOutDate}
+
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            setKmValue((prev) => ({ ...prev, shedOutDate: date }));
+                            handleDateChange(date, 'shedOutDate')
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.shedOutDate} />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
+                    </div>
+                  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
+                {emptyState ? "" :
+                  <div style={{ display: "grid" }} className="input">
+                    {startDateCheckFun()}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Report Date"
+                          // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
+                          // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
+                          // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
+                          disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                          id="startdate"
+                          value={
+                            formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
+                          }
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            setKmValue((prev) => ({ ...prev, startDate: date }));
+                            handleDateChange(date, 'startdate');
+
+                            // const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+                            // const startdate = date;
+
+                            // if (shedoutdate && startdate) {
+                            //   const shedoutdateObj = dayjs(shedoutdate);
+                            //   const startdateObj = dayjs(startdate);
+                            //   const totalDays = startdateObj.diff(shedoutdateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, start_totalDays: totalDays }));
+                            // }
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  // <div className="input" style={{ display: "grid" }}>
+                  //   {closeDateCheckFun()}
+                  //   <div style={{ display: "flex" }}>
+                  //     <div className="icone">
+                  //       <CalendarMonthIcon color="action" />
+                  //     </div>
+                  //     <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  //       <DatePicker
+                  //         label="Close Date"
+                  //         id="closedate"
+                  //         disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                  //         value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : dayjs(selectedCustomerData?.shedOutDate).format('DD/MM/YYYY') || book.closedate ? dayjs(book.closedate) : null}
+                  //         format="DD/MM/YYYY"
+                  //         onChange={(date) => {
+
+                  //           handleDateChange(date, 'closedate')
+                  //           setKmValue(prev => ({ ...prev, closeDate: date }))
+
+                  //           // const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
+                  //           // const closeDate = date
+                  //           // const shedindate = kmValue.shedInDate
+
+                  //           // if (startDate && closeDate) {
+                  //           //   const startDateObj = dayjs(startDate);
+                  //           //   const closeDateObj = dayjs(closeDate);
+                  //           //   const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+                  //           //   setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
+                  //           // }
+
+                  //           // if (shedindate && closeDate) {
+                  //           //   const closedateObj = dayjs(closeDate);
+                  //           //   const shedindateObj = dayjs(shedindate);
+                  //           //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                  //           //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                  //           // }
+                  //         }}
+                  //       >
+                  //         {({ inputProps, inputRef }) => (
+                  //           <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate || selectedCustomerData?.shedOutDate} />
+                  //         )}
+                  //       </DatePicker>
+                  //     </LocalizationProvider>
+                  //   </div>
+                  // </div>
+                  <div className="input" style={{ display: "grid" }}>
+                    {closeDateCheckFun()}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Close Date"
+                          id="closedate"
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          value={
+                            formData?.closedate ||
+                              selectedCustomerData?.closedate
+                              ? dayjs(selectedCustomerData.closedate)
+                              : selectedCustomerData?.shedOutDate
+                                ? dayjs(selectedCustomerData.shedOutDate)
+                                : null ||
+                                  book?.closedate ? dayjs(book?.closedate) : dayjs(book?.shedOutDate)
+                          }
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            handleDateChange(date, 'closedate');
+                            setKmValue((prev) => ({ ...prev, closeDate: date }));
+
+                            // Uncomment and use if you want to handle additional calculations
+                            // const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
+                            // const closeDate = date;
+                            // const shedindate = kmValue.shedInDate;
+
+                            // if (startDate && closeDate) {
+                            //   const startDateObj = dayjs(startDate);
+                            //   const closeDateObj = dayjs(closeDate);
+                            //   const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+                            //   setKmValue((prev) => ({ ...prev, close_totalDays: totalDays }));
+                            // }
+
+                            // if (shedindate && closeDate) {
+                            //   const closedateObj = dayjs(closeDate);
+                            //   const shedindateObj = dayjs(shedindate);
+                            //   const totalDays = closedateObj.diff(shedindateObj, 'days') + 1;
+                            //   setKmValue((prev) => ({ ...prev, close_shedOut_totalDays: totalDays }));
+                            // }
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField
+                              {...inputProps}
+                              inputRef={inputRef}
+                              value={
+                                selectedCustomerData?.closedate ||
+                                selectedCustomerData?.shedOutDate ||
+                                ""
+                              }
+                            />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
+                    </div>
+                  </div>
+
+                }
+
+
+                {emptyState ? "" :
+                  <div className="input" style={{ display: "grid" }}>
+
+                    {shedInDateCheck()}
+
+                    <div style={{ display: "flex" }}>
+
+                      <div className="icone">
+                        <CalendarMonthIcon color="action" />
+                      </div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          label="Shed In Date"
+                          id="shedInDate"
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            handleDateChange(date, 'shedInDate')
+
+                            // setKmValue(prev => ({ ...prev, shedInDate: date }))
+                            // const closedate = kmValue.closeDate;
+                            // const shedoutdate = kmValue.shedOutDate;
+                            // const shedindate = date
+
+                            // if (shedoutdate && shedindate) {
+                            //   const shedOutDateObj = dayjs(shedoutdate);
+                            //   const shedindateObj = dayjs(shedindate);
+                            //   const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, shedIn_TotalDays: totalDays }))
+                            // }
+
+                            // if (shedindate && closedate) {
+                            //   const closedateObj = dayjs(closedate);
+                            //   const shedindateObj = dayjs(shedindate);
+                            //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
+                            //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
+                            // }
+
+                          }}
+                        >
+                          {({ inputProps, inputRef }) => (
+                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
+                          )}
+                        </DatePicker>
+                      </LocalizationProvider>
+                    </div>
+
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input">
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
                     </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Report Date"
-                        id="startdate"
-                        value={
-                          formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
-                        }
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-                          setKmValue((prev) => ({ ...prev, startDate: date }));
-                          handleDateChange(date, 'startdate');
-
-                          // const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
-                          // const startdate = date;
-
-                          // if (shedoutdate && startdate) {
-                          //   const shedoutdateObj = dayjs(shedoutdate);
-                          //   const startdateObj = dayjs(startdate);
-                          //   const totalDays = startdateObj.diff(shedoutdateObj, 'days') + 1;
-                          //   setKmValue(prev => ({ ...prev, start_totalDays: totalDays }));
-                          // }
-                        }}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
-                  </div>
-                </div>
-
-                <div className="input" style={{ display: "grid" }}>
-                  {closeDateCheckFun()}
-                  <div style={{ display: "flex" }}>
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
-                    </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Close Date"
-                        id="closedate"
-                        value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-
-                          handleDateChange(date, 'closedate')
-                          setKmValue(prev => ({ ...prev, closeDate: date }))
-
-                          // const startDate = formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
-                          // const closeDate = date
-                          // const shedindate = kmValue.shedInDate
-
-                          // if (startDate && closeDate) {
-                          //   const startDateObj = dayjs(startDate);
-                          //   const closeDateObj = dayjs(closeDate);
-                          //   const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-                          //   setKmValue(prev => ({ ...prev, close_totalDays: totalDays }))
-                          // }
-
-                          // if (shedindate && closeDate) {
-                          //   const closedateObj = dayjs(closeDate);
-                          //   const shedindateObj = dayjs(shedindate);
-                          //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
-                          //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
-                          // }
-                        }}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
-                  </div>
-                </div>
-
-
-                <div className="input" style={{ display: "grid" }}>
-
-                  {shedInDateCheck()}
-
-                  <div style={{ display: "flex" }}>
-
-                    <div className="icone">
-                      <CalendarMonthIcon color="action" />
-                    </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Shed In Date"
-                        id="shedInDate"
-                        value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-                          handleDateChange(date, 'shedInDate')
-
-                          // setKmValue(prev => ({ ...prev, shedInDate: date }))
-                          // const closedate = kmValue.closeDate;
-                          // const shedoutdate = kmValue.shedOutDate;
-                          // const shedindate = date
-
-                          // if (shedoutdate && shedindate) {
-                          //   const shedOutDateObj = dayjs(shedoutdate);
-                          //   const shedindateObj = dayjs(shedindate);
-                          //   const totalDays = shedindateObj.diff(shedOutDateObj, 'days') + 1;
-                          //   setKmValue(prev => ({ ...prev, shedIn_TotalDays: totalDays }))
-                          // }
-
-                          // if (shedindate && closedate) {
-                          //   const closedateObj = dayjs(closedate);
-                          //   const shedindateObj = dayjs(shedindate);
-                          //   const totalDays = shedindateObj.diff(closedateObj, 'days') + 1;
-                          //   setKmValue(prev => ({ ...prev, close_shedOut_totalDays: totalDays }))
-                          // }
-
-                        }}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
-                        )}
-                      </DatePicker>
-                    </LocalizationProvider>
-                  </div>
-
-                </div>
-
-
-                <div className="input">
-                  <div className="icone">
-                    <CalendarMonthIcon color="action" />
-                  </div>
-                  <DemoItem>
-                    <TextField
-                      name="totaldays"
-                      value={calculateTotalDay()}
-                      label="Total Days"
-                      size="small"
-                      type="number"
-                      id="totaldays"
-                      // variant="standard"
-                      autoComplete="password"
-                    />
-                  </DemoItem>
-                </div>
+                    <DemoItem>
+                      <TextField
+                        name="totaldays"
+                        value={calculateTotalDay()}
+                        label="Total Days"
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        size="small"
+                        type="number"
+                        id="totaldays"
+                        // variant="standard"
+                        autoComplete="password"
+                      />
+                    </DemoItem>
+                  </div>}
 
                 <div className="input tripsheet-e-tripsheet-input">
                   <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
                     E-Tripsheet
                   </Button>
                 </div>
-                <div className="input time" style={{ display: "grid" }}>
 
-                  <div style={{ display: "flex", alignItems: 'center' }}>
+                {emptyState ? "" :
+                  <div className="input time" style={{ display: "grid" }}>
+
+                    <div style={{ display: "flex", alignItems: 'center' }}>
+                      <div className='icone icone-margin-adjust'>
+                        <MdOutlineAccessTimeFilled />
+                      </div>
+
+                      <div className='input-type-grid'>
+                        <label>Shed Out Time</label>
+                        <input
+                          type="time"
+                          name="reporttime"
+                          ref={fileInputRefdata}
+
+                          // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
+                          // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
+                          disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                          value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
+                          onChange={(event) => {
+                            let value = event.target.value;
+                            const [hours, minutes] = value.split(':');
+                            const correctedValue = `${hours}:${minutes}`;
+                         
+                            setPrevHours((prevState) => ({
+                              ...prevState,
+                              shedOutTime: hours
+                            }));                          
+                            if (fileInputRefdata.current && (parseInt(minutes)===59) && prevHours?.shedOutTime === hours) {
+                              fileInputRefdata.current.focus();
+                            }
+                           
+                         
+                            setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                            setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
+                            setBook({ ...book, reporttime: event.target.value });
+                            setreporttime(event.target.value);
+                            setNoChangeData({ ...nochangedata, reporttime: event.target.value });
+
+                            // if (!lockdata && dayhcl === 0) {
+                            //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            // }
+                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            // }
+                            if (!lockdata && dayhcl === 0) {
+                              setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            }
+                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input time">
                     <div className='icone icone-margin-adjust'>
                       <MdOutlineAccessTimeFilled />
                     </div>
-
                     <div className='input-type-grid'>
-                      <label>Shed Out Time</label>
+                      {/* Display 'Invalid Time' conditionally based on the report and start times */}
+                      {/* {(tripshedoutdate===startdate && ((reportTimeVar < startTimeVar) ? (
+                      <label>Report Time</label>
+                    ) : (
+                      tripshedoutdate!==startdate || startdate==="" ?  <label>Report Time</label> : <label style={{ color: "red" }}>Invalid Time</label> 
+                    ))) || (!reportTimeVar && <label>Report Time</label>)} */}
+                      {tripshedoutdate === startdate && formattedReportTime < formattedStartTime ? <label>Report Time</label> :
+                        (tripshedoutdate !== startdate || startTimeVar === "" || startTimeVar === undefined ? <label>Report Time</label> : <label style={{ color: "red" }}>Invalid Time</label>)
+                      }
+
+                      {/* Time input without restricting manual entry */}
                       <input
                         type="time"
-                        name="reporttime"
-                        value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
+                        id="starttime"
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
+                        // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
+                        disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        name="starttime"
+                        ref={reporttimeRef}
+                        value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
                         onChange={(event) => {
-                          setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
-                          setBook({ ...book, reporttime: event.target.value });
-                          setreporttime(event.target.value);
-                          if (!lockdata) {
-                            setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                          const rTime = event.target.value;
+                           
+                          let value = event.target.value;
+                          const [hours, minutes] = value.split(':');
+                          console.log(minutes, "timeeeeeeeee",hours,hours.length);  
+                          console.log(hours,"timeeeeeeee++++++",hours);
+                          
+                          setPrevHours((prevState) => ({
+                            ...prevState,
+                            startTime:hours
+                          }));                          
+                          if (reporttimeRef.current && (parseInt(minutes)===59) && prevHours?.startTime === hours) {
+                            reporttimeRef.current.focus();
                           }
+                         
+
+                          // if (reporttimeRef.current && ((hours[0] !== "0") && (minutes[0] !== "0")) ) {
+                          //   reporttimeRef.current.focus();
+                          // }  
+
+                          setBook({ ...book, starttime: rTime });
+                          setStartTime(rTime);
+                          setFormData({ ...formData, starttime: rTime });
+                          setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
+                          setNoChangeData({ ...nochangedata, starttime: rTime });
+                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
+                          }
+                          // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
+                          //   setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
+                          // }
                         }}
                       />
                     </div>
-                  </div>
-                </div>
-                <div className="input time">
-                  <div className='icone icone-margin-adjust'>
-                    <MdOutlineAccessTimeFilled />
-                  </div>
-                  <div className='input-type-grid'>
-                    {/* Display 'Invalid Time' conditionally based on the report and start times */}
-                    {(reportTimeVar && ((reportTimeVar < startTimeVar) ? (
-                      <label>Report Time</label>
-                    ) : (
-                      <label style={{ color: "red" }}>Invalid Time</label>
-                    ))) || (!reportTimeVar && <label>Report Time</label>)}
+                  </div>}
 
-                    {/* Time input without restricting manual entry */}
-                    <input
-                      type="time"
-                      id="starttime"
-                      name="starttime"
-                      value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
-                      onChange={(event) => {
-                        const rTime = event.target.value;
-                        // Allow the input time to be entered without restriction
-                        setBook({ ...book, starttime: rTime });
-                        setStartTime(rTime);
-                        setFormData({ ...formData, starttime: rTime });
-                        setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className="input time">
-                  <div className='icone icone-margin-adjust'>
-                    <MdOutlineAccessTimeFilled />
-                  </div>
-                  <div className='closetime tripsheet-shed-in-time'>
-                    {/* Display 'Invalid Time' conditionally based on the start and close times, and the total number of days */}
-                    {calculateTotalDay() === 1 ? (
-                      startTimeVar && ((startTimeVar < closeTimeVar) ? (
-                        <label>Close Time</label>
+                {emptyState ? "" :
+                  <div className="input time">
+                    <div className='icone icone-margin-adjust'>
+                      <MdOutlineAccessTimeFilled />
+                    </div>
+                    <div className='closetime tripsheet-shed-in-time'>
+                      {/* Display 'Invalid Time' conditionally based on the start and close times, and the total number of days */}
+                      {calculateTotalDay() === 1 ? (
+                        startTimeVar && ((startTimeVar < closeTimeVar) ? (
+                          <label>Close Time</label>
+                        ) : (
+                          <label style={{ color: "red" }}>Invalid Time</label>
+                        ))
+                        || (!startTimeVar && <label>Close Time</label>)
                       ) : (
-                        <label style={{ color: "red" }}>Invalid Time</label>
-                      ))
-                      || (!startTimeVar && <label>Close Time</label>)
-                    ) : (
-                      <label>Close Time</label>
-                    )}
-                    <input
-                      type="time"
-                      name="closetime"
-                      id="closetime"
-                      value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
-                      onChange={(event) => {
-                        const rTime = event.target.value;
+                        <label>Close Time</label>
+                      )}
+                      <input
+                        type="time"
+                        name="closetime"
+                        id="closetime"
+                        ref={closeTimeRef}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                        onChange={(event) => {
+                          const rTime = event.target.value;
+                          let value = event.target.value;
+                          const [hours, minutes] = value.split(':');
+                          console.log(minutes, "timeeeeeeeee",hours,hours.length);
+                        
 
-                        // Update the time without restriction
-                        setSelectedCustomerData({ ...selectedCustomerData, closetime: rTime });
-                        setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: rTime });
-                        setBook({ ...book, closetime: rTime });
-                        setCloseTime(rTime);
-                      }}
-                    />
-                  </div>
+                          setPrevHours((prevState) => ({
+                            ...prevState,
+                            closeTime:hours
+                          }));                          
+                          if (closeTimeRef.current && (parseInt(minutes)===59) && prevHours?.closeTime === hours) {
+                            closeTimeRef.current.focus();
+                          }
+                          // Update the time without restriction
+                          setSelectedCustomerData({ ...selectedCustomerData, closetime: rTime });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: rTime });
+                          setBook({ ...book, closetime: rTime });
+                          setCloseTime(rTime);
+                          setNoChangeData({ ...nochangedata, closetime: rTime });
+                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          }
+                          // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
+                          //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          // }
+                        }}
+                      />
+                    </div>
 
-                </div>
+                  </div>}
 
-
-                <div className="input time">
-                  <div className='icone icone-margin-adjust'>
-                    <MdOutlineAccessTimeFilled />
-                  </div>
-                  <div className='input-type-grid'>
-                    {/* Display the label and invalid message conditionally based on closeTimeVar and day difference */}
-                    {(closeTimeVar && calculateTotalDay() === 1 &&
+                {emptyState ? "" :
+                  <div className="input time">
+                    <div className='icone icone-margin-adjust'>
+                      <MdOutlineAccessTimeFilled />
+                    </div>
+                    <div className='input-type-grid'>
+                      {/* Display the label and invalid message conditionally based on closeTimeVar and day difference */}
+                      {/* {(closeTimeVar && calculateTotalDay() === 1 &&
                       ((closeTimeVar < shedInTimeVar)
                         ? (<label>Shed In Time</label>)
                         : (<label style={{ color: "red" }}>Invalid Time</label>)
                       ))
-                      || (!closeTimeVar && <label>Shed In Time</label>)
-                    }
+                      || ( <label>Shed In Time</label>)
+                    } */}
+                      {(closeTimeVar && calculateTotalDay() === 1 &&
+                        ((closeTimeVar < shedInTimeVar)
+                          ? (<label>Shed In Time</label>)
+                          : (dayhcl === 1 && duty === "Outstation" ? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
+                        ))
+                        || (closeTimeVar >= shedInTimeVar && dayhcl === 1 && duty === "Outstation" && tripShedInDate === closedate ? <label style={{ color: "red" }}>Invalid Time</label> : <label>Shed In Time</label>)
+                      }
 
-                    {calculateTotalDay() > 1 ? (<label>Shed In Time</label>) : ""}
+                      {/* {calculateTotalDay() > 1 ? (<label>Shed In Time</label>) : ""} */}
 
-                    {/* Time input field */}
-                    <input
-                      type="time"
-                      name="shedintime"
-                      value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
-                      onChange={(event) => {
-                        const rTime = event.target.value;
+                      {/* Time input field */}
+                      <input
+                        type="time"
+                        name="shedintime"
+                        ref={shedinTimeRef}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
+                        onChange={(event) => {
+                          const rTime = event.target.value;
+                          let value = event.target.value;
+                          const [hours, minutes] = value.split(':');
+                          console.log(minutes, "timeeeeeeeee",hours,hours.length);
+                        
 
-                        // Always allow input and set the state
-                        setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
-                        setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
-                        setBook({ ...book, shedintime: rTime });
-                        setshedintime(rTime);
+                          setPrevHours((prevState) => ({
+                            ...prevState,
+                            ShedInTime:hours
+                          }));                          
+                          if (shedinTimeRef.current && (parseInt(minutes)===59) && prevHours?.ShedInTime === hours) {
+                            shedinTimeRef.current.focus();
+                          }
+                          // Always allow input and set the state
+                          setSelectedCustomerData({ ...selectedCustomerData, shedintime: rTime });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: rTime });
+                          setBook({ ...book, shedintime: rTime });
+                          setshedintime(rTime);
+                          setNoChangeData({ ...nochangedata, shedintime: rTime });
 
-                        // Check if the day difference is 1, and validate the time
-                        if (calculateTotalDay() === 1) {
-                          if (closeTimeVar && rTime <= closeTimeVar) {
-                            // If the shed in time is invalid, display an error message but allow input
-                            console.log("Invalid Shed In Time");
+                          // Check if the day difference is 1, and validate the time
+                          if (calculateTotalDay() === 1) {
+                            if (closeTimeVar && rTime <= closeTimeVar) {
+                              // If the shed in time is invalid, display an error message but allow input
+                              console.log("Invalid Shed In Time");
+                            } else {
+                              // Valid input, you can handle any additional logic here
+                              if (!lockdata && dayhcl === 0) {
+                                setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                              }
+                              if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                                setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                              }
+                              // if (lockdata && dayhcl === 0) {
+                              //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                              // }
+                              // if (lockdata && dayhcl === 1 && duty === "Outstation") {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                              // }
+                            }
                           } else {
-                            // Valid input, you can handle any additional logic here
-                            if (!lockdata) {
+                            // If the day difference is more than 1, allow any time
+                            // if (!lockdata && dayhcl === 0) {
+                            //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                            // }
+                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                            // }
+                            if (!lockdata && dayhcl === 0) {
                               setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                             }
+                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                            }
+                            // if (lockdata && dayhcl === 0) {
+                            //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                            // }
+                            // if (lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                            // }
                           }
-                        } else {
-                          // If the day difference is more than 1, allow any time
-                          if (!lockdata) {
-                            setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                        }}
+                      />
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input" style={{ position: 'relative', top: '10px' }}>
+                    <div className="icone icone-margin-adjust" style={{ marginBottom: '16px' }}>
+                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                    </div>
+                    <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center', marginBottom: '15px' }}>
+                      <label>Add Time</label>
+                      <div style={{ position: 'relative', top: '-4px' }}>
+                        <TextField
+                          name="additionaltime"
+                          value={
+                            formData.additionaltime ||
+                            book.additionaltime ||
+                            selectedCustomerData.additionaltime ||
+                            additionalTime.additionaltime ||
+                            ''
                           }
-                        }
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="input">
-                  <div className="icone icone-margin-adjust">
-                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
-                  </div>
-                  <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center' }}>
-                    <label>Total Time</label>
-                    <div style={{ position: 'relative', top: '-4px' }}>
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" || outStationHide}
+                          onChange={handleChange}
+                          id="additionaltime"
+                          size="small"
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone icone-margin-adjust">
+                      <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                    </div>
+                    <div className='tripsheet-total-time-div' style={{ display: 'grid', alignItems: 'center', marginTop: '5px' }}>
+                      <label>Total Time</label>
+                      <div style={{ position: 'relative', top: '-4px' }}>
+                        <TextField
+                          name="totaltime"
+                          // value={ calculateTotalTimes()}
+                          value={
+                            (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
+                              (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
+                              ? calculateTotalTimes()
+                              : ""
+                          }
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          // onChange={handleChange}
+                          id="totaltime"
+                          size='small'
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <>
+
+                    <div className="input" style={{ display: "grid", position: "relative" }} >
+                      <div className='kmConflict' onClick={handleKmConflictModal}>
+                        <p style={{ backgroundColor: conflictModalKmBox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p>
+
+                      </div>
+                      {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                      {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
+                      {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
+                      {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
+                      {/* <br></br> */}
+                      {/* {conflictkm?.maximumkm !== 0 && dayhcl === 0 && tripID !== conflictkm.maxtripid && data === undefined && (
+                      (Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && (
+                        <label className='invalid-km' style={{ paddingBottom: '18px' }}>
+                          Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}
+                        </label>
+                      )
+                    )} */}
+                      {/* {data === undefined && tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
+                      <label className='invalid-km'>
+                        Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
+                      </label>
+
+                    )} */}
+
+                      <Modal
+                        open={openConflictKMPopup}
+                        onClose={handleKMConflictPopup}
+                        aria-labelledby="modal-title"
+                        aria-describedby="modal-description"
+                      >
+                        <Box
+                          sx={{
+                            position: 'absolute',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            top: '49%',
+                            left: '7.5%',
+                            // transform: 'translate(-50%, -50%)',
+                            width: '250px',
+                            height: '80px',
+                            bgcolor: 'white',
+                            // border: '1px solid #000',
+                            borderRadius: 2,
+                            textAlign: 'center',
+                            boxShadow: 24,
+                            p: 1,
+                            // overflowY: 'auto'
+                          }}
+                        >
+                          {conflictModalKmBox ? (
+                            <>
+                              <label className='invalid-km'>
+                                Conflict MaxTripid : {maxconflict?.maxTripid}<br />
+                                KM : {maxconflict?.maxconflictdata}
+                              </label>
+
+
+                            </>
+                          ) : (
+                            <>
+                              <div className='No-Data'>
+                                <label > No Conflict Data</label>
+
+                              </div>
+                            </>
+
+                          )}
+
+
+                        </Box>
+                      </Modal>
+
+                      <div style={{ display: "flex" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faRoad} size="lg" />
+                        </div>
+                        <TextField
+                          name="shedout"
+                          value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
+                          onChange={(e) => {
+                            let value = e.target.value;
+                            if (value >= 0) {
+                              handleChange(e)
+                              setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
+                              if (!lockdata && dayhcl === 0) {
+                                setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              }
+                              if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                                setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              }
+                              // if (lockdata && dayhcl === 0) {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              // }
+                              // if (lockdata && dayhcl === 1 && duty === "Outstation") {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              // }
+                            }
+                          }}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          label="Shed Out"
+                          id="shedout"
+                          size='small'
+                          type="number"
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                  </>}
+
+                {emptyState ? "" :
+                  <div style={{ display: "grid" }} className="input">
+                    {dayhcl === 0 && (kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
+
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                      </div>
                       <TextField
-                        name="totaltime"
-                        // value={ calculateTotalTimes()}
-                        value={
-                          (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
-                            (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
-                            ? calculateTotalTimes()
-                            : ""
-                        }
-                        onChange={handleChange}
-                        id="totaltime"
+                        name="startkm"
+                        value={formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm || ''}
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          if (value >= 0) {
+                            handleChange(e)
+                            setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
+                            if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            }
+                            // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            // }
+                          }
+                        }}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        size="small"
+                        label="Start KM"
+                        type="number"
+                        id="startkm"
+                        autoComplete="password"
+                      />
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input" style={{ display: "grid" }}>
+                    {dayhcl === 0 && kmValue.startKMState && (Number(kmValue.closeKMState || formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                      </div>
+                      <TextField
+                        name="closekm"
+                        value={formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm || ''}
+
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          if (value >= 0) {
+                            setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
+                            handleChange(e)
+                            if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            }
+                            // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            // }
+                          }
+                        }}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        label="Close KM"
+                        size="small"
+                        type="number"
+                        id="outlined-start-closekm"
+                        autoComplete="password"
+                      />
+                    </div>
+                  </div>}
+
+                {emptyState ? "" :
+                  <div style={{ display: "grid" }} className="input">
+                    {dayhcl === 0 && kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
+                    <div style={{ display: "flex" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                      </div>
+                      <TextField
+                        name="shedin"
+                        value={formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || ''}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          if (value >= 0) {
+                            setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
+                            handleChange(e)
+                            if (!lockdata && dayhcl === 0) {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            }
+                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            }
+
+                            // if (lockdata && dayhcl === 0) {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            // }
+                            // if (lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            // }
+                          }
+                        }}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        label="Shed In"
+                        type="number"
+                        id="shedin"
                         size='small'
                         autoComplete="password"
                       />
                     </div>
-                  </div>
-                </div>
+                  </div>}
 
-                <div className="input" style={{ position: 'relative', top: '10px' }}>
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faStopwatch} size="lg" />
-                  </div>
-                  <TextField
-                    name="additionaltime"
-                    value={formData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || additionalTime.additionaltime || ''}
-                    onChange={handleChange}
-                    label="Add Time"
-                    id="additionaltime"
-                    // variant="standard"
-                    size='small'
-                    autoComplete="password"
-                  />
-                </div>
-
-                <div className="input" style={{ display: "grid" }} >
-                  {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
-                  {/* {kmValue.shedOutState && customer && !isHybridCustomer && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
-                  {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
-                  {/* {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && ((Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && <lable className='invalid-km'>Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}</lable>)} */}
-                  {/* <br></br> */}
-                  {conflictkm?.maximumkm !== 0 && tripID !== conflictkm.maxtripid && data === undefined && (
-                    (Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(conflictkm.maximumkm)) && (
-                      <label className='invalid-km' style={{ paddingBottom: '18px' }}>
-                        Conflict id: {conflictkm.maxtripid}, KM: {conflictkm.maximumkm}
-                      </label>
-                    )
-                  )}
-                  {data === undefined && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && (
-                    <label className='invalid-km'>
-                      Conflict MaxTripid:{maxconflict?.maxTripid}, KM: {maxconflict?.maxconflictdata}
-                    </label>
-
-                  )}
-                  <div style={{ display: "flex" }}>
+                {emptyState ? "" :
+                  <div className="input">
                     <div className="icone">
                       <FontAwesomeIcon icon={faRoad} size="lg" />
                     </div>
                     <TextField
-                      name="shedout"
-                      value={formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout || ''}
+                      name="shedkm"
+                      value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
                       onChange={(e) => {
-                        let value = e.target.value;
+                        const value = e.target.value;
                         if (value >= 0) {
-                          handleChange(e)
-                          setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
-                          if (!lockdata) {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                          }
-                        }
-                      }}
-
-                      label="Shed Out"
-                      id="shedout"
-                      size='small'
-                      type="number"
-                      autoComplete="password"
-                    />
-                  </div>
-                </div>
-
-
-                <div style={{ display: "grid" }} className="input">
-                  {(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) && ((Number(kmValue.startKMState) || formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm) <= (Number(kmValue.shedOutState) || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout)) && <lable className='invalid-km'>invalid KM</lable>}
-
-                  <div style={{ display: "flex" }}>
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faRoad} size="lg" />
-                    </div>
-                    <TextField
-                      name="startkm"
-                      value={formData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm || ''}
-                      onChange={(e) => {
-                        let value = e.target.value;
-                        if (value >= 0) {
-                          handleChange(e)
-                          setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
-                        }
-                      }}
-                      size="small"
-                      label="Start KM"
-                      type="number"
-                      id="startkm"
-                      autoComplete="password"
-                    />
-                  </div>
-                </div>
-
-                <div className="input" style={{ display: "grid" }}>
-                  {kmValue.startKMState && (Number(kmValue.closeKMState) <= Number(kmValue.startKMState)) && <lable className='invalid-km'>invalid KM</lable>}
-                  <div style={{ display: "flex" }}>
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faRoad} size="lg" />
-                    </div>
-                    <TextField
-                      name="closekm"
-                      value={formData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm || ''}
-
-                      onChange={(e) => {
-                        let value = e.target.value;
-                        if (value >= 0) {
-                          setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
                           handleChange(e)
                         }
                       }}
-                      label="Close KM"
-                      size="small"
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" || outStationHide}
+                      label="Add KM"
                       type="number"
-                      id="outlined-start-closekm"
-                      autoComplete="password"
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: "grid" }} className="input">
-                  {kmValue.closeKMState && (Number(kmValue.shedInState) <= Number(kmValue.closeKMState)) && <lable className='invalid-km'>invalid KM</lable>}
-                  <div style={{ display: "flex" }}>
-                    <div className="icone">
-                      <FontAwesomeIcon icon={faRoad} size="lg" />
-                    </div>
-                    <TextField
-                      name="shedin"
-                      value={formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || ''}
-                      onChange={(e) => {
-                        const value = e.target.value
-                        if (value >= 0) {
-                          setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
-                          handleChange(e)
-                          if (!lockdata) {
-                            setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
-                          }
-                        }
-                      }}
-                      label="Shed In"
-                      type="number"
-                      id="shedin"
+                      id="shedkm"
                       size='small'
                       autoComplete="password"
                     />
-                  </div>
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faRoad} size="lg" />
-                  </div>
-                  <TextField
-                    name="totalkm1"
-                    value={calculateTotalKilometers() || ''}
-                    onChange={handleChange}
-                    label="Total KM"
-                    id="totalkm1"
-                    type="number"
-                    size='small'
-                    autoComplete="password"
-                  />
-                </div>
+                  </div>}
 
-                <div className="input">
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faRoad} size="lg" />
-                  </div>
-                  <TextField
-                    name="shedkm"
-                    value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value >= 0) {
-                        handleChange(e)
-                      }
-                    }}
-                    label="Add KM"
-                    type="number"
-                    id="shedkm"
-                    size='small'
-                    autoComplete="password"
-                  />
-                </div>
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faRoad} size="lg" />
+                    </div>
+                    <TextField
+                      name="totalkm1"
+                      value={calculateTotalKilometers()}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      // onChange={handleChange}
+                      label="Total KM"
+                      id="totalkm1"
+                      type="number"
+                      size='small'
+                      autoComplete="password"
+                    />
+                  </div>}
 
-                <div className="input">
+
+
+                {/* <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faStamp} />
                   </div>
@@ -1664,8 +2523,49 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size='small'
                     autoComplete="password"
                   />
-                </div>
-                <div className="input">
+                </div> */}
+
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faStamp} />
+                    </div>
+                    <TextField
+                      name="permit"
+                      value={formData.permit || selectedCustomerData.permit || book.permit || ''}
+                      onChange={(e) => {
+                        handleChange(e);
+                        const value = e.target.value;
+                        // Automatically update the Vendor permit field
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                        }));
+                        setSelectedCustomerData((prevState) => ({
+                          ...prevState,
+                          vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                        }));
+                        setBook((prevState) => ({
+                          ...prevState,
+                          vpermettovendor: value, // Syncing the value of "permit" to "vpermettovendor"
+                        }));
+                        setVendorinfodata({
+                          ...vendorinfo,
+                          vendor_vpermettovendor: value, vpermettovendor: value
+                        });
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vpermettovendor: value,
+                        }));
+                      }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      label="Permit"
+                      id="permit"
+                      size="small"
+                      autoComplete="password"
+                    />
+                  </div>}
+                {/* <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faSquareParking} />
                   </div>
@@ -1678,8 +2578,46 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size='small'
                     autoComplete="password"
                   />
-                </div>
-                <div className="input">
+                </div> */}
+
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faSquareParking} />
+                    </div>
+                    <TextField
+                      name="parking"
+                      value={formData.parking || selectedCustomerData.parking || book.parking || ''}
+                      onChange={(e) => {
+                        handleChange(e);
+                        const value = e.target.value;
+                        // Syncing the value of "parking" to "vendorparking"
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          vendorparking: value,
+                        }));
+                        setSelectedCustomerData((prevState) => ({
+                          ...prevState,
+                          vendorparking: value,
+                        }));
+                        setVendorinfodata({ ...vendorinfo, vendorparking: value });
+                        setBook((prevState) => ({
+                          ...prevState,
+                          vendorparking: value,
+                        }));
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vendorparking: value,
+                        }));
+                      }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      label="Parking"
+                      id="parking"
+                      size="small"
+                      autoComplete="password"
+                    />
+                  </div>}
+                {/* <div className="input">
                   <div className="icone">
                     <TollTwoToneIcon color="action" />
                   </div>
@@ -1692,7 +2630,46 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size='small'
                     autoComplete="password"
                   />
-                </div>
+                </div> */}
+
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <TollTwoToneIcon color="action" />
+                    </div>
+                    <TextField
+                      name="toll"
+                      value={formData.toll || selectedCustomerData.toll || book.toll || ''}
+                      onChange={(e) => {
+                        handleChange(e);
+                        const value = e.target.value;
+                        // Syncing the value of "toll" to "vendortoll"
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          vendortoll: value,
+                        }));
+                        setSelectedCustomerData((prevState) => ({
+                          ...prevState,
+                          vendortoll: value,
+                        }));
+                        setVendorinfodata({ ...vendorinfo, vendor_toll: value, vendortoll: value })
+                        setBook((prevState) => ({
+                          ...prevState,
+                          vendortoll: value,
+                        }));
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vendortoll: value,
+                        }));
+
+                      }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      label="Toll"
+                      id="toll"
+                      size="small"
+                      autoComplete="password"
+                    />
+                  </div>}
 
                 <React.Fragment>
                   <Dialog
@@ -1752,11 +2729,13 @@ const TripSheet = ({ stationName, logoImage }) => {
                             },
                           }}
                         >
-                          {billing_read ? <Tab>Bill</Tab> : <> </>}
+                          {/* {billing_read ? <Tab>Bill</Tab> : <> </>} */}
+                          {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <Tab>Bill</Tab> : <> </>}
                           <Tab>GPS Attached</Tab>
                           <Tab>Messages</Tab>
                         </TabList>
-                        <TabPanel value={billing_read ? 1 : 0} sx={{ p: 2 }}>
+                        {/* <TabPanel value={billing_read ? 1 : 0} sx={{ p: 2 }}> */}
+                        <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 1 : 0} sx={{ p: 2 }}>
                           <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
                             <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap" }}>
                               <div className='left-buttons'>
@@ -1772,7 +2751,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       <Button
                                         // onClick={handleDeleteMap}
                                         onClick={handleOpen}
-                                        variant="contained" color="primary">
+                                        variant="contained" color="primary" disabled={superAdminAccess !== "SuperAdmin" && temporaryStatus}>
                                         Delete map
                                       </Button>
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
@@ -1832,12 +2811,18 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         <div>
                                           <TextField type="date"
                                             value={selectedMapRow?.date || ''}
-                                            onChange={(e) => setSelectedMapRow({ ...selectedMapRow, date: e.target.value })} />
+                                            onChange={(e) => {
+                                              setSelectedMapRow({ ...selectedMapRow, date: e.target.value })
+                                              setNoChangeData({ ...nochangedata, date: e.target.value })
+                                            }} />
                                         </div>
                                         <div>
                                           <TextField type="time"
                                             value={selectedMapRow?.time || ''}
-                                            onChange={(e) => setSelectedMapRow({ ...selectedMapRow, time: e.target.value })} />
+                                            onChange={(e) => {
+                                              setSelectedMapRow({ ...selectedMapRow, time: e.target.value })
+                                              setNoChangeData({ ...nochangedata, time: e.target.value })
+                                            }} />
                                         </div>
                                         <div>
                                           <Button disabled={!Tripsheet_modify} onClick={handleEditMapDetails}>Submit</Button>
@@ -1846,7 +2831,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     </Box>
                                   </Modal>
                                   <div className="input">
-                                    <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleUpload} className='full-width'>Upload Doc</Button>
+                                    <Button variant="contained" disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} onClick={handleUpload} className='full-width'>Upload Doc</Button>
                                   </div>
                                 </div>
                                 <div className="in-feild" style={{ marginTop: '20px' }}>
@@ -1855,7 +2840,17 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
                                   </div>
                                   <div className="input">
-                                    <Button disabled={!Tripsheet_modify} onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button>
+                                    <Button
+                                      disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && signaturedisabled)}
+                                      // disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
+                                      onClick={handlesignatureimages}
+                                      variant="contained"
+                                      className={`full-width ${signimageUrl ? 'green-button' : ''}`}
+                                      sx={!signimageUrl ? { backgroundColor: '' } : undefined}
+                                    >
+                                      Signature
+                                    </Button>
+                                    {/* <Button disabled={!Tripsheet_modify} onClick={handlesignatureimages} variant="contained" className='full-width'>signature</Button> */}
                                   </div>
                                   <input
                                     ref={fileInputRefdata}
@@ -1903,8 +2898,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </div> */}
                                   <div className="input">
                                     {manualTripID.length > 0 ?
-                                      <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
-                                      <Button variant='outlined' disabled={!Tripsheet_modify} className='full-width' onClick={handleEditMap}>Manual Marking</Button>
+                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
+                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} className='full-width' onClick={handleEditMap} >Manual Marking</Button>
                                     }
                                   </div>
                                 </div>
@@ -1948,11 +2943,18 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       <embed
                                         src={imageUrl}
                                         title="PDF Viewer"
+                                        // style={{
+                                        //   maxWidth: '100%',
+                                        //   maxHeight: '600px',
+                                        //   width: '100%',
+                                        //   height: '600px',
+                                        //   border: 'none',
+                                        // }}
                                         style={{
                                           maxWidth: '100%',
-                                          maxHeight: '600px',
-                                          width: '100%',
-                                          height: '600px',
+                                          maxHeight: '90vh',
+                                          width: '90vw',
+                                          height: '80vh',
                                           border: 'none',
                                         }}
                                       />
@@ -1974,7 +2976,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 <Button
                                   variant="contained"
                                   color="secondary"
-                                  disabled={!Tripsheet_delete}
+                                  // disabled={!Tripsheet_delete}
+                                  disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
                                   onClick={() => {
                                     handleimagedelete(selectedRow);
                                     handleimgPopupClose();
@@ -2056,15 +3059,36 @@ const TripSheet = ({ stationName, logoImage }) => {
 
 
                         </TabPanel>
-                        <TabPanel value={billing_read ? 2 : 1} sx={{ p: 2 }}>
+                        {/* <TabPanel value={billing_read ? 2 : 1} sx={{ p: 2 }}> */}
+                    
+                        <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 2 : 1} sx={{ p: 2 }}>
                           <div className="Customer-Message-Slider">
                             <div className="input-field">
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
 
                                 <div style={{ display: "blocks" }}>
                                   <Button disabled={!Tripsheet_modify} onClick={generateAndCopyLinkdata}>Generate Link</Button>
-                                </div>
-                                {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+                                </div>                               
+                                {/* {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
+                                  <button>Share on WhatsApp</button>
+                                </WhatsappShareButton>
+                                } */}
+
+                                 {appsstatus !== "Closed" && signaturelinkwhatsapp && 
+                                // <WhatsappShareButton url={signaturelinkwhatsapp} title={"Trip details from JESSY CABS Guest Name ${guestname} . Please Click the link to close E-Tripsheet-"} separator=" - ">
+                                <WhatsappShareButton 
+  url={signaturelinkwhatsapp} 
+title={`Trip details from JESSY CABS, 
+  Guest Name: ${formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''} 
+  Contact no: ${formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''} 
+  T.S no: ${formData.tripid || selectedCustomerData.tripid || book.tripid || ''} 
+  Reporting Date: ${(formData.startdate || selectedCustomerData.startdate || book.startdate) ? dayjs(formData.startdate || selectedCustomerData.startdate || book.startdate).format("DD/MM/YYYY") : ''} 
+  Reporting Time: ${(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime) ? dayjs(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime, "HH:mm:ss").format("HH:mm") : ''} 
+  Reporting Address: ${formData.address1 || selectedCustomerData.address1 || book.address1 || ''}.JESSYCABS.
+
+Please Click the link to close E-Tripsheet-`} 
+ separator=" - "
+>
                                   <button>Share on WhatsApp</button>
                                 </WhatsappShareButton>
                                 }
@@ -2095,7 +3119,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                             </div>
                           </div>
                         </TabPanel>
-                        {billing_read ? <TabPanel value={billing_read ? 0 : ""} sx={{ p: 2 }}>
+                        {/* {billing_read ? <TabPanel value={billing_read ? 0 : ""} sx={{ p: 2 }}> */}
+                        {/* {superpower ? <TabPanel value={superpower === "" ? 0 : ""} sx={{ p: 2 }}> */}
+                         {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin")? 0 : ""} sx={{ p: 2 }}>
                           <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }} className='bill-section'>
                             <div className="Customer-Customer-Bill-Slider bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
 
@@ -2107,8 +3133,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     size="small"
                                     id="free-solo-vendor_vehicle"
                                     freeSolo
+                                    disabled={lockdata}
                                     onChange={(event, value) => {
-                                      if (lockdata) {
+                                      if (!lockdata) {
                                         handleAutocompleteVendor(event, value, "vendor_vehicle");
                                       } else {
                                         setWarning(true);
@@ -2131,8 +3158,9 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     id="free-solo-duty"
                                     freeSolo
                                     sx={{ width: "100%" }}
+                                    disabled={lockdata}
                                     onChange={(event, value) => {
-                                      if (lockdata) {
+                                      if (!lockdata) {
                                         handleAutocompleteVendor(event, value, "vendor_duty")
                                       } else {
                                         setWarning(true);
@@ -2171,9 +3199,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                                       value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
                                       format="DD/MM/YYYY"
+                                      disabled={lockdata}
                                       // onChange={(date) => {
                                       onChange={(date) => {
-                                        if (lockdata) {
+                                        if (!lockdata) {
                                           handleDatevendorChange(date, 'vendorshedOutDate')
                                         } else {
                                           setWarning(true);
@@ -2194,14 +3223,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     <DatePicker
                                       label="CloseDate"
                                       id="vendorshedInDate"
-
+                                      disabled={lockdata}
 
                                       // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
                                       value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
                                       format="DD/MM/YYYY"
                                       // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
                                       onChange={(date) => {
-                                        if (lockdata) {
+                                        if (!lockdata) {
                                           handleDatevendorChange(date, 'vendorshedInDate')
                                         } else {
                                           setWarning(true);
@@ -2221,6 +3250,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name="vendortotaldays"
                                     value={calculatevendorTotalDays()}
                                     label="Total Days"
+                                    disabled={lockdata}
                                     size="small"
                                     type="number"
                                     id="totaldays"
@@ -2238,9 +3268,25 @@ const TripSheet = ({ stationName, logoImage }) => {
                                         type="time"
                                         name="venodrreporttime"
                                         value={vendorinfo?.vendorreporttime}
+                                        ref={vendorinfoOverviewStartRef}
+                                        disabled={lockdata}
                                         onChange={(event) => {
-                                          if (lockdata) {
+                                          let value = event.target.value;
+                                          const [hours, minutes] = value.split(':');
+                                          if (!lockdata) {
+                                            setPrevHours((prevState) => ({
+                                              ...prevState,
+                                              // ShedInTime:hours
+                                              vendorinfoOverviewStartTime:hours
+                                            }));                          
+                                            if (vendorinfoOverviewStartRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoOverviewStartTime === hours) {
+                                              vendorinfoOverviewStartRef.current.focus();
+                                            }
                                             setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                            setNoChangeData((prevData) => ({
+                                              ...prevData,
+                                              vendorreporttime: event.target.value
+                                            }));
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -2262,9 +3308,25 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       type="time"
                                       name="vendorshedintime"
                                       value={vendorinfo?.vendorshedintime}
+                                      ref={vendorinfoOverviewCloseRef}
+                                      disabled={lockdata}
                                       onChange={(event) => {
-                                        if (lockdata) {
+                                        let value = event.target.value;
+                                        const [hours, minutes] = value.split(':');
+                                        if (!lockdata) {
+                                          setPrevHours((prevState) => ({
+                                            ...prevState,
+                                            // ShedInTime:hours
+                                            vendorinfoOverviewCloseTime:hours
+                                          }));                          
+                                          if (vendorinfoOverviewCloseRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoOverviewCloseTime === hours) {
+                                            vendorinfoOverviewCloseRef.current.focus();
+                                          }
                                           setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                                          setNoChangeData((prevData) => ({
+                                            ...prevData,
+                                            vendorshedintime: event.target.value
+                                          }));
                                         }
                                         else {
                                           setWarning(true);
@@ -2281,6 +3343,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   <TextField
                                     name="vendorTotaltime"
                                     value={calculatevendorTotalTime() || ""}
+                                    disabled={lockdata}
                                     label="Total Time"
                                     id="pack5"
                                     size="small"
@@ -2295,6 +3358,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name="vendorshedoutkm"
                                     value={vendorinfo?.vendorshedoutkm || ""}
                                     onChange={handlevendorinfofata}
+                                    disabled={lockdata}
                                     label="starting Kilometers"
                                     id="vendorshedoutkm"
                                     size="small"
@@ -2308,6 +3372,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     value={vendorinfo?.vendorshedinkm || ""}
                                     label="closing Kilometers"
                                     onChange={handlevendorinfofata}
+                                    disabled={lockdata}
                                     id="vendorshedinkm"
                                     size="small"
                                     sx={{ my: 1, width: "100%" }}
@@ -2317,6 +3382,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   <TextField
                                     name="vendortotalkm"
                                     value={calculatevendorTotalKilometers() || ''}
+                                    disabled={lockdata}
                                     label="Total kilometers"
                                     id="vendortotalkm"
                                     size="small"
@@ -2330,6 +3396,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name="vendorRemarks"
                                     value={vendorinfo?.vendorRemarks || ""}
                                     onChange={handlevendorinfofata}
+                                    disabled={lockdata}
                                     label="Remarks"
                                     id="vendorRemarks"
                                     size="small"
@@ -2347,15 +3414,19 @@ const TripSheet = ({ stationName, logoImage }) => {
                                 </div>
                               </div>
                             </div>
-                            <div className={Number(superpower) === 1  && billing_read === 1 ? "Customer-Customer-Bill-Slider bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main" : "Customer-Customer-Bill-Slider tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main"}>
+                            {/* <div className={Number(superpower) === 1 && billing_read === 1 ? "Customer-Customer-Bill-Slider bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main" : "Customer-Customer-Bill-Slider tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main"}> */}
+                            <div className={superpower === "SuperAdmin" && superpower === "Assistant CFO" ? "Customer-Customer-Bill-Slider bill-section-second tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main" : "Customer-Customer-Bill-Slider tripsheet-vendor-bill-main tripsheet-popup-vendor-bill-vendor-info-main"}>
                               <p className='bill-topics'>Vendor Bill</p>
                               <div className="input-field">
                                 <div className="input-g">
                                   <TextField
                                     name="Vendor_Calcpackage"
-                                    value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                    // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                    value={vendorinfo?.vendor_duty === "Transfer" || vendorinfo?.vendor_duty === "Outstation" ? vendorinfo?.vendor_duty : vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                    // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
                                     label="Package"
                                     id="Vendor_Calcpackage"
+                                    disabled={lockdatavendorbill}
                                     size="small"
                                     sx={{ m: 1, width: "100%" }}
                                   />
@@ -2365,6 +3436,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name="Vendor_rateAmount"
                                     value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || 0}
                                     size="small"
+                                    disabled={lockdatavendorbill}
                                     label="Amount"
                                     autoComplete="password"
                                     id="Vendor_rateAmount"
@@ -2385,6 +3457,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   <TextField
                                     name="Vendor_ExtraKms"
                                     value={vendorbilldata.Vendor_ExtraKms || vendorpassvalue.Vendor_ExtraKms || 0}
+                                    disabled={lockdatavendorbill}
                                     label="Ex.Km"
                                     id="Vendor_ExtraKms"
                                     onChange={handlevendor_billdata}
@@ -2395,6 +3468,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   <span>@</span>
                                   <TextField size="small"
                                     name='Vendor_ExtraAmountKms'
+                                    disabled={lockdatavendorbill}
                                     value={vendorbilldata.Vendor_ExtraAmountKms || vendorpassvalue.Vendor_ExtraAmountKms || 0}
                                     onChange={handlevendor_billdata}
                                     id="Vendor_ExtraAmountKms"
@@ -2408,6 +3482,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name="Vendor_totalAmountKms"
                                     value={vendorExtarkmTotalAmount || vendorbilldata.Vendor_totalAmountKms || vendorpassvalue.Vendor_totalAmountKms || 0}
                                     size="small"
+                                    disabled={lockdatavendorbill}
                                     label="Amount"
                                     id="Vendor_totalAmountKms"
                                   />
@@ -2420,6 +3495,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name="Vendor_ExtraHours"
                                     value={vendorbilldata.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours || 0}
                                     label="Ex.Hrs"
+                                    disabled={lockdatavendorbill}
                                     onChange={handlevendor_billdata}
                                     id="Vendor_ExtraHours"
                                     size="small"
@@ -2432,6 +3508,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name='Vendor_ExtraAmountHours'
                                     value={vendorbilldata.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0}
                                     onChange={handlevendor_billdata}
+                                    disabled={lockdatavendorbill}
                                     id="Vendor_ExtraAmountHours"
                                   />
 
@@ -2445,6 +3522,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     value={vendorExtrahrTotalAmount || vendorbilldata.Vendor_totalAmountHours || vendorpassvalue.Vendor_totalAmountHours || 0}
                                     size="small"
                                     label="Amount"
+                                    disabled={lockdatavendorbill}
                                     id="Vendor_totalAmountHours"
                                   />
                                 </div>
@@ -2455,6 +3533,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name="Vendor_NightHALT"
                                     value={vendorbilldata.Vendor_NightHALT || vendorpassvalue.Vendor_NightHALT || 0}
                                     onChange={handlevendor_billdata}
+                                    disabled={lockdatavendorbill}
                                     label="Night"
                                     id="Vendor_NightHALT"
                                     size="small"
@@ -2467,6 +3546,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name='Vendor_NightBataAmount'
                                     value={vendorbilldata.Vendor_NightBataAmount || vendorpassvalue.Vendor_NightBataAmount || 0}
                                     onChange={handlevendor_billdata}
+                                    disabled={lockdatavendorbill}
                                     id="Vendor_NightBataAmount"
                                     autoComplete="password"
                                   />
@@ -2479,6 +3559,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name="Vendor_NightbataTotalAmount"
                                     value={vendornightdatatotalAmount || vendorbilldata.Vendor_NightbataTotalAmount || vendorpassvalue.Vendor_NightbataTotalAmount || 0}
                                     size="small"
+                                    disabled={lockdatavendorbill}
                                     label="Amount"
                                     id="Vendor_NightbataTotalAmount"
                                   />
@@ -2491,6 +3572,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     value={vendorbilldata.Vendor_Bata || vendorpassvalue.Vendor_Bata || 0}
                                     onChange={handlevendor_billdata}
                                     label="Bata"
+                                    disabled={lockdatavendorbill}
                                     id="Vendor_Bata"
                                     autoComplete="password"
                                     size="small"
@@ -2503,6 +3585,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name='Vendor_BataAmount'
                                     value={vendorbilldata.Vendor_BataAmount || vendorpassvalue.Vendor_BataAmount || 0}
                                     onChange={handlevendor_billdata}
+                                    disabled={lockdatavendorbill}
                                     id="Vendor_BataAmount"
                                   />
                                 </div>
@@ -2514,6 +3597,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     name="Vendor_BataTotalAmount"
                                     value={vendorbilldata.Vendor_BataTotalAmount || vendorpassvalue.Vendor_BataTotalAmount || 0}
                                     size="small"
+                                    disabled={lockdatavendorbill}
                                     label="Amount"
                                     id="Vendor_BataTotalAmount"
                                   />
@@ -2534,321 +3618,348 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                             </div>
                             {
-                              Number(superpower) === 1  && billing_read === 1 ?
-                            <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
-                              <p className='bill-topics'>Customer Bill</p>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <Inventory2Icon color="action" />
+                              // i command this line already condition work this 
+                              // Number(superpower) === 1 && billing_read === 1 ? 
+                              superpower === "SuperAdmin" &&  superpower !== "Assistant CFO" ?
+                                <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
+                                  <p className='bill-topics'>Customer Bill</p>
+                                  <div className="input-field">
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <Inventory2Icon color="action" />
+                                      </div>
+                                      <TextField
+                                        name="pack"
+                                        // value={selectedCustomerData?.duty === "Transfer" ? "Transfer" : calcPackage || formData.calcPackage || ratepackage || ''}
+                                        value={duty === "Transfer" || duty === "Outstation" ? duty : calcPackage || formData.calcPackage || ratepackage || ''}
+                                        label="Pack"
+                                        id="pack"
+                                        size="small"
+                                        variant="standard"
+                                        disabled={lockdatacustomerbill}
+                                        autoComplete="password"
+                                        sx={{ m: 1, width: "60ch" }}
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faEquals} />
+                                      </div>
+                                      <TextField
+                                        name="amount5"
+                                        value={package_amount || formData.calcPackage || 0}
+                                        size="small"
+                                        label="Amount"
+                                        autoComplete="password"
+                                        id="amount5"
+                                        variant="standard"
+                                        disabled={lockdatacustomerbill}
+                                      />
+                                    </div>
+                                    <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                                      <Checkbox
+                                        size="small"
+                                        checked={lockdatacustomerbill}
+                                        onChange={(event) => setLockDatacustomerBill(event.target.checked)}
+                                      />
+                                      <p style={{ margin: "0px" }}>Lock</p>
+                                    </div>
                                   </div>
-                                  <TextField
-                                    name="pack"
-                                    value={calcPackage || formData.calcPackage || ratepackage || ''}
-                                    label="Pack"
-                                    id="pack"
-                                    size="small"
-                                    variant="standard"
-                                    autoComplete="password"
-                                    sx={{ m: 1, width: "60ch" }}
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faEquals} />
-                                  </div>
-                                  <TextField
-                                    name="amount5"
-                                    value={package_amount || formData.calcPackage || ''}
-                                    size="small"
-                                    label="Amount"
-                                    autoComplete="password"
-                                    id="amount5"
-                                    variant="standard"
-                                  />
-                                </div>
-                                <div className="" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                  <Checkbox
-                                    size="small"
-                                    checked={lockdatacustomerbill}
-                                    onChange={(event) => setLockDatacustomerBill(event.target.checked)}
-                                  />
-                                  <p style={{ margin: "0px" }}>Lock</p>
-                                </div>
-                              </div>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faRoad} />
-                                  </div>
-                                  <TextField
-                                    name="exkm1"
-                                    className='customer-bill-input'
-                                    value={extraKM || formData.calcPackage || 0}
-                                    onChange={(e) => {
-                                      if (lockdatacustomerbill) {
-                                        setExtraKM(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    label="Ex.Km"
-                                    id="ex-exkm1"
-                                    autoComplete="password"
-                                    size="small"
-                                    variant="standard"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <TollTwoToneIcon color="action" />
-                                  </div>
-                                  <TextField size="small"
-                                    name='exkmTkm2'
-                                    className='customer-bill-input'
-                                    value={extrakm_amount || formData.calcPackage || ''}
-                                    onChange={(e) => {
+                                  <div className="input-field">
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faRoad} />
+                                      </div>
+                                      <TextField
+                                        name="exkm1"
+                                        className='customer-bill-input'
+                                        value={extraKM || formData.calcPackage || 0}
+                                        disabled={lockdatacustomerbill}
+                                        onChange={(e) => {
+                                          if (!lockdatacustomerbill) {
+                                            setExtraKM(e.target.value)
+                                            setNoChangeData({ ...nochangedata, extraKM: e.target.value })
 
-                                      if (lockdatacustomerbill) {
-                                        setextrakm_amount(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    id="exkmTkm2"
-                                    variant="standard"
-                                    autoComplete="password"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faEquals} />
-                                  </div>
-                                  <TextField
-                                    name="amount6"
-                                    className='customer-bill-input'
-                                    value={ex_kmAmount || formData.calcPackage || 0}
-                                    size="small"
-                                    label="Amount"
-                                    autoComplete="password"
-                                    id="amount6"
-                                    variant="standard"
-                                  />
-                                </div>
-                              </div>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faStopwatch} />
-                                  </div>
-                                  <TextField
-                                    name="exHrs1"
-                                    className='customer-bill-input'
-                                    value={extraHR || formData.calcPackage || 0}
-                                    onChange={(e) => {
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        label="Ex.Km"
+                                        id="ex-exkm1"
+                                        autoComplete="password"
+                                        size="small"
+                                        variant="standard"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <TollTwoToneIcon color="action" />
+                                      </div>
+                                      <TextField size="small"
+                                        name='exkmTkm2'
+                                        className='customer-bill-input'
+                                        value={extrakm_amount || formData.calcPackage || ''}
+                                        onChange={(e) => {
 
-                                      if (lockdatacustomerbill) {
-                                        setExtraHR(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    label="exHrs1"
-                                    id="ex-exHrs1"
-                                    size="small"
-                                    autoComplete="password"
-                                    variant="standard"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <TollTwoToneIcon color="action" />
+                                          if (!lockdatacustomerbill) {
+                                            setextrakm_amount(e.target.value)
+                                            setNoChangeData({ ...nochangedata, extrakm_amount: e.target.value })
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        id="exkmTkm2"
+                                        variant="standard"
+                                        disabled={lockdatacustomerbill}
+                                        autoComplete="password"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faEquals} />
+                                      </div>
+                                      <TextField
+                                        name="amount6"
+                                        className='customer-bill-input'
+                                        value={ex_kmAmount || formData.calcPackage || 0}
+                                        size="small"
+                                        label="Amount"
+                                        autoComplete="password"
+                                        id="amount6"
+                                        variant="standard"
+                                        disabled={lockdatacustomerbill}
+                                      />
+                                    </div>
                                   </div>
-                                  <TextField
-                                    size="small"
-                                    id="exHrsTHrs2"
-                                    name='exHrsTHrs2'
-                                    className='customer-bill-input'
-                                    value={extrahr_amount || formData.calcPackage || 0}
-                                    onChange={(e) => {
+                                  <div className="input-field">
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faStopwatch} />
+                                      </div>
+                                      <TextField
+                                        name="exHrs1"
+                                        className='customer-bill-input'
+                                        value={extraHR || formData.calcPackage || 0}
+                                        disabled={lockdatacustomerbill}
+                                        onChange={(e) => {
 
-                                      if (lockdatacustomerbill) {
-                                        setextrahr_amount(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    variant="standard"
-                                  />
+                                          if (!lockdatacustomerbill) {
+                                            setExtraHR(e.target.value)
+                                            setNoChangeData({ ...nochangedata, extraHR: e.target.value })
 
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faEquals} />
-                                  </div>
-                                  <TextField
-                                    name="amount7"
-                                    className='customer-bill-input'
-                                    value={ex_hrAmount || formData.calcPackage || 0}
-                                    size="small"
-                                    label="Amount"
-                                    autoComplete="password"
-                                    id="amouamount7"
-                                    variant="standard"
-                                  />
-                                </div>
-                              </div>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faCloudMoon} />
-                                  </div>
-                                  <TextField
-                                    name="night1"
-                                    className='customer-bill-input'
-                                    value={nightBta}
-                                    onChange={(e) => {
-                                      if (lockdatacustomerbill) {
-                                        setNightBeta(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    label="Night"
-                                    id="night1"
-                                    autoComplete="password"
-                                    size="small"
-                                    variant="standard"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <TollTwoToneIcon color="action" />
-                                  </div>
-                                  <TextField
-                                    size="small"
-                                    className='customer-bill-input'
-                                    name='nightThrs2'
-                                    id="nightThrs2"
-                                    value={nightCount}
-                                    onChange={(e) => {
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        label="exHrs1"
+                                        id="ex-exHrs1"
+                                        size="small"
+                                        autoComplete="password"
+                                        variant="standard"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <TollTwoToneIcon color="action" />
+                                      </div>
+                                      <TextField
+                                        size="small"
+                                        id="exHrsTHrs2"
+                                        name='exHrsTHrs2'
+                                        className='customer-bill-input'
+                                        disabled={lockdatacustomerbill}
+                                        value={extrahr_amount || formData.calcPackage || 0}
+                                        onChange={(e) => {
 
-                                      if (lockdatacustomerbill) {
-                                        setNightCount(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    variant="standard"
-                                    autoComplete="password"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faEquals} />
+                                          if (!lockdatacustomerbill) {
+                                            setextrahr_amount(e.target.value)
+                                            setNoChangeData({ ...nochangedata, extrahr_amount: e.target.value })
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        variant="standard"
+                                      />
+
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faEquals} />
+                                      </div>
+                                      <TextField
+                                        name="amount7"
+                                        className='customer-bill-input'
+                                        value={ex_hrAmount || formData.calcPackage || 0}
+                                        size="small"
+                                        label="Amount"
+                                        autoComplete="password"
+                                        id="amouamount7"
+                                        variant="standard"
+                                        disabled={lockdatacustomerbill}
+                                      />
+                                    </div>
                                   </div>
-                                  <TextField
-                                    name="amount8"
-                                    className='customer-bill-input'
-                                    value={night_totalAmount || 0}
-                                    size="small"
-                                    autoComplete="password"
-                                    label="Amount"
-                                    id="amount8"
-                                    variant="standard"
-                                  />
-                                </div>
-                              </div>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                                  <div className="input-field">
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faCloudMoon} />
+                                      </div>
+                                      <TextField
+                                        name="night1"
+                                        className='customer-bill-input'
+                                        value={nightBta}
+                                        disabled={lockdatacustomerbill}
+                                        onChange={(e) => {
+                                          if (!lockdatacustomerbill) {
+                                            setNightBeta(e.target.value)
+                                            setNoChangeData({ ...nochangedata, nightBta: e.target.value })
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        label="Night"
+                                        id="night1"
+                                        autoComplete="password"
+                                        size="small"
+                                        variant="standard"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <TollTwoToneIcon color="action" />
+                                      </div>
+                                      <TextField
+                                        size="small"
+                                        className='customer-bill-input'
+                                        name='nightThrs2'
+                                        id="nightThrs2"
+                                        value={nightCount}
+                                        disabled={lockdatacustomerbill}
+                                        onChange={(e) => {
+
+                                          if (!lockdatacustomerbill) {
+                                            setNightCount(e.target.value)
+                                            setNoChangeData({ ...nochangedata, nightCount: e.target.value })
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        variant="standard"
+                                        autoComplete="password"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faEquals} />
+                                      </div>
+                                      <TextField
+                                        name="amount8"
+                                        className='customer-bill-input'
+                                        disabled={lockdatacustomerbill}
+                                        value={night_totalAmount || 0}
+                                        size="small"
+                                        autoComplete="password"
+                                        label="Amount"
+                                        id="amount8"
+                                        variant="standard"
+                                      />
+                                    </div>
                                   </div>
-                                  <TextField
-                                    name="driverconvenience1"
-                                    className='customer-bill-input'
-                                    value={driverBeta}
-                                    onChange={(e) => {
-                                      if (lockdatacustomerbill) {
-                                        setdriverBeta(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    label="Driver Convenience"
-                                    autoComplete="password"
-                                    id="driverconvenience1"
-                                    size="small"
-                                    variant="standard"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <TollTwoToneIcon color="action" />
-                                  </div>
-                                  <TextField
-                                    size="small"
-                                    name='dtc2'
-                                    id='dtc2'
-                                    className='customer-bill-input'
-                                    value={driverbeta_Count}
-                                    onChange={(e) => {
-                                      if (lockdatacustomerbill) {
-                                        setdriverbeta_Count(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    variant="standard"
-                                    autoComplete="password"
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <div className="icone">
-                                    <FontAwesomeIcon icon={faEquals} />
+                                  <div className="input-field">
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                                      </div>
+                                      <TextField
+                                        name="driverconvenience1"
+                                        className='customer-bill-input'
+                                        value={driverBeta}
+                                        disabled={lockdatacustomerbill}
+                                        onChange={(e) => {
+                                          if (!lockdatacustomerbill) {
+                                            setdriverBeta(e.target.value)
+                                            setNoChangeData({ ...nochangedata, driverBeta: e.target.value })
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        label="Driver Convenience"
+                                        autoComplete="password"
+                                        id="driverconvenience1"
+                                        size="small"
+                                        variant="standard"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <TollTwoToneIcon color="action" />
+                                      </div>
+                                      <TextField
+                                        size="small"
+                                        name='dtc2'
+                                        id='dtc2'
+                                        className='customer-bill-input'
+                                        value={driverbeta_Count}
+                                        disabled={lockdatacustomerbill}
+                                        onChange={(e) => {
+                                          if (!lockdatacustomerbill) {
+                                            setdriverbeta_Count(e.target.value)
+                                            setNoChangeData({ ...nochangedata, driverbeta_Count: e.target.value })
+                                          } else {
+                                            setWarning(true);
+                                            setWarningMessage("IS not locked,locked Enter Again");
+                                          }
+                                        }}
+                                        variant="standard"
+                                        autoComplete="password"
+                                      />
+                                    </div>
+                                    <div className="input-g">
+                                      <div className="icone">
+                                        <FontAwesomeIcon icon={faEquals} />
+                                      </div>
+                                      <TextField
+                                        name="amount9"
+                                        className='customer-bill-input'
+                                        value={driverBeta_amount}
+                                        disabled={lockdatacustomerbill}
+                                        // onChange={(e) => {
+                                        //   if (!lockdatacustomerbill) {
+                                        //     setdriverBeta_amount(e.target.value)
+                                        //   } else {
+                                        //     setWarning(true);
+                                        //     setWarningMessage("IS not locked,locked Enter Again");
+                                        //   }
+                                        // }}
+                                        size="small"
+                                        label="Amount"
+                                        id="amount9"
+                                        autoComplete="password"
+                                        variant="standard"
+                                      />
+                                    </div>
                                   </div>
                                   <TextField
                                     name="amount9"
-                                    className='customer-bill-input'
-                                    value={driverBeta_amount}
-                                    onChange={(e) => {
-                                      if (lockdatacustomerbill) {
-                                        setdriverBeta_amount(e.target.value)
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
+                                    className='total-amount-textfield'
+                                    value={totalcalcAmount || 0}
                                     size="small"
-                                    label="Amount"
-                                    id="amount9"
+                                    label="Total Amount"
+                                    id="amount-amount9"
                                     autoComplete="password"
                                     variant="standard"
                                   />
                                 </div>
-                              </div>
-                              <TextField
-                                name="amount9"
-                                className='total-amount-textfield'
-                                value={totalcalcAmount || 0}
-                                size="small"
-                                label="Total Amount"
-                                id="amount-amount9"
-                                autoComplete="password"
-                                variant="standard"
-                              />
-                            </div>
-                            :
-                            <></>
-}
+                                :
+                                <></>
+                            }
                           </div>
                         </TabPanel>
                           : <></>
@@ -2856,9 +3967,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                       </Tabs>
                       <DialogActions className='tripsheet-cancel-save-btn'>
                         <Button className='tripsheet-cancel-button' onClick={handleClose}>Cancel</Button>
-                        <Button variant="contained" onClick={handleClose} autoFocus>
-                          Save
-                        </Button>
+                        {isEditMode ?
+                          <Button variant="contained" onClick={handleEdit} disabled={superAdminAccess !== "SuperAdmin" && temporaryStatus} >
+                            Save
+                          </Button>
+                          : <></>
+                        }
                       </DialogActions>
                     </div>
 
@@ -2896,7 +4010,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   </Dialog>
                 </React.Fragment>
 
-                <div className="input">
+                {/* <div className="input">
                   <div className="icone">
                     <BackupTableSharpIcon color="action" />
                   </div>
@@ -2908,28 +4022,175 @@ const TripSheet = ({ stationName, logoImage }) => {
                       handleChange(e)
                       setVendorinfodata({ ...vendorinfo, vendor_vpermettovendor: e.target.value })
                     }}
-                    label="Vendor permet"
+                    label="Vendor permit"
                     id="vpermettovendor"
                     autoComplete="password"
                   />
-                </div>
-                <div className="input">
+                </div> */}
+
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <BackupTableSharpIcon color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      name="vpermettovendor"
+                      value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
+                      // onChange={(e) => {
+                      //   handleChange(e);
+                      //   setVendorinfodata({
+                      //     ...vendorinfo,
+                      //     vendor_vpermettovendor: e.target.value,
+                      //   });
+                      // }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      label="Vendor permit"
+                      id="vpermettovendor"
+                      autoComplete="password"
+                    />
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faSquareParking} />
+                    </div>
+                    <TextField
+                      size="small"
+                      name="vendorparking"
+                      value={formData.vendorparking || selectedCustomerData.vendorparking || book.vendorparking || ""}
+                      // onChange={(e) => {
+                      //   handleChange(e)
+                      //   setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
+                      // }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      label="Vendor Parking"
+                      id="vendorparking"
+                      autoComplete="password"
+                    />
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <MinorCrashSharpIcon color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      name="vendortoll"
+                      value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ""}
+                      // onChange={(e) => {
+                      //   handleChange(e)
+                      //   setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
+                      // }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      label="Vendor Toll"
+                      id="vendor-vendortoll"
+                      autoComplete="password"
+                    />
+                  </div>}
+
+
+
+
+
+                <div className="input tripsheet-remarks-division">
                   <div className="icone">
-                    <MinorCrashSharpIcon color="action" />
+                    <MarkChatReadIcon color="action" />
                   </div>
                   <TextField
                     size="small"
-                    name="vendortoll"
-                    value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ""}
+                    name="remark"
+                    value={formData.remark || selectedCustomerData.remark || book.remark || ''}
+                    disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
                     onChange={(e) => {
-                      handleChange(e)
-                      setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
+                      handleChange(e);
+
                     }}
-                    label="Vendor Toll"
-                    id="vendor-vendortoll"
+                    label="Remarks"
+                    id="remark"
+                    multiline
+                    rows={3}
+                    sx={{ width: "100%" }}
                     autoComplete="password"
                   />
                 </div>
+
+                {/* <div className="input">
+                  <div className="icone">
+                <AccountBalanceWalletTwoToneIcon color="action" />
+              </div>
+                  <TextField
+                    name="fuelamount"
+                    value={formData.fuelamount || selectedCustomerData.fuelamount|| book.fuelamount || ''}
+                    onChange={handleChange}
+                    label="Fuel Amount"
+                    id="fuelamount"
+                    size='small'
+                    autoComplete="password"
+                  />
+                </div> */}
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <AccountBalanceWalletTwoToneIcon color="action" />
+                    </div>
+                    <TextField
+                      margin="normal"
+                      size="small"
+                      name="fuelamount"
+                      value={vendorinfo.fuelamount || ""}
+                      onChange={(e) => {
+                        // handleChange(e)
+                        setVendorinfodata({ ...vendorinfo, fuelamount: e.target.value })
+                        setNoChangeData({ ...nochangedata, fuelamount: e.target.value })
+
+                      }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      label="Fuel Amount"
+                      id="fuelamount"
+                      autoComplete="password"
+                      style={{ marginBottom: '20px' }}
+                    />
+                    {/* <TextField
+                          margin="normal"
+                          size="small"
+                          name="fuelamount"
+                          value={formData.fuelamount || selectedCustomerData.fuelamount || book.fuelamount|| ""}
+                          onChange={(e) => {
+                            handleChange(e)
+                            setVendorinfodata({ ...vendorinfo, vendor_fuelamount: e.target.value })
+                          }}
+                          label="Fuel Amount"
+                          id="fuelamount"
+                          autoComplete="password"
+                          style={{marginBottom:'20px'}}
+                        /> */}
+                  </div>}
+
+                {emptyState ? "" :
+                  <div className="input">
+                    <div className="icone">
+                      <CurrencyRupeeTwoToneIcon color="action" />
+                    </div>
+                    <TextField
+                      margin="normal"
+                      size="small"
+                      name="advancepaidtovendor"
+                      value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ""}
+                      onChange={(e) => {
+                        handleChange(e)
+                        setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value, advancepaidtovendor: e.target.value })
+                      }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      label="Vendor Advance"
+                      id="advance-paid-to-vendor"
+                      autoComplete="password"
+                      style={{ marginBottom: '20px' }}
+                    />
+                  </div>}
+
                 <div className="input">
                   <div className="icone">
                     <PaymentsIcon color="action" />
@@ -2942,81 +4203,47 @@ const TripSheet = ({ stationName, logoImage }) => {
                     label="Customer Advance"
                     id="customer-advance"
                     autoComplete="password"
-                  />
-                </div>
-                <div className="input tripsheet-remarks-division">
-                  <div className="icone">
-                    <MarkChatReadIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="remark"
-                    value={formData.remark || selectedCustomerData.remark || book.remark || ''}
-                    onChange={(e) => {
-                      handleChange(e);
-                      if (!lockdata) {
-                        setVendorinfodata((vendorinfo) => ({
-                          ...vendorinfo, vendorRemarks: e.target.value,
-                        }));
-                      }
-                    }}
-                    label="Remark"
-                    id="remark"
-                    multiline
-                    rows={3}
-                    sx={{ width: "100%" }}
-                    autoComplete="password"
+                    // disabled={Number(superpower) === 0}
+                    disabled={superpower !== "SuperAdmin"}
                   />
                 </div>
 
-                <div className="input">
-                  <div className="icone">
-                    <CurrencyRupeeTwoToneIcon color="action" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    name="advancepaidtovendor"
-                    value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ""}
-                    onChange={(e) => {
-                      handleChange(e)
-                      setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value })
-                    }}
-                    label="Vendor Advance"
-                    id="advance-paid-to-vendor"
-                    autoComplete="password"
-                  />
-                </div>
 
-                <div className="input tripsheet-calculate-input">
-                  <Button variant="contained"
-                    onClick={() => {
-                      handleClickOpen();
-                    }}
-                  >
-                    calculate
-                  </Button>
-                </div>
-                <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
-                  <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                    {isHybridCustomer ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculateTotalTimes()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalkm={calculateTotalKilometers() || ''} />)
-                      : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculateTotalTimes()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalkm={calculateTotalKilometers() || ''} />)}
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handlePopupClose} variant="contained" color="primary">
-                      Cancel
+                <div style={{ display: "flex", flexWrap: "nowrap" }}>
+
+
+
+                  <div className="input-tripsheet-btns-overview tripsheet-calculate-input">
+                    <Button variant="contained"
+                      onClick={() => {
+                        handleClickOpen();
+                      }}
+                    >
+                      Overview
                     </Button>
-                  </DialogActions>
-                </Dialog>
-                <div className="input">
-                  {isEditMode ? (<>
-                    <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
-                  </>
-                  ) : (
-                    <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
-                  )}
+                  </div>
+                  <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                    <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                      {dayhcl === 1 ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)
+                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)}
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handlePopupClose} variant="contained" color="primary">
+                        Cancel
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                  <div className="input-tripsheet-btns">
+                    {isEditMode ? (<>
+                      {/* <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button> */}
+                      {editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <LoadingButton loading={isEditload} variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</LoadingButton>}
+                    </>
+                    ) : (
+                      // <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
+                      <LoadingButton loading={isAddload} variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</LoadingButton>
+                    )}
+                  </div>
                 </div>
-
                 <div className="vehicle-confirm-tripsheet">
                   <div className="input-field input-feild-vehicle-confirm">
                     <div className="input">
@@ -3029,6 +4256,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="free-solo-hireTypes"
                         freeSolo
                         sx={{ width: "100%" }}
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
                         value={
                           formData.hireTypes ||
@@ -3057,6 +4286,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="free-solo-travelmail"
                         freeSolo
                         sx={{ width: "100%" }}
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
                         value={
                           selectedCustomerDatas.travelsname ||
@@ -3091,9 +4322,20 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="vehicleRegno"
                         freeSolo
                         sx={{ width: "100%" }}
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
-                        onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
-                        onKeyDown={handleKeyEnterdriver}
+                        // onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
+                        onInputChange={(event, value) => {
+                          if (event !== null) {
+                            setNoChangeData({ ...nochangedata, vehRegNo: value });
+                          }
+                          handleVehicleChange(event, value, "vehRegNo")
+                        }
+
+                        }
+
+                        // onKeyDown={handleKeyEnterdriver}
                         value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}  // Reflect vehRegNo correctly
                         options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}  // Map vehRegNo from data
                         getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''}  // Adjust to show input value or option label
@@ -3126,6 +4368,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         onChange={(event, value) =>
                           handleAutocompleteChange(event, value, "vehType")
                         }
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         renderInput={(params) => {
                           return (
                             <TextField {...params} name='vehType' label="Vehicle Type" inputRef={params.inputRef} />
@@ -3144,6 +4388,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                         freeSolo
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName2")}
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         value={selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
                         options={vehileNames?.map((option) => ({
                           label: option,
@@ -3164,8 +4410,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="free-solo-vehileName"
                         freeSolo
                         sx={{ width: "100%" }}
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         onChange={(event, value) => {
-                          handleAutocompleteChange(event, value,"vehicleName");
+                          handleAutocompleteChange(event, value, "vehicleName");
                           if (!lockdata && value) {
                             setVendorinfodata({ ...vendorinfo, vendor_vehicle: value.label })
                           }
@@ -3195,6 +4443,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                           selectedCustomerDatas.Groups ||
                           book.Groups || ""
                         }
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         options={GroupTypes ? GroupTypes.map((option) => ({ label: option?.Option })) : []} // Fallback to an empty array
                         onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
                         renderInput={(params) => {
@@ -3206,7 +4456,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                       />
                     </div>
 
-                    <div className="input">
+                    {/* <div className="input">
                       <div className="icone">
                         <AirlineSeatReclineExtraIcon color="action" />
                       </div>
@@ -3216,9 +4466,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="driverName"
                         freeSolo
                         sx={{ width: "100%" }}
+                        disabled={hideField && superAdminAccess !== "SuperAdmin"}
                         onChange={(event, value) => handleDriverChange(event, value, "driverName")}
                         onInputChange={(event, value) => handleDriverChange(event, value, "driverName")} // Handle manual input
-                        onKeyDown={handleKeyEnterdriver}
+                        // onKeyDown={handleKeyEnterdriver}
                         value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
                         options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
                         getOptionLabel={(option) => (typeof option === "string" ? option : option.label || "")} // Adjust to show input value or option label
@@ -3244,6 +4495,43 @@ const TripSheet = ({ stationName, logoImage }) => {
                           />
                         )}
                       />
+                    </div> */}
+
+                    <div className="input">
+                      <div className="icone">
+                        <AirlineSeatReclineExtraIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="driverName"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        onChange={(event, value) => handleDriverChange(event, value, "driverName")}
+                        // onInputChange={(event, value) => handleDriverChange(event, value, "driverName")} 
+                        onInputChange={(event, value) => {
+                          if (event !== null) {
+                            setNoChangeData({ ...nochangedata, driverName: value });
+                          }
+                          handleDriverChange(event, value, "driverName")
+                        }
+
+                        }  // Handle manual input
+                        // onKeyDown={handleKeyEnterdriver}
+                        value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
+                        options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
+                        getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''} // Adjust to show input value or option label
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Driver Name"
+                            name="driverName"
+                            inputRef={params.inputRef}
+                          />
+                        )}
+                      />
                     </div>
 
                     <div className="input">
@@ -3254,9 +4542,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                         name="mobileNo"
                         className='full-width'
                         value={
-                          // selectedCustomerData.mobileNo ||
+                          selectedCustomerData.mobileNo ||
                           book.mobileNo || selectedCustomerDatas.mobileNo || formData.mobileNo || ""}
                         onChange={handleChange}
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         label="Driver Phone"
                         id="mobileNo"
                         size='small'
@@ -3279,299 +4569,342 @@ const TripSheet = ({ stationName, logoImage }) => {
                           ""
                         }
                         onChange={handleChange}
+                        // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
                         label="Travels Email"
                         id="travelsemail"
                         size='small'
                       />
                     </div>
                   </div>
-                  {selectedStatus === "Temporary Closed" && (      
-                  <div className='box-Container'>
-                              <div className='bill-topi'style={{paddingBottom:'6px',paddingLeft:'250px',fontWeight: 600,fontSize:'20px',}}>Vendor Info</div>
-                              <div className="input-field tripsheet-vendor-info-first-input-field">
-                                <div className="input-g">
-                                  <Autocomplete
-                                    fullWidth
-                                    size="small"
-                                    id="free-solo-vendor_vehicle"
-                                    freeSolo
-                                    onChange={(event, value) => {
-                                      if (lockdata) {
-                                        handleAutocompleteVendor(event, value, "vendor_vehicle");
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    value={vendorinfo?.vendor_vehicle}
-                                    options={vehileNames?.map((option) => ({
-                                      label: option,
-                                    }))}
-                                    renderInput={(params) => (
-                                      <TextField {...params} label="Rate For - F3" name="vendor_vehicle" inputRef={params.inputRef} />
-                                    )}
-                                  />
-                                </div>
-                                <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                  <Autocomplete
-                                    fullWidth
-                                    size="small"
-                                    id="free-solo-duty"
-                                    freeSolo
-                                    sx={{ width: "100%" }}
-                                    onChange={(event, value) => {
-                                      if (lockdata) {
-                                        handleAutocompleteVendor(event, value, "vendor_duty")
-                                      } else {
-                                        setWarning(true);
-                                        setWarningMessage("IS not locked,locked Enter Again");
-                                      }
-                                    }}
-                                    value={vendorinfo?.vendor_duty}
-                                    options={Duty.map((option) => ({
-                                      label: option.option,
-                                    }))}
-                                    renderInput={(params) => {
-                                      return (
-                                        <TextField {...params} label="Duty" autoComplete="password" name="vendor_duty" inputRef={params.inputRef} />
-                                      )
+                  {/* {selectedStatus === "Temporary Closed" && ( */}
+                  {selectedStatuschecking === "Temporary Closed" && (
+                    <div className='box-Container'>
+                      <div className='bill-topi' style={{ paddingBottom: '6px', paddingLeft: '250px', fontWeight: 600, fontSize: '20px', }}>Vendor Info</div>
+                      <div className="input-field tripsheet-vendor-info-first-input-field">
+                        <div className="input-g">
+                          <Autocomplete
+                            fullWidth
+                            size="small"
+                            id="free-solo-vendor_vehicle"
+                            freeSolo
+
+                            onChange={(event, value) => {
+                              if (!lockdata) {
+                                handleAutocompleteVendor(event, value, "vendor_vehicle");
+                              } else {
+                                setWarning(true);
+                                setWarningMessage("IS not locked,locked Enter Again");
+                              }
+                            }}
+
+                            // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                           disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                            value={vendorinfo?.vendor_vehicle}
+                            options={vehileNames?.map((option) => ({
+                              label: option,
+                            }))}
+                            renderInput={(params) => (
+                              <TextField {...params} label="Rate For - F3" name="vendor_vehicle" inputRef={params.inputRef} />
+                            )}
+                          />
+                        </div>
+                        <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                          <Autocomplete
+                            fullWidth
+                            size="small"
+                            id="free-solo-duty"
+                            freeSolo
+                            sx={{ width: "100%" }}
+
+                            // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                            onChange={(event, value) => {
+                              if (!lockdata) {
+                                handleAutocompleteVendor(event, value, "vendor_duty")
+                              } else {
+                                setWarning(true);
+                                setWarningMessage("IS not locked,locked Enter Again");
+                              }
+                            }}
+                            value={vendorinfo?.vendor_duty}
+                            options={Duty.map((option) => ({
+                              label: option.option,
+                            }))}
+                            renderInput={(params) => {
+                              return (
+                                <TextField {...params} label="Duty" autoComplete="password" name="vendor_duty" inputRef={params.inputRef} />
+                              )
+                            }
+                            }
+                          />
+                        </div>
+
+                        <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
+                          <Checkbox
+                            size="small"
+                            checked={lockdata}
+                            onChange={(event) => setLockData(event.target.checked)}
+                          />
+                          <p style={{ margin: "0px" }}>Lock</p>
+                        </div>
+                      </div>
+                      <div className="input-field" style={{ marginTop: '15px' }}>
+                        <div className="input-g" >
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              label="StartDate"
+                              id="vendorshedOutDate"
+                              disabled={lockdata}
+                              // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                              value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
+                              format="DD/MM/YYYY"
+                              // onChange={(date) => {
+                              onChange={(date) => {
+                                if (!lockdata) {
+                                  handleDatevendorChange(date, 'vendorshedOutDate')
+                                } else {
+                                  setWarning(true);
+                                  setWarningMessage("IS not locked,locked Enter Again");
+                                }
+                              }}
+                            >
+                              {({ inputProps, inputRef }) => (
+                                <TextField {...inputProps} inputRef={inputRef} />
+                              )}
+                            </DatePicker>
+                          </LocalizationProvider>
+
+                        </div>
+                        <div className="input-g">
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                            <DatePicker
+                              label="CloseDate"
+                              id="vendorshedInDate"
+                              disabled={lockdata}
+
+
+                              // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                              value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
+                              format="DD/MM/YYYY"
+                              // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
+                              onChange={(date) => {
+                                if (!lockdata) {
+                                  handleDatevendorChange(date, 'vendorshedInDate')
+                                } else {
+                                  setWarning(true);
+                                  setWarningMessage("IS not locked,locked Enter Again");
+                                }
+                              }}
+                            >
+                              {({ inputProps, inputRef }) => (
+                                <TextField {...inputProps} inputRef={inputRef} />
+                              )}
+                            </DatePicker>
+                          </LocalizationProvider>
+                        </div>
+
+                        <div className="input-g">
+                          <TextField
+                            name="vendortotaldays"
+                            value={calculatevendorTotalDays()}
+                            label="Total Days"
+                            disabled={lockdata}
+                            size="small"
+                            type="number"
+                            id="totaldays"
+                            sx={{ width: "100%" }}
+                          />
+                        </div>
+
+                      </div>
+                      <div className="input-field" style={{ marginBottom: '10px' }}>
+                        <div className="input-g">
+                          <div className='input-g'>
+                            <div className='full-width' style={{ display: 'grid' }}>
+                              <label>Start Time</label>
+                              <input
+                                type="time"
+                                name="venodrreporttime"
+                                disabled={lockdata}
+                                value={vendorinfo?.vendorreporttime}
+                                ref={vendorinfoStartRef}
+                                onChange={(event) => {
+                                  let value = event.target.value;
+                                  const [hours, minutes] = value.split(':');
+                                  if (!lockdata) {
+                                    setPrevHours((prevState) => ({
+                                      ...prevState,
+                                      vendorinfoStartTime:hours
+                                    }));                          
+                                    if (vendorinfoStartRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoStartTime === hours) {
+                                      vendorinfoStartRef.current.focus();
                                     }
-                                    }
-                                  />
-                                </div>
+                                    setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
+                                    setNoChangeData({ ...nochangedata, vendorreporttime: event.target.value });
+                                  } else {
+                                    setWarning(true);
+                                    setWarningMessage("IS not locked,locked Enter Again");
+                                  }
+                                }}
 
-                                <div className="input-g" style={{ alignItems: "center", gap: "5px", display: "flex" }}>
-                                  <Checkbox
-                                    size="small"
-                                    checked={lockdata}
-                                    onChange={(event) => setLockData(event.target.checked)}
-                                  />
-                                  <p style={{ margin: "0px" }}>Lock</p>
-                                </div>
-                              </div>
-                              <div className="input-field" style={{ marginTop: '15px' }}>
-                                <div className="input-g" >
-                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                      label="StartDate"
-                                      id="vendorshedOutDate"
-                                      // value={vendorinfo.shedOutDate ? dayjs(vendorinfo.shedOutDate) : null || vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
-                                      value={vendorinfo.vendorshedOutDate ? dayjs(vendorinfo.vendorshedOutDate) : null}
-                                      format="DD/MM/YYYY"
-                                      // onChange={(date) => {
-                                      onChange={(date) => {
-                                        if (lockdata) {
-                                          handleDatevendorChange(date, 'vendorshedOutDate')
-                                        } else {
-                                          setWarning(true);
-                                          setWarningMessage("IS not locked,locked Enter Again");
-                                        }
-                                      }}
-                                    >
-                                      {({ inputProps, inputRef }) => (
-                                        <TextField {...inputProps} inputRef={inputRef} />
-                                      )}
-                                    </DatePicker>
-                                  </LocalizationProvider>
-
-                                </div>
-                                <div className="input-g">
-                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                    <DatePicker
-                                      label="CloseDate"
-                                      id="vendorshedInDate"
-
-
-                                      // value={vendorinfo.shedInDate ? dayjs(vendorinfo.shedInDate) : null || vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
-                                      value={vendorinfo.vendorshedInDate ? dayjs(vendorinfo.vendorshedInDate) : null}
-                                      format="DD/MM/YYYY"
-                                      // onChange={(date) => { handleDatevendorChange(date, 'vendorshedInDate') }}
-                                      onChange={(date) => {
-                                        if (lockdata) {
-                                          handleDatevendorChange(date, 'vendorshedInDate')
-                                        } else {
-                                          setWarning(true);
-                                          setWarningMessage("IS not locked,locked Enter Again");
-                                        }
-                                      }}
-                                    >
-                                      {({ inputProps, inputRef }) => (
-                                        <TextField {...inputProps} inputRef={inputRef} />
-                                      )}
-                                    </DatePicker>
-                                  </LocalizationProvider>
-                                </div>
-
-                                <div className="input-g">
-                                  <TextField
-                                    name="vendortotaldays"
-                                    value={calculatevendorTotalDays()}
-                                    label="Total Days"
-                                    size="small"
-                                    type="number"
-                                    id="totaldays"
-                                    sx={{ width: "100%" }}
-                                  />
-                                </div>
-
-                              </div>
-                              <div className="input-field" style={{ marginBottom: '10px' }}>
-                                <div className="input-g">
-                                  <div className='input-g'>
-                                    <div className='full-width' style={{ display: 'grid' }}>
-                                      <label>Start Time</label>
-                                      <input
-                                        type="time"
-                                        name="venodrreporttime"
-                                        value={vendorinfo?.vendorreporttime}
-                                        onChange={(event) => {
-                                          if (lockdata) {
-                                            setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
-                                          } else {
-                                            setWarning(true);
-                                            setWarningMessage("IS not locked,locked Enter Again");
-                                          }
-                                        }}
-
-                                        style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
-                                      // }}
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="input-g">
-                                  <div className='closetime tripsheet-shed-in-time'>
-                                    <label>Close Time</label>
-
-                                    <input
-                                      type="time"
-                                      name="vendorshedintime"
-                                      value={vendorinfo?.vendorshedintime}
-                                      onChange={(event) => {
-                                        if (lockdata) {
-                                          setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
-                                        }
-                                        else {
-                                          setWarning(true);
-                                          setWarningMessage("IS not locked,locked Enter Again");
-                                        }
-                                      }
-                                      }
-                                      style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
-                                    />
-                                  </div>
-                                </div>
-                                <div className="input-g">
-                                  <TextField
-                                    name="vendorTotaltime"
-                                    value={calculatevendorTotalTime() || ""}
-                                    label="Total Time"
-                                    id="pack5"
-                                    size="small"
-                                    sx={{ width: "100%" }}
-                                  />
-                                </div>
-                              </div>
-                              <div className="input-field">
-
-                                <div className="input-g" >
-                                  <TextField
-                                    name="vendorshedoutkm"
-                                    value={vendorinfo?.vendorshedoutkm || ""}
-                                    onChange={handlevendorinfofata}
-                                    label="starting Kilometers"
-                                    id="vendorshedoutkm"
-                                    size="small"
-                                    sx={{ my: 1, width: "100%" }}
-                                  />
-                                </div>
-                                                                                                
-                                <div className="input-g" >
-                                  <TextField
-                                    name="vendorshedinkm"
-                                    value={vendorinfo?.vendorshedinkm || ""}
-                                    label="closing Kilometers"
-                                    onChange={handlevendorinfofata}
-                                    id="vendorshedinkm"
-                                    size="small"
-                                    sx={{ my: 1, width: "100%" }}
-                                  />
-                                </div>
-                                <div className="input-g" >
-                                  <TextField
-                                    name="vendortotalkm"
-                                    value={calculatevendorTotalKilometers() || ''}
-                                    label="Total kilometers"
-                                    id="vendortotalkm"
-                                    size="small"
-                                    sx={{ my: 1, width: "100%" }}
-                                  />
-                                </div>  
-                              </div>
-                              <div className="input-field">
-                                <div className="input-g">
-                                  <TextField
-                                    name="vendorRemarks"
-                                    value={vendorinfo?.vendorRemarks || ""}
-                                    onChange={handlevendorinfofata}
-                                    label="Remarks"
-                                    id="vendorRemarks"
-                                    size="small"
-                                    sx={{ my: 1, width: "100%" }}
-                                  />
-                                </div>
-                                <div className="input-g">
-                                  <Button
-                                    variant='contained'
-                                    onClick={handleVendorcalc}
-                                    disabled={isEditMode ? !Tripsheet_modify : !Tripsheet_new}
-                                  >
-                                    Update
-                                  </Button>
-                                </div>
-                              </div>
+                                style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
+                              // }}
+                              />
                             </div>
+                          </div>
+                        </div>
+
+                        <div className="input-g">
+                          <div className='closetime tripsheet-shed-in-time'>
+                            <label>Close Time</label>
+
+                            <input
+                              type="time"
+                              name="vendorshedintime"
+                              disabled={lockdata}
+                              value={vendorinfo?.vendorshedintime}
+                              ref={vendorinfoCloseRef}
+                              onChange={(event) => {
+                                let value = event.target.value;
+                                const [hours, minutes] = value.split(':');
+                                if (!lockdata) {
+                                  setPrevHours((prevState) => ({
+                                    ...prevState,
+                                    vendorinfoCloseTime:hours
+                                  }));                          
+                                  if (vendorinfoCloseRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoCloseTime === hours) {
+                                    vendorinfoCloseRef.current.focus();
+                                  }
+                                  setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
+                                  setNoChangeData({ ...nochangedata, vendorshedintime: event.target.value });
+                                }
+                                else {
+                                  setWarning(true);
+                                  setWarningMessage("IS not locked,locked Enter Again");
+                                }
+                              }
+                              }
+                              style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '8px 5px' }}
+                            />
+                          </div>
+                        </div>
+                        <div className="input-g">
+                          <TextField
+                            name="vendorTotaltime"
+                            value={calculatevendorTotalTime() || ""}
+                            disabled={lockdata}
+                            label="Total Time"
+                            id="pack5"
+                            size="small"
+                            sx={{ width: "100%" }}
+                          />
+                        </div>
+                      </div>
+                      <div className="input-field">
+
+                        <div className="input-g" >
+                          <TextField
+                            name="vendorshedoutkm"
+                            value={vendorinfo?.vendorshedoutkm || ""}
+                            disabled={lockdata}
+                            onChange={handlevendorinfofata}
+                            label="starting Kilometers"
+                            id="vendorshedoutkm"
+                            size="small"
+                            sx={{ my: 1, width: "100%" }}
+                          />
+                        </div>
+
+                        <div className="input-g" >
+                          <TextField
+                            name="vendorshedinkm"
+                            value={vendorinfo?.vendorshedinkm || ""}
+                            disabled={lockdata}
+                            label="closing Kilometers"
+                            onChange={handlevendorinfofata}
+                            id="vendorshedinkm"
+                            size="small"
+                            sx={{ my: 1, width: "100%" }}
+                          />
+                        </div>
+                        <div className="input-g" >
+                          <TextField
+                            name="vendortotalkm"
+                            value={calculatevendorTotalKilometers() || ''}
+                            label="Total kilometers"
+                            disabled={lockdata}
+                            id="vendortotalkm"
+                            size="small"
+                            sx={{ my: 1, width: "100%" }}
+                          />
+                        </div>
+                      </div>
+                      <div className="input-field">
+                        <div className="input-g">
+                          <TextField
+                            name="vendorRemarks"
+                            value={vendorinfo?.vendorRemarks || ""}
+                            onChange={handlevendorinfofata}
+                            disabled={lockdata}
+                            label="Remarks"
+                            id="vendorRemarks"
+                            size="small"
+                            sx={{ my: 1, width: "100%" }}
+                          />
+                        </div>
+                        <div className="input-g">
+                          <Button
+                            variant='contained'
+                            onClick={handleVendorcalc}
+                            disabled={isEditMode ? !Tripsheet_modify : !Tripsheet_new}
+                          >
+                            Update
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   )}
 
                   <div>
-                  {selectedStatus !== "Temporary Closed" && (
-  <div className="tripsheet-table1">
-    <table className="table-condensed table-striped fixed_header">
-      <thead className="BI_tablehead">
-        <tr>
-          <th className="table-head-booking table-heading-1">Driver name</th>
-          <th className="table-head-booking">Vehicle Name</th>
-          <th className="table-head-booking">Vehicle Reg No</th>
-          <th className="table-head-booking">Travels Name</th>
-        </tr>
-      </thead>
-      <tbody className="BI_tablebody Scroll-Style">
-        {driverdetails.length === 0 ? (
-          <tr>
-            <td colSpan={4}>No data available.</td>
-          </tr>
-        ) : (
-          driverdetails.map((row) => (
-            <tr key={row.id} onClick={() => handleRowClick(row)}>
-              <td>{row.driverName}</td>
-              <td>{row.vehicleName}</td>
-              <td>{row.vehRegNo}</td>
-              <td>{row.travelsname}</td>
-            </tr>
-          ))
-        )}
-      </tbody>
-    </table>
-  </div>
-)}
+                    {/* {selectedStatus !== "Temporary Closed" && ( */}
+                    {selectedStatuschecking !== "Temporary Closed" && (
+                      <div className="tripsheet-table1 Scroll-Style">
+                        <table className="table-condensed table-striped fixed_header">
+                          <thead className="BI_tablehead">
+                            <tr>
+                              <th className="table-head-booking table-heading-1">Driver name</th>
+                              <th className="table-head-booking">Vehicle Name</th>
+                              <th className="table-head-booking">Vehicle Reg No</th>
+                              <th className="table-head-booking">Travels Name</th>
+                            </tr>
+                          </thead>
+                          <tbody className="BI_tablebody Scroll-Style">
+                            {driverdetails.length === 0 ? (
+                              <tr>
+                                <td colSpan={4}>No data available.</td>
+                              </tr>
+                            ) : (
+                              driverdetails.map((row) => (
+                                <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                  <td>{row.driverName}</td>
+                                  <td>{row.vehicleName}</td>
+                                  <td>{row.vehRegNo}</td>
+                                  <td>{row.travelsname}</td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div>
+            <div >
               <Modal
                 open={mapPopUp}
                 onClose={handleCloseMapPopUp}
@@ -3579,22 +4912,53 @@ const TripSheet = ({ stationName, logoImage }) => {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style1}>
+                  <Box>
 
-                  <Box >
+                    {/* <div className='closebuttonhover'>
+                        <IconButton onClick={handleCloseMapPopUp}>
+                          <CloseIcon />
+                        </IconButton>
+                      </div> */}
+
                     <div style={{ display: 'flex', justifyContent: "space-between" }}>
 
 
-                      <div style={{ display: 'flex', gap: "20px", padding: '10px' }}>
-                        <label style={{ fontWeight: 'bold' }}>Trip Id :<span>{tripid}</span> </label>
-                        <label style={{ fontWeight: 'bold' }}>Start Date : <span>{startdate}</span></label>
-                        <label style={{ fontWeight: 'bold' }}>Close Date : <span>{closedate}</span></label>
-                        <label style={{ fontWeight: 'bold' }}>Start Time : <span>{starttime}</span></label>
-                        <label style={{ fontWeight: 'bold' }}>Close Time : <span>{endtime}</span> </label>
+                      <div style={{ display: 'flex', gap: "20px", padding: '0px', flexWrap: "nowrap", }}>
+                        <label style={{ fontWeight: "600" }}>  Trip Id :<span>{tripid}</span> </label>
+                        <label style={{ fontWeight: '600' }}>Start Date : <span>{dayjs(startdate).format("DD/MM/YYYY")}</span></label>
+                        <label style={{ fontWeight: '600' }}>Close Date : <span>{dayjs(closedate).format("DD/MM/YYYY")}</span></label>
+                        <label style={{ fontWeight: '600' }}>Start Time : <span>{removeSeconds(starttime)}</span></label>
+                        <label style={{ fontWeight: '600' }}>Close Time : <span>{removeSeconds(endtime)}</span> </label>
+                        <label style={{ display: "flex", gap: '10px' }}>
+                          <span style={{ fontWeight: 'bold', height: "50px", display: "flex", flexWrap: 'nowrap', gap: "10px" }}>
+                            <span style={{ fontWeight: '600' }}>Remarks</span>
+                            <span> :</span>
+
+                          </span>
+
+                          <span style={{ height: '50px', border: "1px solid #ccc", overflow: 'auto', width: "300px", padding: "5px" }}>{formData.remark || selectedCustomerData.remark || book.remark}</span>
+
+                        </label>                        </div>
+                      {/* <div style={{ width: '60%', display: "flex", justifyContent: "space-around", padding: '10px' }}>
+                          <label style={{ display: "flex", gap: '10px' }}>
+                            <span style={{ fontWeight: 'bold', height: "50px", display: "flex", flexWrap: 'nowrap', gap: "10px" }}>
+                              <span style={{ fontWeight: '600' }}>Remarks</span>
+                              <span> :</span>
+
+                            </span>
+
+                            <span style={{ height: '50px', border: "1px solid #ccc", overflow: 'auto',width:"600px" }}>{formData.remark || selectedCustomerData.remark || book.remark}</span>
+
+                          </label>
+
+                        </div> */}
+                      <div className='closebuttonhover'>
+                        <IconButton onClick={handleCloseMapPopUp}>
+                          <CloseIcon />
+                        </IconButton>
                       </div>
-                      <IconButton onClick={handleCloseMapPopUp}>
-                        <CloseIcon />
-                      </IconButton>
                     </div>
+
                   </Box>
                   <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} />
 

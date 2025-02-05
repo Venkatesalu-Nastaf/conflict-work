@@ -72,6 +72,14 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
+
+  const Roledatauser = localStorage.getItem("SuperAdmin")
+  
+  const filteredStatus =
+  Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO"
+      ? Status // Show all statuses for superAdmin and CFo
+      : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
+
   const {
     popupOpen,
     handlePopupClose,
@@ -92,7 +100,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     cutomerName,
     statusvalue,
     handleShow,
-    handleShowAll,
+    // handleShowAll,
     fromDate,
     department,
     handleInputChange,
@@ -115,6 +123,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     successMessage,
     info,
     infoMessage,
+    columsnew,
     // map and img functions
     selectedCustomerId,
     setSignImageUrl,
@@ -128,6 +137,8 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
 
 
   } = useOverviewDrawer();
+  // console.log(reversedRows,' datas if grid')
+  
 
   const [allCustomer, setAllCustomer] = useState([])
   const { permissions } = useContext(PermissionContext)
@@ -154,6 +165,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
         <p></p>
     </div>
 );
+
 
   return (
     <>
@@ -220,9 +232,10 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                 freeSolo
                 size="small"
                 value={statusvalue}
-                options={Status.map((option) => ({
-                  label: option.option,
-                }))}
+                // options={Status.map((option) => ({
+                //   label: option.option,
+                // }))}
+                options={filteredStatus.map((option) => ({ label: option.option }))}
                 onChange={(event, value) => handlestatusChange(event, value)}
                 renderInput={(params) => {
                   return (
@@ -331,9 +344,9 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
               <div className="input" >
                 <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
               </div>
-              <div className="input">
+              {/* <div className="input">
                 <Button className='text-nowrap' variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
-              </div>
+              </div> */}
             </div>
           </div>
           {/* <div className="SpeedDial">
@@ -536,7 +549,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                     )}
                     <DataGrid
                         rows={reversedRows}
-                        columns={columnshowall ? columns : filteredColumns}
+                        columns={columnshowall ? columsnew : filteredColumns}
                         onRowClick={(event) => handleRowClick(event.row)}
                         pageSize={5}
                         components={{

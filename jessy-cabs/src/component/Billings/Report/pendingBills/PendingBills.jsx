@@ -35,14 +35,18 @@ export const PendingBills = () => {
 
         <>
             <div className='main-content-form'>
-                <div className='input-field pending-bills-input-field'>
+                <div className='input-field pending-bills-input-field' style={{ marginBottom: '15px' }}>
 
                     <div className="inut" style={{ display: "flex", alignItems: "center" }}>
                         <div className="icone">
                             <MdOutlineCalendarMonth color="action" />
                         </div>
 
-                        <FormControl sx={{ m: 1, minWidth: 400 }}>
+                        <FormControl 
+                            sx={{
+                                m: 1,
+                                minWidth: { xs: 300, sm: 400 }, // Responsive minWidth
+                            }} >
                             <InputLabel id="demo-simple-select-helper-label">Customer Name</InputLabel>
                             <Select
                                 labelId="demo-simple-select-helper-label"

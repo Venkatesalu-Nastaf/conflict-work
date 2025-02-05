@@ -13,16 +13,17 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   heading: {
-    border: '2px solid #000000',
+    border: '2px solidrgb(255, 0, 0)',
     padding: '20px',
     boxSizing: 'border-box',
     pageBreakInside: 'avoid',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    // width:'100%',
   },
 
 
   section: {
-    marginTop: 10
+    marginTop: 10,
 
   },
   tableRow: {
@@ -30,7 +31,13 @@ const styles = StyleSheet.create({
     width: '100%', // Set the width of the table row to 100%
   },
   tableCell: {
-    width: '13.33%', // Set the width of each cell to 33.33% for equal distribution
+    width: '17.33%', // Set the width of each cell to 33.33% for equal distribution
+    padding: 5,
+    fontSize: '11px',
+    borderRight: '1px solid #000000',
+  },
+  tableCelldate: {
+    width: '17.33%', // Set the width of each cell to 33.33% for equal distribution
     padding: 5,
     fontSize: '11px',
     borderRight: '1px solid #000000'
@@ -90,7 +97,7 @@ const styles = StyleSheet.create({
     borderTop: '1px solid #000',
     borderLeft: '1px solid #000',
     borderBottom: '1px solid #000',
-    width: '13.33%', // Set the width of each cell to 33.33% for equal distribution
+    width: '17.33%', // Set the width of each cell to 33.33% for equal distribution
     padding: 5,
   },
   tableheadingAmount: {
@@ -98,7 +105,7 @@ const styles = StyleSheet.create({
     borderTop: '1px solid #000',
     borderRight: '1px solid #000',
     borderBottom: '1px solid #000',
-    width: '13.33%', // Set the width of each cell to 33.33% for equal distribution
+    width: '17.33%', // Set the width of each cell to 33.33% for equal distribution
     padding: 5,
   },
   tableheadsno: {
@@ -117,7 +124,7 @@ const styles = StyleSheet.create({
     borderRight: '1px solid #000000'
   },
   tableheadingparticular: {
-    width: '70%',
+    width: '66%',
     fontSize: '11px',
     borderTop: '1px solid #000',
     borderRight: '1px solid #000',
@@ -127,7 +134,7 @@ const styles = StyleSheet.create({
 
   },
   tablecellparticular: {
-    width: '70%',
+    width: '66%',
     padding: 5,
     fontSize: '11px',
     borderRight: '1px solid #000000',
@@ -155,7 +162,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: '20px',
-    padding: 10
+    padding: 10,
+    marginBottom:20,
   },
   totalsum: {
     display: 'flex',
@@ -166,6 +174,9 @@ const styles = StyleSheet.create({
   },
   totalsuminitial: {
     width: '45%',
+    flexDirection:'column',
+    justifyContent:"flex-end",
+    
   },
   total: {
     fontSize: 12
@@ -233,7 +244,11 @@ const styles = StyleSheet.create({
 
   },
   rupeestext: {
-    fontSize: '12px',
+    fontSize: '17px',
+    textTransform: 'capitalize'
+  },
+  rupeestexteo: {
+    // fontSize: "10px",
     textTransform: 'capitalize'
   },
   signtext: {
@@ -244,14 +259,28 @@ const styles = StyleSheet.create({
     fontSize: '14px'
   },
   totalrupeesword: {
-    marginTop: "20px",
-    flexDirection: 'row'
+    // marginTop: "20px",
+    flexDirection: 'row',
+    // paddingLeft:'5px',
+    // width:"60%",
+    width:"100%",
+  },
+  signone :{
+  height:"50px"
+  },
+  textRupees:{
+  width:"45%",
+  // width:"100%",
+  flexDirection:'column',
+  justifyContent: 'flex-end',
+  gap:'5px',
+
   }
 
 
 });
 
-const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images, customStateDetails, billingGroupDetails }) => {
+const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, customeraddress, customer, organisationdetails, images, customStateDetails, billingGroupDetails, customerData, stationData }) => {
 
   const [totalAmount, setTotalAmount] = useState('')
   const [parking, setParking] = useState('')
@@ -289,8 +318,6 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   // } else {
   //     console.log("newStateforpdf is null or undefined.");
   // }
-  console.log(customStateDetails, 'sssss2222');
-  console.log(billingGroupDetails, 'sssss22');
 
 
   const apiUrl = APIURL;
@@ -370,7 +397,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const igst = Math.round(fullAmount * fullGST / 100);
   const cgst = Math.round(fullAmount * gstAmount / 100);
   const sgst = Math.round(fullAmount * gstAmount / 100);
-  const billingGroupCGST = Math.round(fullAmount * groupgst/ 100 || 0)
+  const billingGroupCGST = Math.round(fullAmount * groupgst / 100 || 0)
   const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
 
   const park = parseInt(parking)
@@ -383,7 +410,15 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const formattedFullAmount = FullAmount;
 
   const rupeestext = numWords(parseInt(formattedFullAmount));
-  console.log(newStateforpdf, 'newstator');
+
+  // final calculation
+  const cgstcalc = customerData[0]?.gstTax / 2;
+  const sgstcalc = customerData[0]?.gstTax / 2;
+  const cgstAmount = Math.round(fullAmount * cgstcalc / 100 || 0);
+
+  const igstcalc = customerData[0]?.gstTax;
+  const igstAmount = Math.round(fullAmount * igstcalc / 100 || 0)
+
 
   return (
     <>
@@ -415,7 +450,17 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
 
                   <View>
-                    {newStateforpdf.length > 0 && newStateforpdf[0].gstno !== "" && newStateforpdf[0].gstno !== null ? (
+                    <Text style={styles.underlinetext}>{organisationdetailfill[0]?.organizationname}</Text>
+                    <Text style={[styles.text2, { fontSize: 11.5, width:'50%', }]}>
+                      {stationData[0]?.address}
+                    </Text>
+                    <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                      {stationData[0]?.state.toUpperCase()}
+                    </Text>
+                    <Text style={[styles.text2, { fontSize: 11.5 }]}>
+                      {organisationdetailfill[0]?.contactEmail}
+                    </Text>
+                    {/* {newStateforpdf.length > 0 && newStateforpdf[0].gstno !== "" && newStateforpdf[0].gstno !== null ? (
                       // Render this view if newStateforpdf has values
 
                       <>
@@ -444,7 +489,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                           {organisationdetailfill[0]?.contactEmail}
                         </Text>
                       </>
-                    )}
+                    )} */}
                   </View>
 
 
@@ -486,10 +531,10 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={[styles.underlinetext, { fontSize: 11 }]}>
                       Details of Receiver | Billed to:
                     </Text>
-                    <Text style={[styles.customername, { width: 300, fontSize: 10.5 }]}>{organizationname}</Text>
-                    {billingGroupDetails.length > 0 ? <Text style={[styles.text2, { fontSize: 10, width: 220 }]}>{billingGroupDetails[0]?.address1}</Text> : <Text style={[styles.text2, { fontSize: 10, width: 220 }]}>{address1}</Text>}
-                    {billingGroupDetails.length > 0 ? <Text style={[styles.text2, { fontSize: 10 }]}> {billingGroupDetails[0]?.state}</Text> : <Text style={[styles.text2, { fontSize: 10 }]}> {customeraddress[0]?.state}</Text>}
-                    {billingGroupDetails.length > 0 ? <Text style={[styles.text2, { fontSize: 10 }]}>GSTIN: {billingGroupDetails[0]?.gstnumber}</Text> : <Text style={[styles.text2, { fontSize: 10 }]}>GSTIN: {gst}</Text>}
+                    <Text style={[styles.customername, { width: 300, fontSize: 12.5, fontWeight: 600 }]}>{customer}</Text>
+                    <Text style={[styles.text2, { fontSize: 10, width: 220 }]}>{customerData[0]?.address1}asdfguiyt</Text>
+                    <Text style={[styles.text2, { fontSize: 10 }]}>{customerData[0]?.state}</Text>
+                    <Text style={[styles.text2, { fontSize: 10 }]}>GSTIN: {customerData[0]?.gstnumber}</Text>
                   </View>
 
                   <View style={styles.invoicediv}>
@@ -520,8 +565,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <View style={styles.tableRow}>
 
                       <View style={styles.tableheadsno}><Text>S No</Text></View>
-                      <View style={styles.tableheading}><Text>Trip DT</Text></View>
-                      <View style={styles.tableheadtripno}><Text>Trip NO</Text></View>
+                      <View style={styles.tableheading}><Text>Trip Date</Text></View>
+                      <View style={styles.tableheadtripno}><Text>Trip No</Text></View>
                       <View style={styles.tableheadingparticular}><Text>Particulars</Text></View>
                       <View style={styles.tableheadingpermit}><Text>Park/Permit/Toll</Text></View>
                       <View style={styles.tableheadingAmount}><Text>Amount</Text></View>
@@ -534,17 +579,23 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                             <View style={styles.tablecellsno}>
                               <Text style={{ fontSize: 10 }}>{index + 1}</Text>
                             </View>
-                            <View style={styles.tableCell}>
-                              <Text style={{ fontSize: 10 }}>{dayjs(item.startdate).format('MM/DD/YY')}</Text>
-                            </View>
+                            <View style={styles.tableCelldate}>
+                            <Text style={{ fontSize: 10 }}>{dayjs(item.startdate).format('DD/MM/YYYY')}</Text>                            </View>
                             <View style={styles.tablecelltripno}>
                               <Text style={{ fontSize: 10 }}>{item.tripid}</Text>
                             </View>
                             <View style={styles.tablecellparticular}>
                               <Text style={{ fontSize: 10 }}>{item.guestname}</Text>
-                              <Text style={{ fontSize: 10 }}>
+                              {/* <Text style={{ fontSize: 10 }}>
                                 {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
-                              </Text>
+                                / {item.vehicleName2}
+                              </Text> */}
+                              <Text style={{ fontSize: 10 }}>
+                              {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
+                            </Text>
+                            <Text style={{ fontSize: 10 }}>
+                               {item.vehicleName2} {item.vehType}
+                            </Text>
                               <Text style={{ fontSize: 10 }}>Vehicle Hire Charges For : {item.calcPackage}</Text>
 
                               {item.extraKM > 0 && item.extrakm_amount > 0 ? (
@@ -574,23 +625,23 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                                 {(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}.00
                               </Text>
                             </View>
-                            <View style={[styles.tableCell, { paddingRight: 5 }]}>
+                            <View style={[styles.tableCell, { paddingRight: 15 }]}>
                               <Text style={{ fontSize: 10 }}>{'\n'}</Text>
                               <Text style={{ fontSize: 10 }}>{'\n'}</Text>
                               {item.package_amount > 0 && (
-                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.package_amount}.00</Text>
+                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 26 }}>{item.package_amount}.00</Text>
                               )}
                               {item.extraKM > 0 && item.ex_kmAmount > 0 && (
-                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.ex_kmAmount}.00</Text>
+                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 26 }}>{item.ex_kmAmount}.00</Text>
                               )}
                               {item.extraHR > 0 && item.ex_hrAmount > 0 && (
-                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.ex_hrAmount}.00</Text>
+                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 26 }}>{item.ex_hrAmount}.00</Text>
                               )}
                               {item.nightBta > 0 && item.night_totalAmount > 0 && (
-                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.night_totalAmount}.00</Text>
+                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 26 }}>{item.night_totalAmount}.00</Text>
                               )}
                               {item.driverBeta > 0 && item.driverBeta_amount > 0 && (
-                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 18 }}>{item.driverBeta_amount}.00</Text>
+                                <Text style={{ fontSize: 10, textAlign: 'right', paddingRight: 26 }}>{item.driverBeta_amount}.00</Text>
                               )}
                             </View>
                           </React.Fragment>
@@ -601,27 +652,56 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                 </View>
               </View>
               <View style={styles.totalsum}>
-                <View style={styles.totalsuminitial}>
-                  {gstAmount === 0 ? (
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 15 }}>
-                      <Text style={{ fontSize: 11 }}>NOTE:</Text>
-                      <Text style={{ fontSize: 10 }}>
+                  {customerData[0]?.gstTax === 0 || customerData[0]?.gstTax === null ? (
+
+                  <View style={styles.totalsuminitial}>
+
+
+
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap',width:'100%', paddingLeft: 12}}>
+                      <Text style={{ fontSize: 11,marginTop:5 }}>NOTE:</Text>
+                      {/* <Text style={{ fontSize: 10 }}>
                         IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:335 is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
+                      </Text> */}
+                      <Text style={{ fontSize: 10, marginBottom:10}}>
+                        IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:
+                        {fullAmount > 0 && (
+                          (fullAmount * 0.05).toFixed(2) // Calculate 5% and format to 2 decimal places
+                        )} is to be paid by Service Recipient Under RCM as per Notification 22/2019 - Central tax (Rate) dated 30-09-2019
                       </Text>
                       <View>
-                        <Text style={{ width: 200, fontSize: 11, paddingTop: 75, paddingLeft: 7 }}>
+                        <View>
+                          <Text style={{ width: 200, fontSize: 11,}}>
+                            E.& O.E In Words-Rupees
+                          </Text>
+                        </View>
+
+                        <View style={styles.totalrupeesword}>
+                          <Text style={[styles.rupeestexteo, { paddingBottom: 10, marginBottom: 5 ,fontSize:10}]}>
+                            {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
+                          </Text>
+                        </View>
+
+                      </View>
+
+                    </View>
+                    </View>
+                  ) : (
+                    <View style={styles.textRupees}>
+                      <View>
+                        <Text style={{ width: 200, fontSize: 7,  paddingLeft: 7 }}>
                           E.& O.E In Words-Rupees
                         </Text>
                       </View>
+                      <View style={styles.totalrupeesword}>
+                        <Text style={[styles.rupeestexteo, { paddingBottom: 3,paddingLeft: 7,fontSize:10 }]}>
+                          {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
+                        </Text>
+                      </View>
                     </View>
-                  ) : (
-                    <View>
-                      <Text style={{ width: 200, fontSize: 11, paddingTop: 150, paddingLeft: 7 }}>
-                        E.& O.E In Words-Rupees
-                      </Text>
-                    </View>
+
                   )}
-                </View>
+                {/* </View> */}
                 <View style={styles.grandtotal}>
                   {/* <View >
                     <Text style={styles.total}>SUB TOTAL: </Text>
@@ -638,14 +718,14 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <Text style={styles.text2}>{parkpermit}</Text>
                     <Text style={styles.text2}>{formattedFullAmount}</Text>
                   </View> */}
-                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end' }}>
+                  <View style={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end',paddingRight:5,marginLeft:33 }}>
                     {fullAmount > 0 && (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>SUB TOTAL: </Text>
+                        <Text style={{ width: '200px', fontSize: 10 }}>SUB TOTAL: </Text>
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{fullAmount}.00</Text>
                       </View>
                     )}
-                    {newStateforpdf.length > 0 && newStateforpdf[0].gstno !== "" && newStateforpdf[0].gstno !== null && newStateforpdf[0].gstno !== undefined ? (
+                    {/* {newStateforpdf.length > 0 && newStateforpdf[0].gstno !== "" && newStateforpdf[0].gstno !== null && newStateforpdf[0].gstno !== undefined ? (
                       <>
                         {cgst > 0 && (
                           <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
@@ -666,26 +746,44 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                        {billingGroupDetails.length > 0 ? <Text style={{ width: '130px', fontSize: 10 }}>IGST {groupigst}% on {fullAmount}:</Text> : <Text style={{ width: '130px', fontSize: 10 }}>IGST {fullGST}% on {fullAmount}:</Text> }
                        {billingGroupDetails.length > 0 ? <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{billingGroupIGST}.00</Text> : <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{igst}.00</Text>}
                       </View>
-                    )}
+                    )} */}
+                    {
+                      customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ?
+                        <>
+                          <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1, }}>
+                            <Text style={{ width: '200px', fontSize: 10,}}> {cgstcalc}% on {fullAmount}:</Text>
+                            <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgstAmount}.00</Text>
+                          </View>
+                          <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1 }}>
+                            <Text style={{ width: '200px', fontSize: 10 }}>SGST {sgstcalc}% on {fullAmount}:</Text>
+                            <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgstAmount}.00</Text>
+                          </View>
+                        </> :
+
+                        <View View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1 }}>
+                          {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ width: '200px', fontSize: 10 }}>IGST {igstcalc}% on {fullAmount}:</Text> : <Text style={{ width: '200px', fontSize: 10 }}> </Text>}
+                          {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null ? <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{igstAmount}.00</Text> : <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>0.00</Text>}
+                        </View>
+                    }
 
 
                     {parkpermit > 0 && (
-                      <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 2 }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>Parking & Permit:</Text>
+                      <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1 }}>
+                        <Text style={{ width: '200px', fontSize: 10 }}>Parking & Permit:</Text>
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{parkpermit}.00</Text>
                       </View>
                     )}
 
                     {advance > 0 && (
-                      <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000' }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>Customer Advance (-)</Text>
+                      <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', borderBottom: '1px solid #000',width:"100%" }}>
+                        <Text style={{ width: '200px', fontSize: 10 }}>Customer Advance (-)</Text>
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{advance}.00</Text>
                       </View>
                     )}
 
                     {formattedFullAmount > 0 && (
                       <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-                        <Text style={{ width: '130px', fontSize: 10 }}>Total Amount:</Text>
+                        <Text style={{ width: '200px', fontSize: 10 }}>Total Amount:</Text>
                         <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{formattedFullAmount}.00</Text>
                       </View>
                     )}
@@ -703,11 +801,11 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
               <View style={styles.lastsectiondiv}>
                 <View style={styles.lastsection}>
                   < View style={styles.rupees}>
-                    <View style={styles.totalrupeesword}>
+                    {/* <View style={styles.totalrupeesword}>
                       <Text style={[styles.rupeestext, { paddingBottom: 10, marginBottom: 5 }]}>
                         {rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)} Rupees Only
                       </Text>
-                    </View>
+                    </View> */}
                     {/* <Text style={styles.rupeestext}>{rupeestext.charAt(0).toUpperCase() + rupeestext.slice(1)}</Text> */}
                     <Text style={[styles.underlinetext, { fontSize: 12 }]}>Bank Details</Text>
 
@@ -736,7 +834,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
                   <View style={[styles.companyName, { flexDirection: 'row' }]}>
 
-                    <Text style={[styles.jessytext, { paddingTop: 15, fontSize: "12px" }]}>For Jessy Cabs</Text>
+                    <Text style={[styles.jessytext, { paddingTop: 15, fontSize: "12px" }]}>For Jessy Cabs Pvt Ltd</Text>
 
                   </View>
                   {/* <View style={[styles.companyName, { marginBottom: 100 }]}>  

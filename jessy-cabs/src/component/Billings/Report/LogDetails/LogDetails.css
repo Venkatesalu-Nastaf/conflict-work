@@ -14,6 +14,9 @@
 .vendor-statement-input-field {
   flex-wrap: wrap;
 }
+.row-red-border {
+  border: 2px solid red !important;
+}
 
 @media screen and (max-width: 837px) {
   .vendor-statement-input-field {

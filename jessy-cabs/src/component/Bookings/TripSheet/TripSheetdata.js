@@ -5,12 +5,12 @@ export const Status = [
     optionvalue: "opened",
   },
   {
-    Option: "Closed",
-    optionvalue: "Closed",
-  },
-  {
     Option: "Temporary Closed",
     optionvalue: "Temporary Closed",
+  },
+  {
+    Option: "Closed",
+    optionvalue: "Closed",
   },
   {
     Option: "Cancelled",
@@ -20,6 +20,8 @@ export const Status = [
     Option: "Billed",
     optionvalue: "Billed",
   },
+
+
 
   // {
   //   Option: "Transfer_Billed",
@@ -37,6 +39,18 @@ export const Status = [
   //   Option: "Covering_Closed",
   //   optionvalue: "Covering_Closed"
   // }
+];
+
+export const OuststationStatus = [
+  {
+    Option: "Opened",
+    optionvalue: "opened",
+  },
+  {
+    Option: "Temporary Closed",
+    optionvalue: "Temporary Closed",
+  },
+
 ];
 
 export const GroupTypes = [
@@ -85,19 +99,42 @@ export const Apps = [
 
 // Hire Types
 
+// export const HireTypes = [
+//   {
+//     option: "Attached Vehicle",
+//     optionvalue: "attachedvehicle",
+//   },
+//   {
+//     option: "Out Side Travels",
+//     optionvalue: "outsidetravels",
+//   },
+//   {
+//     option: "Own  Vehicle",
+//     optionvalue: "ownvehicle",
+//   },
+//   {
+//     option: "DCO Vehicle",
+//     optionvalue: "dcovehicle",
+//   },
+// ];
 export const HireTypes = [
   {
-    option: "Attached Vehicle",
-    optionvalue: "attachedvehicle",
+    option:"Attached Vehicle",
+    optionvalue:"Attached Vehicle",
   },
   {
-    option: "Out Side Travels",
-    optionvalue: "outsidetravels",
+    option:"OutSide Travels",
+    optionvalue:"OutSide Travels",
   },
   {
-    option: "Own  Vehicle",
-    optionvalue: "ownvehicle",
+    option:"Own Vehicle",
+    optionvalue:"Own Vehicle",
   },
+  {
+    option:"DCO Vehicle",
+    optionvalue:"DCO Vehicle",
+  }
+
 ];
 // Department
 export const Department = [
@@ -140,6 +177,10 @@ export const Department = [
   {
     option: "INDORE",
     optionvalue: "INDORE",
+  },
+  {
+    option: "Gujarat",
+    optionvalue: "gujarat",
   },
   {
     option: "Jaipur",
@@ -868,7 +909,7 @@ export const states = [
       "Panchmahal (Godhra)",
       "Patan",
       "Porbandar",
-      "Rajkot",
+      "Gujarat",
       "Sabarkantha (Himmatnagar)",
       "Surat",
       "Surendranagar",
@@ -997,6 +1038,7 @@ export const states = [
       "Chitradurga",
       "Dakshina Kannada",
       "Davangere",
+      "Hubli",
       "Dharwad",
       "Gadag",
       "Hassan",
@@ -1506,6 +1548,7 @@ export const states = [
       "Mirzapur",
       "Moradabad",
       "Muzaffarnagar",
+      "Noida",
       "Pilibhit",
       "Pratapgarh",
       "RaeBareli",

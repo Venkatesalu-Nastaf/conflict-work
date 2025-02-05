@@ -120,12 +120,13 @@
 }
 
 .AddBankContainer-BankAccount {
-    width: 100%;
+    width: 96%;
     margin-top: 10px;
     background-color: var(--glass);
     padding: 10px 20px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-bottom: 20px;
 }
 
 .BankDetails-mainContainer {
@@ -279,8 +280,8 @@
 .bank-account-details-main{
     width: fit-content;
     height: 450px;
-    overflow: auto;
+    /* overflow: auto; */
     margin-top: 20px;
-    padding-right: 10px;
+    /* padding-right: 10px; */
 }
 

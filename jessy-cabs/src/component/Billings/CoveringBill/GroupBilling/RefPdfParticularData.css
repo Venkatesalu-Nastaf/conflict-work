@@ -61,6 +61,11 @@
   font-size: 17px;
   margin: 0px;
 }
+.organisationtext-ref {
+  font-size: 17px;
+  margin: 0px;
+  text-align: right;
+}
 
 .Datediv {
   display: flex;
@@ -108,4 +113,11 @@ tbody {
 .table-ref th {
   border: 1px solid gray !important;
   
+}
+
+.total-div{
+  display: flex;
+  justify-content: end;
+  gap: 30px;
+  /* margin-right: 40px; */
 }

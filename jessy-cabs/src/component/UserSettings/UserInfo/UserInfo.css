@@ -235,6 +235,13 @@
     border-radius: 50%;
 }
 
+@media screen and (max-width:650px) {
+    .user-division-image {    
+        border: 1px solid grey;
+        border-radius: 50%;
+    }
+}
+
 .user-info-user-avatar-division {
     width: 100%;
     display: flex;

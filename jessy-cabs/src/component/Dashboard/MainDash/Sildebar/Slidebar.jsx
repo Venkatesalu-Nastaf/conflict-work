@@ -281,19 +281,20 @@ const Sidebar = () => {
   // const INFO = permissions[16]?.read;
   // const Dashbord_read = permissions[21]?.read;
   const INFO = permissions[17]?.read;
-  const Dashbord_read = permissions[21]?.read;
-
+  // const Dashbord_read = permissions[21]?.read;
+  const Dashbord_read = permissions[22]?.read;
   // thsi for map page permisiion
-  const Maps = permissions[22]?.read;
+  const Maps = permissions[23]?.read;
   const mailer = permissions[18]?.read;
   const Fuel = permissions[19]?.read;
   const Employee1 = permissions[20]?.read;
+  const Aggrement = permissions[21]?.read;
   const userCreation = permissions[15]?.read;
-  const Map_Realtime = permissions[23]?.read;
-  const Map_Vehicle = permissions[24]?.read;
-  const Map_Reminders = permissions[25]?.read;
-  const Map_History = permissions[26]?.read;
-  const Map_Records = permissions[27]?.read;
+  const Map_Realtime = permissions[24]?.read;
+  const Map_Vehicle = permissions[25]?.read;
+  const Map_Reminders = permissions[26]?.read;
+  const Map_History = permissions[27]?.read;
+  const Map_Records = permissions[28]?.read;
 
 
 
@@ -302,10 +303,10 @@ const Sidebar = () => {
   const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read || permissions[8]?.read
   const Register_page_permission = permissions[9]?.read || permissions[10]?.read || permissions[11]?.read || permissions[12]?.read || permissions[13]?.read
   const Setting_page_permission = permissions[14]?.read || permissions[15]?.read || permissions[16]?.read
-  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read
+  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read ||  permissions[21]?.read
 
   // thsi for map page permisiion
-  const Map_page_permission = permissions[22]?.read || permissions[23]?.read || permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read
+  const Map_page_permission = permissions[23]?.read || permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read || permissions[28]?.read
 
   const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
     localStorage.removeItem('reports');
@@ -426,7 +427,8 @@ const Sidebar = () => {
       if (e) {
         e.preventDefault();
       }
-      localStorage.removeItem("auth");
+      // localStorage.removeItem("auth");
+      localStorage.setItem("auth",false);
       localStorage.removeItem("username");
       localStorage.removeItem("useridno");
       localStorage.removeItem("selectedImage");
@@ -961,16 +963,36 @@ const Sidebar = () => {
               <MenuItem
                 label={`${expanded === false ? '' : 'Info'}`}
                 // to={INFO && ("/home/info/mailer")}
+                // to={
+                //   mailer ?
+                //     "/home/info/mailer"
+                //     : Fuel
+                //       ? "/home/info/fuelinfo"
+                //       : Employee1
+                //         ? "/home/info/employee"
+                //         : "/home/info/mailer"
+                // }
                 to={
                   mailer ?
                     "/home/info/mailer"
                     : Fuel
                       ? "/home/info/fuelinfo"
                       : Employee1
-                        ? "/home/info/employee"
-                        : "/home/info/mailer"
+                        ? "/home/info/employee" :
+                        Aggrement ?
+                        "/home/info/agreement" :
+                         "/home/info/mailer"
                 }
                 // alt="/home/info/mailer"
+                // alt={
+                //   mailer
+                //     ? "/home/info/mailer"
+                //     : Fuel
+                //       ? "/home/info/fuelinfo"
+                //       : Employee1
+                //         ? "/home/info/employee"
+                //         : "/home/info/mailer"
+                // }
                 alt={
                   mailer
                     ? "/home/info/mailer"
@@ -978,7 +1000,9 @@ const Sidebar = () => {
                       ? "/home/info/fuelinfo"
                       : Employee1
                         ? "/home/info/employee"
-                        : "/home/info/mailer"
+                        :  Aggrement ?
+                        "/home/info/agreement" :
+                         "/home/info/mailer"
                 }
 
                 value="/home/info"
@@ -1156,6 +1180,18 @@ const Sidebar = () => {
                   </span>
                   <span>
                     Employee
+                  </span>
+                </p>
+              </div> :<></> }
+
+              {Aggrement ?
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => infoSubMenu("/home/info/agreement")}>
+                  <span>
+                    <BsFillFuelPumpFill />
+                  </span>
+                  <span>
+                  Aggrement
                   </span>
                 </p>
               </div> :<></> }

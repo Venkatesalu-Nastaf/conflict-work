@@ -223,6 +223,7 @@
   height: 50px;
   position: absolute;
   background-color: #cccccc44;
+  z-index: 1;
 }
 
 .user-name-item p {
@@ -262,7 +263,7 @@
 .cards-container .card-filter {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   margin: 20px;
 }
 

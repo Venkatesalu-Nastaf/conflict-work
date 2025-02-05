@@ -27,7 +27,7 @@ const style2 = {
 };
 
 const mapStyles = {
-  height: "70vh",
+  height: "450px",
   width: "100%"
 };
 
@@ -65,11 +65,10 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const [polygonPath, setPolygonPath] = useState([]);
   const [polylinePath, setPolylinePath] = useState([])
   const [markerPosition, setMarkerPosition] = useState(null); // Store single marker position
-
   const [mapContent, setMapContent] = useState({
     tripid: '',
     time: dayjs().format('HH:mm'),
-    date: dayjs().format('YYYY-MM-DD'),
+    date: startdate,
     place_name: '',
     Location_Alpha: '',
     trip_type: 'start',
@@ -275,7 +274,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       setMapContent({
         tripid: '',
         time: dayjs().format('HH:mm'),
-        date: dayjs().format('YYYY-MM-DD'),
+        // date: dayjs().format('YYYY-MM-DD'),
+        date:startdate,
         place_name: '',
         Location_Alpha: '',
         trip_type: 'start',
@@ -755,46 +755,49 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {/* <LoadScript googleMapsApiKey="AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk"> */}
-      <PlacesAutocomplete
-        value={address}
-        onChange={handleChanges}
-        onSelect={handleSelect}
+    <>
+      <div >
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {/* <LoadScript googleMapsApiKey="AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk"> */}
+          <PlacesAutocomplete
+            value={address}
+            onChange={handleChanges}
+            onSelect={handleSelect}
 
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div className="search-input-field" style={{ position: "relative", zIndex: "999" }}>
-            <input
-              {...getInputProps({
-                placeholder: 'Enter location',
-              })}
-              className="search-input"
-            />
-            <div className={suggestions.length > 0 ? 'suggestion-box' : ''}>
-              {suggestions.map((suggestion, index) => (
-                <div key={index} {...getSuggestionItemProps(suggestion)}>
-                  {suggestion.description}
+          >
+            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+              <div className="search-input-field" style={{ position: "relative", zIndex: "999" }}>
+                <input
+                  {...getInputProps({
+                    placeholder: 'Enter location',
+                  })}
+                  className="search-input"
+                />
+                <div className={suggestions.length > 0 ? 'suggestion-box' : ''}>
+                  {suggestions.map((suggestion, index) => (
+                    <div key={index} {...getSuggestionItemProps(suggestion)}>
+                      {suggestion.description}
+                    </div>
+                  ))}
+
                 </div>
-              ))}
-
-            </div>
-          </div>
-        )}
-      </PlacesAutocomplete>
-      <GoogleMap
-        mapContainerStyle={mapStyles}
-        zoom={5}
-        center={center}
-        id='map'
-        onClick={handleMapClick}
-        onLoad={(map) => {
-          mapRef.current = map;
-          setMapInstance(mapRef.current)
-          fitBoundsToMarkers(map);
-        }}
-      >
-        {/* {polygonPath.length > 0 && (
+              </div>
+            )}
+          </PlacesAutocomplete>
+          <GoogleMap
+            mapContainerStyle={mapStyles}
+            zoom={5}
+            center={center}
+            id='map'
+            onClick={handleMapClick}
+            onLoad={(map) => {
+              mapRef.current = map;
+              setMapInstance(mapRef.current)
+              fitBoundsToMarkers(map);
+            }}
+            
+          >
+            {/* {polygonPath.length > 0 && (
           <Polygon
             onClick={handleMapClick}
             paths={polygonPath}
@@ -807,7 +810,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
             }}
           />
         )} */}
-        {/* {polylinePath.length > 0 && (
+            {/* {polylinePath.length > 0 && (
           <Polyline
             path={polylinePath}
             options={{
@@ -830,132 +833,138 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
             }}
           />
         )} */}
-        {markerPosition !== "" || markerPosition !== null ? <Marker
-          position={markerPosition}
-          onClick={handleMapClick}
-        /> : ""
-        }
-        {startLat && directions === null && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
-        {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />}
-        {directions === null && wayRoutes?.map((point, index) => (
-          <Marker
-            key={index}
-            position={{ lat: point.lat, lng: point.lng }}
-            label={point.label}
-            onClick={() => handleMarkerClick(point)}
-          />
-        ))}
-        {directions && <DirectionsRenderer directions={directions} />}
-
-      </GoogleMap>
-
-      {popupOpen && (
-        <Modal
-          open={popupOpen}
-          onClose={handleCloseMapPopUp}
-        >
-          <Box sx={style2}>
-
-            <IconButton
-              aria-label="close"
-              onClick={handleCloseMapPopUp}
-              sx={{
-                position: 'absolute',
-                right: 8,
-                top: 8,
-                color: (theme) => theme.palette.grey[500],
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-            <div>
-              <DatePicker
-                value={dayjs(mapContent.date)}
-                onChange={(newValue) => handledatechange(newValue)}
-                renderInput={(params) => <TextField {...params} />}
+            {markerPosition !== "" || markerPosition !== null ? <Marker
+              position={markerPosition}
+              onClick={handleMapClick}
+            /> : ""
+            }
+            {startLat && directions === null && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
+            {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />}
+            {directions === null && wayRoutes?.map((point, index) => (
+              <Marker
+                key={index}
+                position={{ lat: point.lat, lng: point.lng }}
+                label={point.label}
+                onClick={() => handleMarkerClick(point)}
               />
-            </div>
-            <div>
-              {/* <FormControl fullWidth> */}
-              <div style={{ display: "grid", gap: "0px 20px", marginTop: "20px", marginBottom: "20px", alignItems: 'center' }}>
+            ))}
+            {directions && <DirectionsRenderer directions={directions} />}
 
-                <InputLabel id="demo-simple-select-label">Select Trip Type</InputLabel>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={mapContent.trip_type}
-                    onChange={(e) => handleChange(e.target.value, 'trip_type')}
-                    style={{ width: '100%' }}
-                  >
-                    <MenuItem value={"start"}>Start</MenuItem>
-                    <MenuItem value={"waypoint"}>Waypoint</MenuItem>
-                    <MenuItem value={"end"}>End</MenuItem>
-                  </Select>
-                  <input
-                    type="time"
-                    id="time"
-                    name="time"
-                    value={mapContent.time}
-                    onChange={handletimeChange}
-                    required
-                    style={{ border: '1px solid', }}
+          </GoogleMap>
+          
+          
+
+          {popupOpen && (
+            <Modal
+              open={popupOpen}
+              onClose={handleCloseMapPopUp}
+            >
+              <Box sx={style2}>
+
+                <IconButton
+                  aria-label="close"
+                  onClick={handleCloseMapPopUp}
+                  sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500],
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+                <div>
+                  <DatePicker
+                    value={dayjs(mapContent.date)}
+                    onChange={(newValue) => handledatechange(newValue)}
+                    renderInput={(params) => <TextField {...params} />}
+                    format='DD/MM/YYYY'
                   />
                 </div>
-                {/* </FormControl> */}
-              </div>
-            </div>
+                <div>
+                  {/* <FormControl fullWidth> */}
+                  <div style={{ display: "grid", gap: "0px 20px", marginTop: "20px", marginBottom: "20px", alignItems: 'center' }}>
 
-            {/* <TextField
+                    <InputLabel id="demo-simple-select-label">Select Trip Type</InputLabel>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={mapContent.trip_type}
+                        onChange={(e) => handleChange(e.target.value, 'trip_type')}
+                        style={{ width: '100%' }}
+                      >
+                        <MenuItem value={"start"}>Start</MenuItem>
+                        <MenuItem value={"waypoint"}>Waypoint</MenuItem>
+                        <MenuItem value={"end"}>End</MenuItem>
+                      </Select>
+                      <input
+                        type="time"
+                        id="time"
+                        name="time"
+                        value={mapContent.time}
+                        onChange={handletimeChange}
+                        required
+                        style={{ border: '1px solid', }}
+                      />
+                    </div>
+                    {/* </FormControl> */}
+                  </div>
+                </div>
+
+                {/* <TextField
                 name="time"
                 label="Time"
                 value={mapContent.time}
                 onChange={handletimeChange}
               /> */}
 
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <Button onClick={submitMapPopUp} variant="contained">Submit</Button>
-              <Button onClick={onRemoveMarker} variant="contained" style={{ whiteSpace: 'nowrap' }}>Remove Marker</Button>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <Button onClick={submitMapPopUp} variant="contained">Submit</Button>
+                  <Button onClick={onRemoveMarker} variant="contained" style={{ whiteSpace: 'nowrap' }}>Remove Marker</Button>
+                </div>
+              </Box>
+
+
+            </Modal>
+          )}
+          {/* </LoadScript> */}
+          <div style={{ position: "relative" }}>
+            <div className="buttons-div">
+
+              <button onClick={handleMapDraw} className="draw-route">Draw Route</button>
+              <button onClick={() => handleMapCapture()} className="Capture-View" >Capture View</button>
             </div>
-          </Box>
-
-
-        </Modal>
-      )}
-      {/* </LoadScript> */}
-      <div style={{ position: "relative" }}>
-        <div className="buttons-div">
-
-          <button onClick={handleMapDraw} className="draw-route">Draw Route</button>
-          <button onClick={() => handleMapCapture()} className="Capture-View" >Capture View</button>
-        </div>
-        <div style={{ position: "absolute", top: "3px", left: "40%" }}>
-          {success ? <p style={{ display: "flex", justifyContent: "center", color: '#347928', fontSize: "22px", fontWeight: 600 }}>Successfully Captured....</p> :
-            ""}
-        </div>
-        <div style={{ position: "absolute", top: "3px", left: "40%" }}>
-          {error ? <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>Please Draw The Route....</p> :
-            ""}
-        </div>
-        <div style={{ position: "absolute", top: "3px", left: "40%" }}>
-          {(errorMessage && (startLat === "" || startLat === undefined)) ? (
-            <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>
-              Mark Your StartPoint
-            </p>
-          ) : null}
-        </div>
-        <div style={{ position: "absolute", top: "3px", left: "40%" }}>
-          {(errorMessage && (startLat !== "" && startLat !== undefined) && (endLat === "" || endLat === undefined)) ? (
-            <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>
-              Mark Your EndPoint
-            </p>
-          ) : null}
-        </div>
+            <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+              {success ? <p style={{ display: "flex", justifyContent: "center", color: '#347928', fontSize: "22px", fontWeight: 600 }}>Successfully Captured....</p> :
+                ""}
+            </div>
+            <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+              {error ? <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>Please Draw The Route....</p> :
+                ""}
+            </div>
+            <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+              {(errorMessage && (startLat === "" || startLat === undefined)) ? (
+                <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>
+                  Mark Your StartPoint
+                </p>
+              ) : null}
+            </div>
+            <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+              {(errorMessage && (startLat !== "" && startLat !== undefined) && (endLat === "" || endLat === undefined)) ? (
+                <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>
+                  Mark Your EndPoint
+                </p>
+              ) : null}
+            </div>
 
 
 
+          </div>
+        </LocalizationProvider>
       </div>
-    </LocalizationProvider>
+    </>
+
   );
 };
 

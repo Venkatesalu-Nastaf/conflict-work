@@ -9,6 +9,7 @@ import { DataGrid } from "@mui/x-data-grid"; // Import DataGrid
 // import axios from "axios";
 // import { APIURL } from "../../../../url";
 import useCard from "../useCard";
+import dayjs from "dayjs";
 
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
@@ -354,16 +355,19 @@ const title = param.title
 
   const columns = getColumns();
 
-  // Prepare the rows data by mapping the fetched data to include 'sno'
+  
   const rows = billData.map((item, index,) => ({
     title:title,
     id: index + 1,
     sno: index + 1,
-    orgname: item.CustomerName || "N/A", // Ensure this key exists
-    date: item.BillDate || "N/A", // Ensure this key exists
-    amount: item.TotalAmount || 0, // Ensure this key exists
-    collected: item.Collected || 0, // Ensure this key exists
-    pending: item.TotalBalance || 0, // Ensure this key exists
+    orgname: item.CustomerName || "N/A", 
+    // date: item.BillDate || "N/A", 
+    date: item.BillDate
+    ? dayjs(item.BillDate).format("DD/MM/YYYY") // Format as DD/MM/YYYY
+    : "N/A",
+    amount: item.TotalAmount || 0, 
+    collected: item.TotalCollected || 0, 
+    pending: item.TotalBalance || 0, 
   }));
 
   // Log the rows to verify structure

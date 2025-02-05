@@ -33,6 +33,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
 import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 
 
@@ -75,7 +76,7 @@ const DriverBataRate = () => {
     isEditMode,
     handleEdit,
     loading,
-    setLoading
+    isDBRButtonLoading
   } = useDriverbatarate();
 
  
@@ -278,9 +279,11 @@ const DriverBataRate = () => {
                 </div>
                 <div className="input">
                   {isEditMode ? (
-                    <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
+                    // <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
+                    <LoadingButton loading={isDBRButtonLoading} variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</LoadingButton>
                   ) : (
-                    <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Add</Button>
+                    // <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Add</Button>
+                    <LoadingButton loading={isDBRButtonLoading} variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Add</LoadingButton>
                   )}
                 </div>
               </div>

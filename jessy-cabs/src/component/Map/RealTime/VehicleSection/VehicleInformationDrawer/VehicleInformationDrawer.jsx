@@ -1,5 +1,5 @@
-import React, { useState, useContext , useCallback} from 'react';
-import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
+import React, { useState, useContext, useCallback, useEffect, useRef, useMemo } from 'react';
+import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer, Polyline } from '@react-google-maps/api';
 // import { IconButton, Button } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import IconButton from '@mui/material/IconButton';
@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import TabList from '@mui/lab/TabList';
 import { FaShare } from "react-icons/fa";
-import { Drawer } from '@mui/material';
+import { Button, Drawer } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
@@ -23,9 +23,17 @@ import SearchIcon from '@mui/icons-material/Search';
 import { PermissionContext } from '../../../../context/permissionContext';
 import "./VehicleInformationDrawer.css"
 import { useNavigate } from 'react-router-dom';
-
-
-
+import { chennaiCoordinates } from '../../MapSection/mapData';
+import mapicon from "./mapicon.png"
+import blackicon from "./blackmapicon.png"
+import startPointIcon from "./startPointIcon.png"
+import useDetailsVehicle from '../useDetailsVehicle';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import { VehicleMapData } from '../../../vehicleMapContext/vehcileMapContext';
+import TripDetailModal from '../../../Modal/TripDetailModal';
+import Autocomplete from "@mui/material/Autocomplete";
+import MapParticularTrip from '../MapParticulaTrip/MapParticularTrip';
 
 /* global google */
 // Define the container style for the map
@@ -33,22 +41,32 @@ const containerStyle = {
     width: '100%',
     height: '650px',
     // border: '2px solid black',
-  };
-  
-  // Set the default map center (Chennai)
-  const center = {
-    lat: 13.0827,
-    lng: 80.2707,
-  };
+};
+
+// Set the default map center (Chennai)
+
 
 
 
 const VehicleInformationDrawer = () => {
 
-    //vehicle section drawer
-    const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer } = useContext(PermissionContext);
-    const navigate = useNavigate();
+    const { vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying,
+        startMarkerPosition, setStartMarkerPosition, handleDrawPaths, dynamicPolyline, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths,
+        handledefault10xDrawPaths, speedState, address, startTripLocation, endTripLocation, tripidOptions, selectedTripid, setSelectedTripid,
+        togglePlayPause
 
+    } = useDetailsVehicle()
+    //vehicle section drawer
+    const { open, setOpen, setOpenHistoryDrawer, setOpenshare, setHistoryLocation, setOpendetailsDrawer, vehicleListData, setVehicleListData } = useContext(PermissionContext);
+    const navigate = useNavigate();
+    const [currentPointIndex, setCurrentPointIndex] = useState(0);
+    const { jessyCabsDistance, setJessyCabsDistance, tripModalOpen, setTripModalOpen } = VehicleMapData();
+    // const {jessyCabsLocation,setJessyCabsLocation} = useState({lat:13.031207,lng:80.239396});
+    const jessyCabsLocation = {
+        lat: 13.031207,
+        lng: 80.239396
+    }
+    const mapRef = useRef(null)
     const handleopenHistoryDrawer = () => {
         // setOpenHistoryDrawer(true);
         navigate("/home/Map/History");
@@ -105,59 +123,241 @@ const VehicleInformationDrawer = () => {
     };
 
 
-
     // Load the Google Maps script with your API key and necessary libraries
-  const { isLoaded } = useLoadScript({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
-    libraries: ['places'], // Add any additional libraries you need
-  });
+    const { isLoaded } = useLoadScript({
+        id: 'google-map-script',
+        googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
+        libraries: ['places'], // Add any additional libraries you need
+    });
 
-  // State management for the map, location, directions, popup, etc.
-  const [map, setMap] = useState(null);
-  const [lat, setLat] = useState(13.0827); // Default latitude (Chennai)
-  const [long, setLong] = useState(80.2707); // Default longitude (Chennai)
-  const [direction, setDirection] = useState(false);
-  const [directionRendererKey, setDirectionRendererKey] = useState(0);
-  const [directionRoute, setDirectionRoute] = useState(null);
-  const [openPopup, setOpenPopup] = useState(false); // State to handle popup open/close
-  const [popupPosition, setPopupPosition] = useState(null); // State for popup position
+    // State management for the map, location, directions, popup, etc.
+    const [map, setMap] = useState(null);
+    const [lat, setLat] = useState(13.0827); // Default latitude (Chennai)
+    const [long, setLong] = useState(80.2707); // Default longitude (Chennai)
+    const [openPopup, setOpenPopup] = useState(false); // State to handle popup open/close
+    const [popupPosition, setPopupPosition] = useState(null); // State for popup position
+    const [directionsResponse, setDirectionsResponse] = useState(null);
+    // Marker location based on latitude and longitude
+    const markerLocation = lat && long ? { lat, lng: long } : null;
 
-  // Marker location based on latitude and longitude
-  const markerLocation = lat && long ? { lat, lng: long } : null;
+    const [mapiconBase64, setMapiconBase64] = useState('');
+    const [clickPosition, setClickPosition] = useState({ top: 0, left: 0 });
 
-  // Map loading handler
-  const onLoad = useCallback((map) => {
-    map.setCenter(center);
-    map.setZoom(16);
-    setMap(map);
-  }, []);
 
-  // Map unmount handler
-  const onUnmount = useCallback(() => {
-    setMap(null);
-  }, []);
+    // Center button click handler
+    const handleCenterButtonClick = () => {
+        const zoomLevel = 16;
+        if (map) {
+            map.panTo(markerLocation ? markerLocation : center);
+            map.setZoom(zoomLevel);
+        }
+    };
 
-  // Center button click handler
-  const handleCenterButtonClick = () => {
-    const zoomLevel = 16;
-    if (map) {
-      map.panTo(markerLocation ? markerLocation : center);
-      map.setZoom(zoomLevel);
+    // Popup open/close handlers
+    const handleOpenPopup = () => {
+        setPopupPosition(markerLocation); // Open popup at marker location
+        setOpenPopup(true);
+    };
+    const handleClosePopup = () => setOpenPopup(false);
+
+    // Check if Google Maps API is loaded
+    //   if (!isLoaded) return <div>Loading...</div>;
+    useEffect(() => {
+        if (!chennaiCoordinates || chennaiCoordinates.length < 2) {
+            console.error("Invalid chennaiCoordinates for routing");
+            return;
+        }
+
+        const directionsService = new window.google.maps.DirectionsService();
+
+        const updateDirections = (isInitial = false) => {
+            const formattedCoordinates = chennaiCoordinates.map(coord => ({
+                lat: coord.latitude,
+                lng: coord.longitude,
+            }));
+
+            // Fixed last point as the standard destination
+            const fixedLastPoint = formattedCoordinates[formattedCoordinates.length - 1];
+
+            const waypoints = formattedCoordinates.slice(1, -1).map(location => ({
+                location,
+                stopover: false,
+            }));
+
+            directionsService.route(
+                {
+                    origin: formattedCoordinates[0],
+                    destination: fixedLastPoint, // Always use the last coordinate
+                    waypoints,
+                    travelMode: window.google.maps.TravelMode.DRIVING,
+                },
+                (result, status) => {
+                    console.log(status, "checkkkkkkk");
+
+                    if (status === window.google.maps.DirectionsStatus.OK) {
+                        setDirectionsResponse(result);
+
+                        if (isInitial) {
+                            const bounds = new window.google.maps.LatLngBounds();
+                            formattedCoordinates?.forEach(coord => bounds.extend(coord));
+                            mapRef?.current?.fitBounds(bounds);
+                        }
+                    } else {
+                        console.error(`Error fetching directions: ${status}`);
+                    }
+                }
+            );
+        };
+
+        updateDirections(true);
+
+        const intervalId = setInterval(() => {
+            updateDirections(false);
+        }, 10000);
+
+        return () => clearInterval(intervalId);
+    }, [chennaiCoordinates, open]);
+
+
+    const handleMapLoad = (map) => {
+        mapRef.current = map; // Save the map instance
+    };
+
+    if (!isLoaded) {
+        return <div>Loading...</div>;
     }
-  };
+    const center = { lat: currentPosition.lat, lng: currentPosition.lng };
+    const base64Image = `data:image/png;base64,${mapicon}`;
+    console.log(base64Image, "llllllllllllllllllllllllllllllllllllll");
 
-  // Popup open/close handlers
-  const handleOpenPopup = () => {
-    setPopupPosition(markerLocation); // Open popup at marker location
-    setOpenPopup(true);
-  };
-  const handleClosePopup = () => setOpenPopup(false);
+    function convertToBase64(imagePath, callback) {
+        fetch(imagePath)
+            .then((res) => res.blob())
+            .then((blob) => {
+                const reader = new FileReader();
+                reader.onloadend = () => callback(reader.result);
+                reader.readAsDataURL(blob);
+            })
+            .catch((err) => console.error('Error converting image to Base64:', err));
+    }
 
-  // Check if Google Maps API is loaded
-  if (!isLoaded) return <div>Loading...</div>;
+    // Use the function
+    convertToBase64('/static/media/mapicon.b6f6d6a97abc01b5785e.png ', (base64Image) => {
+        setMapiconBase64(base64Image)
+    });
 
 
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer();
+
+    const startLat = chennaiCoordinates[0]?.latitude;
+    const startLng = chennaiCoordinates[0]?.longitude;
+
+    const endLat = chennaiCoordinates[chennaiCoordinates.length - 1].latitude;
+    const endLng = chennaiCoordinates[chennaiCoordinates.length - 1].longitude;
+
+    // Waypoints: All coordinates except the first and last
+    const waypoints = chennaiCoordinates.slice(1, chennaiCoordinates.length - 1).map(coord => ({
+        location: new google.maps.LatLng(coord.latitude, coord.longitude),
+        stopover: true,
+    }));
+
+    // Log start, end, and waypoints
+    console.log("Start:", startLat, startLng);
+    console.log("End:", endLat, endLng);
+    console.log("Waypoints:", waypoints);
+    const request = {
+        origin: new google.maps.LatLng(startLat, startLng),
+        destination: new google.maps.LatLng(endLat, endLng),
+        waypoints: waypoints, // Add waypoints here
+        travelMode: google.maps.TravelMode.DRIVING, // Travel mode: Driving
+    };
+    directionsService.route(request, (response, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+            directionsRenderer.setDirections(response);
+            const steps = response.routes[0].legs[0].steps;
+            console.log(steps, "angleeeeeeeeeeeee22222222", response);
+
+            steps.forEach((step, index) => {
+                const instruction = step.instructions; // Direction instruction, e.g., "Turn left onto Main St."
+                const distance = step.distance.text; // Distance for this step
+                const angle = step.travelMode === google.maps.TravelMode.DRIVING ? getBearingFromStep(step) : 0;
+
+                // Analyze the instructions to determine direction
+                if (instruction.includes("left")) {
+                    console.log("Left Turn", distance, angle);
+                }
+                else if (instruction.includes("east")) {
+                    console.log("east", instruction);
+
+                }
+
+            });
+        }
+    });
+
+    function getBearingFromStep(step) {
+        const startLatLng = new google.maps.LatLng(step?.start_location.lat(), step?.start_location.lng());
+        const endLatLng = new google.maps.LatLng(step?.end_location.lat(), step?.end_location.lng());
+        return google.maps.geometry.spherical.computeHeading(startLatLng, endLatLng);
+    }
+
+    // distance calculate
+    const calculateDistance = () => {
+
+        const origin = new window.google.maps.LatLng(jessyCabsLocation?.lat, jessyCabsLocation?.lng);
+        const destination = new window.google.maps.LatLng(currentPosition?.lat, currentPosition?.lng);
+
+        const service = new window.google.maps.DistanceMatrixService();
+        service.getDistanceMatrix(
+            {
+                origins: [origin],
+                destinations: [destination],
+                travelMode: "DRIVING",
+            },
+            (response, status) => {
+                console.log(status, "distanceeeeeeeeeeeeeeee;;;;;;;;;;;;;;;;;;;;;;;;;");
+
+                if (status === "OK") {
+                    const distanceText = response.rows[0].elements[0].distance.text;
+                    console.log(distanceText, "distanceeeeeeeeeeeeeeee");
+
+                    //   setDistance(distanceText);
+                    setJessyCabsDistance(distanceText)
+                    return
+                } else {
+                    //   alert("Error calculating distance");
+                    console.log(response, "distanceeeeeeeeeeeeeeeeresssssssssssssss");
+
+                }
+            }
+        );
+    };
+    const handleStartTrip = (event) => {
+        setClickPosition({
+            lat: startTripLocation?.latitude,
+            lng: startTripLocation?.longitude,
+            pixelX: event?.domEvent?.clientX,
+            pixelY: event?.domEvent?.clientY,
+        });
+        setTripModalOpen(true);
+    };
+    const handleEndTrip = (event) => {
+        setClickPosition({
+            lat: endTripLocation?.latitude,
+            lng: endTripLocation?.longitude,
+            pixelX: event?.domEvent?.clientX,
+            pixelY: event?.domEvent?.clientY,
+        });
+        setTripModalOpen(true)
+
+    }
+
+
+
+    const handleTripidChange = (value) => {
+        setSelectedTripid(value?.value || null);
+    };
     return (
         <>
             <div>
@@ -256,12 +456,11 @@ const VehicleInformationDrawer = () => {
                                                     </div>
                                                     <div className='overview-content'>
                                                         <span className='overview-left'>Current Location:</span>
-                                                        <span>Patel G Kulappa Road, Ramaswamipalya, Banasawadi, Bengaluru, Bangalore Urban, Karnataka</span>
+                                                        <span>{address}</span>
                                                     </div>
-
                                                     <div className='overview-content'>
                                                         <span className='overview-left'>Model:</span>
-                                                        <span>2016 TOYOTA ETIOS</span>
+                                                        <span>{vehicleListData[0]?.yearModel}</span>
                                                     </div>
 
                                                     <div className='overview-content-border' >
@@ -270,12 +469,26 @@ const VehicleInformationDrawer = () => {
 
                                                     <div className='overview-content'>
                                                         <span className='overview-left'>Fuel Type:</span>
-                                                        <span>Diesel</span>
+                                                        <span>{vehicleListData[0]?.fueltype}</span>
                                                     </div>
 
-                                                    <div className='overview-content'>
-                                                        <span className='overview-left'>Distance:</span>
-                                                        <span>1.2 km</span>
+                                                    <div className='overview-content-dropdown'>
+                                                        <div>
+                                                            <span className='overview-left'>Distance:</span>
+                                                            <span>1.2 km</span>
+                                                        </div>
+                                                        <div>
+                                                            <Autocomplete
+                                                                fullWidth
+                                                                // size="small"
+                                                                sx={{ width: 180 }}
+                                                                options={tripidOptions || ""}
+                                                                value={tripidOptions.find(option => option.value === selectedTripid) || null}
+                                                                onChange={(label, value) => handleTripidChange(value)} // Correcting onChange
+                                                                getOptionLabel={option => option.label}
+                                                                renderInput={(params) => <TextField {...params} label="Select Trip ID" />}
+                                                            />
+                                                        </div>
                                                     </div>
 
                                                     <div className='overview-content-border'>
@@ -391,92 +604,176 @@ const VehicleInformationDrawer = () => {
                                 </div>
 
                                 <div className='vehicle-info-content-map'>
-                                    <GoogleMap
-                                        mapContainerStyle={containerStyle}
-                                        options={{
-                                            minZoom: 12,
-                                            maxZoom: 18,
-                                        }}
-                                        center={center}
-                                        zoom={10}
-                                        onLoad={onLoad}
-                                        onUnmount={onUnmount}
-                                    >
-                                        {markerLocation && (
-                                            <MarkerF
-                                                position={markerLocation}
-                                                icon={{
-                                                    anchor: new google.maps.Point(137 / 2, 137 / 2),
-                                                    scaledSize: new google.maps.Size(137, 137),
-                                                }}
-                                                onClick={handleOpenPopup} // Open popup on marker click
-                                            />
-                                        )}
-
-                                        {openPopup && popupPosition && (
-                                            <InfoWindow
-                                                position={popupPosition}
-                                                onCloseClick={handleClosePopup} // Close popup when the close button is clicked
-                                            >
-                                                <div className='map-popup'>
-                                                    <h4>6744TN11BE6744</h4>
-                                                    <p>Group: Hyderabad|Driver: Vijayakumar</p>
-                                                    <p><span className='red-indication'></span>Last updated:22 Aug 24, 02:13:10 PM</p>
-                                                    <div className='status-from'>
-                                                        <p>Status: Parked</p>
-                                                        <p>From: An Hour</p>
-                                                    </div>
-                                                    <div className='location-near'>
-                                                        <p>Location:
-                                                            Perumalpattu - Kottamedu Road, Oragadam Industrial Corridor, Perinjambakkam, Kanchipuram, Tamil Nadu
-                                                        </p>
-                                                        <p>
-                                                            Nearest
-                                                            Address:
-                                                            46.9 km from JESSY CABS ( Office )
-                                                        </p>
-                                                    </div>
-
-                                                    <div className='btns-section'>
-                                                        <button className='popup-last-btns'>Nearby</button>
-                                                        <button className='popup-last-btns'>Add Address</button>
-                                                        <button className='popup-last-btns'>Create Job</button>
-                                                        <button className='popup-last-btns'>History</button>
-                                                    </div>
-
+      {openPopup && popupPosition && (
+                                        <InfoWindow
+                                            position={popupPosition}
+                                            onCloseClick={handleClosePopup} // Close popup when the close button is clicked
+                                        >
+                                            <div className='map-popup'>
+                                                <h4>6744TN11BE6744</h4>
+                                                <p>Group: Hyderabad|Driver: Vijayakumar</p>
+                                                <p><span className='red-indication'></span>Last updated:22 Aug 24, 02:13:10 PM</p>
+                                                <div className='status-from'>
+                                                    <p>Status: Parked</p>
+                                                    <p>From: An Hour</p>
                                                 </div>
-                                            </InfoWindow>
-                                        )}
+                                                <div className='location-near'>
+                                                    <p>Location:
+                                                        Perumalpattu - Kottamedu Road, Oragadam Industrial Corridor, Perinjambakkam, Kanchipuram, Tamil Nadu
+                                                    </p>
+                                                    <p>
+                                                        Nearest
+                                                        Address:
+                                                        46.9 km from JESSY CABS ( Office )
+                                                    </p>
+                                                </div>
 
+                                                <div className='btns-section'>
+                                                    <button className='popup-last-btns'>Nearby</button>
+                                                    <button className='popup-last-btns'>Add Address</button>
+                                                    <button className='popup-last-btns'>Create Job</button>
+                                                    <button className='popup-last-btns'>History</button>
+                                                </div>
 
-
-                                        {direction && (
-                                            <DirectionsRenderer
-                                                key={directionRendererKey}
-                                                directions={directionRoute}
+                                            </div>
+                                        </InfoWindow>
+                                    )}
+                                    {selectedTripid !== null ? <MapParticularTrip selectedTripid={selectedTripid} /> : <><GoogleMap
+                                        mapContainerStyle={containerStyle}
+                                        center={center}
+                                        zoom={18}
+                                        onLoad={() => console.log("Map loaded")}
+                                    >
+                                        {dynamicPolyline.length > 0 ? (
+                                            <Polyline
+                                                path={dynamicPolyline}
                                                 options={{
-                                                    polylineOptions: {
-                                                        strokeColor: "#1FA445",
-                                                        strokeWeight: 7,
-                                                    },
+                                                    strokeColor: "#189df3",
+                                                    strokeOpacity: 0.8,
+                                                    strokeWeight: 6,
                                                 }}
                                             />
-                                        )}
-                                        {/* <div style={{ zIndex: 1, position: 'absolute', top: '60px', right: '20px' }}>
-          <Button variant="contained" color="primary" onClick={handleOpenPopup}>
-            Open Popup
-          </Button>
-        </div> */}
+                                        )
+                                            : <Polyline
+                                                path={chennaiCoordinates.map((coord) => ({
+                                                    lat: coord.latitude,
+                                                    lng: coord.longitude,
+                                                }))}
+                                                options={{
+                                                    strokeColor: "#189df3",
+                                                    strokeOpacity: 0.8,
+                                                    strokeWeight: 6,
+                                                }}
+                                            />
+                                        }
 
-                                        <div style={{ zIndex: 1, position: 'absolute', top: '400px', right: '60px' }} onClick={handleOpenPopup}>
-                                            <IconButton onClick={handleCenterButtonClick} style={{ backgroundColor: 'red', color: 'white' }}>
-                                                <NavigationIcon />
-                                            </IconButton>
+                                        <MarkerF
+                                            position={{
+                                                lat: startMarkerPosition.latitude,
+                                                lng: startMarkerPosition.longitude,
+                                            }}
+                                            icon={{
+                                                url: startPointIcon,
+                                                scaledSize: new window.google.maps.Size(24, 24),
+                                                origin: new window.google.maps.Point(0, 0),
+                                                anchor: new window.google.maps.Point(12, 12),
+                                            }}
+                                        />
+
+                                        <div>
+                                            <MarkerF
+                                                position={{
+                                                    lat: startTripLocation?.latitude,
+                                                    lng: startTripLocation?.longitude,
+                                                }}
+                                                onClick={handleStartTrip}
+                                                icon={{
+                                                    url: startPointIcon,
+                                                    scaledSize: new window.google.maps.Size(24, 24),
+                                                    origin: new window.google.maps.Point(0, 0),
+                                                    anchor: new window.google.maps.Point(12, 12),
+                                                }}
+                                            />
+                                            {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
+                                        </div>
+                                        <div>
+                                            <MarkerF
+                                                position={{
+                                                    lat: endTripLocation?.latitude,
+                                                    lng: endTripLocation?.longitude,
+                                                }}
+                                                onClick={handleEndTrip}
+                                                icon={{
+                                                    url: startPointIcon,
+                                                    scaledSize: new window.google.maps.Size(24, 24),
+                                                    origin: new window.google.maps.Point(0, 0),
+                                                    anchor: new window.google.maps.Point(12, 12),
+                                                }}
+                                            />
+                                            {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
                                         </div>
 
-                                    </GoogleMap>
-                                </div>
 
+                                        <MarkerF
+                                            position={{
+                                                lat: currentPosition.lat,
+                                                lng: currentPosition.lng,
+                                            }}
+                                            icon={{
+                                                url: blackicon,
+                                                scaledSize: new window.google.maps.Size(24, 24),
+                                                origin: new window.google.maps.Point(0, 0),
+                                                anchor: new window.google.maps.Point(12, 12),
+                                            }}
+                                        />
+
+
+
+
+
+                                    </GoogleMap>
+
+
+
+
+                                    <div style={{ zIndex: 1, position: 'absolute', top: '400px', right: '60px' }} onClick={handleOpenPopup}>
+                                        <IconButton onClick={handleCenterButtonClick} style={{ backgroundColor: 'red', color: 'white' }}>
+                                            <NavigationIcon />
+                                        </IconButton>
+                                    </div>
+
+                                    <div className='playButton'>
+                                        <div>
+                                        </div>
+                                        <div className='playArrow'>
+                                            <Button onClick={togglePlayPause}>
+                                                {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                                            </Button>
+
+                                        </div>
+                                        <div className='playspeed'>
+
+                                            <p style={{ textAlign: 'center', margin: 0 }}>Play Speed</p>
+                                            <Button sx={{
+                                                backgroundColor: speedState === 1000 ? 'gray' : 'white',
+                                                color: speedState === 1000 ? 'white' : 'black',
+                                                '&:hover': { backgroundColor: 'lightgray' },
+                                            }} onClick={() => handle10xDrawPaths()}>10X</Button>
+
+                                            <Button sx={{
+                                                backgroundColor: speedState === 500 ? 'gray' : 'white',
+                                                color: speedState === 500 ? 'white' : 'black',
+                                                '&:hover': { backgroundColor: 'lightgray' },
+                                            }} onClick={() => handle20xDrawPaths()}>20X</Button>
+
+                                            <Button sx={{
+                                                backgroundColor: speedState === 100 ? 'gray' : 'white',
+                                                color: speedState === 100 ? 'white' : 'black',
+                                                '&:hover': { backgroundColor: 'lightgray' },
+                                            }} onClick={() => handle50xDrawPaths()}>50X</Button>
+                                        </div>
+                                    </div></>}
+                                </div>
                             </div>
 
                         </Box>

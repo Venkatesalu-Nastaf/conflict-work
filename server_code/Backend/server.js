@@ -1,7 +1,7 @@
 //Database connection for Nastaf Appliction this file contain Add, Delete, Collect data from mysql, and Update functions:  
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');  
 const app = express();
 const fs = require('fs');
 const db = require('./db');
@@ -81,7 +81,9 @@ const IndividualBill = require('./customer_master/Router/Individual_Billing/Indi
 const GstReport = require('./customer_master/Router/GstReport/GstReport');
 const billWiseReport = require('./customer_master/Router/BillWisedReport/BillWisedReport');
 const pendingBill = require('./customer_master/Router/PendingBills/PendingBill')
-const DashBoardBillReport = require('./customer_master/Router/BillingDashboard/BillingDashboard')
+const AggrementPage = require('./customer_master/Router/Aggrement/aggrement')
+const DashBoardBillReport = require('./customer_master/Router/BillingDashboard/BillingDashboard');
+const VehcileDetails = require('./customer_master/Router/VehicleDetails/vehicleDetails')
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
 // -----------------------------------------------------------------------------------------------------------
@@ -91,7 +93,7 @@ app.use('/', vehicleinfoRouter); // vehicle_info page database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', bookingRouter); // Booking page database:-
 // -----------------------------------------------------------------------------------------------------------
-
+app.use('/', AggrementPage); // Aggrement page database:-
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', transferlistRouter); // Transfer lsit Database:
 // -----------------------------------------------------------------------------------------------------------
@@ -171,6 +173,8 @@ app.use('/', billWiseReport);//billWiseReport
 app.use('/', pendingBill);//PendingBill
 // -------------------------------------------------------------------------------------------
 app.use('/', DashBoardBillReport)
+// --------------------------------------------------------------------------------------------
+app.use('/',VehcileDetails)
 
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;
@@ -269,6 +273,26 @@ app.get('/getmapimages/:tripid', (req, res) => {
 });
 
 
+app.get('/getmapimagesverfiy/:tripid', (req, res) => {
+  const { tripid } = req.params;
+
+  const query = 'SELECT path FROM mapimage WHERE tripid = ?';
+  db.query(query, [tripid], (err, results) => {
+    if (err) {
+      console.log("err", err)
+      return res.status(500).send('Internal Server Error');
+    }
+    // if (results.length === 0) {
+    //   // No record found for the given tripid
+    //   return res.status(404).send('Image not found');
+    // }
+    return res.status(200).json(results)
+  
+  
+  });
+});
+
+
 app.delete('/api/mapimagedelete/:tripid', (req, res) => {
   const tripid = req.params.tripid;
   const sql = `SELECT path FROM mapimage WHERE tripid = ?`;
@@ -351,6 +375,7 @@ app.post('/uploads', upload.single('file'), (req, res) => {
 });
 //get image from the folder
 const imageDirectory = path.join(__dirname, 'uploads');
+
 // Serve static files from the imageDirectory
 app.use('/images', express.static(imageDirectory));
 // Example route to serve an image by its filename
@@ -397,8 +422,10 @@ app.put('/tripsheet_uploads/:id/:documentType/:data', uploadtripsheet.single('im
     const insertQuery = `INSERT INTO tripsheetupload (tripid, path, name,documenttype) VALUES (?, ?, ?,?)`;
     db.query(insertQuery, [userId, fileName, filename, documentType], (err, result) => {
       if (err) {
+        console.log(err,"tripupload")
         return res.status(500).json({ Message: "Error inserting profile picture", err });
       }
+      console.log(result, "data of the tripsheet")
       return res.status(200).json({ Status: "success" });
     })
 
@@ -407,6 +434,110 @@ app.put('/tripsheet_uploads/:id/:documentType/:data', uploadtripsheet.single('im
   }
 
 });
+
+const uploadstartkm = multer({
+  storage: storagetripsheet
+})
+
+// app.put('/tripsheet_uploads/:id/:data', uploadstartkm.single('image'), (req, res) => {
+//   const userId = req.params.id;
+//   const fileName = req.file.filename;
+//   const filename = req.file.originalname;
+
+//   if (userId, fileName, filename) {
+//     const insertQuery = `UPDATE tripsheetupload SET startkm_imgpath = ? WHERE tripid = ?`;
+//     db.query(insertQuery, [userId, fileName, filename], (err, result) => {
+//       if (err) {
+//         return res.status(500).json({ Message: "Error inserting profile picture", err });
+//       }
+//       return res.status(200).json({ Status: "success" });
+//     })
+
+//   } else {
+//     return res.status(500).json({ Message: "some data undefind" })
+//   }
+
+// });
+
+app.put('/tripsheet_uploads/:id/:data', uploadstartkm.single('image'), (req, res) => {
+  const tripId = req.params.id;
+  const data = req.params.data;
+  const fileName = req.file?.filename; 
+  const originalName = req.file?.originalname;
+
+  if (tripId && fileName && originalName) {
+    const updateQuery = `UPDATE tripsheetupload SET startkm_imgpath = ? WHERE tripid = ?`;
+    db.query(updateQuery, [fileName, tripId], (err, result) => {
+      if (err) {
+        console.error(err); 
+        return res.status(500).json({ Message: "Error updating database", err });
+      }
+      return res.status(200).json({ Status: "success" });
+    });
+  } else {
+    return res.status(400).json({ Message: "Required data is missing" });
+  }
+});
+
+const uploadclosekm = multer({
+  storage: storagetripsheet
+})
+
+
+app.put('/tripsheet_uploadsclosekm/:id/:data', uploadclosekm.single('image'), (req, res) => {
+  const tripId = req.params.id;
+  const data = req.params.data;
+  const fileName = req.file?.filename;
+  const originalName = req.file?.originalname;
+
+  if (tripId && fileName && originalName) {
+    const updateQuery = `UPDATE tripsheetupload SET closekm_imgpath = ? WHERE tripid = ?`;
+    db.query(updateQuery, [fileName, tripId], (err, result) => {
+      if (err) {
+        return res.status(500).json({ Message: "Error updating database", err });
+      }
+      return res.status(200).json({ Status: "success" });
+    });
+  } else {
+    return res.status(400).json({ Message: "Required data is missing" });
+  }
+});
+
+app.put('/tripsheet-updatekm/:tripid', (req, res) => {
+  const { startkm, closekm ,Hcl,duty} = req.body; 
+  const tripid = req.params.tripid; 
+  // let sql = "UPDATE tripsheet SET startkm = ?, closekm = ? WHERE tripid = ?"
+    
+  let sql = "";
+  let values = [];
+  
+  if (Hcl === 1 && duty === "Outstation") {
+    // First condition
+    sql = "UPDATE tripsheet SET startkm = ?, closekm = ? WHERE tripid = ?";
+    values = [startkm, closekm,tripid];
+  } else if (Hcl === 1 && duty !== "Outstation") {
+    // Second condition
+    sql = "UPDATE tripsheet SET startkm = ?,closekm = ?, vendorshedoutkm = ?,vendorshedinkm = ? WHERE tripid = ?";
+    values = [startkm, closekm,startkm, closekm,tripid];
+  } else {
+    // Default case or other conditions
+    sql = "UPDATE tripsheet SET startkm = ?, closekm = ? WHERE tripid = ?";
+    values = [startkm, closekm,tripid];
+  }
+
+  db.query(sql,values,(err, result) => {
+      if (err) {
+        console.error('Error updating tripsheet:', err);
+        return res.status(500).send('Failed to update');
+      }
+      console.log(result, "data of the tripsheet")
+      return res.status(200).send('Successfully updated');
+    }
+  );
+});
+
+
+
 // --------------------------driverappupdatedtoll and parking image----------------------
 const storagetripsheet1 = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -584,6 +715,7 @@ app.get('/get-signimageforpdfrendered/:tripid', (req, res) => {
 
 const attachedDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
+console.log(attachedDirectory, "attachedDirectory2")
 app.use('/images', express.static(attachedDirectory));
 // Example route to serve an image by its filename
 app.get('/get-attachedimage/:tripid', (req, res) => {
@@ -697,7 +829,7 @@ app.post('/generate-link/:tripid', (req, res) => {
   const checkIfExistsQuery = `SELECT * FROM signatures WHERE tripid = ?`;
   db.query(checkIfExistsQuery, [tripid], (err, rows) => {
     if (err) {
-      console.log("error ", err)
+      
       return res.status(500).json({ message: "Error checking profile existence", error: err });
     }
     if (rows.length > 0) {
@@ -705,6 +837,7 @@ app.post('/generate-link/:tripid', (req, res) => {
       const query = 'UPDATE signatures SET unique_number = ? WHERE tripid = ?';
       db.query(query, [uniqueNumber, tripid], (err, results) => {
         if (err) {
+          
           return res.status(500).json({ message: 'Internal server error', error: err });
         }
         var ciphertext1 = CryptoJS.AES.encrypt(JSON.stringify(tripid), 'my-secret-key@123').toString();
@@ -720,6 +853,7 @@ app.post('/generate-link/:tripid', (req, res) => {
       const uniqueNumber = generateUniqueNumber();
       db.query('INSERT INTO signatures (tripid, unique_number) VALUES (?, ?)', [tripid, uniqueNumber], (insertErr, insertResult) => {
         if (insertErr) {
+          // console.log(insertErr,"ee")
           return res.status(500).json({ message: "Error inserting new tripid", error: insertErr });
         }
         // const dataencryt=encrypt(tripid)
@@ -729,6 +863,7 @@ app.post('/generate-link/:tripid', (req, res) => {
 
         // const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?tripid=${tripid}&uniqueNumber=${uniqueNumber}`;
         const link = `${process.env.FRONTEND_APIURL}/onlinedigital/digitalsignature?trip=${encodeURIComponent(ciphertext)}&uniqueNumber=${encodeURIComponent(cipherunique2)}`;
+        // console.log(link,"ll")
 
         res.status(200).json({ link });
       });
@@ -841,14 +976,16 @@ app.post("/signaturedatatimes/:tripid", (req, res) => {
     updateclosedate,
     updateclosetime } = req.body;
   console.log(tripid, status, datesignature, signtime,updateclosedate,updateclosetime, "jjjjjjj")
-   const sql2=" UPDATE tripsheet set closedate=? , closetime = ? where  tripid = ?"
+   const sql2=" UPDATE tripsheet set closedate=? , closetime = ?,vendorshedInDate = ?, vendorshedintime = ? where  tripid = ?"
 
   db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, datesignature, signtime, status], (err, results) => {
     if (err) {
+      // console.log(err,"errins")
       return res.status(400).json(err)
     }
-    db.query(sql2,[updateclosedate,updateclosetime,tripid],(err,results1)=>{
+    db.query(sql2,[updateclosedate,updateclosetime,updateclosedate,updateclosetime,tripid],(err,results1)=>{
       if (err) {
+        // console.log(err,"trip")
         return res.status(400).json(err)
       }
       console.log(results)
@@ -909,17 +1046,17 @@ app.get("/getvehicleInfo", (req, res) => {
     console.log("query", req.query);
     const { hireTypes, startDate, endDate } = req.query;
     const status = 'Closed'
-    // const sql = `
-    //   SELECT * FROM tripsheet
-    //   WHERE hireTypes = ?
-    //   AND (
-    //     (startdate <= ? AND closedate >= ?)
-    //     OR (startdate BETWEEN ? AND ?)
-    //     OR (closedate BETWEEN ? AND ?)
-    //   )
-    // `;
+ 
+  
 
-    const sql = ` SELECT * FROM tripsheet  WHERE hireTypes = ? AND  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedInDate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?`
+    const sql = ` SELECT *,(COALESCE(NULLIF(Vendor_totalAmountKms, ''), 0) 
++ COALESCE(NULLIF(Vendor_totalAmountHours, ''), 0) 
++ COALESCE(NULLIF(Vendor_NightbataTotalAmount, ''), 0) 
++ COALESCE(NULLIF(Vendor_BataTotalAmount, ''), 0) 
++ COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
++ COALESCE(NULLIF(vendortoll, ''), 0) 
++ COALESCE(NULLIF(vendorparking, ''), 0) 
++ COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE hireTypes = ? AND  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?`
 
 
     // db.query(sql, [hireTypes, startDate, endDate, startDate, endDate, startDate, endDate], (err, result) => {
@@ -928,6 +1065,7 @@ app.get("/getvehicleInfo", (req, res) => {
         console.error("Error executing query:", err);
         return res.status(500).json({ message: "Something went wrong", error: true });
       }
+      console.log(result)
       return res.status(200).json(result);
     });
 

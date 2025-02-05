@@ -41,7 +41,7 @@
   }
 
   .parentContainer {
-    height: 9rem;
+    /* height: 9rem; */
   }
 }
 
@@ -56,7 +56,7 @@
 } */
 
 .cards-dashboard {
-  width: 100%;
+  width: 25vw;
 }
 
 @media screen and (max-width: 1219px) {

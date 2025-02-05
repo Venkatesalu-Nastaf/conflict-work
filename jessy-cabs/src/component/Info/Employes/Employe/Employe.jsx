@@ -20,6 +20,7 @@ import DialogContent from '@mui/material/DialogContent';
 
 // ICONS
 import useEmployee from "./useEmployee";
+import { SiStatuspal } from "react-icons/si";
 import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from "@mui/icons-material/Email";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -236,20 +237,23 @@ const Employe = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <div className="icone">
-                  <TransgenderRoundedIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  id="gender"
-                  className="full-width"
-                  label="Gender"
-                  name="gender"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.gender || book.gender}
-                  onChange={handleChange}
-                />
-              </div>
+  <div className="icone">
+    <TransgenderRoundedIcon color="action" />
+  </div>
+  <TextField
+    select
+    size="small"
+    id="gender"
+    className="full-width"
+    label="Gender"
+    name="gender"
+    value={selectedCustomerData?.gender || book.gender || ''}
+    onChange={handleChange}
+  >
+    <MenuItem value="Male">Male</MenuItem>
+    <MenuItem value="Female">Female</MenuItem>
+  </TextField>
+</div>
               <div className="input">
                 <div className="icone">
                   <BloodtypeIcon color="action" />
@@ -363,13 +367,32 @@ const Employe = () => {
                   size="small"
                   id="esino"
                   className="full-width"
-                  label="ESI No"
+                  label="ESIC No"
                   name="esino"
                   autoComplete="new-password"
                   value={selectedCustomerData?.esino || book.esino}
                   onChange={handleChange}
                 />
               </div>
+
+              <div className="input">
+              <div className="icone">
+                                  <SiStatuspal color="action" />
+                                </div>
+  <TextField
+    select
+    size="small"
+    id="empsts"
+    className="full-width"
+    label="Employee Status"
+    name="empsts"
+    value={selectedCustomerData?.empsts|| book.empsts || ''}
+    onChange={handleChange}
+  >
+    <MenuItem value="Temporary">Temporary</MenuItem>
+    <MenuItem value="Permanent">Permanent</MenuItem>
+  </TextField>
+</div>
               <div className="input-licence">
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
@@ -397,7 +420,7 @@ const Employe = () => {
                   ) : (
                     <Button color="primary" onClick={() => {
                       setError(true);
-                      setErrorMessage("Please Enter Booking No");
+                      setErrorMessage("Please Enter Employee No");
                     }}>
                       <UploadFileIcon />
                     </Button>
@@ -406,6 +429,8 @@ const Employe = () => {
 
                
               </div>
+
+              
             
 
 

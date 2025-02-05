@@ -32,28 +32,35 @@ const useExeclpage = () => {
         { key: "duty1", header: "Sub Route Type", width: 150 },
 
         { key: "VendorName", header: "Vendor Name", width: 150 },
-        { key: "Vendor", header: "Vendor", width: 120 },
-        { key: "vehicleName", header: "Vehicle Name", width: 120 },
+        // { key: "Vendor", header: "Vendor", width: 120 },
+        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
         { key: "vehType", header: "Vehicle Type (Requested)", width: 200 },
-        { key: "vechicletype", header: "Vehicle Actual Make", width: 180 },
-        { key: "vehTypebilling", header: "Billing Vehicle Type", width: 180 },
+        // { key: "vechicletype", header: "Vehicle Actual Make", width: 180 },
+        { key: "vehicleName", header: "Vehicle Actual Make", width: 180 },
+        // { key: "vehTypebilling", header: "Billing Vehicle Type", width: 180 },
         { key: "fueltype", header: "Fuel Type", width: 120 },
-        { key: "tripsheetdate", header: "Date", width: 120 },
+        // { key: "tripsheetdate", header: "Date", width: 120 },
+        { key: "sheoutDatetrip", header: "Date", width: 120 },
+        // { key: "shedOutDate", header: "Date", width: 120 },
         { key: "employeeno", header: "Employee SAP Code", width: 150 },
         { key: "guestname", header: "Travelled Employee Name", width: 200 },
         { key: "Gender", header: "Gender", width: 100 },
         { key: "escort", header: "Escort Route", width: 150 },
-        { key: "pickup", header: "Pickup Point / Shed", width: 180 },
-        { key: "useage", header: "Drop Point", width: 120 },
+ 
+        { key: "address1", header: "Pickup Point / Shed", width: 180 },
+        { key: "useage", header: "Drop Point", width: 200},
         { key: "starttime", header: "Shift Timing", width: 150 },
         { key: "UserNos_Occupancy", header: "User Nos / Occupancy", width: 180 },
         { key: "location", header: "Location", width: 120 },
 
         { key: "Groups", header: "Vehicle Category", width: 150 },
         { key: "remark", header: "Route Type (Pick/Drop)", width: 180 },
-        { key: "starttime1", header: "Garage Initial Time", width: 180 },
-        { key: "reporttime", header: "Initial Time", width: 120 },
+        // { key: "starttime1", header: "Garage Initial Time", width: 180 },
+        // { key: "reporttime", header: "Initial Time", width: 120 },
+
+        { key: "reporttime", header: "Garage Initial Time", width: 180 },
+        { key: "starttime1", header: "Initial Time", width: 120 },
         { key: "closetime", header: "End Time", width: 120 },
         { key: "shedintime", header: "Garage End Time", width: 150 },
         { key: "totaltime", header: "Total Hrs.", width: 120 },
@@ -74,13 +81,16 @@ const useExeclpage = () => {
         { key: "driverBeta", header: "Driver Bhatta", width: 150 },
         { key: "OutstationCharges", header: "Outstation Charges", width: 180 },
         { key: "withoutTaxes", header: "Total Amount", width: 150 },
-        { key: "PenaltyAmount", header: "Penalty Amount", width: 150 },
-        { key: "gstTax", header: "GST%", width: 100 },
+        // { key: "PenaltyAmount", header: "Penalty Amount", width: 150 },
+        { key: "gstTaxes", header: "GST%", width: 100 },
+        { key: "gstTax1", header: "GST Amount", width: 100 },
         { key: "permit", header: "Permit", width: 120 },
         { key: "parking", header: "Parking", width: 120 },
         { key: "toll", header: "Toll", width: 100 },
-        { key: "driverBeta_amount", header: "DND/Toll/Parking Amount", width: 200 },
-        { key: "totalcalcAmount", header: "Amount With All Taxes", width: 200 }
+        { key: "TOTALtollandpark", header: "DND/Toll/Parking Amount", width: 200 },
+        { key: "totalcalcAmount1", header: "Amount With All Taxes", width: 200 },
+        {key: "shedInDate",header: "End Date",width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "")},
+
 
 
         // Add more keys as needed
@@ -95,18 +105,21 @@ const useExeclpage = () => {
         { key: "duty", header: "Route Type", width: 120 },
         { key: "calcPackage", header: "Package", width: 150 },
         { key: "VendorName", header: "Vendor Name", width: 150 },
-        { key: "vehicleName", header: "Vehicle Name", width: 120 },
+        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
-        { key: "vehType", header: "Vehicle Make", width: 180 },
+        // { key: "vehType", header: "Vehicle Make", width: 180 },
+        { key: "vehicleName", header: "Vehicle Make", width: 180 },
         { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
 
         { key: "segement", header: "vehicle Segment", width: 180 },
         { key: "fueltype", header: "Fuel Used", width: 120 },
-        { key: "tripsheetdate", header: "Date", width: 120 },
-        { key: "employeeno", header: "User Name", width: 150 },
+        // { key: "tripsheetdate", header: "Date", width: 120 },
+        { key: "sheoutDatetrip", header: "Date", width: 120 },
+        // { key: "employeeno", header: "User Name", width: 150 },
+        { key: "guestname", header: "User Name", width: 150 },
         { key: "Gender", header: "Gender", width: 100 },
         { key: "escort", header: "Escort Route", width: 150 },
-        { key: "pickup", header: "Pickup Point", width: 180 },
+        { key: "address1", header: "Pickup Point", width: 180 },
         { key: "useage", header: "Drop Point", width: 120 },
         { key: "remark", header: "Runing Details", width: 150 },
         { key: "Zonetranfer", header: "Zone for Airport transfers", width: 150 },
@@ -123,9 +136,10 @@ const useExeclpage = () => {
         { key: "closekm", header: "Emp.End Km", width: 180 },
         { key: "shedin", header: "End Km (At Garage)  LUXURY 2", width: 180 },
         { key: "totalkm1", header: "Total Km", width: 120 },
-        { key: "driverBeta_amount", header: "DND/Toll/Parking Amount", width: 200 },
+        { key: "TOTALtollandpark", header: "DND/Toll/Parking Amount", width: 200 },
         { key: "totalcalcAmount", header: "Total Amount", width: 150 },
-        { key: "opsremark", header: "Ops Remarks", width: 150 },
+        {key: "shedInDate",header: "End Date",width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "")},
+        { key: "opsremark", header: "Ops Remarks", width: 150 }
 
     ]
 
@@ -143,15 +157,71 @@ const useExeclpage = () => {
 
 
     };
-    function addPercentage(amount, percent) {
-        let percentageValue = (amount * percent) / 100;
-        return amount + percentageValue;
+    // function addPercentage(amount, percent) {
+    
+    //     amount = parseFloat(amount) || 0;
+    //     percent = parseFloat(percent) || 0;
+    
+    //     let percentageValue = (amount * percent) / 100;
+    
+    //     const datapercent = amount + percentageValue;
+    
+    //     return datapercent.toFixed(2);
+    // }
+
+
+    function addPercentage(amount1, percent1,toll1) {
+    
+       let amount = parseFloat(amount1) || 0;
+       let percent = parseFloat(percent1) || 0;
+       let  tollamount = parseFloat(toll1) || 0;
+       console.log(amount,percent,tollamount,'zipgstadddd')
+    
+      
+    
+        const datapercent = amount + percent + tollamount;
+        console.log(datapercent,'zipgstaddddpercent',Math.round(datapercent))
+    
+        return Math.round(datapercent);
     }
+    
+
+    // function addPercentage(amount, percent) {
+    //     console.log(amount,percent,'zippppppppppppppppppppp');
+
+    //     let percentageValue = (amount * percent) / 100 || 0;
+      
+    //     const datapercent = amount + percentageValue
+    //     return datapercent.toFixed(2)
+    // }
+    
     function withoutTaxesdata(total,toll,parking,permit) {
         let withoutaxValue = total-toll-parking-permit;
         return withoutaxValue;
     }
 
+    function totalamountgst(gst,total) {
+        console.log(gst,total,'zipgst')
+        let gsttax = (gst * total) / 100;
+        console.log(gsttax,'zipgst')
+        return gsttax.toFixed(2);
+
+    }
+
+    // function addTollparkparking(toll,parking,permit) {
+    //     console.log(toll,parking,permit,'zip')
+    //     let tollparkparking = Number(toll) || 0 + Number(parking) || 0 + Number(permit) || 0
+    //     console.log(tollparkparking,'ziptotal')
+    //     return tollparkparking;
+    // }
+
+    function addTollparkparking(toll, parking, permit) {
+        console.log(toll, parking, permit, 'zip');
+        let tollparkparking = (Number(toll) || 0) + (Number(parking) || 0) + (Number(permit) || 0);
+        console.log(tollparkparking, 'ziptotal');
+        return tollparkparking;
+    }
+    
 
 
 
@@ -172,8 +242,8 @@ const useExeclpage = () => {
         return time;
       }
 
-    const handleExcelDownload = async (misformat, invoice, invoicedate) => {
-        console.log(misformat, invoice, invoicedate, "zipexcel")
+    const handleExcelDownload = async (misformat, invoice, invoicedate,customerData) => {
+        console.log(misformat, invoice, invoicedate,customerData, "zipexcel")
         const data = invoice;
         const data2 = invoice;
 
@@ -211,7 +281,8 @@ const useExeclpage = () => {
                     column.alignment = { horizontal: 'center', vertical: 'middle' };
                 });
 
-                data.forEach((singleData, index) => {
+                data.map((singleData, index) => {
+                    console.log(data,'datas of excel datss')
                 
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
@@ -219,20 +290,32 @@ const useExeclpage = () => {
                     singleData['location'] = location
 
                     singleData["duty1"] = singleData["duty"]
-                    singleData["Vendor"] = " Jesscy Cabs"
-                    singleData["VendorName"] = " Jesscy Cabs"
+                    // singleData["Vendor"] = " Jessy Cabs"
+                    singleData["VendorName"] = " Jessy Cabs"
+                    singleData["UserNos_Occupancy"] = 1
+                    singleData["OutstationCharges"] = 0
+                    singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
                     singleData["vechicletype"] = singleData["vehType"]
-                    singleData["vehTypebilling"] = singleData["vehType"]
+                    // singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
-                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
+    
+
+                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
+                     singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
                     singleData["starttime1"]= removeSeconds(singleData["starttime1"])
+                    // singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax,singleData["totalcalcAmount"])
                     
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):"00:00"
-                    singleData["withoutTaxes"]=  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"],singleData["parking"],singleData["permit"])
-                    singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
+                    singleData["withoutTaxes"] =  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"],singleData["parking"],singleData["permit"])
+                    singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax,singleData["withoutTaxes"])
+                    singleData["gstTaxes"] = customerData[0]?.gstTax
+                    singleData["TOTALtollandpark"] =  addTollparkparking(singleData["toll"],singleData["parking"],singleData["permit"])
+                    // singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
+                    // singleData["totalcalcAmount1"]= customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],customerData[0]?.gstTax)
+                    singleData["totalcalcAmount1"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["withoutTaxes"],singleData["gstTax1"], singleData["TOTALtollandpark"])
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -245,9 +328,26 @@ const useExeclpage = () => {
                         column.width = Math.max(currentColumnWidth, cellLength + 5);
                     });
                 });
-
-
-
+                const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseInt(row.withoutTaxes || 0, 10), 0);
+                const totalAmountgstAmount = data.reduce((sum, row) => sum + parseInt(row.gstTax1 || 0, 10), 0);
+                const totalparkandtollAmount = data.reduce((sum, row) => sum + parseInt(row.TOTALtollandpark || 0, 10), 0);
+                const Amountwithtax = data.reduce((sum, row) => sum + parseInt(row.totalcalcAmount1 || 0, 10), 0);
+                const totalRow = worksheet.addRow({});
+                totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
+                totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
+                totalRow.eachCell((cell) => {
+                    cell.font = { bold: true };
+                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                });
 
                 // loop through all of the rows and set the outline style.
                 worksheet.eachRow({ includeEmpty: false }, (row) => {
@@ -266,11 +366,12 @@ const useExeclpage = () => {
                             right: { style: 'thin' },
                         };
                     });
+
                 });
 
                 // write the content using writeBuffer
                 const buf = await workbook.xlsx.writeBuffer();
-
+                 
                 // download the processed file
 
                 saveAs(new Blob([buf]), `${fileName}.xlsx`);
@@ -278,12 +379,13 @@ const useExeclpage = () => {
 
 
             } catch (error) {
-                console.error('<<<ERRROR>>>', error);
-                console.error('Something Went Wrong', error.message);
-            } finally {
-                // removing worksheet's instance to create new one
-                workbook.removeWorksheet(workSheetName);
+                console.log('<<<ERRROR>>>', error);
+                console.log('Something Went Wrong', error.message);
             }
+            //  finally {
+            //     // removing worksheet's instance to create new one
+            //     workbook.removeWorksheet(workSheetName);
+            // }
         }
 
         else if (misformat === "New MIS") {
@@ -322,9 +424,12 @@ const useExeclpage = () => {
                     singleData2['location'] = location
                     singleData2["Gender"] = singleData2["gender"] ? singleData2["gender"] : "N/A"
                     singleData2["EscortRoute"] = singleData2["escort"] ? singleData2["escort"] : 'N/A'
-                    singleData2["VendorName"] = " Jesscy Cabs"
+                    singleData2["VendorName"] = " Jessy Cabs"
+                    singleData2["UserNos_Occupancy"] = 1
+                    singleData2["calcPackage"] =  singleData2["duty"] === "Transfer" || singleData2["duty"] === "Outstation" ? singleData2["duty"] :singleData2["calcPackage"]
                     singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
+                    singleData2["shedInDate"]=singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD/MM/YYYY"):""
                     singleData2["tripsheetdate"]=singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
                     singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]):"00.00"
@@ -332,7 +437,10 @@ const useExeclpage = () => {
                     singleData2["timeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["starttime"] : "00.00"
                     singleData2["Endtimeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["shedintime"] : "00.00"
                     singleData2["totaltime1"] = singleData2["totaltime"]
+                    singleData2["TOTALtollandpark"] = addTollparkparking(singleData2["toll"],singleData2["parking"],singleData2["permit"])
                     singleData2["opsremark"] = singleData2["opsremark"] ? singleData2["Opremark"] : ''
+                    // singleData2["totalcalcAmount1"] = singleData2["totalcalcAmount"]
+                    // singleData2["totalcalcAmount1"] = singleData2["totalcalcAmount"]
 
                     worksheet1.addRow(singleData2);
 
@@ -374,21 +482,25 @@ const useExeclpage = () => {
             } catch (error) {
                 console.error('<<<ERRROR>>>', error);
                 console.error('Something Went Wrong', error.message);
-            } finally {
-                // removing worksheet's instance to create new one
-                workbook.removeWorksheet(workSheetName);
-            }
+            } 
+            // finally {
+            //     // removing worksheet's instance to create new one
+            //     workbook.removeWorksheet(workSheetName);
+            // }
 
 
         }
     }
 
 
-    const handledatazipDownload = async (misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel) => {
-        console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation)
+    const handledatazipDownload = async (tripheaderIndex,misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel,customerData,stationData) => {
+        console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation, " console for datas")
+        
         const data = invoice;
         const customername = customer;
         const workbook = new Excel.Workbook();
+        console.log(data,"exceldataaa");
+        
 
         try {
             const zip = new JSZip();
@@ -432,7 +544,11 @@ const useExeclpage = () => {
                     column.alignment = { horizontal: 'center', vertical: 'middle' };
                 });
 
-                data.forEach((singleData, index) => {
+                const uniqueData = data.filter((value, index, self) =>
+                    index === self.findIndex((t) => t.tripid === value.tripid)
+                );
+
+                uniqueData.forEach((singleData, index) => {
 
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
@@ -440,19 +556,28 @@ const useExeclpage = () => {
                     singleData['location'] = location
 
                     singleData["duty1"] = singleData["duty"]
-                    singleData["Vendor"] = " Jesscy Cabs"
-                    singleData["VendorName"] = " Jesscy Cabs"
+                    singleData["Vendor"] = " Jessy Cabs"
+                    singleData["VendorName"] = " Jessy Cabs"
+                    singleData["UserNos_Occupancy"] = 1
+                    singleData["OutstationCharges"] = 0
                     singleData["vechicletype"] = singleData["vehType"]
                     singleData["vehTypebilling"] = singleData["vehType"]
+                    singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
-                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
+                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["starttime1"] = removeSeconds(singleData["starttime"])
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):""
                     singleData["withoutTaxes"]=  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"],singleData["parking"],singleData["permit"])
-                    singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
+                    singleData["TOTALtollandpark"] = addTollparkparking(singleData["toll"],singleData["parking"],singleData["permit"])
+                    // singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
+                    singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax,singleData["withoutTaxes"])
+                    singleData["gstTaxes"] = customerData[0]?.gstTax
+                    // singleData["totalcalcAmount1"] = customerData[0]?.gstTax ? singleData["totalcalcAmount"] : addPercentage(singleData["withoutTaxes"],singleData["gstTax1"], singleData["TOTALtollandpark"])
+                    singleData["totalcalcAmount1"] = addPercentage(singleData["withoutTaxes"],singleData["gstTax1"], singleData["TOTALtollandpark"])
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -465,6 +590,29 @@ const useExeclpage = () => {
                         column.width = Math.max(currentColumnWidth, cellLength + 5);
                     });
                 });
+
+                const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseInt(row.withoutTaxes || 0, 10), 0);
+                const totalAmountgstAmount = data.reduce((sum, row) => sum + parseInt(row.gstTax1 || 0, 10), 0);
+                const totalparkandtollAmount = data.reduce((sum, row) => sum + parseInt(row.TOTALtollandpark || 0, 10), 0);
+                const Amountwithtax = data.reduce((sum, row) => sum + parseInt(row.totalcalcAmount1 || 0, 10), 0);
+                const totalRow = worksheet.addRow({});
+                totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
+                totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
+                totalRow.eachCell((cell) => {
+                    cell.font = { bold: true };
+                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                });
+
+          
 
 
 
@@ -526,21 +674,29 @@ const useExeclpage = () => {
                     column.alignment = { horizontal: 'center', vertical: 'middle' };
                 });
 
-                data.forEach((singleData, index) => {
+                const uniqueData = data.filter((value, index, self) =>
+                    index === self.findIndex((t) => t.tripid === value.tripid)
+                );
+
+                uniqueData.forEach((singleData, index) => {
                     singleData["SNo"] = index + 1;
                     const location = `${singleData.address1}`;
                     singleData['location'] = location
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
+                    singleData["UserNos_Occupancy"] = 1
+                    singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
                     singleData["VendorName"] = " Jesscy Cabs"
                     singleData["vehType1"] = singleData["vehType"]
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
-                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("YYYY-MM-DD"):""
+                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
+                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
                     singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
                     singleData["totaltime1"] = singleData["totaltime"]
+                    singleData["TOTALtollandpark"] = addTollparkparking(singleData["toll"],singleData["parking"],singleData["permit"])
                     singleData["opsremark"] = singleData["opsremark"] ? singleData["Opremark"] : ''
 
                     worksheet.addRow(singleData);
@@ -555,7 +711,7 @@ const useExeclpage = () => {
                         column.width = Math.max(currentColumnWidth, cellLength + 5);
                     });
                 });
-
+                console.log(data , "data of old format excel")
                 // loop through all of the rows and set the outline style.
                 worksheet.eachRow({ includeEmpty: false }, (row) => {
                     // store each cell to currentCell
@@ -599,32 +755,72 @@ const useExeclpage = () => {
                         particularPdf={[pdfData]}
                         organisationdetail={organizationsdetail1}
                         imagename={imageorganisation}
+                        customerData={customerData}
+                        stationData={stationData}
 
                     />
                 ).toBlob();
 
                 const pdfBytes = await blob.arrayBuffer();
-
+// dont delete this code
                 const reactPDFDocument = await PDFDocument.load(pdfBytes);
 
-                const data = await JSON.parse(pdfData.bookattachedimage)
-                const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
-                const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-                const datalink = JSON.parse(uniqueJsonStringbook)
+                // const data = await JSON.parse(pdfData.bookattachedimage)
+                // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+                // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+                // const datalink = JSON.parse(uniqueJsonStringbook)
 
+                const data1 = await JSON.parse(pdfData.Attachedimage)
+                const uniqueArraybook1 = Array.from(new Set(data1?.map(JSON.stringify)))?.map(JSON.parse);
+                const uniqueJsonStringbook1 = JSON.stringify(uniqueArraybook1);
+                const datalink1 = JSON.parse(uniqueJsonStringbook1)
+
+                //  const data = await JSON.parse(pdfData.bookattachedimage)
+                // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+                // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+                // const datalink = JSON.parse(uniqueJsonStringbook)
+
+                
 
                 // return datalink
 
 
                 // console.log(pdfPromises1,"pmisddd")
 
+                // const pdfDocuments = [];
+                // for (const data of datalink) {
+                //     if (data.imagees !== null) {
+                //         const data2 = data.imagees.split('.').pop()
+                //         console.log(data2, "datalonk22")
+                //         if (data2 === "pdf") {
+
+                //             const filePath = `${apiurl}/images/${data.imagees}`;
+                //             console.log(filePath, "datalinkpdfpath")
+
+                //             // Fetch the PDF file
+                //             const response = await fetch(filePath);
+                //             const pdfBytes = await response.arrayBuffer();
+
+                //             // Load the PDF document
+                //             const pdfDocument = await PDFDocument.load(pdfBytes);
+                //             console.log(pdfDocument)
+
+                //             // Add the PDF document to the array
+                //             pdfDocuments.push(pdfDocument);
+                //         }
+                //     }
+                // }
+
                 const pdfDocuments = [];
-                for (const data of datalink) {
-                    if (data.imagees !== null) {
-                        const data2 = data.imagees.split('.').pop()
+
+                for (const data of datalink1) {
+                    if (data.attachedimageurl !== null) {
+                        const data2 = data.attachedimageurl.split('.').pop()
+                        console.log(data2, "datalonk22")
                         if (data2 === "pdf") {
 
-                            const filePath = `${apiurl}/images/${data.imagees}`;
+                            const filePath = `${apiurl}/images/${data.attachedimageurl}`;
+                            console.log(filePath, "datalinkpdfpath")
 
                             // Fetch the PDF file
                             const response = await fetch(filePath);
@@ -639,6 +835,28 @@ const useExeclpage = () => {
                         }
                     }
                 }
+                // for (const data of datalink) {
+                //     if (data.imagees !== null) {
+                //         const data2 = data.imagees.split('.').pop()
+                //         console.log(data2, "datalonk22")
+                //         if (data2 === "pdf") {
+
+                //             const filePath = `${apiurl}/images/${data.imagees}`;
+                //             console.log(filePath, "datalinkpdfpath")
+
+                //             // Fetch the PDF file
+                //             const response = await fetch(filePath);
+                //             const pdfBytes = await response.arrayBuffer();
+
+                //             // Load the PDF document
+                //             const pdfDocument = await PDFDocument.load(pdfBytes);
+                //             console.log(pdfDocument)
+
+                //             // Add the PDF document to the array
+                //             pdfDocuments.push(pdfDocument);
+                //         }
+                //     }
+                // }
 
 
                 const mergedPDFDocument = await PDFDocument.create();
@@ -671,7 +889,8 @@ const useExeclpage = () => {
 
                 const mergedPDFBytes = await mergedPDFDocument.save();
                 //   const fileName = `PDF_${index + 1}.pdf`; 
-                const fileName = `PDF_${rowSelectionModel[index]}.pdf`;
+                const fileName = `PDF_${tripheaderIndex[index]}.pdf`;
+                // const fileName = invoice?.map(li => `PDF_${li.tripid}.pdf`)
                 // console.log(blob,"pdfblob")
                 // zip.file(fileName, blob);
                 pdffolder.file(fileName, mergedPDFBytes);

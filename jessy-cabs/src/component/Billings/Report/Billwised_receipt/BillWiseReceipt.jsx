@@ -33,7 +33,7 @@ export const BillWiseReceipt = () => {
   } = useBillWiseReceipt();
   const { permissions } = useContext(PermissionContext)
   // const Report_read = permissions[1]?.read;
- 
+  const Report_add = permissions[1]?.new;
 
   const Report_create = permissions[8]?.delete;
 
@@ -235,9 +235,9 @@ export const BillWiseReceipt = () => {
                       <label htmlFor="">Collected Amount:</label>
                       <input type="text" value={totals.collectedAmount} onChange={(e) => handleCollectedChange(e)} />
                     </div>
-                    <div className='total-inputsss' style={{display: 'flex', gap: '10px'}}>
+                    <div className='total-inputsss'>
                       <Button variant='contained' onClick={handlePending}>Pending </Button>
-                      <Button variant='contained' disabled={!Report_create} onClick={handleAddBillReceive}>ADD</Button>
+                      <Button variant='contained' disabled={!Report_add} onClick={handleAddBillReceive}>ADD</Button>
                     </div>
                     <div className='total-inputs' >
                       <label htmlFor="">On A/C:</label>

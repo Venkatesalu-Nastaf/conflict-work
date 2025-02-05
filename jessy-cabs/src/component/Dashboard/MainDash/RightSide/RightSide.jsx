@@ -6,9 +6,9 @@ import "./RightSide.css";
 const RightSide = ({stationName}) => {
   return (
     <div className="RightSide">
-      <div className="updates-comp">
+      {/* <div className="updates-comp">
         <Updates />
-      </div>
+      </div> */}
       <div className="area-chart">
         {/* <h3  className="area-chart-text">Area Chart</h3> */}
         <CustomerReview  station={stationName}/>

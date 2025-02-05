@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
@@ -12,6 +12,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CopyEmailHtmlBooking from "./CopyEmailBooking";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import InputLabel from '@mui/material/InputLabel';
 import {
   Duty,
   Hire,
@@ -72,6 +73,9 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { MdDataUsage } from "react-icons/md";
 import Select from '@mui/material/Select';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { Document, Page, pdfjs } from 'react-pdf';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -87,14 +91,14 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const Booking = ({ stationName, customerData }) => {
-const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
+  const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
 
   // to tranform datas based on 
   const stationOptions = stationName?.filter(option => option?.Stationname !== "All").map(option => option?.Stationname)
   const apiUrl = APIURL;
   const {
-    selectedCustomerData, handleImagechange2, 
-  
+    selectedCustomerData, handleImagechange2,
+
     selectedCustomerId,
     error, orderByDropDown,
     success,
@@ -146,10 +150,18 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
     edit, AvilableimageCount,
     // handleKeyEnterdriver,
     vehileName,
-    selectedCustomerdriver,
-    handleSelectAll, handlecheckbox, selectAll, deletefile,
-
-     handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning
+    selectedCustomerdriver,setNoChangeData,nochangedata,
+    handleSelectAll, handlecheckbox, selectAll, deletefile, handleButtonClickwithouttripid, dialogOpentrail, handleCloseDialogtrail, handlecheckbox1, selectetImg, deletefiledata,
+    handleimagedeletewithouttripid,
+    handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning,
+    // handleBookEscortChange,handleAirportTransferChange,
+    //  transferreport, 
+     setTransferreport, 
+    //  escort,
+      setEscort, isAddbtnload, 
+      // setisAddbtnload,
+       isEditbtnload, 
+      //  setisEditbtnload
   } = useBooking();
 
   const { getHtmlContentdata } = CopyEmailHtmlBooking();
@@ -159,7 +171,19 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
   const Booking_new = permissions[1]?.new;
   const Booking_modify = permissions[1]?.modify;
   const Booking_delete = permissions[1]?.delete;
+  const [numPages, setNumPages] = useState(null);
+  const shedOutTimeRef = useRef(null);
+  const reportTimeRef = useRef(null);
+  
+    const [prevHours, setPrevHours] = useState({
+      shedOutTime:"",
+      reportTime:""
+    });
 
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+
+  }
 
   // varibale setting for
   const starttimeVar = formData.starttime || selectedCustomerData.starttime || book.starttime
@@ -168,6 +192,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
   const handleStatusChange = (event) => {
     setBookingStatus(event.target.value);
     setSelectedCustomerData({ ...selectedCustomerData, status: event.target.value })
+    setNoChangeData({ ...nochangedata, status: event.target.value })
   };
 
   const shedOutDateObj = new Date(formData?.shedOutDate || selectedCustomerDatas?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate || dayjs())
@@ -206,7 +231,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
       book.guestmobileno ||
       formData.guestmobileno,
     email: formValues.email || selectedCustomerData.email || book.email,
-    pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
+    // pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
     useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
     starttime: formValues.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime || "",
     startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || dayjs() || "",
@@ -252,6 +277,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
       setWarningMessage("Check Your Trip Status")
     }
   }
+// console.log(prevHours,"timeeeeeeee+++++++++++");
 
   return (
     <div className="booking-form main-content-form Scroll-Style-hide">
@@ -259,7 +285,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
         <div>
           <div className="booking-top-division Scroll-Style">
             <span className="d-grid">
-              <label>Booking</label>
+              <label>Booking ID </label>
               <input
                 type="text"
                 id="standard-size-bookingno"
@@ -274,7 +300,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 onKeyDown={handleKeyDown}
               />
             </span>
-          
+
             <div className="radio booking-top-division-status-div">
               <label>Status</label>
               <Box sx={{ width: '100%' }}>
@@ -310,7 +336,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
               <label className="tripsheet-top-division-date-label">Booking Date</label>
               <div className="tripsheet-top-division-date">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                
+
                   <DatePicker
                     id="bookdate"
                     value={
@@ -339,7 +365,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                   getCurrentTime() ||
                   ""
                 }
-               readOnly
+                readOnly
               />
             </span>
 
@@ -382,10 +408,10 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 )}
               </div>
             </span>
-           
+
           </div>
-        
-      
+
+
         </div>
         <div>
           <div className="second-division second-division-booking">
@@ -439,8 +465,13 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "orderedby")
                 }
-                onInputChange={(event, value) => handleAutocompleteChange(event, value, "orderedby")} 
-  
+                onInputChange={(event, value) =>{
+                  if(event !== null){
+                  setNoChangeData({ ...nochangedata,orderedby: event.target.value })
+                  }
+                   handleAutocompleteChange(event, value, "orderedby")
+                }}
+
                 value={
                   formData.orderedby ||
                   selectedCustomerData.orderedby ||
@@ -483,6 +514,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                   selectedCustomerDatas?.orderByMobileNo ||
                   ""
                 }
+
                 onChange={handleChange}
                 label="Order by Mobile No"
                 id="orderByMobileNo"
@@ -490,6 +522,8 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 size="small"
               />
             </div>
+
+
             <div className="input">
               <div className="icone">
                 <ForwardToInboxIcon color="action" />
@@ -500,7 +534,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 autoComplete="new-password"
                 value={
                   selectedCustomerData.orderByEmail ||
-                  book.orderByEmail || 
+                  book.orderByEmail ||
                   book.orderbyemail ||
                   formData.orderByemail ||
                   selectedCustomerDatas.orderByEmail ||
@@ -513,7 +547,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 size="small"
               />
             </div>
-       
+
             <div className="input service-station-input">
               <div className="icone">
                 <DomainAddIcon color="action" />
@@ -938,7 +972,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 </div>
               </div>
             </div>
-            
+
             <div>
               <div className="input time booking-start-time-input">
                 <div className="icone icone-with-margin-top">
@@ -950,12 +984,23 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                     type="time"
                     id="reporttime"
                     name="reporttime"
+                    ref={shedOutTimeRef}
                     value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ""}
                     onChange={(event) => {
+                      let value = event.target.value;
+                      const [hours, minutes] = value.split(':');
+                      setPrevHours((prevState) => ({
+                        ...prevState,
+                        shedOutTime:hours
+                      }));                          
+                      if (shedOutTimeRef.current && (parseInt(minutes)===59) && prevHours?.shedOutTime === hours) {
+                        shedOutTimeRef.current.focus();
+                      }
                       setBook({ ...book, reporttime: event.target.value });
                       setreporttime(event.target.value);
                       setFormData({ ...formData, reporttime: event.target.value });
                       setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value, });
+                      setNoChangeData({ ...nochangedata, reporttime: event.target.value, });
                     }}
                   />
                 </div>
@@ -973,11 +1018,23 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                     type="time"
                     id="starttime"
                     value={formData.starttime || selectedCustomerData.starttime || book.starttime || ""}
+                    ref={reportTimeRef}
                     onChange={(event) => {
+                      let value = event.target.value;
+                      const [hours, minutes] = value.split(':');
+                      
+                      setPrevHours((prevState) => ({
+                        ...prevState,
+                        reportTime:hours
+                      }));                          
+                      if (reportTimeRef.current && (parseInt(minutes)===59) && prevHours?.reportTime === hours) {
+                        reportTimeRef.current.focus();
+                      }
                       setFormData({ ...formData, starttime: event.target.value });
                       setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
                       setBook({ ...book, starttime: event.target.value });
                       setStartTime(event.target.value);
+                      setNoChangeData({ ...nochangedata,starttime: event.target.value  });
                     }}
                     name="starttime"
                   />
@@ -1010,6 +1067,57 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 }}
               />
             </div>
+            <div className='input time booking-start-time-input'>
+
+
+              <FormControl fullWidth size="small" sx={{ marginTop: "20px", width: "85%", marginLeft: "30px" }}>
+                <InputLabel id="demo-simple-select-label">Escort</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={formData.escort || selectedCustomerData.escort || book.escort || "No"}
+                  label="escort"
+                  // onChange={handleBookEscortChange}
+                  onChange={(event) => {
+                    const selectedValue = event.target.value || "No";
+                    setFormData({ ...formData, escort: selectedValue });
+                    setSelectedCustomerData({ ...selectedCustomerData, escort: selectedValue });
+                    setBook({ ...book, escort: event.target.value });
+                    setEscort(selectedValue);
+                    setNoChangeData({ ...nochangedata, escort: event.target.value });
+                  }}
+                >
+                  <MenuItem value={"Yes"}>Yes</MenuItem>
+                  <MenuItem value={"No"}>No</MenuItem>
+
+                </Select>
+              </FormControl>
+
+            </div>
+
+            <div className='input time booking-start-time-input'>
+              <FormControl fullWidth size="small" sx={{ marginTop: "20px", width: "85%", marginLeft: "25px" }}>
+                <InputLabel className="input-type-grid">Airport Transfer</InputLabel>
+                <Select
+                  labelId="demo-simple-select-labelescort"
+                  id="demo-simple-select"
+                  value={formData.transferreport || selectedCustomerData.transferreport || book.transferreport || "No"}
+                  label='transferreport'
+                  // onChange={handleAirportTransferChange}
+                  onChange={(event) => {
+                    setFormData({ ...formData, transferreport: event.target.value });
+                    setSelectedCustomerData({ ...selectedCustomerData, transferreport: event.target.value });
+                    setBook({ ...book, transferreport: event.target.value });
+                    setTransferreport(event.target.value);
+                    setNoChangeData({ ...nochangedata, transferreport: event.target.value });
+                  }}
+                >
+                  <MenuItem value={'Yes'}>Yes</MenuItem>
+                  <MenuItem value={'No'}>No</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+
 
             {isEditMode ? (
               <div>
@@ -1058,6 +1166,22 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                     />
                   </Button>
                 </div>
+                {selectetImg.length > 0 ?
+                  <>
+                    <div className="input-dummy" style={{ marginLeft: "10px" }}>
+                      <Button
+                        variant="outlined"
+                        onClick={handleButtonClickwithouttripid}
+                      >
+                        View
+                      </Button>
+                    </div>
+                    <div className="input-dummy" style={{ marginLeft: "10px" }}>
+                      <p>Image Count : {selectetImg.length}</p>
+                    </div>
+                  </>
+                  : <></>
+                }
               </div>
             )}
 
@@ -1088,21 +1212,32 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
             <div className="input" style={{ marginTop: '0px' }}>
               <div className="input">
                 {isEditMode ? (
-                  <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
+                  // <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
+                  //   Edit
+                  // </Button>
+                  <LoadingButton loading={isEditbtnload} variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
                     Edit
-                  </Button>
+                  </LoadingButton>
                 ) : (
-                  <Button
+                  // <Button
+                  //   disabled={!Booking_new}
+                  //   variant="contained"
+                  //   onClick={handleAdd}
+                  // >
+                  //   Add
+                  // </Button>
+                  <LoadingButton
                     disabled={!Booking_new}
                     variant="contained"
                     onClick={handleAdd}
+                    loading={isAddbtnload}
                   >
                     Add
-                  </Button>
+                  </LoadingButton>
                 )}
               </div>
             </div>
-          </div> 
+          </div>
         </div>
         <Box className='common-speed-dail'>
           <StyledSpeedDial
@@ -1118,7 +1253,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
               />
             )}
-            {Booking_delete === 1 &&  isEditMode &&  (
+            {Booking_delete === 1 && isEditMode && (
               <SpeedDialAction
                 key="delete"
                 icon={<DeleteIcon />}
@@ -1126,7 +1261,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
               />
             )}
-            {Booking_new === 1 && !isEditMode &&  (
+            {Booking_new === 1 && !isEditMode && (
               <SpeedDialAction
                 key="Add"
                 icon={<BookmarkAddedIcon />}
@@ -1167,7 +1302,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 options={Hire.map((option) => ({
                   label: option.Option,
                 }))}
-                getOptionLabel={(option) => 
+                getOptionLabel={(option) =>
                   option.label ||
                   selectedCustomerData.hireTypes ||
                   book.hireTypes || selectedCustomerdriver.hireTypes ||
@@ -1195,7 +1330,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 id="free-solo-travelmail"
                 freeSolo
                 sx={{ width: "100%" }}
-                onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
+                onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname")}
                 value={
                   formData.travelsname ||
                   selectedCustomerData.travelsname ||
@@ -1226,10 +1361,16 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 fullWidth
                 size="small"
                 id="vehicleRegno"
-                freeSolo  
+                freeSolo
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
-                onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
+                // onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
+                onInputChange={(event, value) =>{
+                  if(event !== null){
+                    setNoChangeData({ ...nochangedata,vehRegNo: value });
+                  }
+                   handleVehicleChange(event, value, "vehRegNo")
+                  }} 
                 // onKeyDown={handleKeyEnterdriver}
                 value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}  // Reflect vehRegNo correctly
                 options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}  // Map vehRegNo from data
@@ -1309,7 +1450,13 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                 freeSolo
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleDriverChange(event, value, "driverName")}
-                onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
+                // onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
+                          onInputChange={(event, value) =>{ 
+                            if(event !== null){
+                              setNoChangeData({ ...nochangedata,driverName: value });
+                            }
+                            handleDriverChange(event, value, "driverName")
+                          }}
                 // onKeyDown={handleKeyEnterdriver}
                 value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
                 options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
@@ -1369,26 +1516,35 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
             <div>
               {
                 edit ?
-                  <Button
+                  <LoadingButton
+                    disabled={!Booking_new}
                     variant="contained"
                     onClick={handleAdd}
-                    disabled={!Booking_new}
+                    loading={isAddbtnload}
                   >
-                    Add New</Button> : <></>
+                    Add New
+                  </LoadingButton>
+
+                  // <Button
+                  //   variant="contained"
+                  //   onClick={handleAdd}
+                  //   disabled={!Booking_new}
+                  // >
+                  //   Add New</Button>
+                  : <></>
               }
             </div>
           </div>
           <div className="sub-section2-driver">
-            <div className="second-table-driver">
+            {/* <div className="second-table-driver">
               <div className="booking-update-main driver-table">
                 <div className="booking-update">
                  
-
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div class="booking-table-new">
+            <div class="booking-table-new Scroll-Style">
               <table class="table-condensed table-striped fixed_header">
                 <thead class="BI_tablehead">
                   <tr>
@@ -1481,6 +1637,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
             </div>
           }
         </div>
+        {/* {console.log(allFile, "filealll")} */}
 
         <Dialog open={dialogOpen} onClose={handleCloseDialog}>
           <DialogContent>
@@ -1499,12 +1656,32 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
                       />
                     )}
                     {img.mimetype === "pdf" && (
-                      <embed
-                        src={`${apiUrl}/images/${img.path}`}
-                        type="application/pdf"
-                        style={{ width: "100%", height: "600px", display: "block", border: "none" }}
-                        key={img.path}  // Use key to prevent re-rendering
-                      />
+                      // <embed
+                      //   src={`${apiUrl}/images/${img.path}`}
+                      //   type="application/pdf"
+                      //   style={{ width: "100%", height: "600px", display: "block", border: "none" }}
+                      //   key={img.path}  // Use key to prevent re-rendering
+                      // />
+
+                      <Document
+                        file={`${apiUrl}/images/${img.path}`}
+
+                        onLoadSuccess={onDocumentLoadSuccess}
+                        style={{
+                          width: "595px", // A4 width
+                          height: "auto",
+                          margin: "auto",
+                        }}
+                      >
+                        {Array.from(new Array(numPages), (el, pageIndex) => (
+                          <Page
+                            key={`page_${pageIndex + 1}`}
+                            pageNumber={pageIndex + 1}
+                            scale={1}
+
+                          />
+                        ))}
+                      </Document>
                     )}
                     <Checkbox checked={deletefile.includes(img.path)} onClick={() => handlecheckbox(img.path)} />
                   </div>
@@ -1520,7 +1697,7 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
         <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
           <DialogContent>
             <div>
-              <h3>are you sure you want to delete</h3>
+              <h3>Are you sure you want to delete</h3>
               <div>
                 <Button onClick={handleContextMenu}>yes</Button>
                 <Button onClick={handleClosedeleteDialog}>No</Button>
@@ -1528,6 +1705,71 @@ const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
             </div>
           </DialogContent>
         </Dialog>
+
+
+
+        <Dialog open={dialogOpentrail} onClose={handleCloseDialogtrail}>
+          <DialogContent>
+            <div className="vehicle-info-dailog-box-div1" style={{ width: "600px" }}>
+              {/* <Button variant="contained" style={{ margin: "5px" }} onClick={handleSelectAll}>
+                {selectAll ? "Deselect All" : "Select All"}
+              </Button> */}
+              {Array.isArray(selectetImg) &&
+                selectetImg.map((img, index) => (
+                  <div key={index} className="vehicle-info-dailog-box-btn-division" style={{ marginBottom: "10px" }}>
+
+                    {img.type !== "application/pdf" ?
+                      <>
+                        <img
+                          // src={`${apiUrl}/images/${img}`}
+                          src={URL.createObjectURL(img)}
+                          alt="vehicle_docimage"
+                          style={{ width: "100%", height: "400px", objectFit: "contain" }}
+                        />
+                      </>
+                      :
+                      <>
+                        <Document
+                          file={img}
+                          onLoadSuccess={onDocumentLoadSuccess}
+                          style={{
+                            width: "595px", // A4 width
+                            height: "auto",
+                            margin: "auto",
+                          }}
+                        >
+                          {Array.from(new Array(numPages), (el, pageIndex) => (
+                            <Page
+                              key={`page_${pageIndex + 1}`}
+                              pageNumber={pageIndex + 1}
+                              scale={1}
+                            // style={{
+                            //   display: "block",
+                            //   width: "595px",
+                            //   height: "auto",
+                            //   marginBottom: "20px",
+                            //   pageBreakBefore: "always",
+                            // }}
+                            />
+                          ))}
+                        </Document>
+                      </>
+                    }
+
+
+
+                    <Checkbox checked={deletefiledata.includes(img.name)} onClick={() => handlecheckbox1(img.name)} />
+                  </div>
+                ))}
+            </div>
+            <div>
+              <Button disabled={!Booking_delete} variant="contained" onClick={() => handleimagedeletewithouttripid(deletefiledata)}>
+                Delete
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
 
       </form >
     </div >

@@ -115,12 +115,15 @@ router.get('/pending_tripsheet-show', (req, res) => {
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
   const datadepartment = department ? department.split(',').map(name => name.trim()).filter(name => name) : [];
   const datacustomer = cutomerName ? cutomerName.split(',').map(name => name.trim()).filter(name => name) : [];
+  // console.log(isStations,"ll")
   const isStation = isStations ? isStations.split(',').map(name => name.trim()).filter(name => name) : [];
-  console.log('Is Stations departs:', datadepartment);
+  console.log('Is Stations departs:', datadepartment,"kkkkk",isStation,datacustomer);
   
   let sqlQuery = '';
   let Tripquery = '';
   let queryParams = [];
+  let queerparamsbooking = []
+
   //  'All' status
   // if (status === 'All') {
   //   sqlQuery = `
@@ -175,109 +178,130 @@ router.get('/pending_tripsheet-show', (req, res) => {
 
 // changes with customer filtering 
 if (status === 'All') {
+  // sqlQuery = `
+  //   SELECT * FROM booking
+  //   WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+  //     AND bookingdate <= DATE_ADD(?, INTERVAL 0 DAY)
+  //     AND (status = 'pending' OR status = 'Cancelled')
+  // `;
   sqlQuery = `
-    SELECT * FROM booking
-    WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-      AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)
-  `;
-  Tripquery = `
-    SELECT * FROM tripsheet
-    WHERE tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
-      AND DATE_ADD(?, INTERVAL 1 DAY)
-  `;
+  SELECT * FROM booking
+  WHERE 
+  (
+    (status = 'pending' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+    OR 
+    (status = 'Cancelled' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+)
+`;
 
-  queryParams = [formattedFromDate, formattedToDate];
+  // Tripquery = `
+  //   SELECT * FROM tripsheet
+  //   WHERE tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+  //     AND DATE_ADD(?, INTERVAL 0 DAY) AND  status != 'Cancelled'
+  // `;
+//   Tripquery = ` SELECT * FROM tripsheet
+//   WHERE 
+//   (
+
+
+//     ((status = "Billed" OR status = "Transfer_Billed" OR status = "Covering_Billed") AND tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+//    AND DATE_ADD(?, INTERVAL 0 DAY))
+//     OR 
+//     ((status = "Closed" OR status = "Transfer_Closed" OR status = "Covering_Closed") AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+//    AND DATE_ADD(?, INTERVAL 0 DAY))
+//     OR 
+//     (status = "Opened" AND  status != 'Cancelled' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+//    AND DATE_ADD(?, INTERVAL 0 DAY))
+//     OR 
+//     (status = "Opened" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+//    AND DATE_ADD(?, INTERVAL 0 DAY))
+   
+// )`
+
+Tripquery = ` SELECT * FROM tripsheet
+WHERE 
+(
+
+
+  (status = "Billed" AND tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+  OR 
+  (status = "Closed"  AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY)  AND DATE_ADD(?, INTERVAL 0 DAY))
+  OR 
+  (status = "Opened" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+  OR 
+  (status = "Temporary Closed" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
  
-// if (datadepartment.length === 1 && !datadepartment.includes('All')) {
-//   sqlQuery += ' AND servicestation = ?';
-//   //Tripquery += ' AND servicestation = ?';
-//   queryParams.push(datadepartment[0]); 
-// } else if (datadepartment.length > 1) {
-//   sqlQuery += ' AND servicestation IN (?)';
-//   //Tripquery += ' AND servicestation IN (?)';
-//   queryParams.push(datadepartment); 
-// }
+)`
+//   Tripquery = `
+//   SELECT * FROM tripsheet
+//   WHERE startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
+//     AND DATE_ADD(?, INTERVAL 0 DAY) AND  status != 'Cancelled'
+// `;
 
-// if (VehNo) {
-//   sqlQuery += ' AND vehRegNo = ?';
-//   Tripquery += ' AND vehRegNo = ?';
-//   queryParams.push(VehNo);
-// }
-
-// if (datacustomer.length === 1 && !datacustomer.includes('All')) {
-//   sqlQuery += ' AND customer = ?'; 
-//   Tripquery += ' AND customer = ?'; 
-//   queryParams.push(datacustomer[0]);
-// } else if (datacustomer.length > 1) {
-//   sqlQuery += ' AND customer IN (?)';
-//   Tripquery += ' AND customer IN (?)';
-//   queryParams.push(datacustomer); 
-// }
+  queryParams = [formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate];
+  queerparamsbooking=[formattedFromDate, formattedToDate,formattedFromDate, formattedToDate]
+ 
 
 
-
-//   // Fetch bookings
-//   db.query(sqlQuery, queryParams, (err, bookingResults) => {
-//       if (err) {
-//           console.error('Error fetching bookings:', err.message);
-//           return res.status(500).json({ error: 'Database error on fetching booking' });
-//       }
-
-//       // Fetch tripsheets
-//       db.query(Tripquery, queryParams, (err, tripsheetResults) => {
-//           if (err) {
-//               console.error('Error fetching tripsheets:', err.message);
-//               return res.status(500).json({ error: 'Database error on fetching trip sheet' });
-//           }
-
-//           // Check if there are results
-//           if (bookingResults.length === 0 && tripsheetResults.length === 0) {
-//               return res.status(200).json({ message: 'No data found' });
-//           }
-
-//           // Send response 
-//           return res.status(200).json({
-//               booking: bookingResults,
-//               tripsheet: tripsheetResults
-//           });
-//       });
-//   });
-
-// custom filtering changes 
-if (datadepartment.length === 1 && !datadepartment.includes('All')) {
-  sqlQuery += ' AND servicestation = ?';
-  // Tripquery += ' AND servicestation = ?'; 
-  queryParams.push(datadepartment[0]); 
-} else if (datadepartment.length > 1) {
+// if (datadepartment.length === 0 || datadepartment.includes('All')) {
+  if (datadepartment.length === 0) {
+    // console.log("enter")
+  // if (isStation.length > 0) {
+  // Ensure we filter only by servicestation
+  // sqlQuery += ' AND servicestation IN (?)';
   sqlQuery += ' AND servicestation IN (?)';
-  // Tripquery += ' AND servicestation IN (?)'; 
-  queryParams.push(datadepartment); 
+  Tripquery += ' AND department IN (?)'; 
+  //  sqlQuery += ' AND tripsheet.department IN (?)'
+  queryParams.push(isStation);
+  queerparamsbooking.push(isStation);
+  // queryParams.push(isStation);
+} 
+else {
+  // console.log("not entered")
+  // If specific departments are provided, use them as a filter
+  // sqlQuery += ' AND tripsheet.department IN (?)';
+  sqlQuery += ' AND servicestation IN (?)';
+  Tripquery += ' AND department IN (?)'; 
+  queryParams.push(datadepartment);
+  queerparamsbooking.push(datadepartment);
 }
 
 if (VehNo) {
   sqlQuery += ' AND vehRegNo = ?';
   Tripquery += ' AND vehRegNo = ?';
   queryParams.push(VehNo); 
+  queerparamsbooking.push(VehNo);
 }
 
 if (datacustomer.length === 1 && !datacustomer.includes('All')) {
   sqlQuery += ' AND customer = ?'; 
   Tripquery += ' AND customer = ?'; 
   queryParams.push(datacustomer[0]); 
+  queerparamsbooking.push(datacustomer[0]);
 } else if (datacustomer.length > 1) {
   sqlQuery += ' AND customer IN (?)';
   Tripquery += ' AND customer IN (?)';
   queryParams.push(datacustomer); 
+  queerparamsbooking.push(datacustomer);
 }
 
-console.log("SQL Query:", sqlQuery);
-console.log("Query Params:", queryParams);
+sqlQuery += ' ORDER BY shedOutDate ASC, reporttime ASC';
+Tripquery += ' ORDER BY shedOutDate ASC, reporttime ASC'; 
 
-db.query(sqlQuery, queryParams, (err, bookingResults) => {
+// console.log("SQL Query:", sqlQuery);
+// console.log("Query Params:", queryParams,);
+// console.log("SQL Query:", Tripquery);
+// console.log("Query Params:", queryParams);
+// console.log("SQL Query:", sqlQuery);
+// console.log("Query Params booking:",queerparamsbooking);
+
+// db.query(sqlQuery, queryParams, (err, bookingResults) => {
+  db.query(sqlQuery,queerparamsbooking, (err, bookingResults) => {
   if (err) {
-      console.error('Error fetching bookings:', err.message);
+      console.error('Error fetching bookings:', err);
       return res.status(500).json({ error: 'Database error on fetching booking' });
   }
+  // console.log(bookingResults,"kkk")
 
   db.query(Tripquery, queryParams, (err, tripsheetResults) => {
       if (err) {
@@ -299,34 +323,34 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
 
   // Handle 'pending' and 'Cancelled' statuses
   if (status === 'pending' || status === 'Cancelled') {
-    // sqlQuery = `
-    //   SELECT *
-    //   FROM booking
-    //   WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?
-    // `;
-    // queryParams = [formattedFromDate, formattedToDate, status];
-     if(datadepartment.length === 0){
-      sqlQuery = `
-      SELECT *
-      FROM booking
-      WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?
-      AND servicestation IN (?)
-    `;
-    queryParams = [formattedFromDate, formattedToDate, status,isStation];
-    // console.log(isStations,isStations)
-    }
-    else{
+    if(status === 'pending'){
+
+    
 
       sqlQuery = `
         SELECT *
         FROM booking
-        WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?   AND servicestation IN (?)
+        WHERE startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?   
       `;
-      queryParams = [formattedFromDate, formattedToDate, status,isStation];
+      queryParams = [formattedFromDate, formattedToDate, status];
     }
+    if(status === 'Cancelled'){
+      sqlQuery = `
+        SELECT *
+        FROM booking
+        WHERE startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?   
+      `;
+      queryParams = [formattedFromDate, formattedToDate, status];
+    }
+  
     if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
       sqlQuery += ' AND servicestation IN (?)';
       queryParams.push(datadepartment);
+    }
+
+    if (isStation.length > 0  && datadepartment.length === 0) {
+      sqlQuery += ' AND servicestation IN (?)';
+      queryParams.push(isStation);
     }
     if (VehNo) {
       sqlQuery += ' AND vehRegNo = ?';
@@ -336,6 +360,8 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
       sqlQuery += ' AND customer IN (?)';
       queryParams.push(datacustomer);
     }
+    sqlQuery += ' ORDER BY shedOutDate ASC, reporttime ASC';
+   
   } else {
     // Handle other statuses
   //   sqlQuery = `
@@ -354,23 +380,44 @@ db.query(sqlQuery, queryParams, (err, bookingResults) => {
   //     sqlQuery += ' AND servicestation IN (?)';
   //     queryParams.push(isStation);
   // }
-  sqlQuery = `
+//   sqlQuery = `
+//   SELECT booking.*, tripsheet.*
+//   FROM tripsheet
+//   LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
+//   WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+//   AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
+// `;
+if(status !== 'Billed'){
+sqlQuery = `
+  SELECT booking.*, tripsheet.*
+  FROM tripsheet
+  LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
+  WHERE tripsheet.startdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+  AND tripsheet.startdate <= DATE_ADD(?, INTERVAL 0 DAY)
+`;
+}
+else{
+    sqlQuery = `
   SELECT booking.*, tripsheet.*
   FROM tripsheet
   LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
   WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-  AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+  AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
 `;
+}
 
 // Initialize query parameters
 queryParams = [formattedFromDate, formattedToDate];
 
 // If the department is 'All' or not specified, we skip the department filter
 if (datadepartment.length === 0 || datadepartment.includes('All')) {
+  // if (isStation.length > 0) {
   // Ensure we filter only by servicestation
-  sqlQuery += ' AND servicestation IN (?)';
+  // sqlQuery += ' AND servicestation IN (?)';
+   sqlQuery += ' AND tripsheet.department IN (?)'
   queryParams.push(isStation);
-} else {
+} 
+else {
   // If specific departments are provided, use them as a filter
   sqlQuery += ' AND tripsheet.department IN (?)';
   queryParams.push(datadepartment);
@@ -394,10 +441,10 @@ if (datadepartment.length === 0 || datadepartment.includes('All')) {
       sqlQuery += ' AND tripsheet.status = ?';
       queryParams.push(status);
   }
-    if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
-      sqlQuery += ' AND tripsheet.department IN (?)';
-      queryParams.push(datadepartment);
-    }
+    // if (datadepartment.length >= 1 && !datadepartment.includes('All')) {
+    //   sqlQuery += ' AND tripsheet.department IN (?)';
+    //   queryParams.push(datadepartment);
+    // }
     if (VehNo) {
       sqlQuery += ' AND tripsheet.vehRegNo = ?';
       queryParams.push(VehNo);
@@ -406,12 +453,17 @@ if (datadepartment.length === 0 || datadepartment.includes('All')) {
       sqlQuery += ' AND tripsheet.customer IN (?)';
       queryParams.push(datacustomer);
     }
+     sqlQuery += ' ORDER BY tripsheet.shedOutDate ASC, tripsheet.reporttime ASC';
   }
+
+  // sqlQuery += ' ORDER BY tripsheet.shedOutDate ASC, tripsheet.starttime ASC';
+  // console.log(sqlQuery,"dd",queryParams)
   db.query(sqlQuery, queryParams, (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
     }
+    // console.log(result,"oo")
     return res.status(200).json(result);
   });
 });
@@ -478,50 +530,53 @@ if (datadepartment.length === 0 || datadepartment.includes('All')) {
 //     });
 //   });
 // });
-router.get('/tripsheet-showall', (req, res) => {
-  const { isStation } = req.query;
+// router.get('/tripsheet-showall', (req, res) => {
+//   const { isStation } = req.query;
 
-  // Validate isStation input
-  if (!isStation) {
-    return res.status(400).json({ error: "isStation parameter is required" });
-  }
+//   // Validate isStation input
+//   if (!isStation) {
+//     return res.status(400).json({ error: "isStation parameter is required" });
+//   }
 
-  // Convert isStation to an array
-  const stationsArray = isStation.split(',').map(station => station.trim());
+//   // Convert isStation to an array
+//   const stationsArray = isStation.split(',').map(station => station.trim());
+//   console.log(stationsArray,"saeee")
 
-  let tripsheetResults, bookingResults;
+//   let tripsheetResults, bookingResults;
 
-  // Query to fetch tripsheet data
-  db.query(
-    "SELECT * FROM tripsheet WHERE status != 'Cancelled' AND department IN (?)",
-    [stationsArray],
-    (err, tripsheetData) => {
-      if (err) {
-        return res.status(500).json({ error: "Failed to fetch tripsheet data from MySQL" });
-      }
-      tripsheetResults = tripsheetData;
+//   // Query to fetch tripsheet data
+//   db.query(
+//     "SELECT * FROM tripsheet WHERE status != 'Cancelled' AND department IN (?)",
+//     [stationsArray],
+//     (err, tripsheetData) => {
+//       if (err) {
+//         return res.status(500).json({ error: "Failed to fetch tripsheet data from MySQL" });
+//       }
+//       tripsheetResults = tripsheetData;
 
-      // Query to fetch booking data with status 'pending' or 'Cancelled'
-      db.query(
-        "SELECT * FROM booking WHERE (status = 'pending' OR status = 'Cancelled') AND servicestation IN (?)",
-        [stationsArray],
-        (err, bookingData) => {
-          if (err) {
-            return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
-          }
-          bookingResults = bookingData;
+//       // Query to fetch booking data with status 'pending' or 'Cancelled'
+//       db.query(
+//         "SELECT * FROM booking WHERE (status = 'pending' OR status = 'Cancelled') AND servicestation IN (?)",
+//         [stationsArray],
+//         (err, bookingData) => {
+//           if (err) {
+//             return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
+//           }
+//           bookingResults = bookingData;
 
-          // Combine both results and send response
-          const combinedResults = {
-            tripsheet: tripsheetResults,
-            booking: bookingResults
-          };
-          return res.status(200).json(combinedResults);
-        }
-      );
-    }
-  );
-});
+//           // Combine both results and send response
+//           const combinedResults = {
+//             tripsheet: tripsheetResults,
+//             booking: bookingResults
+//           };
+          
+//           // console.log(combinedResults,"opp")
+//           return res.status(200).json(combinedResults);
+//         }
+//       );
+//     }
+//   );
+// });
 
 
 
@@ -537,20 +592,51 @@ router.get('/getdatafromboookingvalue/:bookingno',(req,res)=>{
 })
 router.get('/VehicleStatement-bookings', (req, res) => {
   const { Travelsname, fromDate, toDate } = req.query;
-  const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
-  const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  db.query("select *,Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) As totalvendoramount from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)",
+  // const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+  // const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+  // db.query("select *,Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) As totalvendoramount from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)",
+  db.query(`select *,COALESCE(NULLIF(advancepaidtovendor, ''), 0) AS totalvendoramount,
+          COALESCE(NULLIF(fuelamount, ''), 0) AS totalfuelamount,
+    (COALESCE(NULLIF(Vendor_totalAmountKms, ''), 0) 
+ + COALESCE(NULLIF(Vendor_totalAmountHours, ''), 0) 
+ + COALESCE(NULLIF(Vendor_NightbataTotalAmount, ''), 0) 
+ + COALESCE(NULLIF(Vendor_BataTotalAmount, ''), 0) 
+ + COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
+ + COALESCE(NULLIF(vendortoll, ''), 0) 
+ + COALESCE(NULLIF(vendorparking, ''), 0) 
+ + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandtotal
+    from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)`,
     [Travelsname, fromDate, toDate], (err, results) => {
       if (err) {
         return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
       }
-      return res.status(200).json(results)
+      const resultsdata = results.map(result => ({
+        ...result, // Spread the existing properties
+        vpermettovendor: result.vpermettovendor || 0, // Default to 0 if null or undefined
+        vendortoll: result.vendortoll || 0, // Add default for another field if needed
+        advancepaidtovendor: result.advancepaidtovendor || 0
+      }));
+      // return res.status(200).json(results)
+      return res.status(200).json(resultsdata)
     }
   )
 })
 
 router.get('/tripsheetvendordata', (req, res) => {
-  db.query("SELECT *, Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) AS totalvendoramount FROM tripsheet", (err, results) => {
+
+  const sql = `select *,COALESCE(NULLIF(advancepaidtovendor, ''), 0) AS totalvendoramount,
+    COALESCE(NULLIF(fuelamount, ''), 0) AS totalfuelamount,
+(COALESCE(NULLIF(Vendor_totalAmountKms, ''), 0) 
++ COALESCE(NULLIF(Vendor_totalAmountHours, ''), 0) 
++ COALESCE(NULLIF(Vendor_NightbataTotalAmount, ''), 0) 
++ COALESCE(NULLIF(Vendor_BataTotalAmount, ''), 0) 
++ COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
++ COALESCE(NULLIF(vendortoll, ''), 0) 
++ COALESCE(NULLIF(vendorparking, ''), 0) 
++ COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandtotal
+from tripsheet`
+  // db.query("SELECT *, Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) AS totalvendoramount FROM tripsheet", (err, results) => {
+    db.query(sql, (err, results) => {
     if (err) {
       console.log(err)
       return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
@@ -558,6 +644,7 @@ router.get('/tripsheetvendordata', (req, res) => {
     if (results.length === 0) {
       return res.status(400).json({ error: "Data not Found" });
     }
+    
     return res.status(200).json(results)
   }
   )

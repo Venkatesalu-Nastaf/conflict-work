@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, } from "react";
+import { useState, useEffect, useCallback,useMemo } from "react";
 import axios from "axios";
 import { useUser } from "../../../form/UserContext";
 import { useLocation } from "react-router-dom";
@@ -41,10 +41,20 @@ const useBooking = () => {
   const [ratename, setRate_name] = useState("");
   const [vehileName, setVehicleName] = useState([]);
   const [CopyEmail, setCopyEmail] = useState(false);
+  const [hybdridatabooking,setHybdriDatabooking] = useState(0);
   const handlePopupClose = () => {
     setPopupOpen(false);
     setpopupOpenmail(false);
   };
+  const [nochangedata,setNoChangeData]=useState({})
+  
+  const [escort, setEscort] = useState('No');
+  const [transferreport, setTransferreport] = useState('No')
+  const [isAddbtnload,setisAddbtnload] = useState(false)
+  const [isEditbtnload,setisEditbtnload] = useState(false)
+   const [deletefile, setDeleteFile] = useState([])
+   const [deletefiledata, setDeleteFiledata] = useState([])
+  
   const [formValues, setFormValues] = useState({
     guestname: "",
     guestmobileno: "",
@@ -84,6 +94,9 @@ const useBooking = () => {
     const stationValue = params.get("servicestation");
     const payValue = params.get("paymenttype") || "BTC";
     const dispath = params.get("dispatchcheck");
+    const shedOutDate = params.get("shedOutDate")|| dayjs()
+    const startdate = params.get("startdate")|| dayjs()
+   
     if (dispath) {
       setSendEmail(false)
       setIsEditMode(dispath)
@@ -136,7 +149,11 @@ const useBooking = () => {
       "mobile",
       "vehiclemodule",
       "ratenamebook",
-      "shedOutDate"
+      "shedOutDate",
+      "escort",
+      'transferreport'
+
+
     ];
 
     parameterKeys.forEach((key) => {
@@ -146,13 +163,17 @@ const useBooking = () => {
       }
     });
     formData["status"] = statusValue;
+    // console.log(formData,'form datas')
     formData["servicestation"] = stationValue;
     formData["paymenttype"] = payValue;
+    formData["shedOutDate"] = shedOutDate;
+    formData["startdate"] = startdate;
     const ratetye = formData["ratenamebook"]
     setRate_name(ratetye)
     setBookingStatus(formData["status"])
     setBook(formData);
     setFormData(formData);
+    // console.log(formData,"ll")
   }, [location]);
 
   useEffect(() => {
@@ -180,8 +201,10 @@ const useBooking = () => {
     report: "",
     vehicleName: "",
     paymenttype: "",
-    shedOutDate: '',
-    startdate: "",
+    // shedOutDate: '',
+    // startdate: "",
+    shedOutDate:dayjs(),
+    startdate: dayjs(),
     starttime: "",
     reporttime: "",
     duty: "",
@@ -204,10 +227,15 @@ const useBooking = () => {
     driverName: "",
     mobileNo: "",
     travelsemail: "",
-    Groups: ""
+    Groups: "",
+    escort:'',
+    transferreport:"",
+  
   }
 
   const [book, setBook] = useState(bookDatdObj);
+  // console.log(book ,'book datas')
+  
   const handleCancel = () => {
     setBook(bookDatdObj);
     setOrderByDropDown([])
@@ -218,6 +246,8 @@ const useBooking = () => {
     setFormData({});
     setSelectedCustomerdriver({})
     setIsEditMode(false);
+    setSelectetImg([])
+    setNoChangeData({})
   };
 
   useEffect(() => {
@@ -244,6 +274,7 @@ const useBooking = () => {
   const handleChange = useCallback(
     (event) => {
       const { name, value, checked, type } = event.target;
+      // console.log("wq",name,value)
 
       if (type === "checkbox") {
         setBook((prevBook) => ({
@@ -259,6 +290,10 @@ const useBooking = () => {
           [name]: checked,
         }));
         setFormValues((prevValues) => ({
+          ...prevValues,
+          [name]: checked,
+        }));
+        setNoChangeData((prevValues) => ({
           ...prevValues,
           [name]: checked,
         }));
@@ -279,8 +314,26 @@ const useBooking = () => {
           ...prevValues,
           [name]: value,
         }));
+        setNoChangeData((prevValues) => ({
+          ...prevValues,
+          [name]: value,
+        }));
       } else {
         const fieldValue = value;
+        if(name === "orderByMobileNo"){
+          setBook((prevBook) => ({
+            ...prevBook,
+            ["mobile"]: fieldValue,
+          }));
+        }
+        if(name === "orderByEmail"){
+          setBook((prevBook) => ({
+            ...prevBook,
+            ["orderbyemail"]: fieldValue,
+          }));
+        
+        }
+        
         setBook((prevBook) => ({
           ...prevBook,
           [name]: fieldValue,
@@ -305,7 +358,13 @@ const useBooking = () => {
           ...prevValues,
           [name]: fieldValue,
         }));
+        if(name !== "bookingno")
+        setNoChangeData((prevValues) => ({
+          ...prevValues,
+          [name]: fieldValue,
+        }));
       }
+     
     },
     [
       setBook,
@@ -314,13 +373,40 @@ const useBooking = () => {
       setFormValues,
       setSelectedCustomerDatas,
       setSelectedCustomerdriver,
+      
     ]
   );
 
+//   const handleBookEscortChange = (event) => {
+//     setEscort(event.target.value);
+//     // console.log(escort,"escoret data")
+// };
+  // const handleBookEscortChange = (event) => {
+  //   const selectedValue = event.target.value; // Get selected value
+  //   setEscort(selectedValue); // Update state
+  //   console.log("Selected Value:", selectedValue); // Debugging
+  //   console.log(escort,'escort update')
+  // };
+ 
+// const handleAirportTransferChange = (event) => {
+//   // const selectedValue = event.target.value;
+//     setTransferreport(event.target.value);
+//     // console.log(transferreport,"Airport data")
+// };
+
+
   //Entering Manually...
+  // console.log(nochangedata,"data")
   const handleVehicleChange = (event, value, name) => {
+    console.log(name,value)
     if (name === "vehRegNo") {
       const manualInput = typeof value === "string" ? value : value?.label;
+
+        // setNoChangeData((prevState) => ({
+        //   ...prevState,
+        //   vehRegNo: value,
+      
+        // }));
 
       if (manualInput) {
         const selectedVehicle = vechiledata?.find(option => option?.vehRegNo === manualInput);
@@ -340,6 +426,14 @@ const useBooking = () => {
           Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
           hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
         }));
+
+        // setNoChangeData((prevState) => ({
+        //   ...prevState,
+        //   vehRegNo: manualInput,
+        //   vehiclemodule: selectedVehicle?.vehType || prevState.vehiclemodule,  // Keep current value if not found
+        //   Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
+        //   hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
+        // }));
       }
     }
   };
@@ -364,7 +458,7 @@ const useBooking = () => {
 
     if (name === "orderedby") {
       const selectedOrder = orderByDropDown?.find(option => option?.orderedby === value?.label);
-      console.log(selectedOrder)
+      // console.log(selectedOrder)
       if (selectedOrder) {
         setBook(prevState => ({
           ...prevState,
@@ -389,6 +483,13 @@ const useBooking = () => {
           // servicestation: selectedOrder.servicestation
         }));
 
+        setNoChangeData((prevState) => ({
+          ...prevState,
+          orderedby: value?.label,
+          orderByMobileNo: selectedOrder.orderByMobileNo,
+          orderByEmail: selectedOrder.orderByEmail,
+        }));
+
       } 
       else { 
         // If no match is found, clear the fields or handle it as necessary
@@ -408,6 +509,10 @@ const useBooking = () => {
           orderedby: value,
         
         }));
+        // setNoChangeData((prevValues) => ({
+        //   ...prevValues,
+        //   orderedby: value,
+        // }));
       }
     } else {
       setBook(prevState => ({
@@ -420,6 +525,10 @@ const useBooking = () => {
       }));
       setFormData((prevData) => ({
         ...prevData,
+        [name]: selectedOption,
+      }));
+      setNoChangeData((prevValues) => ({
+        ...prevValues,
         [name]: selectedOption,
       }));
     }
@@ -439,6 +548,9 @@ const useBooking = () => {
 
         if (resData.success) {
           setOrderByDropDown(resData.data)
+          // console.log(resData,"jjj")
+          
+          
           setBook(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
         } else {
           setOrderByDropDown([])
@@ -453,7 +565,7 @@ const useBooking = () => {
   }, [custmorName, apiUrl])
 
   const handleDriverChange = (event, value, name) => {
-    console.log(value,name,"driver")
+   
     if (name === "driverName") {
       const manualInput = typeof value === "string" ? value : value?.label;
       if (manualInput) {
@@ -469,24 +581,61 @@ const useBooking = () => {
           driverName: manualInput,
           mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, // Same logic as above
         }));
+
+
+        // setNoChangeData((prevState) => ({
+        //   ...prevState,
+        //   driverName: manualInput,
+        //   mobileNo: selectedDriver?.Mobileno || prevState.mobileNo, 
+        // }));
       }
     }
   };
 
+
+ 
+
+  
+
   const handleDateChange = (date, name) => {
+    // const formattedDate = dayjs(date).format("DD-MM-YYYY");
+    // const parsedDate = dayjs(formattedDate).format("DD-MM-YYYY");
+
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
+        const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
+    // console.log(parsedDate,"pp",formattedDate)
+    let data = parsedDate
+    if(data === "Invalid Date")
+    {
+     data = formattedDate
+    }
+    // setBook((prevBook) => ({
+    //   ...prevBook,
+    //   [name]: parsedDate || formattedDate,
+    // }));
+    // setFormValues((prevValues) => ({
+    //   ...prevValues,
+    //   [name]: parsedDate || formattedDate,
+    // }));
+    // setSelectedCustomerData((prevValues) => ({
+    //   ...prevValues,
+    //   [name]: parsedDate || ,
+    // }));
     setBook((prevBook) => ({
       ...prevBook,
-      [name]: parsedDate,
+      [name]: data,
     }));
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: parsedDate,
+      [name]: data,
     }));
     setSelectedCustomerData((prevValues) => ({
       ...prevValues,
-      [name]: parsedDate,
+      [name]: data,
+    }));
+    setNoChangeData((prevValues) => ({
+      ...prevValues,
+      [name]: data,
     }));
   };
 
@@ -527,9 +676,11 @@ const useBooking = () => {
     };
     fetchData();
   }, [apiUrl, datatrigger]);
+  // console.log(nochangedata,"nochnage")
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpentrail, setDialogOpenTrail] = useState(false);
   const booking_id = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
   const handleButtonClick = () => {
     const booking_no = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
@@ -541,6 +692,14 @@ const useBooking = () => {
     setDeleteFile([])
     showPdf();
   };
+  const handleButtonClickwithouttripid = () => {
+    setDialogOpenTrail(true)
+    // setDeleteFile([])
+    // showPdf();
+  };
+  const handleCloseDialogtrail = () => {
+    setDialogOpenTrail(false);
+  }
 
   // ------------------------------------------------------------
   const [allFile, setAllFile] = useState([]);
@@ -568,7 +727,7 @@ const useBooking = () => {
   const addPdf = async (lastbookid, fileData) => {
     const uploadFile = fileData || file
     if (uploadFile !== null) {
-      const createddata = dayjs().format('YYYY-MM-DD')
+      const createddata = dayjs().format('DD-MM-YYYY')
       const formData = new FormData();
       formData.append("file", uploadFile);
       formData.append("created_at", createddata);
@@ -597,7 +756,7 @@ const useBooking = () => {
   }
   const [triggerCount, setTriggerCount] = useState(false)
 
-  useEffect(() => {
+
     const getImageCount = async () => {
       try {
         if (!booking_id) return
@@ -619,8 +778,36 @@ const useBooking = () => {
    
       }
     }
-    getImageCount()
+    useEffect(()=>{
+
+      getImageCount()
   }, [file, triggerCount, apiUrl, booking_id,])
+  
+
+  // useEffect(() => {
+  //   const getImageCount = async () => {
+  //     try {
+  //       if (!booking_id) return
+  //       const response = await axios.get(`${apiUrl}/booking-docPDFView/${booking_id}`)
+  //       const count = response.data.files.length
+
+  //       if (count > 0) {
+  //         setAvilableimageCount(count)
+  //       }
+  //     }
+  //     catch (err) {
+  //       // console.log(err,"rtyuiopoih")
+  //       // const errdata=err.response;
+  //       // console.log(errdata,"weeee")
+  //       // if(err.response.status === 404){
+  //         setAvilableimageCount(0)
+  //       // }
+       
+   
+  //     }
+  //   }
+  //   getImageCount()
+  // }, [file, triggerCount, apiUrl, booking_id,])
 
     //--------------------------------------------------------------
 
@@ -658,6 +845,8 @@ const useBooking = () => {
           username: user,
           Address: formData.address1 || selectedCustomerData.address1 || book.address1 || "",
           status: datamode,
+          escort:formData.escort || selectedCustomerData.escort || book.escort || "No",
+          transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport || "No",
           Sendmailauth: organistaionsendmail.Sender_Mail,
           Mailauthpass: organistaionsendmail.EmailApp_Password
         };
@@ -681,20 +870,25 @@ const useBooking = () => {
   const reportdate = dayjs(book.startdate)
   const [imageDialogOpen, setImageDialogOpen] = useState(false)
   const [selectetImg, setSelectetImg] = useState([])
-  const removeSelectedImage = (index, e) => {
-    e.preventDefault()
-    setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
-  }
+  // const removeSelectedImage = (index, e) => {
+  //   e.preventDefault()
+  //   setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
+  // }
   const handleImagechange2 = (e) => {
+    // console.log(e.target.files,"etarget")
     const files = Array.from(e.target.files);
     setSelectetImg((prevImg) => [...prevImg, ...files]);
-    if (files.length > 0) {
-      setImageDialogOpen(true);
-    }
+    // console.log(files,"filesdataaddnewimage")
+    
+    // if (files.length > 0) {
+    //   setImageDialogOpen(true);
+    // }
   };
+  // console.log(selectetImg,"selectimag lentgh")
   const handleCloseImageDialog = () => {
     setImageDialogOpen(false)
   }
+  // console.log(selectetImg,"selectetImgdata")
 
   const handlebooklogDetails = async (updatebook, lastBookinglogno, modedata) => {
     const logupdatabookdetails = updatebook
@@ -711,15 +905,17 @@ const useBooking = () => {
         startdate: logupdatabookdetails.startdate,
         duty: logupdatabookdetails.duty,
         useage: logupdatabookdetails.useage,
-        travelsname: logupdatabookdetails.travelsname,
+        travelsname: logupdatabookdetails.travelsname || null,
         vehRegNo: logupdatabookdetails.vehRegNo,
         customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
-        Log_Date: dayjs().format("yyyy-MM-DD"),
+        Log_Date: dayjs().format("DD-MM-YYYY"),
         Log_Time: getCurrentTime(),
         mode: modedata,
         bookingno: lastBookinglogno,
         driverName: logupdatabookdetails.driverName,
-        username: logupdatabookdetails.username
+        username: logupdatabookdetails.username,
+        Escort:logupdatabookdetails.escort,
+        Transferreport:logupdatabookdetails.transferreport
 
       };
       await axios.post(`${apiUrl}/bookinglogDetails`, updatedBooklogdetails)
@@ -730,13 +926,121 @@ const useBooking = () => {
       // console.log(err, "err")
     }
   }
-  //------------------------------------------------------
-  const handleAdd = async () => {
-   
 
-    if (!selectedCustomerData.guestmobileno) {
+  const handlebookdeletebookingdoc = async (lastBookinglogno) => {
+    try{
+      await axios.delete(`${apiUrl}/bookingDLETEUPLOAD/${lastBookinglogno}`);
+    }
+    catch (err) {
+    
+      console.log(err, "err")
+    }
+  }
+  //------------------------------------------------------
+  
+  const customerdatatimetoggle = useMemo(() => {
+    return (
+        formData.customer ||
+        selectedCustomerData.customer ||
+        selectedCustomerDatas.customer || book.customer
+    );
+}, [formData.customer, selectedCustomerData.customer, selectedCustomerDatas.customer , book.customer]);
+
+  const fetchdatacustomerhybrid = useCallback(async () => {
+    if (customerdatatimetoggle) {
+        try {
+            const response = await axios.get(`${apiUrl}/customerratenamedata/${customerdatatimetoggle}`);
+            const data = response.data;
+            if (data.length > 0) {
+                const res = data[0].hybrid;
+                // console.log(data,"cust")
+                setHybdriDatabooking(res)
+                // Update state with the fetched result
+            } else {
+              setHybdriDatabooking(0)
+            }
+        } catch (error) {
+
+            console.error('Error fetching customer data:', error);
+            setHybdriDatabooking(0)
+          
+        }
+    } else {
+      setHybdriDatabooking(0)
+ 
+
+    }
+}, [apiUrl, customerdatatimetoggle]); // Memoize the fetch function based on these dependencies
+
+// Use useEffect to trigger the fetch function only when necessary
+useEffect(() => {
+    fetchdatacustomerhybrid();
+}, [fetchdatacustomerhybrid]);
+// console.log(selectetImg,"imgggg")
+// console.log(formData.vehiclemodule,selectedCustomerData.vehiclemodule,book.vehiclemodule,selectedCustomerdriver.vehiclemodule,"jss")
+  const handleAdd = async () => {
+ 
+   const guestmobilenodata = selectedCustomerData.guestmobileno || book.guestmobileno
+   const servicestationdata = selectedCustomerData.servicestation || book.servicestation
+   const customerdatas = selectedCustomerData.customer|| book.customer
+   const starttimedata = selectedCustomerData.starttime || book.starttime
+  const guestname = selectedCustomerData.guestname || book.guestname
+  const bookaddress = selectedCustomerData.address1 || book.address1
+
+
+    // if (!selectedCustomerData.guestmobileno) {
+    //   setError(true);
+    //   setErrorMessage("Enter Guest Mobile Number");
+    //   return;
+    // }
+
+    
+    // if (!selectedCustomerData.guestmobileno) {
+    //   setError(true);
+    //   setErrorMessage("Enter Guest Mobile Number");
+    //   return;
+    // }
+    // if (!selectedCustomerData.servicestation) {
+    //   setError(true);
+    //   setErrorMessage("Enter Station");
+    //   return;
+    // }
+    // if (!reportdate) {
+    //   setError(true);
+    //   setErrorMessage("Enter Report Date");
+    //   return;
+    // }
+    // if (!selectedCustomerData.customer) {
+    //   setError(true)
+    //   setErrorMessage("Enter Customer Name")
+    //   return
+    // }
+    // if (!selectedCustomerData.starttime) {
+    //   setError(true)
+    //   setErrorMessage("Enter starting Time")
+    //   return
+    // }
+   
+    // if (!selectedCustomerData.guestname) {
+    //   setError(true)
+    //   setErrorMessage("Enter GuestName")
+    //   return
+    // }
+    // if (!selectedCustomerData.address1) {
+    //   setError(true);
+    //   setErrorMessage("Enter Address Details");
+    //   return;
+    // }
+
+     if (!guestmobilenodata) {
       setError(true);
       setErrorMessage("Enter Guest Mobile Number");
+      return;
+    }
+
+    if (!servicestationdata) {
+      setError(true);
+      setErrorMessage("Enter Station");
       return;
     }
     if (!reportdate) {
@@ -744,40 +1048,44 @@ const useBooking = () => {
       setErrorMessage("Enter Report Date");
       return;
     }
-    if (!selectedCustomerData.customer) {
+    if (!customerdatas) {
       setError(true)
       setErrorMessage("Enter Customer Name")
       return
     }
-    if (!selectedCustomerData.starttime) {
+    if (!starttimedata) {
       setError(true)
       setErrorMessage("Enter starting Time")
       return
     }
    
-    if (!selectedCustomerData.guestname) {
+    if (!guestname) {
       setError(true)
       setErrorMessage("Enter GuestName")
       return
     }
-    if (!selectedCustomerData.address1) {
+    if (!bookaddress) {
       setError(true);
       setErrorMessage("Enter Address Details");
       return;
     }
 
     try {
+      setisAddbtnload(true)
       setDatatrigger(!datatrigger)
       const selectedBookingDate = dayjs().format("YYYY-MM-DD");
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
+      const bookingstartdate1 = dayjs(bookingstartdate).format("YYYY-MM-DD");
       const bookingshedoutdata = selectedCustomerData.shedOutDate || formData.shedOutDate || book.shedOutDate || dayjs();
+      const bookingshedoutdata1 = dayjs(bookingshedoutdata).format("YYYY-MM-DD");
+
       // Create a new object without the 'id' field from selectedCustomerData
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
 
       const updatedBook = {
         bookingtime: getCurrentTime(),
         bookingdate: selectedBookingDate,
-        starttime: restSelectedCustomerData.starttime,
+        starttime: restSelectedCustomerData.starttime || book.starttime,
         status: bookingStatus,
         mobile: selectedCustomerDatas.phoneno || selectedCustomerData.mobile,
         guestname: selectedCustomerData.guestname || formData.guestname || book.guestname || formValues.guestname,
@@ -788,11 +1096,13 @@ const useBooking = () => {
         report: formData.report || selectedCustomerData.report || book.report,
         vehicleName: formData.vehicleName || selectedCustomerData.vehicleName || book.vehicleName || selectedCustomerdriver.vehicleName,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
-        startdate: bookingstartdate,
-        shedOutDate: bookingshedoutdata,
+        // startdate: bookingstartdate,
+        // shedOutDate: bookingshedoutdata,
+        startdate: bookingstartdate1,
+        shedOutDate: bookingshedoutdata1,
         orderedby: book.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby || formData.orderedby,
-        orderByMobileNo: book.orderByMobileNo || selectedCustomerData.orderByMobileNo || selectedCustomerDatas.orderByMobileNo || formData.orderByMobileNo,
-        orderByEmail: book.orderByEmail || selectedCustomerData.orderByEmail || selectedCustomerDatas.orderByEmail || formData.orderByEmail,
+        orderByMobileNo: book.orderByMobileNo || selectedCustomerData.orderByMobileNo || selectedCustomerDatas.orderByMobileNo || formData.orderByMobileNo || book.mobile,
+        orderByEmail: book.orderByEmail || selectedCustomerData.orderByEmail || selectedCustomerDatas.orderByEmail || formData.orderByEmail ||book.orderbyemail ,
         duty: formData.duty || selectedCustomerData.duty || book.duty,
         pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
         customercode: formData.customercode || selectedCustomerData.customercode || book.customercode,
@@ -805,16 +1115,21 @@ const useBooking = () => {
         hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
         vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
-        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || selectedCustomerdriver.vehiclemodule,
+        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||"A/C",
         driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
-        reporttime: restSelectedCustomerData.reporttime,
+        reporttime: restSelectedCustomerData.reporttime || book.reporttime,
         ratenamebook: ratename,
         username: storedUsername,
         Groups: selectedCustomerData.Groups || book.Groups || formData.Groups || selectedCustomerdriver.Groups,
-        customer: restSelectedCustomerData.customer
+        customer: restSelectedCustomerData.customer || book.customer,
+        escort:formData.escort || selectedCustomerData.escort || book.escort || escort,
+        transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport || transferreport,
+        hybridhcldata:hybdridatabooking
+
       };
+      // console.log(updatedBook,"pppp")
 
       setSendmailGuestsms(true)
       await axios.post(`${apiUrl}/booking`, updatedBook);
@@ -839,6 +1154,7 @@ const useBooking = () => {
       setRow([]);
       setRows([]);
       setSuccess(true);
+      setisAddbtnload(false)
       setSuccessMessage("Successfully Added");
       handlecheck(lastBookingno);
       setEdit(false)
@@ -872,7 +1188,17 @@ const useBooking = () => {
   };
 
   const handleEdit = async (userid) => {
+
+    
+if (Object.keys(nochangedata).length === 0) {
+  // console.error("Error: Data not changed");
+  setError(true);
+  setErrorMessage("Nothing To Change");
+  return
+}
+    
     try {
+      setisEditbtnload(true)
       const selectedCustomer = rows.find(
         (row) =>
           row.bookingno === selectedCustomerData.bookingno ||
@@ -883,6 +1209,9 @@ const useBooking = () => {
       const selectedbookingtime = selectedCustomerData.bookingtime || formData.bookingtime || book.bookingtime || getCurrentTime();
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       const bookingshedoutdata = selectedCustomerData.shedOutDate || formData.shedOutDate || book.shedOutDate || dayjs();
+      const bookingstartdate1 = dayjs(bookingstartdate).format("YYYY-MM-DD");
+      const bookingshedoutdata1 = dayjs(bookingshedoutdata).format("YYYY-MM-DD");
+      
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
       const updatedCustomer = {
         ...selectedCustomer,
@@ -899,8 +1228,10 @@ const useBooking = () => {
         report: formData.report || selectedCustomerData.report || book.report,
         vehicleName: formData.vehicleName || selectedCustomerData.vehicleName || book.vehicleName || selectedCustomerdriver.vehicleName,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
-        shedOutDate: bookingshedoutdata,
-        startdate: bookingstartdate,
+        // shedOutDate: bookingshedoutdata,
+        // startdate: bookingstartdate,
+        shedOutDate: bookingshedoutdata1,
+        startdate: bookingstartdate1,
         orderedby: book.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby || formData.orderedby,
         orderByMobileNo: book.orderByMobileNo || selectedCustomerData.orderByMobileNo || selectedCustomerDatas.orderByMobileNo || formData.orderByMobileNo,
         orderByEmail: book.orderByEmail || book.orderbyemail ||
@@ -919,7 +1250,7 @@ const useBooking = () => {
         hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
         vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
-        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || selectedCustomerdriver.vehiclemodule,
+        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||"A/C",
         driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
@@ -928,6 +1259,9 @@ const useBooking = () => {
         username: storedUsername,
         Groups: formData.Groups || selectedCustomerData.Groups || book.Groups || selectedCustomerdriver.Groups,
         customer: restSelectedCustomerData.customer,
+        escort:formData.escort || selectedCustomerData.escort || book.escort,
+        transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport,
+        hybridhcldata:hybdridatabooking
       };
 
       const editbookno = book.bookingno || selectedCustomerData.bookingno || formData.bookingno
@@ -939,6 +1273,7 @@ const useBooking = () => {
         if (response.status === 201) {
           setSuccess(true);
           setSuccessMessage(response.data.message);
+          setisEditbtnload(false)
           if (sendEmail) {
             handlecheck(editbookno);
           }
@@ -979,6 +1314,9 @@ const useBooking = () => {
             setSuccess(true);
             setSuccessMessage(response.data.message);
             handlebooklogDetails(updatedCustomer, deletebookno, "Delete")
+            handlebookdeletebookingdoc(deletebookno)
+            //  await axios.delete(`${apiUrl}/bookingDLETEUPLOAD/${book.bookingno || selectedCustomerData.bookingno}`);
+            // handlebooklogDetails(updatedCustomer, deletebookno, "Delete")
           } else {
             setInfo(true);
             setInfoMessage(response.data.message)
@@ -1145,7 +1483,7 @@ const useBooking = () => {
   };
   const [imagedata, setImagedata] = useState(null);
   const handleContextMenu = () => {
-    axios.delete(`${apiUrl}/booking_doc-delete/` + imagedata)
+    axios.delete(`${apiUrl}/booking_doc-delete/` + imagedata + "/" + booking_id)
       .then((res) => {
         if (res.data.success) {
           setTriggerCount(prev => !prev)
@@ -1175,7 +1513,8 @@ const useBooking = () => {
     }
     setSelectAll(prevState => !prevState);
   };
-  const [deletefile, setDeleteFile] = useState([])
+ 
+
   const handlecheckbox = (fileName) => {
     if (deletefile.includes(fileName)) {
       setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
@@ -1183,6 +1522,43 @@ const useBooking = () => {
       setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
     }
   };
+
+  // const handlecheckbox1 = (fileName) => {
+  //   if (deletefile.includes(fileName)) {
+  //     setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
+  //   } else {
+  //     setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
+  //   }
+  // };
+
+  const handlecheckbox1 = (e) => {
+    console.log(e,"ee")
+    // e.preventDefault()
+      // if (deletefile.includes(e)) {
+        if (deletefiledata.includes(e)) {
+      setDeleteFiledata(prevDeleteFile => prevDeleteFile.filter(file => file !== e));
+    } else {
+      setDeleteFiledata(prevDeleteFile => [...prevDeleteFile,e]);
+    }
+    // setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
+  }
+  // console.log(deletefiledata,"deletefile")
+
+  const handleimagedeletewithouttripid =(deletefiledata1) => {
+    if (deletefiledata1.length > 0) {
+      // const updatedSelectedImg = selectedImg.filter(file => file.name !== nameToRemove);
+      // setSelectetImg((prevFileNames) => prevFileNames.filter(file => file.name !== nameToRemove));
+      setSelectetImg((prevFileNames) =>
+        prevFileNames.filter(file => !deletefiledata1.includes(file.name))
+      );
+
+      // setDialogdeleteOpen(true);
+      setDialogOpenTrail(true)
+      setDeleteFiledata([]);
+    }
+  };
+  // console.log(deletefile,"deletefile")
+  // console.log(selectetImg,"selecetdimg")
 
   const handleimagedelete = (imageName) => {
     if (deletefile.length > 0) {
@@ -1247,6 +1623,11 @@ const useBooking = () => {
       ...prevData,
       [name]: selectedOption,
     }));
+    setNoChangeData((prevValues) => ({
+      ...prevValues,
+      [name]: selectedOption,
+    }));
+    
     travelsdatafetch(selectedOption)
   };
 
@@ -1325,7 +1706,13 @@ const useBooking = () => {
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus, handletravelsAutocompleteChange, accountinfodata,
-    vehileName, infoMessage, handleImagechange2, selectetImg, removeSelectedImage, imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning
+    vehileName, infoMessage, handleImagechange2, selectetImg,handleimagedeletewithouttripid,deletefiledata,
+    //  removeSelectedImage,
+     imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning,
+    // handleBookEscortChange,
+    // handleAirportTransferChange,
+    transferreport,setTransferreport,escort,setEscort,setNoChangeData,nochangedata,
+    isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload,handleButtonClickwithouttripid,dialogOpentrail,handleCloseDialogtrail,handlecheckbox1
   };
 };
 export default useBooking;

@@ -33,6 +33,7 @@ const useBilling = () => {
     const [stateDetails, setStateDetails] = useState([]);
     const [billadd,setBillAdd]=useState(false)
     const [dataotherStations,setDataOtherStations]=useState([])
+    const [datastate,setDataState]=useState('')
 
     const { setParticularPdf, setParticularRefNo,setIndividualBilled, individualBilled } = PdfData();
 
@@ -206,15 +207,17 @@ const useBilling = () => {
         fetchDataOtherStations();
     }, [memoizedCustomer, apiUrl]);
     
-    console.log(dataotherStations,"llll")
+    // console.log(dataotherStations,"llll")
 
     
     const handleEInvoiceClick = (row) => {
-        const tripid = book.invoiceno;
+        // const tripid = book.invoiceno || invoicestate;
+        const tripid = book.tripid
         // if (!tripid) {
         //     setError(true);
         //     setErrorMessage("Please enter Invoice No");
         // } else {
+        setPopupOpen(true)
           
             setParticularRefNo(tripid)
             setParticularPdf(true);
@@ -286,19 +289,59 @@ const useBilling = () => {
 
     const total_GrossAmount = () => {
         const nhamount = total_Nighthalt_Amount() || book.nhamount;
-        const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll } = book;
-        const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll].map((value) =>
+        // const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll } = book;
+        const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount, permit, parking, toll,} = book;
+        // const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll].map((value) =>
+            const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount].map((value) =>
             isNaN(Number(value)) ? 0 : Number(value)
         );
         return parsedValues.reduce((add, num) => add + num, 0);
     }
 
     const gst_taxAmountCalc = () => {
-        const gst = customerData.gstTax || 0;
-        const GrossAmount = Number(total_GrossAmount() || book.GrossAmount);
-        const parsedValues = GrossAmount + (GrossAmount * (gst / 100))
+        // const gst = customerData.gstTax || 0;
+        const gst = dataotherStations?.data || 0;
+    
+        const GrossAmount = Number(total_GrossAmount() || book.GrossAmount||0);
+    
+        // const parsedValues = GrossAmount + (GrossAmount * (gst / 100))
+        const parsedValues = GrossAmount * (gst / 100)
+    
         return parsedValues.toFixed(2);
     }
+
+const hanldetollpark = () => {
+    const {permit, parking, toll} = book;
+   
+    
+        // Ensure the values are numbers and sum them up
+        const totalAmount = (parseFloat(permit) || 0) + (parseFloat(parking) || 0) + (parseFloat(toll) || 0);
+    
+        return totalAmount;
+  
+}
+
+const handlefullTotalAmount = () => {
+   
+
+        // Calculate the total gross amount
+        const grossAmount = total_GrossAmount();
+    
+        // Calculate the GST tax amount
+        const gstTaxAmount = gst_taxAmountCalc();
+    
+        // Calculate the toll and parking amount
+        const tollParkAmount = hanldetollpark();
+    
+        // Sum the total gross amount, GST tax amount, and toll/parking amount
+        const totalAmount = grossAmount + parseFloat(gstTaxAmount) + tollParkAmount;
+    
+        return totalAmount.toFixed(2); // Return the total amount with two decimal points
+    };
+    
+
+
+
 
     const discound_PercentageCalc = () => {
         const { DiscountAmount, DiscountAmount2 } = book;
@@ -314,8 +357,11 @@ const useBilling = () => {
 
     const balanceRecivable = () => {
         const customeradvance = parseFloat(book.customeradvance || 0);
+        console.log(customeradvance,"advance",discound_PercentageCalc())
         const discountAmount = parseFloat(discound_PercentageCalc() || book.DiscountAmount || 0);
-        const GrossAmount = parseFloat(total_GrossAmount() || book.GrossAmount);
+        // console.log(discountAmount,"disca",total_GrossAmount())
+        const GrossAmount = parseFloat(total_GrossAmount() || book.GrossAmount || 0);
+        // console.log(GrossAmount,"grosssbalance")
 
         if (customeradvance || discountAmount) {
             const result = GrossAmount - (discountAmount + customeradvance)
@@ -362,15 +408,33 @@ const useBilling = () => {
         setCustomerData('')
         setBillingDate()
         setInvoiceNo()
+        setDataState("");
+
 
     }
+    const handleserviceInputChange =(event,newValue)=>{
+        setDataState(newValue ? decodeURIComponent(newValue.label) : "");
+    }
 
+
+    // const customerMotherdatagroupstation = async(customer)=>{
+    //     console.log(customer,"enetr")
+    //     try{
+    //         const resultresponse = await axios.get(`${apiUrl}/customerdatamothergroup/${customer}`)
+    //         const datas =resultresponse.data;
+    //         return datas
+          
+    //     }
+    //     catch(err){
+         
+    //     }
+    // }
 
     const customerMotherdatagroupstation = async(customer)=>{
         console.log(customer,"enetr")
         try{
-            const resultresponse = await axios.get(`${apiUrl}/customerdatamothergroup/${customer}`)
-            const datas =resultresponse.data;
+            const resultresponse = await axios.get(`${apiUrl}/customerinvoicecreate/${customer}`)
+            const datas = resultresponse.data;
             return datas
           
         }
@@ -391,13 +455,16 @@ const useBilling = () => {
     //     Billingdate: book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
     // }
 
-     const dataget = async (bookingno) => {
+     const dataget = async (bookingno,statedata) => {
     const bookdatano = bookingno
+   
     if(bookingno !== null){
-
-    
-    const responsedata = await axios.get(`${apiUrl}/getdatafromtripsheetvaluebilling/${bookdatano}`)
+     
+        // const responsedata = await axios.get(`${apiUrl}/getdatafromtripsheetvaluebilling/${bookdatano}/${statedata}`)
+    const responsedata = await axios.get(`${apiUrl}/getdatafromtripsheetvaluebilling/${bookdatano}/${statedata}`)
     const bookingDetails = responsedata.data[0]; 
+    setBillingDate(bookingDetails.Bill_Date)
+    setDataState(bookingDetails.State)
    setBook(() => ({ ...bookingDetails }));
 
     }
@@ -411,12 +478,14 @@ const useBilling = () => {
     useEffect(() => {
          const params = dataempty === 0 ? new URLSearchParams(location.search): new URLSearchParams();
         const dispath = params.get("dispatchcheck")
-        const tripid = params.get("tripid");
+        // const tripid = params.get("tripid");
         const billingdate1 = params.get("Billingdate");
         const Invoicedata = params.get("Invoicedata")
+        const statedata = params.get("State")
         // console.log(Invoicedata,"PPPs")
         if (dispath && dataempty === 0) {
-            dataget(tripid)
+            // dataget(tripid,statedata)
+            dataget(Invoicedata,statedata)
             setEdit(true)
             setBillingDate(billingdate1)
             // console.log(Invoicedata,"eetr")
@@ -444,6 +513,8 @@ const useBilling = () => {
             setBillingDate('')
             setInvoiceNo('')
             setEdit(false)
+            setDataState('')
+            setCustomerData('')
             setBook(() => ({}));
             setIndividualBilled(false)
             localStorage.setItem("searchdataurl",1)
@@ -515,12 +586,25 @@ const useBilling = () => {
                      // Accessing the first item if response.data is an array
                     if(booklength.length > 0){
                     // Update the state with the booking details
+                    const noAmount = bookingDetails?.totalcalcAmount
+                    console.log(noAmount,"noAmount")
+                    if(noAmount === 0){
+                        setError(true)
+                        setErrorMessage(`The amount for trip ID ${tripid} is Invalid`)
+                        setBook(() => ({  }));
+                        
+                        return
+                    
+                    }
+                    else{
+                    console.log(noAmount,typeof(noAmount),"amount")
                     setBook(() => ({ ...bookingDetails }));
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
                     setBillAdd(true)
                     setEdit(false)
                     setIndividualBilled(false)
+                    }
                     }
                     else{
                     setError(true)
@@ -597,7 +681,7 @@ const useBilling = () => {
 
 
 
-    const organizationaddress1 = customerData.address1;
+    // const organizationaddress1 = customerData.address1;
     // const organizationaddress2 = customerData.address2;
     // const organizationcity = customerData.city;
     // const organizationgstnumber = customerData.gstnumber;
@@ -624,18 +708,21 @@ const useBilling = () => {
 
             if (event.key === "Enter") {
               event.preventDefault();
-             
+              const invoicenodata = invoiceno || invoicestate
+             console.log(datastate,"settt",invoiceno,"lllll")
               try {
-                if (invoiceno) {
+                if (invoicenodata && datastate) {
                 const response = await axios.get(
-                  `${apiUrl}/INVOICEENTER_Billing/${invoiceno}`
+                  `${apiUrl}/INVOICEENTER_Billing/${invoicenodata}/${datastate}`
                 );
                 // const bookingDetails = response.data;
                 const bookingDetails = response.data[0];
                 const bookdata=response.data; // Accessing the first item if response.data is an array
-
+                
                 if(bookdata.length > 0 ){
                 setBillingDate(bookingDetails.Bill_Date)
+                setDataState(bookingDetails.State)
+               
                 setBook(() => ({ ...bookingDetails }));
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
@@ -646,6 +733,8 @@ const useBilling = () => {
                 }
                 else{
                     setBook(() => ({ ...emptyBookvalues }));
+                    setBillingDate('')
+                    setDataState('')
                     setError(true);
                     setErrorMessage("Data Not Found");
                 }
@@ -653,7 +742,7 @@ const useBilling = () => {
 
                 else{
                     setError(true);
-                    setErrorMessage("Enter The Invoice_No");
+                    setErrorMessage("Enter  Invoice_No And State ");
                 }
               } catch {
                 setError(true);
@@ -742,7 +831,7 @@ const useBilling = () => {
         // tripclosetime,
         // tripstartdate,
         // tripclosedate,
-        organizationaddress1,
+        // organizationaddress1,
         // organizationaddress2,
         // organizationcity,
         // organizationgstnumber,
@@ -755,9 +844,9 @@ const useBilling = () => {
         setMapImageUrl,
         setGMapImageUrl,
         handleKeyenterinvoicdeno,
-        setInvoiceNo,billadd,invoicestate,dataotherStations,
+        setInvoiceNo,billadd,invoicestate,dataotherStations,handleserviceInputChange,datastate,
         mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,edit,selectbillingdata,billingdate,
-        stateDetails,setStateDetails
+        stateDetails,setStateDetails,handlefullTotalAmount,hanldetollpark
     };
 };
 

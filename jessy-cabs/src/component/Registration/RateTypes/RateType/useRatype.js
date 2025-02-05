@@ -11,12 +11,12 @@ import Excel from 'exceljs';
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 ,headerAlign: 'center' },
-    { field: "driverid", headerName: "Driver ID", width: 180 ,headerAlign: 'center'},
+    { field: "driverid", headerName: "Ratetype ID", width: 180 ,headerAlign: 'center'},
     { field: "ratetype", headerName: "Rate Type", width: 180 ,headerAlign: 'center'},
     { field: "ratename", headerName: "Ratename", width: 180 ,headerAlign: 'center'},
-    { field: "active", headerName: "Active", width: 180 ,headerAlign: 'center'},
     { field: "starttime", headerName: "Start Date", width: 190 ,headerAlign: 'center',valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
     { field: "closetime", headerName: "Close Date", width: 190,headerAlign: 'center',valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY')  },
+    { field: "active", headerName: "Active", width: 180 ,headerAlign: 'center'},
 ];
 
 const useRatype = () => {
@@ -39,6 +39,7 @@ const useRatype = () => {
     const [infoMessage, setInfoMessage] = useState({});
     const [cerendentialdata,setCredentialData]=useState()
     const [loading, setLoading] = useState(false)
+    const [isRateButtonLoading,setisRateButtonLoading]= useState(false)
     
     // handlechange-----------------
     const handleDateChange = (date, name) => {
@@ -74,66 +75,171 @@ const useRatype = () => {
         }
     }, [error, success, warning, info]);
 
+    // const handleExcelDownload = async () => {
+    //     const workbook = new Excel.Workbook();
+    //     const workSheetName = 'Worksheet-1';
+    //     try {
+    //         const fileName = "Ratetype Reports"
+    //         // creating one worksheet in workbook
+    //         const worksheet = workbook.addWorksheet(workSheetName);
+    //         const headers = Object.keys(rows[0]);
+    //         const idIndex = headers.indexOf('id');
+    //         console.log(idIndex, "index")
+    //         if (idIndex !== -1) {
+    //             headers.splice(idIndex, 1);
+    //             console.log(headers, "splice")
+    //             headers.unshift('id');
+    //             console.log(headers, "unsift")
+    //         }
+    //         const columnsExcel = headers.map(key => ({ key, header: key }));
+    //         worksheet.columns = columnsExcel;
+
+    //         // updated the font for first row.
+    //         worksheet.getRow(1).font = { bold: true };
+
+    //         // Set background color for header cells
+    //         worksheet.getRow(1).eachCell((cell, colNumber) => {
+    //             cell.fill = {
+    //                 type: 'pattern',
+    //                 pattern: 'solid',
+    //                 fgColor: { argb: '9BB0C1' } // Green background color
+    //             };
+    //         });
+
+    //         worksheet.getRow(1).height = 30;
+    //         // loop through all of the columns and set the alignment with width.
+    //         worksheet.columns.forEach((column) => {
+    //             column.width = column.header.length + 5;
+    //             column.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
+
+    //         rows.forEach((singleData, index) => {
+                
+    //             console.log(singleData,'data from the ratetype excel')
+
+    //             worksheet.addRow(singleData);
+
+    //             // Adjust column width based on the length of the cell values in the added row
+    //             worksheet.columns.forEach((column) => {
+    //                 const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+    //                 const cellLength = cellValue.toString().length; // Get length of cell value as a string
+    //                 const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+    //                 // Set column width to the maximum of current width and cell length plus extra space
+    //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
+    //             });
+    //         });
+
+    //         // loop through all of the rows and set the outline style.
+    //         worksheet.eachRow({ includeEmpty: false }, (row) => {
+    //             // store each cell to currentCell
+    //             const currentCell = row._cells;
+    //             // loop through currentCell to apply border only for the non-empty cell of excel
+    //             currentCell.forEach((singleCell) => {
+    //                 const cellAddress = singleCell._address;
+    //                 // apply border
+    //                 worksheet.getCell(cellAddress).border = {
+    //                     top: { style: 'thin' },
+    //                     left: { style: 'thin' },
+    //                     bottom: { style: 'thin' },
+    //                     right: { style: 'thin' },
+    //                 };
+    //             });
+    //         });
+    //         // write the content using writeBuffer
+    //         const buf = await workbook.xlsx.writeBuffer();
+    //         // download the processed file
+    //         saveAs(new Blob([buf]), `${fileName}.xlsx`);
+    //     } catch (error) {
+    //         console.error('<<<ERRROR>>>', error);
+    //         console.error('Something Went Wrong', error.message);
+    //     } finally {
+    //         // removing worksheet's instance to create new one
+    //         workbook.removeWorksheet(workSheetName);
+    //     }
+    // }
+
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
         try {
-            const fileName = "Ratetype Reports"
-            // creating one worksheet in workbook
+            const fileName = "Ratetype Reports";
+            
+            // Creating one worksheet in the workbook
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
+    
+            // Ensure 'id' is first in the header
             const idIndex = headers.indexOf('id');
-            console.log(idIndex, "index")
+            console.log(idIndex, "index");
             if (idIndex !== -1) {
                 headers.splice(idIndex, 1);
-                console.log(headers, "splice")
+                console.log(headers, "splice");
                 headers.unshift('id');
-                console.log(headers, "unsift")
+                console.log(headers, "unshift");
             }
+    
+            // Define columns for the worksheet
             const columnsExcel = headers.map(key => ({ key, header: key }));
             worksheet.columns = columnsExcel;
-
-            // updated the font for first row.
+    
+            // Update the font for the first row (header)
             worksheet.getRow(1).font = { bold: true };
-
+    
             // Set background color for header cells
             worksheet.getRow(1).eachCell((cell, colNumber) => {
                 cell.fill = {
                     type: 'pattern',
                     pattern: 'solid',
-                    fgColor: { argb: '9BB0C1' } // Green background color
+                    fgColor: { argb: '9BB0C1' } // Light gray background color
                 };
             });
-
+    
             worksheet.getRow(1).height = 30;
-            // loop through all of the columns and set the alignment with width.
+    
+            // Loop through all columns and set alignment and width
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
                 column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-
+    
+            // Loop through the rows and format the dates
             rows.forEach((singleData, index) => {
-
-                worksheet.addRow(singleData);
-
+                // Loop through each field of the row and check if it contains a date
+                const formattedRow = headers.map(key => {
+                    let value = singleData[key];
+    
+                    // Format 'closetime' and 'starttime' as 'DD-MM-YYYY'
+                    if (key === 'closetime' || key === 'starttime') {
+                        // Check if the value is a valid date and format it
+                        value = value ? dayjs(value).format('DD-MM-YYYY') : 'N/A';
+                    }
+    
+                    return value;
+                });
+    
+                // Add the formatted row to the worksheet
+                worksheet.addRow(formattedRow);
+    
                 // Adjust column width based on the length of the cell values in the added row
                 worksheet.columns.forEach((column) => {
                     const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
                     const cellLength = cellValue.toString().length; // Get length of cell value as a string
                     const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+    
                     // Set column width to the maximum of current width and cell length plus extra space
                     column.width = Math.max(currentColumnWidth, cellLength + 5);
                 });
             });
-
-            // loop through all of the rows and set the outline style.
+    
+            // Loop through all of the rows and set the outline style
             worksheet.eachRow({ includeEmpty: false }, (row) => {
-                // store each cell to currentCell
                 const currentCell = row._cells;
-                // loop through currentCell to apply border only for the non-empty cell of excel
+    
+                // Loop through currentCell to apply border only for non-empty cells
                 currentCell.forEach((singleCell) => {
                     const cellAddress = singleCell._address;
-                    // apply border
+    
+                    // Apply borders
                     worksheet.getCell(cellAddress).border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -142,18 +248,21 @@ const useRatype = () => {
                     };
                 });
             });
-            // write the content using writeBuffer
+    
+            // Write the content using writeBuffer
             const buf = await workbook.xlsx.writeBuffer();
-            // download the processed file
+    
+            // Download the processed file
             saveAs(new Blob([buf]), `${fileName}.xlsx`);
         } catch (error) {
-            console.error('<<<ERRROR>>>', error);
-            console.error('Something Went Wrong', error.message);
+            console.error('<<<ERROR>>>', error);
+            console.error('Something went wrong', error.message);
         } finally {
-            // removing worksheet's instance to create new one
+            // Removing worksheet's instance to create a new one
             workbook.removeWorksheet(workSheetName);
         }
-    }
+    };
+
     // const handlePdfDownload = () => {
     //     const pdf = new jsPDF();
     //     pdf.setFontSize(12);
@@ -179,83 +288,179 @@ const useRatype = () => {
     //     saveAs(pdfBlob, 'Rate_Type.pdf');
     // };
 
+    // const handlePdfDownload = () => {
+    //     const pdf = new jsPDF({
+    //         orientation: "landscape",
+    //         unit: "mm",
+    //         format: "tabloid" // [width, height] in inches
+    //     });
+    //     pdf.setFontSize(10);
+    //     pdf.setFont('helvetica', 'normal');
+    //     pdf.text("Ratetype Details", 10, 10);
+    //     const header = Object.keys(rows[0]);
+    //     const idIndex = header.indexOf('id');
+    //     console.log(idIndex, "index")
+    //     if (idIndex !== -1) {
+    //         header.splice(idIndex, 1);
+
+    //         header.unshift('id');
+    //     }
+
+    //     // Extracting body
+    //     const body = rows.map(row => Object.values(row));
+
+    //     console.log(rows,'datas of pdf ratype ')
+    //     console.log(header.length, "len")
+
+    //     let fontdata = 1;
+    //     if (header.length <= 13) {
+    //         fontdata = 16;
+    //     }
+    //     else if (header.length >= 14 && header.length <= 18) {
+    //         fontdata = 11;
+    //     }
+    //     else if (header.length >= 19 && header.length <= 20) {
+    //         fontdata = 10;
+    //     } else if (header.length >= 21 && header.length <= 23) {
+    //         fontdata = 9;
+    //     }
+    //     else if (header.length >= 24 && header.length <= 26) {
+    //         fontdata = 7;
+    //     }
+    //     else if (header.length >= 27 && header.length <= 30) {
+    //         fontdata = 6;
+    //     }
+    //     else if (header.length >= 31 && header.length <= 35) {
+    //         fontdata = 4;
+    //     }
+    //     else if (header.length >= 36 && header.length <= 40) {
+    //         fontdata = 4;
+    //     }
+    //     else if (header.length >= 41 && header.length <= 46) {
+    //         fontdata = 2;
+    //     }
+    //     console.log(fontdata, "data")
+
+    //     pdf.autoTable({
+    //         head: [header],
+    //         body: body,
+    //         startY: 20,
+
+    //         headStyles: {
+    //             fontSize: fontdata,
+    //             cellPadding: 1.5, // Decrease padding in header
+    //             minCellHeigh: 8,
+    //             valign: 'middle',
+    //             font: 'helvetica', // Set font type for body
+    //             cellWidth: 'wrap',
+    //         },
+
+    //         bodyStyles: {
+    //             fontSize: fontdata - 1,
+    //             valign: 'middle',
+    //             cellWidth: 'auto'
+    //             // Adjust the font size for the body
+    //         },
+    //         columnWidth: 'auto'
+    //     });
+    //     const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+    //     console.log(scaleFactor, "SCALE")
+    //     // Scale content
+    //     pdf.scale(scaleFactor, scaleFactor);
+    //     const pdfBlob = pdf.output('blob');
+    //     saveAs(pdfBlob, 'RateType_Details.pdf');
+    // };
+  
+
+    // changes with date and correct datas
     const handlePdfDownload = () => {
         const pdf = new jsPDF({
             orientation: "landscape",
             unit: "mm",
             format: "tabloid" // [width, height] in inches
         });
+    
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("Ratetype Details", 10, 10);
+    
+        // Get headers from the first row
         const header = Object.keys(rows[0]);
         const idIndex = header.indexOf('id');
-        console.log(idIndex, "index")
+        console.log(idIndex, "index");
+    
+        // Ensure 'id' is first in the header
         if (idIndex !== -1) {
             header.splice(idIndex, 1);
-
             header.unshift('id');
         }
-
-        // Extracting body
-        const body = rows.map(row => Object.values(row));
-        console.log(header.length, "len")
-
+    
+        // Format the data (body)
+        const body = rows.map(row => {
+            return header.map(column => {
+                let value = row[column];
+                
+                // Format the date fields (closetime, starttime) to DD-MM-YYYY
+                if (column === 'closetime' || column === 'starttime') {
+                    value = value ? dayjs(value).format('DD-MM-YYYY') : ''; // Format date using dayjs
+                }
+                
+                return value;
+            });
+        });
+    
+        // console.log(rows, 'datas of pdf ratype');
+        // console.log(header.length, "len");
+    
         let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
-        }
-        else if (header.length >= 14 && header.length <= 18) {
+        } else if (header.length >= 14 && header.length <= 18) {
             fontdata = 11;
-        }
-        else if (header.length >= 19 && header.length <= 20) {
+        } else if (header.length >= 19 && header.length <= 20) {
             fontdata = 10;
         } else if (header.length >= 21 && header.length <= 23) {
             fontdata = 9;
-        }
-        else if (header.length >= 24 && header.length <= 26) {
+        } else if (header.length >= 24 && header.length <= 26) {
             fontdata = 7;
-        }
-        else if (header.length >= 27 && header.length <= 30) {
+        } else if (header.length >= 27 && header.length <= 30) {
             fontdata = 6;
-        }
-        else if (header.length >= 31 && header.length <= 35) {
+        } else if (header.length >= 31 && header.length <= 35) {
             fontdata = 4;
-        }
-        else if (header.length >= 36 && header.length <= 40) {
+        } else if (header.length >= 36 && header.length <= 40) {
             fontdata = 4;
-        }
-        else if (header.length >= 41 && header.length <= 46) {
+        } else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-        console.log(fontdata, "data")
-
+        console.log(fontdata, "font size");
+    
+        // Generate the table in the PDF
         pdf.autoTable({
             head: [header],
             body: body,
             startY: 20,
-
             headStyles: {
                 fontSize: fontdata,
                 cellPadding: 1.5, // Decrease padding in header
-                minCellHeigh: 8,
+                minCellHeight: 8,
                 valign: 'middle',
                 font: 'helvetica', // Set font type for body
                 cellWidth: 'wrap',
             },
-
             bodyStyles: {
                 fontSize: fontdata - 1,
                 valign: 'middle',
-                cellWidth: 'auto'
-                // Adjust the font size for the body
+                cellWidth: 'auto', // Auto-adjust column width
             },
             columnWidth: 'auto'
         });
+    
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-        console.log(scaleFactor, "SCALE")
+        console.log(scaleFactor, "SCALE");
+    
         // Scale content
         pdf.scale(scaleFactor, scaleFactor);
+    
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'RateType_Details.pdf');
     };
@@ -287,6 +492,7 @@ const useRatype = () => {
                 // return false;
             }
         } }
+        
 
        const  handleChangecredent=(event)=>{
         const { name, value } = event.target;
@@ -364,6 +570,8 @@ const useRatype = () => {
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
+        // console.log(selectedOption,"pppp")
+        uniqueRatetype(selectedOption)
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
@@ -372,6 +580,15 @@ const useRatype = () => {
             ...prevData,
             [name]: selectedOption,
         }));
+        setBook((prevBook) => ({
+            ...prevBook,
+            ["ratename"]:"",
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            ["ratename"]: "",
+        }));
+        setCredentialData(false)
     };
     
     const handleCancel = () => {
@@ -420,11 +637,12 @@ const useRatype = () => {
             setWarningMessage(" Ratename Already Exists");
             return;
         }
+        setisRateButtonLoading(true)
         try {
-            console.log(book.starttime,book.closetime)
+            // console.log(book.starttime,book.closetime)
             const starttime=book.starttime || selectedCustomerData.starttime||dayjs();
            const  closetime=  book.closetime || selectedCustomerData.closetime|| dayjs();
-           console.log(starttime,"start",closetime,"clos")
+        //    console.log(starttime,"start",closetime,"clos")
             const updatedBook = {
                 // stations: book.stations || selectedCustomerData.stations,
                 ratetype:book.ratetype || selectedCustomerData.ratetype,
@@ -443,6 +661,7 @@ const useRatype = () => {
 
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            setisRateButtonLoading(false)
         } 
         // catch {
         //     setError(true);
@@ -456,14 +675,17 @@ const useRatype = () => {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
+                setisRateButtonLoading(false)
             } else if (error.response) {
                 setError(true);
                 // Handle other Axios errors (like 4xx or 5xx responses)
                 setErrorMessage("Failed to Add: " + (error.response.data.message || error.message));
+                setisRateButtonLoading(false)
             } else {
                 // Fallback for other errors
                 setError(true);
                 setErrorMessage("An unexpected error occurred: " + error.message);
+                setisRateButtonLoading(false)
             }
         }
     };
@@ -509,6 +731,7 @@ const useRatype = () => {
             setWarningMessage(" Ratename Already Exists");
             return;
         }
+        setisRateButtonLoading(true)
         try{
         const selectedCustomer = rows.find((row) => row.driverid === driverid);
         const updatedCustomer = {
@@ -524,11 +747,14 @@ const useRatype = () => {
         await axios.put(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
         setSuccess(true);
         setSuccessMessage("Successfully updated");
+        setisRateButtonLoading(false)
         handleCancel();
+        handlelist();
     }
     catch(err){
         setError(true);
         setErrorMessage("Check your Network Connection");
+        setisRateButtonLoading(false)
     }
     };
 
@@ -619,7 +845,7 @@ const useRatype = () => {
         columns,
         isEditMode,
         handleEdit,
-        handleDateChange,cerendentialdata,handleChangecredent,loading
+        handleDateChange,cerendentialdata,handleChangecredent,loading,isRateButtonLoading,setisRateButtonLoading
 
     };
 };

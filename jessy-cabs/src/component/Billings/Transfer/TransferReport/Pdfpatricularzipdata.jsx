@@ -10,8 +10,9 @@ const styles = StyleSheet.create({
     // padding: 10,
   },
   heading: {
-    border: '2px solid #000000',
-    padding: '20px'
+    border: '2px solid rgb(0, 0, 0)',
+    padding: '20px',
+    // height: "",
   },
 
   section: {
@@ -37,6 +38,13 @@ const styles = StyleSheet.create({
     fontSize: '11px',
 
   },
+  text2add: {
+    fontSize: '11px',
+    width: "80%",
+    textAlign:"justify",
+    // backgroundColor:"red"
+
+  },
 
   gstno: {
     fontSize: '11px',
@@ -52,10 +60,15 @@ const styles = StyleSheet.create({
   headingsection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems:'center',
+    height:"100px"
   },
   logodiv: {
     // marginBottom: 10
-    padding: '0px'
+    width:"25%",
+    padding: '0px',
+    flexDirection:'row',
+    justifyContent:'flex-end'
   },
   maintabble: {
     border: '1px solid #000000',
@@ -97,6 +110,13 @@ const styles = StyleSheet.create({
     fontWeight: 'extrabold',
 
   },
+  clientNameadd: {
+    fontSize: '10px',
+    color: '#000000',
+    fontWeight: 'extrabold',
+    width: "40%"
+
+  },
   // labeltag1: {
   //   fontSize: '13px',
   //   textAlign: 'center'
@@ -105,25 +125,26 @@ const styles = StyleSheet.create({
   clientName1: {
     fontSize: '10px',
     color: '#545151',
-    textAlign: 'center'
+    // textAlign: 'center',
+    width:"80%",
 
   },
   clientAddress: {
     fontSize: '10px',
     color: '#000000',
     fontWeight: 'extrabold',
-    textAlign: 'left',
+    textAlign: 'justify',
     lineHeight: '1.3px',
-
+    width: '45%'
   },
   remarksection: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems:"flex-start",
     gap: '10px',
     borderLeft: '1px solid #000000',
     borderRight: '1px solid #000000',
-
-    height: 30,
+    // height: 30,
+    padding:"5px"
 
 
   }, tablesigndiv: {
@@ -135,6 +156,9 @@ const styles = StyleSheet.create({
     width: '60%',
     // border: '1px solid green',
     // flexDirection:'row',
+    padding:"20px",
+    // borderLeft:"1px solid #000000",
+    // borderRight:"1px solid #000000",
 
   },
   signdiv: {
@@ -157,6 +181,8 @@ const styles = StyleSheet.create({
     width: '25%',
     // textAlign: 'center',
     borderRight: '1px solid #000000',
+    borderTop: '1px solid #000000',
+    borderLeft: '1px solid #000000',
   },
   labeltagremark: {
     textAlign: 'center',
@@ -171,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: '10px',
     padding: '1px',
-
+    borderTop:"1px solid #000000",
     borderRight: '1px solid #000000'
   },
 
@@ -182,7 +208,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: '10px',
     padding: '1px',
-
+    borderTop:"1px solid #000000",
     borderRight: '1px solid #000000'
   },
   labeltag4: {
@@ -193,6 +219,7 @@ const styles = StyleSheet.create({
     fontSize: '10px',
     padding: '1px',
     borderRight: '1px solid #000000',
+    borderTop:"1px solid #000000",
 
   },
 
@@ -201,6 +228,7 @@ const styles = StyleSheet.create({
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
+    borderLeft: '1px solid #000000',
     padding: '2px'
   },
   labeltag6: {
@@ -208,6 +236,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: '10px',
     borderRight: '1px solid #000000',
+
     padding: '2px'
   },
 
@@ -216,6 +245,7 @@ const styles = StyleSheet.create({
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
+    borderLeft: '1px solid #000000',
     padding: '2px'
   },
 
@@ -232,6 +262,7 @@ const styles = StyleSheet.create({
     width: '25%',
     textAlign: 'center',
     borderRight: '1px solid #000000',
+    borderLeft: '1px solid #000000',
     padding: '2px'
   },
   labeltag14: {
@@ -246,6 +277,7 @@ const styles = StyleSheet.create({
     fontSize: '10px',
     width: '25%',
     textAlign: 'center',
+    borderLeft: '1px solid #000000',
 
     borderRight: '1px solid #000000',
     padding: '2px'
@@ -263,8 +295,7 @@ const styles = StyleSheet.create({
     fontSize: '10px',
     width: '25%',
     textAlign: 'center',
-
-
+    borderLeft: '1px solid #000000',
     borderRight: '1px solid #000000',
     padding: '2px'
   },
@@ -301,7 +332,7 @@ const styles = StyleSheet.create({
   },
   tablehead5: {
     flexDirection: 'row',
-    // borderBottom: '1px solid #000000',
+    borderBottom: '1px solid #000000',
 
   }, signimg: {
     flexDirection: 'row',
@@ -324,7 +355,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     // alignItems:'center',
     gap: "30px",
-    padding: '3px'
+    padding: '3px',
+    height:"190px",
+    // backgroundColor:"red",
   },
   topmap: {
     marginTop: "40px"
@@ -345,19 +378,31 @@ const styles = StyleSheet.create({
 
   imgwidth: {
     width: '50%',
+   
 
-  }
+  },
+
+  headerSecond : {
+    width:"25%",
+    flexDirection:"row",
+    justifyContent:"flex-start"
+  },
+  
+  firstHeader: {
+    width:"48%"
+  },
+
 
 
 });
 
-const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, }) => {
-  console.log(particularPdf, organisationdetail, imagename)
+const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, customerData, stationData }) => {
 
   const [orgname, setOrgname] = useState('')
   const [orgaddress1, setOrgaddress1] = useState('')
   const [orgaddress3, setOrgaddress3] = useState('')
   const [address1, setAddress1] = useState('')
+  const [guestaddress1, setGuestAddress1] = useState('')
   const [customer, setCustomer] = useState('')
   const [empno, setEmpno] = useState('')
   const [customermobile, setCustomermobile] = useState()
@@ -380,11 +425,21 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
   const [department, setDepartment] = useState('')
   const [escort, setEscort] = useState('')
   const [Tripidno, setTripidno] = useState('')
-  const [tripsheetdate, setTripsheetdate] = useState('')
+  // const [tripsheetdate, setTripsheetdate] = useState('')
   const [tripStartDate, setTripStartDate] = useState('')
   const [tripCloseDate, setTripCloseDate] = useState('')
+   const [tripshedoutDate, setTripShedOutDate] = useState('')
+    const [tripshedinDate, setTripShedinDate] = useState('')
+  // const [tripReporttime, setTripReporttime] = useState('')
+  // const [tripClosetime, setTripClosetime] = useState('')
   const [tripReporttime, setTripReporttime] = useState('')
+  const [tripRelasingTime, setTripReleasingTime] = useState('')
   const [tripClosetime, setTripClosetime] = useState('')
+  const [tripStartTime, setTripStartTime] = useState('')
+  const [tripStartKm, setTripStartKm] = useState('')
+  const [tripReportKm, setTripReportKm] = useState('')
+  const [tripReleaseKm, setTripReleaseKm] = useState('')
+  const [tripCloseKm, setTripCloseKm] = useState('')
   const [triptotaldays, setTripTotalDays] = useState('')
   const [triptotaltime, setTripTotalTime] = useState('')
   const [triptotalkms, setTriptotalKms] = useState('')
@@ -409,17 +464,17 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
   const organisationdetails = organisationdetail
 
-  const convertTimeFormat = (time) => {
+  // const convertTimeFormat = (time) => {
 
-    // const regex = /(\d+)h\s*(\d+)m/;
-    // const match = time.match(regex);
-    // if (match) {
-    //   const hours = match[1].padStart(2, '0');
-    //   const minutes = match[2].padStart(2, '0');
-    //   return `${hours}:${minutes}`;
-    // }
-    return time; // Return original if it doesn't match the pattern
-  };
+  //   // const regex = /(\d+)h\s*(\d+)m/;
+  //   // const match = time.match(regex);
+  //   // if (match) {
+  //   //   const hours = match[1].padStart(2, '0');
+  //   //   const minutes = match[2].padStart(2, '0');
+  //   //   return `${hours}:${minutes}`;
+  //   // }
+  //   return time; // Return original if it doesn't match the pattern
+  // };
 
   // const trimSeconds = (time) => {
   //   return time.slice(0, 5);
@@ -475,11 +530,17 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     let Department = ''
     let Escort = ''
     let Tripid = ''
-    let Tripdate = ''
+    // let Tripdate = ''
     let Tripstartdate = ''
     let TripClosedate = ''
     let Reporttime = ''
+    let Releasingtime = ''
+    let Starttime = ''
     let CloseTime = ''
+    let ReportKm = ''
+    let ReleaseKm = ""
+    let StartKm = ""
+    let CloseKm = ""
     let Totaldays = ''
     let Totaltime = ''
     let Totalkms = ''
@@ -497,6 +558,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     let closekm = ''
     let reportkm = ''
     let releasekm = ''
+      let Tripshedoutdate = ''
+    let Tripshedindate = ''
 
     let bookingimagedata = []
     if (Array.isArray(particularPdf)) {
@@ -508,7 +571,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         empname = li.guestname
         guestmobile = li.guestmobileno
         dutytype = li.duty
-        vehtype = li.vehType
+        vehtype = li.vehicleName
         vehno = li.vehRegNo
         request = li.request
         drivernames = li.driverName
@@ -526,25 +589,48 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         Department = li.department
         Escort = li.escort
         Tripid = li.tripid
-        Tripdate = li.tripsheetdate
+        // Tripdate = li.tripsheetdate
         Tripstartdate = li.startdate
         TripClosedate = li.closedate
-        Reporttime = trimSeconds(li.reporttime)
-        startTime = trimSeconds(li.starttime)
-        shedInTime = trimSeconds(li.shedintime)
-        CloseTime = trimSeconds(li.closetime);
-        startkm = li.shedout;
-        closekm = li.shedin;
-        reportkm = li.startkm;
-        releasekm = li.closekm;
+        Tripshedoutdate = li.shedOutDate
+        Tripshedindate = li.shedInDate
+
+        // Reporttime = li.starttime
+        // Starttime = li.reporttime
+        // CloseTime = li.closetime
+        // Releasingtime = li.shedintime
+
+        
+        Starttime = li.starttime
+        Reporttime = li.reporttime
+        CloseTime = li.closetime
+        Releasingtime = li.shedintime
+        // ReportKm = li.startkm
+        // StartKm = li.shedout
+        // CloseKm = li.shedin
+        // ReleaseKm = li.closekm
+
+        StartKm = li.startkm
+         ReportKm = li.shedout
+         ReleaseKm = li.shedin
+        CloseKm  = li.closekm
+
+        // Reporttime = trimSeconds(li.reporttime)
+        // startTime = trimSeconds(li.starttime)
+        // shedInTime = trimSeconds(li.shedintime)
+        // CloseTime = trimSeconds(li.closetime);
+        // startkm = li.shedout;
+        // closekm = li.shedin;
+        // reportkm = li.startkm;
+        // releasekm = li.closekm;
         Totaldays = li.totaldays
-        Totaltime = convertTimeFormat(li.totaltime);
-        Totalkms = li.totalkm1
+        Totaltime = li.TotalTimeWithoutAddHours
+        Totalkms = parseInt(li.shedin) - parseInt(li.shedout) || 0
         TotalParking = li.parking
         TotalToll = li.toll
         TotalPermit = li.permit
         CustomerCode = li.customercode
-        Categorygroups = li.Groups
+        Categorygroups = li.orderedby
         customeraddress1 = li.Customeraddress1
 
 
@@ -553,6 +639,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
       })
     }
+    console.log(particularPdf, "pdfff")
 
 
 
@@ -571,7 +658,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
     const { signature_path } = signatureimage
     const { map_path } = mapimage
-    setAddress1(addressone)
+    setAddress1(customeraddress1)
+    setGuestAddress1(addressone)
     setCustomer(customers)
     setFuel(fueltype)
     setEmpno(employeeno)
@@ -593,11 +681,23 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setDepartment(Department)
     setEscort(Escort)
     setTripidno(Tripid)
-    setTripsheetdate(Tripdate)
+    // setTripsheetdate(Tripdate)
     setTripStartDate(Tripstartdate)
     setTripCloseDate(TripClosedate)
+    setTripShedOutDate(Tripshedoutdate)
+    setTripShedinDate(Tripshedindate)
+
     setTripReporttime(Reporttime)
+    setTripStartTime(Starttime)
     setTripClosetime(CloseTime)
+    setTripReleasingTime(Releasingtime)
+    setTripReportKm(ReportKm)
+    setTripStartKm(StartKm)
+    setTripCloseKm(CloseKm)
+    setTripReleaseKm(ReleaseKm)
+
+    // setTripReporttime(Reporttime)
+    // setTripClosetime(CloseTime)
     setTripTotalDays(Totaldays)
     setTripTotalTime(Totaltime)
     setTriptotalKms(Totalkms)
@@ -607,20 +707,26 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setTripCustomercode(CustomerCode)
     setCategory(Categorygroups)
     setAddresscustomer(customeraddress1)
-    setStarttime(startTime)
-    setShedintime(shedInTime)
+    // setStarttime(startTime)
+    // setShedintime(shedInTime)
     setCalcPackages(packages)
     setBookingimage(JSON.parse(uniqueJsonStringbook))
-    setStartkm(startkm)
-    setClosekm(closekm)
-    setReleasingKM(releasekm)
-    setReportKM(reportkm)
+    // setStartkm(startkm)
+    // setClosekm(closekm)
+    // setReleasingKM(releasekm)
+    // setReportKM(reportkm)
     setAttachedimage(JSON.parse(uniqueJsonString))
   }, [particularPdf])
 
   const firstSet = routemap.slice(0, 12);
   const nextSet = routemap.slice(12, 24);
   const remainingItems = routemap.slice(24);
+  const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripStartKm || 0)
+  console.log(tripCloseKm, tripReportKm, "kmmmm")
+  console.log(bookimage, "bookimage", stationData, "stationData")
+  console.log(tripshedinDate,"tripshed",tripCloseDate)
+  console.log(vehicletype,"zip")
+
   return (
     <>
       <PDFDocument>
@@ -629,12 +735,12 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
             <View style={styles.borderoutsite}>
               <View style={styles.section}>
                 <View style={styles.headingsection}>
-                  <View>
+                  <View style={styles.firstHeader}>
                     <Text style={styles.text1}>{orgname}</Text>
-                    <Text style={styles.text2}> {orgaddress1}</Text>
-                    <Text style={styles.text2}>{orgaddress3} </Text>
+                    <Text style={styles.text2add}> {stationData[0]?.address}</Text>
+                    {/* <Text style={styles.text2}>{orgaddress3} </Text> */}
                   </View>
-                  <View>
+                  <View style={styles.headerSecond}>
                     <Text style={{ fontSize: '13px', fontWeight: 'bold', textAlign: 'center' }}>LOG SHEET</Text>
                   </View>
                   <View style={styles.logodiv}>
@@ -650,7 +756,9 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   </View>
                   <View>
 
-                    <Text style={styles.gstno}>GSTIN: {organisationdetails[0].gstnumber}</Text>
+                    {/* <Text style={styles.gstno}>GSTIN: {organisationdetails[0].gstnumber}</Text> */}
+                    <Text style={styles.gstno}>GSTIN: {stationData[0]?.gstno}</Text>
+                    {/* <Text style={styles.text2add}> {stationData[0]?.gstno}</Text> */}
 
                   </View>
 
@@ -668,7 +776,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Address</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientAddress}> {addresscustomer}</Text>
+                      <Text style={styles.clientAddress}> {customerData[0]?.address1}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Category</Text>
@@ -698,13 +806,14 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Report Add</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {address1}</Text>
+                      {/* <Text style={styles.clientNameadd}> {address1}</Text> */}
+                      <Text style={styles.clientNameadd}> {guestaddress1}</Text>
                     </View>
 
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Drop Address</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {dropaddress}</Text>
+                      <Text style={styles.clientNameadd}> {dropaddress}</Text>
                     </View>
 
                     <View style={styles.deatilssection}>
@@ -715,7 +824,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     <View style={styles.deatilssection}>
                       <Text style={styles.labelMidContainer}>Airport Transfer</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {report ? "Yes" : "No"}</Text>
+                      <Text style={styles.clientName}> {report}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labelMidContainer}>Ccode</Text>
@@ -757,7 +866,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       <Text style={styles.labeltag}>Date</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {tripsheetdate ? dayjs(tripsheetdate).format('DD/MM/YYYY') : ""}</Text>
+                      <Text style={styles.clientName}> {dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Duty Type</Text>
@@ -800,7 +909,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Package</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {calcpackage}</Text>
+                      <Text style={styles.clientName}> {duty === "Transfer" || duty === "Outstation" ? duty : calcpackage}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Segment</Text>
@@ -820,10 +929,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                 </View>
 
                 <View style={styles.tablesigndiv}>
-                  <View style={styles.tablediv}>
-                    {/* <View>
-    
-  </View> */}
+                  {/* <View style={styles.tablediv}>
+                   
                     <View style={styles.tablehead}>
                       <View style={styles.labeltag1}>
                         <Text >{"  "}</Text>
@@ -841,99 +948,101 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                         <Text>KMS</Text>
 
                       </View>
-                      {/* <View></View> */}
+                 
                     </View>
 
                     <View style={styles.tablehead1}>
                       <View style={styles.labeltag5}>
-                        <Text > Starting</Text>
+                        <Text > Closing</Text>
 
                       </View>
 
 
                       <View style={styles.labeltag6}>
-                        <Text>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</Text>
+                        <Text>{dayjs(tripCloseDate).format('DD/MM/YYYY')}</Text>
 
                       </View>
 
 
 
                       <View style={styles.labeltag6}>
-                        <Text>{starttime}</Text>
+                        {customerData[0]?.hybrid === 1 ? <Text>{'-'}</Text> : <Text> {trimSeconds(tripClosetime)}</Text>}
 
                       </View>
                       <View style={styles.labeltag6}>
-                        <Text>{startkm}</Text>
+                        {customerData[0]?.hybrid !== 1 ? <Text>{tripReleaseKm}</Text> : <Text>{"-"}</Text>}
 
                       </View>
 
                     </View>
-                    <View style={styles.tablehead2}>
-                      <View style={styles.labeltag9}>
-                        <Text >Reporting</Text>
+                    {customerData[0]?.hybrid === 1 ?
+                      <View style={styles.tablehead2}>
+                        <View style={styles.labeltag9}>
+                          <Text >Releasing</Text>
 
-                      </View>
-
-
-                      <View style={styles.labeltag10}>
-                        <Text>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</Text>
-
-                      </View>
-
-                      <View style={styles.labeltag10}>
-                        <Text>{tripReporttime ? tripReporttime : 0.00}</Text>
-
-                      </View>
-                      <View style={styles.labeltag10}>
-                        <Text>{reportKM}</Text>
-
-                      </View>
-
-                    </View>
-
-                    <View style={styles.tablehead3}>
-                      <View style={styles.labeltag13}>
-                        <Text >Releasing</Text>
-
-                      </View>
+                        </View>
 
 
-                      <View style={styles.labeltag14}>
-                        <Text>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</Text>
+                        <View style={styles.labeltag10}>
+                          <Text>{dayjs(tripCloseDate).format('DD/MM/YYYY')}</Text>
 
-                      </View>
+                        </View>
+
+                        <View style={styles.labeltag10}>
+                          <Text>{trimSeconds(tripRelasingTime)}</Text>
+
+                        </View>
+                        <View style={styles.labeltag10}>
+                          {customerData[0]?.hybrid == 1 ? <Text>{hclKm}</Text> : <Text>{"-"}</Text>}
+
+                        </View>
+
+                      </View> : ""}
+
+                    {customerData[0]?.hybrid === 1 ?
+                      <View style={styles.tablehead3}>
+                        <View style={styles.labeltag13}>
+                          <Text >Reporting</Text>
+
+                        </View>
+
+
+                        <View style={styles.labeltag14}>
+                          <Text>{dayjs(tripStartDate).format('DD/MM/YYYY')}</Text>
+
+                        </View>
 
 
 
-                      <View style={styles.labeltag14}>
-                        <Text>{tripClosetime}</Text>
+                        <View style={styles.labeltag14}>
+                          <Text>{trimSeconds(tripReporttime)}</Text>
 
-                      </View>
-                      <View style={styles.labeltag14}>
-                        <Text>{releasingKM}</Text>
+                        </View>
+                        <View style={styles.labeltag14}>
+                          {customerData[0]?.hybrid == 1 ? <Text> 0 </Text> : <Text>{'-'}</Text>}
 
-                      </View>
+                        </View>
 
-                    </View>
+                      </View> : ""}
 
 
                     <View style={styles.tablehead4}>
                       <View style={styles.labeltag17}>
-                        <Text >Closing</Text>
+                        <Text >Starting</Text>
 
                       </View>
 
 
                       <View style={styles.labeltag18}>
-                        <Text>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</Text>
+                        <Text>{dayjs(tripStartDate).format('DD/MM/YYYY')}</Text>
 
                       </View>
                       <View style={styles.labeltag18}>
-                        <Text>{shedintime}</Text>
+                        {customerData[0]?.hybrid === 1 ? <Text>{"-"}</Text> : <Text> {trimSeconds(tripStartTime)} </Text>}
 
                       </View>
                       <View style={styles.labeltag18}>
-                        <Text>{reportKM}</Text>
+                        {customerData[0]?.hybrid !== 1 ? <Text>{tripStartKm}</Text> : <Text>{ }</Text>}
 
                       </View>
 
@@ -955,11 +1064,241 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                       </View>
                       <View style={styles.labeltag22}>
-                        <Text>{triptotalkms ? triptotalkms : 0}</Text>
+                        {customerData[0]?.hybrid === 1 ? <Text>{hclKm}</Text> : <Text>{triptotalkms}</Text>}
 
                       </View>
 
                     </View>
+
+
+                  </View> */}
+
+
+                  <View style={styles.tablediv}>
+                    <View style={styles.tablehead}>
+                      <View style={styles.labeltag1}>
+                        <Text >{"  "}</Text>
+
+                      </View>
+                      <View style={styles.labeltag2}>
+                        <Text >DATE</Text>
+
+                      </View>
+                      <View style={styles.labeltag3}>
+                        <Text >HOURS</Text>
+
+                      </View>
+                      <View style={styles.labeltag4}>
+                        <Text>KMS</Text>
+
+                      </View>
+
+                    </View>
+                    {customerData[0]?.hybrid === 1 ? 
+                    <>
+                 
+                      <View style={styles.tablehead1}>
+                    <View style={styles.labeltag5}>
+                      <Text > Closing</Text>
+
+                    </View>
+
+
+                    <View style={styles.labeltag6}>
+                      {/* <Text>{dayjs(tripshedinDate).format('DD/MM/YYYY')}</Text> */}
+                      <Text>{tripshedinDate}</Text>
+
+                    </View>
+
+
+
+                    <View style={styles.labeltag6}>
+                      {duty !== "Outstation"  ? <Text>{'-'}</Text> : <Text> {trimSeconds(tripRelasingTime)}</Text>}
+
+                    </View>
+                    <View style={styles.labeltag6}>
+                      {duty === "Outstation" ? <Text>{tripReleaseKm}</Text> : <Text>{"-"}</Text>}
+
+                    </View>
+
+                  </View> 
+
+                  <View style={styles.tablehead2}>
+                   <View style={styles.labeltag9}>
+                     <Text >Releasing</Text>
+
+                   </View>
+
+
+                   <View style={styles.labeltag10}>
+                     <Text>{dayjs(tripCloseDate).format('DD/MM/YYYY')}</Text>
+
+                   </View>
+
+                   <View style={styles.labeltag10}>
+                     <Text>{trimSeconds(tripClosetime)}</Text>
+
+                   </View>
+                   <View style={styles.labeltag10}>
+                    <Text>{tripCloseKm}</Text>
+
+                   </View>
+                   </View>
+                   <View style={styles.tablehead3}>
+                        <View style={styles.labeltag13}>
+                          <Text >Reporting</Text>
+
+                        </View>
+
+
+                        <View style={styles.labeltag14}>
+                          <Text>{dayjs(tripStartDate).format('DD/MM/YYYY')}</Text>
+
+                        </View>
+
+
+
+                        <View style={styles.labeltag14}>
+                          <Text>{trimSeconds(tripStartTime)}</Text>
+
+                        </View>
+                        <View style={styles.labeltag14}>
+                          <Text> {tripStartKm} </Text>
+
+                        </View>
+
+                      </View> 
+                      <View style={styles.tablehead4}>
+                      <View style={styles.labeltag17}>
+                        <Text >Starting</Text>
+
+                      </View>
+
+
+                      <View style={styles.labeltag18}>
+                        <Text>{dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
+
+                      </View>
+                      <View style={styles.labeltag18}>
+                        {duty !== "Outstation" ? <Text>{"-"}</Text> : <Text> {trimSeconds(tripReporttime)} </Text>}
+
+                      </View>
+                      <View style={styles.labeltag18}>
+                        <Text>-</Text>
+
+                      </View>
+
+                    </View>
+                    <View style={styles.tablehead5}>
+                      <View style={styles.labeltag21}>
+                        <Text >Total</Text>
+
+                      </View>
+
+
+                      <View style={styles.labeltag22}>
+                        <Text>{triptotaldays ? triptotaldays : 0}</Text>
+
+                      </View>
+
+                      <View style={styles.labeltag22}>
+                        <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
+
+                      </View>
+                      <View style={styles.labeltag22}>
+                      {duty !== "Outstation" ?  <Text>{hclKm}</Text> : <Text>{triptotalkms}</Text>}
+
+                      </View>
+
+                    </View>
+
+
+
+                   
+
+
+
+                    </>
+
+
+                      : <>
+                  
+                                       
+                      <View style={styles.tablehead1}>
+                    <View style={styles.labeltag5}>
+                      <Text > Closing</Text>
+
+                    </View>
+
+
+                    <View style={styles.labeltag6}>
+                      {/* <Text>{dayjs(tripshedinDate).format('DD/MM/YYYY')}</Text> */}
+                      <Text>{tripshedinDate}</Text>
+
+                    </View>
+
+
+
+                    <View style={styles.labeltag6}>
+                     <Text> {trimSeconds(tripRelasingTime)}</Text>
+
+                    </View>
+                    <View style={styles.labeltag6}>
+                      <Text>{tripReleaseKm}</Text>
+
+                    </View>
+
+                  </View> 
+
+                  <View style={styles.tablehead4}>
+                      <View style={styles.labeltag17}>
+                        <Text >Starting</Text>
+
+                      </View>
+
+
+                      <View style={styles.labeltag18}>
+                        <Text>{dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
+
+                      </View>
+                      <View style={styles.labeltag18}>
+                        <Text> {trimSeconds(tripReporttime)} </Text>
+
+                      </View>
+                      <View style={styles.labeltag18}>
+                        <Text>{tripReportKm}</Text>
+
+                      </View>
+                     
+
+                    </View>
+                    <View style={styles.tablehead5}>
+                      <View style={styles.labeltag21}>
+                        <Text >Total</Text>
+
+                      </View>
+
+
+                      <View style={styles.labeltag22}>
+                        <Text>{triptotaldays ? triptotaldays : 0}</Text>
+
+                      </View>
+
+                      <View style={styles.labeltag22}>
+                        <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
+
+                      </View>
+                      <View style={styles.labeltag22}>
+                      <Text>{triptotalkms}</Text>
+
+                      </View>
+
+                    </View>
+                      
+                   
+                      </>
+                    }
+
 
 
                   </View>
@@ -976,7 +1315,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
 
                   </View>
-                  {/* </View> */}</View>
+                </View>
 
 
                 <View style={styles.mapdiv}>
@@ -1037,7 +1376,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     <View style={{ width: "48%" }}>
                       {nextSet.map((item, index) => (
                         <View key={index + 12} style={{ flexDirection: 'row' }}>
-                          <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                          <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px', }}>
                             {index + 13} .
                           </Text>
                           <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
@@ -1064,12 +1403,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   </View> : <></>}
 
 
-                {/* <View style={{ flexDirection: 'column', width: '100%', marginTop: '10px' }}> */}
-                {attachedImage && attachedImage.length > 0 ? (
+
+                {/* {attachedImage && attachedImage.length > 0 ? (
                   <>
-                    {/* <View style={{ width: "100%" }}> */}
-                    {/* <Text style={styles.atimg}>Attached image</Text> */}
-                    {/* </View> */}
+                   
                     <View style={[styles.addimg, { width: '100%' }]}>
                       {attachedImage.map((item, index) => (
                         <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
@@ -1080,15 +1417,38 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   </>
                 ) : (
                   <></>
-                  // <View style={{ width: "100%", margin: 'auto', marginTop: '100px' }}>
-                  //   <Text style={styles.atimg}>  No Attached image</Text>
-                  // </View>
-                )}
-                {/* </View> */}
+                )} */}
+
+                {attachedImage && attachedImage.length > 0 && (
+                  <>
+                    <View style={[styles.addimg, { width: '550px' ,}]}>
+                      {/* <View key={index} style={[styles.imgwidth, { padding: '3px' }]} > */}
+                      {attachedImage.map((item, index) => {
+                        const dataimgetype1 = item.attachedimageurl.split('.').pop();
+                        // URL.createObjectURL(img)
+                        if (dataimgetype1 !== "pdf") {
+                          return (
+                            // <View key={index} style={{ width: '100%' }}>
+                            <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
+
+                              <Image src={`${apiUrl}/images/${item.attachedimageurl}`} />
+                            </View>
+                          );
+                        } else {
+                          return null;
+                        }
+                      })}
+                      {/* </View> */}
+
+                    </View>
+                  </>
+                )
+                }
 
 
-                {/* <View style={{ flexDirection: 'column', width: '100%' }}> */}
-                {bookimage && bookimage.length > 0 && (
+                {/* dont remove the code */}
+
+                {/* {bookimage && bookimage.length > 0 && (
                   <>
                     <View style={{ width: '100%' }}>
 
@@ -1109,7 +1469,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     </View>
                   </>
                 )
-                }
+                } */}
 
 
                 {/* </View> */}

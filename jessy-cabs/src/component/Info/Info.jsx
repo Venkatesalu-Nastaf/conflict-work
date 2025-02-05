@@ -47,9 +47,10 @@ const Info = () => {
   // const INFO = permissions[16]?.read;
   const Mailers = permissions[18]?.read;
   const Fuel_Info = permissions[19]?.read;
-  const Employee =permissions[20]?.read;
+  const Employee = permissions[20]?.read;
+  const Agreement = permissions[21]?.read;
   const handleMenuItemClick = (menuItem, alt, e) => {
-  
+
     localStorage.setItem('activeMenuItem', menuItem);
     setActiveMenuItem(menuItem);
     let hasPermission = 0;
@@ -65,6 +66,9 @@ const Info = () => {
         break;
       case "Employee":
         hasPermission = Employee;
+        break;
+      case "Agreement":
+        hasPermission = Agreement;
         break;
       default:
         break;
@@ -119,33 +123,43 @@ const Info = () => {
             handleMenuItemClick={handleMenuItemClick}
           /> */}
           {Mailers ?
-          <MenuItem
-            label="Mailers"
-            to={Mailers && myTo}
-            alt={myTo}
-            menuItemKey="Mailers"
-            activeMenuItem={activeMenuItem}
-            handleMenuItemClick={handleMenuItemClick}
-          />:<></>}
-          {Fuel_Info ? 
-          <MenuItem
-            label="Fuel Info"
-            to={Fuel_Info && ("/home/info/fuelinfo")}
-            alt={"/home/info/fuelinfo"}
-            menuItemKey="FuelInfo"
-            activeMenuItem={activeMenuItem}
-            handleMenuItemClick={handleMenuItemClick}
-          /> : <></>}
-          {Employee ? 
-          <MenuItem
-            label="Employee"
-            to={Employee && ("/home/info/employee")}
-            alt={"/home/info/employee"}
-            menuItemKey="Employee"
-            activeMenuItem={activeMenuItem}
-            handleMenuItemClick={handleMenuItemClick}
-          />:<></>}
-           {/* {/* <MenuItem
+            <MenuItem
+              label="Mailers"
+              to={Mailers && myTo}
+              alt={myTo}
+              menuItemKey="Mailers"
+              activeMenuItem={activeMenuItem}
+              handleMenuItemClick={handleMenuItemClick}
+            /> : <></>}
+          {Fuel_Info ?
+            <MenuItem
+              label="Fuel Info"
+              to={Fuel_Info && ("/home/info/fuelinfo")}
+              alt={"/home/info/fuelinfo"}
+              menuItemKey="FuelInfo"
+              activeMenuItem={activeMenuItem}
+              handleMenuItemClick={handleMenuItemClick}
+            /> : <></>}
+          {Employee ?
+            <MenuItem
+              label="Employee"
+              to={Employee && ("/home/info/employee")}
+              alt={"/home/info/employee"}
+              menuItemKey="Employee"
+              activeMenuItem={activeMenuItem}
+              handleMenuItemClick={handleMenuItemClick}
+            /> : <></>}
+
+          {Agreement ?
+            <MenuItem
+              label="Agreement"
+              to={Agreement && ("/home/info/agreement")}
+              alt={"/home/info/agreement"}
+              menuItemKey="Agreement"
+              activeMenuItem={activeMenuItem}
+              handleMenuItemClick={handleMenuItemClick}
+            /> : <></>}
+          {/* {/* <MenuItem
             label="Employees"
             to={Employee && ("/home/registration/employes")}
             alt="/home/registration/employes"
@@ -160,7 +174,7 @@ const Info = () => {
           <div className='alert-popup Warning' >
             <div className="popup-icon"> <ErrorOutlineIcon /> </div>
             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
-            <p>You do not have Permission ..!</p>
+            <p>Yyyyyou do not have Permission ..!</p>
           </div>
         }
       </div>

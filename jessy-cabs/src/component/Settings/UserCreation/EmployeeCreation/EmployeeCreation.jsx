@@ -301,7 +301,7 @@ setSationNameforUser(updatedData);
                   />
                 </div>
 
-                <div className="input" style={{ paddingRight: '15px' }}>
+                {/* <div className="input" style={{ paddingRight: '15px' }}>
                   <FormLabel htmlFor='SuperAdmin'>SuperAdmin</FormLabel>
                   <Switch
                     label='label'
@@ -312,7 +312,7 @@ setSationNameforUser(updatedData);
 
                     checked={book.superAdmin}
                   />
-                </div>
+                </div> */}
               
                 <div className="input user-creation-station-select-main">
                   <div className="icone">

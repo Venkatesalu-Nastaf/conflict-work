@@ -560,12 +560,27 @@ const TripSheet = ({ stationName, logoImage }) => {
   // }
 
   const ratefor = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
+  const vehicleRegisterNo1 = formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo || '';
   const [fueltype, setFuelType] = useState('')
   useEffect(() => {
     const fetchFuleType = async () => {
-      if (!ratefor) return
-      const data = await axios.get(`${apiurl}/getFuelType/${ratefor}`)
-      setFuelType(data?.data[0]?.fueltype)
+      if (!vehicleRegisterNo1)
+        { return
+        }
+        else{
+      const responedata = await axios.get(`${apiurl}/getFuelType/${vehicleRegisterNo1}`)
+      // console.log(responedata,"datafueleee")
+      const datafuel = responedata.data
+      // console.log(datafuel,"datafuel")
+      if(datafuel.length > 0){
+        
+      setFuelType(datafuel[0].fueltype)
+      // setFuelType(data?.data[0]?.fueltype)
+      }
+      else{
+      setFuelType('')
+      }
+    }
     }
 
     fetchFuleType()

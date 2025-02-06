@@ -5096,7 +5096,7 @@ useEffect(() => {
 
     }
 
-console.log(userStatus,"sssss")
+// console.log(userStatus,"sssss")
     useEffect(() => {
         const a = calculateTotalDay()
 
@@ -5309,11 +5309,16 @@ console.log(userStatus,"sssss")
     const [vehileNames, setVehicleNames] = useState([])
     useEffect(() => {
         const getvehicleName = async () => {
+            try{
             const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
             const data = response.data
             const names = data?.map(res => res.VechicleNames)
 
             setVehicleNames(names)
+            }
+            catch(err){
+                console.log(err)
+            }
         }
         getvehicleName()
 

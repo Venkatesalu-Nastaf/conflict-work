@@ -568,6 +568,7 @@ const useExeclpage = () => {
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
+                      singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["starttime1"] = removeSeconds(singleData["starttime"])
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):""

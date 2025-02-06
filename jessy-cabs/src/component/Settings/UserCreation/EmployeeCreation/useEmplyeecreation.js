@@ -401,7 +401,7 @@ const indexRanges = [
         EmailApp_Password: '',
         Sender_Mail:'',
         active: false,
-        superAdmin: false,
+        // superAdmin: false,
         RoleUser:""
     });
   
@@ -456,7 +456,7 @@ const indexRanges = [
             Sender_Mail:'',
             active: false,
              RoleUser:" ",
-            superAdmin: false
+            // superAdmin: false
         }));
 
         setPermissionsData(initialPermissionsData);

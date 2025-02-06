@@ -997,9 +997,22 @@ app.post("/signaturedatatimes/:tripid", (req, res) => {
 
 
 
+// app.get("/getFuelType/:fuelType", (req, res) => {
+//   const vehicleName = req.params.fuelType; // Corrected to use req.params
+//   const sql = `SELECT fueltype FROM vehicleinfo WHERE vehicleName=?`;
+
+//   db.query(sql, [vehicleName], (err, result) => {
+//     if (err) {
+//       console.log("err", err);
+//       return res.status(500).json("Something went wrong ..");
+//     }
+//     return res.status(200).json(result);
+//   });
+// });
+
 app.get("/getFuelType/:fuelType", (req, res) => {
   const vehicleName = req.params.fuelType; // Corrected to use req.params
-  const sql = `SELECT fueltype FROM vehicleinfo WHERE vehicleName=?`;
+  const sql = `SELECT fueltype FROM vehicleinfo WHERE vehRegNo=?`;
 
   db.query(sql, [vehicleName], (err, result) => {
     if (err) {

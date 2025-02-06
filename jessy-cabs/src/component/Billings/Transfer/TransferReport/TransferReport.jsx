@@ -291,7 +291,7 @@ const TransferReport = ({ stationName }) => {
         }
       }
       catch (err) {
-        console.log(err, 'error');
+        console.log(err, 'triperr');
       }
     }
     fetchData()

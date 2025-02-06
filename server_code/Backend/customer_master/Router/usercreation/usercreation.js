@@ -37,7 +37,7 @@ router.get('/TemplateUser--Creation', async (req, res) => {
 
 router.post('/usercreation-add', async (req, res) => {
   const { book, permissionsData, organistaionsendmail, created_at, templateMessageData } = req.body;
-  const { username, stationname, designation, organizationname, employeeid, EmailApp_Password, Sender_Mail, userpassword, active, email, mobileno, superAdmin,RoleUser } = book;
+  const { username, stationname, designation, organizationname, employeeid, EmailApp_Password, Sender_Mail, userpassword, active, email, mobileno,RoleUser } = book;
   const { Sender_Email, Email_Password } = organistaionsendmail;
   const themesdata = "theme1";
 
@@ -50,8 +50,8 @@ router.post('/usercreation-add', async (req, res) => {
   const datarole = RoleUser || "None" ;
 
   try {
-    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname,employeeid,userpassword,EmailApp_Password,Sender_Mail,active,email,mobileno,theme,created_at,superAdmin,RoleUser)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, [username, idString, designation, organizationname, employeeid, userpassword, EmailApp_Password, Sender_Mail, active, email, mobileno, themesdata, created_at, superAdmin,datarole]);
+    await db.query(`INSERT INTO usercreation ( username, stationname, designation,organizationname,employeeid,userpassword,EmailApp_Password,Sender_Mail,active,email,mobileno,theme,created_at,RoleUser)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, [username, idString, designation, organizationname, employeeid, userpassword, EmailApp_Password, Sender_Mail, active, email, mobileno, themesdata, created_at,datarole]);
 
     // Set up the mail transporter
     var transporter = nodemailer.createTransport({

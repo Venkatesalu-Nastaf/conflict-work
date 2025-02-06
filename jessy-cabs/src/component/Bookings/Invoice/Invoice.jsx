@@ -319,7 +319,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
 
                             className='upload-img'
                           >
-                            <img
+                            {/* <img
                               src={file}
                               alt={`image_${index}`}
                               style={{
@@ -327,7 +327,9 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                                 height: "100%",
                                 // marginBottom: "20px",
                               }}
-                            />
+                            /> */}
+                            <img src={`${file}?t=${new Date().getTime()}`} alt={`image_${index}`} className='image-non-hcl' />
+
                           </div>
 
                         </li>

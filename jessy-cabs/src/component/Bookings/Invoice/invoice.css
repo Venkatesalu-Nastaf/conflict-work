@@ -482,3 +482,8 @@ border: 1px solid rgb(253, 253, 253);;
   height: 60px !important;
   /* background-color: red; */
 }
+.image-non-hcl{
+  max-width: 100%;  /* Prevents stretching */
+  height: auto;  /* Maintains aspect ratio */
+  object-fit: contain; /* Ensures proper scaling */
+}

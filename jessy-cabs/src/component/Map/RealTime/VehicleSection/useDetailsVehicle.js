@@ -21,13 +21,15 @@ const useDetailsVehicle = () => {
   const [speedValuename, setSpeedValuename] = useState("10x")
   const [address, setAddress] = useState("");
   const { vehcilecurrentAddress, setVehiclecurrentAddress } = VehicleMapData();
-  const [startTripLocation, setStartTripLocation] = useState({ latitude: null, longitude: null });
-  const [endTripLocation, setEndTripLocation] = useState({ latitude: null, longitude: null });
+  // const [startTripLocation, setStartTripLocation] = useState({ latitude: null, longitude: null });
+  // const [endTripLocation, setEndTripLocation] = useState({ latitude: null, longitude: null });
+  const [startTripLocation, setStartTripLocation] = useState([]);
+  const [endTripLocation, setEndTripLocation] = useState([]);
   const [selectedTripid, setSelectedTripid] = useState(null);
   // const [isPlaying, setIsPlaying] = useState(false);
   const [playInterval, setPlayInterval] = useState(null);
-  const [filterDate,setFilterDate] = useState(null)
-  const [dateWiseFilter,setDateWiseFilter] = useState(null);
+  const [filterDate, setFilterDate] = useState(null)
+  const [dateWiseFilter, setDateWiseFilter] = useState(null);
 
   const togglePlayPause = () => {
     if (isPlaying) {
@@ -205,7 +207,11 @@ const useDetailsVehicle = () => {
     }, speedState);
   };
 
+  const handleChange = (date) => {
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
 
+    setFilterDate(formattedDate);
+  };
   // const handledefault10xDrawPaths = () => {
   //   setTrigger((pre) => !pre)
   //   setIsPlaying(true);
@@ -361,22 +367,39 @@ const useDetailsVehicle = () => {
   };
 
 
-  useEffect(() => {    
-    getAddress()
-    const startPoint = chennaiCoordinates.find((point) => point.TripType === "start");
-    const endPoint = chennaiCoordinates.find((point) => point.TripType === "end");
+  useEffect(() => {
+    getAddress();
 
-    if (startPoint) {
-      setStartTripLocation({ latitude: startPoint.latitude, longitude: startPoint.longitude });
+    const startPoint = chennaiCoordinates.filter(
+      (point) => point.TripType === "start" && point.TripDate === filterDate
+    );
+
+    const endPoint = chennaiCoordinates.filter(
+      (point) => point.TripType === "end" && point.TripDate === filterDate
+    );
+
+
+    // Set multiple start locations as an array
+    if (startPoint.length > 0) {
+      setStartTripLocation(startPoint.map(point => ({ latitude: point.latitude, longitude: point.longitude })));
+    } else {
+      setStartTripLocation([]); // Reset if no data
     }
-    if (endPoint) {
-      setEndTripLocation({ latitude: endPoint?.latitude, longitude: endPoint?.longitude })
+
+    // Set multiple end locations as an array
+    if (endPoint.length > 0) {
+      setEndTripLocation(endPoint.map(point => ({ latitude: point.latitude, longitude: point.longitude })));
+    } else {
+      setEndTripLocation([]); // Reset if no data
     }
-  }, [currentPosition])
+
+  }, [currentPosition, filterDate]);
+
   // useEffect(() => {    
   //   getAddress();
 
   //   const filteredCoordinates = chennaiCoordinates.filter((point) => point.TripDate === filterDate);
+  //   console.log(filterDate,"ffilterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr++++++++++++++++++",filteredCoordinates);
 
   //   // Find all start and end points within the filtered data
   //   const startPoints = filteredCoordinates.filter((point) => point.TripType === "start");
@@ -399,32 +422,29 @@ const useDetailsVehicle = () => {
 
 
 
-  useEffect(()=>{
+  useEffect(() => {
     const filteredCoordinates = chennaiCoordinates.filter((point) => point.TripDate === filterDate);
-    console.log(filteredCoordinates,"ffilterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrffffffffffffffffffffffffffffffff");
-    
-      setDateWiseFilter(filteredCoordinates)
-  },[chennaiCoordinates,filterDate])
-  console.log(filterDate,"ffilterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
-  
 
+    setDateWiseFilter(filteredCoordinates)
+  }, [chennaiCoordinates, filterDate])
+
+
+  // const tripidOptions = useMemo(() => {
+  //   const uniqueTripids = [...new Set(chennaiCoordinates.map(item => item.Tripid))].filter(id => id !== "null");
+  //   return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
+  // }, [chennaiCoordinates]);
   const tripidOptions = useMemo(() => {
-    const uniqueTripids = [...new Set(chennaiCoordinates.map(item => item.Tripid))].filter(id => id !== "null");
-    return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
-  }, [chennaiCoordinates]);
+    const filteredTrips = chennaiCoordinates.filter(item => item.TripDate === filterDate && item.Tripid !== "null");
 
-  const handleChange = (date) => {
-    console.log(date,"dateeeeeeeeeeeeeeeeeeeee");
-    const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    console.log(formattedDate,"dateeeeeeeeeeeee+++++++++++++++++++");
-    
-    
-    setFilterDate(formattedDate);
-  };
+    const uniqueTripids = [...new Set(filteredTrips.map(item => item.Tripid))];
+
+    return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
+  }, [chennaiCoordinates, filterDate]);
+
   return {
     vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying, setStartMarkerPosition, startMarkerPosition, dynamicPolyline,
     handleDrawPaths, handledefault10xDrawPaths, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths, rotation, speedState, address, startTripLocation,
-    endTripLocation, tripidOptions, selectedTripid, setSelectedTripid, togglePlayPause,filterDate,handleChange
+    endTripLocation, tripidOptions, selectedTripid, setSelectedTripid, togglePlayPause, filterDate, handleChange, dateWiseFilter
   }
 }
 export default useDetailsVehicle;

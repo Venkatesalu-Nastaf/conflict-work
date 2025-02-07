@@ -34,9 +34,9 @@ import { VehicleMapData } from '../../../vehicleMapContext/vehcileMapContext';
 import TripDetailModal from '../../../Modal/TripDetailModal';
 import Autocomplete from "@mui/material/Autocomplete";
 import MapParticularTrip from '../MapParticulaTrip/MapParticularTrip';
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
 /* global google */
 // Define the container style for the map
@@ -56,7 +56,7 @@ const VehicleInformationDrawer = () => {
     const { vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying,
         startMarkerPosition, setStartMarkerPosition, handleDrawPaths, dynamicPolyline, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths,
         handledefault10xDrawPaths, speedState, address, startTripLocation, endTripLocation, tripidOptions, selectedTripid, setSelectedTripid,
-        togglePlayPause,filterDate,handleChange
+        togglePlayPause, filterDate, handleChange,dateWiseFilter
 
     } = useDetailsVehicle()
     //vehicle section drawer
@@ -165,61 +165,61 @@ const VehicleInformationDrawer = () => {
 
     // Check if Google Maps API is loaded
     //   if (!isLoaded) return <div>Loading...</div>;
-    useEffect(() => {
-        if (!chennaiCoordinates || chennaiCoordinates.length < 2) {
-            console.error("Invalid chennaiCoordinates for routing");
-            return;
-        }
+    // useEffect(() => {
+    //     if (!chennaiCoordinates || chennaiCoordinates.length < 2) {
+    //         console.error("Invalid chennaiCoordinates for routing");
+    //         return;
+    //     }
 
-        const directionsService = new window.google.maps.DirectionsService();
+    //     const directionsService = new window.google.maps.DirectionsService();
 
-        const updateDirections = (isInitial = false) => {
-            const formattedCoordinates = chennaiCoordinates.map(coord => ({
-                lat: coord.latitude,
-                lng: coord.longitude,
-            }));
+    //     const updateDirections = (isInitial = false) => {
+    //         const formattedCoordinates = chennaiCoordinates.map(coord => ({
+    //             lat: coord.latitude,
+    //             lng: coord.longitude,
+    //         }));
 
-            // Fixed last point as the standard destination
-            const fixedLastPoint = formattedCoordinates[formattedCoordinates.length - 1];
+    //         // Fixed last point as the standard destination
+    //         const fixedLastPoint = formattedCoordinates[formattedCoordinates.length - 1];
 
-            const waypoints = formattedCoordinates.slice(1, -1).map(location => ({
-                location,
-                stopover: false,
-            }));
+    //         const waypoints = formattedCoordinates.slice(1, -1).map(location => ({
+    //             location,
+    //             stopover: false,
+    //         }));
 
-            directionsService.route(
-                {
-                    origin: formattedCoordinates[0],
-                    destination: fixedLastPoint, // Always use the last coordinate
-                    waypoints,
-                    travelMode: window.google.maps.TravelMode.DRIVING,
-                },
-                (result, status) => {
-                    console.log(status, "checkkkkkkk");
+    //         directionsService.route(
+    //             {
+    //                 origin: formattedCoordinates[0],
+    //                 destination: fixedLastPoint, // Always use the last coordinate
+    //                 waypoints,
+    //                 travelMode: window.google.maps.TravelMode.DRIVING,
+    //             },
+    //             (result, status) => {
+    //                 console.log(status, "checkkkkkkk");
 
-                    if (status === window.google.maps.DirectionsStatus.OK) {
-                        setDirectionsResponse(result);
+    //                 if (status === window.google.maps.DirectionsStatus.OK) {
+    //                     setDirectionsResponse(result);
 
-                        if (isInitial) {
-                            const bounds = new window.google.maps.LatLngBounds();
-                            formattedCoordinates?.forEach(coord => bounds.extend(coord));
-                            mapRef?.current?.fitBounds(bounds);
-                        }
-                    } else {
-                        console.error(`Error fetching directions: ${status}`);
-                    }
-                }
-            );
-        };
+    //                     if (isInitial) {
+    //                         const bounds = new window.google.maps.LatLngBounds();
+    //                         formattedCoordinates?.forEach(coord => bounds.extend(coord));
+    //                         mapRef?.current?.fitBounds(bounds);
+    //                     }
+    //                 } else {
+    //                     console.error(`Error fetching directions: ${status}`);
+    //                 }
+    //             }
+    //         );
+    //     };
 
-        updateDirections(true);
+    //     updateDirections(true);
 
-        const intervalId = setInterval(() => {
-            updateDirections(false);
-        }, 10000);
+    //     const intervalId = setInterval(() => {
+    //         updateDirections(false);
+    //     }, 10000);
 
-        return () => clearInterval(intervalId);
-    }, [chennaiCoordinates, open]);
+    //     return () => clearInterval(intervalId);
+    // }, [chennaiCoordinates, open]);
 
 
     const handleMapLoad = (map) => {
@@ -417,14 +417,14 @@ const VehicleInformationDrawer = () => {
                                                 label="filterDate"// Set dynamic label
                                                 id="shedOutDate"
                                                 format="DD/MM/YYYY"
-                                                value={filterDate}
-                                                onChange={(date) => {handleChange(date) }}
+                                                onChange={(date) => { handleChange(date) }}
                                             >
                                                 {({ inputProps, inputRef }) => (
                                                     <TextField
                                                         {...inputProps}
                                                         inputRef={inputRef}
-                                                        // value={selectedCustomerData?.shedOutDate}
+                                                        value={filterDate}
+
                                                     />
                                                 )}
                                             </DatePicker>
@@ -704,37 +704,45 @@ const VehicleInformationDrawer = () => {
                                         />
 
                                         <div>
-                                            <MarkerF
-                                                position={{
-                                                    lat: startTripLocation?.latitude,
-                                                    lng: startTripLocation?.longitude,
-                                                }}
-                                                onClick={handleStartTrip}
-                                                icon={{
-                                                    url: startPointIcon,
-                                                    scaledSize: new window.google.maps.Size(24, 24),
-                                                    origin: new window.google.maps.Point(0, 0),
-                                                    anchor: new window.google.maps.Point(12, 12),
-                                                }}
-                                            />
+                                            {startTripLocation.map((location, index) => (
+                                                <MarkerF
+                                                    key={`start-${index}`} // Unique key for each marker
+                                                    position={{
+                                                        lat: location.latitude,
+                                                        lng: location.longitude,
+                                                    }}
+                                                    onClick={() => handleStartTrip(location)} // Pass clicked location
+                                                    icon={{
+                                                        url: startPointIcon,
+                                                        scaledSize: new window.google.maps.Size(24, 24),
+                                                        origin: new window.google.maps.Point(0, 0),
+                                                        anchor: new window.google.maps.Point(12, 12),
+                                                    }}
+                                                />
+                                            ))}
                                             {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
                                         </div>
+
                                         <div>
-                                            <MarkerF
-                                                position={{
-                                                    lat: endTripLocation?.latitude,
-                                                    lng: endTripLocation?.longitude,
-                                                }}
-                                                onClick={handleEndTrip}
-                                                icon={{
-                                                    url: startPointIcon,
-                                                    scaledSize: new window.google.maps.Size(24, 24),
-                                                    origin: new window.google.maps.Point(0, 0),
-                                                    anchor: new window.google.maps.Point(12, 12),
-                                                }}
-                                            />
+                                            {endTripLocation.map((location, index) => (
+                                                <MarkerF
+                                                    key={`end-${index}`} // Unique key for each marker
+                                                    position={{
+                                                        lat: location.latitude,
+                                                        lng: location.longitude,
+                                                    }}
+                                                    onClick={() => handleEndTrip(location)} // Pass clicked location
+                                                    icon={{
+                                                        url: startPointIcon, // Change icon if needed
+                                                        scaledSize: new window.google.maps.Size(24, 24),
+                                                        origin: new window.google.maps.Point(0, 0),
+                                                        anchor: new window.google.maps.Point(12, 12),
+                                                    }}
+                                                />
+                                            ))}
                                             {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
                                         </div>
+
 
 
                                         <MarkerF

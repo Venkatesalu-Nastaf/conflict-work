@@ -822,6 +822,16 @@ const useTransferreport = () => {
           setTripID(tripid)
         } else {
           setError(true);
+          setRows([])
+          setServiceStation("")
+          setCustomer("")
+          setInvoiceno("")
+          setInvoiceDate("")
+          setEndDate("")
+          setFromDate("")
+          setRatetypeforpage("")
+          setPdfBillList("")
+          setMisformat("")
           setErrorMessage("No data found");
         }
       } catch (error) {

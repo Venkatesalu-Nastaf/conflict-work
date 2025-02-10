@@ -230,7 +230,8 @@ const styles = StyleSheet.create({
   lastsection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '10px'
+    padding: '10px',
+    width:"50%",
   },
   rupees: {
     width: '70%',
@@ -238,7 +239,9 @@ const styles = StyleSheet.create({
   signaturesection: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    // marginTop: '30px',
+    width:"50%",
+    alignItems:"flex-end",
+    paddingRight:"10px",
   },
   lastsectiondiv: {
     borderRight: '1px solid #000000',
@@ -247,6 +250,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: "30px",
     // marginTop:"100px",
+    width:"100%",
+    justifyContent:"space-between"
 
 
   },
@@ -600,18 +605,23 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                                 {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
                                 / {item.vehicleName2}
                               </Text> */}
-                                {item?.duty === "Outstation" ?
-                                  <Text style={{ fontSize: 9, width: '75%' }}>
+                              <View style={{flexDirection:'column'}}>
+
+                              <View style={{width:'100%',}}>
+                              {item?.duty === "Outstation" ?
+                                  <Text style={{ fontSize: 9, }}>
                                     {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Days : {item.totaldays}
                                   </Text> :
-                                  <Text style={{ fontSize: 9, width: '75%' }}>
+                                  <Text style={{ fontSize: 9 }}>
                                     {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
                                   </Text>
                                 }
                                 <Text style={{ fontSize: 9 }}>
-                                  {item.vehicleName2} {item.vehType}
+                                  {item.vehicleName} {item.vehType}
                                 </Text>
-                                <Text style={{ fontSize: 9 }}>Vehicle Hire Charges For : {item.calcPackage}</Text>
+                              </View>
+                              <View style={{width:"100%",}}>
+                              <Text style={{ fontSize: 9 }}>Vehicle Hire Charges For : {item.calcPackage}</Text>
 
                                 {item.extraKM > 0 && item.extrakm_amount > 0 ? (
                                   <Text style={{ fontSize: 9 }}>Extra Kms : {item.extraKM} Kms @ Rs.{item.extrakm_amount}</Text>
@@ -632,15 +642,27 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                                 <Text style={{ fontSize: 9 }}>{item.pickup}</Text>
                               </View>
 
+                              </View>
+                              
+
+                                
+                                
+                              </View>
+
                             </View>
 
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
                             <View style={styles.tableCellpermit}>
                               <Text style={{ fontSize: 9 }}>{'\n'}</Text>
                               <Text style={{ fontSize: 9 }}>{'\n'}</Text>
+                              {/* <Text style={[styles.permittext, { fontSize: 9 }]}>
+                                {(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}.00
+                              </Text> */}
+                              {(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0) > 0 && (
                               <Text style={[styles.permittext, { fontSize: 9 }]}>
                                 {(parseInt(item.permit) || 0) + (parseInt(item.parking) || 0) + (parseInt(item.toll) || 0)}.00
                               </Text>
+                            )}
                             </View>
                             <View style={[styles.tableCell, { paddingRight: 15 }]}>
                               <Text style={{ fontSize: 9 }}>{'\n'}</Text>

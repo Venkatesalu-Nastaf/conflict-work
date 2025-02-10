@@ -20,11 +20,13 @@ import Box from "@mui/material/Box";
 import "./VehicleStatement.css";
 import axios from 'axios'
 import { APIURL } from '../../../url';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import { TextField } from '@mui/material';
 import Excel from 'exceljs';
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
+import { IoBusinessSharp } from "react-icons/io5";
+import Autocomplete from "@mui/material/Autocomplete";
 
 
 // const customer_colums = [
@@ -57,7 +59,21 @@ const customer_colums = [
   { field: 'totalPackageAmount', headerName: 'Total Balance', width: 130 },
   // { field: "grandTotal", headerName: "TotalAmount", with: 100 }
 ]
-
+const customer_colums1 = [
+  { field: 'id', headerName: 'S.no', width: 70 },
+  { field: 'vehRegNo', headerName: 'Vehicle', width: 160 },
+  { field: 'totalTime', headerName: 'Tot. Time', width: 120 },
+  { field: 'totalKilometers', headerName: 'TKMS', width: 120 },
+  { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+  { field: "grandTotal", headerName: "TotalAmount", with: 100 },
+  // { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
+  { field: 'totalcustomeradvance', headerName: 'Driver Advance', width: 130 },
+  // { field: 'balance', headerName: 'Balance', width: 130 },
+  // { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+  { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
+  // { field: 'totalPackageAmount', headerName: 'Total Balance', width: 130 },
+  // { field: "grandTotal", headerName: "TotalAmount", with: 100 }
+]
 
 const VehicleStatement = () => {
   const [data, setData] = useState({
@@ -65,6 +81,7 @@ const VehicleStatement = () => {
     startDate: dayjs().format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD')
   })
+  const superAdminstatement = localStorage.getItem("SuperAdmin")
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
   const [successMessage, setSuccessMessage] = useState({});
@@ -72,6 +89,8 @@ const VehicleStatement = () => {
   const [warning, setWarning] = useState(false);
   const [warningMessage, setWarningMessgae] = useState({});
   const [setTableData] = useState([])
+  const [veghdata,setVehDatashow]=useState([])
+  const [vehregvalue,setVehRegValue]=useState('')
 
   const [totalValues, setTotalValues] = useState({
     fullTotalKM: '',
@@ -332,8 +351,17 @@ const VehicleStatement = () => {
 
     }
 
+    if (vehregvalue === '') {
+      setCustomerData([]);
+      setWarning(true);
+      setWarningMessgae("Please Select vehregno");
+      return
+
+    }
+
     try {
-      const response = await axios.get(`${APIURL}/getvehicleInfo`, { params: data });
+      const data2={...data,vehregvalue}
+      const response = await axios.get(`${APIURL}/getvehicleInfo`, { params: data2 });
       const datas = response.data;
 
       if (data.hireTypes === "Own Vehicle") {
@@ -472,6 +500,48 @@ const VehicleStatement = () => {
       }
 
       } else if (data.hireTypes === "DCO Vehicle") {
+        if(datas.length > 0) {
+        const parseData = transformAtached(datas);
+        if (parseData.length > 0) {
+          const reducedData = reduceFun(parseData);
+
+          if (reducedData) {
+            setTotalValues(prev => ({
+              ...prev,
+              fullTotalKM: reducedData.totalKilometers,
+              fullTotalHR: convertMinutesToTime(reducedData.totalTime),
+              // totalAmount: reducedData.totalPackageAmount,
+              totalAmount: reducedData.grandTotal,
+              totalAdvance: reducedData.totalAdvance || 0,
+              totalBalance: reducedData.totaalBalance,
+              totalBeta: reducedData.totalBeta,
+              fuelamount : reducedData.fuelamount,
+            }));
+            setSuccess(true);
+            setSuccessMessage("Successfully Listed");
+          } else {
+            setTotalValues({});
+          }
+
+          setCustomerData(parseData);
+          // setData(prev => ({ ...prev, hireTypes: "lease" }));
+        }
+        else {
+          setCustomerData([]);
+          setTotalValues({});
+          setError(true);
+          setErrorMessage("No Data Found");
+        }
+      }
+      else{
+        setCustomerData([]);
+        setTotalValues({});
+        setError(true);
+        setErrorMessage("No Data Found");
+      }
+
+      }
+      else if (data.hireTypes === "All") {
         if(datas.length > 0) {
         const parseData = transformAtached(datas);
         if (parseData.length > 0) {
@@ -789,6 +859,42 @@ const VehicleStatement = () => {
     setWarning(false);
   };
 
+
+// const handlechnage = (e)=>{
+//   setData(prev => ({ ...prev, hireTypes: e.target.value }))
+
+// }
+
+  
+    const fetchdataccountinfodata = async (dataveh) => {
+      const datareg = dataveh
+        try {
+            const response = await axios.get(`${APIURL}/hiretypebasedvehicle/${datareg}`)
+            const data = response.data
+            const data3 = data.map(res => res.vehRegNo)
+            const data2 = ["All",...data3]
+
+            setVehDatashow(data2)
+            
+          
+            // setAccountInfoData(data2)
+
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    const handlechnage = (e)=>{
+      setData(prev => ({ ...prev, hireTypes: e.target.value }))
+      fetchdataccountinfodata(e.target.value)
+      
+    }
+    const handleInputChange = (event, newValue) => {
+      const selectoption = newValue ? newValue.label : ''
+      setVehRegValue(selectoption);
+  };
+
   return (
 
     <>
@@ -807,8 +913,11 @@ const VehicleStatement = () => {
                 id="demo-simple-select-helper"
                 value={data?.hireTypes}
                 label="Owner Type"
-                onChange={(e) => setData(prev => ({ ...prev, hireTypes: e.target.value }))}
-              >
+              //   onChange={(e) =>
+              //      setData(prev => ({ ...prev, hireTypes: e.target.value }))}
+              // >
+              onChange={handlechnage}
+           >
                 <MenuItem value="">
                   {/* <em>None</em> */}
                 </MenuItem>
@@ -816,15 +925,39 @@ const VehicleStatement = () => {
                 <MenuItem value={"Own Vehicle"}>Own Vehicle</MenuItem>
                 <MenuItem value={"OutSide Travels"}>OutSide Travels</MenuItem>
                 <MenuItem value={"DCO Vehicle"}>DCO Vehicle</MenuItem> */}
-
+                <MenuItem value={"All"}>All</MenuItem>
                 <MenuItem value={"Attached Vehicle"}>Attached Vehicle</MenuItem>
                 <MenuItem value={"Own Vehicle"}>Own Vehicle</MenuItem>
                 <MenuItem value={"OutSide Travels"}>OutSide Travels</MenuItem>
                 <MenuItem value={"DCO Vehicle"}>DCO Vehicle</MenuItem>
+                
 
               </Select>
             </FormControl>
           </div>
+          <div className="input">
+                            <div className="icone">
+                              <IoBusinessSharp color="action" />
+                            </div>
+                            <Autocomplete
+                              fullWidth
+                              id="vendor_hire"
+                              freeSolo
+                              size="small"
+                              value={vehregvalue}
+                              // options={accountinfodata.map((option) => ({
+                              //   label: option?.travelsname,
+                              // }))}
+                              options={veghdata.map((option) => ({
+                                label: option,
+                              }))}
+                              getOptionLabel={(option) => option.label || vehregvalue || ""}
+                              onChange={handleInputChange}
+                              renderInput={(params) =>
+                                <TextField {...params} label="Vendor_hire" />
+                              }
+                            />
+                          </div>
 
 
           <div className="input">
@@ -960,6 +1093,7 @@ const VehicleStatement = () => {
               variant="standard"
             />
           </div>
+          {superAdminstatement === "SuperAdmin" &&
           <div className='input'>
             <TextField
               name="totalBalance"
@@ -972,6 +1106,7 @@ const VehicleStatement = () => {
               variant="standard"
             />
           </div>
+}
           {/* <div className='input'>
             <TextField
               name="totalBeta"
@@ -1046,7 +1181,8 @@ const VehicleStatement = () => {
           >
             <DataGrid
               rows={Customerdata}
-              columns={customer_colums}
+              // columns={customer_colums}
+              columns={superAdminstatement === "SuperAdmin" ?customer_colums :customer_colums1}
               initialState={{
                 pagination: {
                   paginationModel: { page: 0, pageSize: 5 },

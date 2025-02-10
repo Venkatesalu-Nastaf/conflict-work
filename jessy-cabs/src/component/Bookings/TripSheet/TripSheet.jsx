@@ -276,7 +276,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,
-    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata,
+    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata,handlecalcpackage,handlecalcpackageamount,
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -3437,10 +3437,11 @@ Please Click the link to close E-Tripsheet-`}
                                   <TextField
                                     name="Vendor_Calcpackage"
                                     // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
-                                    value={vendorinfo?.vendor_duty === "Transfer" || vendorinfo?.vendor_duty === "Outstation" ? vendorinfo?.vendor_duty : vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                    value={vendorinfo?.vendor_duty === "Transfer" || vendorinfo?.vendor_duty === "Outstation" ? vendorinfo?.vendor_duty : vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || ''}
                                     // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
                                     label="Package"
                                     id="Vendor_Calcpackage"
+                                    onChange={handlevendor_billdata}
                                     disabled={lockdatavendorbill}
                                     size="small"
                                     sx={{ m: 1, width: "100%" }}
@@ -3449,11 +3450,14 @@ Please Click the link to close E-Tripsheet-`}
                                 <div className="input-g">
                                   <TextField
                                     name="Vendor_rateAmount"
-                                    value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || 0}
+                                    value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount||""}
+                                    
                                     size="small"
                                     disabled={lockdatavendorbill}
+                                    onChange={handlevendor_billdata}
                                     label="Amount"
                                     autoComplete="password"
+                                    
                                     id="Vendor_rateAmount"
                                   />
                                 </div>
@@ -3632,6 +3636,7 @@ Please Click the link to close E-Tripsheet-`}
                               </div>
 
                             </div>
+                           
                             {
                               // i command this line already condition work this 
                               // Number(superpower) === 1 && billing_read === 1 ? 
@@ -3651,6 +3656,7 @@ Please Click the link to close E-Tripsheet-`}
                                         id="pack"
                                         size="small"
                                         variant="standard"
+                                        onChange={handlecalcpackage}
                                         disabled={lockdatacustomerbill}
                                         autoComplete="password"
                                         sx={{ m: 1, width: "60ch" }}
@@ -3662,9 +3668,10 @@ Please Click the link to close E-Tripsheet-`}
                                       </div>
                                       <TextField
                                         name="amount5"
-                                        value={package_amount || formData.calcPackage || 0}
+                                        value={package_amount || 0}
                                         size="small"
                                         label="Amount"
+                                        onChange={handlecalcpackageamount}
                                         autoComplete="password"
                                         id="amount5"
                                         variant="standard"

@@ -617,12 +617,14 @@ router.get('/VehicleStatement-bookings', (req, res) => {
         advancepaidtovendor: result.advancepaidtovendor || 0
       }));
       // return res.status(200).json(results)
+      // console.log(results,"rr")
       return res.status(200).json(resultsdata)
     }
   )
 })
 
 router.get('/tripsheetvendordata', (req, res) => {
+  const { fromDate, toDate } = req.query;
 
   const sql = `select *,COALESCE(NULLIF(advancepaidtovendor, ''), 0) AS totalvendoramount,
     COALESCE(NULLIF(fuelamount, ''), 0) AS totalfuelamount,
@@ -634,16 +636,16 @@ router.get('/tripsheetvendordata', (req, res) => {
 + COALESCE(NULLIF(vendortoll, ''), 0) 
 + COALESCE(NULLIF(vendorparking, ''), 0) 
 + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandtotal
-from tripsheet`
+from tripsheet where tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)`
   // db.query("SELECT *, Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) AS totalvendoramount FROM tripsheet", (err, results) => {
-    db.query(sql, (err, results) => {
+    db.query(sql,[fromDate, toDate], (err, results) => {
     if (err) {
       console.log(err)
       return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
     }
-    if (results.length === 0) {
-      return res.status(400).json({ error: "Data not Found" });
-    }
+    // if (results.length === 0) {
+    //   return res.status(400).json({ error: "Data not Found" });
+    // }
     
     return res.status(200).json(results)
   }

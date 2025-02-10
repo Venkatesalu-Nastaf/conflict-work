@@ -1232,7 +1232,7 @@ const useTripsheet = () => {
                     }
                     // }
                     else {
-                        console.log("withoyttripid")
+                        // console.log("withoyttripid")
                         setCheckSignandMapVerify(false)
                         return false
                     }
@@ -4412,33 +4412,103 @@ useEffect(() => {
         const NightCount = () => {
             const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
             const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+            const starttimedata = removeSeconds(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime)
+
+            const closetimedata = removeSeconds(formData.closetime || selectedCustomerData.closetime || book.closetime)
+    
+            const hybriddata = hybridhclcustomer || hybridhclnavigate
             const TotalDay = calculateTotalDay();
-            const newTimeString = shedOutTime?.replace(":", ".");
-            const newTimeStrings = shedInTime?.replace(":", ".");
+            
+            const duty = formData.duty || selectedCustomerData.duty || book.duty;
+            // const newTimeString = shedOutTime?.replace(":", ".");
+            // const newTimeStrings = shedInTime?.replace(":", ".");
+
+            // const newTimeString = hybriddata === 0 ? shedOutTime?.replace(":", ".") : starttimedata?.replace(":", ".")
+            // const newTimeStrings = hybriddata === 0 ? shedInTime?.replace(":", ".") : closetimedata?.replace(":", ".")
+
+            const newTimeString = hybriddata === 0 ? shedOutTime?.replace(":", "."): hybriddata === 1 && duty === "Outstation" ? shedOutTime?.replace(":", "."): starttimedata?.replace(":", ".");
+            const newTimeStrings = hybriddata === 0 ? shedInTime?.replace(":", "."): hybriddata === 1 && duty === "Outstation" ? shedInTime?.replace(":", "."):closetimedata?.replace(":", ".");
+
+            // console.log(newTimeString,"night2222",newTimeStrings)
+
 
             let calcNight = 0;
+            
+            // let a = 0;
 
+            if(duty !== "Outstation") {
+           
             if (calculateTotalDay() === 1) {
-                if (Number(newTimeStrings) > 22.0 || Number(newTimeString) <= 6.00) {
-                    calcNight = 1;
+                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) <= 6.00) {
+                    // console.log(2,"night1")
+                    calcNight = 2;
                 }
-                // if (Number(newTimeStrings) > 22.0 && Number(newTimeString) <= 6.00) {
-                //     calcNight = 2;
-                // }
+              if(Number(newTimeStrings) < 22.0 && Number(newTimeString) <= 6.00) {
+                // console.log(1,"night2")
+                calcNight = 1;
+              }
+              if(Number(newTimeStrings) > 22.0 && Number(newTimeString) > 6.00) {
+                // console.log(1,"night3")
+                calcNight = 1;
+              }
+                
+              
             }
-            // else if (TotalDay > 1) {
-            //     if (newTimeStrings >= 22.0) {
-            //         calcNight = TotalDay + 1;
-            //     } else {
-            //         calcNight = TotalDay;
-            //     }
-            // }
-            else if (TotalDay > 1) {
+         
+             if (TotalDay > 1) {
+              
+                // console.log(TotalDay,"days")
+                if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) <= 6.00) {
+                    // console.log(TotalDay + 1,"days1")
+                    calcNight = TotalDay + 1 ;
+                }
+                if(Number(newTimeStrings) < 22.0 && Number(newTimeString) <= 6.00){
+                    calcNight = TotalDay;
+                    // console.log(TotalDay ,"days2")
+                }
+                if(Number(newTimeStrings) < 22.0 && Number(newTimeString) > 6.00){
+                    calcNight = TotalDay -1;
+                    // console.log(TotalDay ,"days3")
+                }
+                if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) > 6.00){
+                    calcNight = TotalDay;
+                    // console.log(TotalDay ,"days4")
+                }
+                // console.log(calcNight,"daysnii")
+                
+                
 
-                calcNight = TotalDay - 1;
+                // calcNight = TotalDay-1;
             }
+            // console.log(calcNight,"nightousttaion")
             // setNightCount(calcNight);
             setcusnightCount(calcNight)
+        }
+        else{
+            if (calculateTotalDay() === 1) {
+                if (Number(newTimeString) <= 6.00) {
+                    
+                    calcNight = 1;
+                }
+            }  
+
+
+             if (TotalDay > 1) {
+                if (Number(newTimeString) <= 6.00) {
+                    console.log(Number(newTimeString))
+                    calcNight = TotalDay  ;
+                }
+                else{
+                    calcNight = TotalDay-1;
+                }
+                
+
+                // calcNight = TotalDay-1;
+            }
+            // console.log(calcNight,"nightousttion")
+            // setNightCount(calcNight);
+            setcusnightCount(calcNight)
+        }
 
         };
         // setNightTotalCount(calculateTotalDay())
@@ -4446,6 +4516,7 @@ useEffect(() => {
 
         NightCount();
     }, [formData, selectedCustomerData, selectedCustomerDatas, book]);
+    // console.log(cusnightcount,"count")
 
 
 
@@ -4682,35 +4753,77 @@ useEffect(() => {
 
         const newTimeString = shedOutTime?.replace(":", ".");
         const newTimeStrings = shedInTime?.replace(":", ".");
+        const duty = vendorinfo?.vendor_duty;
 
         let calcNight = 0;
+        if(duty !== "Outstation") {
 
         if (TotalDay === 1) {
-            if (Number(newTimeStrings) >= 22.0 || Number(newTimeString) <= 6.00) {
-                calcNight = 1;
-            }
-            // if (Number(newTimeStrings) > 22.0 && Number(newTimeString) <= 6.00) {
-            //     calcNight = 2;
+            // if (Number(newTimeStrings) >= 22.0 || Number(newTimeString) <= 6.00) {
+            //     calcNight = 1;
             // }
+            if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) <= 6.00) {
+                // console.log(2,"night1")
+                calcNight = 2;
+            }
+          if(Number(newTimeStrings) < 22.0 && Number(newTimeString) <= 6.00) {
+            // console.log(1,"night2")
+            calcNight = 1;
+          }
+          if(Number(newTimeStrings) > 22.0 && Number(newTimeString) > 6.00) {
+            // console.log(1,"night3")
+            calcNight = 1;
+          }
         }
 
-        // else if (TotalDay > 1) {
-        //     if (newTimeStrings >= 22.0) {
-        //         calcNight = TotalDay + 1;
-        //     } else {
-        //         calcNight = TotalDay;
-        //     }
-        // }
+     
+        if (TotalDay > 1) {
+          
 
-        else if (TotalDay > 1) {
+            if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) <= 6.00) {
+                // console.log(TotalDay + 1,"days1")
+                calcNight = TotalDay + 1 ;
+            }
+            if(Number(newTimeStrings) < 22.0 && Number(newTimeString) <= 6.00){
+                calcNight = TotalDay;
+                // console.log(TotalDay ,"days2")
+            }
+            if(Number(newTimeStrings) < 22.0 && Number(newTimeString) > 6.00){
+                calcNight = TotalDay -1;
+                // console.log(TotalDay ,"days3")
+            }
+            if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) > 6.00){
+                calcNight = TotalDay;
+                // console.log(TotalDay ,"days4")
+            }
 
-            calcNight = TotalDay - 1;
+       
+
+    }
+}  else{
+    if (TotalDay === 1) {
+        if (Number(newTimeString) <= 6.00) {
+            calcNight = 1;
         }
-        // if (newTimeStrings >= 22.0) {
-        //     calcNight = TotalDay + 1;
-        // } else {
-        //     calcNight = TotalDay;
-        // }
+    }
+   
+     if (TotalDay > 1) {
+        if (Number(newTimeString) <= 6.00) {
+            calcNight = TotalDay  ;
+        }
+        else{
+            calcNight = TotalDay-1;
+        }
+
+       
+        
+
+        
+    }
+    // console.log(calcNight,"nightousttion")
+  
+}
+     
 
 
         return calcNight;
@@ -4719,6 +4832,10 @@ useEffect(() => {
     useEffect(() => {
         setVendornightCount(calcNightCount);
     }, [calcNightCount]);
+
+
+   
+
 
     useEffect(() => {
         const calcdatavendor = () => {
@@ -4884,8 +5001,10 @@ useEffect(() => {
             const extraKMS = Number(vendordata.extraKMS);
             const NHalt = Number(vendordata.NHalt);
             const Bata = Number(vendordata.Bata);
+            const totalDays1 = calculatevendorTotalDays()
             const nHaltdays = Number(vendornightcount);
-            const batahaltdays = Number(vendornightcount)
+            // const batahaltdays = Number(vendornightcount)
+            const batahaltdays = Number(totalDays1)
             console.log(packages, Hours, KMS, Rate, extraHours, extraKMS, NHalt, Bata, "for supplier")
             let dataextrahous, dataextrakms
 
@@ -5163,11 +5282,12 @@ useEffect(() => {
             const extraHours = Number(data.extraHours);
             const extraKMS = Number(data.extraKMS);
             const NHalt = Number(data.NHalt);
+            const totaldays = calculateTotalDay()
             const nightHatDays = Number(cusnightcount)
             const NHaltAmount = Math.round(Number(data.NHalt) * nightHatDays);
             setNightCount(nightHatDays);
             // setdriverbeta_Count(calculateTotalDay())
-            setdriverbeta_Count(nightHatDays)
+            setdriverbeta_Count(totaldays)
             setnight_totalAmount(NHaltAmount)
             const Bata = Number(data.Bata);
 
@@ -5304,6 +5424,24 @@ useEffect(() => {
     //     }
     //     return true;
     // };
+
+    const handlecalcpackage =(e)=>{
+        setcalcPackage(e.target.value)
+        setRatePackage(e.target.value)
+        setNoChangeData((prevData) => ({
+            ...prevData,
+            calcpackage:e.target.value,
+        }));
+    }
+
+    const handlecalcpackageamount =(e)=>{
+        setpackage_amount(e.target.value)
+        setNoChangeData((prevData) => ({
+            ...prevData,
+            package_amount:e.target.value,
+        }));
+        // setRatePackage(e.target.value)
+    }
 
 
     const [vehileNames, setVehicleNames] = useState([])
@@ -7031,7 +7169,7 @@ useEffect(() => {
         isAddload, setisAddload, isEditload, setisEditload,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
         minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage,
-        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata,
+        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata,handlecalcpackage,handlecalcpackageamount,
 
     };
 };

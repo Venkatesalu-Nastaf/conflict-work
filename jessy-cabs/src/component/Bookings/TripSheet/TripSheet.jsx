@@ -160,7 +160,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
   const superAdminAccess = localStorage.getItem("SuperAdmin")
   const filteredStatus =
-  superAdminAccess === "SuperAdmin" || superAdminAccess === "Assistant CFO"
+    superAdminAccess === "SuperAdmin" || superAdminAccess === "Assistant CFO"
       ? Status // Show all statuses for superAdmin and CFo
       : Status.filter((option) => option.optionvalue !== "Billed");
 
@@ -276,7 +276,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,
-    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata,handlecalcpackage,handlecalcpackageamount,
+    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount,
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -295,14 +295,14 @@ const TripSheet = ({ stationName, logoImage }) => {
   const vendorinfoOverviewCloseRef = useRef(null);
 
   const [prevHours, setPrevHours] = useState({
-    shedOutTime:"",
-    startTime:"",
-    closeTime:"",
-    ShedInTime:"",
-    vendorinfoStartTime:"",
-    vendorinfoCloseTime:"",
-    vendorinfoOverviewStartTime:"",
-    vendorinfoOverviewCloseTime:"",
+    shedOutTime: "",
+    startTime: "",
+    closeTime: "",
+    ShedInTime: "",
+    vendorinfoStartTime: "",
+    vendorinfoCloseTime: "",
+    vendorinfoOverviewStartTime: "",
+    vendorinfoOverviewCloseTime: "",
   });
 
   // const Tripsheet_read = permissions[3]?.read;
@@ -564,23 +564,23 @@ const TripSheet = ({ stationName, logoImage }) => {
   const [fueltype, setFuelType] = useState('')
   useEffect(() => {
     const fetchFuleType = async () => {
-      if (!vehicleRegisterNo1)
-        { return
+      if (!vehicleRegisterNo1) {
+        return
+      }
+      else {
+        const responedata = await axios.get(`${apiurl}/getFuelType/${vehicleRegisterNo1}`)
+        // console.log(responedata,"datafueleee")
+        const datafuel = responedata.data
+        // console.log(datafuel,"datafuel")
+        if (datafuel.length > 0) {
+
+          setFuelType(datafuel[0].fueltype)
+          // setFuelType(data?.data[0]?.fueltype)
         }
-        else{
-      const responedata = await axios.get(`${apiurl}/getFuelType/${vehicleRegisterNo1}`)
-      // console.log(responedata,"datafueleee")
-      const datafuel = responedata.data
-      // console.log(datafuel,"datafuel")
-      if(datafuel.length > 0){
-        
-      setFuelType(datafuel[0].fueltype)
-      // setFuelType(data?.data[0]?.fueltype)
+        else {
+          setFuelType('')
+        }
       }
-      else{
-      setFuelType('')
-      }
-    }
     }
 
     fetchFuleType()
@@ -716,7 +716,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     const finalshedincalc = parseFloat(shedintimeformat).toFixed(2);
     const shedoutTimeFormat = reportTime?.replace(":", ".")
     const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
-    const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';    
+    const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';
     const parseDate = (dateStr) => {
       const [day, month, year] = dateStr?.split('-');
       return new Date(`${year}-${month}-${day}`);
@@ -928,7 +928,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   useEffect(() => {
     let timeout;
     console.log(conflictModalbox, "conflictttttttttttt")
-    if (conflictModalbox && emptyState!==true) {
+    if (conflictModalbox && emptyState !== true) {
       timeout = setTimeout(() => {
         setError(true);
         setErrorMessage("There is a conflict with this trip sheet in Date and Time");
@@ -1016,8 +1016,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     // disabled={editButtonStatusCheck && superAdminAccess !== "SuperAdmin"}
-                    
-                   disabled={editButtonStatusCheck && superAdminAccess !== "SuperAdmin"}
+
+                    disabled={editButtonStatusCheck && superAdminAccess !== "SuperAdmin"}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
                     value={Status.find((option) => option.optionvalue)?.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                     // options={Status.map((option) => ({
@@ -1202,7 +1202,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={handleChange}
                     label="Customer"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     id="standard-size-customer"
                     required
                     autoComplete="password"
@@ -1215,8 +1215,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <TextField
                     name="orderedby"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
-                    
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+
                     size="small"
                     value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
                     onChange={handleChange}
@@ -1237,7 +1237,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={handleChange}
                     label="Mobile"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     id="standard-size-mobile"
                     size="small"
                     autoComplete="password"
@@ -1254,7 +1254,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Order By Email"
                     id="orderbyemail"
                     size="small"
@@ -1273,7 +1273,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
                     value={stationOptions?.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                     options={stationOptions?.map((option) => ({
@@ -1299,7 +1299,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     label="Guest Name"
                     name="guestname"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
                     onChange={handleChange}
                     size="small"
@@ -1316,7 +1316,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Phone (Cell)"
                     id="guestmobileno"
                     size="small"
@@ -1333,7 +1333,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.email || selectedCustomerData.email || formValues.email || book.email || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Email"
                     id="email"
                     size="small"
@@ -1353,7 +1353,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     name="address1"
                     multiline
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     rows={2}
                     sx={{ width: "100%" }}
                     autoComplete="new-password"
@@ -1371,7 +1371,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size="small"
                     name="useage"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
                     onChange={handleChange}
                     label="Usage"
@@ -1391,7 +1391,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     onChange={(event, value) => {
                       handleAutocompleteChange(event, value, "duty")
                       if (!lockdata) {
@@ -1423,7 +1423,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size="small"
                     name="request"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
                     onChange={handleChange}
                     label="Request"
@@ -1466,7 +1466,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Cost Code"
                     id="customer-customercode"
                     autoComplete="password"
@@ -1483,7 +1483,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={handleChange}
                     name="employeeno"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Employee No"
                     id="employeeno"
                     autoComplete="password"
@@ -1500,7 +1500,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="demo-simple-select"
                         // value={bookingStatus}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         value={escort}
                         // label="Status"
                         onChange={handleEscortChange}
@@ -1546,7 +1546,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="demo-simple-select"
                         value={transferreport}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         onChange={handleTransferChange}
                       >
                         <MenuItem value={'Yes'}>Yes</MenuItem>
@@ -1663,7 +1663,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
 
-                          disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
 
                           id="shedOutDate"
                           value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
@@ -1719,7 +1719,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                          disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                           id="startdate"
                           value={
                             formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
@@ -1950,22 +1950,22 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                          disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                           value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                           onChange={(event) => {
                             let value = event.target.value;
                             const [hours, minutes] = value.split(':');
                             const correctedValue = `${hours}:${minutes}`;
-                         
+
                             setPrevHours((prevState) => ({
                               ...prevState,
                               shedOutTime: hours
-                            }));                          
-                            if (fileInputRefdata.current && (parseInt(minutes)===59) && prevHours?.shedOutTime === hours) {
+                            }));
+                            if (fileInputRefdata.current && (parseInt(minutes) === 59) && prevHours?.shedOutTime === hours) {
                               fileInputRefdata.current.focus();
                             }
-                           
-                         
+
+
                             setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
                             setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                             setBook({ ...book, reporttime: event.target.value });
@@ -2012,26 +2012,26 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="starttime"
                         // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                         // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                        disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         name="starttime"
                         ref={reporttimeRef}
                         value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
                         onChange={(event) => {
                           const rTime = event.target.value;
-                           
+
                           let value = event.target.value;
                           const [hours, minutes] = value.split(':');
-                          console.log(minutes, "timeeeeeeeee",hours,hours.length);  
-                          console.log(hours,"timeeeeeeee++++++",hours);
-                          
+                          console.log(minutes, "timeeeeeeeee", hours, hours.length);
+                          console.log(hours, "timeeeeeeee++++++", hours);
+
                           setPrevHours((prevState) => ({
                             ...prevState,
-                            startTime:hours
-                          }));                          
-                          if (reporttimeRef.current && (parseInt(minutes)===59) && prevHours?.startTime === hours) {
+                            startTime: hours
+                          }));
+                          if (reporttimeRef.current && (parseInt(minutes) === 59) && prevHours?.startTime === hours) {
                             reporttimeRef.current.focus();
                           }
-                         
+
 
                           // if (reporttimeRef.current && ((hours[0] !== "0") && (minutes[0] !== "0")) ) {
                           //   reporttimeRef.current.focus();
@@ -2081,14 +2081,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                           const rTime = event.target.value;
                           let value = event.target.value;
                           const [hours, minutes] = value.split(':');
-                          console.log(minutes, "timeeeeeeeee",hours,hours.length);
-                        
+                          console.log(minutes, "timeeeeeeeee", hours, hours.length);
+
 
                           setPrevHours((prevState) => ({
                             ...prevState,
-                            closeTime:hours
-                          }));                          
-                          if (closeTimeRef.current && (parseInt(minutes)===59) && prevHours?.closeTime === hours) {
+                            closeTime: hours
+                          }));
+                          if (closeTimeRef.current && (parseInt(minutes) === 59) && prevHours?.closeTime === hours) {
                             closeTimeRef.current.focus();
                           }
                           // Update the time without restriction
@@ -2144,14 +2144,14 @@ const TripSheet = ({ stationName, logoImage }) => {
                           const rTime = event.target.value;
                           let value = event.target.value;
                           const [hours, minutes] = value.split(':');
-                          console.log(minutes, "timeeeeeeeee",hours,hours.length);
-                        
+                          console.log(minutes, "timeeeeeeeee", hours, hours.length);
+
 
                           setPrevHours((prevState) => ({
                             ...prevState,
-                            ShedInTime:hours
-                          }));                          
-                          if (shedinTimeRef.current && (parseInt(minutes)===59) && prevHours?.ShedInTime === hours) {
+                            ShedInTime: hours
+                          }));
+                          if (shedinTimeRef.current && (parseInt(minutes) === 59) && prevHours?.ShedInTime === hours) {
                             shedinTimeRef.current.focus();
                           }
                           // Always allow input and set the state
@@ -3075,7 +3075,7 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                         </TabPanel>
                         {/* <TabPanel value={billing_read ? 2 : 1} sx={{ p: 2 }}> */}
-                    
+
                         <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 2 : 1} sx={{ p: 2 }}>
                           <div className="Customer-Message-Slider">
                             <div className="input-field">
@@ -3083,17 +3083,17 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                                 <div style={{ display: "blocks" }}>
                                   <Button disabled={!Tripsheet_modify} onClick={generateAndCopyLinkdata}>Generate Link</Button>
-                                </div>                               
+                                </div>
                                 {/* {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
                                   <button>Share on WhatsApp</button>
                                 </WhatsappShareButton>
                                 } */}
 
-                                 {appsstatus !== "Closed" && signaturelinkwhatsapp && 
-                                // <WhatsappShareButton url={signaturelinkwhatsapp} title={"Trip details from JESSY CABS Guest Name ${guestname} . Please Click the link to close E-Tripsheet-"} separator=" - ">
-                                <WhatsappShareButton 
-  url={signaturelinkwhatsapp} 
-title={`Trip details from JESSY CABS, 
+                                {appsstatus !== "Closed" && signaturelinkwhatsapp &&
+                                  // <WhatsappShareButton url={signaturelinkwhatsapp} title={"Trip details from JESSY CABS Guest Name ${guestname} . Please Click the link to close E-Tripsheet-"} separator=" - ">
+                                  <WhatsappShareButton
+                                    url={signaturelinkwhatsapp}
+                                    title={`Trip details from JESSY CABS, 
   Guest Name: ${formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''} 
   Contact no: ${formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''} 
   T.S no: ${formData.tripid || selectedCustomerData.tripid || book.tripid || ''} 
@@ -3101,11 +3101,11 @@ title={`Trip details from JESSY CABS,
   Reporting Time: ${(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime) ? dayjs(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime, "HH:mm:ss").format("HH:mm") : ''} 
   Reporting Address: ${formData.address1 || selectedCustomerData.address1 || book.address1 || ''}.JESSYCABS.
 
-Please Click the link to close E-Tripsheet-`} 
- separator=" - "
->
-                                  <button>Share on WhatsApp</button>
-                                </WhatsappShareButton>
+Please Click the link to close E-Tripsheet-`}
+                                    separator=" - "
+                                  >
+                                    <button>Share on WhatsApp</button>
+                                  </WhatsappShareButton>
                                 }
                                 {copydatalink && signaturelinkwhatsapp &&
                                   <CopyField
@@ -3136,7 +3136,7 @@ Please Click the link to close E-Tripsheet-`}
                         </TabPanel>
                         {/* {billing_read ? <TabPanel value={billing_read ? 0 : ""} sx={{ p: 2 }}> */}
                         {/* {superpower ? <TabPanel value={superpower === "" ? 0 : ""} sx={{ p: 2 }}> */}
-                         {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin")? 0 : ""} sx={{ p: 2 }}>
+                        {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 0 : ""} sx={{ p: 2 }}>
                           <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }} className='bill-section'>
                             <div className="Customer-Customer-Bill-Slider bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
 
@@ -3292,9 +3292,9 @@ Please Click the link to close E-Tripsheet-`}
                                             setPrevHours((prevState) => ({
                                               ...prevState,
                                               // ShedInTime:hours
-                                              vendorinfoOverviewStartTime:hours
-                                            }));                          
-                                            if (vendorinfoOverviewStartRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoOverviewStartTime === hours) {
+                                              vendorinfoOverviewStartTime: hours
+                                            }));
+                                            if (vendorinfoOverviewStartRef.current && (parseInt(minutes) === 59) && prevHours?.vendorinfoOverviewStartTime === hours) {
                                               vendorinfoOverviewStartRef.current.focus();
                                             }
                                             setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
@@ -3332,9 +3332,9 @@ Please Click the link to close E-Tripsheet-`}
                                           setPrevHours((prevState) => ({
                                             ...prevState,
                                             // ShedInTime:hours
-                                            vendorinfoOverviewCloseTime:hours
-                                          }));                          
-                                          if (vendorinfoOverviewCloseRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoOverviewCloseTime === hours) {
+                                            vendorinfoOverviewCloseTime: hours
+                                          }));
+                                          if (vendorinfoOverviewCloseRef.current && (parseInt(minutes) === 59) && prevHours?.vendorinfoOverviewCloseTime === hours) {
                                             vendorinfoOverviewCloseRef.current.focus();
                                           }
                                           setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
@@ -3450,14 +3450,14 @@ Please Click the link to close E-Tripsheet-`}
                                 <div className="input-g">
                                   <TextField
                                     name="Vendor_rateAmount"
-                                    value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount||""}
-                                    
+                                    value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || ""}
+
                                     size="small"
                                     disabled={lockdatavendorbill}
                                     onChange={handlevendor_billdata}
                                     label="Amount"
                                     autoComplete="password"
-                                    
+
                                     id="Vendor_rateAmount"
                                   />
                                 </div>
@@ -3636,11 +3636,11 @@ Please Click the link to close E-Tripsheet-`}
                               </div>
 
                             </div>
-                           
+
                             {
                               // i command this line already condition work this 
                               // Number(superpower) === 1 && billing_read === 1 ? 
-                              superpower === "SuperAdmin" &&  superpower !== "Assistant CFO" ?
+                              superpower === "SuperAdmin" && superpower !== "Assistant CFO" ?
                                 <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
                                   <p className='bill-topics'>Customer Bill</p>
                                   <div className="input-field">
@@ -4279,7 +4279,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
                         value={
                           formData.hireTypes ||
@@ -4309,8 +4309,13 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
+                        onInputChange={(event, newInputValue) => {
+                          if (event && newInputValue) {
+                            handletravelsAutocompleteChange(event, { label: newInputValue.trim() }, "travelsname");
+                          }
+                        }}
                         value={
                           selectedCustomerDatas.travelsname ||
                           formData.travelsname ||
@@ -4345,7 +4350,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
                         // onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
                         onInputChange={(event, value) => {
@@ -4391,7 +4396,7 @@ Please Click the link to close E-Tripsheet-`}
                           handleAutocompleteChange(event, value, "vehType")
                         }
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         renderInput={(params) => {
                           return (
                             <TextField {...params} name='vehType' label="Vehicle Type" inputRef={params.inputRef} />
@@ -4411,7 +4416,7 @@ Please Click the link to close E-Tripsheet-`}
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName2")}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         value={selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
                         options={vehileNames?.map((option) => ({
                           label: option,
@@ -4433,7 +4438,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         onChange={(event, value) => {
                           handleAutocompleteChange(event, value, "vehicleName");
                           if (!lockdata && value) {
@@ -4466,7 +4471,7 @@ Please Click the link to close E-Tripsheet-`}
                           book.Groups || ""
                         }
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         options={GroupTypes ? GroupTypes.map((option) => ({ label: option?.Option })) : []} // Fallback to an empty array
                         onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
                         renderInput={(params) => {
@@ -4530,7 +4535,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         onChange={(event, value) => handleDriverChange(event, value, "driverName")}
                         // onInputChange={(event, value) => handleDriverChange(event, value, "driverName")} 
                         onInputChange={(event, value) => {
@@ -4568,7 +4573,7 @@ Please Click the link to close E-Tripsheet-`}
                           book.mobileNo || selectedCustomerDatas.mobileNo || formData.mobileNo || ""}
                         onChange={handleChange}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         label="Driver Phone"
                         id="mobileNo"
                         size='small'
@@ -4592,7 +4597,7 @@ Please Click the link to close E-Tripsheet-`}
                         }
                         onChange={handleChange}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         label="Travels Email"
                         id="travelsemail"
                         size='small'
@@ -4621,7 +4626,7 @@ Please Click the link to close E-Tripsheet-`}
                             }}
 
                             // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                           disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                             value={vendorinfo?.vendor_vehicle}
                             options={vehileNames?.map((option) => ({
                               label: option,
@@ -4640,7 +4645,7 @@ Please Click the link to close E-Tripsheet-`}
                             sx={{ width: "100%" }}
 
                             // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                             onChange={(event, value) => {
                               if (!lockdata) {
                                 handleAutocompleteVendor(event, value, "vendor_duty")
@@ -4758,9 +4763,9 @@ Please Click the link to close E-Tripsheet-`}
                                   if (!lockdata) {
                                     setPrevHours((prevState) => ({
                                       ...prevState,
-                                      vendorinfoStartTime:hours
-                                    }));                          
-                                    if (vendorinfoStartRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoStartTime === hours) {
+                                      vendorinfoStartTime: hours
+                                    }));
+                                    if (vendorinfoStartRef.current && (parseInt(minutes) === 59) && prevHours?.vendorinfoStartTime === hours) {
                                       vendorinfoStartRef.current.focus();
                                     }
                                     setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
@@ -4794,9 +4799,9 @@ Please Click the link to close E-Tripsheet-`}
                                 if (!lockdata) {
                                   setPrevHours((prevState) => ({
                                     ...prevState,
-                                    vendorinfoCloseTime:hours
-                                  }));                          
-                                  if (vendorinfoCloseRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoCloseTime === hours) {
+                                    vendorinfoCloseTime: hours
+                                  }));
+                                  if (vendorinfoCloseRef.current && (parseInt(minutes) === 59) && prevHours?.vendorinfoCloseTime === hours) {
                                     vendorinfoCloseRef.current.focus();
                                   }
                                   setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });

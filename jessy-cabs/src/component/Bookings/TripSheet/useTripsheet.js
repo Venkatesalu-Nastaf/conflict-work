@@ -857,8 +857,8 @@ const useTripsheet = () => {
     const [book, setBook] = useState(bookData);
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
-    const handleCancel = () => {
-        setBook(bookData);
+    const handleCancel = () => {        
+        setBook({ ...bookData, travelsname: "" }); // Ensure travelsname is empty
         setSelectedCustomerDatas({});
         setSelectedCustomerData({});
         setFormData({});
@@ -901,6 +901,11 @@ const useTripsheet = () => {
             close_shedOut_totalDays: '',
             totalDays: '',
         })
+        setBook(prev => ({ ...prev, travelsname: "" }));
+        setSelectedCustomerData(prev => ({ ...prev, travelsname: "" }));
+        setSelectedCustomerDatas(prev => ({ ...prev, travelsname: "" }));
+        setFormData(prev => ({ ...prev, travelsname: "" }));
+        setGroupTripId("")
         setConflictKMData({
             maximumkm: 0,
             maxtripid: "",
@@ -1853,8 +1858,7 @@ const useTripsheet = () => {
     }
 
     const handletravelsAutocompleteChange = (event, value, name) => {
-        const selectedOption = value ? value.label : '';
-
+        const selectedOption = value ? value.label : '';        
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,

@@ -84,6 +84,8 @@ const pendingBill = require('./customer_master/Router/PendingBills/PendingBill')
 const AggrementPage = require('./customer_master/Router/Aggrement/aggrement')
 const DashBoardBillReport = require('./customer_master/Router/BillingDashboard/BillingDashboard');
 const VehcileDetails = require('./customer_master/Router/VehicleDetails/vehicleDetails')
+const gpsDeviceDatas = require('./customer_master/Router/GPSDeviceData/gpsDeviceData')
+
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
 // -----------------------------------------------------------------------------------------------------------
@@ -175,6 +177,8 @@ app.use('/', pendingBill);//PendingBill
 app.use('/', DashBoardBillReport)
 // --------------------------------------------------------------------------------------------
 app.use('/', VehcileDetails)
+// --------------------------------------------------------------------------------------------
+app.use('/',gpsDeviceDatas);//gpsdevicedatas
 
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;

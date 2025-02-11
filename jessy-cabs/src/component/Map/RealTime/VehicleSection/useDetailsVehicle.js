@@ -420,7 +420,20 @@ const useDetailsVehicle = () => {
 
   // }, [currentPosition, filterDate]);
 
+  useEffect(() => {
+    const fetchData = async () => {
 
+      try {
+        const response = await axios.get(`${apiUrl}/getGpsDeviceDatas`,);
+        console.log(response.data, "uuuuuuuuuuuuuuuuuuuuuuuuu");
+
+      } catch (err) {
+        console.error(err, "error");
+      }
+    };
+
+    fetchData();
+  }, [chennaiCoordinates])
 
   useEffect(() => {
     const filteredCoordinates = chennaiCoordinates.filter((point) => point.TripDate === filterDate);

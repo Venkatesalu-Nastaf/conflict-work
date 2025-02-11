@@ -52,8 +52,8 @@ const useGstReport = () => {
         { field: 'cgst', headerName: 'CGST', width: 130 },
         { field: 'sgst', headerName: 'SGST', width: 130 },
         { field: 'igst', headerName: 'IGST', width: 130 },
-        { field: "tripid", headerName: "Trip ID", width: 130 },
         { field: 'billed', headerName: 'Billed', width: 130 },
+        { field: "tripid", headerName: "Trip No", width: 130 },
     ];
 
     const apiUrl = APIURL;
@@ -405,14 +405,17 @@ const useGstReport = () => {
                 totalGST += customerData[0]?.state === stationData[0]?.state && customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== undefined ? cgst + sgst : igst;
                 totalCGSTAmount += totalcalcAmount + cgst + sgst;
                 totalIGSTAmount += totalcalcAmount + igst;
-
+                const billedAmount = customerData[0]?.state === stationData[0]?.state 
+                ? Math.round(totalcalcAmount + cgst + sgst) 
+                : Math.round(totalcalcAmount + igst);
 
                 return {
                     ...item,
                     id: index + 1,
                     billdate: billdate,
                     tripsheetdate: dayjs(item.tripsheetdate),
-                    billed: "Yes",
+                    // billed: "Yes",
+                    billed:billedAmount,
                     gstNumber: customerData[0]?.gstnumber || '',
                     gstTax: Math.round(gstTax),
                     cgst: cgst,
@@ -631,14 +634,17 @@ const useGstReport = () => {
                 totalCGSTAmount += totalcalcAmount + cgst + sgst;
                 totalIGSTAmount += totalcalcAmount + igst;
 
-
+                const billedAmount = customerData[0]?.state === stationData[0]?.state 
+                ? Math.round(totalcalcAmount + cgst + sgst) 
+                : Math.round(totalcalcAmount + igst);
 
                 return {
                     ...item,
                     id: index + 1,
                     billdate: billdate,
                     tripsheetdate: dayjs(item.tripsheetdate),
-                    billed: "Yes",
+                    // billed: "Yes",
+                    billed:billedAmount,
                     gstNumber: customerData[0]?.gstnumber || '',
                     gstTax: Math.round(gstTax),
                     cgst: cgst,

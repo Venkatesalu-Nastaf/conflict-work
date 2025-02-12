@@ -492,7 +492,7 @@ const useExeclpage = () => {
     }
 
 
-    const handledatazipDownload = async (tripheaderIndex,misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel,customerData,stationData) => {
+    const handledatazipDownload = async (tripheaderIndex,misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel,customerData,stationData,bookingMail) => {
         console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation, " console for datas")
         
         const data = invoice;
@@ -762,7 +762,7 @@ const useExeclpage = () => {
                 ).toBlob();
 
                 const pdfBytes = await blob.arrayBuffer();
-// dont delete this code
+            // dont delete this code
                 const reactPDFDocument = await PDFDocument.load(pdfBytes);
 
                 // const data = await JSON.parse(pdfData.bookattachedimage)
@@ -774,11 +774,11 @@ const useExeclpage = () => {
                 const uniqueArraybook1 = Array.from(new Set(data1?.map(JSON.stringify)))?.map(JSON.parse);
                 const uniqueJsonStringbook1 = JSON.stringify(uniqueArraybook1);
                 const datalink1 = JSON.parse(uniqueJsonStringbook1)
-
-                //  const data = await JSON.parse(pdfData.bookattachedimage)
-                // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
-                // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-                // const datalink = JSON.parse(uniqueJsonStringbook)
+                
+                const data = await JSON.parse(pdfData.bookattachedimage)
+                const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+                const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+                const datalink = JSON.parse(uniqueJsonStringbook)
 
                 
 
@@ -835,28 +835,31 @@ const useExeclpage = () => {
                         }
                     }
                 }
-                // for (const data of datalink) {
-                //     if (data.imagees !== null) {
-                //         const data2 = data.imagees.split('.').pop()
-                //         console.log(data2, "datalonk22")
-                //         if (data2 === "pdf") {
+                if(bookingMail) {
+                    console.log(bookingMail, "jhgfffffff")
+                for (const data of datalink) {
+                    if (data.imagees !== null) {
+                        const data2 = data.imagees.split('.').pop()
+                        console.log(data2, "datalonk22")
+                        if (data2 === "pdf") {
 
-                //             const filePath = `${apiurl}/images/${data.imagees}`;
-                //             console.log(filePath, "datalinkpdfpath")
+                            const filePath = `${apiurl}/images/${data.imagees}`;
+                            console.log(filePath, "datalinkpdfpath")
 
-                //             // Fetch the PDF file
-                //             const response = await fetch(filePath);
-                //             const pdfBytes = await response.arrayBuffer();
+                            // Fetch the PDF file
+                            const response = await fetch(filePath);
+                            const pdfBytes = await response.arrayBuffer();
 
-                //             // Load the PDF document
-                //             const pdfDocument = await PDFDocument.load(pdfBytes);
-                //             console.log(pdfDocument)
+                            // Load the PDF document
+                            const pdfDocument = await PDFDocument.load(pdfBytes);
+                            console.log(pdfDocument)
 
-                //             // Add the PDF document to the array
-                //             pdfDocuments.push(pdfDocument);
-                //         }
-                //     }
-                // }
+                            // Add the PDF document to the array
+                            pdfDocuments.push(pdfDocument);
+                        }
+                    }
+                }
+            }
 
 
                 const mergedPDFDocument = await PDFDocument.create();

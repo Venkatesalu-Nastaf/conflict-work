@@ -101,6 +101,7 @@ const TransferReport = ({ stationName }) => {
     misformat, setMisformat,
     servicestation,
     handleserviceInputChange,
+    handleCheckboxChange,
     pbpopupOpen,
     handlePopupClose,
     npopupOpen,
@@ -124,6 +125,7 @@ const TransferReport = ({ stationName }) => {
     rowSelectionModel,
     setRowSelectionModel,
     pdfzipdata,
+    bookingMail,
     handleKeyDown,
     handleChange,
     tripID,
@@ -149,7 +151,7 @@ const TransferReport = ({ stationName }) => {
   const [organizationsdetail1, setOrganisationDetail] = useState([]);
   const { logo } = useData();
   const [particularPdf, setParticularPdf] = useState([])
-  const [imageorganisation, setSelectedImageorganisation] = useState(null);
+  const [imageorganisation, setSelectedImageorganisation] = useState(null); 
   const [tripno, setTripno] = useState('')
   const { pdfPrint, setPdfPrint, billGenerate, setBillGenerate } = PdfData()
   const [billId, setBillId] = useState()
@@ -181,6 +183,7 @@ const TransferReport = ({ stationName }) => {
       <div></div>
     </Box>
   );
+
 
 
 
@@ -798,7 +801,7 @@ const TransferReport = ({ stationName }) => {
                     }}
                   />
                 </div>
-                <div className="input input-transfer-report" >
+                {/* <div className="input input-transfer-report" >
                   <FormControlLabel
                     value="bookingmail"
                     control={
@@ -808,7 +811,18 @@ const TransferReport = ({ stationName }) => {
                     }
                     label="Booking Mail"
                   />
+                </div> */}
+
+                <div className="input input-transfer-report">
+                      <FormControlLabel
+                        value="bookingmail"
+                        control={
+                          <Checkbox size="small" onChange={handleCheckboxChange} />
+                        }
+                        label="Booking Mail"
+                      />
                 </div>
+            
                 <div className="input input-transfer-report" >
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
@@ -927,7 +941,7 @@ const TransferReport = ({ stationName }) => {
                       </Button>
                       <Menu {...bindMenu(popupState)}>
                         {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                        <MenuItem onClick={() => handledatazipDownload(tripheaderIndex, misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel, customerData, stationData)}>  ZIP </MenuItem>
+                        <MenuItem onClick={() => handledatazipDownload(tripheaderIndex, misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel, customerData, stationData,bookingMail)}>  ZIP </MenuItem>
                         {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
                         {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
                       </Menu>
@@ -1046,7 +1060,6 @@ const TransferReport = ({ stationName }) => {
                   }}
                 />
               </Box>
-
 
             </div>
           </div>

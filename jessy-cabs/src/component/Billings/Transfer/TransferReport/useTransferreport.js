@@ -36,9 +36,10 @@ const useTransferreport = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [misformat, setMisformat] = useState('')
   const [pdfBillList, setPdfBillList] = useState('');
+  const [bookingMail, setBookingMail] = useState(false);
   const [tripID, setTripID] = useState();
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [pdfzipdata, setPdfzipdata] = useState([])
+  const [pdfzipdata, setPdfzipdata] = useState([])  
   const [selectedRow, setSelectedRow] = useState([])
   const [billedStatusCheck, setBilledStatusCheck] = useState();
   const location = useLocation()
@@ -147,6 +148,12 @@ const useTransferreport = () => {
     }
   }, [error, success, warning, info]);
 
+  const handleCheckboxChange = (event) => {
+    const isChecked = event.target.checked;
+    setBookingMail(isChecked);
+    console.log("Booking Mail", isChecked);
+  };
+
 
   const handleEInvoiceClick = (row) => {
     if (rows.length === 0) {
@@ -196,6 +203,29 @@ const useTransferreport = () => {
     setInfo(false);
     setWarning(false);
   };
+
+    //  useEffect(() => {
+    //   const fetchData = async () => {
+    //     const tripidno = tripno
+    //     try {
+    //       const response = await fetch(`${apiUrl}/booking-docPDFView/${tripidno}`);
+    //       if (response.status === 200) {
+    //         const data = await response.json();
+    //         const attachedImageUrls = data.files
+    //         setBookmailimage(attachedImageUrls);
+    //       }
+  
+    //       else {
+    //         const timer = setTimeout(fetchData, 2000);
+    //         return () => clearTimeout(timer);
+    //       }
+    //     }
+    //     catch (err) {
+    //       console.log(err, 'error');
+    //     }
+    //   }
+    //   fetchData()
+    // }, [apiUrl, tripno])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -510,7 +540,7 @@ const useTransferreport = () => {
 
     console.log("Row Selection Model (Trip Sheet IDs):", tripsheetid);
   };
-  console.log(rowSelectionModel,"rrrrrr",rowSelectionModel.length);
+  // console.log(rowSelectionModel,"rrrrrr",rowSelectionModel.length);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -925,6 +955,7 @@ const useTransferreport = () => {
     popupOpen,
     pbpopupOpen,
     handlePopupClose,
+    handleCheckboxChange,
     npopupOpen,
     lxpopupOpen,
     handleExcelDownload,
@@ -932,6 +963,8 @@ const useTransferreport = () => {
     handleETripsheetClick,
     routeData,
     roundedAmount,
+    setBookingMail,
+    bookingMail,
     sumTotalAndRounded,
     totalValue,
     organizationaddress1,
@@ -940,6 +973,7 @@ const useTransferreport = () => {
     organizationgstnumber,
     invoiceno,
     groupTripid,
+
     fromDate,
     endDate,
     invoiceDate,

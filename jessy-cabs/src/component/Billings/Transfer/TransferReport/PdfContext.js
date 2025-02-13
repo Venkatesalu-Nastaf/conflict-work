@@ -65,7 +65,7 @@ export const PdfDataProvider = ({ children }) => {
         };
 
         fetchdata();
-    });
+    },[apiUrl]);
 
     return (
         <DataContext.Provider value={{

@@ -39,7 +39,7 @@ const useTransferreport = () => {
   const [bookingMail, setBookingMail] = useState(false);
   const [tripID, setTripID] = useState();
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [pdfzipdata, setPdfzipdata] = useState([])  
+  const [pdfzipdata, setPdfzipdata] = useState([])
   const [selectedRow, setSelectedRow] = useState([])
   const [billedStatusCheck, setBilledStatusCheck] = useState();
   const location = useLocation()
@@ -204,28 +204,28 @@ const useTransferreport = () => {
     setWarning(false);
   };
 
-    //  useEffect(() => {
-    //   const fetchData = async () => {
-    //     const tripidno = tripno
-    //     try {
-    //       const response = await fetch(`${apiUrl}/booking-docPDFView/${tripidno}`);
-    //       if (response.status === 200) {
-    //         const data = await response.json();
-    //         const attachedImageUrls = data.files
-    //         setBookmailimage(attachedImageUrls);
-    //       }
-  
-    //       else {
-    //         const timer = setTimeout(fetchData, 2000);
-    //         return () => clearTimeout(timer);
-    //       }
-    //     }
-    //     catch (err) {
-    //       console.log(err, 'error');
-    //     }
-    //   }
-    //   fetchData()
-    // }, [apiUrl, tripno])
+  //  useEffect(() => {
+  //   const fetchData = async () => {
+  //     const tripidno = tripno
+  //     try {
+  //       const response = await fetch(`${apiUrl}/booking-docPDFView/${tripidno}`);
+  //       if (response.status === 200) {
+  //         const data = await response.json();
+  //         const attachedImageUrls = data.files
+  //         setBookmailimage(attachedImageUrls);
+  //       }
+
+  //       else {
+  //         const timer = setTimeout(fetchData, 2000);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     }
+  //     catch (err) {
+  //       console.log(err, 'error');
+  //     }
+  //   }
+  //   fetchData()
+  // }, [apiUrl, tripno])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -553,7 +553,7 @@ const useTransferreport = () => {
         // console.log(rowSelectionModel,'Transferreport response')
         // const customer = decodeURIComponent(storedCustomer);
         // console.log(tripID,"exceltrip",rowSelectionModel);
-        
+
         if (tripid.length >= 1) {
 
           // const response = await fetch(
@@ -569,18 +569,18 @@ const useTransferreport = () => {
           );
 
 
-          const tripData =  response.data
+          const tripData = response.data
           // console.log(tripData,"exceltripppppppppppp");
-          
+
           const flattenedTripData = tripData.flat();
           // console.log(flattenedTripData,"flattenedTripData");
           const uniqueData = flattenedTripData.filter((item, index, self) =>
             index === self.findIndex((obj) => obj.tripid === item.tripid)
           );
-          console.log(uniqueData,"flattenedTripDatauniqueData");
+          console.log(uniqueData, "flattenedTripDatauniqueData");
           setPdfzipdata(uniqueData)
           // setPdfzipdata(flattenedTripData)
-        
+
           // console.log(flattenedTripData,"trip dtatas ")
           // setSuccess(true)
         }
@@ -766,7 +766,7 @@ const useTransferreport = () => {
             InvoiceNo: InvoiceNo
           }
         });
-        const Result = response.data;        
+        const Result = response.data;
         if (Result.length > 0) {
 
           setSuccess(true)
@@ -786,7 +786,7 @@ const useTransferreport = () => {
           setGroupTripid(groupTripid)
           const Status = Result?.map(li => li.Status)
 
-          const checkStatus = Status[0];          
+          const checkStatus = Status[0];
           setBilledStatusCheck(checkStatus)
           // const tripid = Result?.map(li =>li.Trip_id)
           const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
@@ -809,10 +809,16 @@ const useTransferreport = () => {
       }
     }
   };
+  const handleCancel = () => {
+    setRows([]);
+    setPdfBillList("")
+    setMisformat("")
+  }
 
   const handleGroupKeyDown = async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
+      handleCancel();
       const GroupId = event.target.value;
 
       try {
@@ -845,7 +851,7 @@ const useTransferreport = () => {
           setTotalTransferAmount(Amount)
           const Status = Result?.map(li => li.Status)
 
-          const checkStatus = Status[0];          
+          const checkStatus = Status[0];
           setBilledStatusCheck(checkStatus)
           const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
 

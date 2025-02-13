@@ -424,7 +424,9 @@ const useDetailsVehicle = () => {
     const fetchData = async () => {
 
       try {
-        const response = await axios.get(`${apiUrl}/getGpsDeviceDatas`,);
+        const response = await axios.post(`${apiUrl}/particularGpsRecords`,{
+          selectedDate:filterDate
+        });
         console.log(response.data, "uuuuuuuuuuuuuuuuuuuuuuuuu");
 
       } catch (err) {
@@ -433,7 +435,7 @@ const useDetailsVehicle = () => {
     };
 
     fetchData();
-  }, [chennaiCoordinates])
+  }, [chennaiCoordinates,filterDate])
 
   useEffect(() => {
     const filteredCoordinates = chennaiCoordinates.filter((point) => point.TripDate === filterDate);

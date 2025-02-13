@@ -408,10 +408,10 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   // const sgst = fullAmount * 2.5 / 100
   const groupgst = billingGroupDetails[0]?.gstTax / 2;
   const groupigst = billingGroupDetails[0]?.gstTax;
-  const igst = Math.round(fullAmount * fullGST / 100);
-  const cgst = Math.round(fullAmount * gstAmount / 100);
-  const sgst = Math.round(fullAmount * gstAmount / 100);
-  const billingGroupCGST = Math.round(fullAmount * groupgst / 100 || 0)
+  const igst = (fullAmount * fullGST / 100);
+  const cgst = (fullAmount * gstAmount / 100);
+  const sgst = (fullAmount * gstAmount / 100);
+  const billingGroupCGST = (fullAmount * groupgst / 100 || 0)
   const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
 
   const park = parseInt(parking)
@@ -420,7 +420,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
   const parkpermit = park + permitcharge + tollAmount
   // const FullAmount = fullAmount + cgst + sgst + parkpermit - parseInt(advance)
-  const FullAmount = billingGroupDetails.length > 0 ? fullAmount + billingGroupCGST + billingGroupCGST + parkpermit - parseInt(advance) : fullAmount + cgst + sgst + parkpermit - parseInt(advance)
+  const FullAmount = Math.round(billingGroupDetails.length > 0 ? fullAmount + billingGroupCGST + billingGroupCGST + parkpermit - parseInt(advance) : fullAmount + cgst + sgst + parkpermit - parseInt(advance));
   const formattedFullAmount = FullAmount;
 
   const rupeestext = numWords(parseInt(formattedFullAmount));
@@ -428,7 +428,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   // final calculation
   const cgstcalc = customerData[0]?.gstTax / 2;
   const sgstcalc = customerData[0]?.gstTax / 2;
-  const cgstAmount = Math.round(fullAmount * cgstcalc / 100 || 0);
+  const cgstAmount = ((fullAmount * cgstcalc) / 100 || 0).toFixed(2);
 
   const igstcalc = customerData[0]?.gstTax;
   const igstAmount = Math.round(fullAmount * igstcalc / 100 || 0)
@@ -791,11 +791,11 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                         <>
                           <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1, }}>
                             <Text style={{ width: '200px', fontSize: 10, }}>CGST {cgstcalc}% on {fullAmount}:</Text>
-                            <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgstAmount}.00</Text>
+                            <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgstAmount}</Text>
                           </View>
                           <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginTop: 1 }}>
                             <Text style={{ width: '200px', fontSize: 10 }}>SGST {sgstcalc}% on {fullAmount}:</Text>
-                            <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgstAmount}.00</Text>
+                            <Text style={{ fontSize: 10, padding: 5, width: '60px', textAlign: 'right' }}>{cgstAmount}</Text>
                           </View>
                         </> :
 

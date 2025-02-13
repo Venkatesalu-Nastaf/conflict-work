@@ -80,7 +80,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     setInfo,
     setINFOMessage,
     handlecustomer, isbtnloading, setisbtnloading, iseditloading, setiseditloading, isbillloading, setisbillloading,
-    addEditTrigger, setAddEditTrigger
+    addEditTrigger, setAddEditTrigger, setBillingdate
     //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
@@ -106,7 +106,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
   const getRowClassName = (params) => {
 
     return params.row.status === "Billed" ? 'green-row' : 'red-row';
-}
+  }
 
   return (
     <div className="TransferDataEntry-form main-content-form Scroll-Style-hide">
@@ -139,14 +139,38 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     </div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
-                        <DatePicker
+                        {/* <DatePicker
                           id="Billingdate"
                           className='full-width'
                           label="Bill Date"
                           name="Billingdate"
-                          value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
+                          value={Billingdate || (selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null)}
+                          // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
                           format="DD/MM/YYYY"
+                        /> */}
+                        <DatePicker
+                          label="Bill Date"
+                          id="Billingdate"
+                          className="full-width"
+                          value={
+                            Billingdate
+                              ? dayjs(Billingdate) // If `Billingdate` exists, use it
+                              : selectedCustomerDatas?.Billingdate
+                                ? dayjs(selectedCustomerDatas.Billingdate) // Else, use `selectedCustomerDatas.Billingdate`
+                                : formDataTransfer?.Billdate
+                                  ? dayjs(formDataTransfer.Billdate) // Else, fallback to `formDataTransfer.Billdate`
+                                  : null
+                          }
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            handleDateChange(date, "Billingdate");
+                            setBillingdate(dayjs(date).format("YYYY-MM-DD"));
+                          }}
+                          renderInput={(params) => (
+                            <TextField {...params} value={Billingdate || selectedCustomerDatas?.Billingdate || ""} />
+                          )}
                         />
+
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
@@ -264,7 +288,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       autoComplete='off'
                     />
                   </div>
-                  
+
                   <div className="input">
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -327,7 +351,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
-                  
+
                   <div className="input">
                     <Button variant="contained" disabled={!Transfer_read} onClick={() => handleShow()} >List</Button>
                   </div>
@@ -524,33 +548,33 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                   //     backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Same hover effect for selected row
                   //   },
                   // },
-                     '& .green-row': {
-                                            backgroundColor: invoiceNoCheck ? "#eb492f" : '#65B741' ,
-                                            color: 'white',
-                                            '&:hover': {
-                                                backgroundColor: invoiceNoCheck ? "red" : '#21b90f' ,
+                  '& .green-row': {
+                    backgroundColor: invoiceNoCheck ? "#eb492f" : '#65B741',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: invoiceNoCheck ? "red" : '#21b90f',
 
-                                            },
-                                        },
-                                        '& .red-row': {
-                                            backgroundColor: '#E72929',
-                                            color: 'white',
-                                            '&:hover': {
-                                                backgroundColor: '#ec2424',
-                                            },
-                                        },
-                                        '& .Mui-selected.green-row': {
-                                            backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
-                                            '&:hover': {
-                                                backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
-                                            },
-                                        },
-                                        '& .Mui-selected.red-row': {
-                                            backgroundColor: '#E72929 !important',
-                                            '&:hover': {
-                                                backgroundColor: '#ec2424 !important',
-                                            },
-                                        },
+                    },
+                  },
+                  '& .red-row': {
+                    backgroundColor: '#E72929',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: '#ec2424',
+                    },
+                  },
+                  '& .Mui-selected.green-row': {
+                    backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
+                    '&:hover': {
+                      backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
+                    },
+                  },
+                  '& .Mui-selected.red-row': {
+                    backgroundColor: '#E72929 !important',
+                    '&:hover': {
+                      backgroundColor: '#ec2424 !important',
+                    },
+                  },
                 }}
               />
             </Box>

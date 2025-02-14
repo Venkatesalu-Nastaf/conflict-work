@@ -4313,7 +4313,7 @@ useEffect(() => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         try {
             if (tripid !== null && tripid && tripid !== "undefined") {
-                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
+                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004  
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
                     setSignImageUrl(imageUrl);
@@ -4441,37 +4441,62 @@ useEffect(() => {
         }
     };
 
+// ----------------------------------------
+    // Dont remove this code
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
 
 
+    //         try {
+    //             // const response = await fetch(`${apiUrl}/organizationdata/${encoded}`);
+    //             const response = await fetch(`${apiUrl}/organizationdata`);
+    //             if (response.status === 200) {
+
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setorganizationData(userDataArray[0]);
+    //                     setTriggerData(!triggerdata)
+
+    //                 }
+
+    //             }
+
+    //             // else {
+    //             //     const timer = setTimeout(fetchData, 2000);
+    //             //     return () => clearTimeout(timer);
+    //             // }
+    //         } catch (error) {
+    //             console.log("Error", error)
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [apiUrl, sendEmail, location, organizationdata, triggerdata]);
+// ---------------------------------
     useEffect(() => {
+
         const fetchData = async () => {
-
-
-            try {
-                // const response = await fetch(`${apiUrl}/organizationdata/${encoded}`);
+            try {   
                 const response = await fetch(`${apiUrl}/organizationdata`);
                 if (response.status === 200) {
-
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
-                        setorganizationData(userDataArray[0]);
-                        setTriggerData(!triggerdata)
-
+                        setorganizationData(userDataArray[0]); // Update state safely
                     }
-
+                } else {
+                    console.error("Error fetching data, retrying...");
+                    setTimeout(fetchData, 2000); //  Retry only on failure
                 }
-
-                // else {
-                //     const timer = setTimeout(fetchData, 2000);
-                //     return () => clearTimeout(timer);
-                // }
             } catch (error) {
-                console.log("Error", error)
+                console.log("Error", error);
             }
         };
-
+    
         fetchData();
-    }, [apiUrl, sendEmail, location, organizationdata, triggerdata]);
+    }, [apiUrl, sendEmail, location]); //  Removed `triggerdata` and `organizationdata`
+
+
 
 
 

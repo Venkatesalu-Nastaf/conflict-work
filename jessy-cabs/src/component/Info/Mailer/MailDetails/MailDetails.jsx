@@ -355,7 +355,7 @@ useEffect(() => {
           const userDataArray = await response.json();
           if (userDataArray.length > 0) {
             setOrganisationSendEmail(userDataArray[0])
-            setDataTrigger(!datatrigger)
+            // setDataTrigger(!datatrigger)
           } else {
             // setErrorMessage('User data not found.');
             // setError(true);
@@ -366,7 +366,9 @@ useEffect(() => {
       }
     };
     fetchData();
-  }, [apiurl, selecteddata, file, datatrigger]);
+  }, [apiurl, selecteddata, file,
+    //  datatri gger
+    ]);
   const handleShowdata = async () => {
     try {
       const response = await fetch(

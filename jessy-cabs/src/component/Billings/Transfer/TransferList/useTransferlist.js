@@ -663,7 +663,7 @@ row['State']
       width: 130,
       valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
     },
-    { field: "Organization_name", headerName: "Customer", width: 130 },
+    { field: "Organization_name", headerName: "Customer", width: 180 },
     {
       field: "FromDate",
       headerName: "From Date",
@@ -676,7 +676,7 @@ row['State']
       width: 150,
       valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
     },
-    { field: "guestname", headerName: "UserName", width: 150 },
+    // { field: "guestname", headerName: "UserName", width: 150 },
     { field: "Trips", headerName: "Trips", width: 150 },
     { field: "Amount", headerName: "Amount", width: 130 },
   ];

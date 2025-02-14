@@ -658,29 +658,52 @@ const useBooking = () => {
     fetchgetvehicleName()
   }, [apiUrl,])
 
+  // Dont Remove------------------------------
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(`${apiUrl}/organizationdata`);
+  //       if (response.status === 200) {
+  //         const userDataArray = await response.json();
+  //         if (userDataArray.length > 0) {
+  //           setOrganisationSendEmail(userDataArray[0])
+  //           setDatatrigger(!datatrigger)
+
+  //         }
+  //          else {
+  //           // setErrorMessage('User data not found.');
+  //           // setError(true);
+  //         }
+  //       }
+  //     }
+  //     catch {
+  //     }
+  //   };
+  //   fetchData();
+  // }, [apiUrl, datatrigger]);
+  // // console.log(nochangedata,"nochnage")
+  // --------------------------------------------------
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/organizationdata`);
-        if (response.status === 200) {
-          const userDataArray = await response.json();
-          if (userDataArray.length > 0) {
-            setOrganisationSendEmail(userDataArray[0])
-            setDatatrigger(!datatrigger)
-
-          }
-           else {
-            // setErrorMessage('User data not found.');
-            // setError(true);
-          }
+        try {
+            const response = await fetch(`${apiUrl}/organizationdata`);
+            if (response.status === 200) {
+                const userDataArray = await response.json();
+                if (userDataArray.length > 0) {
+                    setOrganisationSendEmail(userDataArray[0]);
+                } 
+                else {
+                    // setErrorMessage('User data not found.'); 
+                    // setError(true);
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
         }
-      }
-      catch {
-      }
     };
+
     fetchData();
-  }, [apiUrl, datatrigger]);
-  // console.log(nochangedata,"nochnage")
+}, [apiUrl]);
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);

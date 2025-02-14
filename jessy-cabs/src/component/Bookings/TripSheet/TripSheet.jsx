@@ -154,9 +154,10 @@ const style1 = {
 };
 
 
-const TripSheet = ({ stationName, logoImage }) => {
+const TripSheet = ({ stationName, logoImage,customerData }) => {
 
   const stationOptions = stationName?.filter(option => option?.Stationname !== "All")
+  const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
 
   const superAdminAccess = localStorage.getItem("SuperAdmin")
   const filteredStatus =
@@ -275,8 +276,8 @@ const TripSheet = ({ stationName, logoImage }) => {
     // timeToggle,HclKMCalculation,
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
-    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,
-    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount,
+    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,
+    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount,orderByDropDown,
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -1195,7 +1196,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
-                  <TextField
+                  {/* <TextField
                     name="customer"
                     size='small'
                     value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
@@ -1206,13 +1207,52 @@ const TripSheet = ({ stationName, logoImage }) => {
                     id="standard-size-customer"
                     required
                     autoComplete="password"
-                  />
+                  /> */}
+
+
+                   <Autocomplete
+                                  fullWidth
+                                  size="small"
+                                  id="customer"
+                                  freeSolo
+                                  sx={{ width: "100%" }}
+                                  // onChange={(event, value) => {
+                                  //   handleAutocompleteChangecustomer(event, value, "customer")
+                                  // }}
+
+                                  onChange={(event, value) =>{
+                                    if(superAdminAccess === "SuperAdmin"){
+                                      handleAutocompleteChangecustomer(event, value, "customer")
+                                  }
+                                  else{
+                                    setError(true)
+                                    setErrorMessage("u don't change customer data")
+                                  }
+                                  }
+                                }
+                                  value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
+                                  options={CustomerNames?.map((option) => ({
+                                    label: option.customer,
+                                  }))}
+                                  disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                                  getOptionLabel={(option) => option.label || formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || ''}
+                                  renderInput={(params) => {
+                                    return (
+                                      <TextField
+                                        {...params}
+                                        label="Customer"
+                                        name="customer"
+                                        inputRef={params.inputRef}
+                                      />
+                                    );
+                                  }}
+                                />
                 </div>
                 <div className="input">
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
-                  <TextField
+                  {/* <TextField
                     name="orderedby"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
                     disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
@@ -1224,8 +1264,55 @@ const TripSheet = ({ stationName, logoImage }) => {
                     id="standard-size-orderedby"
                     autoComplete="password"
                     required
-                  />
+                  /> */}
+
+
+                   <Autocomplete
+                                  fullWidth
+                                  size="small"
+                                  id="orderedby"
+                                  freeSolo
+                                  sx={{ width: "100%" }}
+                                  onChange={(event, value) =>{
+                                    if(superAdminAccess === "SuperAdmin"){
+                                    handleAutocompleteChangecustomer(event, value, "orderedby")
+                                  }
+                                  else{
+                                    setError(true)
+                                    setErrorMessage("u don't change customer data")
+                                  }
+                                }
+                                  }
+                                  // onInputChange={(event, value) =>{
+                                  //   if(event !== null){
+                                  //   setNoChangeData({ ...nochangedata,orderedby: event.target.value })
+                                  //   }
+                                  //    handleAutocompleteChange(event, value, "orderedby")
+                                  // }}
+                  
+                                  value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
+
+                                  disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                                  options={orderByDropDown?.map((option) => ({
+                  
+                                    label: option?.orderedby,
+                                  }))}
+                                  getOptionLabel={(option) => option?.label || formData.orderedby || selectedCustomerData.orderedby || book.orderedby ||""}
+                                  renderInput={(params) => {
+                                    return (
+                                      <TextField
+                                        {...params}
+                                        label="Ordered By"
+                                        name="orderedby"
+                                        inputRef={params.inputRef}
+                                      />
+                  
+                                    );
+                                  }}
+                                />
+                  
                 </div>
+                {/* {console.log(formData.mobile,"fo",selectedCustomerData.mobile,"bb",book.mobile,"mobile")} */}
 
                 <div className="input">
                   <div className="icone">
@@ -1234,7 +1321,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <TextField
                     name="mobile"
                     value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
-                    onChange={handleChange}
+                    // onChange={handleChange}
                     label="Mobile"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
                     disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
@@ -1252,7 +1339,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <TextField
                     name="orderbyemail"
                     value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
-                    onChange={handleChange}
+                    // onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
                     disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Order By Email"
@@ -3668,7 +3755,7 @@ Please Click the link to close E-Tripsheet-`}
                                       </div>
                                       <TextField
                                         name="amount5"
-                                        value={package_amount || 0}
+                                        value={package_amount || ''}
                                         size="small"
                                         label="Amount"
                                         onChange={handlecalcpackageamount}

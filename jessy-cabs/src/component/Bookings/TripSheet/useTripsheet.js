@@ -293,6 +293,7 @@ const useTripsheet = () => {
     const [nochangedata,setNoChangeData]=useState({})
     const [checksignandMapverify, setCheckSignandMapVerify] = useState(false)
     const [checksignmapmessage, setCheckSignMapMessage] = useState('')
+    const [orderByDropDown, setOrderByDropDown] = useState([])
    
     
     const maplogcolumns = [
@@ -527,7 +528,7 @@ const useTripsheet = () => {
                 const data = response.data;
                 setRow(data);
                 setMaplogimgPopupOpen(true);
-                console.log(data, 'mapdata')
+                // console.log(data, 'mapdata')
             }
         } catch {
         }
@@ -649,7 +650,7 @@ const useTripsheet = () => {
         const timetoggledata = Number(params.get('TimeToggle')) || 0
         const timetogglevendor = Number(params.get('VendorTimeToggle')) || 0
         const lockdatavendor = Number(params.get('lockdatavalue'))
-        console.log(lockdatavendor,"lockvendorlog")
+        // console.log(lockdatavendor,"lockvendorlog")
         setHybridHclNavigate(HCLDATA)
         setTimeToggleNaviagate(timetoggledata)
         setTimeToggleVendorNaviagate(timetogglevendor)
@@ -984,6 +985,126 @@ const useTripsheet = () => {
 
         }
     };
+
+
+
+
+
+    const handleAutocompleteChangecustomer = (event, value, name) => {
+  
+        const selectedOption = value ? value.label : "";
+    
+        if (name === "orderedby") {
+          const selectedOrder = orderByDropDown?.find(option => option?.orderedby === value?.label);
+        //   console.log(selectedOrder,"order")
+          if (selectedOrder) {
+            setBook(prevState => ({
+              ...prevState,
+              orderedby: value?.label,
+              mobile: selectedOrder.orderByMobileNo,
+              orderbyemail: selectedOrder.orderByEmail,
+              // servicestation: selectedOrder.servicestation
+            }));
+    
+            setSelectedCustomerData((prevState) => ({
+              ...prevState,
+              orderedby: value?.label,
+              mobile: selectedOrder.orderByMobileNo,
+              orderbyemail: selectedOrder.orderByEmail,
+              // servicestation: selectedOrder.servicestation
+            }));
+            setFormData((prevState) => ({
+              ...prevState,
+              orderedby: value?.label,
+              mobile: selectedOrder.orderByMobileNo,
+              orderbyemail: selectedOrder.orderByEmail,
+              // servicestation: selectedOrder.servicestation
+            }));
+    
+            // setNoChangeData((prevState) => ({
+            //   ...prevState,
+            //   orderedby: value?.label,
+            //   orderByMobileNo: selectedOrder.orderByMobileNo,
+            //   orderByEmail: selectedOrder.orderByEmail,
+            // }));
+    
+          } 
+        }
+        else {
+            // setBook(prevState => ({
+            //   ...prevState,
+            //   [name]: selectedOption
+            // }));
+            // setSelectedCustomerData((prevData) => ({
+            //   ...prevData,
+            //   [name]: selectedOption,
+            // }));
+
+            setBook(prevState => ({
+                ...prevState,
+                [name]: selectedOption,
+                orderedby:'-',
+                mobile:'-',
+                orderbyemail:'-',
+                // servicestation: selectedOrder.servicestation
+              }));
+      
+              setSelectedCustomerData((prevState) => ({
+                ...prevState,
+                orderedby:'-',
+                [name]: selectedOption,
+                mobile:'-',
+                orderbyemail:'-',
+                // servicestation: selectedOrder.servicestation
+              }));
+              setFormData((prevState) => ({
+                ...prevState,
+                orderedby:'-',
+                [name]: selectedOption,
+                mobile:'-',
+                orderbyemail:'-',
+                // servicestation: selectedOrder.servicestation
+              }));
+              setNoChangeData((prevValues) => ({
+                ...prevValues,
+                [name]: selectedOption,
+            }));
+        }
+    }
+
+
+    const custmorName = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || '';
+    // console.log(formData.customer ,"form",selectedCustomerData.customer,"dd",book.customer,"ff",packageData.customer,"cust")
+
+    useEffect(() => {
+  
+      const fetchcustomerData = async () => {
+        try {
+          if (!custmorName) return
+          const response = await axios.get(
+            `${apiUrl}/name-orderby/${custmorName}`
+          );
+          const resData = response.data;
+        // console.log(resData,"cust")
+          if (resData.success) {
+            setOrderByDropDown(resData.data)
+            // console.log(resData.data,"custjjj")
+            
+            
+            // setBook(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
+            // setSelectedCustomerData(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
+          } else {
+            setOrderByDropDown([])
+            // setBook(prev => ({ ...prev, orderedby: '', orderByEmail: '', orderByMobileNo: "" }))
+            // setSelectedCustomerData(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
+          }
+        } catch (error) {
+          // setError(true);
+          // setErrorMessage("Error retrieving vehicle details.");
+        }
+      }
+      fetchcustomerData()
+    }, [custmorName, apiUrl])
 
     const handleDelete = async () => {
         const tripid = selectedCustomerData.tripid;
@@ -2317,6 +2438,7 @@ useEffect(() => {
             ''
         );
     }, [formData.customer, selectedCustomerData.customer, book.customer, packageData.customer]);
+    // console.log(customerdatatimetoggle,"toggle",timeToggle)
     const fetchdatacustomerTimeToggle = useCallback(async () => {
         if (customerdatatimetoggle) {
             try {
@@ -2326,9 +2448,11 @@ useEffect(() => {
                     const res = data[0].TimeToggle;
 
 
-                    setTimeToggle(res); // Update state with the fetched result
+                    setTimeToggle(res);
+                    setTimeToggleNaviagate(res) // Update state with the fetched result
                 } else {
                     setTimeToggle(0);
+                    setTimeToggleNaviagate(0)
                 }
             } catch (error) {
                 console.error('Error fetching customer data:', error);
@@ -2362,13 +2486,16 @@ useEffect(() => {
                     const res = data[0].TimeToggle;
                     // console.log(typeof(res),"custommmmm")
 
-                    setTimeToggleVendor(res); // Update state with the fetched result
+                    setTimeToggleVendor(res); 
+                    setTimeToggleVendorNaviagate(res)// Update state with the fetched result
                 } else {
                     setTimeToggleVendor(0);
+                    setTimeToggleVendorNaviagate(0)
                 }
             } catch (error) {
                 console.error('Error fetching customer data:', error);
                 setTimeToggleVendor(0);
+                setTimeToggleVendorNaviagate(0)
             }
         } else {
             setTimeToggleVendor(0);
@@ -2390,17 +2517,20 @@ useEffect(() => {
                     const res = data[0].hybrid;
                     // console.log(data,"cust")
                     setHybridHclCustomer(res)
+                    setHybridHclNavigate(res)
                     // Update state with the fetched result
                 } else {
-                    setHybridHclCustomer('')
+                    setHybridHclCustomer(0)
+                    setHybridHclNavigate(0)
                 }
             } catch (error) {
 
                 console.error('Error fetching customer data:', error);
-                setHybridHclCustomer('')
+                setHybridHclCustomer(0)
+                setHybridHclNavigate(0)
             }
         } else {
-            setHybridHclCustomer('')
+            setHybridHclCustomer(0)
 
         }
     }, [apiUrl, customerdatatimetoggle]); // Memoize the fetch function based on these dependencies
@@ -2435,6 +2565,7 @@ useEffect(() => {
         const duty = formData.duty || selectedCustomerData.duty || book.duty;
         const datatimetoggle = timeToggle || timetogglenavigate
         // console.log( timeToggle,"hhh",timetogglenavigate,datatimetoggle)
+        // console.log(datatimetoggle,"toggletime",timeToggle,"bothna",timetogglenavigate)
         const starttimehybrid = removeSeconds(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime)
 
         const closetimehybrid = removeSeconds(formData.closetime || selectedCustomerData.closetime || book.closetime)
@@ -2890,6 +3021,7 @@ useEffect(() => {
             return ''
         }
         else {
+            
 
             let additionalHours = 0;
             let additionalMinutesValue = 0;
@@ -3136,6 +3268,7 @@ useEffect(() => {
         const startKm = formData.shedout || book.shedout || selectedCustomerData.shedout || '';
         const closeKm = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
         const hybridatahcl = hybridhclcustomer || hybridhclnavigate
+        // console.log(typeof(hybridatahcl),"hcl")
 
         // if (hybridhclcustomer === 1) {
         if (hybridatahcl === 1) {
@@ -3355,6 +3488,7 @@ useEffect(() => {
         const totalDays = calculatevendorTotalDays()
         // const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
         const datatimetoggle = timeTogglevendor || timetogglevendornavigate
+        // console.log(datatimetoggle,"togglevendor",timeTogglevendor , timetogglevendornavigate)
 
 
         // let additionalMinutes = 0;
@@ -3958,7 +4092,7 @@ useEffect(() => {
                             setdriverBeta_amount(bookingDetails.driverBeta_amount);
                             setTotalcalcAmount(bookingDetails.totalcalcAmount);
                             setGroupTripId(bookingDetails.GroupTripId)
-                            setHybridHclCustomer(bookingDetails.Hybriddata)
+                            setHybridHclCustomer(bookingDetails.Hybriddata);
                             setTimeToggle(bookingDetails.TimeToggleData)
                             setTimeToggleVendor(bookingDetails.VendorTimeToggle)
                             setEnterTrigger((prev) => !prev)
@@ -4327,10 +4461,10 @@ useEffect(() => {
 
                 }
 
-                else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
-                }
+                // else {
+                //     const timer = setTimeout(fetchData, 2000);
+                //     return () => clearTimeout(timer);
+                // }
             } catch (error) {
                 console.log("Error", error)
             }
@@ -4362,7 +4496,7 @@ useEffect(() => {
         // // Calculate the total hours
         // const totalHours = hours + (minutes || 0) / 60; // if no minutes provided, consider it as 0
         // return totalHours;
-        console.log(timeString, "hhh")
+        // console.log(timeString, "hhh")
         const [hoursPart, minutesPart] = timeString.split('h');
 
         // Convert hours to an integer
@@ -4372,14 +4506,14 @@ useEffect(() => {
         const minutes = parseInt(minutesPart) || 0;
 
         // Convert minutes to a decimal format with two digits
-        console.log(minutes, "mmm")
+        // console.log(minutes, "mmm")
         const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes.toString();
-        console.log(formattedMinutes, "mmminutes")
+        // console.log(formattedMinutes, "mmminutes")
 
         // Combine hours and minutes into a single number as a string and convert to a number
         // const totalHours = parseFloat(`${hours}.${formattedMinutes}`);
         const totalHours = `${hours}.${formattedMinutes}`;
-        console.log(totalHours, "hooo")
+        // console.log(totalHours, "hooo")
         return totalHours;
     }
 
@@ -4914,7 +5048,7 @@ useEffect(() => {
 
 
     const fetchdatasupplierraratenametryyyy = async () => {
-        console.log("vendortravelnametryy", selectedCustomerDatas.travelsname, "fff", formData.travelsname, "dd", selectedCustomerData.travelsname, "bb", book.travelsname)
+        // console.log("vendortravelnametryy", selectedCustomerDatas.travelsname, "fff", formData.travelsname, "dd", selectedCustomerData.travelsname, "bb", book.travelsname)
         const supplierdata = selectedCustomerDatas.travelsname ||
             formData.travelsname ||
             selectedCustomerData.travelsname ||
@@ -7173,7 +7307,7 @@ useEffect(() => {
         isAddload, setisAddload, isEditload, setisEditload,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
         minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage,
-        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata,handlecalcpackage,handlecalcpackageamount,
+        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata,handlecalcpackage,handlecalcpackageamount,handleAutocompleteChangecustomer,orderByDropDown,
 
     };
 };

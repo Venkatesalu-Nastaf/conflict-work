@@ -8,7 +8,7 @@ import { saveAs } from 'file-saver';
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
 
-const useAccountinfo = () => {
+const useVendorinfo = () => {
   const apiUrl = APIURL;
   // const user_id = localStorage.getItem('useridno');
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -403,7 +403,7 @@ const useAccountinfo = () => {
   const columns = [
     { field: "id", headerName: "Sno", width: 100 },
     // { field: "cperson", headerName: "Supplier_Name", width: 160 },
-    { field: "accountNo", headerName: "ACC_ID", width: 160 },
+    { field: "accountNo", headerName: "Vendor_ID", width: 160 },
     { field: "travelsname", headerName: "Travel_Name", width: 160 },
     // { field: "stations", headerName: "Stations", width: 160 },
     { field: "Accdate", headerName: "Acc_Date", width: 160 , valueFormatter: (params) => {
@@ -1033,4 +1033,4 @@ const useAccountinfo = () => {
   };
 };
 
-export default useAccountinfo;
+export default useVendorinfo;

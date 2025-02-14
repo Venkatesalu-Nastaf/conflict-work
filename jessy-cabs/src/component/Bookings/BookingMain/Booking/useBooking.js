@@ -54,6 +54,10 @@ const useBooking = () => {
   const [isEditbtnload,setisEditbtnload] = useState(false)
    const [deletefile, setDeleteFile] = useState([])
    const [deletefiledata, setDeleteFiledata] = useState([])
+
+
+   const Roledatauser = localStorage.getItem("SuperAdmin")
+   const datachangeAdmin = Roledatauser === "SuperAdmin" ? true :false;
   
   const [formValues, setFormValues] = useState({
     guestname: "",
@@ -749,6 +753,12 @@ const useBooking = () => {
     const file = e.target.files[0]
     if (file) {
       setFile(file)
+      setNoChangeData((prevValues) => ({
+        ...prevValues,
+        ["Attachimage"]:file,
+      }));
+
+      
     }
     if (booking_no && file) {
       addPdf(booking_no, file)
@@ -1265,7 +1275,7 @@ if (Object.keys(nochangedata).length === 0) {
       };
 
       const editbookno = book.bookingno || selectedCustomerData.bookingno || formData.bookingno
-      const response = await axios.put(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`,
+      const response = await axios.put(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}/${datachangeAdmin}`,
         updatedCustomer
       )
       handlebooklogDetails(updatedCustomer, editbookno, "Edited")
@@ -1280,6 +1290,7 @@ if (Object.keys(nochangedata).length === 0) {
         } else {
           setInfo(true);
           setInfoMessage(response.data.message);
+          setisEditbtnload(false)
         }
         setEdit(false)
 
@@ -1342,6 +1353,9 @@ if (Object.keys(nochangedata).length === 0) {
     //   setErrorMessage("Check Network Connection");
     // }
   // };
+
+
+  // console.log(isEditbtnload,"load")
 
   const handleKeyDown = async (event) => {
     if (event.key === "Enter") {
@@ -1492,6 +1506,10 @@ if (Object.keys(nochangedata).length === 0) {
           setImagedata([]);
           setDeleteFile([]);
           setSelectAll(false);
+          setNoChangeData((prevValues) => ({
+            ...prevValues,
+            ["deleteimage"]: "yesdeleted",
+          }));
         }
       })
       .catch((err) => {

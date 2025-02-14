@@ -1,7 +1,7 @@
 import React, {useContext } from 'react';
 import 'jspdf-autotable';
 import dayjs from "dayjs";
-import "./Accountinfo.css";
+import "./Vendorinfo.css";
 import Box from "@mui/material/Box";
 import Menu from '@mui/material/Menu';
 import Button from "@mui/material/Button";
@@ -26,7 +26,7 @@ import StoreIcon from "@mui/icons-material/Store";
 import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import { Undergroup, Vehicleinfo } from "./Accountinfo";
+import { Undergroup, Vehicleinfo } from "./Vendorinfo";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -47,7 +47,7 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import useAccountinfo from './useAccountinfo';
+import useVendorinfo from './useVendorinfo';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { GrSelect } from "react-icons/gr";
 import { FaCarOn } from "react-icons/fa6";
@@ -64,7 +64,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const Accuntinfo = ({ stationName }) => {
+const Vendorinfo = ({ stationName }) => {
 
 
 
@@ -106,7 +106,7 @@ const Accuntinfo = ({ stationName }) => {
     //  handleAutocompleteChangestations,
     handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata,
     loading,isAButtonLoading
-  } = useAccountinfo();
+  } = useVendorinfo();
 
 
 
@@ -129,7 +129,7 @@ const Accuntinfo = ({ stationName }) => {
                 </div>
                 <TextField
                   name="accountNo"
-                  label="Account Id"
+                  label="Vendor Id"
                   margin="normal"
                   size="small"
                   id="accountNo"
@@ -723,4 +723,4 @@ const Accuntinfo = ({ stationName }) => {
   );
 };
 
-export default Accuntinfo;
+export default Vendorinfo;

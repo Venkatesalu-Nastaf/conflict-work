@@ -7,6 +7,7 @@ const db = require('../../../db');
 // Add account_info database
 router.post('/accountinfo', (req, res) => {
     const bookData = req.body;
+    
     console.log(bookData, "kk");
     db.query('INSERT INTO accountinfo SET ?', bookData, (err, result) => {
         if (err) {

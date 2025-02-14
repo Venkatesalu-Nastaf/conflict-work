@@ -457,7 +457,7 @@ function App() {
       }
     };
     fetchgetvehicleName()
-  }, [apiUrl, vehileName])
+  }, [apiUrl])
 
 
   // const getElement = () => {
@@ -566,7 +566,7 @@ function App() {
                 />
                 <Route
                   path="/home/bookings/tripsheet"
-                  element={TriSheet !== 0 && TriSheet !== undefined ? (<TripSheet stationName={stationName} logoImage={logo} />) : (<NoPermission />)}
+                  element={TriSheet !== 0 && TriSheet !== undefined ? (<TripSheet stationName={stationName} customerData={customerData} logoImage={logo} />) : (<NoPermission />)}
                 />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route

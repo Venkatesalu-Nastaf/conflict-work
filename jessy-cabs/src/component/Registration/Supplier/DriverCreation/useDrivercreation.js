@@ -1035,7 +1035,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
               }
                
 
-            await axios.post(`${apiUrl}/drivercreation`, formData,)
+            await axios.post(`${apiUrl}/drivercreation`, formData)
             
             const response = await axios.get(`${apiUrl}/lastdrivergetid`);
             const lastdriveridno = response.data.driverid;

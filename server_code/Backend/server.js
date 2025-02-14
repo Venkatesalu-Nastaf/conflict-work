@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 
 //connect using route
 const customerRoutes = require('./customer_master/Router/customer/Customer');
-const accountinfoRoutes = require('./customer_master/Router/supplier/accountinginfo');
+const vendorinfoRoutes = require('./customer_master/Router/supplier/vendorinfo');
 const vehicleinfoRouter = require('./customer_master/Router/vehicle Info/vehicleinfo');
 const bookingRouter = require('./customer_master/Router/Booking/booking');
 
@@ -89,7 +89,7 @@ const gpsDeviceDatas = require('./customer_master/Router/GPSDeviceData/gpsDevice
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', accountinfoRoutes); // account_info page database:-
+app.use('/', vendorinfoRoutes); // account_info page database:-
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', vehicleinfoRouter); // vehicle_info page database
 // -----------------------------------------------------------------------------------------------------------

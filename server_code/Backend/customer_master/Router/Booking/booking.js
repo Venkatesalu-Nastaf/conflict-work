@@ -233,17 +233,24 @@ router.delete('/bookingDLETEUPLOAD/:bookingno', async (req, res) => {
 
 
 // update booking details
-router.put('/booking/:bookingno', async (req, res) => {
+router.put('/booking/:bookingno/:dataadmin', async (req, res) => {
     const bookingno = req.params.bookingno;
+    const datasuperADMIN = req.params.dataadmin;
+    const dd = datasuperADMIN === "true" ? "yes":"no"
+  
     const updatedCustomerData = req.body;
     try {
         //check this booking added tripsheet or not
+        if(dd === "no"){
         const checkBookingId = await query('select bookingno from tripsheet where bookingno=?', [bookingno])
         if (checkBookingId.length > 0) return res.json({ message: "This Booking dosen't allowed to edit", error: false, success: true })
+        }
 
         // Update the booking
+       
         const updateResult = await query('UPDATE booking SET ? WHERE bookingno = ?', [updatedCustomerData, bookingno])
         if (updateResult.affectedRows === 0) return res.json({ message: "Booking Id not found", error: false, success: true });
+        
 
         return res.status(201).json({ message: "Updated successfully", success: true, error: false });
 

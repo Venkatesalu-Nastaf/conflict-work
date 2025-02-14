@@ -425,6 +425,7 @@ setSationNameforUser(updatedData);
                     id="Role"
                     style={{ width: '100%' }}
                   /> */}
+                 
                         
                         <Autocomplete
                                   fullWidth
@@ -755,6 +756,7 @@ setSationNameforUser(updatedData);
                       <div className='user-table-permission' style={{ cursor: "pointer" }} onClick={() => {
                         togglePermission(row);
                         handleRowClickUser(row)
+                        setRoleFielddropdown('')
                       }}
                         key={index}>
                         {/* <img src={row.profile_image} alt="profile" width="50" /> */}

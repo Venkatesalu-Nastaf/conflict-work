@@ -162,6 +162,21 @@ const usePackagerateentry = () => {
         }));
     };
 
+    const handleChange11 = (event, index) => {
+        const { name, value } = event.target;
+
+        const newFieldSets = [...fieldSets];
+        newFieldSets[index][name] = value;
+        newFieldSets[index]["package"] = `${newFieldSets[index]["Hours"]}HRS&${newFieldSets[index]["KMS"]}KMS `;
+        setFieldSets(newFieldSets);
+
+        setCommonData(prevCommonData => ({
+            ...prevCommonData,
+            [name]: value
+        }));
+    };
+    // console.log(commonData,"Data")
+
     const handleAutocompleteChange = (event, value, name, index) => {
         const selectedOption = value ? value.label : '';
 
@@ -408,6 +423,7 @@ const usePackagerateentry = () => {
                 const normalizedFieldSet = normalizeFields(fieldSet, fieldsToDefault);
                 return { ...commonData, ...normalizedFieldSet };
               });
+            //   console.log(requestData,"Dataadd")
             // const requestData = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
             await axios.post(`${apiUrl}/ratemanagement-add`, requestData);
             // If successful, update state
@@ -587,7 +603,7 @@ const usePackagerateentry = () => {
         columns,
         isEditMode,
         handleEdit,
-        handleShow,
+        handleShow,handleChange11,
         handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage,validitydata,loading,setLoading,isbtnloading,setisbtnloading
     };
 };

@@ -46,6 +46,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const PackageRateEntery = ({ vehileName, stationname }) => {
 
+  // console.log(vehileName,"N")
   const {
     rows,
     error,
@@ -65,6 +66,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
     columns,
     isEditMode,
     handleEdit,
+    handleChange11,
     // datevalidity,
     handleShow,
     fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata,loading,setLoading,isbtnloading,setisbtnloading
@@ -134,6 +136,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                     }
                   />
                 </div>
+                
                 <div className="input PackageRateEntery-input">
                   <div className="icone">
                     <CarCrashIcon color="action" />
@@ -207,6 +210,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
             </div>
           </div>
         </div>
+        
 
         {/* //-----------------------------------------addpackage------------------------------- */}
 
@@ -238,6 +242,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       }
                       }
                     />
+                     {console.log(fieldSet?.duty === "Local" ? true :false,"Local",fieldSet?.duty)}
                   </div>
                   <div className="input">
                     <TextField
@@ -248,6 +253,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       label="Package"
                       name="package"
                       autoComplete="new-password"
+                      disabled={fieldSet?.duty === "Local" ? true :false}
                       value={fieldSet.package || ""}
                       onChange={(e) => handleChange(e, index)}
                     />
@@ -262,7 +268,19 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       name="Hours"
                       autoComplete="new-password"
                       value={fieldSet.Hours || ""}
-                      onChange={(e) => handleChange(e, index)}
+                      // onChange={(e) => handleChange(e, index)}
+                      onChange={(e) =>
+                      {
+                        if(fieldSet?.duty === "Local"){
+
+                          handleChange11(e, index)
+                        // handleChange(e, index)
+                      }
+                      else{
+                        handleChange(e, index)
+                      }
+                      }
+                    }
                     />
                   </div>
                   <div className="input">
@@ -275,7 +293,19 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       name="KMS"
                       autoComplete="new-password"
                       value={fieldSet.KMS || ""}
-                      onChange={(e) => handleChange(e, index)}
+                      // onChange={(e) => handleChange(e, index)}
+                      onChange={(e) =>
+                        {
+                          if(fieldSet?.duty === "Local"){
+  
+                          
+                          handleChange11(e, index)
+                        }
+                        else{
+                          handleChange(e, index)
+                        }
+                        }
+                      }
                     />
                   </div>
                   <div className="input">

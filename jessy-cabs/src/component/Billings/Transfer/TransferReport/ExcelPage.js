@@ -293,7 +293,9 @@ const useExeclpage = () => {
                     singleData["VendorName"] = " Jessy Cabs"
                     singleData["UserNos_Occupancy"] = 1
                     singleData["OutstationCharges"] = 0
-                    singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    // singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"])  : singleData["calcPackage"];
+                    singleData["package_amount"] = singleData["duty"] === "Outstation"   ?   singleData["ex_kmAmount"] : singleData["package_amount"]
                     singleData["vechicletype"] = singleData["vehType"]
                     // singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
@@ -561,7 +563,9 @@ const useExeclpage = () => {
                     singleData["OutstationCharges"] = 0
                     singleData["vechicletype"] = singleData["vehType"]
                     singleData["vehTypebilling"] = singleData["vehType"]
-                    singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    // singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"])  : singleData["calcPackage"];
+                    singleData["package_amount"] = singleData["duty"] === "Outstation"   ?   singleData["ex_kmAmount"] : singleData["package_amount"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'

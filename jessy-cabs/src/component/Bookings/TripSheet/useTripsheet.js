@@ -6135,24 +6135,47 @@ useEffect(() => {
         }
     };
 
+// ----------------Dont Remove This-------------------
+    // const TripID = formData.tripid || selectedCustomerData.tripid || book.tripid
 
-    const TripID = formData.tripid || selectedCustomerData.tripid || book.tripid
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid
+    //         try {
+
+    //             const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${tripid}`)
+    //             setManualTripID(response.data)
+    //         }
+    //         catch (error) {
+    //             // console.log(error);
+
+    //         }
+    //     }    
+    //     fetchData()
+    // }, [manualMarkTrigger, TripID, mapButtonTrigger, mapimgpopupOpen])
+// ---------------------------------------------------------
 
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid
+            const tripid = formData?.tripid || selectedCustomerData?.tripid || book?.tripid;
+    
+            if (!tripid) {
+                console.warn("TripID is missing, skipping API call");
+                return; 
+            }
+    
             try {
-
-                const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${tripid}`)
-                setManualTripID(response.data)
+                const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${encodeURIComponent(tripid)}`);
+                setManualTripID(response.data);
             }
             catch (error) {
-                // console.log(error);
-
+                console.error("Error fetching trip data:", error);
             }
-        }
-        fetchData()
-    }, [manualMarkTrigger, TripID, mapButtonTrigger, mapimgpopupOpen])
+        };
+    
+        fetchData();
+    }, [manualMarkTrigger, formData.tripid, selectedCustomerData.tripid, book.tripid, mapButtonTrigger, mapimgpopupOpen]);  
+    
     const handleDeleteMap = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         try {
@@ -7112,88 +7135,144 @@ useEffect(() => {
     useEffect(() => {
         EditButtonHide()
     }, [statuschecking])
-
+  
     
 
     // getVehcileHistoryData in vehcileHistoryData
 
 
+    // useEffect(() => {
+    //     const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo;
+    //     const datecheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate;
+
+    //     const fetchData = async () => {
+
+    //         try {
+    //             const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, {
+    //                 vehicleNo: vehicleNo,
+    //                 dateCheck: datecheck
+    //             });
+    //             // console.log(response.data, "conflictdataaaa");
+
+    //             const mainDatas = response.data;
+    //             const minData = mainDatas.reduce((min, current) => {
+    //                 const timesWithDates = [
+    //                     { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
+    //                     { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
+    //                     { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
+    //                     { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
+    //                 ].filter(entry => entry.time && entry.date);
+
+    //                 // Find the minimum time in the current row
+    //                 const minCurrentRow = timesWithDates.reduce((minRow, currentRow) => {
+    //                     return parseFloat(currentRow.time) < parseFloat(minRow.time) ? currentRow : minRow;
+    //                 }, timesWithDates[0]);
+
+    //                 // Compare with the overall minimum
+    //                 return parseFloat(minCurrentRow.time) < parseFloat(min.time) ? minCurrentRow : min;
+    //             }, { time: Infinity, date: null, tripid: null }); // Start with an impossibly high time
+    //             setMinTimeData(minData)
+
+
+
+    //             const maxData = mainDatas.reduce((max, current) => {
+    //                 const timesWithDates = [
+    //                     { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
+    //                     { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
+    //                     { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
+    //                     { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
+    //                 ].filter(entry => entry.time && entry.date);
+
+    //                 // Find the maximum time in the current row
+    //                 const maxCurrentRow = timesWithDates.reduce((maxRow, currentRow) => {
+    //                     return parseFloat(currentRow.time) > parseFloat(maxRow.time) ? currentRow : maxRow;
+    //                 }, timesWithDates[0]);
+
+    //                 // Compare with the overall maximum
+    //                 return parseFloat(maxCurrentRow.time) > parseFloat(max.time) ? maxCurrentRow : max;
+    //             }, { time: -Infinity, date: null, tripid: null }); // Start with an impossibly low time
+    //             setMaxTimeData(maxData)
+
+
+    //             // const rowsWithShedInDate = mainDatas?.filter(current =>
+    //             //     current?.shedindate !== null && current?.shedindate !== datecheck
+    //             // );
+    //             const notEqualRows = mainDatas?.filter(current =>
+    //                 current?.shedindate !== null && current?.shedindate !== datecheck
+    //             );
+
+    //             const equalRows = mainDatas?.filter(current =>
+    //                 current?.shedindate !== null && current?.shedindate === datecheck
+    //             );
+    //             const rowsWithShedInDate = notEqualRows?.length > 0 ? notEqualRows : equalRows;
+
+    //             setShedInTimeData(rowsWithShedInDate)
+
+
+    //         }
+    //         catch (err) {
+    //             console.log(err, "error");
+
+    //         }
+    //     }
+    //     fetchData()
+    // }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues])
     useEffect(() => {
-        const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo;
-        const datecheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate;
-
-        const fetchData = async () => {
-
-            try {
-                const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, {
-                    vehicleNo: vehicleNo,
-                    dateCheck: datecheck
-                });
-                // console.log(response.data, "conflictdataaaa");
-
-                const mainDatas = response.data;
-                const minData = mainDatas.reduce((min, current) => {
-                    const timesWithDates = [
-                        { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
-                        { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
-                        { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
-                        { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
-                    ].filter(entry => entry.time && entry.date);
-
-                    // Find the minimum time in the current row
-                    const minCurrentRow = timesWithDates.reduce((minRow, currentRow) => {
-                        return parseFloat(currentRow.time) < parseFloat(minRow.time) ? currentRow : minRow;
-                    }, timesWithDates[0]);
-
-                    // Compare with the overall minimum
-                    return parseFloat(minCurrentRow.time) < parseFloat(min.time) ? minCurrentRow : min;
-                }, { time: Infinity, date: null, tripid: null }); // Start with an impossibly high time
-                setMinTimeData(minData)
-
-
-
-                const maxData = mainDatas.reduce((max, current) => {
-                    const timesWithDates = [
-                        { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
-                        { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
-                        { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
-                        { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
-                    ].filter(entry => entry.time && entry.date);
-
-                    // Find the maximum time in the current row
-                    const maxCurrentRow = timesWithDates.reduce((maxRow, currentRow) => {
-                        return parseFloat(currentRow.time) > parseFloat(maxRow.time) ? currentRow : maxRow;
-                    }, timesWithDates[0]);
-
-                    // Compare with the overall maximum
-                    return parseFloat(maxCurrentRow.time) > parseFloat(max.time) ? maxCurrentRow : max;
-                }, { time: -Infinity, date: null, tripid: null }); // Start with an impossibly low time
-                setMaxTimeData(maxData)
-
-
-                // const rowsWithShedInDate = mainDatas?.filter(current =>
-                //     current?.shedindate !== null && current?.shedindate !== datecheck
-                // );
-                const notEqualRows = mainDatas?.filter(current =>
-                    current?.shedindate !== null && current?.shedindate !== datecheck
-                );
-
-                const equalRows = mainDatas?.filter(current =>
-                    current?.shedindate !== null && current?.shedindate === datecheck
-                );
-                const rowsWithShedInDate = notEqualRows?.length > 0 ? notEqualRows : equalRows;
-
-                setShedInTimeData(rowsWithShedInDate)
-
-
-            }
-            catch (err) {
-                console.log(err, "error");
-
-            }
+        const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || "";
+        const dateCheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate || "";
+    
+        if (!vehicleNo || !dateCheck) {
+            console.warn("Missing vehicleNo or dateCheck. Skipping API call.");
+            return;
         }
-        fetchData()
-    }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues])
+    
+        const fetchData = async () => {
+            try {
+                const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, { vehicleNo, dateCheck });
+                const mainDatas = response.data;
+    
+                if (!mainDatas.length) {
+                    console.warn("No data received.");
+                    return;
+                }
+    
+                const getMinMaxData = (isMin) => {
+                    return mainDatas.reduce((result, current) => {
+                        const timesWithDates = [
+                            { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
+                            { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
+                            { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
+                            { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
+                        ].filter(entry => entry.time && entry.date);
+    
+                        if (!timesWithDates.length) return result;
+    
+                        const bestCurrentRow = timesWithDates.reduce((bestRow, currentRow) => {
+                            return isMin 
+                                ? parseFloat(currentRow.time) < parseFloat(bestRow.time) ? currentRow : bestRow 
+                                : parseFloat(currentRow.time) > parseFloat(bestRow.time) ? currentRow : bestRow;
+                        }, timesWithDates[0]);
+    
+                        return isMin 
+                            ? parseFloat(bestCurrentRow.time) < parseFloat(result.time) ? bestCurrentRow : result 
+                            : parseFloat(bestCurrentRow.time) > parseFloat(result.time) ? bestCurrentRow : result;
+                    }, { time: isMin ? Infinity : -Infinity, date: null, tripid: null });
+                };
+    
+                setMinTimeData(getMinMaxData(true));
+                setMaxTimeData(getMinMaxData(false));
+    
+                const notEqualRows = mainDatas.filter(current => current?.shedindate && current?.shedindate !== dateCheck);
+                setShedInTimeData(notEqualRows.length > 0 ? notEqualRows : mainDatas.filter(current => current?.shedindate === dateCheck));
+    
+            } catch (err) {
+                console.error("API Error:", err);
+            }
+        };
+    
+        fetchData();
+    }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues]);
+    
 
 
     return {

@@ -229,7 +229,7 @@ function App() {
     } else {
       setIsLoading(false); // Stop loading if not authenticated
     }
-  
+
     // Handle redirection once loading is complete
     if (!isLoading && location.pathname !== '/') {
       // console.log("enetr")
@@ -281,21 +281,47 @@ function App() {
 
   const [stationName, setStationName] = useState([]);
 
+// ------------Dont Delete This-----------------------
+
+  // useEffect(() => {
+  //   const fetchSattionName = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/getStation-name`, { params: { username: loginUserName } })
+  //       const resData = response.data;
+  //       setStationName(resData);
+  //       // localStorage.removeItem("stationValue");
+  //     } catch (error) {
+  //       console.log("error occur ", error);
+  //     }
+  //   }
+  //   fetchSattionName();
+  
+  // }, [apiUrl, loginUserName,stationvalue,isstationtrigger])
+
+  // -----------------------------------------------------
 
   useEffect(() => {
-    const fetchSattionName = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/getStation-name`, { params: { username: loginUserName } })
-        const resData = response.data;
-        setStationName(resData);
-        // localStorage.removeItem("stationValue");
-      } catch (error) {
-        console.log("error occur ", error);
+    const fetchStationName = async () => {
+      const cachedStation = localStorage.getItem("stationName");
+      if (cachedStation) {
+        setStationName(JSON.parse(cachedStation));
+        return;
       }
-    }
-    fetchSattionName();
+   
+      try {
+        const response = await axios.get(`${apiUrl}/getStation-name`, {
+          params: { username: loginUserName },
+        });
+        setStationName(response.data);
+        localStorage.setItem("stationName", JSON.stringify(response.data)); 
+      } catch (error) {
+        console.log("Error occurred:", error);
+      }
+    };
   
-  }, [apiUrl, loginUserName,stationvalue,isstationtrigger])
+    fetchStationName();
+  }, []);
+  
 
 // console.log(permissions,'permissinon datas come')
 //     const auth = localStorage.getItem("auth") === 'true';
@@ -341,20 +367,44 @@ function App() {
 
 // console.log(permissions.length,' length of permissions')
 
+
+  // useEffect(() => {
+  //   const organizationName = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/allCustomers`);
+  //       const organisationData = response?.data;
+  //       const names = organisationData.map(res => res.customer);
+  //       setOrganizationName(names);
+  //     } catch (error) {
+  //       console.error('Error fetching organization names:', error);
+  //     }
+  //   };
+  //   organizationName();
+
+  // }, [apiUrl]); // Empty dependency array to ensure it runs only once
+
   useEffect(() => {
-    const organizationName = async () => {
+    const fetchOrganizationName = async () => {
+      const cachedData = localStorage.getItem("organizationNames");
+      if (cachedData) {
+        setOrganizationName(JSON.parse(cachedData)); 
+        return;
+      }
+  
       try {
         const response = await axios.get(`${apiUrl}/allCustomers`);
         const organisationData = response?.data;
         const names = organisationData.map(res => res.customer);
         setOrganizationName(names);
+        localStorage.setItem("organizationNames", JSON.stringify(names)); 
       } catch (error) {
-        console.error('Error fetching organization names:', error);
+        console.error("Error fetching organization names:", error);
       }
     };
-    organizationName();
-
-  }, [apiUrl]); // Empty dependency array to ensure it runs only once
+  
+    fetchOrganizationName();
+  }, []);
+  
 
 
   //--------------------------------------------------------

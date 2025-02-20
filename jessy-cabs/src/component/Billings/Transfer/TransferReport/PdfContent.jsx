@@ -623,9 +623,17 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                               <View style={{width:"100%",}}>
                               <Text style={{ fontSize: 9 }}>Vehicle Hire Charges For : {item.calcPackage}</Text>
 
-                                {item.extraKM > 0 && item.extrakm_amount > 0 ? (
+                                {/* {item.extraKM > 0 && item.extrakm_amount > 0 ? (
                                   <Text style={{ fontSize: 9 }}>Extra Kms : {item.extraKM} Kms @ Rs.{item.extrakm_amount}</Text>
-                                ) : null}
+                                ) : null} */}
+                                {item.extraKM > 0 && item.extrakm_amount > 0 ? (
+                                <Text style={{ fontSize: 9 }}>
+                                  {item.duty === "Outstation"  
+                                    ? `${item.extraKM} Kms @ Rs.${item.extrakm_amount}`
+                                    : `Extra Kms : ${item.extraKM} Kms @ Rs.${item.extrakm_amount}`}
+                                </Text>
+                              ) : null}
+
 
                                 {item.extraHR > 0 && item.extrahr_amount > 0 ? (
                                   <Text style={{ fontSize: 9 }}>Extra Hrs : {item.extraHR} hrs @ Rs.{item.extrahr_amount}</Text>

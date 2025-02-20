@@ -59,33 +59,67 @@ const useGstReport = () => {
     const apiUrl = APIURL;
 
     // fetch gst Tax Percentage
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const customer = gstReport?.customer;
+
+    //             const response = await axios.get(`${apiUrl}/customerDetailsAndGroupBillingDetails/${customer}`)
+    //             console.log(response.data, 'customer response');
+    //             const data = response.data;
+    //             const customerDetails = data.customerDetails;
+    //             const stationDetails = data.customerStations;
+
+    //             setCustomerData(customerDetails)
+    //             setStationData(stationDetails)
+    
+
+    //             if (customerDetails.length > 0) {
+    //                 setisGstbtnloading(false)
+    //             } else {
+    //                 setisGstbtnloading(false)
+    //             }
+    //         }
+    //         catch (error) {
+    //             console.log(error);
+    //         }
+    //     }
+    //     fetchData()
+    // }, [apiUrl, gstReport.customer, isGstbtnloading])
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const customer = gstReport?.customer;
+                
+                if (!customer) {
+                    console.log("Customer value is missing or undefined.");
+                    return; // Prevent API call if customer is invalid
+                }
 
-                const response = await axios.get(`${apiUrl}/customerDetailsAndGroupBillingDetails/${customer}`)
-                console.log(response.data, 'customer response');
-                const data = response.data;
+                const requestUrl = `${apiUrl}/customerDetailsAndGroupBillingDetails/${customer}`;
+                console.log("Requesting URL:", requestUrl);
+    
+                const response = await axios.get(requestUrl);
+                console.log(response.data, "customer response");
+    
+                const data = response.data;  
                 const customerDetails = data.customerDetails;
                 const stationDetails = data.customerStations;
-
-                setCustomerData(customerDetails)
-                setStationData(stationDetails)
-
-
-                if (customerDetails.length > 0) {
-                    setisGstbtnloading(false)
-                } else {
-                    setisGstbtnloading(false)
-                }
+    
+                setCustomerData(customerDetails);
+                setStationData(stationDetails);
+                setisGstbtnloading(false);
+            } catch (error) {
+                console.error("Error fetching data:", error);
             }
-            catch (error) {
-                console.log(error);
-            }
+        };
+    
+        if (gstReport?.customer) {
+            fetchData();
         }
-        fetchData()
-    }, [apiUrl, gstReport.customer, isGstbtnloading])
+    }, [apiUrl, gstReport?.customer]);
+    
 
 
     // Fetch all customers

@@ -12,9 +12,11 @@ const useDetailsVehicle = () => {
   const [vehiclesData, setVehiclesData] = useState(null);
   const { vehicleListData, setVehicleListData, vehicleSearchDetails, setVehicleSearchDetails } = useContext(PermissionContext)
   const [currentPosition, setCurrentPosition] = useState({ lat: chennaiCoordinates[chennaiCoordinates.length - 1].latitude, lng: chennaiCoordinates[chennaiCoordinates.length - 1].longitude }); // State to animate the marker
+  const [currentPosition1, setCurrentPosition1] = useState(null); // State to animate the marker
   const [isPlaying, setIsPlaying] = useState(false); // State to control animation
   const [isPolylineVisible, setIsPolylineVisible] = useState(true); // State
   const [startMarkerPosition, setStartMarkerPosition] = useState(chennaiCoordinates[0])
+  const [startMarkerPosition1, setStartMarkerPosition1] = useState(null)
   const [dynamicPolyline, setDynamicPolyline] = useState([]);
   const [trigger, setTrigger] = useState(null);
   const [speedState, setSpeedState] = useState(1000);
@@ -28,8 +30,10 @@ const useDetailsVehicle = () => {
   const [selectedTripid, setSelectedTripid] = useState(null);
   // const [isPlaying, setIsPlaying] = useState(false);
   const [playInterval, setPlayInterval] = useState(null);
-  const [filterDate, setFilterDate] = useState(null)
+  const [filterDate, setFilterDate] = useState()
   const [dateWiseFilter, setDateWiseFilter] = useState(null);
+  const [currentDatePoints,setCurrentDatePoints] = useState([]);
+  const menuItem = localStorage.getItem('activeMenuItem');
 
   const togglePlayPause = () => {
     if (isPlaying) {
@@ -56,7 +60,28 @@ const useDetailsVehicle = () => {
       }
     }
     fetchData()
-  }, [apiUrl])
+  }, [apiUrl,])
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/getAllVehicleDetailsList`);
+  //       console.log(response.data, "vehicle data");
+  //       setVehiclesData(response.data);
+  //       setVehicleListData(response.data);
+  //     } catch (err) {
+  //       console.log(err, "error");
+  //     }
+  //   };
+  
+  //   // Set an interval to call the API every 1 second
+  //   const intervalId = setInterval(fetchData, 1000);
+  
+  //   // Cleanup the interval when the component unmounts or apiUrl changes
+  //   return () => clearInterval(intervalId);
+  // }, [apiUrl]); // The effect will re-run when `apiUrl` changes
+  
+  
 
   // get full vehicle details
   useEffect(() => {
@@ -78,12 +103,12 @@ const useDetailsVehicle = () => {
     };
 
     fetchData();
-  }, [apiUrl, vehicleSearchDetails]);
+  }, [apiUrl, vehicleSearchDetails,menuItem]);
   useEffect(() => {
     if (dynamicPolyline.length > 1) {
-      setCurrentPosition({
-        lat: startMarkerPosition.latitude,
-        lng: startMarkerPosition.longitude,
+      setCurrentPosition1({
+        Lattitude_loc: startMarkerPosition.latitude,
+        Longitude_loc: startMarkerPosition.longitude,
       });
     }
   }, [startMarkerPosition]);
@@ -150,18 +175,21 @@ const useDetailsVehicle = () => {
     setIsPlaying(true);
     setDynamicPolyline([]);
     let step = 0;
-    const totalSteps = chennaiCoordinates.length - 1;
+    const totalSteps = currentDatePoints.length - 1;
     let prevPosition = null; // Initialize previous position
 
     const interval = setInterval(() => {
       if (step <= totalSteps) {
         const newPoint = {
-          lat: chennaiCoordinates[step].latitude,
-          lng: chennaiCoordinates[step].longitude,
+          lat: currentDatePoints[step].Lattitude_loc,
+          lng: currentDatePoints[step].Longitude_loc,
         };
-
+        const newPoint1 = {
+          Lattitude_loc: currentDatePoints[step].Lattitude_loc,
+          Longitude_loc: currentDatePoints[step].Longitude_loc,
+        };
         const angle = calculateAngle(prevPosition, newPoint); // Calculate angle
-        setCurrentPosition({ ...newPoint, angle }); // Update position with angle
+        setCurrentPosition1({ ...newPoint1, angle }); // Update position with angle
 
         // Update the dynamic polyline to include the new point
         setDynamicPolyline((prevPolyline) => [...prevPolyline, newPoint]);
@@ -180,22 +208,26 @@ const useDetailsVehicle = () => {
   const stepRef = useRef(0); // Persist step across re-renders
 
   const handledefault10xDrawPaths = () => {
-    if (stepRef.current >= chennaiCoordinates.length) {
+    if (stepRef.current >= currentDatePoints.length) {
       stepRef.current = 0; // Reset when reaching the last point
       setDynamicPolyline([]); // Clear the polyline
     }
     setTrigger((prev) => !prev);
     setIsPlaying(true);
 
-    const totalSteps = chennaiCoordinates.length - 1;
+    const totalSteps = currentDatePoints.length - 1;
 
     const interval = setInterval(() => {
       if (stepRef.current <= totalSteps && speedState) {
         const newPoint = {
-          lat: chennaiCoordinates[stepRef.current].latitude,
-          lng: chennaiCoordinates[stepRef.current].longitude,
+          lat: parseFloat(currentDatePoints[stepRef.current].Lattitude_loc),
+          lng: parseFloat(currentDatePoints[stepRef.current].Longitude_loc),
         };
-        setCurrentPosition(newPoint);
+        const newPoint1 = {
+          Lattitude_loc: parseFloat(currentDatePoints[stepRef.current].Lattitude_loc),
+          Longitude_loc: parseFloat(currentDatePoints[stepRef.current].Longitude_loc),
+        };
+        setCurrentPosition1(newPoint1);
         setDynamicPolyline((prevPolyline) => [...prevPolyline, newPoint]);
 
         stepRef.current++; // Persist step count
@@ -316,7 +348,7 @@ const useDetailsVehicle = () => {
   const getAddress = async () => {
     try {
       const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentPosition?.lat},${currentPosition?.lng}&key=${API_KEY}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentPosition1?.Lattitude_loc},${currentPosition1?.Longitude_loc}&key=${API_KEY}`
       );
 
       if (response.data.status === "OK") {
@@ -370,30 +402,31 @@ const useDetailsVehicle = () => {
   useEffect(() => {
     getAddress();
 
-    const startPoint = chennaiCoordinates.filter(
-      (point) => point.TripType === "start" && point.TripDate === filterDate
+    const startPoint = currentDatePoints?.filter(
+      (point) => point.Trip_Status === "Start" && point.Running_Date === filterDate
     );
 
-    const endPoint = chennaiCoordinates.filter(
-      (point) => point.TripType === "end" && point.TripDate === filterDate
+    const endPoint = currentDatePoints?.filter(
+      (point) => point.Trip_Status === "end" && point.Running_Date === filterDate
     );
 
 
     // Set multiple start locations as an array
     if (startPoint.length > 0) {
-      setStartTripLocation(startPoint.map(point => ({ latitude: point.latitude, longitude: point.longitude })));
+      setStartTripLocation(startPoint.map(point => ({ latitude: point.Lattitude_loc, longitude: point.Longitude_loc })));
     } else {
       setStartTripLocation([]); // Reset if no data
     }
 
     // Set multiple end locations as an array
     if (endPoint.length > 0) {
-      setEndTripLocation(endPoint.map(point => ({ latitude: point.latitude, longitude: point.longitude })));
+      setEndTripLocation(endPoint.map(point => ({ latitude: point.Lattitude_loc, longitude: point.Longitude_loc })));
     } else {
       setEndTripLocation([]); // Reset if no data
+      setDynamicPolyline([])
     }
 
-  }, [currentPosition, filterDate]);
+  }, [currentPosition1, filterDate,vehicleListData]);
 
   // useEffect(() => {    
   //   getAddress();
@@ -420,22 +453,91 @@ const useDetailsVehicle = () => {
 
   // }, [currentPosition, filterDate]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const vehicleNo = vehicleListData?.map((li) => li.vehRegNo);
+      
+  //     // Ensure filterDate is always a valid date
+  //     const selectedDate = filterDate ? filterDate : dayjs().format("YYYY-MM-DD");
+  
+  //     console.log(vehicleNo,vehicleListData, "Vehicle Numbers", selectedDate, );
+  
+  //     try {
+  //       const response = await axios.post(`${apiUrl}/particularGpsRecords`, {
+  //         selectedDate:selectedDate,    
+  //         vehicleNumber: vehicleNo
+  //       });
+  //       const result = response.data;
+  //       console.log(result,"gettttttttttttttttttttttttttttttttttttttt");
+  //       const timesPoint = result.map(li=>li.TripStartTime);
+  //       console.log(timesPoint,"gettttttttttttttttttttttttttttttttttttttttt00000000000000");
+  //       const formattedTimesPoint = timesPoint.map(time => {
+  //         const [hours, minutes] = time.split(':');
+  //         return `${hours}.${minutes}`;
+  //       });
+        
+  //       console.log(formattedTimesPoint,'gettttttttttttttttttttttttttttttttttttttttttttt-------------------');
+        
+  //       setCurrentDatePoints(response.data);
+  //       setStartMarkerPosition1(response.data[0]);
+  //       setCurrentPosition1(response.data[result.length-1])
+  //       console.log(response.data, "GPS Data Response");
+  
+  //     } catch (err) {
+  //       console.error(err, "Error fetching GPS data");
+  //     }
+  //   };
+  
+  //   fetchData();
+  // }, [ filterDate,vehicleListData]);
+
   useEffect(() => {
     const fetchData = async () => {
-
+      const vehicleNo = vehicleListData?.map((li) => li.vehRegNo);
+      
+      // Ensure filterDate is always a valid date
+      const selectedDate = filterDate ? filterDate : dayjs().format("YYYY-MM-DD");
+  
+      console.log(vehicleNo, vehicleListData, "Vehicle Numbers", selectedDate,vehicleSearchDetails);
+  
       try {
-        const response = await axios.post(`${apiUrl}/particularGpsRecords`,{
-          selectedDate:filterDate
+        if(selectedDate!=="" || selectedDate!==null){
+        const response = await axios.post(`${apiUrl}/particularGpsRecords`, {
+          selectedDate: selectedDate,
+          vehicleNumber: vehicleSearchDetails
         });
-        console.log(response.data, "uuuuuuuuuuuuuuuuuuuuuuuuu");
-
+  
+        const result = response.data;
+        console.log(result, "GPS Data Response");
+  
+        // Sort response.data based on TripStartTime in ascending order
+        const sortedData = [...result].sort((a, b) => {
+          const timeA = parseInt(a.TripStartTime.replace(/[:.]/g, '').slice(0, 4)); // Convert HH:MM to numeric value
+          const timeB = parseInt(b.TripStartTime.replace(/[:.]/g, '').slice(0, 4));
+          return timeA - timeB;
+        });
+  
+        console.log(sortedData, 'Sorted GPS Data -------------------');
+  
+        setCurrentDatePoints(sortedData);
+        setStartMarkerPosition1(sortedData[0]);
+        setCurrentPosition1(sortedData[sortedData.length - 1]);
+      }
+  
       } catch (err) {
-        console.error(err, "error");
+        console.error(err, "Error fetching GPS data");
       }
     };
-
+  
     fetchData();
-  }, [chennaiCoordinates,filterDate])
+  }, [filterDate, vehicleListData]);
+  
+  // console.log(currentPosition1,"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+  
+
+  // console.log(currentDatePoints,"currentDatepoints");
+  // console.log(startMarkerPosition1,"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuussssssssssssssssssssssssssssssss");
+  
 
   useEffect(() => {
     const filteredCoordinates = chennaiCoordinates.filter((point) => point.TripDate === filterDate);
@@ -443,23 +545,25 @@ const useDetailsVehicle = () => {
     setDateWiseFilter(filteredCoordinates)
   }, [chennaiCoordinates, filterDate])
 
+// console.log(startMarkerPosition,"starttttttttttttttttttttttttttttttttttttt");
 
   // const tripidOptions = useMemo(() => {
   //   const uniqueTripids = [...new Set(chennaiCoordinates.map(item => item.Tripid))].filter(id => id !== "null");
   //   return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
   // }, [chennaiCoordinates]);
   const tripidOptions = useMemo(() => {
-    const filteredTrips = chennaiCoordinates.filter(item => item.TripDate === filterDate && item.Tripid !== "null");
+    const filteredTrips = currentDatePoints.filter(item => item.Running_Date === filterDate && item.Trip_id !== "null");
 
-    const uniqueTripids = [...new Set(filteredTrips.map(item => item.Tripid))];
+    const uniqueTripids = [...new Set(filteredTrips.map(item => item.Trip_id))];
 
     return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
-  }, [chennaiCoordinates, filterDate]);
+  }, [currentDatePoints, filterDate]);
 
   return {
     vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying, setStartMarkerPosition, startMarkerPosition, dynamicPolyline,
     handleDrawPaths, handledefault10xDrawPaths, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths, rotation, speedState, address, startTripLocation,
-    endTripLocation, tripidOptions, selectedTripid, setSelectedTripid, togglePlayPause, filterDate, handleChange, dateWiseFilter
+    endTripLocation, tripidOptions, selectedTripid, setSelectedTripid, togglePlayPause, filterDate, handleChange, dateWiseFilter,currentDatePoints,
+    startMarkerPosition1,setCurrentPosition1,currentPosition1
   }
 }
 export default useDetailsVehicle;

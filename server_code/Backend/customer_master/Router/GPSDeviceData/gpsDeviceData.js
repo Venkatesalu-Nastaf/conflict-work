@@ -62,10 +62,10 @@ const db = require('../../../db');
 
 // get all gpsDatas from gpsdevice_datas
 router.post('/particularGpsRecords', (req, res) => {
-    const { selectedDate } = req.body; // If coming from query parameters, use req.query. Otherwise, use req.body.
-    console.log(selectedDate, "filterrrrrrrrrrrrrrrrrrrrr");
-    const sqlQuery = `SELECT * FROM gpsdevice_datas WHERE todayDate = ?`;
-    db.query(sqlQuery, [selectedDate], (error, result) => {
+    const { selectedDate, vehicleNumber } = req.body; // If coming from query parameters, use req.query. Otherwise, use req.body.
+    console.log(selectedDate, "filterrrrrrrrrrrrrrrrrrrrr", vehicleNumber);
+    const sqlQuery = `SELECT * FROM  VehicleTripDetails WHERE Running_Date = ? AND Vehicle_No = ?`;
+    db.query(sqlQuery, [selectedDate, vehicleNumber], (error, result) => {
         if (error) {
             console.log(error, "error");
         }
@@ -74,42 +74,61 @@ router.post('/particularGpsRecords', (req, res) => {
         res.status(200).json(result);
 
     })
+
 })
 
-router.post('/getGpsDeviceDatas', (req, res) => {
-    const { selectedDate } = req.body; // If coming from query parameters, use req.query. Otherwise, use req.body.
-    console.log(selectedDate, "filterrrrrrrrrrrrrrrrrrrrr");
+router.post('/getAllVehicleCurrentLocation', (req, res) => {
+    // const todayDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+    // console.log("Today's Date:", todayDate);
+    const today = new Date();
 
-    if (!selectedDate) {
-        return res.status(400).json({ error: "selectedDate is required" });
-    }
-
-    const sqlQuery = `
-    SELECT 
-        g.lattitude, 
-        g.longitude, 
-        g.todayDate AS TripDate,
-        COALESCE(v.Trip_Status, 'Unknown') AS Trip_Status
-    FROM gpsdevice_datas g
-    LEFT JOIN VehicleTripDetails v 
-        ON v.Running_Date = g.todayDate
-        AND v.Lattitude_loc = g.lattitude
-    WHERE g.todayDate = ?;
-`;
-
-
-
-    db.query(sqlQuery, [selectedDate], (error, result) => {
+    const todayDate = today.toLocaleDateString('en-CA'); // 'en-CA' ensures YYYY-MM-DD format
+    console.log("Today's Date:", todayDate);
+    const sqlQuery = `SELECT * FROM VehicleTripDetails WHERE Running_Date =?`;
+    db.query(sqlQuery, [todayDate], (error, result) => {
         if (error) {
-            console.error("Database Query Error:", error);
-            return res.status(500).json({ error: "Database query error" });
+            console.log(error, "error");
         }
-
-        console.log(result, "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+        // console.log(result,"all vehicle lists....");
 
         res.status(200).json(result);
-    });
-});
+    })
+})
+
+// router.post('/getGpsDeviceDatas', (req, res) => {
+//     const { selectedDate } = req.body; // If coming from query parameters, use req.query. Otherwise, use req.body.
+//     console.log(selectedDate, "filterrrrrrrrrrrrrrrrrrrrr");
+
+//     if (!selectedDate) {
+//         return res.status(400).json({ error: "selectedDate is required" });
+//     }
+
+//     const sqlQuery = `
+//     SELECT 
+//         g.lattitude, 
+//         g.longitude, 
+//         g.todayDate AS TripDate,
+//         COALESCE(v.Trip_Status, 'Unknown') AS Trip_Status
+//     FROM gpsdevice_datas g
+//     LEFT JOIN VehicleTripDetails v 
+//         ON v.Running_Date = g.todayDate
+//         AND v.Lattitude_loc = g.lattitude
+//     WHERE g.todayDate = ?;
+// `;
+
+
+
+//     db.query(sqlQuery, [selectedDate], (error, result) => {
+//         if (error) {
+//             console.error("Database Query Error:", error);
+//             return res.status(500).json({ error: "Database query error" });
+//         }
+
+//         console.log(result, "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+
+//         res.status(200).json(result);
+//     });
+// });
 
 
 module.exports = router;

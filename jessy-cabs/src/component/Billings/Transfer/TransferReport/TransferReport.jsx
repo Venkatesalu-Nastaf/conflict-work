@@ -71,7 +71,7 @@ export const MISformat = [
   },
 ];
 
-const TransferReport = ({ stationName }) => {
+const TransferReport = ({Statename }) => {
 
   const {
     invoiceno,
@@ -91,7 +91,7 @@ const TransferReport = ({ stationName }) => {
     ratetypeforpage,
     hidePopup,
     organizationdata,
-    routedData,
+    // routedData,
     date,
     customer,
     tripData,
@@ -133,14 +133,15 @@ const TransferReport = ({ stationName }) => {
     setGroupTripid,
     // handleRemove,
     billedStatusCheck,
-    setBilledStatusCheck,
+    // setBilledStatusCheck,
     loading,
-    setLoading,
+    // setLoading,
     billingGroupDetails,
     setBillingGroupDetails,
-    setServiceStation,
+    // setServiceStation,
     isButtonloading,
-    setisButtonLoading
+    setisButtonLoading,
+    // datastatetranfer,
   } = useTransferreport();
   const {
     handleExcelDownload, error1, errormessage1,
@@ -606,6 +607,31 @@ const TransferReport = ({ stationName }) => {
                   />
                 </div>
                 <div className="input input-transfer-report" >
+                                                    <div className="icone">
+                                                        <FontAwesomeIcon icon={faBuilding} size="xl" />
+                                                    </div>
+                                                    <Autocomplete
+                                                        fullWidth
+                                                        id="free-Statebill"
+                                                        freeSolo
+                                                        size="small"
+                                                        // value={datastatetranfer}
+                                                        value={servicestation}
+                                                        // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
+                                                        options={Statename.map((option) => ({
+                                                            label: option.state,
+                                                        }))}
+                                                        onChange={(event, value) => handleserviceInputChange(event, value)}
+                                                        renderInput={(params) => {
+                                                            return (
+                                                                <TextField {...params} label="State" inputRef={params.inputRef}
+                                                                value={servicestation}
+                                                                 />
+                                                            );
+                                                        }}
+                                                    />
+                                                    </div>
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                   </div>
@@ -723,7 +749,7 @@ const TransferReport = ({ stationName }) => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input input-transfer-report" >
+                {/* <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuilding} size="xl" />
                   </div>
@@ -739,24 +765,8 @@ const TransferReport = ({ stationName }) => {
                     name="State"
                     autoComplete='off'
                   />
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    className='full-width'
-                    freeSolos
-                    size="small"
-                    value={servicestation || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                    options={stationName.map((option) => ({
-                      label: option.Stationname,
-                    }))}
-                    onChange={(event, value) => handleserviceInputChange(event, value)}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="State" inputRef={params.inputRef} />
-                      );
-                    }}
-                  /> */}
-                </div>
+                
+                </div> */}
                 <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
@@ -872,7 +882,7 @@ const TransferReport = ({ stationName }) => {
               </div>
             </div>
             {/* normal invoice */}
-            <Dialog open={pbpopupOpen} onClose={handlePopupClose}>
+            {/* <Dialog open={pbpopupOpen} onClose={handlePopupClose}>
               <DialogContent>
                 <Reportinvoice
                   organizationdata={organizationdata}
@@ -893,7 +903,7 @@ const TransferReport = ({ stationName }) => {
                   Cancel
                 </Button>
               </DialogActions>
-            </Dialog>
+            </Dialog> */}
             {/* booking mail dialog box */}
             <Dialog open={popupOpen} onClose={handlePopupClose}>
               <DialogContent>

@@ -113,12 +113,12 @@ router.get('/getStation-name', (req, res) => {
           }
           // results.push({ Stationname: 'All' });
 
-          console.log("results", results)
+          // console.log("results", results)
           return res.status(200).json(results);
         });
       }
       else {
-        console.log("data", data)
+        // console.log("data", data)
         // data.push({ Stationname: 'All' });
         return res.status(200).json(data);
       }

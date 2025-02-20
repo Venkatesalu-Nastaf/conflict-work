@@ -278,6 +278,8 @@ const Booking = ({ stationName, customerData }) => {
     }
   }
 // console.log(prevHours,"timeeeeeeee+++++++++++");
+const superAdminAccess = localStorage.getItem("SuperAdmin")
+const datahidecustomerdetails =  superAdminAccess === "SuperAdmin" ? true : false;
 
   return (
     <div className="booking-form main-content-form Scroll-Style-hide">
@@ -498,6 +500,9 @@ const Booking = ({ stationName, customerData }) => {
               />
 
             </div>
+
+       
+            {datahidecustomerdetails ?  <>
             <div className="input">
               <div className="icone">
                 <AddIcCallTwoToneIcon color="action" />
@@ -546,7 +551,47 @@ const Booking = ({ stationName, customerData }) => {
                 margin="normal"
                 size="small"
               />
+            </div> 
+            
+            </>: <>
+            <div className="input">
+              <div className="icone">
+                <AddIcCallTwoToneIcon color="action" />
+              </div>
+              <TextField
+                name="orderByMobileNo"
+                autoComplete="new-password"
+                className="full-width"
+             
+                disabled={!datahidecustomerdetails}
+                label="Order by Mobile No"
+                id="orderByMobileNo"
+                margin="normal"
+                size="small"
+              />
             </div>
+
+
+            <div className="input">
+              <div className="icone">
+                <ForwardToInboxIcon color="action" />
+              </div>
+              <TextField
+                name="orderByEmail"
+                className="full-width"
+                autoComplete="new-password"
+                disabled={!datahidecustomerdetails}
+                label="Order By Email"
+                id="orderByEmail"
+                margin="normal"
+                size="small"
+              />
+            </div> 
+            
+            
+            
+            </>
+}
 
             <div className="input service-station-input">
               <div className="icone">

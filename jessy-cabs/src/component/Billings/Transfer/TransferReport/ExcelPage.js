@@ -78,7 +78,8 @@ const useExeclpage = () => {
         { key: "ex_hrAmount", header: "Extra HRs Amount", width: 160 },
 
         { key: "night_totalAmount", header: "Night Charges", width: 150 },
-        { key: "driverBeta", header: "Driver Bhatta", width: 150 },
+        // { key: "driverBeta", header: "Driver Bhatta", width: 150 },
+        { key: "driverBeta_amount", header: "Driver Bhatta", width: 150 },
         { key: "OutstationCharges", header: "Outstation Charges", width: 180 },
         { key: "withoutTaxes", header: "Total Amount", width: 150 },
         // { key: "PenaltyAmount", header: "Penalty Amount", width: 150 },
@@ -174,12 +175,12 @@ const useExeclpage = () => {
        let amount = parseFloat(amount1) || 0;
        let percent = parseFloat(percent1) || 0;
        let  tollamount = parseFloat(toll1) || 0;
-       console.log(amount,percent,tollamount,'zipgstadddd')
+    //    console.log(amount,percent,tollamount,'zipgstadddd')
     
       
     
         const datapercent = amount + percent + tollamount;
-        console.log(datapercent,'zipgstaddddpercent',Math.round(datapercent))
+        // console.log(datapercent,'zipgstaddddpercent',Math.round(datapercent))
     
         return Math.round(datapercent);
     }
@@ -200,9 +201,9 @@ const useExeclpage = () => {
     }
 
     function totalamountgst(gst,total) {
-        console.log(gst,total,'zipgst')
+        // console.log(gst,total,'zipgst')
         let gsttax = (gst * total) / 100;
-        console.log(gsttax,'zipgst')
+        // console.log(gsttax,'zipgst')
         return gsttax.toFixed(2);
 
     }
@@ -215,9 +216,9 @@ const useExeclpage = () => {
     // }
 
     function addTollparkparking(toll, parking, permit) {
-        console.log(toll, parking, permit, 'zip');
+        // console.log(toll, parking, permit, 'zip');
         let tollparkparking = (Number(toll) || 0) + (Number(parking) || 0) + (Number(permit) || 0);
-        console.log(tollparkparking, 'ziptotal');
+        // console.log(tollparkparking, 'ziptotal');
         return tollparkparking;
     }
     

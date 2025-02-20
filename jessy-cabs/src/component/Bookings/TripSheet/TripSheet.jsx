@@ -1313,7 +1313,7 @@ const TripSheet = ({ stationName, logoImage,customerData }) => {
                   
                 </div>
                 {/* {console.log(formData.mobile,"fo",selectedCustomerData.mobile,"bb",book.mobile,"mobile")} */}
-
+                  {superAdminAccess === "SuperAdmin"  ? <>
                 <div className="input">
                   <div className="icone">
                     <PhoneIphoneIcon color="action" />
@@ -1348,6 +1348,43 @@ const TripSheet = ({ stationName, logoImage,customerData }) => {
                     autoComplete="password"
                   />
                 </div>
+                </>:<>
+                <div className="input">
+                  <div className="icone">
+                    <PhoneIphoneIcon color="action" />
+                  </div>
+                  <TextField
+                    name="mobile"
+     
+                    // onChange={handleChange}
+                    label="Mobile"
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    id="standard-size-mobile"
+                    size="small"
+                    autoComplete="password"
+                    required
+                  />
+                </div>
+
+                <div className="input">
+                  <div className="icone">
+                    <AttachEmailIcon color="action" />
+                  </div>
+                  <TextField
+                    name="orderbyemail"
+
+                    // onChange={handleChange}
+                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    label="Order By Email"
+                    id="orderbyemail"
+                    size="small"
+                    autoComplete="password"
+                  />
+                </div>
+                
+                </>}
 
                 <div className="input">
                   <div className="icone">

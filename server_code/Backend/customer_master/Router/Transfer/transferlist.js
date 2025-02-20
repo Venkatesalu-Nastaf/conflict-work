@@ -761,6 +761,29 @@ router.get('/getTripIdFromTransferList', (req, res) => {
 });
 
 
+router.get('/getTripIdFromTransferListforinvoiceno', (req, res) => {
+  const {invoicno,State} = req.query;
+
+  if (!invoicno) {
+    return res.status(400).json({ error: 'Group ID is required' });
+  }
+  const sqlquery = `SELECT Grouptrip_id,Trip_id,Organization_name,Trips,Invoice_no,Billdate,FromDate,EndDate,State FROM Transfer_list WHERE Invoice_no = ? AND  State = ?`;
+
+  db.query(sqlquery, [invoicno,State], (error, result) => {
+    if (error) {
+      console.error(error, 'error');
+      return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
+    }
+
+    // if (result.length === 0) {
+    //   return res.status(404).json({ message: 'No Trip IDs found for the given Group ID' });
+    // }
+
+    return res.status(200).json(result);
+  });
+});
+
+
 
 router.get('/gettransfer_list/:userdata', (req, res) => {
   const { userdata } = req.params;

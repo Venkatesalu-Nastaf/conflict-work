@@ -283,44 +283,45 @@ function App() {
 
 // ------------Dont Delete This-----------------------
 
-  // useEffect(() => {
-  //   const fetchSattionName = async () => {
-  //     try {
-  //       const response = await axios.get(`${apiUrl}/getStation-name`, { params: { username: loginUserName } })
-  //       const resData = response.data;
-  //       setStationName(resData);
-  //       // localStorage.removeItem("stationValue");
-  //     } catch (error) {
-  //       console.log("error occur ", error);
-  //     }
-  //   }
-  //   fetchSattionName();
+  useEffect(() => {
+    const fetchSattionName = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/getStation-name`, { params: { username: loginUserName } })
+        const resData = response.data;
+        setStationName(resData);
+        // localStorage.removeItem("stationValue");
+      } catch (error) {
+        console.log("error occur ", error);
+      }
+    }
+    fetchSattionName();
   
-  // }, [apiUrl, loginUserName,stationvalue,isstationtrigger])
+  }, [apiUrl, loginUserName,stationvalue,isstationtrigger])
 
   // -----------------------------------------------------
 
-  useEffect(() => {
-    const fetchStationName = async () => {
-      const cachedStation = localStorage.getItem("stationName");
-      if (cachedStation) {
-        setStationName(JSON.parse(cachedStation));
-        return;
-      }
+  // useEffect(() => {
+  //   const fetchStationName = async () => {
+  //     const cachedStation = localStorage.getItem("stationName");
+  //     if (cachedStation) {
+  //       setStationName(JSON.parse(cachedStation));
+  //       return;
+  //     }
    
-      try {
-        const response = await axios.get(`${apiUrl}/getStation-name`, {
-          params: { username: loginUserName },
-        });
-        setStationName(response.data);
-        localStorage.setItem("stationName", JSON.stringify(response.data)); 
-      } catch (error) {
-        console.log("Error occurred:", error);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/getStation-name`, {
+  //         params: { username: loginUserName },
+  //       });
+  //       setStationName(response.data);
+  //       console.log(response.data,"tion")
+  //       localStorage.setItem("stationName", JSON.stringify(response.data)); 
+  //     } catch (error) {
+  //       console.log("Error occurred:", error);
+  //     }
+  //   };
   
-    fetchStationName();
-  }, []);
+  //   fetchStationName();
+  // }, []);
   
 
 // console.log(permissions,'permissinon datas come')

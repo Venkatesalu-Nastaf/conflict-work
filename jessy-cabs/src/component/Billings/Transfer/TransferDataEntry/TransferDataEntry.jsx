@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, {useContext } from 'react';
 import "./TransferDataEntry.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -9,7 +9,7 @@ import { Menu, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import PopupState, {bindMenu } from 'material-ui-popup-state';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { Autocomplete } from "@mui/material";
 import { PermissionContext } from '../../../context/permissionContext';
@@ -20,15 +20,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { faBuilding, faFileInvoiceDollar, faTags } from "@fortawesome/free-solid-svg-icons";
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+// import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferdataentry from './useTransferdataentry';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Box } from '@mui/material';
-import Skeleton from '@mui/material/Skeleton';
+// import Skeleton from '@mui/material/Skeleton';
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-const TransferDataEntry = ({ stationName, organizationNames }) => {
+const TransferDataEntry = ({organizationNames,Statename }) => {
   const {
     rows,
     error,
@@ -41,10 +41,10 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     Billingdate,
     selectedCustomerDatas,
     invoiceno,
-    // handleKeyenter,
+    handleKeyenter,
     customer,
-    tripData,
-    setCustomer,
+    // tripData,
+    // setCustomer,
     fromDate,
     handleDateChange,
     setFromDate,
@@ -59,8 +59,8 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     handleClickGenerateBill,
     handleExcelDownload,
     handlePdfDownload,
-    handleBillRemove,
-    handleAddOrganization,
+    // handleBillRemove,
+    // handleAddOrganization,
     totalKm,
     totalTime,
     totalAmount,
@@ -75,12 +75,17 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     handleKeyDown,
     handleRemove,
     loading,
-    setLoading,
-    setServiceStation,
-    setInfo,
-    setINFOMessage,
-    handlecustomer, isbtnloading, setisbtnloading, iseditloading, setiseditloading, isbillloading, setisbillloading,
-    addEditTrigger, setAddEditTrigger, setBillingdate
+    // setLoading,
+    // setServiceStation,
+    // setInfo,
+    // setINFOMessage,
+    handlecustomer, isbtnloading,
+    //  setisbtnloading, iseditloading, setiseditloading, 
+     isbillloading,
+      // setisbillloading,
+    addEditTrigger,
+    //  setAddEditTrigger, 
+     setBillingdate,stateenter
     //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
@@ -132,7 +137,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       autoComplete='off'
                     />
                   </div>
-
+{/* {console.log(Billingdate,"bill")} */}
                   <div className='input'>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -174,7 +179,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
-                  <div className="input" >
+                  {/* <div className="input" >
                     <div className="icone">
                       <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                     </div>
@@ -187,11 +192,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       value={invoiceno || ''}
                       onChange={(event) => handlechnageinvoice(event)}
                       autoComplete='off'
-                      // onKeyDown={handleKeyenter}
+                      onKeyDown={handleKeyenter}
                       disabled={groupdisable}
 
                     />
-                  </div>
+                  </div> */}
                   <div className="input">
                     <div className="icone">
                       <HailOutlinedIcon color="action" />
@@ -207,23 +212,30 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
 
                       onChange={(event, value) => handlecustomer(value)}
 
-                      //  onChange={(event, value) => {
-                      //   if (!groupId) {
-                      //     setCustomer(value)
-
-                      //   }
-                      //    else {
-
-                      //     setInfo(true)
-                      //     setINFOMessage("not change customer ")
-                      //   }
-                      //   }}
-                      // onChange={(event, value) => setCustomer(value)}
+                      
                       renderInput={(params) => {
                         return (
                           <TextField {...params} label="Organization" name='customer' inputRef={params.inputRef} />
                         );
                       }}
+                    />
+                  </div>
+                  <div className="input" >
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
+                    </div>
+                    <TextField
+                      size="small"
+                      id="invoiceno"
+                      className='full-width'
+                      label="Invoice No"
+                      name="invoiceno"
+                      value={invoiceno || ''}
+                      onChange={(event) => handlechnageinvoice(event)}
+                      autoComplete='off'
+                      onKeyDown={handleKeyenter}
+                      disabled={groupdisable}
+
                     />
                   </div>
                   <div className="input" >
@@ -274,9 +286,41 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       }}
                     /> */}
 
+                   {invoiceno ? <>
 
+                    {/* <TextField
+                      size="small"
+                      id="freet-station"
+                      className='full-width'
 
-                    <TextField
+                      label="State"
+                      name='station'
+                      value={servicestation || ""}
+
+                      autoComplete='off'
+                    /> */}
+                    {/* {console.log(servicestation,"state",stateenter)} */}
+
+                                            <Autocomplete
+                                                            fullWidth
+                                                            id="free-Stations"
+                                                            freeSolo
+                                                            size="small"
+                                                            value={servicestation || stateenter}
+                                                            // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
+                                                            options={Statename.map((option) => ({
+                                                                label: option.state,
+                                                            }))}
+                                                            onChange={(event, value) => handleserviceInputChange(event, value)}
+                                                            renderInput={(params) => {
+                                                                return (
+                                                                    <TextField {...params} label="State" inputRef={params.inputRef}  value={servicestation || stateenter} />
+                                                                );
+                                                            }}
+                                                        /> 
+                                                        </>:
+
+                         <TextField
                       size="small"
                       id="freet-station"
                       className='full-width'
@@ -287,6 +331,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
 
                       autoComplete='off'
                     />
+                                                          }
                   </div>
 
                   <div className="input">

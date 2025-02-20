@@ -56,7 +56,7 @@ const VehicleInformationDrawer = () => {
     const { vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying,
         startMarkerPosition, setStartMarkerPosition, handleDrawPaths, dynamicPolyline, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths,
         handledefault10xDrawPaths, speedState, address, startTripLocation, endTripLocation, tripidOptions, selectedTripid, setSelectedTripid,
-        togglePlayPause, filterDate, handleChange,dateWiseFilter
+        togglePlayPause, filterDate, handleChange, dateWiseFilter, currentDatePoints,startMarkerPosition1,setCurrentPosition1,currentPosition1
 
     } = useDetailsVehicle()
     //vehicle section drawer
@@ -229,7 +229,7 @@ const VehicleInformationDrawer = () => {
     if (!isLoaded) {
         return <div>Loading...</div>;
     }
-    const center = { lat: currentPosition.lat, lng: currentPosition.lng };
+    const center = { lat: currentPosition?.lat, lng: currentPosition?.lng };
     const base64Image = `data:image/png;base64,${mapicon}`;
     console.log(base64Image, "llllllllllllllllllllllllllllllllllllll");
 
@@ -411,7 +411,7 @@ const VehicleInformationDrawer = () => {
                                             </Select>
                                         </FormControl>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <DatePicker
                                                 label="filterDate"// Set dynamic label
@@ -430,6 +430,17 @@ const VehicleInformationDrawer = () => {
                                             </DatePicker>
                                         </LocalizationProvider>
 
+                                    </div> */}
+                                    <div>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DatePicker
+                                                label="filterDate" 
+                                                id="shedOutDate"
+                                                format="DD/MM/YYYY"
+                                                value={filterDate ? dayjs(filterDate) : dayjs()} 
+                                                onChange={(date) => handleChange(date)}
+                                            />
+                                        </LocalizationProvider>
                                     </div>
 
                                     <div className='vehicle-info-button-content' onClick={handleopenHistoryDrawer}>
@@ -661,7 +672,8 @@ const VehicleInformationDrawer = () => {
                                             </div>
                                         </InfoWindow>
                                     )}
-                                    {selectedTripid !== null ? <MapParticularTrip selectedTripid={selectedTripid} /> : <><GoogleMap
+                                    {selectedTripid !== null ? <MapParticularTrip selectedTripid={selectedTripid} /> : <>
+                                    <GoogleMap
                                         mapContainerStyle={containerStyle}
                                         center={center}
                                         zoom={18}
@@ -678,22 +690,22 @@ const VehicleInformationDrawer = () => {
                                             />
                                         )
                                             : <Polyline
-                                                path={chennaiCoordinates.map((coord) => ({
-                                                    lat: coord.latitude,
-                                                    lng: coord.longitude,
-                                                }))}
-                                                options={{
-                                                    strokeColor: "#189df3",
-                                                    strokeOpacity: 0.8,
-                                                    strokeWeight: 6,
-                                                }}
-                                            />
+                                            path={currentDatePoints?.map((point) => ({
+                                                lat: parseFloat(point?.Lattitude_loc),  // Convert string to float
+                                                lng: parseFloat(point?.Longitude_loc), 
+                                            }))}
+                                            options={{
+                                                strokeColor: "#189df3",
+                                                strokeOpacity: 0.8,
+                                                strokeWeight: 6,
+                                            }}
+                                        />
                                         }
 
                                         <MarkerF
                                             position={{
-                                                lat: startMarkerPosition.latitude,
-                                                lng: startMarkerPosition.longitude,
+                                                lat: parseFloat(startMarkerPosition1?.Lattitude_loc),
+                                                lng: parseFloat(startMarkerPosition1?.Longitude_loc),
                                             }}
                                             icon={{
                                                 url: startPointIcon,
@@ -747,8 +759,8 @@ const VehicleInformationDrawer = () => {
 
                                         <MarkerF
                                             position={{
-                                                lat: currentPosition.lat,
-                                                lng: currentPosition.lng,
+                                                lat: parseFloat(currentPosition1?.Lattitude_loc),
+                                                lng: parseFloat(currentPosition1?.Longitude_loc),
                                             }}
                                             icon={{
                                                 url: blackicon,

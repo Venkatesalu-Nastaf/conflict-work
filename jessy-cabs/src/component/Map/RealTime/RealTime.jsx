@@ -28,8 +28,9 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export const RealTime = () => {
+export const RealTime = ({allVehicleList,vehicleCurrentLocation}) => {
 
+    
   return (
     <>
       <div className="form-container-realtime">
@@ -40,8 +41,8 @@ export const RealTime = () => {
 
             </div>
             <div className='main-body-container'>
-              <VehicleSection />
-              <MapSection />
+              <VehicleSection allVehicleList={allVehicleList} />
+              <MapSection vehicleCurrentLocation={vehicleCurrentLocation} />
             </div>
             <div>
             </div>

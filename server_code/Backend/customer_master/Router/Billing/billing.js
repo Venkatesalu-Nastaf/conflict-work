@@ -665,10 +665,10 @@ router.get('/getParticularTripsheet', (req, res) => {
 });
 
 router.get('/getParticularInvoiceDetails', (req, res) => {
-  const { InvoiceNo } = req.query;
-  const query = `SELECT * FROM Transfer_list WHERE Invoice_no = ? `;
+  const { InvoiceNo,State} = req.query;
+  const query = `SELECT * FROM Transfer_list WHERE Invoice_no = ? and State = ?`;
 
-  db.query(query, [InvoiceNo], (err, result) => {
+  db.query(query, [InvoiceNo,State], (err, result) => {
     if (err) {
       console.error('Failed to retrieve booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });

@@ -1,7 +1,7 @@
 
 /* global google */
 import React, { useState, useCallback, useEffect } from 'react';
-import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer, MarkerClusterer } from '@react-google-maps/api';
 import { IconButton, Button } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import "./MapSection.css";
@@ -12,8 +12,7 @@ import L from 'leaflet';
 import markerIconPng from 'leaflet/dist/images/marker-icon.png';
 import markerShadowPng from 'leaflet/dist/images/marker-shadow.png';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { chennaiCoordinates } from './mapData'
-
+import caricon from '../VehicleSection/VehicleInformationDrawer/mapicon.png'
 // Define the container style for the map
 const containerStyle = {
   width: '100%',
@@ -30,7 +29,7 @@ const center = {
 
 
 
-const MapSection = () => {
+const MapSection = ({ vehicleCurrentLocation }) => {
   // Load the Google Maps script with your API key and necessary libraries
   const { isLoaded } = useLoadScript({
     id: 'google-map-script',
@@ -120,7 +119,33 @@ const MapSection = () => {
   // Check if Google Maps API is loaded
   // if (!isLoaded) return <div>Loading...</div>;
   const position = [51.505, -0.09]; // Latitude and Longitude for the map center
+  const mapFitBounds = () => {
+    // console.log("mapFitBounds:map> ", map);
+    if (!map) return;
 
+    const bounds = new google.maps.LatLngBounds();
+    vehicleCurrentLocation?.map((loc) => {
+      bounds.extend(new google.maps.LatLng(parseFloat(loc.Lattitude_loc), parseFloat(loc.Longitude_loc)));
+    });
+
+    map.fitBounds(bounds);
+  }
+  useEffect(() => {
+    if (map) {
+      mapFitBounds()
+    }
+  }, [map])
+  const clusterStyles = [
+
+    {
+      url: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m1.png', // Medium cluster
+      height: 70,
+      width: 70,
+      textColor: "black",
+      textSize: 14,
+    },
+
+  ];
   return (
     <>
 
@@ -128,8 +153,26 @@ const MapSection = () => {
 
         {mapType === 'google' && (
 
-          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
-       
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6}>
+
+            <MarkerClusterer options={{ styles: clusterStyles }}>
+              {(clusterer) =>
+                vehicleCurrentLocation?.map((loc, index) => (
+                  <MarkerF
+                    key={index}
+                    position={{ lat: parseFloat(loc.Lattitude_loc), lng: parseFloat(loc.Longitude_loc) }} // Correctly setting latitude and longitude
+                    clusterer={clusterer}
+                    icon={{
+                      url: caricon,
+                      scaledSize: new window.google.maps.Size(100, 100),
+                      origin: new window.google.maps.Point(0, 0),
+                      anchor: new window.google.maps.Point(50, 50),
+                    }}
+                  />
+                ))
+              }
+            </MarkerClusterer>
+
             {openPopup && popupPosition && (
               <InfoWindow
                 position={popupPosition}

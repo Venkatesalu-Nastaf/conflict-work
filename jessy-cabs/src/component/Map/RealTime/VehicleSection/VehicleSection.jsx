@@ -54,7 +54,7 @@ CustomTabPanel.propTypes = {
 
 
 
-const VehicleSection = () => {
+const VehicleSection = ({allVehicleList}) => {
 
   const { setOpenHistoryDrawer, setOpenmessage, setOpenshare, setOpenDriverModify, setHistoryLocation, setOpenAddTag, setOpendetailsDrawer, setOpen,vehicleListData,setVehicleListData,
     vehicleSearchDetails,setVehicleSearchDetails
@@ -64,7 +64,6 @@ const VehicleSection = () => {
   const [selectedOption, setSelectedOption] = useState('Vehicle');
   const [searchTerm, setSearchTerm] = useState('');
   const [dropdownValue, setDropdownValue] = useState('');
-
   const handleToggleChange = (event, newOption) => {
     if (newOption !== null) {
       setSelectedOption(newOption);
@@ -83,10 +82,10 @@ const VehicleSection = () => {
   const toggleDrawer = (open,vehno) => (event) => {
     console.log(vehno,"vehnooo");
     
-    setVehicleSearchDetails(vehno)
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
+    setVehicleSearchDetails(vehno);
+    // if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    //   return;
+    // }
     setOpen(open);
   };
 
@@ -125,7 +124,7 @@ const VehicleSection = () => {
   const handleOpenhistoryLocation = () => {
     setHistoryLocation(true);
   };
-  const filteredVehicles = vehiclesData?.filter((vehicle) => {
+  const filteredVehicles = allVehicleList?.filter((vehicle) => {
     return (
       vehicle.vehRegNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       vehicle.driverName?.toLowerCase().includes(searchTerm.toLowerCase()) ||

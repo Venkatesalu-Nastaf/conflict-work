@@ -14,7 +14,6 @@ router.get('/getAllVehicleDetailsList', (req, res) => {
             });
         }
 
-        // console.log("Vehicle result:", result);
         return res.status(200).json(result);
     });
 });

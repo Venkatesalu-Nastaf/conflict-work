@@ -139,6 +139,7 @@ const useTripsheet = () => {
     });
     const [conflictLoad, setConflictLoad] = useState(null)
     const [selectedStatuschecking, setSelectedStatuschecking] = useState('');
+    const [oldStatusCheck,setOldStatusCheck] = useState('')
     const [openModalConflict, setOpenModalConflict] = useState(null)
     const [openConflictKMPopup, setOpenConflictKMPopup] = useState(null);
     const [overetripsheetstatus,setOverViewETripsheet]=useState(false)
@@ -710,6 +711,7 @@ const useTripsheet = () => {
         setFormData(formData);
         setSelectedStatus(formData['status'])
         setSelectedStatuschecking(formData['status'])
+        setOldStatusCheck(formData['status'])
         ///calc--------------------------------------
         setcalcPackage(calcPackage);
         setExtraHR(extraHR);
@@ -730,6 +732,7 @@ const useTripsheet = () => {
         ///------
     }, [location]);
 
+console.log(driverBeta,"driverrrrrrrrrrrrrrrrrrr");
 
     useEffect(() => {
         window.history.replaceState(null, document.title, window.location.pathname);
@@ -4050,8 +4053,7 @@ useEffect(() => {
                 if (tripid !== null && tripid !== "undefined" && tripid && loginUserName) {
 
                     const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
-                    const bookingDetails = response.data;
-
+                    const bookingDetails = response.data;                       
                     handleCancel()
                     if (response.status === 200 && bookingDetails) {
                         if (bookingDetails.status === "Cancelled") {
@@ -4067,6 +4069,7 @@ useEffect(() => {
                             setSelectedCustomerId(bookingDetails.tripid);
                             setSelectedStatus(bookingDetails.status); // Set selected status based on booking details
                             setSelectedStatuschecking(bookingDetails.status)
+                            setOldStatusCheck(bookingDetails.status)
                             // if (!lockdata) {
 
 
@@ -4086,7 +4089,7 @@ useEffect(() => {
                             setEx_HrAmount(bookingDetails.ex_hrAmount);
                             setNightBeta(Number(bookingDetails.nightBta));
                             setNightCount(bookingDetails.nightCount);
-                            setnight_totalAmount(bookingDetails.night_totalAmount);
+                            setnight_totalAmount(bookingDetails.night_totalAmount);                            
                             setdriverBeta(bookingDetails.driverBeta);
                             setdriverbeta_Count(bookingDetails.driverbeta_Count);
                             setdriverBeta_amount(bookingDetails.driverBeta_amount);
@@ -6982,7 +6985,7 @@ useEffect(() => {
                 //     (station.includes("Chennai") || station.includes("All"))
                 // )
                 if (
-                    (statusCheck === "Temporary Closed") &&
+                    (oldStatusCheck === "Temporary Closed") &&
                     (superAdminAccess !== "SuperAdmin" ) &&
                     (station.includes("Chennai") || station.includes("All"))
                 )
@@ -6992,7 +6995,7 @@ useEffect(() => {
                     setEmptyState(false)
                     return;
                 }
-                if (statusCheck === "Opened") {
+                if (oldStatusCheck === "Opened") {
                     setTemporaryStatus(false);
                     setEmptyState(false)
                     return
@@ -7005,7 +7008,7 @@ useEffect(() => {
                 // ) 
 
                 if (
-                    (statusCheck === "Temporary Closed") &&
+                    (oldStatusCheck === "Temporary Closed") &&
                     (superAdminAccess !== "SuperAdmin") &&
                     (!station.includes("Chennai") || !station.includes("All"))
                 ) 
@@ -7018,7 +7021,7 @@ useEffect(() => {
                 }
                   // Condition 4: Closed with Chennai or All
                   if (
-                    (statusCheck === "Closed") &&
+                    (oldStatusCheck === "Closed") &&
                     (station.includes("Chennai") || station.includes("All"))
                 ) {
                     console.log("Condition 4: Closed with Chennai or All");
@@ -7033,7 +7036,7 @@ useEffect(() => {
                 //     (!station.includes("Chennai") || !station.includes("All"))
                 // ) 
                 if (
-                    (statusCheck === "Closed") &&
+                    (oldStatusCheck === "Closed") &&
                     (superAdminAccess !== "SuperAdmin") &&
                     (!station.includes("Chennai") || !station.includes("All"))
                 ) 
@@ -7060,7 +7063,7 @@ useEffect(() => {
                 //     (!station.includes("Chennai") && !station.includes("All"))
                 // )
                 if (
-                    statusCheck === "Closed" &&
+                    oldStatusCheck === "Closed" &&
                     superAdminAccess !== "SuperAdmin" &&
                     (!station.includes("Chennai") && !station.includes("All"))
                 )
@@ -7089,7 +7092,7 @@ useEffect(() => {
                 }
 
                 // Condition 7: Not Closed
-                if (statusCheck !== "Closed") {
+                if (oldStatusCheck !== "Closed") {
                     console.log("Condition 7: Not Closed");
                     setEmptyState(false);
                     setTemporaryStatus(false);

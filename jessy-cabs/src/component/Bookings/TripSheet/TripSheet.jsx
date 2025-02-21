@@ -154,7 +154,7 @@ const style1 = {
 };
 
 
-const TripSheet = ({ stationName, logoImage,customerData }) => {
+const TripSheet = ({ stationName, logoImage, customerData }) => {
 
   const stationOptions = stationName?.filter(option => option?.Stationname !== "All")
   const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
@@ -277,7 +277,7 @@ const TripSheet = ({ stationName, logoImage,customerData }) => {
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,
-    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount,orderByDropDown,
+    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -1210,43 +1210,43 @@ const TripSheet = ({ stationName, logoImage,customerData }) => {
                   /> */}
 
 
-                   <Autocomplete
-                                  fullWidth
-                                  size="small"
-                                  id="customer"
-                                  freeSolo
-                                  sx={{ width: "100%" }}
-                                  // onChange={(event, value) => {
-                                  //   handleAutocompleteChangecustomer(event, value, "customer")
-                                  // }}
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="customer"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    // onChange={(event, value) => {
+                    //   handleAutocompleteChangecustomer(event, value, "customer")
+                    // }}
 
-                                  onChange={(event, value) =>{
-                                    if(superAdminAccess === "SuperAdmin"){
-                                      handleAutocompleteChangecustomer(event, value, "customer")
-                                  }
-                                  else{
-                                    setError(true)
-                                    setErrorMessage("u don't change customer data")
-                                  }
-                                  }
-                                }
-                                  value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
-                                  options={CustomerNames?.map((option) => ({
-                                    label: option.customer,
-                                  }))}
-                                  disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
-                                  getOptionLabel={(option) => option.label || formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || ''}
-                                  renderInput={(params) => {
-                                    return (
-                                      <TextField
-                                        {...params}
-                                        label="Customer"
-                                        name="customer"
-                                        inputRef={params.inputRef}
-                                      />
-                                    );
-                                  }}
-                                />
+                    onChange={(event, value) => {
+                      if (superAdminAccess === "SuperAdmin") {
+                        handleAutocompleteChangecustomer(event, value, "customer")
+                      }
+                      else {
+                        setError(true)
+                        setErrorMessage("u don't change customer data")
+                      }
+                    }
+                    }
+                    value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
+                    options={CustomerNames?.map((option) => ({
+                      label: option.customer,
+                    }))}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    getOptionLabel={(option) => option.label || formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          label="Customer"
+                          name="customer"
+                          inputRef={params.inputRef}
+                        />
+                      );
+                    }}
+                  />
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -1267,123 +1267,123 @@ const TripSheet = ({ stationName, logoImage,customerData }) => {
                   /> */}
 
 
-                   <Autocomplete
-                                  fullWidth
-                                  size="small"
-                                  id="orderedby"
-                                  freeSolo
-                                  sx={{ width: "100%" }}
-                                  onChange={(event, value) =>{
-                                    if(superAdminAccess === "SuperAdmin"){
-                                    handleAutocompleteChangecustomer(event, value, "orderedby")
-                                  }
-                                  else{
-                                    setError(true)
-                                    setErrorMessage("u don't change customer data")
-                                  }
-                                }
-                                  }
-                                  // onInputChange={(event, value) =>{
-                                  //   if(event !== null){
-                                  //   setNoChangeData({ ...nochangedata,orderedby: event.target.value })
-                                  //   }
-                                  //    handleAutocompleteChange(event, value, "orderedby")
-                                  // }}
-                  
-                                  value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="orderedby"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => {
+                      if (superAdminAccess === "SuperAdmin") {
+                        handleAutocompleteChangecustomer(event, value, "orderedby")
+                      }
+                      else {
+                        setError(true)
+                        setErrorMessage("u don't change customer data")
+                      }
+                    }
+                    }
+                    // onInputChange={(event, value) =>{
+                    //   if(event !== null){
+                    //   setNoChangeData({ ...nochangedata,orderedby: event.target.value })
+                    //   }
+                    //    handleAutocompleteChange(event, value, "orderedby")
+                    // }}
 
-                                  disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
-                                  options={orderByDropDown?.map((option) => ({
-                  
-                                    label: option?.orderedby,
-                                  }))}
-                                  getOptionLabel={(option) => option?.label || formData.orderedby || selectedCustomerData.orderedby || book.orderedby ||""}
-                                  renderInput={(params) => {
-                                    return (
-                                      <TextField
-                                        {...params}
-                                        label="Ordered By"
-                                        name="orderedby"
-                                        inputRef={params.inputRef}
-                                      />
-                  
-                                    );
-                                  }}
-                                />
-                  
+                    value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
+
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    options={orderByDropDown?.map((option) => ({
+
+                      label: option?.orderedby,
+                    }))}
+                    getOptionLabel={(option) => option?.label || formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ""}
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          label="Ordered By"
+                          name="orderedby"
+                          inputRef={params.inputRef}
+                        />
+
+                      );
+                    }}
+                  />
+
                 </div>
                 {/* {console.log(formData.mobile,"fo",selectedCustomerData.mobile,"bb",book.mobile,"mobile")} */}
-                  {superAdminAccess === "SuperAdmin"  ? <>
-                <div className="input">
-                  <div className="icone">
-                    <PhoneIphoneIcon color="action" />
+                {superAdminAccess === "SuperAdmin" ? <>
+                  <div className="input">
+                    <div className="icone">
+                      <PhoneIphoneIcon color="action" />
+                    </div>
+                    <TextField
+                      name="mobile"
+                      value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
+                      // onChange={handleChange}
+                      label="Mobile"
+                      // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      id="standard-size-mobile"
+                      size="small"
+                      autoComplete="password"
+                      required
+                    />
                   </div>
-                  <TextField
-                    name="mobile"
-                    value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
-                    // onChange={handleChange}
-                    label="Mobile"
-                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
-                    id="standard-size-mobile"
-                    size="small"
-                    autoComplete="password"
-                    required
-                  />
-                </div>
 
-                <div className="input">
-                  <div className="icone">
-                    <AttachEmailIcon color="action" />
+                  <div className="input">
+                    <div className="icone">
+                      <AttachEmailIcon color="action" />
+                    </div>
+                    <TextField
+                      name="orderbyemail"
+                      value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
+                      // onChange={handleChange}
+                      // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      label="Order By Email"
+                      id="orderbyemail"
+                      size="small"
+                      autoComplete="password"
+                    />
                   </div>
-                  <TextField
-                    name="orderbyemail"
-                    value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
-                    // onChange={handleChange}
-                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
-                    label="Order By Email"
-                    id="orderbyemail"
-                    size="small"
-                    autoComplete="password"
-                  />
-                </div>
-                </>:<>
-                <div className="input">
-                  <div className="icone">
-                    <PhoneIphoneIcon color="action" />
-                  </div>
-                  <TextField
-                    name="mobile"
-     
-                    // onChange={handleChange}
-                    label="Mobile"
-                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
-                    id="standard-size-mobile"
-                    size="small"
-                    autoComplete="password"
-                    required
-                  />
-                </div>
+                </> : <>
+                  <div className="input">
+                    <div className="icone">
+                      <PhoneIphoneIcon color="action" />
+                    </div>
+                    <TextField
+                      name="mobile"
 
-                <div className="input">
-                  <div className="icone">
-                    <AttachEmailIcon color="action" />
+                      // onChange={handleChange}
+                      label="Mobile"
+                      // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      id="standard-size-mobile"
+                      size="small"
+                      autoComplete="password"
+                      required
+                    />
                   </div>
-                  <TextField
-                    name="orderbyemail"
 
-                    // onChange={handleChange}
-                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
-                    label="Order By Email"
-                    id="orderbyemail"
-                    size="small"
-                    autoComplete="password"
-                  />
-                </div>
-                
+                  <div className="input">
+                    <div className="icone">
+                      <AttachEmailIcon color="action" />
+                    </div>
+                    <TextField
+                      name="orderbyemail"
+
+                      // onChange={handleChange}
+                      // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      label="Order By Email"
+                      id="orderbyemail"
+                      size="small"
+                      autoComplete="password"
+                    />
+                  </div>
+
                 </>}
 
                 <div className="input">
@@ -4025,12 +4025,12 @@ Please Click the link to close E-Tripsheet-`}
                                       <TextField
                                         name="driverconvenience1"
                                         className='customer-bill-input'
-                                        value={driverBeta}
+                                        value={driverBeta || 0}
                                         disabled={lockdatacustomerbill}
                                         onChange={(e) => {
                                           if (!lockdatacustomerbill) {
                                             setdriverBeta(e.target.value)
-                                            setNoChangeData({ ...nochangedata, driverBeta: e.target.value })
+                                            // setNoChangeData({ ...nochangedata, driverBeta: e.target.value })
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");

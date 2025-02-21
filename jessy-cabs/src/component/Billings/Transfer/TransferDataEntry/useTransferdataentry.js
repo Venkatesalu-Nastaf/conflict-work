@@ -461,6 +461,7 @@ const useTransferdataentry = () => {
                         }));
                         setTripData(rowsWithUniqueId);
                         setRows(rowsWithUniqueId);
+                        setCombinedRows(rowsWithUniqueId)
                     }
                     // No need to set loading here; it will be false at the end
                 }

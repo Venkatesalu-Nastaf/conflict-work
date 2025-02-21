@@ -38,6 +38,8 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { TextField, FormControlLabel, FormControl, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EmailIcon from "@mui/icons-material/Email";
+import MessageIcon from '@mui/icons-material/Message';
+
 
 //dialog box
 import Dialog from '@mui/material/Dialog';
@@ -272,7 +274,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     handleDeleteMap, copydatalink, setCopyDataLink,
     //  conflictenddate,
     mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess,
-    setSuccessMessage,
+    setSuccessMessage,handleChangetexttrip,handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip,messageditedtrip,messageditedbeforetrip,
     // timeToggle,HclKMCalculation,
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
@@ -5055,6 +5057,72 @@ Please Click the link to close E-Tripsheet-`}
               </div>
             </div>
 
+
+            <Modal
+          open={dialogmessagetrip}
+          onClose={handleCloseMessagetrip}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              top: '40%',
+              right: '-8%',
+              transform: 'translate(-50%, -50%)',
+              width: '400px',
+              height: '200px',
+              bgcolor: 'white',
+              // border: '1px solid #000',
+              borderRadius: 2,
+              textAlign: 'center',
+              boxShadow: 24,
+              p: 1,
+              overflowY: 'auto'
+            }}
+          >
+
+{/* {console.log( formData.MessageText ,selectedCustomerData.MessageText,book.MessageText,"Text")} */}
+            <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'self-start' }}>
+              <p>Edited By: <span>{messageditedbeforetrip}</span></p>
+
+              <div className="input1 pick-up-address-input2">
+                <TextField
+                  name="MessageText"
+                  margin="normal"
+                  size="small"
+                  autoComplete="new-password"
+                  className="full-width"
+                 
+                  label="Message"
+                  id="MessageTexttripsheet "
+                  multiline
+                  rows={2}
+                  sx={{ width: "100%" }}
+                  value={
+                    formData.MessageText ||
+                    selectedCustomerData.MessageText ||
+                    book.MessageText ||
+                    ""
+                  }
+                  // onChange={(event) => handleChangetext(event)}
+                  onChange={(e) => {
+                    handleChangetexttrip(e)
+                  }} 
+                />
+
+              </div>
+              <div className="message_data">
+                <Button onClick={handleCloseMessagetrip}>Done</Button>
+              </div>
+            </div>
+          </Box>
+        </Modal>
+
+
             <div >
               <Modal
                 open={mapPopUp}
@@ -5159,6 +5227,13 @@ Please Click the link to close E-Tripsheet-`}
                     tooltipTitle="Cancel"
                     onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                   />
+                   <SpeedDialAction
+              key="Message"
+              icon={<MessageIcon />}
+              tooltipTitle="Message"
+              onClick={handleMessagetrip}
+
+            />
                 </StyledSpeedDial>
               </Box>
             </div>

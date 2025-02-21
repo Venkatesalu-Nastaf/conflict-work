@@ -22,6 +22,9 @@ const useTripsheet = () => {
     const apiUrl = APIURL;
     const superAdminAccess = localStorage.getItem("SuperAdmin")
     const loginusername = localStorage.getItem("username")
+    const [dialogmessagetrip,setDialogMessage]=useState(false)
+    const [messageditedtrip,setMessageEditedtrip]=useState('')
+    const [messageditedbeforetrip,setMessageEditedBeforetrip]=useState('')
     // const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     // const statusCheck = formData.status || selectedCustomerData.status || book.status;
     // THIS APIURL TRANSFER FRO DRIVER APP
@@ -651,6 +654,7 @@ const useTripsheet = () => {
         const timetoggledata = Number(params.get('TimeToggle')) || 0
         const timetogglevendor = Number(params.get('VendorTimeToggle')) || 0
         const lockdatavendor = Number(params.get('lockdatavalue'))
+        const messagedatatrip = params.get("messageedited")|| '';
         // console.log(lockdatavendor,"lockvendorlog")
         setHybridHclNavigate(HCLDATA)
         setTimeToggleNaviagate(timetoggledata)
@@ -662,7 +666,8 @@ const useTripsheet = () => {
         //----------------------
         const formData = {};
         const parameterKeys = [
-            'dispatchcheck', 'vehType', 'shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
+            'dispatchcheck', 'vehType', 'shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail', 'messageedited',
+            'MessageText',
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -690,6 +695,7 @@ const useTripsheet = () => {
             // setIsEditMode(true);
 
             setIsEditMode(false);
+            setMessageEditedBeforetrip(messagedatatrip)
         }
         else if (formData['dispatchcheck'] === 'true' && formData['status'] !== 'pending') {
             // setIsEditMode(false);
@@ -697,6 +703,7 @@ const useTripsheet = () => {
             setSendEmail(false)
             setDriverSMS(false)
             setIsEditMode(true);
+            setMessageEditedBeforetrip(messagedatatrip)
 
 
 
@@ -732,7 +739,7 @@ const useTripsheet = () => {
         ///------
     }, [location]);
 
-console.log(driverBeta,"driverrrrrrrrrrrrrrrrrrr");
+// console.log(driverBeta,"driverrrrrrrrrrrrrrrrrrr");
 
     useEffect(() => {
         window.history.replaceState(null, document.title, window.location.pathname);
@@ -855,7 +862,8 @@ console.log(driverBeta,"driverrrrrrrrrrrrrrrrrrr");
         vehType: "",
         vehicleName: "",
         travelsname: "",
-        GroupTripId: ""
+        GroupTripId: "",
+        MessageText:"",
     }
 
     const [book, setBook] = useState(bookData);
@@ -1527,7 +1535,9 @@ console.log(driverBeta,"driverrrrrrrrrrrrrrrrrrr");
                     VendorTimeToggle: timeTogglevendor,
                     Hcldatakmvalue: conflicthcldatavalue.Hcldatakmvalue,
                     HclMaxConflctdata: conflicthcldatavalue.HclMaxConflctdata,
-                    lockdatavalue:lockdata
+                    lockdatavalue:lockdata,
+                    messageedited:messageditedtrip,
+                MessageText:formData.MessageText || selectedCustomerData.MessageText || book.MessageText
 
                 };
                 const VehcileHistory = {
@@ -1827,7 +1837,9 @@ console.log(driverBeta,"driverrrrrrrrrrrrrrrrrrr");
                 VendorTimeToggle: timeTogglevendor,
                 HclMaxConflctdata: 0,
                 Hcldatakmvalue: 0,
-                lockdatavalue:lockdata
+                lockdatavalue:lockdata,
+                messageedited:messageditedtrip,
+                MessageText:formData.MessageText || selectedCustomerData.MessageText || book.MessageText
             };
             // console.log(updatedBook," book")
             const VehcileHistory = {
@@ -2047,6 +2059,31 @@ console.log(driverBeta,"driverrrrrrrrrrrrrrrrrrr");
         }
     };
 
+
+    const handleChangetexttrip = (event) => {
+        const { name, value, } = event.target;
+      // const { name, value} = event.target.value;
+      console.log(name,value,"textt")
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+      setMessageEditedtrip(loginusername)
+      setNoChangeData((prevValues) => ({
+        ...prevValues,
+        [name]: value,
+    }));
+    
+     }
+
     // speeddaial
     const handleClick = async (event, actionName) => {
         event.preventDefault();
@@ -2263,7 +2300,7 @@ const Etripsheetoverview = ()=>{
   const userdatastatusstation = userStatus
   if(userdatastatusstation !== null){
 
-  if (statusCheck === "Closed" && superAdminAccess !== "SuperAdmin" &&
+  if (statusCheck === "Closed" && superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Billing_Headoffice"&&
     (!userdatastatusstation.includes("Chennai") && !userdatastatusstation.includes("All"))
 )
 {
@@ -2274,7 +2311,7 @@ return
 }
 
 else if( 
-    (statusCheck === "Closed") && superAdminAccess !== "SuperAdmin" &&
+    (statusCheck === "Closed") && superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Billing_Headoffice" &&
     (userdatastatusstation.includes("Chennai") || userdatastatusstation.includes("All"))
 ){
     setOverViewETripsheet(true)
@@ -4099,6 +4136,8 @@ useEffect(() => {
                             setTimeToggle(bookingDetails.TimeToggleData)
                             setTimeToggleVendor(bookingDetails.VendorTimeToggle)
                             setEnterTrigger((prev) => !prev)
+                            setMessageEditedBeforetrip(bookingDetails?.messageedited)
+                            setMessageEditedtrip(bookingDetails?.messageedited)
                             //---------------------------
 
                             setEscort(bookingDetails.escort)
@@ -4605,15 +4644,15 @@ useEffect(() => {
             if(duty !== "Outstation") {
            
             if (calculateTotalDay() === 1) {
-                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) <= 6.00) {
+                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
                     // console.log(2,"night1")
                     calcNight = 2;
                 }
-              if(Number(newTimeStrings) < 22.0 && Number(newTimeString) <= 6.00) {
+              if(Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
                 // console.log(1,"night2")
                 calcNight = 1;
               }
-              if(Number(newTimeStrings) > 22.0 && Number(newTimeString) > 6.00) {
+              if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
                 // console.log(1,"night3")
                 calcNight = 1;
               }
@@ -4624,19 +4663,19 @@ useEffect(() => {
              if (TotalDay > 1) {
               
                 // console.log(TotalDay,"days")
-                if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) <= 6.00) {
+                if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
                     // console.log(TotalDay + 1,"days1")
                     calcNight = TotalDay + 1 ;
                 }
-                if(Number(newTimeStrings) < 22.0 && Number(newTimeString) <= 6.00){
+                if(Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00){
                     calcNight = TotalDay;
                     // console.log(TotalDay ,"days2")
                 }
-                if(Number(newTimeStrings) < 22.0 && Number(newTimeString) > 6.00){
+                if(Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00){
                     calcNight = TotalDay -1;
                     // console.log(TotalDay ,"days3")
                 }
-                if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) > 6.00){
+                if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00){
                     calcNight = TotalDay;
                     // console.log(TotalDay ,"days4")
                 }
@@ -4652,7 +4691,7 @@ useEffect(() => {
         }
         else{
             if (calculateTotalDay() === 1) {
-                if (Number(newTimeString) <= 6.00) {
+                if (Number(newTimeString) < 6.00) {
                     
                     calcNight = 1;
                 }
@@ -4660,7 +4699,7 @@ useEffect(() => {
 
 
              if (TotalDay > 1) {
-                if (Number(newTimeString) <= 6.00) {
+                if (Number(newTimeString) < 6.00) {
                     console.log(Number(newTimeString))
                     calcNight = TotalDay  ;
                 }
@@ -4928,15 +4967,15 @@ useEffect(() => {
             // if (Number(newTimeStrings) >= 22.0 || Number(newTimeString) <= 6.00) {
             //     calcNight = 1;
             // }
-            if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) <= 6.00) {
+            if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
                 // console.log(2,"night1")
                 calcNight = 2;
             }
-          if(Number(newTimeStrings) < 22.0 && Number(newTimeString) <= 6.00) {
+          if(Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
             // console.log(1,"night2")
             calcNight = 1;
           }
-          if(Number(newTimeStrings) > 22.0 && Number(newTimeString) > 6.00) {
+          if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
             // console.log(1,"night3")
             calcNight = 1;
           }
@@ -4946,19 +4985,19 @@ useEffect(() => {
         if (TotalDay > 1) {
           
 
-            if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) <= 6.00) {
+            if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
                 // console.log(TotalDay + 1,"days1")
                 calcNight = TotalDay + 1 ;
             }
-            if(Number(newTimeStrings) < 22.0 && Number(newTimeString) <= 6.00){
+            if(Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00){
                 calcNight = TotalDay;
                 // console.log(TotalDay ,"days2")
             }
-            if(Number(newTimeStrings) < 22.0 && Number(newTimeString) > 6.00){
+            if(Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00){
                 calcNight = TotalDay -1;
                 // console.log(TotalDay ,"days3")
             }
-            if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) > 6.00){
+            if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00){
                 calcNight = TotalDay;
                 // console.log(TotalDay ,"days4")
             }
@@ -4968,13 +5007,13 @@ useEffect(() => {
     }
 }  else{
     if (TotalDay === 1) {
-        if (Number(newTimeString) <= 6.00) {
+        if (Number(newTimeString) < 6.00) {
             calcNight = 1;
         }
     }
    
      if (TotalDay > 1) {
-        if (Number(newTimeString) <= 6.00) {
+        if (Number(newTimeString) < 6.00) {
             calcNight = TotalDay  ;
         }
         else{
@@ -5215,7 +5254,7 @@ useEffect(() => {
             if (vendorduty === "Outstation") {
                 // console.log(vendorduty,"dutydata")
                 let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
-                let kmfixed2 = Number(km.toFixed(2))
+                let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
                 dataextrakms = kmfixed2
             }
 
@@ -5520,7 +5559,7 @@ useEffect(() => {
             } else if (duty === "Outstation") {
                 console.log("duty", duty)
                 let km = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
-                let cuctomerkm2 = Number(km.toFixed(2))
+                let cuctomerkm2 = Number(km.toFixed(2)) * Number(totaldays)
                 // console.log(km)
                 setExtraKM(cuctomerkm2)
             }
@@ -7276,7 +7315,12 @@ useEffect(() => {
         fetchData();
     }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues]);
     
-
+    const handleMessagetrip  = ()=>{
+        setDialogMessage(true)
+      }
+      const handleCloseMessagetrip = ()=>{
+        setDialogMessage(false)
+      }
 
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
@@ -7411,7 +7455,7 @@ useEffect(() => {
         // conflictenddate, 
         groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
-        isAddload, setisAddload, isEditload, setisEditload,
+        isAddload, setisAddload, isEditload, setisEditload,handleChangetexttrip,handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip,messageditedtrip,messageditedbeforetrip,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
         minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage,
         outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata,handlecalcpackage,handlecalcpackageamount,handleAutocompleteChangecustomer,orderByDropDown,

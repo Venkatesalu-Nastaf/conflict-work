@@ -991,7 +991,6 @@ const useTransferreport = () => {
     organizationgstnumber,
     invoiceno,
     groupTripid,
-
     fromDate,
     endDate,
     invoiceDate,

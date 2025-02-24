@@ -695,6 +695,7 @@ export const states = [
       "Prakasam",
       "Srikakulam",
       "Visakhapatnam",
+      "Vijayawada",
       "Vizianagaram",
       "West Godavari",
       "YSR Kadapa",

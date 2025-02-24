@@ -30,7 +30,6 @@ const useExeclpage = () => {
         { key: "orderedby", header: "Category", width: 120 },
         { key: "duty", header: "Route Type", width: 120 },
         { key: "duty1", header: "Sub Route Type", width: 150 },
-
         { key: "VendorName", header: "Vendor Name", width: 150 },
         // { key: "Vendor", header: "Vendor", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
@@ -278,12 +277,17 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 data.map((singleData, index) => {
                     console.log(data,'datas of excel datss')
-                
+
+                    if (singleData["duty"] === "Outstation") {
+                        singleData["originalExtraKM"] = singleData["extraKM"]; // Store original value
+                        singleData["extraKM"] = 0;
+                        singleData["extraHR"] = 0;
+                    }
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
                     const location = `${singleData.address1}`;
@@ -295,7 +299,8 @@ const useExeclpage = () => {
                     singleData["UserNos_Occupancy"] = 1
                     singleData["OutstationCharges"] = 0
                     // singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
-                    singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"])  : singleData["calcPackage"];
+                    // singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"])  : singleData["calcPackage"];
+                    singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"] || singleData["originalExtraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"]): singleData["calcPackage"];
                     singleData["package_amount"] = singleData["duty"] === "Outstation"   ?   singleData["ex_kmAmount"] : singleData["package_amount"]
                     singleData["vechicletype"] = singleData["vehType"]
                     // singleData["vehTypebilling"] = singleData["vehType"]
@@ -342,7 +347,7 @@ const useExeclpage = () => {
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
                 totalRow.eachCell((cell) => {
                     cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.alignment = { horizontal: 'left', vertical: 'left' };
                     cell.border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -416,7 +421,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet1.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 data2.forEach((singleData2, index) => {
@@ -543,7 +548,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 const uniqueData = data.filter((value, index, self) =>
@@ -608,7 +613,7 @@ const useExeclpage = () => {
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
                 totalRow.eachCell((cell) => {
                     cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.alignment = { horizontal: 'left', vertical: 'left' };
                     cell.border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -676,7 +681,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 const uniqueData = data.filter((value, index, self) =>

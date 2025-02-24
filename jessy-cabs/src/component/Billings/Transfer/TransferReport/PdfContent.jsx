@@ -476,7 +476,6 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     </Text>
                     {/* {newStateforpdf.length > 0 && newStateforpdf[0].gstno !== "" && newStateforpdf[0].gstno !== null ? (
                       // Render this view if newStateforpdf has values
-
                       <>
                         <Text style={styles.underlinetext}>{organisationdetailfill[0]?.organizationname}</Text>
                         <Text style={[styles.text2, { fontSize: 11.5 }]}>

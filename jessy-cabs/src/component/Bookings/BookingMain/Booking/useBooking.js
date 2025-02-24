@@ -1048,12 +1048,14 @@ useEffect(() => {
 // console.log(formData.vehiclemodule,selectedCustomerData.vehiclemodule,book.vehiclemodule,selectedCustomerdriver.vehiclemodule,"jss")
   const handleAdd = async () => {
  
-   const guestmobilenodata = selectedCustomerData.guestmobileno || book.guestmobileno
+  //  const guestmobilenodata = selectedCustomerData.guestmobileno || book.guestmobileno
    const servicestationdata = selectedCustomerData.servicestation || book.servicestation
+   const duty = selectedCustomerData.duty || book.duty
    const customerdatas = selectedCustomerData.customer|| book.customer
-   const starttimedata = selectedCustomerData.starttime || book.starttime
-  const guestname = selectedCustomerData.guestname || book.guestname
-  const bookaddress = selectedCustomerData.address1 || book.address1
+   const starttime = selectedCustomerData.starttime || book.starttime
+   const guestname = selectedCustomerData.guestname || book.guestname
+   const reporttime = selectedCustomerData.reporttime || book.reporttime
+   const bookaddress = selectedCustomerData.address1 || book.address1
 
 
     // if (!selectedCustomerData.guestmobileno) {
@@ -1100,43 +1102,47 @@ useEffect(() => {
     //   return;
     // }
 
-     if (!guestmobilenodata) {
-      setError(true);
-      setErrorMessage("Enter Guest Mobile Number");
-      return;
-    }
-
+    if (!customerdatas) {
+      setError(true)
+      setErrorMessage("Enter Customer Name")
+      return
+    }    
     if (!servicestationdata) {
       setError(true);
       setErrorMessage("Enter Station");
       return;
     }
-    if (!reportdate) {
-      setError(true);
-      setErrorMessage("Enter Report Date");
-      return;
-    }
-    if (!customerdatas) {
-      setError(true)
-      setErrorMessage("Enter Customer Name")
-      return
-    }
-    if (!starttimedata) {
-      setError(true)
-      setErrorMessage("Enter starting Time")
-      return
-    }
-   
     if (!guestname) {
       setError(true)
-      setErrorMessage("Enter GuestName")
+      setErrorMessage("Enter Guest Name")
       return
     }
+    // if (!guestmobilenodata) {
+    //   setError(true);
+    //   setErrorMessage("Enter Guest Mobile Number");
+    //   return;
+    // }
     if (!bookaddress) {
       setError(true);
       setErrorMessage("Enter Address Details");
       return;
     }
+    if (!duty) {
+      setError(true);
+      setErrorMessage("Enter Duty ");
+      return;
+    }
+    if (!reporttime) {
+      setError(true);
+      setErrorMessage("Enter Shed Out Time");
+      return;
+    }
+    if (!starttime) {
+      setError(true)
+      setErrorMessage("Enter Report Time")
+      return
+    }
+    
 
     try {
       setisAddbtnload(true)

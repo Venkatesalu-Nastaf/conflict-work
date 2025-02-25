@@ -153,7 +153,7 @@ const useExeclpage = () => {
     const hidePopup = () => {
 
         setError1(false);
-
+ 
 
     };
     // function addPercentage(amount, percent) {
@@ -310,7 +310,7 @@ const useExeclpage = () => {
     
 
                     singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
-                     singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
+                    singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
                     singleData["starttime1"]= removeSeconds(singleData["starttime1"])
                     // singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax,singleData["totalcalcAmount"])
@@ -436,6 +436,7 @@ const useExeclpage = () => {
                     singleData2["calcPackage"] =  singleData2["duty"] === "Transfer" || singleData2["duty"] === "Outstation" ? singleData2["duty"] :singleData2["calcPackage"]
                     singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
+                    singleData2["sheoutDatetrip"]=singleData2["shedOutDate"] ? dayjs(singleData2["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData2["shedInDate"]=singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD/MM/YYYY"):""
                     singleData2["tripsheetdate"]=singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
@@ -577,7 +578,7 @@ const useExeclpage = () => {
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
-                      singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
+                    singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["starttime1"] = removeSeconds(singleData["starttime"])
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):""
@@ -700,6 +701,7 @@ const useExeclpage = () => {
                     singleData["vehType1"] = singleData["vehType"]
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
+                    singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):""

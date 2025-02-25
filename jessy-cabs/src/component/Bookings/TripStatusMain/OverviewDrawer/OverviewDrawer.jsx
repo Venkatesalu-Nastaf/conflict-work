@@ -144,14 +144,14 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
   const { permissions } = useContext(PermissionContext)
   const TripStatus_read = permissions[2]?.read;
 
-  useEffect(() => {
-    if (customer?.length > 1) {
-      setAllCustomer([...customer, { customer: "All" }])
-    }
-    else {
-      setAllCustomer(customer)
-    }
-  })
+  // useEffect(() => {
+  //   if (customer?.length > 1) {
+  //     setAllCustomer([...customer, { customer: "All" }])
+  //   }
+  //   else {
+  //     setAllCustomer(customer)
+  //   }
+  // })
   useEffect(() => {
 
     if (stationName?.length > 0) {

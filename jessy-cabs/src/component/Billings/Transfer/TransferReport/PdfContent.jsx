@@ -319,7 +319,6 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   //   console.log(newStateforpdf.address,'Custom state address')
   //   console.log(newStateforpdf.gstno,'Custom state gstno ')
 
-
   //   if (newStateforpdf) {
 
   //     if (newStateforpdf.length === 0) {

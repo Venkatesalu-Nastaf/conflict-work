@@ -108,12 +108,21 @@ import useTripsheet from './useTripsheet';
 import { WhatsappShareButton } from 'react-share';
 import LoadingButton from '@mui/lab/LoadingButton';
 // UpdateTbaleRowsGPSSlider TABLE START
+// const columns = [
+//   { field: "id", headerName: "Sno", width: 60 },
+//   { field: "documenttype", headerName: "Document Type", width: 180 },
+//   { field: "path", headerName: "Attach Path", width: 160 },
+//   { field: "tripid", headerName: "TripID", width: 100 },
+//   { field: "booking_id", headerName: "Booking ID", width: 110 },
+// ];
+
 const columns = [
-  { field: "id", headerName: "Sno", width: 60 },
-  { field: "documenttype", headerName: "Document Type", width: 180 },
+  { field: "id", headerName: "Sno", width: 20 },
+  { field: "documenttype", headerName: "Document Type", width: 130 },
   { field: "path", headerName: "Attach Path", width: 160 },
-  { field: "tripid", headerName: "TripID", width: 100 },
-  { field: "booking_id", headerName: "Booking ID", width: 110 },
+  { field: "name", headerName: "File Name", width: 160 },
+  { field: "tripid", headerName: "TripID", width: 80 },
+  { field: "booking_id", headerName: "Booking ID", width: 80 },
 ];
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -163,7 +172,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
   const superAdminAccess = localStorage.getItem("SuperAdmin")
   const filteredStatus =
-    superAdminAccess === "SuperAdmin" || superAdminAccess === "Assistant CFO"
+    superAdminAccess === "SuperAdmin" 
       ? Status // Show all statuses for superAdmin and CFo
       : Status.filter((option) => option.optionvalue !== "Billed");
 
@@ -271,14 +280,14 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
-    handleDeleteMap, copydatalink, setCopyDataLink,
+    handleDeleteMap, copydatalink, setCopyDataLink,speeddailacesssedit,speeddailacesss,
     //  conflictenddate,
-    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess,
+    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess,oldStatusCheck,
     setSuccessMessage,handleChangetexttrip,handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip,messageditedtrip,messageditedbeforetrip,
     // timeToggle,HclKMCalculation,
 
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
-    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,
+    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,handleDatapermission,
     setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
@@ -313,6 +322,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   const Tripsheet_new = permissions[3]?.new;
   const Tripsheet_modify = permissions[3]?.modify;
   const Tripsheet_delete = permissions[3]?.delete;
+
   const billing_read = permissions[4]?.read;
 
   // varibles for validation 
@@ -950,6 +960,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     }
     return () => clearTimeout(timeout);
   }, [conflictModalKmBox]);
+const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") ;
 
   // console.log(formData.reporttime, selectedCustomerData.reporttime, selectedCustomerDatas.reporttime, book.reporttime, 'rrrrrrrrrrrrrrr');
   return (
@@ -1929,7 +1940,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         <DatePicker
                           label="Close Date"
                           id="closedate"
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"&& !a}
                           value={
                             formData?.closedate ||
                               selectedCustomerData?.closedate
@@ -1997,7 +2008,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         <DatePicker
                           label="Shed In Date"
                           id="shedInDate"
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -2043,7 +2054,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         name="totaldays"
                         value={calculateTotalDay()}
                         label="Total Days"
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         size="small"
                         type="number"
                         id="totaldays"
@@ -2201,7 +2212,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         name="closetime"
                         id="closetime"
                         ref={closeTimeRef}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"&& !a}
                         value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                         onChange={(event) => {
                           const rTime = event.target.value;
@@ -2264,7 +2275,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         type="time"
                         name="shedintime"
                         ref={shedinTimeRef}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
                         onChange={(event) => {
                           const rTime = event.target.value;
@@ -2350,7 +2361,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                             additionalTime.additionaltime ||
                             ''
                           }
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" || outStationHide}
+                          // disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" || outStationHide}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           onChange={handleChange}
                           id="additionaltime"
                           size="small"
@@ -2377,7 +2389,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                               ? calculateTotalTimes()
                               : ""
                           }
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           // onChange={handleChange}
                           id="totaltime"
                           size='small'
@@ -2489,7 +2501,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                               // }
                             }
                           }}
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           label="Shed Out"
                           id="shedout"
                           size='small'
@@ -2524,7 +2536,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                             // }
                           }
                         }}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         size="small"
                         label="Start KM"
                         type="number"
@@ -2558,7 +2570,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                             // }
                           }
                         }}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         label="Close KM"
                         size="small"
                         type="number"
@@ -2598,7 +2610,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                             // }
                           }
                         }}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         label="Shed In"
                         type="number"
                         id="shedin"
@@ -2622,7 +2634,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           handleChange(e)
                         }
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" || outStationHide}
+                      // disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a || outStationHide}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a }
                       label="Add KM"
                       type="number"
                       id="shedkm"
@@ -2639,7 +2652,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     <TextField
                       name="totalkm1"
                       value={calculateTotalKilometers()}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       // onChange={handleChange}
                       label="Total KM"
                       id="totalkm1"
@@ -2699,7 +2712,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           vpermettovendor: value,
                         }));
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Permit"
                       id="permit"
                       size="small"
@@ -2751,7 +2764,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           vendorparking: value,
                         }));
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Parking"
                       id="parking"
                       size="small"
@@ -2804,7 +2817,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         }));
 
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Toll"
                       id="toll"
                       size="small"
@@ -2892,7 +2905,9 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       <Button
                                         // onClick={handleDeleteMap}
                                         onClick={handleOpen}
-                                        variant="contained" color="primary" disabled={superAdminAccess !== "SuperAdmin" && temporaryStatus}>
+                                        variant="contained" color="primary" 
+                                        // disabled={superAdminAccess !== "SuperAdmin" && (temporaryStatus || hideField)}>
+                                           disabled={handleDatapermission(Tripsheet_delete)}>
                                         Delete map
                                       </Button>
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
@@ -2941,6 +2956,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       }
                                     />
                                   </div>
+                                  {/* {console.log(!Tripsheet_modify ,"pertrip" ,superAdminAccess !== "SuperAdmin",temporaryStatus,)} */}
                                   <Modal
                                     open={openEditMapLog}
                                     onClose={handleCloseMapLog}
@@ -2972,7 +2988,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                     </Box>
                                   </Modal>
                                   <div className="input">
-                                    <Button variant="contained" disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} onClick={handleUpload} className='full-width'>Upload Doc</Button>
+                                    <Button variant="contained" disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus && !a)} onClick={handleUpload} className='full-width'>Upload Doc</Button>
                                   </div>
                                 </div>
                                 <div className="in-feild" style={{ marginTop: '20px' }}>
@@ -2982,7 +2998,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                   </div>
                                   <div className="input">
                                     <Button
-                                      disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && signaturedisabled)}
+                                      disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && signaturedisabled && !a)}
                                       // disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
                                       onClick={handlesignatureimages}
                                       variant="contained"
@@ -3027,7 +3043,11 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       <Button variant="contained" onClick={() => {
                                         handlesignaturemageDelete()
 
-                                      }} color="primary" disabled={!Tripsheet_delete}>
+                                      }} color="primary" 
+                                      // disabled={!Tripsheet_delete}
+                                      // disabled={!Tripsheet_delete && (superAdminAccess === "SuperAdmin" || superAdminAccess === "Billing_Headoffice" )}
+                                      disabled={handleDatapermission(Tripsheet_delete)}
+                                      >
                                         Delete
                                       </Button>
                                     </DialogActions>
@@ -3039,8 +3059,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                   </div> */}
                                   <div className="input">
                                     {manualTripID.length > 0 ?
-                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
-                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} className='full-width' onClick={handleEditMap} >Manual Marking</Button>
+                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus && !a)} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
+                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus && !a)} className='full-width' onClick={handleEditMap} >Manual Marking</Button>
                                     }
                                   </div>
                                 </div>
@@ -3057,6 +3077,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                 </div>
                               </div>
                             </div>
+      
                             <Dialog
                               open={imgpopupOpen}
                               onClose={handleimgPopupClose}
@@ -3118,7 +3139,10 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                   variant="contained"
                                   color="secondary"
                                   // disabled={!Tripsheet_delete}
-                                  disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
+                                  
+                                  // disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
+                                  // disabled={!Tripsheet_delete && (superAdminAccess === "SuperAdmin" || superAdminAccess === "Billing_Headoffice" )}
+                                  disabled={handleDatapermission(Tripsheet_delete)}
                                   onClick={() => {
                                     handleimagedelete(selectedRow);
                                     handleimgPopupClose();
@@ -4116,9 +4140,14 @@ Please Click the link to close E-Tripsheet-`}
                       <DialogActions className='tripsheet-cancel-save-btn'>
                         <Button className='tripsheet-cancel-button' onClick={handleClose}>Cancel</Button>
                         {isEditMode ?
-                          <Button variant="contained" onClick={handleEdit} disabled={superAdminAccess !== "SuperAdmin" && temporaryStatus} >
-                            Save
-                          </Button>
+                          // <Button variant="contained" onClick={handleEdit} disabled={superAdminAccess !== "SuperAdmin" && editButtonStatusCheck} >
+                          //   Save
+                          // </Button>
+
+
+
+  editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <Button  variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}> Save</Button>
+
                           : <></>
                         }
                       </DialogActions>
@@ -4192,7 +4221,7 @@ Please Click the link to close E-Tripsheet-`}
                       //     vendor_vpermettovendor: e.target.value,
                       //   });
                       // }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"&& !a}
                       label="Vendor permit"
                       id="vpermettovendor"
                       autoComplete="password"
@@ -4212,7 +4241,7 @@ Please Click the link to close E-Tripsheet-`}
                       //   handleChange(e)
                       //   setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
                       // }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Vendor Parking"
                       id="vendorparking"
                       autoComplete="password"
@@ -4232,7 +4261,7 @@ Please Click the link to close E-Tripsheet-`}
                       //   handleChange(e)
                       //   setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
                       // }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Vendor Toll"
                       id="vendor-vendortoll"
                       autoComplete="password"
@@ -4251,7 +4280,7 @@ Please Click the link to close E-Tripsheet-`}
                     size="small"
                     name="remark"
                     value={formData.remark || selectedCustomerData.remark || book.remark || ''}
-                    disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                    disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                     onChange={(e) => {
                       handleChange(e);
 
@@ -4295,7 +4324,8 @@ Please Click the link to close E-Tripsheet-`}
                         setNoChangeData({ ...nochangedata, fuelamount: e.target.value })
 
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                      // disabled={superAdminAccess !== "SuperAdmin" && fueldataamountdis}
                       label="Fuel Amount"
                       id="fuelamount"
                       autoComplete="password"
@@ -4331,7 +4361,8 @@ Please Click the link to close E-Tripsheet-`}
                         handleChange(e)
                         setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value, advancepaidtovendor: e.target.value })
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      // disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                      disabled={superpower !== "SuperAdmin"}
                       label="Vendor Advance"
                       id="advance-paid-to-vendor"
                       autoComplete="password"
@@ -5189,7 +5220,7 @@ Please Click the link to close E-Tripsheet-`}
                 </Box>
               </Modal>
             </div>
-
+          
             <div>
               <Box className="common-speed-dail">
                 <StyledSpeedDial
@@ -5197,15 +5228,37 @@ Please Click the link to close E-Tripsheet-`}
                   icon={<SpeedDialIcon />}
                   direction="left"
                 >
-                  {Tripsheet_modify === 1 && isEditMode && (
+                  {/* {Tripsheet_modify === 1 && isEditMode && (
                     <SpeedDialAction
                       key="edit"
                       icon={<ModeEditIcon />}
                       tooltipTitle="Edit"
+                      // disabled={Tripsheet_modify === 1}
+                      onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                    />
+                  )} */}
+
+                  
+
+{isEditMode && speeddailacesssedit && (
+                    <SpeedDialAction
+                      key="edit"
+                      icon={<ModeEditIcon />}
+                      tooltipTitle="Edit"
+                      // disabled={Tripsheet_modify === 1}
                       onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                     />
                   )}
-                  {Tripsheet_delete === 1 && isEditMode && (
+                  {/* {Tripsheet_delete === 1 && isEditMode && (
+                    <SpeedDialAction
+                      key="delete"
+                      icon={<DeleteIcon />}
+                      tooltipTitle="Delete"
+                      onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                    />
+                  )} */}
+
+                  {isEditMode && speeddailacesss && (
                     <SpeedDialAction
                       key="delete"
                       icon={<DeleteIcon />}

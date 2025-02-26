@@ -1394,7 +1394,7 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
                 if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
                     // its for fetch by All
                     // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" `, tripid, (err, result) => {
-                        if(datarole === "SuperAdmin" || datarole === "Assistant CFO") {
+                        if(datarole === "SuperAdmin" || datarole === "Assistant CFO"|| datarole === "Billing_Headoffice") {
                             console.log(datarole,"inside")
                         await db.query(`SELECT * FROM tripsheet WHERE tripid = ?   `, tripid, (err, result) => {
                         if (err) {
@@ -1433,7 +1433,7 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
                             return res.status(404).json({ error: 'You Dont Have Accesss To This Tripsheet Based On Service Station' });
                         }
                         else if (result.length > 0) {
-                              if(datarole === "SuperAdmin" || datarole === "Assistant CFO") {
+                              if(datarole === "SuperAdmin" || datarole === "Assistant CFO"|| datarole === "Billing_Headoffice") {
                             // db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
                                 db.query(`SELECT * FROM tripsheet WHERE tripid = ?  AND department IN (?) `, [tripid, arryData], (err, result) => {
                                 if (err) {

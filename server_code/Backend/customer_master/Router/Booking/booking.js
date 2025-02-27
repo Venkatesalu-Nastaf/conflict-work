@@ -721,14 +721,14 @@ router.post('/send-email', async (req, res) => {
                 // from: 'foxfahad386@gmail.com',
                 from: Sendmailauth,
                 to: `${email},${customeremail}`,
-                subject: `JESSY CABS Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
+                subject: `JESSY CABS PVT LTD Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
                 html: `
             <p>Dear Sir/Madam,</p>
-             <p>Thank you for booking with us!!! Your booking has been confirmed. Please find the details below:</p>
+             <p>Thank you for booking with us! Your booking has been confirmed. Please find the details below:</p>
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1; color: #FFFFFF;">
                         <tr>
-                            <th colspan="2" style="padding: 8px; text-align: center;">JESSY CABS Booking Confirmation </th>
+                            <th colspan="2" style="padding: 8px; text-align: center;">JESSY CABS PVT LTD Booking Confirmation </th>
                         </tr>
                     </thead>
                     <tbody>

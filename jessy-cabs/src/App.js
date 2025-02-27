@@ -369,42 +369,42 @@ function App() {
   // console.log(permissions.length,' length of permissions')
 
 
-  // useEffect(() => {
-  //   const organizationName = async () => {
-  //     try {
-  //       const response = await axios.get(`${apiUrl}/allCustomers`);
-  //       const organisationData = response?.data;
-  //       const names = organisationData.map(res => res.customer);
-  //       setOrganizationName(names);
-  //     } catch (error) {
-  //       console.error('Error fetching organization names:', error);
-  //     }
-  //   };
-  //   organizationName();
-
-  // }, [apiUrl]); // Empty dependency array to ensure it runs only once
-
   useEffect(() => {
-    const fetchOrganizationName = async () => {
-      const cachedData = localStorage.getItem("organizationNames");
-      if (cachedData) {
-        setOrganizationName(JSON.parse(cachedData));
-        return;
-      }
-
+    const organizationName = async () => {
       try {
         const response = await axios.get(`${apiUrl}/allCustomers`);
         const organisationData = response?.data;
         const names = organisationData.map(res => res.customer);
         setOrganizationName(names);
-        localStorage.setItem("organizationNames", JSON.stringify(names));
       } catch (error) {
-        console.error("Error fetching organization names:", error);
+        console.error('Error fetching organization names:', error);
       }
     };
+    organizationName();
 
-    fetchOrganizationName();
-  }, []);
+  }, [apiUrl,triggerCustomerAdd]); // Empty dependency array to ensure it runs only once
+
+  // useEffect(() => {
+  //   const fetchOrganizationName = async () => {
+  //     const cachedData = localStorage.getItem("organizationNames");
+  //     if (cachedData) {
+  //       setOrganizationName(JSON.parse(cachedData));
+  //       return;
+  //     }
+
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/allCustomers`);
+  //       const organisationData = response?.data;
+  //       const names = organisationData.map(res => res.customer);
+  //       setOrganizationName(names);
+  //       localStorage.setItem("organizationNames", JSON.stringify(names));
+  //     } catch (error) {
+  //       console.error("Error fetching organization names:", error);
+  //     }
+  //   };
+
+  //   fetchOrganizationName();
+  // }, []);
 
 
 
@@ -449,17 +449,17 @@ function App() {
   }, [apiUrl])
 
   //-------------------------------------------
-  const [customer, setCustomer] = useState()
+  // const [customer, setCustomer] = useState()
 
   const [Statename, setStateName] = useState([])
 
-  useEffect(() => {
-    const getCustomer = async () => {
-      const response = await axios.get(`${apiUrl}/get-customer`)
-      setCustomer(response.data)
-    }
-    getCustomer()
-  }, [apiUrl])
+  // useEffect(() => {
+  //   const getCustomer = async () => {
+  //     const response = await axios.get(`${apiUrl}/get-customer`)
+  //     setCustomer(response.data)
+  //   }
+  //   getCustomer()
+  // }, [apiUrl])
   useEffect(() => {
     const getstationstate = async () => {
       const response = await axios.get(`${apiUrl}/Statecreation`)
@@ -664,7 +664,7 @@ function App() {
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route
                   path="/home/bookings/tripstatus"
-                  element={TripStatus !== 0 && TripStatus !== undefined ? (<TripStatusMain stationName={stationName} customer={customer} vehicleNo={vehicleNo} />) : (<NoPermission />)}
+                  element={TripStatus !== 0 && TripStatus !== undefined ? (<TripStatusMain stationName={stationName} customer={customerData} vehicleNo={vehicleNo} />) : (<NoPermission />)}
                 />
               </Route>
 

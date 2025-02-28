@@ -126,6 +126,7 @@ const useTripsheet = () => {
     let [driverBeta, setdriverBeta] = useState('0')
     let [driverbeta_Count, setdriverbeta_Count] = useState('0')
     let [driverBeta_amount, setdriverBeta_amount] = useState('0')
+    const [userstatuspermission,setUserStatusPermission]=useState([])
 
     //-----------------------------------------------------------------
     const [packageData, setPackageData] = useState({
@@ -251,6 +252,7 @@ const useTripsheet = () => {
 
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
+    const [signimageUrl1, setSignImageUrl1] = useState('');
     const [attachedImage, setAttachedImage] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
 
@@ -300,7 +302,9 @@ const useTripsheet = () => {
     const [orderByDropDown, setOrderByDropDown] = useState([])
     const [speeddailacesss,setSpeedDialAccessdelete]=useState(false)
     const [speeddailacesssedit,setSpeedDialAccessedit]=useState(false)
-    // const [fueldataamountdis,setFuelDataAmountDis]=useState(false)
+    const [Permissiondeleteroles,setPermissionDeleteRoles]=useState(false)
+    const [fueldataamountdis,setFuelDataAmountDis]=useState(false)
+    const [fueladvancedamounthide,setFuelAdvancedamountHide]=useState(null)
     const a1 = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") ;
    
     
@@ -345,12 +349,14 @@ const useTripsheet = () => {
                     aria-label="open-dialog"
                     // disabled={!Tripsheet_delete1}
                     // disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
-                    disabled={handleDatapermission(Tripsheet_delete1)}
+                    // disabled={handleDatapermission(Tripsheet_delete1)}
+                    disabled={Permissiondeleteroles}
                     // handleDatapermission(Tripsheet_delete)
                 >
                     <Button 
                     // disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
-                    disabled={handleDatapermission(Tripsheet_delete1)}
+                    // disabled={handleDatapermission(Tripsheet_delete1)}
+                    disabled={Permissiondeleteroles}
                      variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <RiDeleteBinLine style={{ fontSize: "18px" }} />
                     </Button>
@@ -476,7 +482,7 @@ const useTripsheet = () => {
     };
 
     const [mapimageUrls, setMapImageUrls] = useState([]);
-    const [mapimageUrls1, setMapImageUrls1] = useState("");
+    const [mapimageUrls1, setMapImageUrls1] = useState([]);
 
 
     // map1
@@ -495,6 +501,8 @@ const useTripsheet = () => {
             const imageUrl = URL.createObjectURL(responseData);
             setMapImageUrls(imageUrl);
             setMapimgPopupOpen(true);
+            handleTripmapverify()
+
         } catch {
         }
     };
@@ -514,20 +522,21 @@ const useTripsheet = () => {
 
             const responseData = response.data
             // console.log(responseData,"urlstripiii")
-            if (responseData.length > 0) {
+            // if (responseData.length > 0) {
                 // setCheckSignandMapVerify(true)
                 // setCheckSignMapMessage("Map and Signature Verified")
                 setMapImageUrls1(responseData);
-            } else {
+            // } else {
 
                 // Assuming you want to display the image directly
                 // const imageUrl = URL.createObjectURL(responseData);
-                setMapImageUrls1("");
-            }
+                // setMapImageUrls1([]);
+            // }
             // setMapimgPopupOpen(true);
         } catch {
         }
     };
+    // console.log(mapimageUrls1,"urls")
 
 
     const handleTripmaplogClick = async () => {
@@ -713,6 +722,13 @@ const useTripsheet = () => {
             setDriverSMS(false)
             setIsEditMode(true);
             setMessageEditedBeforetrip(messagedatatrip)
+            getSignatureImageverify();
+            handleTripmapverify();
+            checksignatureandmap(); 
+            fuelAdvnacedisabled();
+            handlepermissionforspeedDialedit(Tripsheet_modify1)
+            handlepermissionforspeedDialdelete(Tripsheet_delete1)
+
 
 
 
@@ -744,6 +760,8 @@ const useTripsheet = () => {
         setdriverbeta_Count(driverbeta_Count);
         setdriverBeta_amount(driverBeta_amount);
         setTotalcalcAmount(totalcalcAmount || formData.totalcalcAmount);
+      
+       
 
         ///------
     }, [location]);
@@ -904,6 +922,7 @@ const useTripsheet = () => {
         setGMapImageUrl("")
         setRouteData('')
         setSignImageUrl('')
+        setSignImageUrl1('')
         // -----------
         setSignatureWhattsapplink()
         setCopyDataLink(false)
@@ -939,6 +958,7 @@ const useTripsheet = () => {
         // setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
         // setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
         localStorage.removeItem('selectedTripid');
+        setFuelAdvancedamountHide(null)
     };
     const handlecheck = async () => {
         const statusdata = formData.status || book.status || selectedCustomerData.status;
@@ -1329,95 +1349,97 @@ const useTripsheet = () => {
     const dayhcl1 = hybridhclcustomer || hybridhclnavigate
     // console.log(mapimageUrls1, "urls", typeof (mapimageUrls1), mapimageUrls)
     const checksignatureandmap = async () => {
-        // handleTripmapClick()
-        await handleTripmapverify()
-        // await getSignatureImage()
-        getSignatureImageverify()
-        // console.log(tripID1, "userStatusdatatripi", typeof (tripID1))
-        //    const status1 = formData.status || selectedCustomerData.status || book.status
-        if (tripID1 && userStatus !== null) {
-            // console.log(tripID1, "userStatusdatatripienetr", typeof (tripID1))
-            //     const station = userStatus
-            //     const dayhcl1 = hybridhclcustomer || hybridhclnavigate
-
-            // if (stationmap.includes("All") || stationmap.includes("Chennai")) {
-            if (userStatus.includes("All") || userStatus.includes("Chennai")) {
+        const userstatusdata = userstatuspermission
+      console.log(signimageUrl1,"sign",mapimageUrls1,userstatuspermission)
+    //   const userstatusdata = userstatuspermission
+      
+        if (tripID1 && userstatusdata.length > 0) {
+           
+            if (userstatusdata.includes("All") || userstatusdata.includes("Chennai")) {
                 if (dayhcl1 === 1 && status1 === "Closed") {
 
-                    if (!signimageUrl && !mapimageUrls1 && mapimageUrls1 === "") {
+                    // if (!signimageUrl1 && !mapimageUrls1 && mapimageUrls1 === "") {
+                        if (!signimageUrl1 && mapimageUrls1.length === 0) {
+                        console.log("condition1check1")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the signature and Map")
-                        return true;
+                        // return 
                     }
-                    else if (!signimageUrl) {
+                    else if (!signimageUrl1) {
+                        console.log("condition1check2")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the signature")
                         // setError(true);
                         // setErrorMessage("Please upload the signature");
-                        return true;
-                    } else if (!mapimageUrls1 && mapimageUrls1 === "") {
+                        // return 
+                    } 
+                    // else if (!mapimageUrls1 && mapimageUrls1 === "") {
+                        else if (mapimageUrls1.length === 0) {
+                        console.log("condition1check3")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the map image")
                         // setError(true);
                         // setErrorMessage("Please upload the map image");
-                        return true;
+                        // return 
                     }
                     else {
+                        console.log("condition1check4")
                         setCheckSignandMapVerify(false)
-                        return false
+                        // return 
                     }
 
                 } else {
                     // if(dayhcl1 === 0 && status1 === "Closed"){
-                    if (!signimageUrl && status1 === "Closed") {
+                    if (!signimageUrl1 && status1 === "Closed") {
+                        console.log("condition1check5")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the signature")
                         // setError(true);
                         // setErrorMessage("Please upload the signature");
-                        return true;
+                        return 
                     }
                     // }
                     else {
                         // console.log("withoyttripid")
+                        console.log("condition1check6")
                         setCheckSignandMapVerify(false)
-                        return false
+                        // return 
                     }
 
 
                 }
 
             }
-            // else if( !stationmap.includes('Chennai') && !stationmap.includes('All')){
-            //     else if( !userStatus.includes('Chennai') && !userStatus.includes('All')){
-            //     if(!signimageUrl && status1 === "Temporary Closed"){
-            //         setCheckSignandMapVerify(true)
-            //         setCheckSignMapMessage("Please upload the signature")
-            //         // setError(true);
-            //         // setErrorMessage("Please upload the signature");
-            //         return;
-            //     }
-
-            // }
+         
             else {
+                console.log("condition1check7")
                 setCheckSignandMapVerify(false);
-                return false;
+                // return 
             }
         }
         else {
+            console.log("condition1check8")
             setCheckSignandMapVerify(false);
-            return false
+            // return 
         }
     }
     useEffect(() => {
         checksignatureandmap()
-    }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate, signimageUrl, mapimageUrls1])
+    // }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate, signimageUrl, mapimageUrls1])
+// }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate,signimageUrl1, mapimageUrls1])
+// }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate,signimageUrl1, mapimageUrls1])
+}, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate,mapimageUrls1,signimageUrl1,location,userstatuspermission])
 
     // console.log(checksignandMapverify, "userStatusdata", typeof (checksignandMapverify))
 
     const handleEdit = async () => {
         // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
         // handleTripmapClick()
+        handleTripmapverify()
+        getSignatureImageverify()
+
         await checksignatureandmap()
+        // console.log(checksignandMapverify,"verify")
 
         const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
@@ -1609,6 +1631,7 @@ const useTripsheet = () => {
                 setLockDatavendorBill(true)
                 setLockDatacustomerBill(true)
                 setCheckSignandMapVerify(false)
+                fuelAdvnacedisabled()
                 //    const data2= await  checksignatureandmap()
                 //    console.log(data2,"userStatusdata2")
 
@@ -4169,6 +4192,12 @@ useEffect(() => {
                             setLockDatavendorBill(true)
                             setLockDatacustomerBill(true)
                             localStorage.setItem('selectedTripid', tripid);
+                            getSignatureImageverify();
+                            handleTripmapverify();
+                            checksignatureandmap();
+                            fuelAdvnacedisabled();
+                            handlepermissionforspeedDialedit(Tripsheet_modify1)
+                            handlepermissionforspeedDialdelete(Tripsheet_delete1)
                         }
                     } else {
                         setError(true);
@@ -4383,14 +4412,19 @@ useEffect(() => {
     };
 
 
-    const getSignatureImageverify = async () => {
+    const getSignatureImageverify = useCallback(async () => {
+        // console.log("adddedddddd")
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+        checksignatureandmap()
         try {
             if (tripid !== null && tripid && tripid !== "undefined") {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
+                // console.log(response,"ddddddddddddddddddddddddd")
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
-                    setSignImageUrl(imageUrl);
+                    // console.log("addeddatyyyyyyyyyyyyyyyyyyyyyyy")
+                    setSignImageUrl1(imageUrl);
+                   
                     // setSuccess(true)
                     // setSuccessMessage('Signature Added Sucessfully')
 
@@ -4402,7 +4436,9 @@ useEffect(() => {
             setWarningMessage("Failed to fetch signature image. Please try again.");
 
         }
-    };
+    },[formData,book,isEditMode,signimageUrl1,userstatuspermission])
+
+ 
 
 
 
@@ -4418,9 +4454,16 @@ useEffect(() => {
                 await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}/${datadate}`, formData);
                 // await axios.post(`http://localhost:7000/signatureimagesavedriver/${datadate}`,formData)
                 getSignatureImage()
+                getSignatureImageverify()
+                checksignatureandmap()
                 setSignImageUrl(imageUrl);
                 setSuccess(true)
                 setSuccessMessage('Signature Added Sucessfully')
+                setNoChangeData((prevData) => ({
+                    ...prevData,
+                    signatureimage: "done",
+                  }));
+
                 // THIS API FRO DRIVER APP 
                 await axios.post(`${apiurltransfer}/signatureimageuploaddriver/${datadate}`, formData)
 
@@ -4446,6 +4489,11 @@ useEffect(() => {
             setSignaturepopup(false);
             setSignImageUrl('')
             getSignatureImage()
+            getSignatureImageverify()
+            setNoChangeData((prevData) => ({
+                ...prevData,
+                signatureimagedelete: "done",
+              }));
         }
         catch (err) {
             console.log(err)
@@ -5700,8 +5748,13 @@ useEffect(() => {
         // if(!isentertripID){
         //     return
         // }
+        handleTripmapverify()
+        // await getSignatureImage()
+         getSignatureImageverify()
+         getSignatureImage()
+        
 
-        console.log(overetripsheetoutstation ,overetripsheetstatus,"over")
+        // console.log(overetripsheetoutstation ,overetripsheetstatus,"over")
         if (!isEditMode) {
             return
         }
@@ -6133,6 +6186,9 @@ useEffect(() => {
 
     const handleEditMap = () => {
         setMapPopUp(true)
+        // getSignatureImageverify();
+        // handleTripmapverify();
+        // checksignatureandmap();
         if (manualTripID.length > 0) {
             // setEditMap(!EditMap);
             const editTrigger = "editMode"
@@ -7205,102 +7261,229 @@ useEffect(() => {
     }, [statuschecking])
     
     
+    useEffect(() => {
+        const fetchDatastatus = async () => {
+            try {
+                const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
+                    username: loginusername,
+                });
+                const data = response.data;
+                const station = data?.map(li => li.stationname.split(",")).flat();
+                console.log(station,"disuseraww")
+                setUserStatusPermission(station)
+
+              
+                
+                }
+                catch(err){
+                    console.log(err)
+                }
+            }
+            fetchDatastatus()
+        },[loginusername,isEditMode])
 
 
     // const statuschecking = selectedStatus;
     // console.log(statuschecking,'status checking',selectedCustomerData.status,book.status,selectedStatus);
-    const handleDatapermission = (datatrip) => {
+    const handleDatapermission = useCallback((datatrip) => {
         // console.log("joo")
+        const userstation = userStatus
+        if(userstation !== null){
       
         // console.log(statuschecking,"percheck")
-            if ((statuschecking === "Closed" || statuschecking === "Billed") && (superAdminAccess === "Billing_Headoffice" ||superAdminAccess === "Assistant CFO" || superAdminAccess !== "SuperAdmin")) {
+            if ((statuschecking === "Closed" || statuschecking === "Billed") &&((userstation.includes('Chennai') || userstation.includes('All')) )&& (superAdminAccess === "Billing_Headoffice" ||superAdminAccess === "Assistant CFO" || superAdminAccess !== "SuperAdmin")) {
                 // SetArticfialchangedata(true)
                 // console.log("pernotstatus1")
-                return true
+                setPermissionDeleteRoles(true)
+                return 
             }
-            else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess === "Billing_Headoffice" && datatrip === 1)  ) {
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((userstation.includes('Chennai') || userstation.includes('All'))) &&  (superAdminAccess === "Billing_Headoffice" && datatrip === 1)  ) {
                 // console.log("pernotstatus2",statuschecking)
                 // SetArticfialchangedata(false)
-                return  false
+                setPermissionDeleteRoles(false)
+                return  
             }
-             else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess === "Billing_Headoffice" && datatrip === 0)  ) {
+             else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((userstation.includes('Chennai') || userstation.includes('All')) )&&  (superAdminAccess === "Billing_Headoffice" && datatrip === 0)  ) {
                 // console.log("pernotstatus2",statuschecking)
                 // SetArticfialchangedata(false)
-                return  false
+                setPermissionDeleteRoles(false)
+                return  
             }
-            else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && datatrip === 1 ) {
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&((userstation.includes('Chennai') || userstation.includes('All')) ) && (superAdminAccess !== "Billing_Headoffice") && datatrip === 1 ) {
                 // console.log("pernotstatus2",statuschecking)
                 // SetArticfialchangedata(false)
-                return  false
+                setPermissionDeleteRoles(false)
+                return  
+            }
+            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed" ) &&((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess === "Billing_Headoffice") && datatrip === 1 ) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return 
+            }
+            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed" ) &&((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess === "Billing_Headoffice") && datatrip === 0 ) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return  
+            }
+            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed" ) &&((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess === "Assistant CFO") && datatrip === 1 ) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return  
+            }
+            else if ((statuschecking === "Opened" ) &&((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "Billing_Headoffice" ) && datatrip === 1 ) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return 
             }
             else if(superAdminAccess === "SuperAdmin"){
                 
                 // console.log("pernotstatus3")
-                return  false
+                setPermissionDeleteRoles(false)
+                return 
             }
             else{
-                return true
+                setPermissionDeleteRoles(true)
+                return 
             }
+        }
+        else{
+            setPermissionDeleteRoles(true)
+            return 
+        }
 
           
            
         
        
-    }
+    },[userStatus])
 
-    const handlepermissionforspeedDialdelete = (datatrip)=>{
-        console.log("call the datadelete")
-        const userstation = userStatus
-        if(userstation !== null){
+    // const handlepermissionforspeedDialdelete = useCallback((datatrip)=>{
+    //     // console.log("call the datadelete")
+    //     const userstation = userStatus
+    //     if(userstation !== null){
 
         
-        console.log(userstation,"callstate")
-      
-        //  if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1)  ) {
-            if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')) ) ) {
-            // console.log("pernotstatus2",statuschecking)
-            // SetArticfialchangedata(false)
+    //     // console.log(userstation,"callstate")
+    //     console.log("deletepernotstatus211",statuschecking,superAdminAccess,datatrip )
+    //     //  if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1)  ) {
+    //     //     if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')) ) ) {
+    //     //     console.log("deletepernotstatus2",statuschecking)
+    //     //     // SetArticfialchangedata(false)
+    //     //     console.log("deletecondition1")
     
-            setSpeedDialAccessdelete(true)
-            return  
-        }
-        else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
-            setSpeedDialAccessdelete(true)
-        }
+    //     //     setSpeedDialAccessdelete(true)
+    //     //     return  
+    //     // }
+    //     if ((statuschecking === "Opened" && statuschecking === "Temporary Closed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')) ) ) {
+    //         console.log("deletepernotstatus2",statuschecking)
+    //         // SetArticfialchangedata(false)
+    //         console.log("deletecondition1")
+    
+    //         setSpeedDialAccessdelete(true)
+    //         return  
+    //     }
+    //     else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && ((superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") && datatrip === 1)) {
+    //         console.log("deletecondition2")
+    //         setSpeedDialAccessdelete(true)
+    //         return
+    //     }
+    //     else if ((statuschecking === "Opened" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+    //         setSpeedDialAccessedit(true)
+    //     }
        
-        else if(superAdminAccess === "SuperAdmin"){
+    //     else if(superAdminAccess === "SuperAdmin"){
             
-            // console.log("pernotstatus3")
+    //         // console.log("pernotstatus3")
+    //         console.log("deletecondition3")
+    //         setSpeedDialAccessdelete(true)
+    //         return 
+    //     }
+    //     else{
+    //         console.log("deletecondition4")
+    //         setSpeedDialAccessdelete(false)
+    //         return 
+    //     }
+    // }
+    // else{
+    //     console.log("deletecondition5")
+    //     setSpeedDialAccessdelete(false)
+    //     return 
+    // }
+    // },[userStatus,statuschecking])
+
+    
+    const handlepermissionforspeedDialdelete =(datatrip)=>{
+        // console.log("call the datadelete")
+        const userstation = userStatus
+        if(userStatus !== null){
+            // console.log(userstation,"callstate")
+            // console.log("call the dataedit",datatrip)
+            if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')) ) ) {
+               // console.log("pernotstatus2",statuschecking)
+               // SetArticfialchangedata(false)
+            //    console.log("callfirst")
             setSpeedDialAccessdelete(true)
-            return 
+               
+               return 
+           }
+           else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && ((superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") && datatrip === 1)) {
+            setSpeedDialAccessdelete(true)
+        }
+           else if ((statuschecking === "Opened" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+            setSpeedDialAccessdelete(true)
+        }
+        // else if ((statuschecking === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+        //     setSpeedDialAccessedit(true)
+        // }
+       
+    
+          
+           else if(superAdminAccess === "SuperAdmin"){
+               
+               // console.log("pernotstatus3")
+               setSpeedDialAccessdelete(true)
+               return  
+           }
+           else{
+            // console.log("calllast")
+            setSpeedDialAccessdelete(false)
+             return
+           }
         }
         else{
             setSpeedDialAccessdelete(false)
-            return 
+            return
         }
-    }
-    else{
-        setSpeedDialAccessdelete(false)
-        return 
-    }
     }
 
     const handlepermissionforspeedDialedit = (datatrip)=>{
         const userstation = userStatus
         if(userStatus !== null){
-        console.log(userstation,"callstate")
-        console.log("call the dataedit",datatrip)
+        // console.log(userstation,"callstate")
+        // console.log("call the dataedit",datatrip)
         if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')) ) ) {
            // console.log("pernotstatus2",statuschecking)
            // SetArticfialchangedata(false)
-           console.log("callfirst")
+        //    console.log("callfirst")
            setSpeedDialAccessedit(true)
            
            return 
        }
-       else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+       else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && ((superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") && datatrip === 1)) {
         setSpeedDialAccessedit(true)
+        return
     }
+       else if ((statuschecking === "Opened" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+        setSpeedDialAccessedit(true)
+        return
+    }
+    // else if ((statuschecking === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+    //     setSpeedDialAccessedit(true)
+    // }
    
 
       
@@ -7311,7 +7494,7 @@ useEffect(() => {
            return  
        }
        else{
-        console.log("calllast")
+        // console.log("calllast")
          setSpeedDialAccessedit(false)
          return
        }
@@ -7322,59 +7505,86 @@ useEffect(() => {
     }
    }
 
+//    const advancefuel = vendorinfo.fuelamount
 
+   const fuelAdvnacedisabled = useCallback(()=>{
+    // const advancefuel = vendorinfo.fuelamount
+    // console.log(advancefuel,"disfule")
+    const advancefuel = vendorinfo.fuelamount
+    // console.log(advancefuel,"disfule")
+    const userstation = userstatuspermission
+    
+    // console.log(userstation,"dis",userstatuspermission,oldStatusCheck)
 
-//    const fuelAdvnacedisabled = ()=>{
-//     const advancefuel = vendorinfo.fuelamount
-//     console.log(advancefuel,"disfule")
-//     const userstation = userStatus
-
-//     if(userStatus !== null){
-//     if(advancefuel){
-//       if((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')) )) {
-//         setFuelDataAmountDis(true)
+    if(userstatuspermission.length > 0){
+    if(advancefuel && fueladvancedamounthide === null){
+    
+      if((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')) )) {
+        console.log("discondition1")
+        setFuelDataAmountDis(true)
         
-//         return true
-//       }
-//       else if((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) ){
-//         setFuelDataAmountDis(true)
-//         return true
-//       }
+        return 
+      }
+      else if((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) ){
+        setFuelDataAmountDis(true)
+        console.log("discondition2")
+        return 
+      }
+      else{
+        console.log("discondition3")
+        setFuelDataAmountDis(true)
+        return 
+      }
     
 
-//     }
-//     else{
-//         if((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')) )) {
-//             setFuelDataAmountDis(false)
-//             return false
-//           }
-//           else if((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) ){
-//             setFuelDataAmountDis(false)
-//             return false
-//           }
-//           else if((oldStatusCheck === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) )  && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO")){
-//             setFuelDataAmountDis(false)
-//             return false
-//           }
+    }
+    else{
+        if((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')) )) {
+            console.log("discondition4")
+            setFuelDataAmountDis(false)
+            return 
+          }
+          else if((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) ){
+            console.log("discondition5")
+            setFuelDataAmountDis(false)
+            return 
+          }
+          else if((oldStatusCheck === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All')) )&& (superAdminAccess !== "Billing_Headoffice" && superAdminAccess !== "Assistant CFO") ){
+            console.log("discondition6")
+            setFuelDataAmountDis(true)
+            return 
+          }
+          else if((oldStatusCheck === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) )  && (superAdminAccess === "Billing_Headoffice" && superAdminAccess === "Assistant CFO")){
+            console.log("discondition7")
+            setFuelDataAmountDis(false)
+            return 
+          }
          
     
-//     }
-// }
-// else{
-// setFuelDataAmountDis(false)
-// return
-// }
+    }
+}
+else{
+    console.log("discondition8")
+setFuelDataAmountDis(false)
+return 
+}
     
-//    }
+   },[userStatus,oldStatusCheck,isEditMode,userstatuspermission])
+
+//    console.log(fueldataamountdis,"diss")
     useEffect(() => {
-        // handleDatapermission()
+        handleDatapermission(Tripsheet_delete1)
         handlepermissionforspeedDialedit(Tripsheet_modify1)
         handlepermissionforspeedDialdelete(Tripsheet_delete1)
     
         // fuelAdvnacedisabled()
-    }, [statuschecking])
-//     console.log(fueldataamountdis,"dis")
-   
+    }, [statuschecking,userStatus,isEditMode])
+
+    useEffect(()=>{
+        fuelAdvnacedisabled()
+        // console.log("calldis")
+    },[vendorinfo,userstatuspermission])
+//     console.log(fueldataamountdis,"dis"
 
     // console.log(speeddailacesss,"callper",speeddailacesssedit,userStatus)
   
@@ -7521,6 +7731,29 @@ useEffect(() => {
       const handleCloseMessagetrip = ()=>{
         setDialogMessage(false)
       }
+    //   useEffect(()=>{
+    //     getSignatureImageverify();
+    //     handleTripmapverify();
+    //     checksignatureandmap();
+    //     fuelAdvnacedisabled();
+    //   },[])
+
+      useEffect(() => {
+        const initialize = async () => {
+          try {
+            // console.log("count1")
+            await checksignatureandmap();
+            await getSignatureImageverify();
+            await handleTripmapverify();
+            await checksignatureandmap();
+            fuelAdvnacedisabled();
+          } catch (error) {
+            console.error("Initialization failed:", error);
+          }
+        };
+      
+        initialize();
+      }, [isAddload,status1,userstatuspermission]);
 
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
@@ -7653,12 +7886,12 @@ useEffect(() => {
         handleEditMap,
         handleDeleteMap, copydatalink, setCopyDataLink,
         // conflictenddate, 
-        groupTripId, setGroupTripId, mapPopUp, setMapPopUp,oldStatusCheck,
+        groupTripId, setGroupTripId, mapPopUp, setMapPopUp,oldStatusCheck,getSignatureImageverify,checksignatureandmap,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload,handleChangetexttrip,handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip,messageditedtrip,messageditedbeforetrip,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
-        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage,handleDatapermission,
-        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata,handlecalcpackage,handlecalcpackageamount,handleAutocompleteChangecustomer,orderByDropDown,speeddailacesss,speeddailacesssedit
+        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage,Permissiondeleteroles,fueldataamountdis,setFuelAdvancedamountHide,
+        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata,handlecalcpackage,handlecalcpackageamount,handleAutocompleteChangecustomer,orderByDropDown,speeddailacesss,speeddailacesssedit,
 
     };
 };

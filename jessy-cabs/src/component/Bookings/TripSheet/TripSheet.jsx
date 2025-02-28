@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import { CopyField } from '@eisberg-labs/mui-copy-field';
-import EditMapComponent from './NavigationMap/EditMapComponent';
+// import EditMapComponent from './NavigationMap/EditMapComponent';
 import EditMapCheckComponent from './NavigationMap/EditMapCheckComponent';
 import { Typography, IconButton } from '@mui/material';
 import { Snackbar, Alert } from '@mui/material';
@@ -280,14 +280,14 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
-    handleDeleteMap, copydatalink, setCopyDataLink,speeddailacesssedit,speeddailacesss,
+    handleDeleteMap, copydatalink, setCopyDataLink,speeddailacesssedit,speeddailacesss,checksignatureandmap,getSignatureImageverify,
     //  conflictenddate,
     mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess,oldStatusCheck,
     setSuccessMessage,handleChangetexttrip,handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip,messageditedtrip,messageditedbeforetrip,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
-    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,handleDatapermission,
+    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,Permissiondeleteroles,
+    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,fueldataamountdis,setFuelAdvancedamountHide,
     setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
@@ -436,15 +436,22 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
         const imageUrl = URL.createObjectURL(await response.blob());
         setSignImageUrl(imageUrl); // Update state
         setSignaturepopup(true);
-        setSuccess(true);
+        checksignatureandmap();
+        getSignatureImageverify()
+        // setSuccess(true);
         setWarning(false);
-        setSuccessMessage("Signature loaded successfully!");
+        // setSuccessMessage("Signature loaded successfully!");
+      
+        console.log("success")
       } else {
         setSignImageUrl(""); // Clear state
         if (fileInputRefdata.current) {
           fileInputRefdata.current.click();
           setSignatureupload(false);
-          setSuccessMessage("Please upload a signature image.");
+          checksignatureandmap();
+          getSignatureImageverify()
+          console.log("successno")
+          // setSuccessMessage("Please upload a signature image.");
         } else {
           console.error("File input ref is not available");
         }
@@ -2907,7 +2914,8 @@ const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billin
                                         onClick={handleOpen}
                                         variant="contained" color="primary" 
                                         // disabled={superAdminAccess !== "SuperAdmin" && (temporaryStatus || hideField)}>
-                                           disabled={handleDatapermission(Tripsheet_delete)}>
+                                          //  disabled={handleDatapermission(Tripsheet_delete)}>
+                                              disabled={Permissiondeleteroles}>
                                         Delete map
                                       </Button>
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
@@ -3046,7 +3054,8 @@ const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billin
                                       }} color="primary" 
                                       // disabled={!Tripsheet_delete}
                                       // disabled={!Tripsheet_delete && (superAdminAccess === "SuperAdmin" || superAdminAccess === "Billing_Headoffice" )}
-                                      disabled={handleDatapermission(Tripsheet_delete)}
+                                      // disabled={handleDatapermission(Tripsheet_delete)}
+                                       disabled={Permissiondeleteroles}
                                       >
                                         Delete
                                       </Button>
@@ -3142,7 +3151,8 @@ const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billin
                                   
                                   // disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
                                   // disabled={!Tripsheet_delete && (superAdminAccess === "SuperAdmin" || superAdminAccess === "Billing_Headoffice" )}
-                                  disabled={handleDatapermission(Tripsheet_delete)}
+                                  // disabled={handleDatapermission(Tripsheet_delete)}
+                                   disabled={Permissiondeleteroles}
                                   onClick={() => {
                                     handleimagedelete(selectedRow);
                                     handleimgPopupClose();
@@ -4322,10 +4332,11 @@ Please Click the link to close E-Tripsheet-`}
                         // handleChange(e)
                         setVendorinfodata({ ...vendorinfo, fuelamount: e.target.value })
                         setNoChangeData({ ...nochangedata, fuelamount: e.target.value })
+                        setFuelAdvancedamountHide(e.target.value)
 
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
-                      // disabled={superAdminAccess !== "SuperAdmin" && fueldataamountdis}
+                      // disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                      disabled={superAdminAccess !== "SuperAdmin" && fueldataamountdis}
                       label="Fuel Amount"
                       id="fuelamount"
                       autoComplete="password"

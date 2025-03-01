@@ -1,0 +1,146 @@
+import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png";
+
+// Custom car icon
+const customIcon = new L.Icon({
+  iconUrl: caricon,
+  iconSize: [80, 80],
+  iconAnchor: [40, 80],
+  popupAnchor: [0, -50],
+});
+
+// Custom blue cluster icon function
+const createClusterIcon = (cluster) => {
+  const count = cluster.getChildCount();
+  return L.divIcon({
+    html: `<div style="
+      background-color: #007bff;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      border: 2px solid white;
+    ">${count}</div>`,
+    className: "custom-cluster-icon",
+    iconSize: [40, 40],
+  });
+};
+
+// Jessy Cabs Location
+const jessyCabsLocation = {
+  lat: 13.031207,
+  lng: 80.239396,
+};
+
+// Function to calculate distance (Haversine formula)
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const toRad = (value) => (value * Math.PI) / 180;
+  const R = 6371; // Earth's radius in km
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return (R * c).toFixed(2); // Distance in km (2 decimal places)
+};
+
+// const OSMap = ({ vehicleCurrentLocation,todayVehicle }) => {
+//   const [lastVehicle, setLastVehicle] = useState(null);
+
+//   const [intervalTrigger, setIntervalTrigger] = useState(0); // State for triggering updates
+// console.log(vehicleCurrentLocation,vehicleCurrentLocation.length,"checkkkkkkkkkkkkk");
+
+//   useEffect(() => {
+//     const updateLastVehicle = () => {
+//       if (todayVehicle?.length) {
+//         setLastVehicle(todayVehicle[todayVehicle.length - 1]);
+//       }
+//       // setIntervalTrigger((prev) => prev + 1); 
+//     };
+
+//     updateLastVehicle(); // Initial update
+//     console.log("Updating last vehicle...");
+
+//     const interval = setInterval(updateLastVehicle, 3000);
+
+//     return () => clearInterval(interval);
+//   }, [todayVehicle]); 
+// console.log(lastVehicle,"lastttttttttttttttttttttt",todayVehicle);
+
+//   return (
+//     <div style={{ height: "100vh", width: "100vw" }}>
+//       <MapContainer center={[13.080555, 80.163118]} zoom={13} style={{ height: "100%", width: "100%" }}>
+//         <TileLayer
+//           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+//           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+//         />
+
+//         {/* Marker Cluster Group with Custom Blue Cluster */}
+//         <MarkerClusterGroup iconCreateFunction={createClusterIcon}>
+//           {lastVehicle && (
+//             <Marker
+//               position={[parseFloat(lastVehicle.Latitude_loc), parseFloat(lastVehicle.Longtitude_loc)]}
+//               icon={customIcon}
+//             >
+//               <Popup>
+//                 <div><strong>Vehicle No:</strong> {lastVehicle.Vehicle_No}</div>
+//                 <div><strong>Group:</strong> {lastVehicle.Group}</div>
+//                 <div><strong>Driver:</strong> {lastVehicle.Driver}</div>
+//                 <div><strong>Location:</strong> {lastVehicle.Location}</div>
+//                 <div><strong>Nearest Address:</strong> {lastVehicle.Nearest_Address}</div>
+//                 <div><strong>Distance to Jessy Cabs:</strong> {calculateDistance(jessyCabsLocation.lat, jessyCabsLocation.lng, parseFloat(lastVehicle.Latitude_loc), parseFloat(lastVehicle.Longtitude_loc))} km</div>
+//               </Popup>
+//             </Marker>
+//           )}
+//         </MarkerClusterGroup>
+//       </MapContainer>
+//     </div>
+//   );
+// };
+const OSMap = ({ vehicleCurrentLocation, todayVehicle }) => {
+  console.log(vehicleCurrentLocation, vehicleCurrentLocation.length, "checkkkkkkkkkkkkk");
+
+  return (
+    <div style={{ height: "100vh", width: "100vw" }}>
+      <MapContainer center={[13.080555, 80.163118]} zoom={13} style={{ height: "100%", width: "100%" }}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+
+        {/* Marker Cluster Group with Custom Blue Cluster */}
+        <MarkerClusterGroup iconCreateFunction={createClusterIcon}>
+          {todayVehicle?.map((vehicle, index) => (
+            <Marker
+              key={index}
+              position={[parseFloat(vehicle.Latitude_loc), parseFloat(vehicle.Longtitude_loc)]}
+              icon={customIcon}
+            >
+              <Popup>
+                <div><strong>Vehicle No:</strong> {vehicle.Vehicle_No}</div>
+                <div><strong>Group:</strong> {vehicle.Group}</div>
+                <div><strong>Driver:</strong> {vehicle.Driver}</div>
+                <div><strong>Location:</strong> {vehicle.Location}</div>
+                <div><strong>Nearest Address:</strong> {vehicle.Nearest_Address}</div>
+                <div><strong>Distance to Jessy Cabs:</strong> {calculateDistance(jessyCabsLocation.lat, jessyCabsLocation.lng, parseFloat(vehicle.Latitude_loc), parseFloat(vehicle.Longtitude_loc))} km</div>
+              </Popup>
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
+      </MapContainer>
+    </div>
+  );
+};
+
+export default OSMap;

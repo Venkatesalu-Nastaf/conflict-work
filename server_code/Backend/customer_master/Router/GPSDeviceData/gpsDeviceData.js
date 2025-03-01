@@ -61,10 +61,26 @@ const db = require('../../../db');
 // });
 
 // get all gpsDatas from gpsdevice_datas
+// router.post('/particularGpsRecords', (req, res) => {
+//     const { selectedDate, vehicleNumber } = req.body; 
+//     console.log(selectedDate, "filterrrrrrrrrrrrrrrrrrrrr", vehicleNumber);
+//     const sqlQuery = `SELECT * FROM  VehicleTripDetails WHERE Running_Date = ? AND Vehicle_No = ?`;
+//     db.query(sqlQuery, [selectedDate, vehicleNumber], (error, result) => {
+//         if (error) {
+//             console.log(error, "error");
+//         }
+//         console.log(result, "particularrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+
+//         res.status(200).json(result);
+
+//     })
+
+// })
+
 router.post('/particularGpsRecords', (req, res) => {
-    const { selectedDate, vehicleNumber } = req.body; // If coming from query parameters, use req.query. Otherwise, use req.body.
+    const { selectedDate, vehicleNumber } = req.body; 
     console.log(selectedDate, "filterrrrrrrrrrrrrrrrrrrrr", vehicleNumber);
-    const sqlQuery = `SELECT * FROM  VehicleTripDetails WHERE Running_Date = ? AND Vehicle_No = ?`;
+    const sqlQuery = `SELECT * FROM   VehicleAccessLocation WHERE Runing_Date = ? AND Vehicle_No = ?`;
     db.query(sqlQuery, [selectedDate, vehicleNumber], (error, result) => {
         if (error) {
             console.log(error, "error");
@@ -77,23 +93,57 @@ router.post('/particularGpsRecords', (req, res) => {
 
 })
 
+// router.post('/getTodayVehiclePoints', (req, res) => {
 router.post('/getAllVehicleCurrentLocation', (req, res) => {
     // const todayDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
     // console.log("Today's Date:", todayDate);
     const today = new Date();
 
-    const todayDate = today.toLocaleDateString('en-CA'); // 'en-CA' ensures YYYY-MM-DD format
+    const todayDate = today.toLocaleDateString('en-CA');
     console.log("Today's Date:", todayDate);
-    const sqlQuery = `SELECT * FROM VehicleTripDetails WHERE Running_Date =?`;
+    const sqlQuery = `SELECT * FROM VehicleAccessLocation WHERE Runing_Date =?`;
     db.query(sqlQuery, [todayDate], (error, result) => {
         if (error) {
             console.log(error, "error");
         }
-        // console.log(result,"all vehicle lists....");
+        console.log(result, "Today vehicle lists....");
 
         res.status(200).json(result);
     })
 })
+
+router.post('/getTodayVehiclePoints', (req, res) => {
+    const today = new Date();
+    const todayDate = today.toLocaleDateString('en-CA');
+    console.log("Today's Date:", todayDate);
+
+    // Query to get the full row with the latest created_at timestamp for each Vehicle_No
+    const sqlQuery = `
+        SELECT v.*
+        FROM VehicleAccessLocation v
+        INNER JOIN (
+            SELECT Vehicle_No, MAX(created_at) AS max_time
+            FROM VehicleAccessLocation
+            WHERE Runing_Date = ?
+            GROUP BY Vehicle_No
+        ) latest 
+        ON v.Vehicle_No = latest.Vehicle_No 
+        AND v.created_at = latest.max_time
+        WHERE v.Runing_Date = ?;
+    `;
+
+    db.query(sqlQuery, [todayDate, todayDate], (error, result) => {
+        if (error) {
+            console.log(error, "error");
+            return res.status(500).json({ error: "Database query error" });
+        }
+
+        res.status(200).json(result);
+    });
+});
+
+
+
 
 // router.post('/getGpsDeviceDatas', (req, res) => {
 //     const { selectedDate } = req.body; // If coming from query parameters, use req.query. Otherwise, use req.body.

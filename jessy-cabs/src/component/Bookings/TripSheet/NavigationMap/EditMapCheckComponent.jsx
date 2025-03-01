@@ -647,7 +647,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   };
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk",
+    googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
   });
 
   if (!isLoaded) {

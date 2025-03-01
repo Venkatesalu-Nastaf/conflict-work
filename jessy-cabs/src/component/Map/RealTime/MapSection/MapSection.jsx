@@ -1,6 +1,6 @@
 
 /* global google */
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer, MarkerClusterer } from '@react-google-maps/api';
 import { IconButton, Button } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
@@ -12,7 +12,10 @@ import L from 'leaflet';
 import markerIconPng from 'leaflet/dist/images/marker-icon.png';
 import markerShadowPng from 'leaflet/dist/images/marker-shadow.png';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import caricon from '../VehicleSection/VehicleInformationDrawer/mapicon.png'
+import caricon from '../VehicleSection/VehicleInformationDrawer/mapicon.png';
+import { VehicleMapData } from '../../vehicleMapContext/vehcileMapContext';
+// import VehiclesDetailsPopup from "../../Modal/VehicleDetailsPopup";
+import VehicleDetailsPopup from '../../VehicleModal/VehicleDetailsPopup';
 // Define the container style for the map
 const containerStyle = {
   width: '100%',
@@ -29,13 +32,14 @@ const center = {
 
 
 
-const MapSection = ({ vehicleCurrentLocation }) => {
+const MapSection = ({ vehicleCurrentLocation, allVehicleList }) => {
   // Load the Google Maps script with your API key and necessary libraries
   const { isLoaded } = useLoadScript({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
-    libraries: ['places'], // Add any additional libraries you need
+    googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+    libraries: ['places'],
   });
+  const mapRef = useRef(null);
 
   // State management for the map, location, directions, popup, etc.
   const [mapType, setMapType] = useState('google'); // State to manage map type
@@ -48,12 +52,15 @@ const MapSection = ({ vehicleCurrentLocation }) => {
   const [directionRoute, setDirectionRoute] = useState(null);
   const [openPopup, setOpenPopup] = useState(false); // State to handle popup open/close
   const [popupPosition, setPopupPosition] = useState(null); // State for popup position
-
+  const [vehiclePositionPopup, setVehiclePositionPopup] = useState(null)
 
   const [center, setCenter] = useState({ lat: 37.7749, lng: -122.4194 }); // Default to San Francisco
   const [userLocation, setUserLocation] = useState(null);
   const [directionsResponse, setDirectionsResponse] = useState(null);
-
+  const menuItem = localStorage.getItem('activeMenuItem');
+  const [clickPosition, setClickPosition] = useState({ top: 0, left: 0 });
+  const { jessyCabsDistance, setJessyCabsDistance, vehiclePoint, setVehiclePoint } = VehicleMapData();
+  const [officeDistance, setOfficeDistance] = useState("")
   useEffect(() => {
     // Get the user's current location
     if (navigator.geolocation) {
@@ -88,17 +95,7 @@ const MapSection = ({ vehicleCurrentLocation }) => {
   // Marker location based on latitude and longitude
   const markerLocation = lat && long ? { lat, lng: long } : null;
 
-  // Map loading handler
-  const onLoad = useCallback((map) => {
-    map.setCenter(center);
-    map.setZoom(16);
-    setMap(map);
-  }, []);
 
-  // Map unmount handler
-  const onUnmount = useCallback(() => {
-    setMap(null);
-  }, []);
 
   // Center button click handler
   const handleCenterButtonClick = () => {
@@ -125,16 +122,18 @@ const MapSection = ({ vehicleCurrentLocation }) => {
 
     const bounds = new google.maps.LatLngBounds();
     vehicleCurrentLocation?.map((loc) => {
-      bounds.extend(new google.maps.LatLng(parseFloat(loc.Lattitude_loc), parseFloat(loc.Longitude_loc)));
+      bounds.extend(new google.maps.LatLng(parseFloat(loc?.Lattitude_loc), parseFloat(loc?.Longitude_loc)));
     });
-
+    if (mapRef.current) {
+      mapRef.current.fitBounds(bounds);
+    }
     map.fitBounds(bounds);
   }
   useEffect(() => {
     if (map) {
-      mapFitBounds()
+      mapFitBounds();
     }
-  }, [map])
+  }, [map, vehicleCurrentLocation])
   const clusterStyles = [
 
     {
@@ -146,6 +145,97 @@ const MapSection = ({ vehicleCurrentLocation }) => {
     },
 
   ];
+  console.log(vehicleCurrentLocation, "vvvvvvvvvvvvvvvvvvvvvvvvvvvvs");
+  useEffect(() => {
+    if (menuItem === "RealTime" && localStorage.getItem('hasReloaded') !== 'true') {
+      localStorage.setItem('hasReloaded', 'true');
+      window.location.reload();
+      console.log("iiiiiiiiiiiiiiiiiiii");
+
+    }
+  }, [menuItem]);
+
+  //   const handleVehicleLocation = (location, e) => {
+  //     console.log(location, "weeeeeeeeeeeeeeeeeeeeeee",);
+  //     console.log(e, "Mouse Event Data", e?.domEvent?.clientX, "wwwwww");
+
+  //     setClickPosition({
+  //         lat: parseFloat(location?.Lattitude_loc),
+  //         lng: parseFloat(location?.Longitude_loc),
+  //         pixelX: e?.domEvent?.clientX, // Capture X position
+  //         pixelY: e?.domEvent?.clientY, // Capture Y position
+  //         vehno:location?.Vehicle_No
+  //     });
+
+  //     setVehiclePoint(true);
+  // };
+  const jessyCabsLocation = {
+    lat: 13.031207,
+    lng: 80.239396
+  }
+  const handleVehicleLocation = (location, e) => {
+    console.log(location, "weeeeeeeeeeeeeeeeeeeeeee");
+    console.log(e, "Mouse Event Data", e?.domEvent?.clientX, "wwwwww");
+
+    const lat = parseFloat(location?.Lattitude_loc);
+    const lng = parseFloat(location?.Longitude_loc);
+
+    const lat1 = location?.Lattitude_loc;
+    const lng1 = (location?.Longitude_loc)
+    setClickPosition({
+      lat,
+      lng,
+      pixelX: e?.domEvent?.clientX, 
+      pixelY: e?.domEvent?.clientY, 
+      vehno: location?.Vehicle_No
+    });
+
+    setVehiclePoint(true);
+    console.log(lat, "Addressss111111", lng);
+
+    // Reverse Geocoding to get Address
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        console.log("Addressss:", results[0].formatted_address);
+        setClickPosition(prev => ({
+          ...prev,
+          address: results[0].formatted_address // Add address to state
+        }));
+      } else {
+        console.error("Geocoder failed due to:", status);
+      }
+    });
+    const origin = new window.google.maps.LatLng(jessyCabsLocation?.lat, jessyCabsLocation?.lng);
+    const destination = new window.google.maps.LatLng(parseFloat(location?.Lattitude_loc), parseFloat(location?.Longitude_loc));
+    console.log(destination, "mainnnnnnnnnnnn33333333", destination,);
+
+    const service = new window.google.maps.DistanceMatrixService();
+    service.getDistanceMatrix(
+      {
+        origins: [origin],
+        destinations: [destination],
+        travelMode: "DRIVING",
+      },
+      (response, status) => {
+        console.log(status, "mainnnnnnnnnnnn");
+
+        if (status === "OK") {
+          const distanceText = response.rows[0].elements[0].distance.text;
+          console.log(distanceText, "mainnnnnnnnnnnn111111111111");
+          setOfficeDistance(distanceText)
+          return
+        } else {
+          console.log(response, "mainnnnnnnnnnnn2222222222222");
+
+        }
+      }
+    );
+  };
+
+
+  console.log(vehiclePoint, "weeeeeeeeeeeeeeeeeeeeeeeeeeee-----------", vehicleCurrentLocation);
+
   return (
     <>
 
@@ -153,66 +243,42 @@ const MapSection = ({ vehicleCurrentLocation }) => {
 
         {mapType === 'google' && (
 
-          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={6}>
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={6}
+            ref={mapRef}
+            onLoad={(map) => {
+              setMap(map);
+              mapRef.current = map;
+            }}
+          >
+            {vehiclePoint && <VehicleDetailsPopup position={clickPosition} setVehiclePoint={setVehiclePoint} officeDistance={officeDistance} />}
+
 
             <MarkerClusterer options={{ styles: clusterStyles }}>
               {(clusterer) =>
                 vehicleCurrentLocation?.map((loc, index) => (
-                  <MarkerF
-                    key={index}
-                    position={{ lat: parseFloat(loc.Lattitude_loc), lng: parseFloat(loc.Longitude_loc) }} // Correctly setting latitude and longitude
-                    clusterer={clusterer}
-                    icon={{
-                      url: caricon,
-                      scaledSize: new window.google.maps.Size(100, 100),
-                      origin: new window.google.maps.Point(0, 0),
-                      anchor: new window.google.maps.Point(50, 50),
-                    }}
-                  />
+                  <div>
+                    <MarkerF
+                      key={index}
+                      position={{ lat: parseFloat(loc?.Lattitude_loc), lng: parseFloat(loc?.Longitude_loc) }}
+                      clusterer={clusterer}
+                      onClick={(e) => handleVehicleLocation(loc, e)}
+                      icon={{
+                        url: caricon,
+                        scaledSize: new window.google.maps.Size(100, 100),
+                        origin: new window.google.maps.Point(0, 0),
+                        anchor: new window.google.maps.Point(50, 50),
+                      }}
+                    />
+
+                  </div>
                 ))
               }
             </MarkerClusterer>
 
-            {openPopup && popupPosition && (
-              <InfoWindow
-                position={popupPosition}
-                onCloseClick={handleClosePopup}
-              >
-                <div className="map-popup">
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <h4 style={{ margin: 0 }}>6744TN11BE6744</h4>
-                  </div>
-                  <p>Group: Hyderabad | Driver: Vijayakumar</p>
-                  <p>
-                    <span className="red-indication"></span>Last updated: 22 Aug 24,
-                    02:13:10 PM
-                  </p>
-                  <div className="status-from">
-                    <p>Status: Parked</p>
-                    <p>From: An Hour</p>
-                  </div>
-                  <div className="location-near">
-                    <p>
-                      Location: Perumalpattu - Kottamedu Road, Oragadam Industrial
-                      Corridor, Perinjambakkam, Kanchipuram, Tamil Nadu
-                    </p>
-                    <p>Nearest Address: 46.9 km from JESSY CABS (Office)</p>
-                  </div>
-                  <div className="btns-section">
-                    <button className="popup-last-btns">Nearby</button>
-                    <button className="popup-last-btns">Add Address</button>
-                    <button className="popup-last-btns">Create Job</button>
-                    <button className="popup-last-btns">History</button>
-                  </div>
-                </div>
-              </InfoWindow>
-            )}
+
 
 
             <div
@@ -232,7 +298,6 @@ const MapSection = ({ vehicleCurrentLocation }) => {
               </IconButton>
             </div>
 
-            {/* Select Dropdown inside the Map */}
             <div
               style={{
                 zIndex: 1,
@@ -250,13 +315,12 @@ const MapSection = ({ vehicleCurrentLocation }) => {
                 renderValue={(selected) => (selected ? selected : 'Select Map')}
                 sx={{
                   '& .MuiSelect-select': {
-                    paddingRight: '2px', // Adjust this to increase space between value and dropdown icon
+                    paddingRight: '2px',
                     minWidth: '70px'
 
                   },
                   '& .MuiOutlinedInput-notchedOutline': {
-                    border: 'none', // Removes the border
-                    // minWidth:'100px'
+                    border: 'none', 
                   },
                 }}
               >

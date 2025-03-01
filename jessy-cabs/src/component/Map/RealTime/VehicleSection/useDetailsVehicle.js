@@ -128,22 +128,22 @@ const useDetailsVehicle = () => {
 
     return (bearing + 360) % 360; // Normalize to 0–360 degrees
   };
-  useEffect(() => {
-    if (currentPosition && chennaiCoordinates.length > 1) {
-      const prevPosition = chennaiCoordinates[chennaiCoordinates.length - 2];
-      const newRotation = calculateBearing(prevPosition, currentPosition);
-      setRotation(newRotation);
-    }
-  }, [currentPosition, chennaiCoordinates]);
-  const calculateAngle = (prevPosition, currentPosition) => {
-    if (!prevPosition || !currentPosition) return 0;
+  // useEffect(() => {
+  //   if (currentPosition && chennaiCoordinates.length > 1) {
+  //     const prevPosition = chennaiCoordinates[chennaiCoordinates.length - 2];
+  //     const newRotation = calculateBearing(prevPosition, currentPosition);
+  //     setRotation(newRotation);
+  //   }
+  // }, [currentPosition, chennaiCoordinates]);
+  // const calculateAngle = (prevPosition, currentPosition) => {
+  //   if (!prevPosition || !currentPosition) return 0;
 
-    const deltaY = currentPosition.lat - prevPosition.lat;
-    const deltaX = currentPosition.lng - prevPosition.lng;
+  //   const deltaY = currentPosition.lat - prevPosition.lat;
+  //   const deltaX = currentPosition.lng - prevPosition.lng;
 
-    const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // Convert radians to degrees
-    return angle;
-  };
+  //   const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // Convert radians to degrees
+  //   return angle;
+  // };
 
 
   // const handleDrawPaths = () => {
@@ -188,8 +188,8 @@ const useDetailsVehicle = () => {
           Lattitude_loc: currentDatePoints[step].Lattitude_loc,
           Longitude_loc: currentDatePoints[step].Longitude_loc,
         };
-        const angle = calculateAngle(prevPosition, newPoint); // Calculate angle
-        setCurrentPosition1({ ...newPoint1, angle }); // Update position with angle
+        // const angle = calculateAngle(prevPosition, newPoint); // Calculate angle
+        setCurrentPosition1({ ...newPoint1 }); // Update position with angle
 
         // Update the dynamic polyline to include the new point
         setDynamicPolyline((prevPolyline) => [...prevPolyline, newPoint]);
@@ -347,6 +347,8 @@ const useDetailsVehicle = () => {
   //   };
   const getAddress = async () => {
     try {
+      console.log(currentPosition1,"cccccccccccc");
+      if(currentPosition1!==undefined){
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentPosition1?.Lattitude_loc},${currentPosition1?.Longitude_loc}&key=${API_KEY}`
       );
@@ -392,15 +394,16 @@ const useDetailsVehicle = () => {
       } else {
         setAddress("Unable to fetch address");
       }
+    }
     } catch (error) {
-      console.error("Error fetching address:", error);
+      console.log("Error fetching address:", error);
       setAddress("Error occurred while fetching address");
     }
   };
 
 
   useEffect(() => {
-    getAddress();
+    // getAddress();
 
     const startPoint = currentDatePoints?.filter(
       (point) => point.Trip_Status === "Start" && point.Running_Date === filterDate
@@ -409,7 +412,6 @@ const useDetailsVehicle = () => {
     const endPoint = currentDatePoints?.filter(
       (point) => point.Trip_Status === "end" && point.Running_Date === filterDate
     );
-
 
     // Set multiple start locations as an array
     if (startPoint.length > 0) {

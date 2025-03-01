@@ -1,11 +1,14 @@
-import React from 'react'
-import "./RealTime.css"
-import Box from '@mui/material/Box';
-import PropTypes from 'prop-types';
-
+import React, { useState } from "react";
+import "./RealTime.css";
+import Box from "@mui/material/Box";
+import PropTypes from "prop-types";
 import HeaderDetails from "./HeaderDetails/HeaderDetails";
 import VehicleSection from "./VehicleSection/VehicleSection";
-import MapSection from "./MapSection/MapSection"
+import GoogleMapFile from "./MapSectionArea/GoogleMapFile";
+import OSMap from "./MapSectionArea/OSMap";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -28,27 +31,46 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export const RealTime = ({allVehicleList,vehicleCurrentLocation}) => {
+export const RealTime = ({ allVehicleList, vehicleCurrentLocation ,todayVehicle}) => {
+  const [selectMap, setSelectMap] = useState("OSMap");
 
-    
+  // Handle Select Change
+  const handleChange = (event) => {
+    setSelectMap(event.target.value);
+  };
+
   return (
     <>
       <div className="form-container-realtime">
         <div className="main-content-realtime">
-          <div className='main-content-form'>
-            <div style={{position:"relative", height:"55px", width:"100%"}}>
-            <HeaderDetails />
+          <div className="main-content-form">
+            <div style={{ position: "relative", height: "55px", width: "100%" }}>
+              <HeaderDetails />
+            </div>
+            <VehicleSection allVehicleList={allVehicleList} vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} />
 
-            </div>
-            <div className='main-body-container'>
-              <VehicleSection allVehicleList={allVehicleList} />
-              <MapSection vehicleCurrentLocation={vehicleCurrentLocation} />
-            </div>
-            <div>
+            <div className="main-body-container">
+            {/* <VehicleSection allVehicleList={allVehicleList} /> */}
+              <Select
+                labelId="map-select-label"
+                id="map-select"
+                value={selectMap}
+                onChange={handleChange}
+                displayEmpty
+                style={{ marginBottom: "10px", width: "150px" }}
+              >
+                <MenuItem value="OSMap">OSMap</MenuItem>
+                <MenuItem value="GoogleMap">Google Map</MenuItem>
+              </Select>
+
+              {selectMap === "OSMap" &&
+                <OSMap vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} /> }
+                {selectMap === "GoogleMap" &&
+                <GoogleMapFile vehicleCurrentLocation={vehicleCurrentLocation} />}
             </div>
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};

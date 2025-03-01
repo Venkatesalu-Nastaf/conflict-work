@@ -382,7 +382,7 @@ function App() {
     };
     organizationName();
 
-  }, [apiUrl,triggerCustomerAdd]); // Empty dependency array to ensure it runs only once
+  }, [apiUrl, triggerCustomerAdd]); // Empty dependency array to ensure it runs only once
 
   // useEffect(() => {
   //   const fetchOrganizationName = async () => {
@@ -553,6 +553,7 @@ function App() {
   // get All vehicleDetails
   const [allVehicleData, setAllVehcileData] = useState('');
   const [currentVehiclePoint, setCurrentVehiclePoint] = useState(null);
+  const [todayVehicle, setTodayVehicle] = useState(null);
   const menuItem = localStorage.getItem('activeMenuItem');
 
   useEffect(() => {
@@ -581,9 +582,49 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post(`${apiUrl}/getAllVehicleCurrentLocation`);
-        console.log(response.data, "alllllvehicleeeee");
-        setCurrentVehiclePoint(response.data)
+        if (menuItem === "RealTime") {
+          const response = await axios.post(`${apiUrl}/getAllVehicleCurrentLocation`);
+          console.log(response.data, "alllllvehicleeeee");
+          setCurrentVehiclePoint(response.data)
+
+        }
+      }
+      catch (err) {
+
+      }
+    }
+    fetchData()
+  }, [apiUrl, menuItem])
+
+  // getTodayVehiclePoints
+  useEffect(() => {
+    let interval;
+
+    const fetchData = async () => {
+      try {
+        if (menuItem === "RealTime") {
+          const response = await axios.post(`${apiUrl}/getTodayVehiclePoints`);
+          console.log(response.data, "todayalllllvehicleeeee");
+          setTodayVehicle(response.data);
+        }
+      } catch (err) {
+        console.error("Error fetching vehicle data:", err);
+      }
+    };
+
+    fetchData();
+
+    interval = setInterval(fetchData, 5000);
+
+    return () => clearInterval(interval);
+  }, [apiUrl, menuItem]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/gettingParticularVehcileDetails`);
+        console.log(response.data, "wwwwwwwwwwwwwwwwwwwww-----------------------");
+        // setCurrentVehiclePoint(response.data)
 
       }
       catch (err) {
@@ -672,8 +713,8 @@ function App() {
               <Route path="/home/Map" element={Maps !== 0 ? <Map /> : <NoPermission />}>
                 <Route
                   path="/home/Map/RealTime"
-                  element={Map_Realtime !== 0 && Map_Realtime !== undefined  ? (<RealTime stationName={stationName} customerData={customerData} allVehicleList={allVehicleData} vehicleCurrentLocation={currentVehiclePoint}  />) : (<NoPermission />)}
-                  />
+                  element={Map_Realtime !== 0 && Map_Realtime !== undefined ? (<RealTime stationName={stationName} customerData={customerData} allVehicleList={allVehicleData} vehicleCurrentLocation={currentVehiclePoint} todayVehicle={todayVehicle} />) : (<NoPermission />)}
+                />
                 <Route
                   path="/home/Map/History"
                   element={Map_History !== 0 && Map_History !== undefined ? (<History stationName={stationName} customerData={customerData} />) : (<NoPermission />)}

@@ -129,7 +129,7 @@ const VehicleInformationDrawer = () => {
     // Load the Google Maps script with your API key and necessary libraries
     const { isLoaded } = useLoadScript({
         id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
+        googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE", // Your actual Google Maps API key
         libraries: ['places'], // Add any additional libraries you need
     });
 
@@ -231,7 +231,7 @@ const VehicleInformationDrawer = () => {
     }
     const center = { lat: currentPosition?.lat, lng: currentPosition?.lng };
     const base64Image = `data:image/png;base64,${mapicon}`;
-    console.log(base64Image, "llllllllllllllllllllllllllllllllllllll");
+    // console.log(base64Image, "llllllllllllllllllllllllllllllllllllll");
 
     function convertToBase64(imagePath, callback) {
         fetch(imagePath)
@@ -279,7 +279,7 @@ const VehicleInformationDrawer = () => {
         if (status === google.maps.DirectionsStatus.OK) {
             directionsRenderer.setDirections(response);
             const steps = response.routes[0].legs[0].steps;
-            console.log(steps, "angleeeeeeeeeeeee22222222", response);
+            // console.log(steps, "angleeeeeeeeeeeee22222222", response);
 
             steps.forEach((step, index) => {
                 const instruction = step.instructions; // Direction instruction, e.g., "Turn left onto Main St."
@@ -288,10 +288,10 @@ const VehicleInformationDrawer = () => {
 
                 // Analyze the instructions to determine direction
                 if (instruction.includes("left")) {
-                    console.log("Left Turn", distance, angle);
+                    // console.log("Left Turn", distance, angle);
                 }
                 else if (instruction.includes("east")) {
-                    console.log("east", instruction);
+                    // console.log("east", instruction);
 
                 }
 
@@ -319,18 +319,18 @@ const VehicleInformationDrawer = () => {
                 travelMode: "DRIVING",
             },
             (response, status) => {
-                console.log(status, "distanceeeeeeeeeeeeeeee;;;;;;;;;;;;;;;;;;;;;;;;;");
+                // console.log(status, "distanceeeeeeeeeeeeeeee;;;;;;;;;;;;;;;;;;;;;;;;;");
 
                 if (status === "OK") {
                     const distanceText = response.rows[0].elements[0].distance.text;
-                    console.log(distanceText, "distanceeeeeeeeeeeeeeee");
+                    // console.log(distanceText, "distanceeeeeeeeeeeeeeee");
 
                     //   setDistance(distanceText);
                     setJessyCabsDistance(distanceText)
                     return
                 } else {
                     //   alert("Error calculating distance");
-                    console.log(response, "distanceeeeeeeeeeeeeeeeresssssssssssssss");
+                    // console.log(response, "distanceeeeeeeeeeeeeeeeresssssssssssssss");
 
                 }
             }
@@ -346,6 +346,8 @@ const VehicleInformationDrawer = () => {
         setTripModalOpen(true);
     };
     const handleEndTrip = (event) => {
+        // console.log(event,"positionnnnnnnnnnnnnnnnnn--------");
+        
         setClickPosition({
             lat: endTripLocation?.latitude,
             lng: endTripLocation?.longitude,
@@ -355,7 +357,7 @@ const VehicleInformationDrawer = () => {
         setTripModalOpen(true)
 
     }
-
+// console.log(clickPosition,"postionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn----------------+++++++++++++++++++++++++++");
 
 
     const handleTripidChange = (value) => {
@@ -718,7 +720,7 @@ const VehicleInformationDrawer = () => {
                                         <div>
                                             {startTripLocation.map((location, index) => (
                                                 <MarkerF
-                                                    key={`start-${index}`} // Unique key for each marker
+                                                    key={`start-${index}`} 
                                                     position={{
                                                         lat: location.latitude,
                                                         lng: location.longitude,
@@ -755,8 +757,6 @@ const VehicleInformationDrawer = () => {
                                             {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
                                         </div>
 
-
-
                                         <MarkerF
                                             position={{
                                                 lat: parseFloat(currentPosition1?.Lattitude_loc),
@@ -769,8 +769,6 @@ const VehicleInformationDrawer = () => {
                                                 anchor: new window.google.maps.Point(12, 12),
                                             }}
                                         />
-
-
 
 
 

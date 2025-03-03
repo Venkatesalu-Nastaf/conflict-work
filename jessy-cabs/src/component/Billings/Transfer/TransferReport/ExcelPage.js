@@ -308,11 +308,12 @@ const useExeclpage = () => {
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
     
-
+ 
                     singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
                     singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
                     singleData["starttime1"]= removeSeconds(singleData["starttime1"])
+
                     // singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax,singleData["totalcalcAmount"])
                     
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):"00:00"

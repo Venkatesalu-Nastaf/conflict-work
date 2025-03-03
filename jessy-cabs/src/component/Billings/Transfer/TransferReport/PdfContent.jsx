@@ -658,7 +658,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                             </View>
 
                             {/* <View style={styles.tableCellpermit}><Text style={styles.permittext}>{item.permit ? item.permit : 0} / {item.parking ? item.parking : 0}</Text></View> */}
-                            <View style={styles.tableCellpermit}>
+                            <View style={[styles.tableCellpermit , {paddingTop: 16}]}>
                               <Text style={{ fontSize: 9 }}>{'\n'}</Text>
                               <Text style={{ fontSize: 9 }}>{'\n'}</Text>
                               {/* <Text style={[styles.permittext, { fontSize: 9 }]}>
@@ -670,7 +670,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                               </Text>
                             )}
                             </View>
-                            <View style={[styles.tableCell, { paddingRight: 15 }]}>
+                            <View style={[styles.tableCell, { paddingRight: 15 ,paddingTop: 16}]}>
                               <Text style={{ fontSize: 9 }}>{'\n'}</Text>
                               <Text style={{ fontSize: 9 }}>{'\n'}</Text>
                               {item.package_amount > 0 && (

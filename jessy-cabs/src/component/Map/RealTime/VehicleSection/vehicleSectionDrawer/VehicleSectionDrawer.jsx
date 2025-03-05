@@ -259,7 +259,7 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
                     <DialogContent>
                         <div style={{ width: "100%", height: "500px" }}>
                             {/* {selectMap === "OSMap" && <OSMapDrawer vehicleCurrentLocation={vehicleCurrentLocation} vehNo={vehNo} startMarkerPosition={startMarkerPosition} currentPosition={currentPosition} currentDatePoints={currentDatePoints} startTripLocation={startTripLocation} endTripLocation={endTripLocation} tripWayPoints={tripWayPoints} todayVehicle={todayVehicle} />} */}
-                                {selectMap === "OSMap" && <OSMapDrawer  vehNo={vehNo} startMarkerPosition={startMarkerPosition} currentPosition={currentPosition} currentDatePoints={currentDatePoints} />}
+                                {/* {selectMap === "OSMap" && <OSMapDrawer  vehNo={vehNo} startMarkerPosition={startMarkerPosition} currentPosition={currentPosition} currentDatePoints={currentDatePoints} />} */}
                             {selectMap === "GoogleMap" && <GoogleMapDrawer  vehNo={vehNo} startMarkerPosition={startMarkerPosition} currentPosition={currentPosition} currentDatePoints={currentDatePoints}  />}
                         </div>
                     </DialogContent>

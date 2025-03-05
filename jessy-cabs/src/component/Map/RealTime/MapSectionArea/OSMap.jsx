@@ -109,7 +109,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 //   );
 // };
 const OSMap = ({ vehicleCurrentLocation, todayVehicle }) => {
-  console.log(vehicleCurrentLocation, vehicleCurrentLocation.length, "checkkkkkkkkkkkkk");
+  // console.log(vehicleCurrentLocation, vehicleCurrentLocation.length, "checkkkkkkkkkkkkk");
 
   return (
     <div style={{ height: "100vh", width: "100vw" }}>

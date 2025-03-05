@@ -66,7 +66,7 @@ export const RealTime = ({ allVehicleList, vehicleCurrentLocation ,todayVehicle}
               {selectMap === "OSMap" &&
                 <OSMap vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} /> }
                 {selectMap === "GoogleMap" &&
-                <GoogleMapFile vehicleCurrentLocation={vehicleCurrentLocation} />}
+                <GoogleMapFile vehicleCurrentLocation={todayVehicle} />}
             </div>
           </div>
         </div>

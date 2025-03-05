@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
+const moment = require('moment');
 
 // router.get('/getGpsDeviceDatas', (req, res) => {
 //     const sqlQuery1 = `SELECT * FROM VehicleAccessLocation`;
@@ -77,20 +78,74 @@ const db = require('../../../db');
 
 // })
 
+// router.post('/particularGpsRecords', (req, res) => {
+//     const { selectedDate, vehicleNumber } = req.body; 
+//     console.log(selectedDate, "filterrrrrrrrrrrrrrrrrrrrr", vehicleNumber);
+//     const sqlQuery = `SELECT * FROM   VehicleAccessLocation WHERE Runing_Date = ? AND Vehicle_No = ?`;
+//     db.query(sqlQuery, [selectedDate, vehicleNumber], (error, result) => {
+//         if (error) {
+//             console.log(error, "error");
+//         }
+//         console.log(result, "particularrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+
+//         res.status(200).json(result);
+
+//     })
+
+// })
+
 router.post('/particularGpsRecords', (req, res) => {
-    const { selectedDate, vehicleNumber } = req.body; 
-    console.log(selectedDate, "filterrrrrrrrrrrrrrrrrrrrr", vehicleNumber);
-    const sqlQuery = `SELECT * FROM   VehicleAccessLocation WHERE Runing_Date = ? AND Vehicle_No = ?`;
-    db.query(sqlQuery, [selectedDate, vehicleNumber], (error, result) => {
+    const { selectedDate, vehicleNumber,selectedTripiddata } = req.body;
+    // console.log(selectedDate, "filterrrrrrrrrrrrrrrrrrrrr", vehicleNumber,selectedTripiddata);
+    const formattedStartDate = moment(selectedDate).format('YYYY-MM-DD');
+    console.log(selectedDate, "filterrrrrrrrrrrrrrrrrrrrr", vehicleNumber,selectedTripiddata,formattedStartDate);
+
+    // const Trip_Status = ["Start", "Riding", "Reached_end"];
+    // const sqlQuery = `SELECT * FROM VehicleAccessLocation 
+    //                   WHERE Runing_Date = ? 
+    //                   AND Vehicle_No = ? 
+    //                   AND Trip_Status IN (?) order by veh_id`;
+    const sqlQuery = `SELECT * FROM VehicleAccessLocation 
+                      WHERE Runing_Date = ? 
+                      AND Vehicle_No = ? 
+                      ANd Trip_id = ?
+                       AND Trip_Status IN ('Started','On_Going','Reached') 
+                      ORDER BY veh_id `;
+
+
+    db.query(sqlQuery, [formattedStartDate, vehicleNumber,selectedTripiddata], (error, result) => {
         if (error) {
             console.log(error, "error");
+            return res.status(500).json({ error: "Database error" });
         }
         console.log(result, "particularrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
 
         res.status(200).json(result);
+    });
+});
 
+router.post('/getAlladddateandtripid', (req, res) => {
+    // const todayDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+    // console.log("Today's Date:", todayDate);
+    const { selectedDate, vehicleNumber } = req.body;
+    const formattedStartDate = moment(selectedDate).format('YYYY-MM-DD');
+    
+    console.log("Today's Date:alllladtaaa", vehicleNumber,formattedStartDate);
+    const sqlQuery = `SELECT Distinct Trip_id FROM VehicleAccessLocation WHERE Runing_Date =?  AND Vehicle_No = ?  AND Trip_Status  IN ('Reached')   `;
+    db.query(sqlQuery,[formattedStartDate, vehicleNumber], (error, result) => {
+        if (error) {
+            console.log(error, "error");
+        }
+        console.log(result, "Today vehicle lists....");
+        if(result.length > 0){
+        const formattedResult = result.map(row => ({
+            Trip_id: String(row.Trip_id) // Convert to string
+        }));
+       return  res.status(200).json(formattedResult);
+    }
+
+        res.status(200).json(result);
     })
-
 })
 
 // router.post('/getTodayVehiclePoints', (req, res) => {

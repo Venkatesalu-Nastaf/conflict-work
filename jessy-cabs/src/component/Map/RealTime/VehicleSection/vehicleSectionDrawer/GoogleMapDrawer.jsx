@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState,useRef, useEffect } from "react";
 import { GoogleMap, LoadScript, MarkerF, useJsApiLoader, Polyline, InfoBox ,InfoWindow} from "@react-google-maps/api";
 import { MarkerClustererF } from "@react-google-maps/api";
 // import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png"
@@ -30,6 +30,7 @@ const containerStyle = {
 
 
 const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentDatePoints, }) => {
+  const mapRef = useRef(null); 
   // const defaultCenter = [12.9716, 77.5946];
     const [clickPosition, setClickPosition] = useState({ top: 0, left: 0 });
   // console.log(startMarkerPosition, currentPosition, currentDatePoints, "lang1111", vehNo)
@@ -40,10 +41,40 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
   // const center = useMemo(() => ({ lat: 13.080555, lng: 80.163118, }), [vehNo]);
   // lat: parseFloat(startMarkerPosition.Latitude_loc),
   // lng: parseFloat(startMarkerPosition.Longtitude_loc),
-  const center = useMemo(() => ({ lat:parseFloat(startMarkerPosition.Latitude_loc), lng:parseFloat(startMarkerPosition.Longtitude_loc), }), [vehNo]);
+  
+  // const center = useMemo(() => ({ lat:parseFloat(startMarkerPosition.Latitude_loc) || 21.7679, lng:parseFloat(startMarkerPosition.Longtitude_loc ) || 78.8718, }), [vehNo,startMarkerPosition]);
+  // const center = useMemo(() => ({ lat:parseFloat(startMarkerPosition.Latitude_loc), lng:parseFloat(startMarkerPosition.Longtitude_loc )}), [vehNo,startMarkerPosition]);
+  const center = useMemo(() => {
+    if (startMarkerPosition && Object.keys(startMarkerPosition).length > 0  ) {
+      console.log(startMarkerPosition,"val2222sttt")
+      return {
+        lat: parseFloat(startMarkerPosition.Latitude_loc),
+        lng: parseFloat(startMarkerPosition.Longtitude_loc),
+      };
+    }
+    else{
+    return { lat: 21.7679, lng: 78.8718 }; // Default India center
+    }
+  }, [vehNo, startMarkerPosition]);
+
+  // console.log(center, "Updated Center");
+  console.log(center,"val222jjjjj",startMarkerPosition,Object.keys(startMarkerPosition).length > 0)
+  // const [zoom, setZoom] = useState(19);
+  // const zoom = startMarkerPosition ? 15 : 4
+  const zoom = useMemo(() => {
+    if (startMarkerPosition && Object.keys(startMarkerPosition).length > 0  ) {
+      console.log(startMarkerPosition,"val2222sttt")
+      return 15
+    }
+    else{
+    return 4; // Default India center
+    }
+  }, [vehNo, startMarkerPosition]);
+  console.log(zoom,"val22222111zoom")
+  
 
   // const [showStartInfoBox, setShowStartInfoBox] = useState(false);
-  const [showInfoBox, setShowInfoBox] = useState(false);
+  // const [showInfoBox, setShowInfoBox] = useState(false);
   // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), []);
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
@@ -111,8 +142,43 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
     //   }
     // );
   };
+  
+  
+  // const handleZoomChange = useCallback(() => {
+  //   if (map) {
+  //     const newZoom = map.getZoom();
+  //     console.log("Zoom changed to:", newZoom);
+  //     setZoom(newZoom);
+  //   }
+  // }, []);
 
+  // const [map, setMap] = useState(null);
+// useEffect(()=>{    // mapRef.current = map;
 
+//     if (mapRef.current && startMarkerPosition ) {
+//       console.log("val222enetruseefffect",mapRef.current)
+//      const bounds = new window.google.maps.LatLngBounds();
+//       bounds.extend({
+//         lat: parseFloat(startMarkerPosition.Latitude_loc),
+//         lng: parseFloat(startMarkerPosition.Longtitude_loc),
+//       });
+//       bounds.extend({
+//         lat: parseFloat(currentPosition.Latitude_loc),
+//         lng: parseFloat(currentPosition.Longtitude_loc),
+//       });
+
+//       console.log(bounds, "val222Updated Bounds");
+//       setZoom(15)
+//       mapRef.current.fitBounds(bounds); 
+//     // Adjust zoom to fit both markers
+//     } else {
+//       console.log(mapRef.current,"val2222233currenr") 
+//       setZoom(4)
+//     }
+//   },[startMarkerPosition,currentPosition,vehNo])
+// const onLoad = (map) => {
+//     mapRef.current = map;
+//   };
 
 
   return (
@@ -120,7 +186,10 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={10}
+      zoom={zoom}
+      
+      // onLoad={onLoad}
+      // onZoomChanged={handleZoomChange} //
     >
 {currentDatePoints.length > 0 && (
   <>

@@ -1142,7 +1142,11 @@ useEffect(() => {
       setErrorMessage("Enter Report Time")
       return
     }
-    
+    if (hybdridatabooking && selectetImg.length === 0 ) {
+      setError(true);
+      setErrorMessage("Attach the file");
+      return;
+    }
 
     try {
       setisAddbtnload(true)

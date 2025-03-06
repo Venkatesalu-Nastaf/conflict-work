@@ -336,16 +336,39 @@ const useExeclpage = () => {
                         column.width = Math.max(currentColumnWidth, cellLength + 5);
                     });
                 });
-                const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseInt(row.withoutTaxes || 0, 10), 0);
-                const totalAmountgstAmount = data.reduce((sum, row) => sum + parseInt(row.gstTax1 || 0, 10), 0);
-                const totalparkandtollAmount = data.reduce((sum, row) => sum + parseInt(row.TOTALtollandpark || 0, 10), 0);
-                const Amountwithtax = data.reduce((sum, row) => sum + parseInt(row.totalcalcAmount1 || 0, 10), 0);
-                const totalRow = worksheet.addRow({});
-                totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
-                totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
+
+
+                // Ensure all numbers are considered with decimals
+const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseFloat(row.withoutTaxes || 0), 0);
+const totalAmountgstAmount = data.reduce((sum, row) => sum + parseFloat(row.gstTax1 || 0), 0);
+const totalparkandtollAmount = data.reduce((sum, row) => sum + parseFloat(row.TOTALtollandpark || 0), 0);
+
+// Calculate total with all taxes
+const Amountwithtax = totalAmountnoaddpark + totalAmountgstAmount + totalparkandtollAmount;
+
+// Round the final total
+const roundedAmountWithTax = Math.round(Amountwithtax);
+
+const totalRow = worksheet.addRow({});
+totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
+totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
+totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value = totalAmountgstAmount;
+totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
+totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = roundedAmountWithTax; // Ensure final rounding
+
+                // const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseInt(row.withoutTaxes || 0, 10), 0);
+                // // const totalAmountgstAmount = data.reduce((sum, row) => sum + parseInt(row.gstTax1 || 0, 10), 0);
+                // const totalAmountgstAmount = Math.round(
+                //     data.reduce((sum, row) => sum + parseFloat(row.gstTax1 || 0), 0)
+                // );
+                // const totalparkandtollAmount = data.reduce((sum, row) => sum + parseInt(row.TOTALtollandpark || 0, 10), 0);
+                // const Amountwithtax = data.reduce((sum, row) => sum + parseInt(row.totalcalcAmount1 || 0, 10), 0);
+                // const totalRow = worksheet.addRow({});
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
                 totalRow.eachCell((cell) => {
                     cell.font = { bold: true };
                     cell.alignment = { horizontal: 'left', vertical: 'left' };

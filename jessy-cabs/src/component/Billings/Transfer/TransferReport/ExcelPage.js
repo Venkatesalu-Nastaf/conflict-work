@@ -287,6 +287,7 @@ const useExeclpage = () => {
                         singleData["originalExtraKM"] = singleData["extraKM"]; // Store original value
                         singleData["extraKM"] = 0;
                         singleData["extraHR"] = 0;
+                        singleData["ex_kmAmount"] = 0;
                     }
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]

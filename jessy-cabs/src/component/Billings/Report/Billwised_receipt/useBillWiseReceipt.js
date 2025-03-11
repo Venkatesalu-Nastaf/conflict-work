@@ -55,8 +55,9 @@ const useBillWiseReceipt = () => {
     { field: "uniqueId", headerName: "Unique Id", width: 130 },
   ];
 
-  const columnsPendingBill = [
+  const columnsPendingBill = [  
     { field: "sno", headerName: "Sno", width: 30 },
+    { field: "Invoice_no", headerName: "Invoice No", type: "number", width: 80 },
     balanceAmount
       ? {
         field: "Voucherid",
@@ -64,7 +65,9 @@ const useBillWiseReceipt = () => {
         type: "number",
         width: 100,
       }
-      : { field: "BillNo", headerName: "Bill No", type: "number", width: 120 },
+      
+      : { field: "BillNo", headerName: "Group Trip No", type: "number", width: 110},
+      
     {
       field: "BillDate",
       headerName: "Bill Date",

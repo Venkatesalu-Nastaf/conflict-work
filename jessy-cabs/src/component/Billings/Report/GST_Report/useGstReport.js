@@ -45,7 +45,7 @@ const useGstReport = () => {
         { field: 'Invoice_no', headerName: 'Invoice No', width: 90,},
         // { field: 'billdate', headerName: 'Invoice Date', width: 130,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
         { field: 'Billdate', headerName: 'Invoice Date', width: 130,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY')  },
-        { field: 'FromDate', headerName: 'Trip Date', width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
+        // { field: 'FromDate', headerName: 'Trip Date', width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
         { field: 'Organization_name', headerName: 'Customer Name', width: 130 },
         { field: 'gstNumber', headerName: 'GSTIN', width: 130 },
         { field: 'Amount', headerName: 'GROSS', width: 130 },

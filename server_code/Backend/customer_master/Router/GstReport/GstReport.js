@@ -445,6 +445,156 @@ router.get('/getAllStateBilledDetails', async (req, res) => {
 //     }
 // });
 
+// checking gstreport data
+router.get('/getFromToBetweenParticularStateBilledDetails', async (req, res) => {
+    const { customer, fromDate, toDate, department } = req.query;
+
+    if (!fromDate || !toDate || !department) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+    }
+
+    try {
+        const customerCondition = customer !== 'All' ? 'AND Organization_name = ?' : '';
+        const customerParams = customer !== 'All' ? [customer] : [];
+
+        // Execute TransferListQuery
+        const transferListQuery = `
+            SELECT Grouptrip_id ,Invoice_no, Billdate, Organization_name, Trip_id,	Amount
+            FROM Transfer_list 
+            WHERE Billdate BETWEEN ? AND ? 
+            AND State = ? 
+            ${customerCondition}`;
+        
+        const transferListResults = await new Promise((resolve, reject) => {
+            db.query(transferListQuery, [fromDate, toDate, department, ...customerParams], (error, results) => {
+                if (error) return reject(error);
+                resolve(results);
+            });
+        });
+
+        // Execute GroupBillingQuery
+        const groupBillingQuery = `
+        SELECT 
+            ReferenceNo AS Grouptrip_id, 
+            InvoiceDate AS Billdate, 
+            Customer AS Organization_name, 
+            Amount,
+            Trip_id
+        FROM Group_billing 
+        WHERE InvoiceDate BETWEEN ? AND ? 
+        AND State = ?
+        ${customerCondition.replace('Organization_name', 'Customer')}
+    `;
+        
+        const groupBillingResults = await new Promise((resolve, reject) => {
+            db.query(groupBillingQuery, [fromDate, toDate, department, ...customerParams], (error, results) => {
+                if (error) return reject(error);
+                resolve(results);
+            });
+        });
+
+        // Fetch Invoice_No for each ReferenceNo from GroupBillingResults
+        const groupBillingInvoices = await Promise.all(
+            groupBillingResults.map((row) =>
+                new Promise((resolve, reject) => {
+                    const query = "SELECT Invoice_No FROM GroupBillinginvoice_no WHERE ReferenceNo = ?";
+                    db.query(query, [row.ReferenceNo], (error, results) => {
+                        if (error) return reject(error);
+                        resolve({ ...row, invoices: results });
+                    });
+                })
+            )
+        );
+
+        // Execute IndividualBillingQuery
+        const individualBillingQuery = `
+        SELECT 
+            Invoice_No AS Invoice_no, 
+            Bill_Date AS Billdate, 
+            Customer AS Organization_name, 
+            Amount,
+            Trip_id
+        FROM Individual_Billing 
+        WHERE Bill_Date BETWEEN ? AND ? 
+        AND State = ?
+        ${customerCondition.replace('Organization_name', 'Customer')}`;
+    
+        
+        const individualBillingResults = await new Promise((resolve, reject) => {
+            db.query(individualBillingQuery, [fromDate, toDate, department, ...customerParams], (error, results) => {
+                if (error) return reject(error);
+                resolve(results);
+            });
+        });
+
+        // Consolidate results
+        const combinedResults = {
+            transferListResults,
+            groupBillingResults: groupBillingInvoices,
+            individualBillingResults,
+        };
+console.log(combinedResults,"-----------------------------------------------------");
+
+        // Extract all Trip IDs
+        const allTripIds = [
+            ...transferListResults.flatMap(item => item.Trip_id ? item.Trip_id.split(',') : []),
+            ...groupBillingInvoices.flatMap(item => item.Trip_id ? item.Trip_id.split(',') : []),
+            ...individualBillingResults.flatMap(item => item.Trip_id ? item.Trip_id.split(',') : []),
+        ];
+
+        if (allTripIds.length === 0) {
+            return res.status(200).json({
+                message: 'No trip IDs found',
+                combinedResults,
+                allTripIds: [],
+                allTripDetails: [],
+                tripsheetResults: [],
+            });
+        }
+
+        const allTripDetails = [
+            ...transferListResults.flatMap(item => item.Trip_id ? item.Trip_id.split(',').map(tripId => ({
+                tripId: tripId.trim(),
+                invoiceNo: item.Invoice_no,
+                invoiceDate: item.Billdate,
+            })) : []),
+            
+            ...groupBillingInvoices.flatMap(item => {
+                const tripIds = item.Trip_id ? item.Trip_id.split(',').map(tripId => tripId.trim()) : [];
+                return tripIds.map((tripId, index) => ({
+                    tripId,
+                    invoiceNo: item.invoices[index]?.Invoice_No || null,
+                    invoiceDate: item.InvoiceDate,
+                }));
+            }),
+
+            ...individualBillingResults.flatMap(item => item.Trip_id ? item.Trip_id.split(',').map(tripId => ({
+                tripId: tripId.trim(),
+                invoiceNo: item.Invoice_no,
+                invoiceDate: item.Bill_Date,
+            })) : []),
+        ];
+
+        // Query tripsheet table
+        db.query("SELECT * FROM tripsheet WHERE tripid IN (?)", [allTripIds], (error, tripsheetResults) => {
+            if (error) {
+                console.error('Error querying tripsheet:', error);
+                return res.status(500).json({ error: 'Error fetching tripsheet data' });
+            }
+
+            res.status(200).json({
+                combinedResults,
+                allTripIds,
+                allTripDetails,
+                tripsheetResults,
+            });
+        });
+    } catch (error) {
+        console.error('Error fetching particular state billed details:', error);
+        res.status(500).json({ error: 'Failed to fetch data' });
+    }
+});
+
 router.get('/getParticularStateBilledDetails', async (req, res) => {
     const { customer, fromDate, toDate, department } = req.query;
 
@@ -567,6 +717,7 @@ router.get('/getParticularStateBilledDetails', async (req, res) => {
                 console.error('Error querying tripsheet:', error);
                 return res.status(500).json({ error: 'Error fetching tripsheet data' });
             }
+console.log(combinedResults,"cccccccccccccccccccccccccccccc");
 
             res.status(200).json({
                 combinedResults,

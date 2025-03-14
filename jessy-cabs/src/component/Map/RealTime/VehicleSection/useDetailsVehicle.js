@@ -14,10 +14,11 @@ const useDetailsVehicle = () => {
   const [currentPosition, setCurrentPosition] = useState({ lat: chennaiCoordinates[chennaiCoordinates.length - 1].latitude, lng: chennaiCoordinates[chennaiCoordinates.length - 1].longitude }); // State to animate the marker
   const [currentPosition1, setCurrentPosition1] = useState(null); // State to animate the marker
   const [isPlaying, setIsPlaying] = useState(false); // State to control animation
-  const [isPolylineVisible, setIsPolylineVisible] = useState(true); // State
+  const [isPolylineVisible, setIsPolylineVisible] = useState(false); // State
   const [startMarkerPosition, setStartMarkerPosition] = useState(chennaiCoordinates[0])
   const [startMarkerPosition1, setStartMarkerPosition1] = useState(null)
   const [dynamicPolyline, setDynamicPolyline] = useState([]);
+  const [dynamicPolyline1, setDynamicPolyline1] = useState([]);
   const [trigger, setTrigger] = useState(null);
   const [speedState, setSpeedState] = useState(1000);
   const [speedValuename, setSpeedValuename] = useState("10x")
@@ -33,16 +34,92 @@ const useDetailsVehicle = () => {
   const [filterDate, setFilterDate] = useState()
   const [dateWiseFilter, setDateWiseFilter] = useState(null);
   const [currentDatePoints,setCurrentDatePoints] = useState([]);
+  const [datastop,setDataStop]=useState()
   const menuItem = localStorage.getItem('activeMenuItem');
+  const [moveposition,setMOVEPosition1]=useState([])
+  const stepRef = useRef(0);
 
-  const togglePlayPause = () => {
-    if (isPlaying) {
-      setIsPlaying(false);
-      clearInterval(playInterval); // Stop the animation
-    } else {
-      handledefault10xDrawPaths(); // Start the animation
-    }
-  };
+  // const togglePlayPause = (currentvlaue) => {
+  //   if (isPlaying) {
+  //     setIsPlaying(false);
+  //     console.log(isPlaying,"tolls",playInterval)
+  //     clearInterval(playInterval); // Stop the animation
+  //   } else {
+  //     console.log(isPlaying,"tollslseeeenelser",playInterval)
+  //     handledefault10xDrawPaths(currentvlaue); // Start the animation
+  //   }
+  // };
+
+  // const togglePlayPause = (currentvlaue,data) => {
+  //   console.log(data,"tollddata")
+  //   if(data) {
+  //     console.log(data,"tolldenterr")
+  //  setIsPlaying(true)
+  //  setDataStop(true)
+  //  handledefault10xDrawPaths(currentvlaue);
+  //  return
+  //   }
+  //   else{
+  //     console.log(data,"tolldelse")
+  //     setIsPlaying(false)
+  //     setDataStop(false)
+  //     handledefault10xDrawPaths([]); 
+  //     stepRef.current = 0
+  //     return
+  //   }
+  // };
+
+  const intervalRef = useRef(null); // Store interval ID
+
+    const togglePlayPause = () => {
+       setIsPlaying(!isPlaying)
+      // setIsPlaying(true)
+       stepRef.current = 0
+       setDynamicPolyline1([])
+       setMOVEPosition1([])
+       
+     
+    };
+    const datahost = useMemo(() => datastop, [datastop]);
+    useEffect(() => {
+      // console.log(isPlaying,"tolld",intervalRef.current,stepRef.current,"data",datahost?.length)
+      if (isPlaying) {
+          if (intervalRef.current) clearInterval(intervalRef.current); // Clear previous interval
+
+          intervalRef.current = setInterval(() => {
+            // console.log(stepRef.current,datahost.length,"tolldlen")
+              if (stepRef.current < datahost?.length) {
+                  console.log(`tolldExecuting Step: ${stepRef.current} at speed ${speedState}ms`);
+
+                  const newPoint = {
+                    lat: parseFloat(datahost[stepRef.current].Latitude_loc),
+                    lng: parseFloat(datahost[stepRef.current].Longtitude_loc),
+                  };
+                  // const newPoint1 = {
+                  //   Lattitude_loc: parseFloat(currentvlaue[stepRef.current].Latitude_loc),
+                  //   Longitude_loc: parseFloat(currentvlaue[stepRef.current].Longtitude_loc),
+                  // };
+                  setMOVEPosition1(newPoint);
+                
+                  setDynamicPolyline1((prevPolyline) => [...prevPolyline, newPoint]);
+                  stepRef.current++;
+              } else {
+                // console.log(stepRef.current,datahost.length,"tolldlenddd")
+                  clearInterval(intervalRef.current);
+                  clearInterval(stepRef.current)
+                  setIsPlaying(false);
+                  setMOVEPosition1();
+              }
+          }, speedState);
+      }
+      else{
+      setMOVEPosition1();
+      }
+
+      return () => clearInterval(intervalRef.current); // Cleanup on unmount
+  }, [speedState, isPlaying]);
+  // console.log(dynamicPolyline1)
+  
 
   const [rotation, setRotation] = useState(0);
   //   get All vehicles List
@@ -171,6 +248,7 @@ const useDetailsVehicle = () => {
   //     }, 1000); // Update interval (1 second per step)
   // };
   const handleDrawPaths = () => {
+    console.log("poocallpoly")
     setTrigger((pre) => !pre);
     setIsPlaying(true);
     setDynamicPolyline([]);
@@ -205,39 +283,39 @@ const useDetailsVehicle = () => {
 
 
 
-  const stepRef = useRef(0); // Persist step across re-renders
+  // const stepRef = useRef(0); // Persist step across re-renders
 
-  const handledefault10xDrawPaths = () => {
-    if (stepRef.current >= currentDatePoints.length) {
-      stepRef.current = 0; // Reset when reaching the last point
-      setDynamicPolyline([]); // Clear the polyline
-    }
-    setTrigger((prev) => !prev);
-    setIsPlaying(true);
+  // const handledefault10xDrawPaths = () => {
+  //   if (stepRef.current >= currentDatePoints.length) {
+  //     stepRef.current = 0; // Reset when reaching the last point
+  //     setDynamicPolyline([]); // Clear the polyline
+  //   }
+  //   setTrigger((prev) => !prev);
+  //   setIsPlaying(true);
 
-    const totalSteps = currentDatePoints.length - 1;
+  //   const totalSteps = currentDatePoints.length - 1;
 
-    const interval = setInterval(() => {
-      if (stepRef.current <= totalSteps && speedState) {
-        const newPoint = {
-          lat: parseFloat(currentDatePoints[stepRef.current].Lattitude_loc),
-          lng: parseFloat(currentDatePoints[stepRef.current].Longitude_loc),
-        };
-        const newPoint1 = {
-          Lattitude_loc: parseFloat(currentDatePoints[stepRef.current].Lattitude_loc),
-          Longitude_loc: parseFloat(currentDatePoints[stepRef.current].Longitude_loc),
-        };
-        setCurrentPosition1(newPoint1);
-        setDynamicPolyline((prevPolyline) => [...prevPolyline, newPoint]);
+  //   const interval = setInterval(() => {
+  //     if (stepRef.current <= totalSteps && speedState) {
+  //       const newPoint = {
+  //         lat: parseFloat(currentDatePoints[stepRef.current].Lattitude_loc),
+  //         lng: parseFloat(currentDatePoints[stepRef.current].Longitude_loc),
+  //       };
+  //       const newPoint1 = {
+  //         Lattitude_loc: parseFloat(currentDatePoints[stepRef.current].Lattitude_loc),
+  //         Longitude_loc: parseFloat(currentDatePoints[stepRef.current].Longitude_loc),
+  //       };
+  //       setCurrentPosition1(newPoint1);
+  //       setDynamicPolyline((prevPolyline) => [...prevPolyline, newPoint]);
 
-        stepRef.current++; // Persist step count
-      } else {
-        clearInterval(interval);
-        setIsPlaying(false);
-      }
-      setPlayInterval(interval);
-    }, speedState);
-  };
+  //       stepRef.current++; // Persist step count
+  //     } else {
+  //       clearInterval(interval);
+  //       setIsPlaying(false);
+  //     }
+  //     setPlayInterval(interval);
+  //   }, speedState);
+  // };
 
   const handleChange = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
@@ -563,9 +641,11 @@ const useDetailsVehicle = () => {
 
   return {
     vehiclesData, currentPosition, setCurrentPosition, isPolylineVisible, setIsPolylineVisible, isPlaying, setIsPlaying, setStartMarkerPosition, startMarkerPosition, dynamicPolyline,
-    handleDrawPaths, handledefault10xDrawPaths, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths, rotation, speedState, address, startTripLocation,
-    endTripLocation, tripidOptions, selectedTripid, setSelectedTripid, togglePlayPause, filterDate, handleChange, dateWiseFilter,currentDatePoints,
-    startMarkerPosition1,setCurrentPosition1,currentPosition1
+    handleDrawPaths,
+    //  handledefault10xDrawPaths, 
+     handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths, rotation, speedState, address, startTripLocation,
+    endTripLocation, tripidOptions, selectedTripid, setSelectedTripid, togglePlayPause, filterDate, handleChange, dateWiseFilter,currentDatePoints,dynamicPolyline1,setDynamicPolyline1,
+    startMarkerPosition1,setCurrentPosition1,currentPosition1,setDataStop,setSpeedState,moveposition,setMOVEPosition1
   }
 }
 export default useDetailsVehicle;

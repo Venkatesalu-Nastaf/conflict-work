@@ -178,12 +178,12 @@ router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => 
       // });
 
       const vehicleDataMap = {};
-      if(result1.length > 0) {
-      result1.forEach(row => {
-        vehicleDataMap[row.vehRegNo] = { fueltype: row.fueltype, segement: row.segement };
+      if (result1.length > 0) {
+        result1.forEach(row => {
+          vehicleDataMap[row.vehRegNo] = { fueltype: row.fueltype, segement: row.segement };
 
-      });
-    }
+        });
+      }
 
 
       db.query('select customer,gstTax,address1 from customers where customer=?', [customer], (err, result2) => {
@@ -330,12 +330,12 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
       // }
       // console.log(result1,'result vehicle');
       const vehicleDataMap = {};
-      if(result.length > 0){
-      result1.forEach(row => {
-        vehicleDataMap[row.vehRegNo] = { fueltype: row.fueltype, segement: row.segement };
+      if (result.length > 0) {
+        result1.forEach(row => {
+          vehicleDataMap[row.vehRegNo] = { fueltype: row.fueltype, segement: row.segement };
 
-      });
-    }
+        });
+      }
 
       db.query('select customer,gstTax,address1 from customers where customer=?', [customer], (err, result2) => {
         if (err) {
@@ -762,14 +762,14 @@ router.get('/getTripIdFromTransferList', (req, res) => {
 
 
 router.get('/getTripIdFromTransferListforinvoiceno', (req, res) => {
-  const {invoicno,State} = req.query;
+  const { invoicno, State } = req.query;
 
   if (!invoicno) {
     return res.status(400).json({ error: 'Group ID is required' });
   }
   const sqlquery = `SELECT Grouptrip_id,Trip_id,Organization_name,Trips,Invoice_no,Billdate,FromDate,EndDate,State FROM Transfer_list WHERE Invoice_no = ? AND  State = ?`;
 
-  db.query(sqlquery, [invoicno,State], (error, result) => {
+  db.query(sqlquery, [invoicno, State], (error, result) => {
     if (error) {
       console.error(error, 'error');
       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
@@ -1597,7 +1597,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
 
   Promise.all(promises)
     .then(results => {
-//  console.log(results,'pdfzippppppppppppppppppppp');
+      //  console.log(results,'pdfzippppppppppppppppppppp');
       return res.status(200).json(results);
     })
     .catch(error => {
@@ -1770,6 +1770,150 @@ router.get('/customerdatamothergroup/:customers', (req, res) => {
 //     });
 //   });
 // });
+
+router.post('/gettingCustomerList', (req, res) => {
+  const { fromDate, toDate } = req.body;
+
+  if (!fromDate || !toDate) {
+    return res.status(400).json({ error: 'Missing fromDate or toDate' });
+  }
+
+  const sqlQuery = `
+  SELECT DISTINCT Organization_name 
+  FROM Transfer_list 
+  WHERE Billdate BETWEEN ? AND ?`;
+
+
+  db.query(sqlQuery, [fromDate, toDate], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to fetch data', details: err });
+    }
+    console.log(result, "orggggggggggg");
+
+    return res.status(200).json(result);
+  });
+});
+
+// getting multiple customer gst details
+router.post('/multipleCustomerGSTDetails', (req, res) => {
+  const { customer } = req.body;
+  console.log(customer, 'params customer');
+
+  if (!Array.isArray(customer) || customer.length === 0) {
+    return res.status(400).json({ error: 'Invalid customer input' });
+  }
+
+  const customerQuery = `SELECT * FROM customers WHERE customer IN (?)`;
+
+  db.query(customerQuery, [customer], (err, customerResults) => {
+    if (err) {
+      console.error(err, 'error');
+      return res.status(500).json({ error: 'Database error while fetching customers' });
+    }
+
+    if (customerResults.length === 0) {
+      return res.status(404).json({ error: 'Customers not found' });
+    }
+
+    let stationPromises = [];
+
+    const fetchStations = (state, stationName) => {
+      return new Promise((resolve, reject) => {
+        const stationQuery = `
+          SELECT * FROM stationcreation 
+          WHERE state = ? 
+          AND Stationname = ? 
+          AND gstno IS NOT NULL 
+          AND gstno != ""
+        `;
+
+        const defaultStationQuery = `
+          SELECT * FROM stationcreation 
+          WHERE state = "Tamil Nadu" 
+          AND Stationname = "Chennai" 
+          AND gstno IS NOT NULL 
+          AND gstno != ""
+        `;
+
+        db.query(stationQuery, [state, stationName], (err, stationResult) => {
+          if (err) {
+            console.error(err, 'error');
+            return reject({ error: 'Database error while fetching stations' });
+          }
+
+          const allGstEmpty = stationResult.every(station => !station.gstno || station.gstno.trim() === '');
+
+          if (allGstEmpty) {
+            db.query(defaultStationQuery, (err, defaultStations) => {
+              if (err) {
+                console.error(err, 'error');
+                return reject({ error: 'Database error while fetching default stations' });
+              }
+              resolve(defaultStations);
+            });
+          } else {
+            resolve(stationResult);
+          }
+        });
+      });
+    };
+
+    customerResults.forEach(customer => {
+      const groupBilling = customer.billingGroup;
+      const state = customer.state;
+      const stationName = customer.servicestation;
+      console.log(groupBilling, "Processing customer:", state, stationName);
+
+      if (!groupBilling) {
+        stationPromises.push(
+          fetchStations(state, stationName).then(stationResult => ({
+            customerDetails: customer,
+            customerStations: stationResult,
+          }))
+        );
+      } else {
+        const groupBillingQuery = `SELECT * FROM customers WHERE customer = ?`;
+
+        stationPromises.push(
+          new Promise((resolve, reject) => {
+            db.query(groupBillingQuery, [groupBilling], (err, billingResults) => {
+              if (err) {
+                console.error(err, 'error');
+                return reject({ error: 'Database error while fetching group billing details' });
+              }
+
+              if (billingResults.length === 0) {
+                return reject({ error: 'Group billing customer not found' });
+              }
+
+              // Handle multiple group billing customers
+              let groupBillingPromises = billingResults.map(billingCustomer =>
+                fetchStations(billingCustomer.state, billingCustomer.servicestation).then(
+                  billingGroupStationResult => ({
+                    customerDetails: billingCustomer,
+                    customerStations: billingGroupStationResult,
+                  })
+                )
+              );
+
+              Promise.all(groupBillingPromises)
+                .then(resolve)
+                .catch(reject);
+            });
+          })
+        );
+      }
+    });
+
+    Promise.all(stationPromises)
+      .then(results => res.status(200).json(results.flat())) // Flatten the array to avoid nested arrays
+      .catch(error => res.status(500).json(error));
+  });
+});
+
+
+
+
 
 router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
   const { customer } = req.params;
@@ -1979,7 +2123,7 @@ router.get('/customerdatgst/:customers', (req, res) => {
       if (data === null) {
         const datas = results[0].state || null;
         const datas2 = results[0].servicestation || null;
-        db.query(sql2, [datas,datas2], (err, results3) => {
+        db.query(sql2, [datas, datas2], (err, results3) => {
           if (err) {
             console.log(err, "sql1")
             return res.status(500).send({ error: 'Database query failed' });
@@ -2019,7 +2163,7 @@ router.get('/customerdatgst/:customers', (req, res) => {
           console.log(results1, "lll")
           console.log(datas)
           if (results1.length > 0) {
-            db.query(sql2, [datas,datas2], (err, result5) => {
+            db.query(sql2, [datas, datas2], (err, result5) => {
               if (err) {
                 console.log(err, "sql1")
                 return res.status(500).send({ error: 'Database query failed' });

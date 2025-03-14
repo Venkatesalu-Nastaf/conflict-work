@@ -20,8 +20,17 @@ import { GoHistory } from "react-icons/go";
 import { FaCarOn } from "react-icons/fa6";
 import TabContext from '@mui/lab/TabContext';
 import Box from '@mui/material/Box';
+import useDetailsVehicle from "../useDetailsVehicle";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 
 const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
+    const {isPlaying,
+       handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths,
+        handledefault10xDrawPaths, speedState, 
+        togglePlayPause,dynamicPolyline1,setDynamicPolyline1,setIsPlaying,setDataStop,setSpeedState,moveposition,setMOVEPosition1
+
+    } = useDetailsVehicle()
     console.log(vehNo,"vehhhhhhhhhhhhhhhhhhhhhhh")
     const [selectMap, setSelectMap] = useState("OSMap");
     const [filterDate, setFilterDate] = useState(dayjs());
@@ -32,7 +41,7 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
     const [selectedTripid, setSelectedTripid] = useState(null);
     const [startTripLocation, setStartTripLocation] = useState([]);
     const [endTripLocation, setEndTripLocation] = useState([]);
-    const [dynamicPolyline, setDynamicPolyline] = useState([]);
+    // const [dynamicPolyline, setDynamicPolyline] = useState([]);
     const [tripWayPoints, setTripWayPoints] = useState([]);
     const [tripdropdown,settripdown]=useState([])
     const [ridingvaluedata,setRidingValue]=useState([]);
@@ -77,6 +86,7 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
                     const result = response.data;
                     console.log(result, "GPS Data"); 
                     setCurrentDatePoints(result); 
+                    setDataStop(result)
 
                     const filteredData = result.slice(1, -1);
                     console.log(filteredData,"filetr")
@@ -86,9 +96,11 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
                   
                     setStartMarkerPosition(result[0]);
                     setCurrentPosition(result[result.length - 1]);
+                
                 }
                 else{
                     setCurrentDatePoints([]); 
+                    setDynamicPolyline1([])
 
                     // const filteredData = result.slice(1, -1);
                     // console.log(filteredData,"filetr")
@@ -104,7 +116,7 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
             
 
              catch (err) {
-                console.error(err, "Error fetching GPS data");
+                console.log(err, "Error fetching GPS data");
             }
         };
 
@@ -169,6 +181,9 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
         console.log(selectedOption,"ss")
 
         setSelectedTripid(selectedOption);
+        setDynamicPolyline1([])
+        setIsPlaying(false)
+        setMOVEPosition1()
     };
   
 
@@ -224,6 +239,9 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
     setStartMarkerPosition({})
     setCurrentPosition([])
     setCurrentDatePoints([])
+    setDynamicPolyline1([])
+    setIsPlaying(false)
+    setSpeedState(1000)
     
 
     }
@@ -234,7 +252,7 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
 
     },[open])
     
-
+// console.log(dynamicPolyline1,"poly")
 
     return (
         <>
@@ -475,8 +493,39 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
                             <div style={{ width: "70%", height: "500px" }}>
 
                         
-                                {selectMap === "OSMap" && <OSMapDrawer  vehNo={vehNo} startMarkerPosition={startMarkerPosition} currentPosition={currentPosition} currentDatePoints={currentDatePoints} />}
-                            {selectMap === "GoogleMap" && <GoogleMapDrawer  vehNo={vehNo} startMarkerPosition={startMarkerPosition} currentPosition={currentPosition} currentDatePoints={currentDatePoints}  />}
+                                {selectMap === "OSMap" && <OSMapDrawer  vehNo={vehNo} startMarkerPosition={startMarkerPosition} currentPosition={currentPosition} currentDatePoints={currentDatePoints} dynamicPolyline={dynamicPolyline1}  moveposition={moveposition} />}
+                            {selectMap === "GoogleMap" && <GoogleMapDrawer  vehNo={vehNo} startMarkerPosition={startMarkerPosition} currentPosition={currentPosition} currentDatePoints={currentDatePoints} dynamicPolyline={dynamicPolyline1} moveposition={moveposition} />}
+                             <div className='playButton'>
+                                            <div>
+                                            </div>
+                                            <div className='playArrow'>
+                                                <Button onClick={() => togglePlayPause()}>
+                                                    {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+                                                </Button>
+
+                                            </div>
+                                            <div className='playspeed'>
+
+                                                <p style={{ textAlign: 'center', margin: 0 }}>Play Speed</p>
+                                                <Button sx={{
+                                                    backgroundColor: speedState === 1000 ? 'gray' : 'white',
+                                                    color: speedState === 1000 ? 'white' : 'black',
+                                                    '&:hover': { backgroundColor: 'lightgray' },
+                                                }} onClick={() => handle10xDrawPaths()}>10X</Button>
+
+                                                <Button sx={{
+                                                    backgroundColor: speedState === 500 ? 'gray' : 'white',
+                                                    color: speedState === 500 ? 'white' : 'black',
+                                                    '&:hover': { backgroundColor: 'lightgray' },
+                                                }} onClick={() => handle20xDrawPaths()}>20X</Button>
+
+                                                <Button sx={{
+                                                    backgroundColor: speedState === 100 ? 'gray' : 'white',
+                                                    color: speedState === 100 ? 'white' : 'black',
+                                                    '&:hover': { backgroundColor: 'lightgray' },
+                                                }} onClick={() => handle50xDrawPaths()}>50X</Button>
+                                            </div>
+                                        </div>
                             </div>
                         </div>
                     </DialogContent>

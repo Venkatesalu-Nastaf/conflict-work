@@ -47,7 +47,8 @@ export const RealTime = ({ allVehicleList, vehicleCurrentLocation ,todayVehicle}
             <div style={{ position: "relative", height: "55px", width: "100%" }}>
               <HeaderDetails />
             </div>
-            <VehicleSection allVehicleList={allVehicleList} vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} />
+            <div style={{display:"flex"}}>
+                       <VehicleSection allVehicleList={allVehicleList} vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} />
 
             <div className="main-body-container">
             {/* <VehicleSection allVehicleList={allVehicleList} /> */}
@@ -67,6 +68,7 @@ export const RealTime = ({ allVehicleList, vehicleCurrentLocation ,todayVehicle}
                 <OSMap vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} /> }
                 {selectMap === "GoogleMap" &&
                 <GoogleMapFile vehicleCurrentLocation={todayVehicle} />}
+            </div>
             </div>
           </div>
         </div>

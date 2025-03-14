@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
@@ -108,12 +108,16 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 //     </div>
 //   );
 // };
-const OSMap = ({ vehicleCurrentLocation, todayVehicle }) => {
+const OSMap = ({todayVehicle }) => {
   // console.log(vehicleCurrentLocation, vehicleCurrentLocation.length, "checkkkkkkkkkkkkk");
+  // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), [todayVehicle]);
+
 
   return (
-    <div style={{ height: "100vh", width: "100vw" }}>
-      <MapContainer center={[13.080555, 80.163118]} zoom={13} style={{ height: "100%", width: "100%" }}>
+    // <div style={{ height: "100vh", width: "100vw" }}>
+      <MapContainer center={[13.080555, 80.163118]} zoom={13} minZoom={1}  // Prevent zooming out too much
+      // <MapContainer center={center} zoom={13} minZoom={1}
+      maxZoom={19} style={{ height: "100%", width: "100%" }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -139,7 +143,7 @@ const OSMap = ({ vehicleCurrentLocation, todayVehicle }) => {
           ))}
         </MarkerClusterGroup>
       </MapContainer>
-    </div>
+    // </div>
   );
 };
 

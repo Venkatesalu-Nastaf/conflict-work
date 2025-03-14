@@ -584,7 +584,7 @@ function App() {
       try {
         if (menuItem === "RealTime") {
           const response = await axios.post(`${apiUrl}/getAllVehicleCurrentLocation`);
-          console.log(response.data, "alllllvehicleeeee");
+          // console.log(response.data, "alllllvehicleeeee");
           setCurrentVehiclePoint(response.data)
 
         }
@@ -604,7 +604,7 @@ function App() {
       try {
         if (menuItem === "RealTime") {
           const response = await axios.post(`${apiUrl}/getTodayVehiclePoints`);
-          console.log(response.data, "todayalllllvehicleeeee");
+          // console.log(response.data, "todayalllllvehicleeeee");
           setTodayVehicle(response.data);
         }
       } catch (err) {

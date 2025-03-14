@@ -22,9 +22,9 @@ const useTripsheet = () => {
     const apiUrl = APIURL;
     const superAdminAccess = localStorage.getItem("SuperAdmin")
     const loginusername = localStorage.getItem("username")
-    const [dialogmessagetrip,setDialogMessage]=useState(false)
-    const [messageditedtrip,setMessageEditedtrip]=useState('')
-    const [messageditedbeforetrip,setMessageEditedBeforetrip]=useState('')
+    const [dialogmessagetrip, setDialogMessage] = useState(false)
+    const [messageditedtrip, setMessageEditedtrip] = useState('')
+    const [messageditedbeforetrip, setMessageEditedBeforetrip] = useState('')
     // const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     // const statusCheck = formData.status || selectedCustomerData.status || book.status;
     // THIS APIURL TRANSFER FRO DRIVER APP
@@ -126,8 +126,10 @@ const useTripsheet = () => {
     let [driverBeta, setdriverBeta] = useState('0')
     let [driverbeta_Count, setdriverbeta_Count] = useState('0')
     let [driverBeta_amount, setdriverBeta_amount] = useState('0')
-    const [userstatuspermission,setUserStatusPermission]=useState([])
-
+    const [userstatuspermission, setUserStatusPermission] = useState([])
+    const [tripGpsData, setTripGpsData] = useState([]);
+    const [fullGpsData, setFullGpsData] = useState([]);
+    const [allGpsData, setAllGpsData] = useState([]);
     //-----------------------------------------------------------------
     const [packageData, setPackageData] = useState({
         customer: '',
@@ -143,11 +145,11 @@ const useTripsheet = () => {
     });
     const [conflictLoad, setConflictLoad] = useState(null)
     const [selectedStatuschecking, setSelectedStatuschecking] = useState('');
-    const [oldStatusCheck,setOldStatusCheck] = useState('')
+    const [oldStatusCheck, setOldStatusCheck] = useState('')
     const [openModalConflict, setOpenModalConflict] = useState(null)
     const [openConflictKMPopup, setOpenConflictKMPopup] = useState(null);
-    const [overetripsheetstatus,setOverViewETripsheet]=useState(false)
-    const [overetripsheetoutstation,setOverViewETripsheetOutstation]=useState(null)
+    const [overetripsheetstatus, setOverViewETripsheet] = useState(false)
+    const [overetripsheetoutstation, setOverViewETripsheetOutstation] = useState(null)
     // ----------------------------------------vendorinfo-------------------
     const [lockdata, setLockData] = useState(false)
     // const [lockdata, setLockData] = useState(true)
@@ -296,18 +298,18 @@ const useTripsheet = () => {
     // })
     const [checkstatusapps, setCheckStatusApp] = useState([])
     const usernamedata = localStorage.getItem("username");
-    const [nochangedata,setNoChangeData]=useState({})
+    const [nochangedata, setNoChangeData] = useState({})
     const [checksignandMapverify, setCheckSignandMapVerify] = useState(false)
     const [checksignmapmessage, setCheckSignMapMessage] = useState('')
     const [orderByDropDown, setOrderByDropDown] = useState([])
-    const [speeddailacesss,setSpeedDialAccessdelete]=useState(false)
-    const [speeddailacesssedit,setSpeedDialAccessedit]=useState(false)
-    const [Permissiondeleteroles,setPermissionDeleteRoles]=useState(false)
-    const [fueldataamountdis,setFuelDataAmountDis]=useState(false)
-    const [fueladvancedamounthide,setFuelAdvancedamountHide]=useState(null)
-    const a1 = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") ;
-   
-    
+    const [speeddailacesss, setSpeedDialAccessdelete] = useState(false)
+    const [speeddailacesssedit, setSpeedDialAccessedit] = useState(false)
+    const [Permissiondeleteroles, setPermissionDeleteRoles] = useState(false)
+    const [fueldataamountdis, setFuelDataAmountDis] = useState(false)
+    const [fueladvancedamounthide, setFuelAdvancedamountHide] = useState(null)
+    const a1 = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO");
+
+
     const maplogcolumns = [
         { field: "id", headerName: "Sno", width: 70 },
         { field: "tripid", headerName: "TripSheet No", width: 120 },
@@ -351,13 +353,13 @@ const useTripsheet = () => {
                     // disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
                     // disabled={handleDatapermission(Tripsheet_delete1)}
                     disabled={Permissiondeleteroles}
-                    // handleDatapermission(Tripsheet_delete)
+                // handleDatapermission(Tripsheet_delete)
                 >
-                    <Button 
-                    // disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
-                    // disabled={handleDatapermission(Tripsheet_delete1)}
-                    disabled={Permissiondeleteroles}
-                     variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button
+                        // disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
+                        // disabled={handleDatapermission(Tripsheet_delete1)}
+                        disabled={Permissiondeleteroles}
+                        variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <RiDeleteBinLine style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -523,14 +525,14 @@ const useTripsheet = () => {
             const responseData = response.data
             // console.log(responseData,"urlstripiii")
             // if (responseData.length > 0) {
-                // setCheckSignandMapVerify(true)
-                // setCheckSignMapMessage("Map and Signature Verified")
-                setMapImageUrls1(responseData);
+            // setCheckSignandMapVerify(true)
+            // setCheckSignMapMessage("Map and Signature Verified")
+            setMapImageUrls1(responseData);
             // } else {
 
-                // Assuming you want to display the image directly
-                // const imageUrl = URL.createObjectURL(responseData);
-                // setMapImageUrls1([]);
+            // Assuming you want to display the image directly
+            // const imageUrl = URL.createObjectURL(responseData);
+            // setMapImageUrls1([]);
             // }
             // setMapimgPopupOpen(true);
         } catch {
@@ -672,7 +674,7 @@ const useTripsheet = () => {
         const timetoggledata = Number(params.get('TimeToggle')) || 0
         const timetogglevendor = Number(params.get('VendorTimeToggle')) || 0
         const lockdatavendor = Number(params.get('lockdatavalue'))
-        const messagedatatrip = params.get("messageedited")|| '';
+        const messagedatatrip = params.get("messageedited") || '';
         // console.log(lockdatavendor,"lockvendorlog")
         setHybridHclNavigate(HCLDATA)
         setTimeToggleNaviagate(timetoggledata)
@@ -724,7 +726,7 @@ const useTripsheet = () => {
             setMessageEditedBeforetrip(messagedatatrip)
             getSignatureImageverify();
             handleTripmapverify();
-            checksignatureandmap(); 
+            checksignatureandmap();
             fuelAdvnacedisabled();
             handlepermissionforspeedDialedit(Tripsheet_modify1)
             handlepermissionforspeedDialdelete(Tripsheet_delete1)
@@ -760,13 +762,13 @@ const useTripsheet = () => {
         setdriverbeta_Count(driverbeta_Count);
         setdriverBeta_amount(driverBeta_amount);
         setTotalcalcAmount(totalcalcAmount || formData.totalcalcAmount);
-      
-       
+
+
 
         ///------
     }, [location]);
 
-// console.log(driverBeta,"driverrrrrrrrrrrrrrrrrrr");
+    // console.log(driverBeta,"driverrrrrrrrrrrrrrrrrrr");
 
     useEffect(() => {
         window.history.replaceState(null, document.title, window.location.pathname);
@@ -890,13 +892,13 @@ const useTripsheet = () => {
         vehicleName: "",
         travelsname: "",
         GroupTripId: "",
-        MessageText:"",
+        MessageText: "",
     }
 
     const [book, setBook] = useState(bookData);
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
-    const handleCancel = () => {        
+    const handleCancel = () => {
         setBook({ ...bookData, travelsname: "" }); // Ensure travelsname is empty
         setSelectedCustomerDatas({});
         setSelectedCustomerData({});
@@ -1010,7 +1012,7 @@ const useTripsheet = () => {
 
             return
         }
-        if(overetripsheetstatus && overetripsheetoutstation === "oustation") {
+        if (overetripsheetstatus && overetripsheetoutstation === "oustation") {
             setWarning(true);
             setWarningMessage("Status is closed, u dont have permission open this E-Tripsheet.");
             return
@@ -1031,44 +1033,44 @@ const useTripsheet = () => {
 
 
     const handleAutocompleteChangecustomer = (event, value, name) => {
-  
+
         const selectedOption = value ? value.label : "";
-    
+
         if (name === "orderedby") {
-          const selectedOrder = orderByDropDown?.find(option => option?.orderedby === value?.label);
-        //   console.log(selectedOrder,"order")
-          if (selectedOrder) {
-            setBook(prevState => ({
-              ...prevState,
-              orderedby: value?.label,
-              mobile: selectedOrder.orderByMobileNo,
-              orderbyemail: selectedOrder.orderByEmail,
-              // servicestation: selectedOrder.servicestation
-            }));
-    
-            setSelectedCustomerData((prevState) => ({
-              ...prevState,
-              orderedby: value?.label,
-              mobile: selectedOrder.orderByMobileNo,
-              orderbyemail: selectedOrder.orderByEmail,
-              // servicestation: selectedOrder.servicestation
-            }));
-            setFormData((prevState) => ({
-              ...prevState,
-              orderedby: value?.label,
-              mobile: selectedOrder.orderByMobileNo,
-              orderbyemail: selectedOrder.orderByEmail,
-              // servicestation: selectedOrder.servicestation
-            }));
-    
-            // setNoChangeData((prevState) => ({
-            //   ...prevState,
-            //   orderedby: value?.label,
-            //   orderByMobileNo: selectedOrder.orderByMobileNo,
-            //   orderByEmail: selectedOrder.orderByEmail,
-            // }));
-    
-          } 
+            const selectedOrder = orderByDropDown?.find(option => option?.orderedby === value?.label);
+            //   console.log(selectedOrder,"order")
+            if (selectedOrder) {
+                setBook(prevState => ({
+                    ...prevState,
+                    orderedby: value?.label,
+                    mobile: selectedOrder.orderByMobileNo,
+                    orderbyemail: selectedOrder.orderByEmail,
+                    // servicestation: selectedOrder.servicestation
+                }));
+
+                setSelectedCustomerData((prevState) => ({
+                    ...prevState,
+                    orderedby: value?.label,
+                    mobile: selectedOrder.orderByMobileNo,
+                    orderbyemail: selectedOrder.orderByEmail,
+                    // servicestation: selectedOrder.servicestation
+                }));
+                setFormData((prevState) => ({
+                    ...prevState,
+                    orderedby: value?.label,
+                    mobile: selectedOrder.orderByMobileNo,
+                    orderbyemail: selectedOrder.orderByEmail,
+                    // servicestation: selectedOrder.servicestation
+                }));
+
+                // setNoChangeData((prevState) => ({
+                //   ...prevState,
+                //   orderedby: value?.label,
+                //   orderByMobileNo: selectedOrder.orderByMobileNo,
+                //   orderByEmail: selectedOrder.orderByEmail,
+                // }));
+
+            }
         }
         else {
             // setBook(prevState => ({
@@ -1083,29 +1085,29 @@ const useTripsheet = () => {
             setBook(prevState => ({
                 ...prevState,
                 [name]: selectedOption,
-                orderedby:'-',
-                mobile:'-',
-                orderbyemail:'-',
+                orderedby: '-',
+                mobile: '-',
+                orderbyemail: '-',
                 // servicestation: selectedOrder.servicestation
-              }));
-      
-              setSelectedCustomerData((prevState) => ({
+            }));
+
+            setSelectedCustomerData((prevState) => ({
                 ...prevState,
-                orderedby:'-',
+                orderedby: '-',
                 [name]: selectedOption,
-                mobile:'-',
-                orderbyemail:'-',
+                mobile: '-',
+                orderbyemail: '-',
                 // servicestation: selectedOrder.servicestation
-              }));
-              setFormData((prevState) => ({
+            }));
+            setFormData((prevState) => ({
                 ...prevState,
-                orderedby:'-',
+                orderedby: '-',
                 [name]: selectedOption,
-                mobile:'-',
-                orderbyemail:'-',
+                mobile: '-',
+                orderbyemail: '-',
                 // servicestation: selectedOrder.servicestation
-              }));
-              setNoChangeData((prevValues) => ({
+            }));
+            setNoChangeData((prevValues) => ({
                 ...prevValues,
                 [name]: selectedOption,
             }));
@@ -1117,33 +1119,33 @@ const useTripsheet = () => {
     // console.log(formData.customer ,"form",selectedCustomerData.customer,"dd",book.customer,"ff",packageData.customer,"cust")
 
     useEffect(() => {
-  
-      const fetchcustomerData = async () => {
-        try {
-          if (!custmorName) return
-          const response = await axios.get(
-            `${apiUrl}/name-orderby/${custmorName}`
-          );
-          const resData = response.data;
-        // console.log(resData,"cust")
-          if (resData.success) {
-            setOrderByDropDown(resData.data)
-            // console.log(resData.data,"custjjj")
-            
-            
-            // setBook(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
-            // setSelectedCustomerData(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
-          } else {
-            setOrderByDropDown([])
-            // setBook(prev => ({ ...prev, orderedby: '', orderByEmail: '', orderByMobileNo: "" }))
-            // setSelectedCustomerData(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
-          }
-        } catch (error) {
-          // setError(true);
-          // setErrorMessage("Error retrieving vehicle details.");
+
+        const fetchcustomerData = async () => {
+            try {
+                if (!custmorName) return
+                const response = await axios.get(
+                    `${apiUrl}/name-orderby/${custmorName}`
+                );
+                const resData = response.data;
+                // console.log(resData,"cust")
+                if (resData.success) {
+                    setOrderByDropDown(resData.data)
+                    // console.log(resData.data,"custjjj")
+
+
+                    // setBook(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
+                    // setSelectedCustomerData(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
+                } else {
+                    setOrderByDropDown([])
+                    // setBook(prev => ({ ...prev, orderedby: '', orderByEmail: '', orderByMobileNo: "" }))
+                    // setSelectedCustomerData(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
+                }
+            } catch (error) {
+                // setError(true);
+                // setErrorMessage("Error retrieving vehicle details.");
+            }
         }
-      }
-      fetchcustomerData()
+        fetchcustomerData()
     }, [custmorName, apiUrl])
 
     const handleDelete = async () => {
@@ -1350,16 +1352,16 @@ const useTripsheet = () => {
     // console.log(mapimageUrls1, "urls", typeof (mapimageUrls1), mapimageUrls)
     const checksignatureandmap = async () => {
         const userstatusdata = userstatuspermission
-      console.log(signimageUrl1,"sign",mapimageUrls1,userstatuspermission)
-    //   const userstatusdata = userstatuspermission
-      
+        console.log(signimageUrl1, "sign", mapimageUrls1, userstatuspermission)
+        //   const userstatusdata = userstatuspermission
+
         if (tripID1 && userstatusdata.length > 0) {
-           
+
             if (userstatusdata.includes("All") || userstatusdata.includes("Chennai")) {
                 if (dayhcl1 === 1 && status1 === "Closed") {
 
                     // if (!signimageUrl1 && !mapimageUrls1 && mapimageUrls1 === "") {
-                        if (!signimageUrl1 && mapimageUrls1.length === 0) {
+                    if (!signimageUrl1 && mapimageUrls1.length === 0) {
                         console.log("condition1check1")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the signature and Map")
@@ -1372,9 +1374,9 @@ const useTripsheet = () => {
                         // setError(true);
                         // setErrorMessage("Please upload the signature");
                         // return 
-                    } 
+                    }
                     // else if (!mapimageUrls1 && mapimageUrls1 === "") {
-                        else if (mapimageUrls1.length === 0) {
+                    else if (mapimageUrls1.length === 0) {
                         console.log("condition1check3")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the map image")
@@ -1396,7 +1398,7 @@ const useTripsheet = () => {
                         setCheckSignMapMessage("Please upload the signature")
                         // setError(true);
                         // setErrorMessage("Please upload the signature");
-                        return 
+                        return
                     }
                     // }
                     else {
@@ -1410,7 +1412,7 @@ const useTripsheet = () => {
                 }
 
             }
-         
+
             else {
                 console.log("condition1check7")
                 setCheckSignandMapVerify(false);
@@ -1425,10 +1427,10 @@ const useTripsheet = () => {
     }
     useEffect(() => {
         checksignatureandmap()
-    // }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate, signimageUrl, mapimageUrls1])
-// }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate,signimageUrl1, mapimageUrls1])
-// }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate,signimageUrl1, mapimageUrls1])
-}, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate,mapimageUrls1,signimageUrl1,location,userstatuspermission])
+        // }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate, signimageUrl, mapimageUrls1])
+        // }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate,signimageUrl1, mapimageUrls1])
+        // }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate,signimageUrl1, mapimageUrls1])
+    }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate, mapimageUrls1, signimageUrl1, location, userstatuspermission])
 
     // console.log(checksignandMapverify, "userStatusdata", typeof (checksignandMapverify))
 
@@ -1454,8 +1456,8 @@ const useTripsheet = () => {
         // ) {
 
         if (
-            (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && superAdminAccess  !== "SuperAdmin") ||
-            (checkdata?.status === "Closed" && checkdata?.apps === "Closed" && superAdminAccess  !== "SuperAdmin" )
+            (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && superAdminAccess !== "SuperAdmin") ||
+            (checkdata?.status === "Closed" && checkdata?.apps === "Closed" && superAdminAccess !== "SuperAdmin")
         ) {
             setError(true);
             setErrorMessage(`Tripsheet has been ${checkdata?.status}`);
@@ -1471,7 +1473,7 @@ const useTripsheet = () => {
             setError(true);
             setErrorMessage("Nothing To Change");
             return
-          }
+        }
 
         try {
             setisEditload(true)
@@ -1566,9 +1568,9 @@ const useTripsheet = () => {
                     VendorTimeToggle: timeTogglevendor,
                     Hcldatakmvalue: conflicthcldatavalue.Hcldatakmvalue,
                     HclMaxConflctdata: conflicthcldatavalue.HclMaxConflctdata,
-                    lockdatavalue:lockdata,
-                    messageedited:messageditedtrip,
-                MessageText:formData.MessageText || selectedCustomerData.MessageText || book.MessageText
+                    lockdatavalue: lockdata,
+                    messageedited: messageditedtrip,
+                    MessageText: formData.MessageText || selectedCustomerData.MessageText || book.MessageText
 
                 };
                 const VehcileHistory = {
@@ -1816,7 +1818,7 @@ const useTripsheet = () => {
                 shedOutDate: formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
                 startdate: formData.startdate || selectedCustomerDatas.startdate || selectedCustomerData.startdate || book.startdate,
                 // closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate,
-                closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate ||formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
+                closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate || formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
                 shedInDate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
                 startkm: book.startkm,
                 orderbyemail: formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail,
@@ -1870,9 +1872,9 @@ const useTripsheet = () => {
                 VendorTimeToggle: timeTogglevendor,
                 HclMaxConflctdata: 0,
                 Hcldatakmvalue: 0,
-                lockdatavalue:lockdata,
-                messageedited:messageditedtrip,
-                MessageText:formData.MessageText || selectedCustomerData.MessageText || book.MessageText
+                lockdatavalue: lockdata,
+                messageedited: messageditedtrip,
+                MessageText: formData.MessageText || selectedCustomerData.MessageText || book.MessageText
             };
             // console.log(updatedBook," book")
             const VehcileHistory = {
@@ -1998,7 +2000,7 @@ const useTripsheet = () => {
             ...prevValues,
             [name]: selectedOption,
         }));
-         setNoChangeData((prevValues) => ({
+        setNoChangeData((prevValues) => ({
             ...prevValues,
             [name]: selectedOption,
         }));
@@ -2027,7 +2029,7 @@ const useTripsheet = () => {
     }
 
     const handletravelsAutocompleteChange = (event, value, name) => {
-        const selectedOption = value ? value.label : '';        
+        const selectedOption = value ? value.label : '';
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
@@ -2081,7 +2083,7 @@ const useTripsheet = () => {
             ...prevValues,
             [name]: parsedDate,
         }));
-        
+
         if (!lockdata) {
             if (name === "shedOutDate") {
                 setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: parsedDate }))
@@ -2095,27 +2097,27 @@ const useTripsheet = () => {
 
     const handleChangetexttrip = (event) => {
         const { name, value, } = event.target;
-      // const { name, value} = event.target.value;
-      console.log(name,value,"textt")
-      setBook((prevBook) => ({
-        ...prevBook,
-        [name]: value,
-      }));
-      setSelectedCustomerData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-      setMessageEditedtrip(loginusername)
-      setNoChangeData((prevValues) => ({
-        ...prevValues,
-        [name]: value,
-    }));
-    
-     }
+        // const { name, value} = event.target.value;
+        console.log(name, value, "textt")
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+        setMessageEditedtrip(loginusername)
+        setNoChangeData((prevValues) => ({
+            ...prevValues,
+            [name]: value,
+        }));
+
+    }
 
     // speeddaial
     const handleClick = async (event, actionName) => {
@@ -2178,7 +2180,7 @@ const useTripsheet = () => {
             const data = Date.now().toString();
             const formData = new FormData();
             formData.append('image', file);
-            setNoChangeData({...nochangedata,uploaddata:file})
+            setNoChangeData({ ...nochangedata, uploaddata: file })
             try {
                 await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
                 setSuccess(true);
@@ -2327,54 +2329,52 @@ const useTripsheet = () => {
     //     return '';
     // }
 
-// -----------this for E-trisheet and overview hide based on status and station"
+    // -----------this for E-trisheet and overview hide based on status and station"
 
-const Etripsheetoverview = ()=>{
-  const userdatastatusstation = userStatus
-  if(userdatastatusstation !== null){
+    const Etripsheetoverview = () => {
+        const userdatastatusstation = userStatus
+        if (userdatastatusstation !== null) {
 
-  if (statusCheck === "Closed" && superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Billing_Headoffice"&&superAdminAccess !== "Assistant CFO"&&
-    (!userdatastatusstation.includes("Chennai") && !userdatastatusstation.includes("All"))
-)
-{
-setOverViewETripsheet(true)
-setOverViewETripsheetOutstation("oustation")
+            if (statusCheck === "Closed" && superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Billing_Headoffice" && superAdminAccess !== "Assistant CFO" &&
+                (!userdatastatusstation.includes("Chennai") && !userdatastatusstation.includes("All"))
+            ) {
+                setOverViewETripsheet(true)
+                setOverViewETripsheetOutstation("oustation")
 
-return
-}
+                return
+            }
 
-else if( 
-    (statusCheck === "Closed") && superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Billing_Headoffice" && superAdminAccess !== "Assistant CFO" &&
-    (userdatastatusstation.includes("Chennai") || userdatastatusstation.includes("All"))
-){
-    setOverViewETripsheet(true)
-    setOverViewETripsheetOutstation("Instation")
-    return
-}
-else{
-    setOverViewETripsheet(false)
-    setOverViewETripsheetOutstation(null)
-    return
-}
-  }
-  else{
-    setOverViewETripsheet(false)
-    setOverViewETripsheetOutstation(null)
-    
-    return
-  }
+            else if (
+                (statusCheck === "Closed") && superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Billing_Headoffice" && superAdminAccess !== "Assistant CFO" &&
+                (userdatastatusstation.includes("Chennai") || userdatastatusstation.includes("All"))
+            ) {
+                setOverViewETripsheet(true)
+                setOverViewETripsheetOutstation("Instation")
+                return
+            }
+            else {
+                setOverViewETripsheet(false)
+                setOverViewETripsheetOutstation(null)
+                return
+            }
+        }
+        else {
+            setOverViewETripsheet(false)
+            setOverViewETripsheetOutstation(null)
 
-
-
-}
+            return
+        }
 
 
 
+    }
 
-useEffect(() => {
-    Etripsheetoverview();
-  }, [statusCheck, userStatus, superAdminAccess]);
 
+
+
+    useEffect(() => {
+        Etripsheetoverview();
+    }, [statusCheck, userStatus, superAdminAccess]);
 
 
 
@@ -2382,7 +2382,8 @@ useEffect(() => {
 
 
 
-// ------------------------------------------
+
+    // ------------------------------------------
 
     const calculateExkmAmount = () => {
         const exkm = formData.exkm || selectedCustomerData.exkm || book.exkm || packageDetails[0]?.extraKMS;
@@ -2559,7 +2560,7 @@ useEffect(() => {
                     const res = data[0].TimeToggle;
                     // console.log(typeof(res),"custommmmm")
 
-                    setTimeToggleVendor(res); 
+                    setTimeToggleVendor(res);
                     setTimeToggleVendorNaviagate(res)// Update state with the fetched result
                 } else {
                     setTimeToggleVendor(0);
@@ -3094,7 +3095,7 @@ useEffect(() => {
             return ''
         }
         else {
-            
+
 
             let additionalHours = 0;
             let additionalMinutesValue = 0;
@@ -4006,11 +4007,11 @@ useEffect(() => {
             ...prevData,
             [name]: value,
         }));
-        if(name !== "tripid")
-        setNoChangeData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        if (name !== "tripid")
+            setNoChangeData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
 
         if (event.target.type === 'checkbox') {
             setBook((prevBook) => ({
@@ -4059,7 +4060,7 @@ useEffect(() => {
                 }));
                 setNoChangeData((prevData) => ({
                     ...prevData,
-                    [name]:formattedTime,
+                    [name]: formattedTime,
                 }));
             } else {
                 setBook((prevBook) => ({
@@ -4098,7 +4099,7 @@ useEffect(() => {
                 //     ...prevData,
                 //     [name]:value,
                 // }));
-                if(name !== "tripid")
+                if (name !== "tripid")
                     setNoChangeData((prevData) => ({
                         ...prevData,
                         [name]: value,
@@ -4114,6 +4115,7 @@ useEffect(() => {
     const handleKeyDown = async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
+            localStorage.removeItem("pointscount")
             const tripid = event.target.value;
             const loginUserName = await localStorage.getItem("username")
 
@@ -4123,7 +4125,7 @@ useEffect(() => {
                 if (tripid !== null && tripid !== "undefined" && tripid && loginUserName) {
 
                     const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
-                    const bookingDetails = response.data;                       
+                    const bookingDetails = response.data;
                     handleCancel()
                     if (response.status === 200 && bookingDetails) {
                         if (bookingDetails.status === "Cancelled") {
@@ -4143,8 +4145,8 @@ useEffect(() => {
                             // if (!lockdata) {
 
 
-                                setVendorinfodata(restdatavendor)
-                                setVendorbilldata(bookingDetails)
+                            setVendorinfodata(restdatavendor)
+                            setVendorbilldata(bookingDetails)
                             // }
 
                             //--------------calc---------
@@ -4159,7 +4161,7 @@ useEffect(() => {
                             setEx_HrAmount(bookingDetails.ex_hrAmount);
                             setNightBeta(Number(bookingDetails.nightBta));
                             setNightCount(bookingDetails.nightCount);
-                            setnight_totalAmount(bookingDetails.night_totalAmount);                            
+                            setnight_totalAmount(bookingDetails.night_totalAmount);
                             setdriverBeta(bookingDetails.driverBeta);
                             setdriverbeta_Count(bookingDetails.driverbeta_Count);
                             setdriverBeta_amount(bookingDetails.driverBeta_amount);
@@ -4424,7 +4426,7 @@ useEffect(() => {
                     const imageUrl = URL.createObjectURL(await response.blob());
                     // console.log("addeddatyyyyyyyyyyyyyyyyyyyyyyy")
                     setSignImageUrl1(imageUrl);
-                   
+
                     // setSuccess(true)
                     // setSuccessMessage('Signature Added Sucessfully')
 
@@ -4436,9 +4438,9 @@ useEffect(() => {
             setWarningMessage("Failed to fetch signature image. Please try again.");
 
         }
-    },[formData,book,isEditMode,signimageUrl1,userstatuspermission])
+    }, [formData, book, isEditMode, signimageUrl1, userstatuspermission])
 
- 
+
 
 
 
@@ -4448,7 +4450,7 @@ useEffect(() => {
         if (file !== null) {
             const datadate = Date.now().toString();
             const formData = new FormData();
-            setNoChangeData({...nochangedata,signatureimagedata:file})
+            setNoChangeData({ ...nochangedata, signatureimagedata: file })
             formData.append("signature_image", file);
             try {
                 await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}/${datadate}`, formData);
@@ -4462,7 +4464,7 @@ useEffect(() => {
                 setNoChangeData((prevData) => ({
                     ...prevData,
                     signatureimage: "done",
-                  }));
+                }));
 
                 // THIS API FRO DRIVER APP 
                 await axios.post(`${apiurltransfer}/signatureimageuploaddriver/${datadate}`, formData)
@@ -4493,7 +4495,7 @@ useEffect(() => {
             setNoChangeData((prevData) => ({
                 ...prevData,
                 signatureimagedelete: "done",
-              }));
+            }));
         }
         catch (err) {
             console.log(err)
@@ -4541,7 +4543,7 @@ useEffect(() => {
         }
     };
 
-// ----------------------------------------
+    // ----------------------------------------
     // Dont remove this code
 
     // useEffect(() => {
@@ -4573,11 +4575,11 @@ useEffect(() => {
 
     //     fetchData();
     // }, [apiUrl, sendEmail, location, organizationdata, triggerdata]);
-// ---------------------------------
+    // ---------------------------------
     useEffect(() => {
 
         const fetchData = async () => {
-            try {   
+            try {
                 const response = await fetch(`${apiUrl}/organizationdata`);
                 if (response.status === 200) {
                     const userDataArray = await response.json();
@@ -4592,7 +4594,7 @@ useEffect(() => {
                 console.log("Error", error);
             }
         };
-    
+
         fetchData();
     }, [apiUrl, sendEmail, location]); //  Removed `triggerdata` and `organizationdata`
 
@@ -4678,10 +4680,10 @@ useEffect(() => {
             const starttimedata = removeSeconds(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime)
 
             const closetimedata = removeSeconds(formData.closetime || selectedCustomerData.closetime || book.closetime)
-    
+
             const hybriddata = hybridhclcustomer || hybridhclnavigate
             const TotalDay = calculateTotalDay();
-            
+
             const duty = formData.duty || selectedCustomerData.duty || book.duty;
             // const newTimeString = shedOutTime?.replace(":", ".");
             // const newTimeStrings = shedInTime?.replace(":", ".");
@@ -4689,89 +4691,89 @@ useEffect(() => {
             // const newTimeString = hybriddata === 0 ? shedOutTime?.replace(":", ".") : starttimedata?.replace(":", ".")
             // const newTimeStrings = hybriddata === 0 ? shedInTime?.replace(":", ".") : closetimedata?.replace(":", ".")
 
-            const newTimeString = hybriddata === 0 ? shedOutTime?.replace(":", "."): hybriddata === 1 && duty === "Outstation" ? shedOutTime?.replace(":", "."): starttimedata?.replace(":", ".");
-            const newTimeStrings = hybriddata === 0 ? shedInTime?.replace(":", "."): hybriddata === 1 && duty === "Outstation" ? shedInTime?.replace(":", "."):closetimedata?.replace(":", ".");
+            const newTimeString = hybriddata === 0 ? shedOutTime?.replace(":", ".") : hybriddata === 1 && duty === "Outstation" ? shedOutTime?.replace(":", ".") : starttimedata?.replace(":", ".");
+            const newTimeStrings = hybriddata === 0 ? shedInTime?.replace(":", ".") : hybriddata === 1 && duty === "Outstation" ? shedInTime?.replace(":", ".") : closetimedata?.replace(":", ".");
 
             // console.log(newTimeString,"night2222",newTimeStrings)
 
 
             let calcNight = 0;
-            
+
             // let a = 0;
 
-            if(duty !== "Outstation") {
-           
-            if (calculateTotalDay() === 1) {
-                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
-                    // console.log(2,"night1")
-                    calcNight = 2;
+            if (duty !== "Outstation") {
+
+                if (calculateTotalDay() === 1) {
+                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                        // console.log(2,"night1")
+                        calcNight = 2;
+                    }
+                    if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                        // console.log(1,"night2")
+                        calcNight = 1;
+                    }
+                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                        // console.log(1,"night3")
+                        calcNight = 1;
+                    }
+
+
                 }
-              if(Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
-                // console.log(1,"night2")
-                calcNight = 1;
-              }
-              if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
-                // console.log(1,"night3")
-                calcNight = 1;
-              }
-                
-              
+
+                if (TotalDay > 1) {
+
+                    // console.log(TotalDay,"days")
+                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                        // console.log(TotalDay + 1,"days1")
+                        calcNight = TotalDay + 1;
+                    }
+                    if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                        calcNight = TotalDay;
+                        // console.log(TotalDay ,"days2")
+                    }
+                    if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
+                        calcNight = TotalDay - 1;
+                        // console.log(TotalDay ,"days3")
+                    }
+                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                        calcNight = TotalDay;
+                        // console.log(TotalDay ,"days4")
+                    }
+                    // console.log(calcNight,"daysnii")
+
+
+
+                    // calcNight = TotalDay-1;
+                }
+                // console.log(calcNight,"nightousttaion")
+                // setNightCount(calcNight);
+                setcusnightCount(calcNight)
             }
-         
-             if (TotalDay > 1) {
-              
-                // console.log(TotalDay,"days")
-                if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
-                    // console.log(TotalDay + 1,"days1")
-                    calcNight = TotalDay + 1 ;
-                }
-                if(Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00){
-                    calcNight = TotalDay;
-                    // console.log(TotalDay ,"days2")
-                }
-                if(Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00){
-                    calcNight = TotalDay -1;
-                    // console.log(TotalDay ,"days3")
-                }
-                if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00){
-                    calcNight = TotalDay;
-                    // console.log(TotalDay ,"days4")
-                }
-                // console.log(calcNight,"daysnii")
-                
-                
+            else {
+                if (calculateTotalDay() === 1) {
+                    if (Number(newTimeString) < 6.00) {
 
-                // calcNight = TotalDay-1;
+                        calcNight = 1;
+                    }
+                }
+
+
+                if (TotalDay > 1) {
+                    if (Number(newTimeString) < 6.00) {
+                        console.log(Number(newTimeString))
+                        calcNight = TotalDay;
+                    }
+                    else {
+                        calcNight = TotalDay - 1;
+                    }
+
+
+                    // calcNight = TotalDay-1;
+                }
+                // console.log(calcNight,"nightousttion")
+                // setNightCount(calcNight);
+                setcusnightCount(calcNight)
             }
-            // console.log(calcNight,"nightousttaion")
-            // setNightCount(calcNight);
-            setcusnightCount(calcNight)
-        }
-        else{
-            if (calculateTotalDay() === 1) {
-                if (Number(newTimeString) < 6.00) {
-                    
-                    calcNight = 1;
-                }
-            }  
-
-
-             if (TotalDay > 1) {
-                if (Number(newTimeString) < 6.00) {
-                    console.log(Number(newTimeString))
-                    calcNight = TotalDay  ;
-                }
-                else{
-                    calcNight = TotalDay-1;
-                }
-                
-
-                // calcNight = TotalDay-1;
-            }
-            // console.log(calcNight,"nightousttion")
-            // setNightCount(calcNight);
-            setcusnightCount(calcNight)
-        }
 
         };
         // setNightTotalCount(calculateTotalDay())
@@ -5019,74 +5021,74 @@ useEffect(() => {
         const duty = vendorinfo?.vendor_duty;
 
         let calcNight = 0;
-        if(duty !== "Outstation") {
+        if (duty !== "Outstation") {
 
-        if (TotalDay === 1) {
-            // if (Number(newTimeStrings) >= 22.0 || Number(newTimeString) <= 6.00) {
-            //     calcNight = 1;
-            // }
-            if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
-                // console.log(2,"night1")
-                calcNight = 2;
+            if (TotalDay === 1) {
+                // if (Number(newTimeStrings) >= 22.0 || Number(newTimeString) <= 6.00) {
+                //     calcNight = 1;
+                // }
+                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    // console.log(2,"night1")
+                    calcNight = 2;
+                }
+                if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                    // console.log(1,"night2")
+                    calcNight = 1;
+                }
+                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                    // console.log(1,"night3")
+                    calcNight = 1;
+                }
             }
-          if(Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
-            // console.log(1,"night2")
-            calcNight = 1;
-          }
-          if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
-            // console.log(1,"night3")
-            calcNight = 1;
-          }
+
+
+            if (TotalDay > 1) {
+
+
+                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    // console.log(TotalDay + 1,"days1")
+                    calcNight = TotalDay + 1;
+                }
+                if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                    calcNight = TotalDay;
+                    // console.log(TotalDay ,"days2")
+                }
+                if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
+                    calcNight = TotalDay - 1;
+                    // console.log(TotalDay ,"days3")
+                }
+                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                    calcNight = TotalDay;
+                    // console.log(TotalDay ,"days4")
+                }
+
+
+
+            }
+        } else {
+            if (TotalDay === 1) {
+                if (Number(newTimeString) < 6.00) {
+                    calcNight = 1;
+                }
+            }
+
+            if (TotalDay > 1) {
+                if (Number(newTimeString) < 6.00) {
+                    calcNight = TotalDay;
+                }
+                else {
+                    calcNight = TotalDay - 1;
+                }
+
+
+
+
+
+            }
+            // console.log(calcNight,"nightousttion")
+
         }
 
-     
-        if (TotalDay > 1) {
-          
-
-            if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
-                // console.log(TotalDay + 1,"days1")
-                calcNight = TotalDay + 1 ;
-            }
-            if(Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00){
-                calcNight = TotalDay;
-                // console.log(TotalDay ,"days2")
-            }
-            if(Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00){
-                calcNight = TotalDay -1;
-                // console.log(TotalDay ,"days3")
-            }
-            if(Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00){
-                calcNight = TotalDay;
-                // console.log(TotalDay ,"days4")
-            }
-
-       
-
-    }
-}  else{
-    if (TotalDay === 1) {
-        if (Number(newTimeString) < 6.00) {
-            calcNight = 1;
-        }
-    }
-   
-     if (TotalDay > 1) {
-        if (Number(newTimeString) < 6.00) {
-            calcNight = TotalDay  ;
-        }
-        else{
-            calcNight = TotalDay-1;
-        }
-
-       
-        
-
-        
-    }
-    // console.log(calcNight,"nightousttion")
-  
-}
-     
 
 
         return calcNight;
@@ -5097,7 +5099,7 @@ useEffect(() => {
     }, [calcNightCount]);
 
 
-   
+
 
 
     useEffect(() => {
@@ -5310,9 +5312,8 @@ useEffect(() => {
             }
 
             if (vendorduty === "Outstation") {
-                // console.log(vendorduty,"dutydata")
-                let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
-                let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
+                let km = (Number(vendortotkm) <= Number(KMS)) ? Number(vendortotkm) * Number(totalDays1) : Number(vendortotkm)
+                let kmfixed2 = Number(km.toFixed(2))
                 dataextrakms = kmfixed2
             }
 
@@ -5478,7 +5479,7 @@ useEffect(() => {
 
     }
 
-// console.log(userStatus,"sssss")
+    // console.log(userStatus,"sssss")
     useEffect(() => {
         const a = calculateTotalDay()
 
@@ -5616,8 +5617,10 @@ useEffect(() => {
                 setExtraKM(cuctomerkm);
             } else if (duty === "Outstation") {
                 console.log("duty", duty)
-                let km = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
-                let cuctomerkm2 = Number(km.toFixed(2)) * Number(totaldays)
+                // let km = (Number(totkm) <= Number(KMS)) ? Number(KMS) * Number(totaldays) : Number(totkm)
+                // let cuctomerkm2 = Number(km.toFixed(2))
+                let km = (Number(totkm) <= Number(KMS)) ?  Number(totkm) *  Number(totaldays): Number(totkm)
+                let cuctomerkm2 = Number(km.toFixed(2))
                 // console.log(km)
                 setExtraKM(cuctomerkm2)
             }
@@ -5688,20 +5691,20 @@ useEffect(() => {
     //     return true;
     // };
 
-    const handlecalcpackage =(e)=>{
+    const handlecalcpackage = (e) => {
         setcalcPackage(e.target.value)
         setRatePackage(e.target.value)
         setNoChangeData((prevData) => ({
             ...prevData,
-            calcpackage:e.target.value,
+            calcpackage: e.target.value,
         }));
     }
 
-    const handlecalcpackageamount =(e)=>{
+    const handlecalcpackageamount = (e) => {
         setpackage_amount(e.target.value)
         setNoChangeData((prevData) => ({
             ...prevData,
-            package_amount:e.target.value,
+            package_amount: e.target.value,
         }));
         // setRatePackage(e.target.value)
     }
@@ -5710,14 +5713,14 @@ useEffect(() => {
     const [vehileNames, setVehicleNames] = useState([])
     useEffect(() => {
         const getvehicleName = async () => {
-            try{
-            const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
-            const data = response.data
-            const names = data?.map(res => res.VechicleNames)
+            try {
+                const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
+                const data = response.data
+                const names = data?.map(res => res.VechicleNames)
 
-            setVehicleNames(names)
+                setVehicleNames(names)
             }
-            catch(err){
+            catch (err) {
                 console.log(err)
             }
         }
@@ -5729,15 +5732,15 @@ useEffect(() => {
         setEscort(event.target.value);
         setNoChangeData((prevData) => ({
             ...prevData,
-            escort:event.target.value,
+            escort: event.target.value,
         }));
-        
+
     };
     const handleTransferChange = (event) => {
         setTransferreport(event.target.value);
         setNoChangeData((prevData) => ({
             ...prevData,
-            transferreport:event.target.value,
+            transferreport: event.target.value,
         }));
     };
 
@@ -5750,16 +5753,16 @@ useEffect(() => {
         // }
         handleTripmapverify()
         // await getSignatureImage()
-         getSignatureImageverify()
-         getSignatureImage()
-        
+        getSignatureImageverify()
+        getSignatureImage()
+
 
         // console.log(overetripsheetoutstation ,overetripsheetstatus,"over")
         if (!isEditMode) {
             return
         }
         // oustation")Instation
-        if(overetripsheetstatus && (overetripsheetoutstation === "Instation" ||overetripsheetoutstation === "oustation") ){
+        if (overetripsheetstatus && (overetripsheetoutstation === "Instation" || overetripsheetoutstation === "oustation")) {
             setWarning(true);
             setWarningMessage("Status is closed, u dont have permission open this Overview.");
             return
@@ -6243,7 +6246,7 @@ useEffect(() => {
         }
     };
 
-// ----------------Dont Remove This-------------------
+    // ----------------Dont Remove This-------------------
     // const TripID = formData.tripid || selectedCustomerData.tripid || book.tripid
 
     // useEffect(() => {
@@ -6261,17 +6264,17 @@ useEffect(() => {
     //     }    
     //     fetchData()
     // }, [manualMarkTrigger, TripID, mapButtonTrigger, mapimgpopupOpen])
-// ---------------------------------------------------------
+    // ---------------------------------------------------------
 
     useEffect(() => {
         const fetchData = async () => {
             const tripid = formData?.tripid || selectedCustomerData?.tripid || book?.tripid;
-    
+
             if (!tripid) {
                 console.warn("TripID is missing, skipping API call");
-                return; 
+                return;
             }
-    
+
             try {
                 const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${encodeURIComponent(tripid)}`);
                 setManualTripID(response.data);
@@ -6280,10 +6283,10 @@ useEffect(() => {
                 console.error("Error fetching trip data:", error);
             }
         };
-    
+
         fetchData();
-    }, [manualMarkTrigger, formData.tripid, selectedCustomerData.tripid, book.tripid, mapButtonTrigger, mapimgpopupOpen]);  
-    
+    }, [manualMarkTrigger, formData.tripid, selectedCustomerData.tripid, book.tripid, mapButtonTrigger, mapimgpopupOpen]);
+
     const handleDeleteMap = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         try {
@@ -7056,7 +7059,7 @@ useEffect(() => {
             setHideField(true);
             console.log("Both dates are equal not allowed");
         }
-    }, [enterTrigger,book]);
+    }, [enterTrigger, book]);
 
     // }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
 
@@ -7091,10 +7094,9 @@ useEffect(() => {
                 // )
                 if (
                     (oldStatusCheck === "Temporary Closed") &&
-                    (superAdminAccess !== "SuperAdmin" ) &&
+                    (superAdminAccess !== "SuperAdmin") &&
                     (station.includes("Chennai") || station.includes("All"))
-                )
-                 {
+                ) {
                     console.log("Condition 1: Temporary Closed with All or Chennai");
                     setTemporaryStatus(false);
                     setEmptyState(false)
@@ -7114,9 +7116,9 @@ useEffect(() => {
 
                 if (
                     (oldStatusCheck === "Temporary Closed") &&
-                    (superAdminAccess !== "SuperAdmin") && 
+                    (superAdminAccess !== "SuperAdmin") &&
                     (!station.includes("Chennai") || !station.includes("All"))
-                ) 
+                )
 
                 // if (
                 //     (oldStatusCheck === "Temporary Closed") &&
@@ -7130,8 +7132,8 @@ useEffect(() => {
                     setHideField(true)
                     return;
                 }
-                  // Condition 4: Closed with Chennai or All
-                  if (
+                // Condition 4: Closed with Chennai or All
+                if (
                     (oldStatusCheck === "Closed") &&
                     (station.includes("Chennai") || station.includes("All"))
                 ) {
@@ -7150,15 +7152,13 @@ useEffect(() => {
                     (oldStatusCheck === "Closed") &&
                     (superAdminAccess !== "SuperAdmin") &&
                     (!station.includes("Chennai") || !station.includes("All"))
-                ) 
-                {
+                ) {
                     console.log("Condition 33: Temporary Closed without All or Chennai");
                     setEmptyState(true);
                     setTemporaryStatus(true);
                     return;
                 }
-                if((oldStatusCheck === "Billed") && (superAdminAccess !== "SuperAdmin"))
-                {
+                if ((oldStatusCheck === "Billed") && (superAdminAccess !== "SuperAdmin")) {
                     setTemporaryStatus(true);
                     setHideField(true);
                     setEmptyState(true);
@@ -7172,7 +7172,7 @@ useEffect(() => {
                     return;
                 }
 
-              
+
 
                 // Condition 5: Closed and superAdminAccess is 0
                 // if (
@@ -7184,8 +7184,7 @@ useEffect(() => {
                     oldStatusCheck === "Closed" &&
                     superAdminAccess !== "SuperAdmin" &&
                     (!station.includes("Chennai") && !station.includes("All"))
-                )
-                 {
+                ) {
                     console.log("Condition 5: Closed without Chennai or All and superAdminAccess 0");
                     setTemporaryStatus(true);
                     setEmptyState(true);
@@ -7201,8 +7200,7 @@ useEffect(() => {
                 if (
                     (statusCheck === "Closed" || statusCheck === "Billed") &&
                     (superAdminAccess !== "SuperAdmin")
-                ) 
-                {
+                ) {
                     console.log("Condition 6: Closed or Billed and superAdminAccess is 0");
                     setEmptyState(true);
                     setHideField(true)
@@ -7222,7 +7220,7 @@ useEffect(() => {
         };
 
         fetchData();
-    }, [enterTrigger,book]);
+    }, [enterTrigger, book]);
 
     // Edit Button Hide
 
@@ -7241,7 +7239,7 @@ useEffect(() => {
             else if (statuschecking === "Temporary Closed" && ((station.includes('Chennai') || station.includes('All')))) {
                 SetEditButtonStatusCheck(false)
             }
-            else if (statuschecking === "Temporary Closed" && ((!station.includes('Chennai') || !station.includes('All')) ) && (superAdminAccess === "Billing_Headoffice" ||superAdminAccess === "Assistant CFO" )) {
+            else if (statuschecking === "Temporary Closed" && ((!station.includes('Chennai') || !station.includes('All'))) && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO")) {
                 SetEditButtonStatusCheck(false)
             }
             else if (statuschecking === "Temporary Closed" || statuschecking === "Closed" || statuschecking === "Billed") {
@@ -7259,8 +7257,8 @@ useEffect(() => {
     useEffect(() => {
         EditButtonHide()
     }, [statuschecking])
-    
-    
+
+
     useEffect(() => {
         const fetchDatastatus = async () => {
             try {
@@ -7269,18 +7267,18 @@ useEffect(() => {
                 });
                 const data = response.data;
                 const station = data?.map(li => li.stationname.split(",")).flat();
-                console.log(station,"disuseraww")
+                console.log(station, "disuseraww")
                 setUserStatusPermission(station)
 
-              
-                
-                }
-                catch(err){
-                    console.log(err)
-                }
+
+
             }
-            fetchDatastatus()
-        },[loginusername,isEditMode])
+            catch (err) {
+                console.log(err)
+            }
+        }
+        fetchDatastatus()
+    }, [loginusername, isEditMode])
 
 
     // const statuschecking = selectedStatus;
@@ -7288,85 +7286,85 @@ useEffect(() => {
     const handleDatapermission = useCallback((datatrip) => {
         // console.log("joo")
         const userstation = userStatus
-        if(userstation !== null){
-      
-        // console.log(statuschecking,"percheck")
-            if ((statuschecking === "Closed" || statuschecking === "Billed") &&((userstation.includes('Chennai') || userstation.includes('All')) )&& (superAdminAccess === "Billing_Headoffice" ||superAdminAccess === "Assistant CFO" || superAdminAccess !== "SuperAdmin")) {
+        if (userstation !== null) {
+
+            // console.log(statuschecking,"percheck")
+            if ((statuschecking === "Closed" || statuschecking === "Billed") && ((userstation.includes('Chennai') || userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO" || superAdminAccess !== "SuperAdmin")) {
                 // SetArticfialchangedata(true)
                 // console.log("pernotstatus1")
                 setPermissionDeleteRoles(true)
-                return 
+                return
             }
-            else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((userstation.includes('Chennai') || userstation.includes('All'))) &&  (superAdminAccess === "Billing_Headoffice" && datatrip === 1)  ) {
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed") && ((userstation.includes('Chennai') || userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice" && datatrip === 1)) {
                 // console.log("pernotstatus2",statuschecking)
                 // SetArticfialchangedata(false)
                 setPermissionDeleteRoles(false)
-                return  
+                return
             }
-             else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((userstation.includes('Chennai') || userstation.includes('All')) )&&  (superAdminAccess === "Billing_Headoffice" && datatrip === 0)  ) {
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed") && ((userstation.includes('Chennai') || userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice" && datatrip === 0)) {
                 // console.log("pernotstatus2",statuschecking)
                 // SetArticfialchangedata(false)
                 setPermissionDeleteRoles(false)
-                return  
+                return
             }
-            else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&((userstation.includes('Chennai') || userstation.includes('All')) ) && (superAdminAccess !== "Billing_Headoffice") && datatrip === 1 ) {
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed") && ((userstation.includes('Chennai') || userstation.includes('All'))) && (superAdminAccess !== "Billing_Headoffice") && datatrip === 1) {
                 // console.log("pernotstatus2",statuschecking)
                 // SetArticfialchangedata(false)
                 setPermissionDeleteRoles(false)
-                return  
+                return
             }
-            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed" ) &&((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess === "Billing_Headoffice") && datatrip === 1 ) {
+            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice") && datatrip === 1) {
                 // console.log("pernotstatus2",statuschecking)
                 // SetArticfialchangedata(false)
                 setPermissionDeleteRoles(false)
-                return 
+                return
             }
-            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed" ) &&((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess === "Billing_Headoffice") && datatrip === 0 ) {
+            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice") && datatrip === 0) {
                 // console.log("pernotstatus2",statuschecking)
                 // SetArticfialchangedata(false)
                 setPermissionDeleteRoles(false)
-                return  
+                return
             }
-            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed" ) &&((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess === "Assistant CFO") && datatrip === 1 ) {
+            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess === "Assistant CFO") && datatrip === 1) {
                 // console.log("pernotstatus2",statuschecking)
                 // SetArticfialchangedata(false)
                 setPermissionDeleteRoles(false)
-                return  
+                return
             }
-            else if ((statuschecking === "Opened" ) &&((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "Billing_Headoffice" ) && datatrip === 1 ) {
+            else if ((statuschecking === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess !== "Billing_Headoffice") && datatrip === 1) {
                 // console.log("pernotstatus2",statuschecking)
                 // SetArticfialchangedata(false)
                 setPermissionDeleteRoles(false)
-                return 
+                return
             }
-            else if(superAdminAccess === "SuperAdmin"){
-                
+            else if (superAdminAccess === "SuperAdmin") {
+
                 // console.log("pernotstatus3")
                 setPermissionDeleteRoles(false)
-                return 
+                return
             }
-            else{
+            else {
                 setPermissionDeleteRoles(true)
-                return 
+                return
             }
         }
-        else{
+        else {
             setPermissionDeleteRoles(true)
-            return 
+            return
         }
 
-          
-           
-        
-       
-    },[userStatus])
+
+
+
+
+    }, [userStatus])
 
     // const handlepermissionforspeedDialdelete = useCallback((datatrip)=>{
     //     // console.log("call the datadelete")
     //     const userstation = userStatus
     //     if(userstation !== null){
 
-        
+
     //     // console.log(userstation,"callstate")
     //     console.log("deletepernotstatus211",statuschecking,superAdminAccess,datatrip )
     //     //  if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1)  ) {
@@ -7374,7 +7372,7 @@ useEffect(() => {
     //     //     console.log("deletepernotstatus2",statuschecking)
     //     //     // SetArticfialchangedata(false)
     //     //     console.log("deletecondition1")
-    
+
     //     //     setSpeedDialAccessdelete(true)
     //     //     return  
     //     // }
@@ -7382,7 +7380,7 @@ useEffect(() => {
     //         console.log("deletepernotstatus2",statuschecking)
     //         // SetArticfialchangedata(false)
     //         console.log("deletecondition1")
-    
+
     //         setSpeedDialAccessdelete(true)
     //         return  
     //     }
@@ -7394,9 +7392,9 @@ useEffect(() => {
     //     else if ((statuschecking === "Opened" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
     //         setSpeedDialAccessedit(true)
     //     }
-       
+
     //     else if(superAdminAccess === "SuperAdmin"){
-            
+
     //         // console.log("pernotstatus3")
     //         console.log("deletecondition3")
     //         setSpeedDialAccessdelete(true)
@@ -7415,180 +7413,180 @@ useEffect(() => {
     // }
     // },[userStatus,statuschecking])
 
-    
-    const handlepermissionforspeedDialdelete =(datatrip)=>{
+
+    const handlepermissionforspeedDialdelete = (datatrip) => {
         // console.log("call the datadelete")
         const userstation = userStatus
-        if(userStatus !== null){
+        if (userStatus !== null) {
             // console.log(userstation,"callstate")
             // console.log("call the dataedit",datatrip)
-            if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')) ) ) {
-               // console.log("pernotstatus2",statuschecking)
-               // SetArticfialchangedata(false)
-            //    console.log("callfirst")
-            setSpeedDialAccessdelete(true)
-               
-               return 
-           }
-           else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && ((superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") && datatrip === 1)) {
-            setSpeedDialAccessdelete(true)
+            if ((statuschecking !== "Closed" && statuschecking !== "Billed") && (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')))) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                //    console.log("callfirst")
+                setSpeedDialAccessdelete(true)
+
+                return
+            }
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && ((superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") && datatrip === 1)) {
+                setSpeedDialAccessdelete(true)
+            }
+            else if ((statuschecking === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+                setSpeedDialAccessdelete(true)
+            }
+            // else if ((statuschecking === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+            //     setSpeedDialAccessedit(true)
+            // }
+
+
+
+            else if (superAdminAccess === "SuperAdmin") {
+
+                // console.log("pernotstatus3")
+                setSpeedDialAccessdelete(true)
+                return
+            }
+            else {
+                // console.log("calllast")
+                setSpeedDialAccessdelete(false)
+                return
+            }
         }
-           else if ((statuschecking === "Opened" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
-            setSpeedDialAccessdelete(true)
-        }
-        // else if ((statuschecking === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
-        //     setSpeedDialAccessedit(true)
-        // }
-       
-    
-          
-           else if(superAdminAccess === "SuperAdmin"){
-               
-               // console.log("pernotstatus3")
-               setSpeedDialAccessdelete(true)
-               return  
-           }
-           else{
-            // console.log("calllast")
-            setSpeedDialAccessdelete(false)
-             return
-           }
-        }
-        else{
+        else {
             setSpeedDialAccessdelete(false)
             return
         }
     }
 
-    const handlepermissionforspeedDialedit = (datatrip)=>{
+    const handlepermissionforspeedDialedit = (datatrip) => {
         const userstation = userStatus
-        if(userStatus !== null){
-        // console.log(userstation,"callstate")
-        // console.log("call the dataedit",datatrip)
-        if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')) ) ) {
-           // console.log("pernotstatus2",statuschecking)
-           // SetArticfialchangedata(false)
-        //    console.log("callfirst")
-           setSpeedDialAccessedit(true)
-           
-           return 
-       }
-       else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && ((superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") && datatrip === 1)) {
-        setSpeedDialAccessedit(true)
-        return
-    }
-       else if ((statuschecking === "Opened" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
-        setSpeedDialAccessedit(true)
-        return
-    }
-    // else if ((statuschecking === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
-    //     setSpeedDialAccessedit(true)
-    // }
-   
+        if (userStatus !== null) {
+            // console.log(userstation,"callstate")
+            // console.log("call the dataedit",datatrip)
+            if ((statuschecking !== "Closed" && statuschecking !== "Billed") && (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')))) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                //    console.log("callfirst")
+                setSpeedDialAccessedit(true)
 
-      
-       else if(superAdminAccess === "SuperAdmin"){
-           
-           // console.log("pernotstatus3")
-           setSpeedDialAccessedit(true)
-           return  
-       }
-       else{
-        // console.log("calllast")
-         setSpeedDialAccessedit(false)
-         return
-       }
+                return
+            }
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && ((superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") && datatrip === 1)) {
+                setSpeedDialAccessedit(true)
+                return
+            }
+            else if ((statuschecking === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+                setSpeedDialAccessedit(true)
+                return
+            }
+            // else if ((statuschecking === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+            //     setSpeedDialAccessedit(true)
+            // }
+
+
+
+            else if (superAdminAccess === "SuperAdmin") {
+
+                // console.log("pernotstatus3")
+                setSpeedDialAccessedit(true)
+                return
+            }
+            else {
+                // console.log("calllast")
+                setSpeedDialAccessedit(false)
+                return
+            }
+        }
+        else {
+            setSpeedDialAccessedit(false)
+            return
+        }
     }
-    else{
-        setSpeedDialAccessedit(false)
-        return
-    }
-   }
 
-//    const advancefuel = vendorinfo.fuelamount
+    //    const advancefuel = vendorinfo.fuelamount
 
-   const fuelAdvnacedisabled = useCallback(()=>{
-    // const advancefuel = vendorinfo.fuelamount
-    // console.log(advancefuel,"disfule")
-    const advancefuel = vendorinfo.fuelamount
-    // console.log(advancefuel,"disfule")
-    const userstation = userstatuspermission
-    
-    // console.log(userstation,"dis",userstatuspermission,oldStatusCheck)
+    const fuelAdvnacedisabled = useCallback(() => {
+        // const advancefuel = vendorinfo.fuelamount
+        // console.log(advancefuel,"disfule")
+        const advancefuel = vendorinfo.fuelamount
+        // console.log(advancefuel,"disfule")
+        const userstation = userstatuspermission
 
-    if(userstatuspermission.length > 0){
-    if(advancefuel && fueladvancedamounthide === null){
-    
-      if((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')) )) {
-        console.log("discondition1")
-        setFuelDataAmountDis(true)
-        
-        return 
-      }
-      else if((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) ){
-        setFuelDataAmountDis(true)
-        console.log("discondition2")
-        return 
-      }
-      else{
-        console.log("discondition3")
-        setFuelDataAmountDis(true)
-        return 
-      }
-    
+        // console.log(userstation,"dis",userstatuspermission,oldStatusCheck)
 
-    }
-    else{
-        if((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')) )) {
-            console.log("discondition4")
+        if (userstatuspermission.length > 0) {
+            if (advancefuel && fueladvancedamounthide === null) {
+
+                if ((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')))) {
+                    console.log("discondition1")
+                    setFuelDataAmountDis(true)
+
+                    return
+                }
+                else if ((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')))) {
+                    setFuelDataAmountDis(true)
+                    console.log("discondition2")
+                    return
+                }
+                else {
+                    console.log("discondition3")
+                    setFuelDataAmountDis(true)
+                    return
+                }
+
+
+            }
+            else {
+                if ((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')))) {
+                    console.log("discondition4")
+                    setFuelDataAmountDis(false)
+                    return
+                }
+                else if ((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')))) {
+                    console.log("discondition5")
+                    setFuelDataAmountDis(false)
+                    return
+                }
+                else if ((oldStatusCheck === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess !== "Billing_Headoffice" && superAdminAccess !== "Assistant CFO")) {
+                    console.log("discondition6")
+                    setFuelDataAmountDis(true)
+                    return
+                }
+                else if ((oldStatusCheck === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice" && superAdminAccess === "Assistant CFO")) {
+                    console.log("discondition7")
+                    setFuelDataAmountDis(false)
+                    return
+                }
+
+
+            }
+        }
+        else {
+            console.log("discondition8")
             setFuelDataAmountDis(false)
-            return 
-          }
-          else if((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) ){
-            console.log("discondition5")
-            setFuelDataAmountDis(false)
-            return 
-          }
-          else if((oldStatusCheck === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All')) )&& (superAdminAccess !== "Billing_Headoffice" && superAdminAccess !== "Assistant CFO") ){
-            console.log("discondition6")
-            setFuelDataAmountDis(true)
-            return 
-          }
-          else if((oldStatusCheck === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) )  && (superAdminAccess === "Billing_Headoffice" && superAdminAccess === "Assistant CFO")){
-            console.log("discondition7")
-            setFuelDataAmountDis(false)
-            return 
-          }
-         
-    
-    }
-}
-else{
-    console.log("discondition8")
-setFuelDataAmountDis(false)
-return 
-}
-    
-   },[userStatus,oldStatusCheck,isEditMode,userstatuspermission])
+            return
+        }
 
-//    console.log(fueldataamountdis,"diss")
+    }, [userStatus, oldStatusCheck, isEditMode, userstatuspermission])
+
+    //    console.log(fueldataamountdis,"diss")
     useEffect(() => {
         handleDatapermission(Tripsheet_delete1)
         handlepermissionforspeedDialedit(Tripsheet_modify1)
         handlepermissionforspeedDialdelete(Tripsheet_delete1)
-    
-        // fuelAdvnacedisabled()
-    }, [statuschecking,userStatus,isEditMode])
 
-    useEffect(()=>{
+        // fuelAdvnacedisabled()
+    }, [statuschecking, userStatus, isEditMode])
+
+    useEffect(() => {
         fuelAdvnacedisabled()
         // console.log("calldis")
-    },[vendorinfo,userstatuspermission])
-//     console.log(fueldataamountdis,"dis"
+    }, [vendorinfo, userstatuspermission])
+    //     console.log(fueldataamountdis,"dis"
 
     // console.log(speeddailacesss,"callper",speeddailacesssedit,userStatus)
-  
-    
+
+
 
     // getVehcileHistoryData in vehcileHistoryData
 
@@ -7672,22 +7670,22 @@ return
     useEffect(() => {
         const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || "";
         const dateCheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate || "";
-    
+
         if (!vehicleNo || !dateCheck) {
             console.warn("Missing vehicleNo or dateCheck. Skipping API call.");
             return;
         }
-    
+
         const fetchData = async () => {
             try {
                 const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, { vehicleNo, dateCheck });
                 const mainDatas = response.data;
-    
+
                 if (!mainDatas.length) {
                     console.warn("No data received.");
                     return;
                 }
-    
+
                 const getMinMaxData = (isMin) => {
                     return mainDatas.reduce((result, current) => {
                         const timesWithDates = [
@@ -7696,41 +7694,41 @@ return
                             { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
                             { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
                         ].filter(entry => entry.time && entry.date);
-    
+
                         if (!timesWithDates.length) return result;
-    
+
                         const bestCurrentRow = timesWithDates.reduce((bestRow, currentRow) => {
-                            return isMin 
-                                ? parseFloat(currentRow.time) < parseFloat(bestRow.time) ? currentRow : bestRow 
+                            return isMin
+                                ? parseFloat(currentRow.time) < parseFloat(bestRow.time) ? currentRow : bestRow
                                 : parseFloat(currentRow.time) > parseFloat(bestRow.time) ? currentRow : bestRow;
                         }, timesWithDates[0]);
-    
-                        return isMin 
-                            ? parseFloat(bestCurrentRow.time) < parseFloat(result.time) ? bestCurrentRow : result 
+
+                        return isMin
+                            ? parseFloat(bestCurrentRow.time) < parseFloat(result.time) ? bestCurrentRow : result
                             : parseFloat(bestCurrentRow.time) > parseFloat(result.time) ? bestCurrentRow : result;
                     }, { time: isMin ? Infinity : -Infinity, date: null, tripid: null });
                 };
-    
+
                 setMinTimeData(getMinMaxData(true));
                 setMaxTimeData(getMinMaxData(false));
-    
+
                 const notEqualRows = mainDatas.filter(current => current?.shedindate && current?.shedindate !== dateCheck);
                 setShedInTimeData(notEqualRows.length > 0 ? notEqualRows : mainDatas.filter(current => current?.shedindate === dateCheck));
-    
+
             } catch (err) {
                 console.error("API Error:", err);
             }
         };
-    
+
         fetchData();
     }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues]);
-    
-    const handleMessagetrip  = ()=>{
+
+    const handleMessagetrip = () => {
         setDialogMessage(true)
-      }
-      const handleCloseMessagetrip = ()=>{
+    }
+    const handleCloseMessagetrip = () => {
         setDialogMessage(false)
-      }
+    }
     //   useEffect(()=>{
     //     getSignatureImageverify();
     //     handleTripmapverify();
@@ -7738,23 +7736,81 @@ return
     //     fuelAdvnacedisabled();
     //   },[])
 
-      useEffect(() => {
+    useEffect(() => {
         const initialize = async () => {
-          try {
-            // console.log("count1")
-            await checksignatureandmap();
-            await getSignatureImageverify();
-            await handleTripmapverify();
-            await checksignatureandmap();
-            fuelAdvnacedisabled();
-          } catch (error) {
-            console.error("Initialization failed:", error);
-          }
+            try {
+                // console.log("count1")
+                await checksignatureandmap();
+                await getSignatureImageverify();
+                await handleTripmapverify();
+                await checksignatureandmap();
+                fuelAdvnacedisabled();
+            } catch (error) {
+                console.error("Initialization failed:", error);
+            }
         };
-      
-        initialize();
-      }, [isAddload,status1,userstatuspermission]);
 
+        initialize();
+    }, [isAddload, status1, userstatuspermission]);
+
+    //   getting lat and long from vehcileAccessLocation tables  (gpsdevicedata.js file)
+    const gpsTripId = formData.tripid || selectedCustomerData.tripid || book.tripid;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/getLatLongByTripId`, {
+                    params: { gpsTripId }
+                });
+
+                console.log(response.data, "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
+                setTripGpsData(response.data)
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        if (gpsTripId) {
+            fetchData();
+        }
+    }, [apiUrl, gpsTripId]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/appLatLongDetailsByTripId`, {
+                    params: { gpsTripId }
+                });
+
+                console.log(response.data, "fullgpsdataaaaaaaa");
+                setFullGpsData(response.data)
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        if (gpsTripId) {
+            fetchData();
+        }
+    }, [apiUrl, gpsTripId]);
+    // allLatLongDetailsByTripId
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/allLatLongDetailsByTripId`, {
+                    params: { gpsTripId }
+                });
+
+                console.log(response.data, "fullgpsdataaaaaaaa");
+                setAllGpsData(response.data)
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        if (gpsTripId) {
+            fetchData();
+        }
+    }, [apiUrl, gpsTripId]);
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
         escort, setEscort, driverdetails,
@@ -7886,12 +7942,13 @@ return
         handleEditMap,
         handleDeleteMap, copydatalink, setCopyDataLink,
         // conflictenddate, 
-        groupTripId, setGroupTripId, mapPopUp, setMapPopUp,oldStatusCheck,getSignatureImageverify,checksignatureandmap,
+        groupTripId, setGroupTripId, mapPopUp, setMapPopUp, oldStatusCheck, getSignatureImageverify, checksignatureandmap,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
-        isAddload, setisAddload, isEditload, setisEditload,handleChangetexttrip,handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip,messageditedtrip,messageditedbeforetrip,
+        isAddload, setisAddload, isEditload, setisEditload, handleChangetexttrip, handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip, messageditedtrip, messageditedbeforetrip,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
-        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage,Permissiondeleteroles,fueldataamountdis,setFuelAdvancedamountHide,
-        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata,handlecalcpackage,handlecalcpackageamount,handleAutocompleteChangecustomer,orderByDropDown,speeddailacesss,speeddailacesssedit,
+        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage, Permissiondeleteroles, fueldataamountdis, setFuelAdvancedamountHide,
+        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, handleAutocompleteChangecustomer, orderByDropDown, speeddailacesss, speeddailacesssedit,
+        tripGpsData, fullGpsData,allGpsData
 
     };
 };

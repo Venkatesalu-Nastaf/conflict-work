@@ -132,15 +132,26 @@ const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) 
   const handleOpenhistoryLocation = () => {
     setHistoryLocation(true);
   };
-  const filteredVehicles = allVehicleList?.filter((vehicle) => {
-    return (
-      vehicle.vehRegNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.driverName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.stations?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.fueltype?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.vehicleName?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  // const filteredVehicles = allVehicleList?.filter((vehicle) => {
+  //   return (
+  //     vehicle.vehRegNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     vehicle.driverName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     vehicle.stations?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     vehicle.fueltype?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     vehicle.vehicleName?.toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
+  // });
+  const filteredVehicles = Array.isArray(allVehicleList)
+    ? allVehicleList.filter((vehicle) => {
+      return (
+        vehicle.vehRegNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.driverName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.stations?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.fueltype?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.vehicleName?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    })
+    : [];
   return (
     <>
       <div className='vehicle-section'>

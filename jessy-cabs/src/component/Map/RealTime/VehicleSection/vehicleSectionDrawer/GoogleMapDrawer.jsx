@@ -29,10 +29,12 @@ const containerStyle = {
 };
 
 
-const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentDatePoints, }) => {
+const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentDatePoints,dynamicPolyline,moveposition}) => {
   const mapRef = useRef(null); 
   // const defaultCenter = [12.9716, 77.5946];
     const [clickPosition, setClickPosition] = useState({ top: 0, left: 0 });
+    const [prevPosition, setPrevPosition] = useState(null);
+    const [calcdatavalue,setCalcDataValue]=useState({"jesscycabslat":0,"jesscycabslong":0,"Userlat":0,"Userlng":0})
   // console.log(startMarkerPosition, currentPosition, currentDatePoints, "lang1111", vehNo)
    const {vehiclePoint, setVehiclePoint } = VehicleMapData();
   // const startTripLocation = startMarkerPosition && startMarkerPosition[0].Latitude_loc ? startMarkerPosition[0].Latitude_loc : 0
@@ -46,7 +48,7 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
   // const center = useMemo(() => ({ lat:parseFloat(startMarkerPosition.Latitude_loc), lng:parseFloat(startMarkerPosition.Longtitude_loc )}), [vehNo,startMarkerPosition]);
   const center = useMemo(() => {
     if (startMarkerPosition && Object.keys(startMarkerPosition).length > 0  ) {
-      console.log(startMarkerPosition,"val2222sttt")
+      // console.log(startMarkerPosition,"val2222sttt")
       return {
         lat: parseFloat(startMarkerPosition.Latitude_loc),
         lng: parseFloat(startMarkerPosition.Longtitude_loc),
@@ -58,20 +60,20 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
   }, [vehNo, startMarkerPosition]);
 
   // console.log(center, "Updated Center");
-  console.log(center,"val222jjjjj",startMarkerPosition,Object.keys(startMarkerPosition).length > 0)
+  // console.log(center,"val222jjjjj",startMarkerPosition,Object.keys(startMarkerPosition).length > 0)
   // const [zoom, setZoom] = useState(19);
   // const zoom = startMarkerPosition ? 15 : 4
   const zoom = useMemo(() => {
     if (startMarkerPosition && Object.keys(startMarkerPosition).length > 0  ) {
-      console.log(startMarkerPosition,"val2222sttt")
+      // console.log(startMarkerPosition,"val2222sttt")
       return 15
     }
     else{
     return 4; // Default India center
     }
   }, [vehNo, startMarkerPosition]);
-  console.log(zoom,"val22222111zoom")
-  
+  // console.log(zoom,"val22222111zoom")
+  //  console.log(dynamicPolyline,"poly")
 
   // const [showStartInfoBox, setShowStartInfoBox] = useState(false);
   // const [showInfoBox, setShowInfoBox] = useState(false);
@@ -84,13 +86,37 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
   //  if (!isLoaded) {
   //    return <div>Loading...</div>;
   //  }
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    // console.log(lat1, lon1, lat2, lon2,"tolldwatch",typeof(lat1), typeof(lon1), typeof(lat2),typeof(lon2),)
+    const toRad = (value) => (value * Math.PI) / 180;
+    const R = 6371; // Earth's radius in km
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    // console.log(c,"tolldcall")
+    return (R * c).toFixed(2); // Distance in km (2 decimal places)
+  };
+
+
   const handlestartLocation = (location, e) => {
     console.log(location, "weeeeeeeeeeeeeeeeeeeeeee");
     console.log(e, "Mouse Event Data", e?.domEvent?.clientX, "wwwwww");
 
     const lat = parseFloat(location?.Latitude_loc);
     const lng = parseFloat(location?.Longtitude_loc);
-
+    
+      const jessyCabsLocation = {
+      lat: 13.031207,
+      lng: 80.239396,
+    };
+    setCalcDataValue({"jesscycabslat":jessyCabsLocation.lat,"jesscycabslong":jessyCabsLocation.lng,"Userlat":lat,"Userlng":lng})
+    //  const  latjesscy = 13.031207 
+    //  const  lngjessyc = 80.239396
+   
    
     setClickPosition({
       lat,
@@ -101,7 +127,8 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
     });
 
     setVehiclePoint(true);
-    console.log(lat, "Addressss111111", lng);
+
+    // console.log(lat, "Addressss111111", lng);
 
     // Reverse Geocoding to get Address
     const geocoder = new window.google.maps.Geocoder();
@@ -116,6 +143,18 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
         console.error("Geocoder failed due to:", status);
       }
     });
+
+    // const jessyCabsLocation = {
+    //   lat: 13.031207,
+    //   lng: 80.239396,
+    // };
+   
+  
+   
+
+
+
+    
     // const origin = new window.google.maps.LatLng(jessyCabsLocation?.lat, jessyCabsLocation?.lng);
     // const destination = new window.google.maps.LatLng(parseFloat(location?.Lattitude_loc), parseFloat(location?.Longitude_loc));
     // console.log(destination, "mainnnnnnnnnnnn33333333", destination,);
@@ -181,17 +220,47 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
 //   };
 
 
+// const calculateRotation = (currentPos) => {
+//   console.log(currentPos,"tolldcallll")
+//   if (!currentPos) return 0;
+
+//   const latDiff = currentPos.lat;
+//   const lngDiff = currentPos.lng;
+
+//   const angle = (Math.atan2(latDiff, lngDiff) * 180) / Math.PI;
+//   console.log(angle,"tolld")
+  
+//   return angle;
+// };
+const OPTIONS = {
+  minZoom: 4,
+  maxZoom: 30,
+}
+// console.log(dynamicPolyline,"tolldpolyyyyy",moveposition)
+
   return (
     // <LoadScript>
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
       zoom={zoom}
+      options = {OPTIONS}
       
       // onLoad={onLoad}
       // onZoomChanged={handleZoomChange} //
     >
-{currentDatePoints.length > 0 && (
+      {dynamicPolyline.length > 0 ? (
+                                                  <Polyline
+                                                      path={dynamicPolyline}
+                                                      options={{
+                                                          strokeColor: "#189df3",
+                                                          strokeOpacity: 0.8,
+                                                          strokeWeight: 6,
+                                                      }}
+                                                      
+                                                  />
+                                              ):<>
+{/* {currentDatePoints.length > 0 && (
   <>
       <Polyline
         path={currentDatePoints?.map((point) => ({
@@ -250,7 +319,87 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
         }}
       />
       </>
+)} */}
+{/* {currentDatePoints.length > 0 && ( */}
+  
+      <Polyline
+        path={currentDatePoints?.map((point) => ({
+          lat: parseFloat(point?.Latitude_loc),  // Convert string to float
+          lng: parseFloat(point?.Longtitude_loc),
+        }))}
+        
+        options={{
+          strokeColor:"blue",
+          strokeOpacity: 0.8,
+          strokeWeight: 6,
+        }}
+      />
+      </>
+}
+      {/* )} */}
+
+
+      <MarkerF
+        key={startMarkerPosition.veh_id}
+        position={{
+          lat: parseFloat(startMarkerPosition.Latitude_loc),
+          lng: parseFloat(startMarkerPosition.Longtitude_loc),
+        }}
+        title="startPosition"
+
+
+
+        onClick={(e) => handlestartLocation(startMarkerPosition,e)} // Pass clicked location
+        icon={{
+          url: startpoint,
+          scaledSize: new window.google.maps.Size(24, 24),
+          origin: new window.google.maps.Point(0, 0),
+          anchor: new window.google.maps.Point(12, 12),
+          fillColor:"green"
+        }}
+        // onClick={() => setShowInfoBox(!showInfoBox)}
+      />
+
+{moveposition && (
+    <MarkerF
+        position={moveposition}
+        icon={{
+            url:caricon, // Replace with your car icon URL
+            scaledSize: new window.google.maps.Size(30, 30),
+            anchor: new window.google.maps.Point(15, 15),
+          
+            
+             // Apply rotation
+        }}
+    />
 )}
+
+
+
+{vehiclePoint && <VehicleDetailsPopup position={clickPosition} setVehiclePoint={setVehiclePoint} officeDistance={calculateDistance(calcdatavalue.jesscycabslat,calcdatavalue.jesscycabslong,calcdatavalue.Userlat,calcdatavalue.Userlng)} />}
+
+
+
+
+      <MarkerF
+        key={currentPosition.veh_id}
+        position={{
+          lat: parseFloat(currentPosition.Latitude_loc),
+          lng: parseFloat(currentPosition.Longtitude_loc),
+        }}
+        title="ReachedPosition"
+        onClick={(e) => handlestartLocation(currentPosition,e)} // Pass clicked location
+        icon={{
+          url:Reach,
+          scaledSize: new window.google.maps.Size(24, 24),
+          origin: new window.google.maps.Point(0, 0),
+          anchor: new window.google.maps.Point(12, 12),
+        }}
+      />
+      
+
+
+
 
     </GoogleMap>
     // </LoadScript>

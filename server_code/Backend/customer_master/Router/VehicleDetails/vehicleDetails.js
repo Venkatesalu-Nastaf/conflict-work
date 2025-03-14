@@ -91,32 +91,32 @@ router.post('/store-location', (req, res) => {
   });
 
 // Getting current point vehicle details by particular vehicle
-router.get('/gettingParticularVehcileDetails', (req, res) => {
-    // const { vehicleNumber } = req.body;
+// router.get('/gettingParticularVehcileDetails', (req, res) => {
+//     // const { vehicleNumber } = req.body;
 
    
 
-    const sqlQuery = `
-        SELECT * FROM VehicleTripDetails 
-        WHERE DATE(created_at) = CURDATE()  -- Filter for today's date
-        ORDER BY created_at DESC  -- Get the latest time
-        LIMIT 1;  -- Only the latest row
-    `;
+//     const sqlQuery = `
+//         SELECT * FROM VehicleTripDetails 
+//         WHERE DATE(created_at) = CURDATE()  -- Filter for today's date
+//         ORDER BY created_at DESC  -- Get the latest time
+//         LIMIT 1;  -- Only the latest row
+//     `;
 
-    db.query(sqlQuery, (err, results) => {
-        if (err) {
-            console.error("Error fetching vehicle details:", err);
-            return res.status(500).json({ error: "Internal Server Error" });
-        }
-        console.log(results,"particularrrrrr---------------------------------");
+//     db.query(sqlQuery, (err, results) => {
+//         if (err) {
+//             console.error("Error fetching vehicle details:", err);
+//             return res.status(500).json({ error: "Internal Server Error" });
+//         }
+//         console.log(results,"particularrrrrr---------------------------------");
         
-        if (results.length === 0) {
-            return res.status(404).json({ message: "No data found for the vehicle today" });
-        }
+//         if (results.length === 0) {
+//             return res.status(404).json({ message: "No data found for the vehicle today" });
+//         }
 
-        res.json(results[0]);  
-    });
-});
+//         res.json(results[0]);  
+//     });
+// });
 
 
 

@@ -289,6 +289,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,Permissiondeleteroles,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,fueldataamountdis,setFuelAdvancedamountHide,
     setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
+    tripGpsData,fullGpsData,allGpsData
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -5221,7 +5222,7 @@ Please Click the link to close E-Tripsheet-`}
                     </div>
 
                   </Box>
-                  <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} />
+                  <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} tripGpsData={tripGpsData} fullGpsData={fullGpsData} allGpsData={allGpsData} />
 
 
                   {/* <EditMapComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} /> */}

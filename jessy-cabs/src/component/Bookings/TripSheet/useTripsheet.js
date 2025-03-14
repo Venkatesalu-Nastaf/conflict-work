@@ -5311,12 +5311,21 @@ const useTripsheet = () => {
                 dataextrakms = kmfixed
             }
 
-            if (vendorduty === "Outstation") {
-                let km = (Number(vendortotkm) <= Number(KMS)) ? Number(vendortotkm) * Number(totalDays1) : Number(vendortotkm)
-                let kmfixed2 = Number(km.toFixed(2))
+            // if (vendorduty === "Outstation") {
+            //     let km = (Number(vendortotkm) <= Number(KMS)) ? Number(vendortotkm) * Number(totalDays1) : Number(vendortotkm)
+            //     let kmfixed2 = Number(km.toFixed(2))
+            //     dataextrakms = kmfixed2
+            // }
+            if(Number(totalDays1) === 1){
+                let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
+                let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
                 dataextrakms = kmfixed2
             }
-
+            else{
+                let km = Number(vendortotkm)
+                let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
+                dataextrakms = kmfixed2
+            }
             console.log(dataextrahous, "hrs", dataextrakms, "kmsss")
 
 
@@ -5615,14 +5624,26 @@ const useTripsheet = () => {
                 let KM = (Number(totkm) - Number(KMS))
                 let cuctomerkm = Number(KM.toFixed(2))
                 setExtraKM(cuctomerkm);
-            } else if (duty === "Outstation") {
+            } 
+            else if (duty === "Outstation") {
                 console.log("duty", duty)
                 // let km = (Number(totkm) <= Number(KMS)) ? Number(KMS) * Number(totaldays) : Number(totkm)
                 // let cuctomerkm2 = Number(km.toFixed(2))
-                let km = (Number(totkm) <= Number(KMS)) ?  Number(totkm) *  Number(totaldays): Number(totkm)
-                let cuctomerkm2 = Number(km.toFixed(2))
+                // let km = (Number(totkm) <= Number(KMS)) ?  Number(totkm) *  Number(totaldays): Number(totkm)
+                // let cuctomerkm2 = Number(km.toFixed(2))
                 // console.log(km)
-                setExtraKM(cuctomerkm2)
+                if(Number(totaldays) === 1){
+                    console.log("duty", duty)
+                    let km1 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
+                    let cuctomerkm21 = Number(km1.toFixed(2)) 
+                    setExtraKM(cuctomerkm21)
+                }
+                else{
+                    let km = Number(totkm) 
+                    let cuctomerkm2 = Number(km.toFixed(2))  * Number(totaldays)
+                    setExtraKM(cuctomerkm2)
+                }
+                // setExtraKM(cuctomerkm2)
             }
             else {
                 setExtraKM("")

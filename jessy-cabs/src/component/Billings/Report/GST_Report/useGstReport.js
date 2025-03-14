@@ -44,8 +44,8 @@ const useGstReport = () => {
         // { field: "InvoiceDate", headerName: "Invoice Date", width: 130 },
         { field: 'Invoice_no', headerName: 'Invoice No', width: 90,},
         // { field: 'billdate', headerName: 'Invoice Date', width: 130,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
-        { field: 'Billdate', headerName: 'Invoice Date', width: 130, },
-        // { field: 'tripsheetdate', headerName: 'Trip Date', width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
+        { field: 'Billdate', headerName: 'Invoice Date', width: 130,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY')  },
+        { field: 'FromDate', headerName: 'Trip Date', width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
         { field: 'Organization_name', headerName: 'Customer Name', width: 130 },
         { field: 'gstNumber', headerName: 'GSTIN', width: 130 },
         { field: 'Amount', headerName: 'GROSS', width: 130 },
@@ -238,7 +238,7 @@ const useGstReport = () => {
                     id: row.id,
                     Invoice_no: row.Invoice_no,
                     // invoicedate: row.invoicedate,
-                     Billdate: row.Billdate,
+                     Billdate: dayjs(row.Billdate).format('DD-MM-YYYY'),
                     billingno: row.billingno,
                     billdate: dayjs(row.billdate).format('DD-MM-YYYY'),
                     // tripsheetdate: dayjs(row.tripsheetdate).format('DD-MM-YYYY'),
@@ -770,6 +770,8 @@ const updatedBilledgstReportDats = billedgstReportDats.map(bill => {
                 totalGST: Math.round(totalGST),
                 totalAmount: customerData[0]?.state === stationData[0]?.state ? Math.round(totalCGSTAmount) : Math.round(totalIGSTAmount)
             });
+            console.log(FinalGstReportResults,"pppppppppppppppppppppppppp");
+            
             setRows(FinalGstReportResults)
 
             const FinalTripsheetResults = updatedTripsheetResults.map((item, index) => {

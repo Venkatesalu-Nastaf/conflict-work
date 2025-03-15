@@ -45,7 +45,7 @@ const useGstReport = () => {
         { field: 'Invoice_no', headerName: 'Invoice No', width: 90,},
         // { field: 'billdate', headerName: 'Invoice Date', width: 130,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY') },
         { field: 'Billdate', headerName: 'Invoice Date', width: 130,valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY')  },
-        // { field: 'FromDate', headerName: 'Trip Date', width: 130,  valueFormatter: (params) => params.value ? dayjs(params.value).format('DD-MM-YYYY') : 'N/A' },
+        { field: 'FromDate', headerName: 'Trip Date', width: 130,  valueFormatter: (params) => params.value ? dayjs(params.value).format('DD-MM-YYYY') : '' },
         { field: 'Organization_name', headerName: 'Customer Name', width: 130 },
         { field: 'gstNumber', headerName: 'GSTIN', width: 130 },
         { field: 'Amount', headerName: 'GROSS', width: 130 },
@@ -243,7 +243,7 @@ const useGstReport = () => {
                     billingno: row.billingno,
                     billdate: dayjs(row.billdate).format('DD-MM-YYYY'),
                     // tripsheetdate: dayjs(row.tripsheetdate).format('DD-MM-YYYY'),
-                    // FromDate: row.FromDate ? dayjs(row.FromDate).format('DD-MM-YYYY') : 'N/A',
+                    FromDate: row.FromDate ? dayjs(row.FromDate).format('DD-MM-YYYY') : '',
                     Organization_name: row.Organization_name,
                     gstNumber: row.gstNumber,
                     Amount: row.Amount,
@@ -335,6 +335,7 @@ const useGstReport = () => {
         // ]);
         const tableRows = rows.map(row => [
             row.id, row.Invoice_no, dayjs(row.invoicedate).format('DD-MM-YYYY'),
+            row.FromDate ? dayjs(row.FromDate).format('DD-MM-YYYY') : '',  
             row.Organization_name,
             row.gstnumber, row.Amount, row.gstTax, row.cgst, row.sgst, row.igst,  row.billed,row.Grouptrip_id,
         ]);

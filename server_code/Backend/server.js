@@ -378,7 +378,9 @@ app.post('/uploads', upload.single('file'), (req, res) => {
   });
 });
 //get image from the folder
-const imageDirectory = path.join(__dirname, 'uploads');
+const imageDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+// const basemapImagePath = path.join(__dirname, 'customer_master', 'public', 'map_images');
+
 
 // Serve static files from the imageDirectory
 app.use('/images', express.static(imageDirectory));
@@ -402,9 +404,18 @@ app.get('/get-image/:filename', (req, res) => {
 
 //tripsheet  GPS Att fill upload
 
+// const storagetripsheet = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'uploads')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))
+//   }
+
+// })
 const storagetripsheet = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads')
+    cb(null, './customer_master/public/imagesUploads_doc')
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))
@@ -722,7 +733,8 @@ app.get('/get-signimageforpdfrendered/:tripid', (req, res) => {
   });
 });
 
-const attachedDirectory = path.join(__dirname, 'uploads');
+// const attachedDirectory = path.join(__dirname, 'uploads');
+const attachedDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
 // Serve static files from the imageDirectory
 console.log(attachedDirectory, "attachedDirectory2")
 app.use('/images', express.static(attachedDirectory));
@@ -746,8 +758,10 @@ app.get('/get-attachedimage/:tripid', (req, res) => {
   });
 });
 //get a booking mail...
-const attachedmailDirectory = path.join(__dirname, 'uploads');
-const pdfDirectory = path.join(__dirname, 'uploads');
+// const attachedmailDirectory = path.join(__dirname, 'uploads');
+const attachedmailDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+// const pdfDirectory = path.join(__dirname, 'uploads');
+const pdfDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
 // Serve static files from the imageDirectory
 app.use('/images', express.static(attachedmailDirectory));
 app.use('/pdf', express.static(pdfDirectory));
@@ -778,7 +792,10 @@ app.get('/get-attachedmailimage/:bookingno', (req, res) => {
 
 
 //get image for organization
-const companyattachedDirectory = path.join(__dirname, 'uploads');
+// const companyattachedDirectory = path.join(__dirname, 'uploads');
+const companyattachedDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+console.log(companyattachedDirectory,"companyattach");
+
 // Serve static files from the imageDirectory
 app.use('/images', express.static(companyattachedDirectory));
 // Example route to serve an image by its filename
@@ -804,7 +821,10 @@ app.get('/get-companyimage', (req, res) => {
 
 
 //get image for user profile
-const userattachedDirectory = path.join(__dirname, 'uploads');
+// const userattachedDirectory = path.join(__dirname, 'uploads');
+const userattachedDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+console.log(userattachedDirectory,"userattach");
+
 // Serve static files from the imageDirectory
 app.use('/images', express.static(userattachedDirectory));
 // Example route to serve an image by its filename

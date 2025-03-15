@@ -952,9 +952,18 @@ router.post('/send-onbook-email', async (req, res) => {
 //     });
 // });
 // image or pdf upload 
+// const booking_storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'uploads')
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//     }
+// })
+router.use(express.static('customer_master'));
 const booking_storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads')
+        cb(null, './customer_master/public/imagesUploads_doc')
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))

@@ -131,11 +131,14 @@ router.post('/store-location', (req, res) => {
 //   }
 
 // })
-router.use(express.static('Backend'));
+// router.use(express.static('Backend'));
+router.use(express.static('customer_master'));
 
 const storagetripsheet1 = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './uploads')
+    // cb(null, './uploads')
+    cb(null, './customer_master/public/imageUploads_doc')
+
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))

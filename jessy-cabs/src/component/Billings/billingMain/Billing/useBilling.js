@@ -521,13 +521,15 @@ const handlefullTotalAmount = () => {
         }
       });
 
-    const handlebilldata = async () => {
+      const handlebilldata = async () => {
         const tripno = book.tripid;
         if (!tripno) {
             setError(true);
             setErrorMessage("Please enter TripID");
             return
         }
+        console.log(book,"inddddddddddddddddd");
+        
         try {
             const statedata = await customerMotherdatagroupstation(book.customer ||  selectbillingdata.customer);
             const IndividualBillData = {
@@ -538,7 +540,8 @@ const handlefullTotalAmount = () => {
                 Customer: customerData?.customer,
                 billing_no: book?.billingno,
                 guestname: book?.guestname,
-                State:statedata
+                State:statedata,
+                TripStartDate:book?.startdate
             }
             await axios.post(`${apiUrl}/IndividualBill`, IndividualBillData);
             handleCancel();
@@ -552,6 +555,7 @@ const handlefullTotalAmount = () => {
             setErrorMessage("Check your Network Connection");
         }
     }
+
 
     const handleClick = async (event, actionName, tripid) => {
         event.preventDefault();

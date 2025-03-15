@@ -459,7 +459,7 @@ router.get('/getFromToBetweenParticularStateBilledDetails', async (req, res) => 
 
         // Execute TransferListQuery
         const transferListQuery = `
-            SELECT Grouptrip_id ,Invoice_no, Billdate, Organization_name, Trip_id,	Amount
+            SELECT Grouptrip_id ,Invoice_no, Billdate, Organization_name, Trip_id,	Amount,FromDate,EndDate
             FROM Transfer_list 
             WHERE Billdate BETWEEN ? AND ? 
             AND State = ? 
@@ -478,6 +478,8 @@ router.get('/getFromToBetweenParticularStateBilledDetails', async (req, res) => 
             ReferenceNo AS Grouptrip_id, 
             InvoiceDate AS Billdate, 
             Customer AS Organization_name, 
+            FromDate,
+            ToDate AS EndDate,
             Amount,
             Trip_id
         FROM Group_billing 
@@ -513,7 +515,8 @@ router.get('/getFromToBetweenParticularStateBilledDetails', async (req, res) => 
             Bill_Date AS Billdate, 
             Customer AS Organization_name, 
             Amount,
-            Trip_id
+            Trip_id,
+            TripStartDate AS FromDate
         FROM Individual_Billing 
         WHERE Bill_Date BETWEEN ? AND ? 
         AND State = ?

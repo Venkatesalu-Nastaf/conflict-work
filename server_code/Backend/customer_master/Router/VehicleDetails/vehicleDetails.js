@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
+const multer = require('multer');
+const app = express();
 
 router.get('/getAllVehicleDetailsList', (req, res) => {
     const vehicleQuery = "SELECT * FROM vehicleinfo";
@@ -118,6 +120,48 @@ router.post('/store-location', (req, res) => {
 //     });
 // });
 
+// const userattachedDirectory1 = path.join(__dirname, 'uploads');
+// const storagetripsheet1 = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     // cb(null, 'uploads')
+//     cb(null, userattachedDirectory1)
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))
+//   }
 
+// })
+router.use(express.static('Backend'));
+
+const storagetripsheet1 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './Backend/uploads')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))
+  }
+
+})
+const uploadtripsheet1 = multer({
+  storage: storagetripsheet1
+})
+app.post('/tripsheetdatadriverappimage/:data', uploadtripsheet1.single('file'), (req, res) => {
+  console.log(req.params.data, "kk")
+  const fullPath = path.resolve(req.file.path);
+  const fileData = {
+    name: req.file.originalname,
+    mimetype: req.file.mimetype,
+    size: req.file.size,
+    path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
+    // tripid: req.body.tripid,
+    fullPath:fullPath,
+    date: req.body.datadate
+
+  };
+  console.log(fileData)
+  // res.send("datasend")
+  res.json({fileData})
+
+})
 
 module.exports = router

@@ -579,19 +579,23 @@ router.get('/customers/:customer', (req, res) => {
 
 router.get('/routedata/:tripid', (req, res) => {
   const tripid = req.params.tripid;
+  const tripType = ["start", "waypoint", "end"]; // Define allowed trip types
 
-  db.query('SELECT * FROM gmapdata WHERE tripid = ?', tripid, (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' })
+  db.query(
+    'SELECT * FROM gmapdata WHERE tripid = ? AND trip_type IN (?)',
+    [tripid, tripType], // Pass tripType array correctly
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({ error: 'Route data not found' });
+      }
+
+      return res.status(200).json(result);
     }
-
-    if (result.length === 0) {
-      return res.status(404).json({ error: 'Route data not found' });
-    }
-
-    const routeData = result;
-    return res.status(200).json(routeData);
-  });
+  );
 });
 
 
@@ -665,10 +669,10 @@ router.get('/getParticularTripsheet', (req, res) => {
 });
 
 router.get('/getParticularInvoiceDetails', (req, res) => {
-  const { InvoiceNo } = req.query;
-  const query = `SELECT * FROM Transfer_list WHERE Invoice_no = ? `;
+  const { InvoiceNo,State} = req.query;
+  const query = `SELECT * FROM Transfer_list WHERE Invoice_no = ? and State = ?`;
 
-  db.query(query, [InvoiceNo], (err, result) => {
+  db.query(query, [InvoiceNo,State], (err, result) => {
     if (err) {
       console.error('Failed to retrieve booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });

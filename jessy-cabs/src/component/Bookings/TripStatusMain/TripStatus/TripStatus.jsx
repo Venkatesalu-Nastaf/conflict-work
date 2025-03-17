@@ -139,7 +139,7 @@ useEffect(() => {
 const Roledatauser = localStorage.getItem("SuperAdmin")
 
 const filteredStatus =
-Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO"
+Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO" || Roledatauser === "Billing_Headoffice"
     ? Status // Show all statuses for superAdmin and CFo
     : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
 

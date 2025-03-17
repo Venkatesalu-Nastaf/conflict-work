@@ -1,6 +1,6 @@
 .vehicle-inputs {
     display: flex;
-    gap: 20px;
+    gap: 15px;
     justify-content: space-between;
     align-items: center;
 }
@@ -13,11 +13,11 @@
     }
 }
 .inputs-width {
-    width: 70%;
+    width: 50%;
 }
 
 .buttons-width {
-    width: 20%;
+    width: 60%;
 }
 
 .white-text {
@@ -95,3 +95,105 @@
   }
 
   
+  
+
+
+
+.vehicle-info-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    /* overflow: hidden; */
+}
+@media screen and (max-width:1000px) {
+    .vehicle-info-content-info {
+        width: 100% !important;
+    }
+
+    .vehicle-info-content-map {
+        width: 100% !important;
+    }
+}
+
+.vehicle-info-content-info {
+    width: 100%;
+}
+
+.overview-left {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.overview-content-head {
+    border: 1px solid #ccc;
+    /* padding: 20px; */
+    /* overflow: scroll; */
+}
+
+.overview-content {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.overview-content-dropdown{
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: space-between;
+}
+
+.overview-content-border {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    border-bottom: 1px solid  gray;
+}
+
+.directions-vehicle-info {
+    padding: 10px;
+}
+
+.Getdirection {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Getdirection-btn {
+    border: 1px solid gray;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: gray;
+    border-radius: 8px;
+}
+
+.direction-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.direction-box {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.direction-apply-btn {
+    color: gray;
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 10px 20px;
+    height: 40px;
+}
+
+.warning-no-petrol {
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
+
+
+

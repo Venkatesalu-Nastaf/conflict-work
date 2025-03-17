@@ -101,6 +101,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     useEffect(() => {
         const fetchData = async () => {
           try {
+            if(customer!==""){
             console.log(customer, 'customer =====');
     
             const response = await axios.get(`${apiUrl}/customerDetailsAndGroupBillingDetails/${customer}`)
@@ -111,6 +112,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     
             setCustomerData(customerDetails)
             setStationData(stationDetails)
+            }
           }
           catch (error) {
             console.log(error);

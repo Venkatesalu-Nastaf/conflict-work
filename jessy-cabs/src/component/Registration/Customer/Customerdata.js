@@ -102,7 +102,7 @@ export const allStations = [
   "Visakhapatnam", "West Godavari", "Ysr Kadapa", "Anjaw", "Changlang", "East Kameng", "East Siang",
   "Kurung Kumey", "Lohit", "Longding", "Lower Dibang Valley", "Lower Subansiri", "Namsai", "Papum Pare",
   "Tawang", "Tirap", "Upper Siang", "Upper Subansiri", "West Kameng", "West Siang", "Baksa", "Barpeta",
-  "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh",
+  "Biswanath", "Bongaigaon", "Vijayawada", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh",
   "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong",
   "Karimganj", "Kokrajhar", "Lakhimpur", "Morigaon", "Nagaon", "Nalbari", "Sivasagar", "Sonitpur",
   "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong", "Araria", "Arwal",
@@ -152,7 +152,7 @@ export const allStations = [
   "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur",
   "Neemuch", "Panna", "Raisen", "Rajgarh", "Ratlam", "Rewa", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol",
   "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha",
-  "Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli",
+  "Ahmednagar","Nagpur", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli",
   "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai", "Mumbai Suburban", "Nandurbar", "Nashik",
   "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur",
   "Thane", "Wardha", "Washim", "Yavatmal", "Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West",
@@ -299,7 +299,7 @@ export const stateToStations = {
   "Andhra Pradesh": 
    [
      "Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool",
-    "Prakasam", "Srikakulam", "Visakhapatnam", "West Godavari", "Ysr Kadapa"
+    "Prakasam", "Srikakulam", "Vijayawada", "Visakhapatnam", "West Godavari", "Ysr Kadapa"
   ],
 
   "Arunachal Pradesh":
@@ -384,7 +384,7 @@ export const stateToStations = {
   "Maharashtra": 
   [ "Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana",
     "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna",
-    "Kolhapur", "Latur", "Mumbai", "Mumbai Suburban", "Nandurbar", "Nashik", "Osmanabad",
+    "Kolhapur", "Latur", "Mumbai", "Mumbai Suburban", "Nandurbar", "Nashik","Nagpur", "Osmanabad",
     "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg",
     "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"
   ],
@@ -1065,6 +1065,8 @@ export const states = [
       "Prakasam",
       "Srikakulam",
       "Visakhapatnam",
+      "Vijayawada",
+      "Vijayawada",
       "Vizianagaram",
       "West Godavari",
       "YSR Kadapa",

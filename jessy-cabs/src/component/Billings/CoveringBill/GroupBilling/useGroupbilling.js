@@ -7,7 +7,6 @@ import { saveAs } from 'file-saver';
 // import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 import { APIURL } from "../../../url";
 import { useLocation } from 'react-router-dom';
-import { ReferenceNo } from './RefenceNo';
 import { RefPdfData } from './GroupBillingContext';
 import Excel from 'exceljs';
 
@@ -52,17 +51,17 @@ const useGroupbilling = () => {
     const [groupBillAmount, setGroupBillAmount] = useState(0)
     const [trips, setTrips] = useState(0)
     const [department, setDepartment] = useState('');
-    const [referInvoiceno,setReferINVOICENO]=useState('')
+    const [referInvoiceno, setReferINVOICENO] = useState('')
     const [groupAmount, setGroupAmount] = useState(0)
     const [stateDetails, setStateDetails] = useState([]);
-    const [disabeldata,setDisabelData]=useState(false);
+    const [disabeldata, setDisabelData] = useState(false);
 
     // Loading//
 
-    const [isSaveload , setisSaveload] = useState(false);
-    const [isgroupEditload , setisGfoupEditload] = useState(false)
-    const [isBllload , setisBillload] = useState(false)
-   
+    const [isSaveload, setisSaveload] = useState(false);
+    const [isgroupEditload, setisGfoupEditload] = useState(false)
+    const [isBllload, setisBillload] = useState(false)
+
     const [billingGroupDetails, setBillingGroupDetails] = useState('')
     const [groupBillingData, setGroupBillingData] = useState([])
     const [viewGroupBill, setViewGroupBill] = useState({
@@ -72,7 +71,7 @@ const useGroupbilling = () => {
         Customer: '',
         station: ''
     })
-    const [refernceinvoice_no,setRefernceInvoice_no]=useState([])
+    const [refernceinvoice_no, setRefernceInvoice_no] = useState([])
     // popup------------------------------
     const hidePopup = () => {
         setError(false);
@@ -92,7 +91,7 @@ const useGroupbilling = () => {
             headerName: "Invoice Date",
             width: 130,
             valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),
-          },
+        },
         { field: "tripid", headerName: "Trip No", width: 150 },
         { field: "customer", headerName: "Customer", width: 130 },
         { field: "vehRegNo", headerName: "Vehcile No", width: 150 },
@@ -110,7 +109,22 @@ const useGroupbilling = () => {
         { field: "guestname", headerName: "UserName", width: 150 },
     ];
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/ReferenceNo`);
+                const data = response.data;
 
+                const referenceNos = data.map(item => item.ReferenceNo);
+                setReferenceNo(referenceNos);
+            }
+            catch (error) {
+                console.log(error, "error");
+
+            }
+        }
+        fetchData()
+    }, [apiUrl])
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -167,18 +181,18 @@ const useGroupbilling = () => {
         fetchData()
     }, [apiUrl, groupBillId, groupInvoice, groupInvoiceDate, groupInvoiceNumber])
 
-    useEffect(() => {
-        ReferenceNo()
-            .then((data) => {
-                if (data) {
-                    const referenceNos = data.map(item => item.ReferenceNo);
-                    setReferenceNo(referenceNos);
-                } else {
-                }
-            })
-            .catch(() => {
-            });
-    }, [referenceNo])
+    // useEffect(() => {
+    //     ReferenceNo()
+    //         .then((data) => {
+    //             if (data) {
+    //                 const referenceNos = data.map(item => item.ReferenceNo);
+    //                 setReferenceNo(referenceNos);
+    //             } else {
+    //             }
+    //         })
+    //         .catch(() => {
+    //         });
+    // }, [referenceNo])
 
 
     useEffect(() => {
@@ -245,45 +259,45 @@ const useGroupbilling = () => {
                 const response2 = await axios.get(`${apiUrl}/GroupReferenceforinvoiceno/${invoiceno}`);
                 console.log(response2.data)
                 const referncenoinvoiceno = response2.data
-                if(referncenoinvoiceno.length>0){
-                setRefernceInvoice_no(referncenoinvoiceno)
+                if (referncenoinvoiceno.length > 0) {
+                    setRefernceInvoice_no(referncenoinvoiceno)
                 }
-                else{
-                    setRefernceInvoice_no([])  
+                else {
+                    setRefernceInvoice_no([])
                 }
                 const GroupReference = response.data;
-                if(GroupReference.length > 0){
-                console.log(GroupReference, 'GroupBill=====');
-                setDisabelData(true)
-             
-                setViewGroupBill(response.data)
-                // setRows(GroupReference)
-                // const RefId = GroupReference.map((li) => li.Trip_id)
-                // setParticularId(RefId)
-                const RefId = GroupReference.map((li) => li.Trip_id.split(','));
-                console.log(RefId, 'idddddddddd');
+                if (GroupReference.length > 0) {
+                    console.log(GroupReference, 'GroupBill=====');
+                    setDisabelData(true)
 
-                setParticularId(RefId.flat());
-                const RefInvoiceNo = GroupReference.map((li) => li.InvoiceNo)
-                setRefInvNo(RefInvoiceNo)
-                const RefInvDate = GroupReference.map((li) => li.InvoiceDate)
-                setRefInvDate(RefInvDate)
-                const ReferenceNo = GroupReference.map((li) => li.ReferenceNo)
-                setReferNo(ReferenceNo)
-                const fromdate = GroupReference.map((li) => li.FromDate)
-                setRefFromDate(fromdate)
-                const todate = GroupReference.map((li) => li.ToDate)
-                setRefToDate(todate)
-                const Amount = GroupReference.map((li) => li.Amount)
-                setGroupAmount(Amount)
+                    setViewGroupBill(response.data)
+                    // setRows(GroupReference)
+                    // const RefId = GroupReference.map((li) => li.Trip_id)
+                    // setParticularId(RefId)
+                    const RefId = GroupReference.map((li) => li.Trip_id.split(','));
+                    console.log(RefId, 'idddddddddd');
+
+                    setParticularId(RefId.flat());
+                    const RefInvoiceNo = GroupReference.map((li) => li.InvoiceNo)
+                    setRefInvNo(RefInvoiceNo)
+                    const RefInvDate = GroupReference.map((li) => li.InvoiceDate)
+                    setRefInvDate(RefInvDate)
+                    const ReferenceNo = GroupReference.map((li) => li.ReferenceNo)
+                    setReferNo(ReferenceNo)
+                    const fromdate = GroupReference.map((li) => li.FromDate)
+                    setRefFromDate(fromdate)
+                    const todate = GroupReference.map((li) => li.ToDate)
+                    setRefToDate(todate)
+                    const Amount = GroupReference.map((li) => li.Amount)
+                    setGroupAmount(Amount)
                 }
-                else{
-                    setDisabelData(false) 
+                else {
+                    setDisabelData(false)
                     setRows([]);
-                     setError(true);
+                    setError(true);
                     setErrorMessage("No data found");
                 }
-               
+
                 // const Tripsid = GroupReference.map((li) => li.Trip_id)
             }
             catch (err) {
@@ -305,25 +319,25 @@ const useGroupbilling = () => {
                 const invoiceMap = refernceinvoice_no.reduce((map, invoice) => {
                     map[invoice.Tripid] = invoice.Invoice_No;
                     return map;
-                  }, {});
-        
-               let RefTripDetails =[]
-               if(refernceinvoice_no.length > 0){
-                 RefTripDetails = TripDetails.map(item => ({
-                    ...item,
-                    // ...(groupInvoice && { InvoiceNo: refInvNo }),
-                    ...(groupInvoice && { InvoiceNo: invoiceMap[item.tripid] }),
-                    ...{ InvoiceDate: refInvDate }
-                }));
-            }
-            else{
-                 RefTripDetails = TripDetails.map(item => ({
-                    ...item,
-                    ...(groupInvoice && { InvoiceNo: refInvNo }),
-                    // ...(groupInvoice && { InvoiceNo: invoiceMap[item.tripid] }),
-                    ...{ InvoiceDate: refInvDate }
-                }));
-            }
+                }, {});
+
+                let RefTripDetails = []
+                if (refernceinvoice_no.length > 0) {
+                    RefTripDetails = TripDetails.map(item => ({
+                        ...item,
+                        // ...(groupInvoice && { InvoiceNo: refInvNo }),
+                        ...(groupInvoice && { InvoiceNo: invoiceMap[item.tripid] }),
+                        ...{ InvoiceDate: refInvDate }
+                    }));
+                }
+                else {
+                    RefTripDetails = TripDetails.map(item => ({
+                        ...item,
+                        ...(groupInvoice && { InvoiceNo: refInvNo }),
+                        // ...(groupInvoice && { InvoiceNo: invoiceMap[item.tripid] }),
+                        ...{ InvoiceDate: refInvDate }
+                    }));
+                }
                 setRows(RefTripDetails)
                 setSuccess(true)
                 setSuccessMessage("Successfully Listed")
@@ -509,8 +523,8 @@ const useGroupbilling = () => {
         // const params = servicestationValue !== ""
         //     ? { customer: customerValue, fromDate: fromDateValue, toDate: toDateValue, servicestation: servicestationValue }
         //     : { customer: customerValue, fromDate: fromDateValue, toDate: toDateValue };
-            const apiEndpoint =`${apiUrl}/allGroup-Billing`;
-            const params =  { customer: customerValue, fromDate: fromDateValue, toDate: toDateValue };
+        const apiEndpoint = `${apiUrl}/allGroup-Billing`;
+        const params = { customer: customerValue, fromDate: fromDateValue, toDate: toDateValue };
 
         try {
             setRows([]);
@@ -563,7 +577,7 @@ const useGroupbilling = () => {
     //         const worksheet = workbook.addWorksheet(workSheetName);
     //         const headers = Object.keys(rows[0]);
     //         //         console.log(headers,"hed")
-            
+
     //         const columns = headers.map(key => ({ key, header: key }));
     //         //         worksheet.columns = columnsexcel
     //         worksheet.columns = columns;
@@ -605,7 +619,7 @@ const useGroupbilling = () => {
     //             singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
     //             singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD-MM-YYYY"):""
     //              singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
-                
+
 
     //             worksheet.addRow(singleData);
     //             // Adjust column width based on the length of the cell values in the added row
@@ -659,7 +673,7 @@ const useGroupbilling = () => {
     //     try {
     //         const fileName = "Group Billing";
     //         const worksheet = workbook.addWorksheet(workSheetName);
-    
+
     //         // Define the columns based on your data
     //         const columns = [
     //             {key: "SNo", header: "Ref", width: 130},
@@ -686,20 +700,20 @@ const useGroupbilling = () => {
     //             { key: 'starttime', header: 'Start Time' , width: 130},
     //             { key: 'closedate', header: 'Close Date' , width: 130},
     //             { key: 'closetime', header: 'Close Time', width: 130 },
-               
-                
+
+
     //             { key: 'totalcalcAmount', header: 'Total Calc Amount', width: 130 },
     //             { key: 'Vendor_Bata', header: 'Vendor Bata' , width: 130},
-                
+
     //             // { key: 'guestname', header: 'Guest Name' , width: 130},
-                      
+
     //             { key: 'pickup', header: 'Pickup ', width: 130 },
-                
+
 
     //         ];
-    
+
     //         worksheet.columns = columns;
-    
+
     //         // Style the header row
     //         worksheet.getRow(1).font = { bold: true };
     //         worksheet.getRow(1).eachCell((cell) => {
@@ -710,19 +724,19 @@ const useGroupbilling = () => {
     //             };
     //         });
     //         worksheet.getRow(1).height = 30;
-    
+
     //         // Format column width and alignment
     //         worksheet.columns.forEach((column) => {
     //             column.width = column.header.length + 5;
     //             column.alignment = { horizontal: 'center', vertical: 'middle' };
     //         });
-    
+
     //         // Add rows to the worksheet
     //         console.log(rows, "datas of row ")
     //         rows.forEach((row, index) => {
     //             const formattedRow = {
     //                 SNo: index + 1, 
-                    
+
     //                 id: row.id || 'N/A',
     //                 billingno:row.billingno || 'N/A',
     //                 bookingno:row.bookingno || 'N/A',
@@ -750,14 +764,14 @@ const useGroupbilling = () => {
     //                 guestname: row.guestname || 'N/A',
     //                 department:row.department || 'N/A',
     //                 pickup:row.pickup || 'N/A'
-                   
-                  
+
+
     //             };
-            
+
     //             worksheet.addRow(formattedRow);
     //         });
-            
-    
+
+
     //         // Apply borders to all cells
     //         worksheet.eachRow({ includeEmpty: false }, (row) => {
     //             row.eachCell((cell) => {
@@ -769,7 +783,7 @@ const useGroupbilling = () => {
     //                 };
     //             });
     //         });
-    
+
     //         // Write to a buffer and save the file
     //         const buf = await workbook.xlsx.writeBuffer();
     //         saveAs(new Blob([buf]), `${fileName}.xlsx`);
@@ -783,46 +797,46 @@ const useGroupbilling = () => {
     function removeSeconds(time) {
         // Split the time string by colon (:)
         const timeParts = time.split(':');
-      
+
         // Check if there are seconds (length 3), return hours:minutes
         if (timeParts.length === 3) {
-          return `${timeParts[0]}:${timeParts[1]}`;
+            return `${timeParts[0]}:${timeParts[1]}`;
         }
-      
+
         // If there's only hours:minutes, return it as is
         return time;
-      }
+    }
 
     //   function addPercentage(amount, percent) {
-     
+
     //     let percentageValue = (amount * percent) / 100;
-      
+
     //     const datapercent = amount + percentageValue
     //     const datas = Math.round(datapercent)
-     
+
     //     return `${datas}.00`
     // }
-    function addPercentage(amount1, percent1,toll1) {
-    
+    function addPercentage(amount1, percent1, toll1) {
+
         let amount = parseFloat(amount1) || 0;
         let percent = parseFloat(percent1) || 0;
-        let  tollamount = parseFloat(toll1) || 0;
-        console.log(amount,percent,tollamount,'zipgstadddd')
-     
-       
-     
-         const datapercent = amount + percent + tollamount;
-         console.log(datapercent,'zipgstaddddpercent',Math.round(datapercent))
-     
-         return Math.round(datapercent);
-     }
+        let tollamount = parseFloat(toll1) || 0;
+        console.log(amount, percent, tollamount, 'zipgstadddd')
 
-      function withoutTaxesdata(total,toll,parking,permit) {
-        let withoutaxValue = total-toll-parking-permit;
+
+
+        const datapercent = amount + percent + tollamount;
+        console.log(datapercent, 'zipgstaddddpercent', Math.round(datapercent))
+
+        return Math.round(datapercent);
+    }
+
+    function withoutTaxesdata(total, toll, parking, permit) {
+        let withoutaxValue = total - toll - parking - permit;
         return withoutaxValue;
     }
     // const handleExcelDownload = async (customerData) => {
-     
+
     //       if(rows.length === 0){
     //         setError(true);
     //         setErrorMessage("Data is Empty");
@@ -834,7 +848,7 @@ const useGroupbilling = () => {
 
     //     const workbook = new Excel.Workbook();
     //     const workSheetName = 'Group Billing';
-    
+
     //     try {
     //         const fileName = "Group Billing";
     //         const worksheet = workbook.addWorksheet(workSheetName);
@@ -866,7 +880,7 @@ const useGroupbilling = () => {
     //             { key: "extraHR", header: "Extra HRs"},
     //             { key: "ex_kmAmount", header: "Extra KMs Amount"},
     //             { key: "ex_hrAmount", header: "Extra HRs Amount"},
-        
+
     //             { key: "night_totalAmount", header: "Night Charges"},
     //             { key: "driverBeta", header: "Driver Bhatta"},
     //             { key: "OutstationCharges", header: "Outstation Charges"},
@@ -879,9 +893,9 @@ const useGroupbilling = () => {
     //             { key: "totalcalcAmount", header: "Amount With All Taxes"},
 
     //         ];
-    
+
     //         worksheet.columns = columns;
-    
+
     //         // Style the header row
     //         worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } }; // White text
     //         worksheet.getRow(1).eachCell((cell) => {
@@ -898,7 +912,7 @@ const useGroupbilling = () => {
     //             };
     //             cell.alignment = { horizontal: 'center', vertical: 'middle' };
     //         });
-    
+
     //         worksheet.getRow(1).height = 30; // Adjust header row height
 
     //         worksheet.columns.forEach((column) => {
@@ -907,8 +921,8 @@ const useGroupbilling = () => {
     //         });
 
     //         rows.forEach((singleData, index) => {
-             
-            
+
+
     //             singleData["SNo"] = index + 1;
     //             // singleData["duty1"]=singleData["duty"]
     //             singleData["toll"] =  singleData["toll"] || 0
@@ -918,7 +932,7 @@ const useGroupbilling = () => {
     //             singleData["Vendor"] = " Jessy Cabs"
     //             singleData["gsttaxdata"] =`${customerData[0]?.gstTax|| 0}%`
     //              singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
-        
+
     //             singleData["withoutTaxes"]=  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"] || 0,singleData["parking"] || 0,singleData["permit"] || 0)
     //             singleData["totalcalcAmount"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] || 0: addPercentage(singleData["totalcalcAmount"] || 0,customerData[0]?.gstTax)
     //             worksheet.addRow(singleData);
@@ -933,7 +947,7 @@ const useGroupbilling = () => {
     //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
     //             });
     //         });
-    
+
     //         // Add rows to the worksheet
     //         // rows.forEach((row, index) => {
     //         //     const formattedRow = {
@@ -966,8 +980,8 @@ const useGroupbilling = () => {
     //         //         pickup: row.pickup || 'N/A',
     //         //     };
 
-          
-    
+
+
     //         // Adjust column width dynamically based on content
     //         worksheet.eachRow({ includeEmpty: false }, (row) => {
     //             // store each cell to currentCell
@@ -987,7 +1001,7 @@ const useGroupbilling = () => {
     //             });
     //         });
 
-    
+
     //         // Save the workbook
     //         const buffer = await workbook.xlsx.writeBuffer();
     //         const blob = new Blob([buffer], { type: "application/octet-stream" });
@@ -1006,14 +1020,14 @@ const useGroupbilling = () => {
     //         setErrorMessage("Data is Empty");
     //         return;
     //     }
-    
+
     //     const workbook = new Excel.Workbook();
     //     const workSheetName = 'Group Billing';
-    
+
     //     try {
     //         const fileName = "Group Billing";
     //         const worksheet = workbook.addWorksheet(workSheetName);
-    
+
     //         const columns = [
     //             { key: "SNo", header: "Ref" },
     //             { key: "customer", header: 'c.Name' },
@@ -1051,9 +1065,9 @@ const useGroupbilling = () => {
     //             { key: "driverBeta_amount", header: "DND/Toll/Parking Amount" },
     //             { key: "totalcalcAmount", header: "Amount With All Taxes" },
     //         ];
-    
+
     //         worksheet.columns = columns;
-    
+
     //         // Style the header row
     //         worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } }; // White text
     //         worksheet.getRow(1).eachCell((cell) => {
@@ -1070,14 +1084,14 @@ const useGroupbilling = () => {
     //             };
     //             cell.alignment = { horizontal: 'center', vertical: 'middle' };
     //         });
-    
+
     //         worksheet.getRow(1).height = 30; // Adjust header row height
-    
+
     //         worksheet.columns.forEach((column) => {
     //             column.width = column.header.length + 5;
     //             column.alignment = { horizontal: 'center', vertical: 'middle' };
     //         });
-    
+
     //         rows.forEach((singleData, index) => {
     //             singleData["SNo"] = index + 1;
     //             singleData["toll"] = singleData["toll"] || 0;
@@ -1086,7 +1100,7 @@ const useGroupbilling = () => {
     //             singleData["Vendor"] = "Jessy Cabs";
     //             singleData["gsttaxdata"] = `${customerData[0]?.gstTax || 0}%`;
     //             singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : "00:00";
-                
+
     //             // Format date fields using dayjs
     //             if (singleData["tripsheetdate"]) {
     //                 singleData["tripsheetdate"] = dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY");
@@ -1100,18 +1114,18 @@ const useGroupbilling = () => {
     //             singleData["withoutTaxes"] = withoutTaxesdata(singleData["totalcalcAmount"], singleData["toll"] || 0, singleData["parking"] || 0, singleData["permit"] || 0);
     //             singleData["totalcalcAmount"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] || 0 : addPercentage(singleData["totalcalcAmount"] || 0, customerData[0]?.gstTax);
     //             worksheet.addRow(singleData);
-    
+
     //             // Adjust column width dynamically based on content
     //             worksheet.columns.forEach((column) => {
     //                 const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
     //                 const cellLength = cellValue.toString().length; // Get length of cell value as a string
     //                 const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-    
+
     //                 // Set column width to the maximum of current width and cell length plus extra space
     //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
     //             });
     //         });
-    
+
     //         // Adjust column width dynamically based on content
     //         worksheet.eachRow({ includeEmpty: false }, (row) => {
     //             const currentCell = row._cells;
@@ -1125,7 +1139,7 @@ const useGroupbilling = () => {
     //                 };
     //             });
     //         });
-    
+
     //         // Save the workbook
     //         const buffer = await workbook.xlsx.writeBuffer();
     //         const blob = new Blob([buffer], { type: "application/octet-stream" });
@@ -1138,10 +1152,10 @@ const useGroupbilling = () => {
     //     }
     // };
 
-    function totalamountgst(gst,total) {
-        console.log(gst,total,'zipgst')
+    function totalamountgst(gst, total) {
+        console.log(gst, total, 'zipgst')
         let gsttax = (gst * total) / 100;
-        console.log(gsttax,'zipgst')
+        console.log(gsttax, 'zipgst')
         return gsttax.toFixed(2);
 
     }
@@ -1159,14 +1173,14 @@ const useGroupbilling = () => {
             setErrorMessage("Data is Empty");
             return;
         }
-    
+
         const workbook = new Excel.Workbook();
         const workSheetName = 'Group Billing';
-    
+
         try {
             const fileName = "Group Billing";
             const worksheet = workbook.addWorksheet(workSheetName);
-    
+
             const columns = [
                 { key: "SNo", header: "Ref" },
                 { key: "customer", header: 'c.Name' },
@@ -1205,11 +1219,11 @@ const useGroupbilling = () => {
                 { key: "TOTALtollandpark", header: "DND/Toll/Parking Amount" },
                 { key: "totalcalcAmount1", header: "Amount With All Taxes" },
 
-                
+
             ];
-    
+
             worksheet.columns = columns;
-    
+
             worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
             worksheet.getRow(1).eachCell((cell) => {
                 cell.fill = {
@@ -1225,14 +1239,14 @@ const useGroupbilling = () => {
                 };
                 cell.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-    
+
             worksheet.getRow(1).height = 30;
-    
+
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
                 column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-    
+
             rows.forEach((singleData, index) => {
                 singleData["SNo"] = index + 1;
                 singleData["toll"] = singleData["toll"] || 0;
@@ -1241,33 +1255,33 @@ const useGroupbilling = () => {
                 singleData["Vendor"] = "Jessy Cabs";
                 singleData["gsttaxdatanumber"] = `${customerData[0]?.gstTax || 0}%`;
                 singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : "";
-    
+
                 if (singleData["tripsheetdate"] && dayjs(singleData["tripsheetdate"]).isValid()) {
                     singleData["tripsheetdate"] = dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY");
                 } else {
                     singleData["tripsheetdate"] = "";
                 }
-    
+
                 if (singleData["starttime"] && dayjs(singleData["starttime"], "HH:mm:ss").isValid()) {
                     singleData["starttime"] = dayjs(singleData["starttime"], "HH:mm:ss").format("HH:mm");
                 } else {
                     singleData["starttime"] = "";
                 }
-    
+
                 if (singleData["shedintime"] && dayjs(singleData["shedintime"], "HH:mm:ss").isValid()) {
                     singleData["shedintime"] = dayjs(singleData["shedintime"], "HH:mm:ss").format("HH:mm");
                 } else {
                     singleData["shedintime"] = "";
                 }
-                singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
-                singleData["OutstationCharges"]= 0
+                singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] : singleData["calcPackage"]
+                singleData["OutstationCharges"] = 0
                 singleData["withoutTaxes"] = withoutTaxesdata(singleData["totalcalcAmount"], singleData["toll"] || 0, singleData["parking"] || 0, singleData["permit"] || 0);
-                singleData["gsttaxdata"] = totalamountgst(customerData[0]?.gstTax,singleData["withoutTaxes"])
-                singleData["TOTALtollandpark"] =  addTollparkparking(singleData["toll"],singleData["parking"],singleData["permit"])
-                singleData["totalcalcAmount1"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["withoutTaxes"],singleData["gsttaxdata"], singleData["TOTALtollandpark"])
-    
+                singleData["gsttaxdata"] = totalamountgst(customerData[0]?.gstTax, singleData["withoutTaxes"])
+                singleData["TOTALtollandpark"] = addTollparkparking(singleData["toll"], singleData["parking"], singleData["permit"])
+                singleData["totalcalcAmount1"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] : addPercentage(singleData["withoutTaxes"], singleData["gsttaxdata"], singleData["TOTALtollandpark"])
+
                 worksheet.addRow(singleData);
-    
+
                 worksheet.columns.forEach((column) => {
                     const cellValue = singleData[column.key] || '';
                     const cellLength = cellValue.toString().length;
@@ -1275,7 +1289,7 @@ const useGroupbilling = () => {
                     column.width = Math.max(currentColumnWidth, cellLength + 5);
                 });
             });
-    
+
             worksheet.eachRow({ includeEmpty: false }, (row) => {
                 const currentCell = row._cells;
                 currentCell.forEach((singleCell) => {
@@ -1288,7 +1302,7 @@ const useGroupbilling = () => {
                     };
                 });
             });
-    
+
             const buffer = await workbook.xlsx.writeBuffer();
             const blob = new Blob([buffer], { type: "application/octet-stream" });
             const link = document.createElement("a");
@@ -1299,10 +1313,10 @@ const useGroupbilling = () => {
             console.error("Error generating Excel file:", error);
         }
     };
-    
-    
-        
-    
+
+
+
+
 
     const handleCoverPDFDownload = () => {
         if (rows.length === 0) {
@@ -1325,7 +1339,7 @@ const useGroupbilling = () => {
     //                 const billingDetails = response.data;
     //                 if (billingDetails) {
     //                     setSelectedCustomerDatas(billingDetails);
-                        
+
     //                    console.log("true",billingDetails)
     //                     setSuccess(true);
     //                     // setDisabelData(false)
@@ -1378,14 +1392,14 @@ const useGroupbilling = () => {
 
         }
     }
-    const handlecustomer = async(e)=>{
-        console.log(e,"ppp")
+    const handlecustomer = async (e) => {
+        console.log(e, "ppp")
         setCustomer(e)
-      const data =  await customerMotherdatagroupstation(e);
-    setServiceStation(data)
-        
+        const data = await customerMotherdatagroupstation(e);
+        setServiceStation(data)
 
-        
+
+
     }
 
     const handleRowSelection = (newSelectionModel) => {
@@ -1477,17 +1491,17 @@ const useGroupbilling = () => {
         setRefPdfPrint(false)
     }
     const handleGstPdf = () => {
-        if(rowSelectionModel.length === 0){
+        if (rowSelectionModel.length === 0) {
             setError(true);
             setErrorMessage("Please Select The Row");
             return
         }
-        if(!invoiceno){
+        if (!invoiceno) {
             setError(true);
             setErrorMessage("RefrenceNo Not created");
             return
         }
-      
+
         setRefPdfPrint(true)
     }
 
@@ -1555,9 +1569,11 @@ const useGroupbilling = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                if(invoiceno!==""){
                 const response = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`);
                 console.log(response.data, 'groupresp');
                 setGroupBillingData(response.data)
+                }
             }
             catch (err) {
                 console.log(err);
@@ -1565,7 +1581,7 @@ const useGroupbilling = () => {
             }
         }
         fetchData()
-    }, [invoiceno])
+    }, [apiUrl,invoiceno])
 
 
     const handleRemoveData = async () => {
@@ -1673,7 +1689,7 @@ const useGroupbilling = () => {
 
             // const ToDate = dayjs(toDate).format('YYYY-MM-DD')
             // const ToDate = dayjs(toDate).format('DD-MM-YYYY')
-            const ToDate = dayjs(refPdfData[refPdfData.length-1]?.startdate).format('YYYY-MM-DD')
+            const ToDate = dayjs(refPdfData[refPdfData.length - 1]?.startdate).format('YYYY-MM-DD')
             // const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
             // const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
             const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
@@ -1694,9 +1710,9 @@ const useGroupbilling = () => {
                     Trips: TripsCount,
                     Amount: TotalAmount,
                     Trip_id: selectedRow,
-                    State:stateNamce,
+                    State: stateNamce,
                     // station: department,
-                    
+
                 };
                 console.log(groupbillList, 'group========');
 
@@ -1739,17 +1755,17 @@ const useGroupbilling = () => {
             rowSelectedValues?.forEach((li) => {
                 TotalAmount += li;
             });
-            console.log(rowSelectedValues,'rowselected values',groupAmount);
-            
+            console.log(rowSelectedValues, 'rowselected values', groupAmount);
+
             const selectedTotal = rowSelectedValues?.reduce((sum, value) => sum + value, 0);
             const groupTotal = (groupAmount || []).reduce((sum, value) => sum + value, 0);
-            console.log('groupbill22s', groupAmount, selectedTotal, 'tot', groupTotal + selectedTotal,'TotalAmount',TotalAmount);
+            console.log('groupbill22s', groupAmount, selectedTotal, 'tot', groupTotal + selectedTotal, 'TotalAmount', TotalAmount);
 
             // const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
             // const ToDate = dayjs(toDate).format('YYYY-MM-DD')
             // const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
             const FromDate = dayjs(refPdfData[0]?.startdate).format('DD-MM-YYYY')
-            const ToDate = dayjs(refPdfData[refPdfData.length-1]?.startdate).format('DD-MM-YYYY')
+            const ToDate = dayjs(refPdfData[refPdfData.length - 1]?.startdate).format('DD-MM-YYYY')
             const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
             console.log(fromDate, ToDate, InvoiceDate, TripsCount, TotalAmount, 'usegroup');
 
@@ -1797,33 +1813,33 @@ const useGroupbilling = () => {
         }
     }
 
-    const handleInvoicegenerate = async()=> {
+    const handleInvoicegenerate = async () => {
 
         if (rowSelectionModel.length === 0) {
             setError(true);
             setErrorMessage("Please select the Row");
             return;
         }
-        if (referInvoiceno === "created"){
+        if (referInvoiceno === "created") {
             setError(true);
             setisBillload(false)
             setErrorMessage("Already INVOICE Generated");
             return;
         }
-        console.log(selectedRow,"ROWTRIPD")
-        try{
+        console.log(selectedRow, "ROWTRIPD")
+        try {
             setisBillload(true)
             const InvoiceDate1 = dayjs(Billingdate).format('YYYY-MM-DD')
-          
+
             const groupinvoiceList = {
-                InvoiceDate:InvoiceDate1,
+                InvoiceDate: InvoiceDate1,
                 Trip_id: selectedRow,
-                State:servicestation,
+                State: servicestation,
                 ReferenceNo: invoiceno,
-                Invoiceno:"created",
-                
+                Invoiceno: "created",
+
             };
-            const response =await axios.post(`${apiUrl}/billgeneratecoveringbill`,groupinvoiceList)
+            const response = await axios.post(`${apiUrl}/billgeneratecoveringbill`, groupinvoiceList)
             console.log(response)
             setSuccess(true)
             setisBillload(false)
@@ -1832,7 +1848,7 @@ const useGroupbilling = () => {
 
 
         }
-        catch{
+        catch {
             setisBillload(false)
         }
 
@@ -1892,7 +1908,7 @@ const useGroupbilling = () => {
         billingGroupDetails,
         setBillingGroupDetails,
         handleInvoicegenerate,
-        handlecustomer,disabeldata,referInvoiceno,setReferINVOICENO,isSaveload , setisSaveload,isgroupEditload , setisGfoupEditload,isBllload , setisBillload
+        handlecustomer, disabeldata, referInvoiceno, setReferINVOICENO, isSaveload, setisSaveload, isgroupEditload, setisGfoupEditload, isBllload, setisBillload
 
     };
 };

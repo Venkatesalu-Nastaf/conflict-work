@@ -301,7 +301,7 @@ setSationNameforUser(updatedData);
                   />
                 </div>
 
-                <div className="input" style={{ paddingRight: '15px' }}>
+                {/* <div className="input" style={{ paddingRight: '15px' }}>
                   <FormLabel htmlFor='SuperAdmin'>SuperAdmin</FormLabel>
                   <Switch
                     label='label'
@@ -312,7 +312,7 @@ setSationNameforUser(updatedData);
 
                     checked={book.superAdmin}
                   />
-                </div>
+                </div> */}
               
                 <div className="input user-creation-station-select-main">
                   <div className="icone">
@@ -425,6 +425,7 @@ setSationNameforUser(updatedData);
                     id="Role"
                     style={{ width: '100%' }}
                   /> */}
+                 
                         
                         <Autocomplete
                                   fullWidth
@@ -755,6 +756,7 @@ setSationNameforUser(updatedData);
                       <div className='user-table-permission' style={{ cursor: "pointer" }} onClick={() => {
                         togglePermission(row);
                         handleRowClickUser(row)
+                        setRoleFielddropdown('')
                       }}
                         key={index}>
                         {/* <img src={row.profile_image} alt="profile" width="50" /> */}

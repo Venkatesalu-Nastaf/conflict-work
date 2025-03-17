@@ -22,7 +22,8 @@ import ModifyDriver from "./ModifyDriver/ModifyDriver"
 import HistoryLocationModal from "./HistoryLocationModal/HistoryLocationModal"
 import AddTags from "./AddTags/AddTags"
 import Detailsvehicle from "./Detailsvehicle/Detailsvehicle"
-import VehicleInformationDrawer from "./VehicleInformationDrawer/VehicleInformationDrawer"
+import VehicleInformationDrawer from "./VehicleInformationDrawer/VehicleInformationDrawer";
+import VehcileSectionDrawer from './vehicleSectionDrawer/VehicleSectionDrawer';
 import { useNavigate } from 'react-router-dom';
 import useDetailsVehicle from './useDetailsVehicle';
 import { VehicleMapData } from '../../vehicleMapContext/vehcileMapContext';
@@ -54,17 +55,18 @@ CustomTabPanel.propTypes = {
 
 
 
-const VehicleSection = () => {
+const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) => {
 
-  const { setOpenHistoryDrawer, setOpenmessage, setOpenshare, setOpenDriverModify, setHistoryLocation, setOpenAddTag, setOpendetailsDrawer, setOpen,vehicleListData,setVehicleListData,
-    vehicleSearchDetails,setVehicleSearchDetails
-   } = useContext(PermissionContext)
+  const { setOpenHistoryDrawer, setOpenmessage, setOpenshare, setOpenDriverModify, setHistoryLocation, setOpenAddTag, setOpendetailsDrawer, setOpen, vehicleListData, setVehicleListData,
+    vehicleSearchDetails, setVehicleSearchDetails
+  } = useContext(PermissionContext)
   const { vehiclesData } = useDetailsVehicle()
-  const {jessyCabsDistance, vehcilecurrentAddress} = VehicleMapData()
+  const { jessyCabsDistance, vehcilecurrentAddress } = VehicleMapData()
   const [selectedOption, setSelectedOption] = useState('Vehicle');
   const [searchTerm, setSearchTerm] = useState('');
   const [dropdownValue, setDropdownValue] = useState('');
-
+  const [selectValue, setSelectedValue] = useState(false);
+  const [vehNo,setVehNo] = useState(null)
   const handleToggleChange = (event, newOption) => {
     if (newOption !== null) {
       setSelectedOption(newOption);
@@ -78,16 +80,21 @@ const VehicleSection = () => {
   const handleDropdownChange = (event) => {
     setDropdownValue(event.target.value);
   };
-
+  const [vehicleOpenDrawer, setVehicleOpenDrawer] = useState(false)
+  const handleClose = () => {
+    setVehicleOpenDrawer(false)
+  }
   //vehicle section drawer
-  const toggleDrawer = (open,vehno) => (event) => {
-    console.log(vehno,"vehnooo");
-    
-    setVehicleSearchDetails(vehno)
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
+  const toggleDrawer = (open, vehno) => (event) => {
+    console.log(vehno, "vehnooo");
+
+    setVehicleSearchDetails(vehno);
+    setVehNo(vehno)
+    // if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    //   return;
+    // }
     setOpen(open);
+    setVehicleOpenDrawer(true)
   };
 
 
@@ -125,15 +132,26 @@ const VehicleSection = () => {
   const handleOpenhistoryLocation = () => {
     setHistoryLocation(true);
   };
-  const filteredVehicles = vehiclesData?.filter((vehicle) => {
-    return (
-      vehicle.vehRegNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.driverName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.stations?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.fueltype?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.vehicleName?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  // const filteredVehicles = allVehicleList?.filter((vehicle) => {
+  //   return (
+  //     vehicle.vehRegNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     vehicle.driverName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     vehicle.stations?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     vehicle.fueltype?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     vehicle.vehicleName?.toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
+  // });
+  const filteredVehicles = Array.isArray(allVehicleList)
+    ? allVehicleList.filter((vehicle) => {
+      return (
+        vehicle.vehRegNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.driverName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.stations?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.fueltype?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.vehicleName?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    })
+    : [];
   return (
     <>
       <div className='vehicle-section'>
@@ -197,60 +215,60 @@ const VehicleSection = () => {
           </div>
         </div>
         {selectedOption === 'Vehicle' && (
-          
-          <div className='vehicle-details' style={{height:"400px", overflow:"auto"}} >
+
+          <div className='vehicle-details' style={{ height: "400px", overflow: "auto" }} >
             <div className="vehicle-indiduals">
-              { filteredVehicles?.map((li)=>(
-<>
-              <div className='vehicle-indiduals-cards' onClick={toggleDrawer(true,li?.vehRegNo)}>
-                <div className='vehicle-indiduals-cards-width' >
-                  <div className='vehicle-indiduals-cards'>
-                    <h3 className='heading-three ' onClick={toggleDrawer(true,li?.vehRegNo)}>{li?.vehRegNo}</h3>
-                    <div className='location-icon'>
-                      <FaLocationArrow className='white-text' />
+              {filteredVehicles?.map((li) => (
+                <>
+                  <div className='vehicle-indiduals-cards' onClick={toggleDrawer(true, li?.vehRegNo)}>
+                    <div className='vehicle-indiduals-cards-width' >
+                      <div className='vehicle-indiduals-cards'>
+                        <h3 className='heading-three ' onClick={toggleDrawer(true, li?.vehRegNo)}>{li?.vehRegNo}</h3>
+                        <div className='location-icon'>
+                          <FaLocationArrow className='white-text' />
+                        </div>
+                      </div>
+
+                      <div className='flex-class margins'>
+                        <p className='indidual-para text-color' onClick={toggleDrawer(true)}>Group: {li?.stations}</p>
+                        <p className='flex-class indidual-para driver-para text-color' onClick={toggleDrawer(true)}> <span>Driver: {li?.driverName}</span> <span onClick={handleClickOpenDriverModify}>< FiUpload /></span></p>
+                      </div>
+
+                      <div className='flex-class margins'>
+                        <p className='flex-class indidual-para ' onClick={toggleDrawer(true)}> <span>< GoClock /></span><span className='text-warning'>15m</span></p>
+                        <p className='indidual-para driver-para text-warning' onClick={toggleDrawer(true)}>2.5 km</p>
+                        <p className='indidual-para driver-para text-color' onClick={toggleDrawer(true)}>speed: <span className='text-warning'>25 km/h</span></p>
+                      </div>
+                      <p className='indidual-para margins' onClick={toggleDrawer(true)}> <span><CiLocationOn /></span> <span></span></p>
+                      <p className='indidual-para margins vehicle-nearest-address' onClick={toggleDrawer(true)} > NEAREST ADDRESS: {jessyCabsDistance} km from JESSY CABS ( Office )</p>
+                      <div className='vehicle-indiduals-cards'>
+                        <p className='indidual-para margins' onClick={toggleDrawer(true)}> <span><GiPathDistance /></span> <span className='not-on-job-vehicle-info'>Not On Job</span></p>
+                        <div className='call-share-message'>
+                          <div className="call-icon">
+                            <a href="tel:+4733378901"><IoCall className='white-text' /></a>
+                          </div>
+                          <div className="share-icon" onClick={handleClickOpenshare}>
+                            <BsFillShareFill className='white-text' />
+
+                          </div>
+                          <div className="message-icon" onClick={handleClickOpenMessage}>
+                            <BiSolidMessageRounded className='white-text' />
+
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  <div className='flex-class margins'>
-                    <p className='indidual-para text-color' onClick={toggleDrawer(true)}>Group: chennai</p>
-                    <p className='flex-class indidual-para driver-para text-color' onClick={toggleDrawer(true)}> <span>Driver: {li?.driverName}</span> <span onClick={handleClickOpenDriverModify}>< FiUpload /></span></p>
+                  <div className='last-row-buttons' style={{ marginBottom: "10px" }} >
+                    <button className='bottom-buttons' onClick={handleOpenHistoryDrawer}>History</button>
+                    <button className='bottom-buttons' onClick={handleOpendetailsDrawer}>Details</button>
+                    <button className='bottom-buttons' onClick={handleClickOpenAddTag}>Add Tag</button>
+                    <button className='bottom-buttons' onClick={handleOpenhistoryLocation}>History Location</button>
                   </div>
+                </>
+              ))
 
-                  <div className='flex-class margins'>
-                    <p className='flex-class indidual-para ' onClick={toggleDrawer(true)}> <span>< GoClock /></span><span className='text-warning'>15m</span></p>
-                    <p className='indidual-para driver-para text-warning' onClick={toggleDrawer(true)}>2.5 km</p>
-                    <p className='indidual-para driver-para text-color' onClick={toggleDrawer(true)}>speed: <span className='text-warning'>25 km/h</span></p>
-                  </div>
-                  <p className='indidual-para margins' onClick={toggleDrawer(true)}> <span><CiLocationOn /></span> <span>{vehcilecurrentAddress}</span></p>
-                  <p className='indidual-para margins vehicle-nearest-address' onClick={toggleDrawer(true)} > NEAREST ADDRESS: {jessyCabsDistance} km from JESSY CABS ( Office )</p>
-                  <div className='vehicle-indiduals-cards'>
-                    <p className='indidual-para margins' onClick={toggleDrawer(true)}> <span><GiPathDistance /></span> <span className='not-on-job-vehicle-info'>Not On Job</span></p>
-                    <div className='call-share-message'>
-                      <div className="call-icon">
-                        <a href="tel:+4733378901"><IoCall className='white-text' /></a>
-                      </div>
-                      <div className="share-icon" onClick={handleClickOpenshare}>
-                        <BsFillShareFill className='white-text' />
-
-                      </div>
-                      <div className="message-icon" onClick={handleClickOpenMessage}>
-                        <BiSolidMessageRounded className='white-text' />
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className='last-row-buttons'  style={{marginBottom:"10px"}} >
-                <button className='bottom-buttons' onClick={handleOpenHistoryDrawer}>History</button>
-                <button className='bottom-buttons' onClick={handleOpendetailsDrawer}>Details</button>
-                <button className='bottom-buttons' onClick={handleClickOpenAddTag}>Add Tag</button>
-                <button className='bottom-buttons' onClick={handleOpenhistoryLocation}>History Location</button>
-              </div>
-              </>
-                            ))
-
-            }
+              }
 
             </div>
 
@@ -276,7 +294,8 @@ const VehicleSection = () => {
       <HistoryLocationModal />
       <AddTags />
       <ModifyDriver />
-      <VehicleInformationDrawer />
+      {/* <VehicleInformationDrawer /> */}
+      <VehcileSectionDrawer open={vehicleOpenDrawer} handleClose={handleClose} vehicleCurrentLocation={vehicleCurrentLocation} vehNo={vehNo} todayVehicle={todayVehicle} />
       <ShareIconPopup />
       <MessageIconPopup />
     </>

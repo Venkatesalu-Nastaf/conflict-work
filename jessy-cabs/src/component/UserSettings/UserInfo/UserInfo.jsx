@@ -191,7 +191,7 @@ const UserSetting = () => {
                       onChange={handleChange}
                       // disabled={!editMode}
                       // disabled={Number(superpower) === 0}
-                      disabled={!editMode || Number(superpower) === 0}
+                      disabled={!editMode || superpower !== "SuperAdmin"}
                     />
                   </div>
                   <div className="input">
@@ -209,7 +209,8 @@ const UserSetting = () => {
                       }
                       onChange={handleChange}
                       // disabled={!editMode}
-                      disabled={!editMode || Number(superpower) === 0}
+                      // disabled={!editMode || Number(superpower) === 0}
+                      disabled={!editMode || superpower !== "SuperAdmin"}
                     />
                   </div>
                   <div className="input">
@@ -226,7 +227,8 @@ const UserSetting = () => {
                       onChange={handleChange}
                       autoFocus
                       // disabled={!editMode}
-                      disabled={!editMode || Number(superpower) === 0}
+                      // disabled={!editMode || Number(superpower) === 0}
+                      disabled={!editMode || superpower !== "SuperAdmin"}
                     />
                   </div>
                  

@@ -129,7 +129,8 @@ router.delete('/tripsheet-imagedelete', (req, res) => {
     const pathimage = req.query.path
     const sql = 'delete from tripsheetupload where path=?';
     const sql2 = 'delete from booking_doc where path=?'
-    const removeFromLocal = path.join("./uploads", pathimage)
+    // const removeFromLocal = path.join("./uploads", pathimage)
+    const removeFromLocal = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
     // const removeFromLocal = path.join(__dirname, "uploads", pathimage)
 
     const removeFile = () => {
@@ -224,7 +225,8 @@ router.delete('/booking_doc-delete/:imagedata/:tripid', async (req, res) => {
                     if (err) {
                         reject(err);
                     } else {
-                        const deleteImagePath = path.join('./uploads', img);
+                        // const deleteImagePath = path.join('./uploads', img);
+                        const deleteImagePath = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
                         if (fs.existsSync(deleteImagePath)) {
                             try {
                                 fs.unlinkSync(deleteImagePath);

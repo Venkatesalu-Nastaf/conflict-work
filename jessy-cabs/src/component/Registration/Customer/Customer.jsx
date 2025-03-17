@@ -160,7 +160,6 @@ const Customer = ({ stationName }) => {
                     className='full-width'
                     autoComplete="new-password"
                     value={selectedCustomerData?.customerId || ""}
-
                   />
                 </div>
                 {/* <div className="input">
@@ -288,7 +287,10 @@ const Customer = ({ stationName }) => {
                     }
                   />
                 </div>
-                <div className="input">
+       {/* ------------------------------------------------------------------ */}
+                {/* Dont remove this field */}
+
+                {/* <div className="input">
                   <div className="icone">
                     <AccountBalanceWalletIcon color="action" />
                   </div>
@@ -303,9 +305,9 @@ const Customer = ({ stationName }) => {
                     onChange={handleChange}
                     id="opBalance"
                   />
-                </div>
+                </div> */}
 
-                <div className="input radio">
+                {/* <div className="input radio">
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
                       A/C Type
@@ -331,7 +333,9 @@ const Customer = ({ stationName }) => {
                       />
                     </RadioGroup>
                   </FormControl>
-                </div>
+                </div> */}
+        {/* ------------------------------------------------------ */}
+
                 <div className='customer-billing-group-input-division input'>
                   <FormLabel htmlFor='hybrid'>Hybrid</FormLabel>
                   <Switch
@@ -545,7 +549,10 @@ const Customer = ({ stationName }) => {
                     )}
                   />
                 </div>
-                <div className="input">
+
+                {/* Dont delete this code  */}
+                
+                {/* <div className="input">
                   <div className='icone'>
                     <GrSelect />
                   </div>
@@ -568,7 +575,7 @@ const Customer = ({ stationName }) => {
                     }
                     }
                   />
-                </div>
+                </div> */}
                 <div className="input">
                   <div className="icone">
                     <StoreIcon color="action" />

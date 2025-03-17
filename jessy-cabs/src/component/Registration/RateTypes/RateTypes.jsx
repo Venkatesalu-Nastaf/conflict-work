@@ -28,14 +28,18 @@ const RateTypes = ({ stationName, organizationNames,vehileName }) => {
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="RateType" value="ratetype" />
                 <Tab label="Package Rate" value="packagerateentery" />
-                <Tab label="Driver Bata Rate" value="driverbatarate" />
+                {/* Dont delete this -------------------- */}
+                {/* <Tab label="Driver Bata Rate" value="driverbatarate" /> */}
+                {/* ---------------------------------------------------------- */}
                 {/* <Tab label="Ratevalidity" value="ratevalidity" />
                 <Tab label="Division" value="division" /> */}
               </TabList>
             </Box>
             <TabPanel value="ratetype"><RateType stationName={stationName} /></TabPanel>
             <TabPanel value="packagerateentery"><PackageRateEntery organizationNames={organizationNames} vehileName={vehileName} stationname={stationName}/></TabPanel>
-            <TabPanel value="driverbatarate"><DriverBataRate /></TabPanel>
+            {/* dont delete this --------------------------- */}
+            {/* <TabPanel value="driverbatarate"><DriverBataRate /></TabPanel> */}
+            {/* ------------------------------------------------------------ */}
             {/* <TabPanel value="ratevalidity"><Ratevalidity /></TabPanel>
             <TabPanel value="division"><Division /></TabPanel> */}
           </TabContext>

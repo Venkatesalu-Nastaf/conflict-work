@@ -210,10 +210,10 @@ const HistoryLocationModal = () => {
           {markerLocation && (
             <MarkerF
               position={markerLocation}
-              icon={{
-                anchor: new google.maps.Point(137 / 2, 137 / 2),
-                scaledSize: new google.maps.Size(137, 137),
-              }}
+              // icon={{
+              //   anchor: new google.maps.Point(137 / 2, 137 / 2),
+              //   scaledSize: new google.maps.Size(137, 137),
+              // }}
               onClick={handleOpenPopup} // Open popup on marker click
             />
           )}

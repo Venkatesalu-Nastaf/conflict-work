@@ -10,6 +10,7 @@ export const PdfData = () => {
 };
 
 export const PdfDataProvider = ({ children }) => {
+    const currentYear = new Date().getFullYear(); 
     const apiUrl = APIURL
     const [pdfPrint, setPdfPrint] = useState(false);
     const [billingPage, setBillingPage] = useState(null);
@@ -18,6 +19,7 @@ export const PdfDataProvider = ({ children }) => {
     const [individualBilled, setIndividualBilled] = useState(true)
     const [particularRefNo, setParticularRefNo] = useState('');
     const [billGenerate,setBillGenerate] = useState(false);
+    const [selectedYear, setSelectedYear] = useState(currentYear);
     const [organizationDetail, setOrganizationDetail] = useState({
         organizationname: '',
         addressLine1: '',
@@ -63,13 +65,13 @@ export const PdfDataProvider = ({ children }) => {
         };
 
         fetchdata();
-    });
+    },[apiUrl]);
 
     return (
         <DataContext.Provider value={{
             pdfPrint, setPdfPrint, billingPage, setBillingPage, individualBilled, setIndividualBilled,billGenerate,setBillGenerate,
             transferReport, setTransferReport, particularPdf, setParticularPdf, organizationDetail, particularRefNo, setParticularRefNo,
-            selectedMonths,setSelectedMonths
+            selectedMonths,setSelectedMonths,selectedYear,setSelectedYear
         }}>
             {children}
         </DataContext.Provider>

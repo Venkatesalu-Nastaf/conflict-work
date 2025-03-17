@@ -76,7 +76,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
   const Roledatauser = localStorage.getItem("SuperAdmin")
   
   const filteredStatus =
-  Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO"
+  Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO" || Roledatauser === "Billing_Headoffice"
       ? Status // Show all statuses for superAdmin and CFo
       : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
 
@@ -144,14 +144,14 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
   const { permissions } = useContext(PermissionContext)
   const TripStatus_read = permissions[2]?.read;
 
-  useEffect(() => {
-    if (customer?.length > 1) {
-      setAllCustomer([...customer, { customer: "All" }])
-    }
-    else {
-      setAllCustomer(customer)
-    }
-  })
+  // useEffect(() => {
+  //   if (customer?.length > 1) {
+  //     setAllCustomer([...customer, { customer: "All" }])
+  //   }
+  //   else {
+  //     setAllCustomer(customer)
+  //   }
+  // })
   useEffect(() => {
 
     if (stationName?.length > 0) {

@@ -9,7 +9,8 @@ const TripDetailModal = ({ position,  }) => {
     if (!position) return null;
 
     const handleClose = () => setTripModalOpen(false);
-
+        console.log(position,"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+        
     return (
         <Modal
             open={true}

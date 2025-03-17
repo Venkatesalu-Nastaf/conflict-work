@@ -30,14 +30,13 @@ const useExeclpage = () => {
         { key: "orderedby", header: "Category", width: 120 },
         { key: "duty", header: "Route Type", width: 120 },
         { key: "duty1", header: "Sub Route Type", width: 150 },
-
         { key: "VendorName", header: "Vendor Name", width: 150 },
         // { key: "Vendor", header: "Vendor", width: 120 },
-        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
+        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
+        { key: "vehicleName", header: "Vehicle Actual Make", width: 180 },
         { key: "vehType", header: "Vehicle Type (Requested)", width: 200 },
         // { key: "vechicletype", header: "Vehicle Actual Make", width: 180 },
-        { key: "vehicleName", header: "Vehicle Actual Make", width: 180 },
         // { key: "vehTypebilling", header: "Billing Vehicle Type", width: 180 },
         { key: "fueltype", header: "Fuel Type", width: 120 },
         // { key: "tripsheetdate", header: "Date", width: 120 },
@@ -78,7 +77,8 @@ const useExeclpage = () => {
         { key: "ex_hrAmount", header: "Extra HRs Amount", width: 160 },
 
         { key: "night_totalAmount", header: "Night Charges", width: 150 },
-        { key: "driverBeta", header: "Driver Bhatta", width: 150 },
+        // { key: "driverBeta", header: "Driver Bhatta", width: 150 },
+        { key: "driverBeta_amount", header: "Driver Bhatta", width: 150 },
         { key: "OutstationCharges", header: "Outstation Charges", width: 180 },
         { key: "withoutTaxes", header: "Total Amount", width: 150 },
         // { key: "PenaltyAmount", header: "Penalty Amount", width: 150 },
@@ -105,12 +105,11 @@ const useExeclpage = () => {
         { key: "duty", header: "Route Type", width: 120 },
         { key: "calcPackage", header: "Package", width: 150 },
         { key: "VendorName", header: "Vendor Name", width: 150 },
-        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
+        { key: "vehicleName2", header: "Vehicle Name", width: 120 }, 
         // { key: "vehType", header: "Vehicle Make", width: 180 },
         { key: "vehicleName", header: "Vehicle Make", width: 180 },
         { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
-
         { key: "segement", header: "vehicle Segment", width: 180 },
         { key: "fueltype", header: "Fuel Used", width: 120 },
         // { key: "tripsheetdate", header: "Date", width: 120 },
@@ -154,7 +153,7 @@ const useExeclpage = () => {
     const hidePopup = () => {
 
         setError1(false);
-
+ 
 
     };
     // function addPercentage(amount, percent) {
@@ -175,12 +174,12 @@ const useExeclpage = () => {
        let amount = parseFloat(amount1) || 0;
        let percent = parseFloat(percent1) || 0;
        let  tollamount = parseFloat(toll1) || 0;
-       console.log(amount,percent,tollamount,'zipgstadddd')
+    //    console.log(amount,percent,tollamount,'zipgstadddd')
     
       
     
         const datapercent = amount + percent + tollamount;
-        console.log(datapercent,'zipgstaddddpercent',Math.round(datapercent))
+        // console.log(datapercent,'zipgstaddddpercent',Math.round(datapercent))
     
         return Math.round(datapercent);
     }
@@ -201,9 +200,9 @@ const useExeclpage = () => {
     }
 
     function totalamountgst(gst,total) {
-        console.log(gst,total,'zipgst')
+        // console.log(gst,total,'zipgst')
         let gsttax = (gst * total) / 100;
-        console.log(gsttax,'zipgst')
+        // console.log(gsttax,'zipgst')
         return gsttax.toFixed(2);
 
     }
@@ -216,9 +215,9 @@ const useExeclpage = () => {
     // }
 
     function addTollparkparking(toll, parking, permit) {
-        console.log(toll, parking, permit, 'zip');
+        // console.log(toll, parking, permit, 'zip');
         let tollparkparking = (Number(toll) || 0) + (Number(parking) || 0) + (Number(permit) || 0);
-        console.log(tollparkparking, 'ziptotal');
+        // console.log(tollparkparking, 'ziptotal');
         return tollparkparking;
     }
     
@@ -278,12 +277,18 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 data.map((singleData, index) => {
                     console.log(data,'datas of excel datss')
-                
+
+                    if (singleData["duty"] === "Outstation") {
+                        singleData["originalExtraKM"] = singleData["extraKM"]; // Store original value
+                        singleData["extraKM"] = 0;
+                        singleData["extraHR"] = 0;
+                        singleData["ex_kmAmount"] = 0;
+                    }
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
                     const location = `${singleData.address1}`;
@@ -294,18 +299,22 @@ const useExeclpage = () => {
                     singleData["VendorName"] = " Jessy Cabs"
                     singleData["UserNos_Occupancy"] = 1
                     singleData["OutstationCharges"] = 0
-                    singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    // singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    // singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"])  : singleData["calcPackage"];
+                    singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"] || singleData["originalExtraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"]): singleData["calcPackage"];
+                    singleData["package_amount"] = singleData["duty"] === "Outstation"   ?   singleData["ex_kmAmount"] : singleData["package_amount"]
                     singleData["vechicletype"] = singleData["vehType"]
                     // singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
     
-
+ 
                     singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
-                     singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
+                    singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
                     singleData["starttime1"]= removeSeconds(singleData["starttime1"])
+
                     // singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax,singleData["totalcalcAmount"])
                     
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):"00:00"
@@ -328,19 +337,42 @@ const useExeclpage = () => {
                         column.width = Math.max(currentColumnWidth, cellLength + 5);
                     });
                 });
-                const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseInt(row.withoutTaxes || 0, 10), 0);
-                const totalAmountgstAmount = data.reduce((sum, row) => sum + parseInt(row.gstTax1 || 0, 10), 0);
-                const totalparkandtollAmount = data.reduce((sum, row) => sum + parseInt(row.TOTALtollandpark || 0, 10), 0);
-                const Amountwithtax = data.reduce((sum, row) => sum + parseInt(row.totalcalcAmount1 || 0, 10), 0);
-                const totalRow = worksheet.addRow({});
-                totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
-                totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
+
+
+                // Ensure all numbers are considered with decimals
+const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseFloat(row.withoutTaxes || 0), 0);
+const totalAmountgstAmount = data.reduce((sum, row) => sum + parseFloat(row.gstTax1 || 0), 0);
+const totalparkandtollAmount = data.reduce((sum, row) => sum + parseFloat(row.TOTALtollandpark || 0), 0);
+
+// Calculate total with all taxes
+const Amountwithtax = totalAmountnoaddpark + totalAmountgstAmount + totalparkandtollAmount;
+
+// Round the final total
+const roundedAmountWithTax = Math.round(Amountwithtax);
+
+const totalRow = worksheet.addRow({});
+totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
+totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
+totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value = totalAmountgstAmount;
+totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
+totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = roundedAmountWithTax; // Ensure final rounding
+
+                // const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseInt(row.withoutTaxes || 0, 10), 0);
+                // // const totalAmountgstAmount = data.reduce((sum, row) => sum + parseInt(row.gstTax1 || 0, 10), 0);
+                // const totalAmountgstAmount = Math.round(
+                //     data.reduce((sum, row) => sum + parseFloat(row.gstTax1 || 0), 0)
+                // );
+                // const totalparkandtollAmount = data.reduce((sum, row) => sum + parseInt(row.TOTALtollandpark || 0, 10), 0);
+                // const Amountwithtax = data.reduce((sum, row) => sum + parseInt(row.totalcalcAmount1 || 0, 10), 0);
+                // const totalRow = worksheet.addRow({});
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
                 totalRow.eachCell((cell) => {
                     cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.alignment = { horizontal: 'left', vertical: 'left' };
                     cell.border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -414,7 +446,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet1.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 data2.forEach((singleData2, index) => {
@@ -429,6 +461,7 @@ const useExeclpage = () => {
                     singleData2["calcPackage"] =  singleData2["duty"] === "Transfer" || singleData2["duty"] === "Outstation" ? singleData2["duty"] :singleData2["calcPackage"]
                     singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
+                    singleData2["sheoutDatetrip"]=singleData2["shedOutDate"] ? dayjs(singleData2["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData2["shedInDate"]=singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD/MM/YYYY"):""
                     singleData2["tripsheetdate"]=singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
@@ -493,7 +526,7 @@ const useExeclpage = () => {
     }
 
 
-    const handledatazipDownload = async (tripheaderIndex,misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel,customerData,stationData) => {
+    const handledatazipDownload = async (tripheaderIndex,misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel,customerData,stationData,bookingMail) => {
         console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation, " console for datas")
         
         const data = invoice;
@@ -541,7 +574,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 const uniqueData = data.filter((value, index, self) =>
@@ -562,12 +595,15 @@ const useExeclpage = () => {
                     singleData["OutstationCharges"] = 0
                     singleData["vechicletype"] = singleData["vehType"]
                     singleData["vehTypebilling"] = singleData["vehType"]
-                    singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    // singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"])  : singleData["calcPackage"];
+                    singleData["package_amount"] = singleData["duty"] === "Outstation"   ?   singleData["ex_kmAmount"] : singleData["package_amount"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
+                    singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
                     singleData["starttime1"] = removeSeconds(singleData["starttime"])
                     singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):""
@@ -603,7 +639,7 @@ const useExeclpage = () => {
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
                 totalRow.eachCell((cell) => {
                     cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.alignment = { horizontal: 'left', vertical: 'left' };
                     cell.border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -671,7 +707,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 const uniqueData = data.filter((value, index, self) =>
@@ -690,6 +726,7 @@ const useExeclpage = () => {
                     singleData["vehType1"] = singleData["vehType"]
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
+                    singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
                     singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
                     singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
@@ -762,7 +799,7 @@ const useExeclpage = () => {
                 ).toBlob();
 
                 const pdfBytes = await blob.arrayBuffer();
-// dont delete this code
+            // dont delete this code
                 const reactPDFDocument = await PDFDocument.load(pdfBytes);
 
                 // const data = await JSON.parse(pdfData.bookattachedimage)
@@ -774,11 +811,11 @@ const useExeclpage = () => {
                 const uniqueArraybook1 = Array.from(new Set(data1?.map(JSON.stringify)))?.map(JSON.parse);
                 const uniqueJsonStringbook1 = JSON.stringify(uniqueArraybook1);
                 const datalink1 = JSON.parse(uniqueJsonStringbook1)
-
-                //  const data = await JSON.parse(pdfData.bookattachedimage)
-                // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
-                // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-                // const datalink = JSON.parse(uniqueJsonStringbook)
+                
+                const data = await JSON.parse(pdfData.bookattachedimage)
+                const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+                const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+                const datalink = JSON.parse(uniqueJsonStringbook)
 
                 
 
@@ -835,28 +872,31 @@ const useExeclpage = () => {
                         }
                     }
                 }
-                // for (const data of datalink) {
-                //     if (data.imagees !== null) {
-                //         const data2 = data.imagees.split('.').pop()
-                //         console.log(data2, "datalonk22")
-                //         if (data2 === "pdf") {
+                if(bookingMail) {
+                    console.log(bookingMail, "jhgfffffff")
+                for (const data of datalink) {
+                    if (data.imagees !== null) {
+                        const data2 = data.imagees.split('.').pop()
+                        console.log(data2, "datalonk22")
+                        if (data2 === "pdf") {
 
-                //             const filePath = `${apiurl}/images/${data.imagees}`;
-                //             console.log(filePath, "datalinkpdfpath")
+                            const filePath = `${apiurl}/images/${data.imagees}`;
+                            console.log(filePath, "datalinkpdfpath")
 
-                //             // Fetch the PDF file
-                //             const response = await fetch(filePath);
-                //             const pdfBytes = await response.arrayBuffer();
+                            // Fetch the PDF file
+                            const response = await fetch(filePath);
+                            const pdfBytes = await response.arrayBuffer();
 
-                //             // Load the PDF document
-                //             const pdfDocument = await PDFDocument.load(pdfBytes);
-                //             console.log(pdfDocument)
+                            // Load the PDF document
+                            const pdfDocument = await PDFDocument.load(pdfBytes);
+                            console.log(pdfDocument)
 
-                //             // Add the PDF document to the array
-                //             pdfDocuments.push(pdfDocument);
-                //         }
-                //     }
-                // }
+                            // Add the PDF document to the array
+                            pdfDocuments.push(pdfDocument);
+                        }
+                    }
+                }
+            }
 
 
                 const mergedPDFDocument = await PDFDocument.create();

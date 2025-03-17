@@ -64,7 +64,7 @@ const LogDetails = () => {
   //   const columns = headers.map((key) => {
   //     let valueFormatter = null;
 
- 
+
   //     if (["bookingdate", "startdate", "tripsheet_date", "shedInDate", "shedOutDate", "Reportdate", "closedate"].includes(key)) {
   //       valueFormatter = (params) => {
   //         return params.value ? dayjs(params.value).format('DD-MM-YYYY') : '';
@@ -98,7 +98,7 @@ const LogDetails = () => {
       let valueFormatter = null;
       let renderCell = null;
 
-   
+
 
       // if (["bookingdate", "startdate", "tripsheet_date", "shedInDate", "shedOutDate", "Reportdate", "closedate"].includes(key)) {
       //   valueFormatter = (params) => {
@@ -229,10 +229,12 @@ const LogDetails = () => {
       const response = await axios.get(`${apiurl}/bookinglogdetailsget`, {
         params: logDateDetails,
       });
-      const data = response.data;
+      const data = response.data;      
       if (data.length > 0) {
 
         const rowsWithUniqueId = data.map((row, index) => ({
+          id:row.id,
+          username: row.username,
           ...row,
           // id5: index + 1,
 
@@ -360,18 +362,28 @@ const LogDetails = () => {
       console.log(data, "ff")
       if (data.length > 0) {
 
-        const rowsWithUniqueId = data.map((row, index) => ({
-          ...row,
-          // id5: index + 1,
+        // const rowsWithUniqueId = data.map((row, index) => ({
+        //   ...row,
+        //   // id5: index + 1,
 
+        //   tripsheet_date: row.tripsheet_date ? dayjs(row.tripsheet_date).format('DD-MM-YYYY') : '',
+        //   shedOutDate: row.shedOutDate ? dayjs(row.shedOutDate).format('DD-MM-YYYY') : '',
+        //   Reportdate: row.Reportdate ? dayjs(row.Reportdate).format('DD-MM-YYYY') : '',
+        //   closedate: row.closedate ? dayjs(row.closedate).format('DD-MM-YYYY') : '',
+        //   shedInDate: row.shedInDate ? dayjs(row.shedInDate).format('DD-MM-YYYY') : ''
+        // }));
+
+        //  venkat code
+        const rowsWithUniqueId = data.map((row, index) => ({
+          id:row.id,
+          username: row.username, // Move username to the top
+          ...row, // Spread other properties
           tripsheet_date: row.tripsheet_date ? dayjs(row.tripsheet_date).format('DD-MM-YYYY') : '',
           shedOutDate: row.shedOutDate ? dayjs(row.shedOutDate).format('DD-MM-YYYY') : '',
           Reportdate: row.Reportdate ? dayjs(row.Reportdate).format('DD-MM-YYYY') : '',
           closedate: row.closedate ? dayjs(row.closedate).format('DD-MM-YYYY') : '',
           shedInDate: row.shedInDate ? dayjs(row.shedInDate).format('DD-MM-YYYY') : ''
         }));
-
-
 
 
         const groupedByBookingNo = rowsWithUniqueId.reduce((acc, log) => {
@@ -519,7 +531,7 @@ const LogDetails = () => {
           const rowsWithUniqueId = bookingDetails.map((row, index) => ({
             ...row,
             // id5: index + 1,
-  
+
             tripsheet_date: row.tripsheet_date ? dayjs(row.tripsheet_date).format('DD-MM-YYYY') : '',
             shedOutDate: row.shedOutDate ? dayjs(row.shedOutDate).format('DD-MM-YYYY') : '',
             Reportdate: row.Reportdate ? dayjs(row.Reportdate).format('DD-MM-YYYY') : '',
@@ -530,10 +542,10 @@ const LogDetails = () => {
           const rowsWithUniqueId1 = bookingDetails.map((row, index) => ({
             ...row,
             // id5: index + 1,
-  
+
             bookingdate: row.bookingdate ? dayjs(row.bookingdate).format('DD-MM-YYYY') : '',
             startdate: row.startdate ? dayjs(row.startdate).format('DD-MM-YYYY') : '',
-  
+
           }));
           const checkingdata = logDateDetails.selectType === "Booking" ? rowsWithUniqueId1 : rowsWithUniqueId
 

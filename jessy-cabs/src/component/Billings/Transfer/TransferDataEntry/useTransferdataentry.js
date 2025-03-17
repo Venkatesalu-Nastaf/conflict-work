@@ -19,7 +19,8 @@ const columns = [
     { field: "totalcalcAmount", headerName: "Amount", width: 130 },
     { field: "customer", headerName: "Customer", width: 130 },
     { field: "vehRegNo", headerName: "VehicleReg.No", width: 130 },
-    { field: "vehType", headerName: "VehicleType", width: 130 },
+    // { field: "vehType", headerName: "VehicleType", width: 130 },
+    { field: "vehicleName", headerName: "VehicleType", width: 130 },
     { field: "guestname", headerName: "UserName", width: 150 },
     { field: "groupname", headerName: "GroupName", width: 130 },
     // { field: "totalcalcAmount", headerName: "Amount", width: 130 },
@@ -59,7 +60,7 @@ const useTransferdataentry = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     // const [bankOptions, setBankOptions] = useState([]);
     const [warning, setWarning] = useState(false);
-    const [warningMessage] = useState({});
+    const [warningMessage,setWarningMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [infoMessage, setINFOMessage] = useState({});
     const [successMessage, setSuccessMessage] = useState({});
@@ -71,7 +72,7 @@ const useTransferdataentry = () => {
     const [info, setInfo] = useState(false);
     const location = useLocation();
     const [transferId, setTransferId] = useState([])
-    const [tripAmount, setTripAmount] = useState('')
+    // const [tripAmount, setTripAmount] = useState('')
     const [latestTripNo, setLatestTripNo] = useState([])
     const [latestGroupNo, setLatestGroupNo] = useState(0)
     const [lengthCheck, setLengthCheck] = useState()
@@ -82,6 +83,8 @@ const useTransferdataentry = () => {
     const [selectTripid, setSelectTripid] = useState([])
     const [loading, setLoading] = useState(false)
     const [matchTripID, setMatchTripID] = useState('')
+    const [oldBillDate,setOldBillDate] = useState("");
+    const [stateenter,setStateEnter] = useState("");
 
     // loading //
     const [isbtnloading, setisbtnloading] = useState(false);
@@ -256,6 +259,20 @@ const useTransferdataentry = () => {
         localStorage.removeItem('fromDate');
         localStorage.removeItem('toDate');
         localStorage.removeItem('selectedRowCount');
+        // new code---------------
+        setInvoiceno('');
+        setTransferId([])
+        setCustomer('');
+        setGroupId('');
+        setStateEnter('')
+        setBillingdate();
+     
+    
+        setFromDate(dayjs())
+        // setFormData({});
+ 
+        setRowSelectionModel([])
+        // -----------------------------
     };
 
     // info box------------------
@@ -329,6 +346,7 @@ const useTransferdataentry = () => {
         setFromDate(updatedFormData.FromDate || dayjs());
         setEndDate(updatedFormData.EndDate);
         setBillingdate(updatedFormData.Billdate);
+        setOldBillDate(updatedFormData.Billdate);
         setServiceStation(updatedFormData.Stations);
         setTotalValue(parseInt(updatedFormData.Amount));
         setBillingPage(updatedFormData?.billingsheet)
@@ -350,8 +368,9 @@ const useTransferdataentry = () => {
             setBook('')
             setSelectedCustomerDatas('');
             setServiceStation('');
-            setFromDate(dayjs())
+            setFromDate(dayjs()) 
             // setFormData({});
+            setBillingdate();
             setRows([])
             setRowSelectionModel([])
         }
@@ -442,6 +461,7 @@ const useTransferdataentry = () => {
                         }));
                         setTripData(rowsWithUniqueId);
                         setRows(rowsWithUniqueId);
+                        setCombinedRows(rowsWithUniqueId)
                     }
                     // No need to set loading here; it will be false at the end
                 }
@@ -515,10 +535,12 @@ const useTransferdataentry = () => {
     const handlechnageinvoice = (event) => {
         setInvoiceno(event.target.value)
     }
-    // const handleserviceInputChange = (event, newValue) => {
-    //     console.log("sattaions added")
-    //     setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
-    // };
+    const handleserviceInputChange = (event, newValue) => {
+        console.log("sattaions added")
+    // const [stateenter,setStateEnter] = useState("");
+    // setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
+    setStateEnter(newValue ? decodeURIComponent(newValue.label) : '');
+    };
 
 
 
@@ -552,19 +574,19 @@ const useTransferdataentry = () => {
             .filter((tripid) => tripid !== null);
         setSelectTripid(selectedTrips)
 
-        const selectedTripAmount = newSelectionModel
-            .filter((selectedId) => selectedId !== null)
-            .map((selectedId) => {
-                const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
-                const amount = selectedRow ? parseInt(selectedRow.totalcalcAmount) : null;
-                // Only replace NaN with 0, keep other values as they are
-                return isNaN(amount) ? 0 : amount;
-            });
+        // const selectedTripAmount = newSelectionModel
+        //     .filter((selectedId) => selectedId !== null)
+        //     .map((selectedId) => {
+        //         const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+        //         const amount = selectedRow ? parseInt(selectedRow.totalcalcAmount) : null;
+        //         // Only replace NaN with 0, keep other values as they are
+        //         return isNaN(amount) ? 0 : amount;
+        //     });
 
         // selected trips
-        const totalSelectedTripAmount = selectedTripAmount.reduce((total, amount) => total + amount, 0) || 0;
+        // const totalSelectedTripAmount = selectedTripAmount.reduce((total, amount) => total + amount, 0) || 0;
 
-        setTripAmount(totalSelectedTripAmount)
+        // setTripAmount(totalSelectedTripAmount)
         setSelectedRow(selectedTrips)
         const tripsheetid = selectedTripIds;
         setRowSelectionModel(tripsheetid);
@@ -987,19 +1009,29 @@ const useTransferdataentry = () => {
             Amount: ActualAmount,
             Trips: Trips,
 
+            
+        }
+
+
+
+        if (rowSelectionModel.length === 0) {
+            setError(true)
+            setErrorMessage("Select The Row")
+            return
         }
         try {
             const resultresponse = await axios.put(`${apiUrl}/updateList`, TransferUpdate)
-            const updatedRows = rows.filter(row => !selectId.includes(row.id));
-            setSuccess(true)
-            setSuccessMessage("Successfully Removed")
-            setRows(updatedRows);
-            setSelectedRow([]);
-            setMatchTripID('')
-            setRowSelectionModel([])
-            setCombinedRows(updatedRows)
+            // const updatedRows = rows.filter(row => !selectId.includes(row.id));
+            // setSuccess(true)
+            // setSuccessMessage("Successfully Removed")
+            // setRows(updatedRows);
+            // setSelectedRow([]);
+            // setMatchTripID('')
+            // setRowSelectionModel([])
+            // setCombinedRows(updatedRows)
 
-            const responsedata = resultresponse.data
+            const responsedata = resultresponse.data.results[0]
+            // console.log(responsedata,"transferdataerr",)
             if (responsedata.affectedRows > 0) {
                 const updatedRows = rows.filter(row => !selectId.includes(row.id));
 
@@ -1007,13 +1039,22 @@ const useTransferdataentry = () => {
                 setRowSelectionModel([])
                 setRows(updatedRows);
                 setSelectedRow([]);
+                setMatchTripID('')
                 setCombinedRows(updatedRows)
+                  setSuccess(true)
+            setSuccessMessage("Successfully Removed")
 
             }
 
         }
-        catch (err) {
-            console.log(err, 'error');
+        catch (error) {
+            console.log(error, 'comberror');
+            if (error.message === 'Network Error') {
+                setError(true);
+                setisbtnloading(false)
+                setErrorMessage("Check your internet connection");
+                // console.log('Network error');
+            }
         }
 
     }
@@ -1031,8 +1072,8 @@ const useTransferdataentry = () => {
         const amount = totalValue - totalAmount
         const TotalAmount = amount.toString()
         const updatedRows = rows.filter(row => !selectId.includes(row.id));
-        const totalPrice = selectedRow.reduce((sum, li) => sum + li.totalcalcAmount, 0);
-        const ActualAmount = parseInt(totalAmount) - totalPrice
+        // const totalPfrice = selectedRow.reduce((sum, li) => sum + li.totalcalcAmount, 0);
+        // const ActualAmount = parseInt(totalAmount) - totalPrice
 
         if (rowSelectionModel.length === 0) {
             setError(true);
@@ -1633,7 +1674,7 @@ const useTransferdataentry = () => {
 
 
     const customerMotherdatagroupstation = async (customer) => {
-        console.log(customer, "enetr")
+        // console.log(customer, "enetr")
         try {
             const resultresponse = await axios.get(`${apiUrl}/customerinvoicecreate/${customer}`)
             const datas = resultresponse.data;
@@ -1645,10 +1686,11 @@ const useTransferdataentry = () => {
         }
     }
     const handlecustomer = async (e) => {
-        console.log(e, "ppp")
+        // console.log(e, "ppp")
         setCustomer(e)
         const data = await customerMotherdatagroupstation(e);
         setServiceStation(data)
+        setStateEnter(data)
 
 
 
@@ -1675,7 +1717,7 @@ const useTransferdataentry = () => {
         }
 
 
-        if (rowSelectionModel.length === 0) {
+        if (rowSelectionModel.length === 0 && Billingdate === oldBillDate) {
             setError(true);
             setErrorMessage("Please select the Row");
             return;
@@ -1846,21 +1888,22 @@ const useTransferdataentry = () => {
         }
         else if (groupId !== "") {
             // updateTransferListTrip'
-            if (rowSelectionModel.length === 0) {
+                        
+            if (rowSelectionModel.length === 0 && Billingdate === oldBillDate ) {
+            
                 setError(true);
-                setErrorMessage("Please select the Row");
+                setErrorMessage("Please select the Row or Change the Billing Date");
                 return;
-    
             }
             try {
                 if (!rows || rows.length === 0) {
                     throw new Error("Rows data is empty");
                 }
                 setisbtnloading(true)
-                const fromdate2 = rows[0]?.startdate;
-                const enddate = rows[rows.length - 1]?.startdate;
-                const fromDate1 = dayjs(fromdate2).format('YYYY-MM-DD');
-                const EndDate = dayjs(enddate).format('YYYY-MM-DD');
+                // const fromdate2 = rows[0]?.startdate;
+                // const enddate = rows[rows.length - 1]?.startdate;
+                // const fromDate1 = dayjs(fromdate2).format('YYYY-MM-DD');
+                // const EndDate = dayjs(enddate).format('YYYY-MM-DD');
 
                 const billdate = selectedCustomerDatas?.Billingdate || Billingdate;
                 const billDate = dayjs(billdate).format('YYYY-MM-DD');
@@ -1878,7 +1921,7 @@ const useTransferdataentry = () => {
                 });
 
                 const amount = response.data[0].Amount;
-                const trips = response.data[0].Trips;
+                // const trips = response.data[0].Trips;
                 const tripid = response.data[0].Trip_id;
 
                 // const TotalTrips = parseInt(trips) + parseInt(Trips)
@@ -1920,19 +1963,20 @@ const useTransferdataentry = () => {
                     return
                 }
                 // Combine rowSelectionModelAsStrings and tripid into a new array
-                const combinedArray = [...rowSelectionModelAsStrings, tripid];
+                // const combinedArray = [...rowSelectionModelAsStrings, tripid];
                 // const uniqueTripIds = [...new Set(combinedArray)];
                 // const uniqueTripIds = [...new Set(combinedArray)].filter(tripId => tripId !== "");
-                const uniqueTripIds = [
-                    ...new Set(
-                        combinedArray
-                            .flatMap((tripId) => tripId.split(',')) // Split comma-separated values into individual IDs
-                            .filter((tripId) => tripId.trim() !== "") // Filter out empty strings after trimming
-                    ),
-                ];
+                // const uniqueTripIds = [
+                //     ...new Set(
+                //         combinedArray
+                //             .flatMap((tripId) => tripId.split(',')) // Split comma-separated values into individual IDs
+                //             .filter((tripId) => tripId.trim() !== "") // Filter out empty strings after trimming
+                //     ),
+                // ];
 
-                console.log(uniqueTripIds, "com")
-                const dadatrip = uniqueTripIds.length
+                // console.log(uniqueTripIds, "com")
+                // const dadatrip = uniqueTripIds.length
+                const dadatrip = combinedTripIds.length
                 const TotalTrips = parseInt(dadatrip) // Results in ["1358", "1358"]
                 const todate = dayjs(toDate).format('YYYY-MM-DD')
                 const totalamount = fullTotalAmount.toString()
@@ -1952,9 +1996,9 @@ const useTransferdataentry = () => {
                 }
                 console.log(transferlist, "not empty",filteredRows);
 
-                if (filteredRows.length > 0) {
+                // if (filteredRows.length > 0) {
 
-                    const updateresponse = await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
+                 await axios.post(`${apiUrl}/updateParticularTransferList`, transferlist);
                     setSuccess(true)
                     setisbtnloading(false)
                     setSuccessMessage("Successfully Added")
@@ -1969,7 +2013,7 @@ const useTransferdataentry = () => {
                 }
 
 
-            }
+            // }
             // catch (error) {
             //     console.error("Error occurred:", error);
             //     setErrorMessage("Failed to add organization: " + error.message);
@@ -2101,19 +2145,19 @@ const useTransferdataentry = () => {
                     const transferTripId = response.data[0].Trip_id;
                     console.log(response.data, "repondedata", transferTripId)
                     setMatchTripID(transferTripId)
-
+                    const BillDate = response.data[0]?.Billdate;
                     const fromDate1 = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
                     const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
-
+                    setOldBillDate(BillDate)
                     setFromDate(fromDate1);
                     setToDate(toDate);
 
                     setCustomer(response.data[0].Organization_name);
                     setInvoiceno(response.data[0].Invoice_no);
-                    setBillingdate(response.data[0].Billdate);
+                    setBillingdate(dayjs(response.data[0]?.Billdate).format('YYYY-MM-DD'));
                     setServiceStation(response.data[0].State)
 
-
+                    
                     // Second API call to get tripsheet details using transferTripId
                     const tripsheetResponse = await axios.get(`${apiUrl}/getTripsheetDetailsFromTransferTripId`, {
                         params: {
@@ -2156,6 +2200,105 @@ const useTransferdataentry = () => {
                     setInvoiceno();
                     setBillingdate();
                     setServiceStation()
+                    setError(true);
+                    setErrorMessage("no data found")
+
+                    console.log('No Trip_id found for the given GroupTripId');
+
+                }
+            } catch (error) {
+                console.log(error, 'error');
+            }
+        }
+    };
+// console.log(stateenter,"state",servicestation)
+
+    const handleKeyenter = async (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const invoicce = event.target.value;
+            // console.log(invoicce,"stateinvoiced")
+            if(!invoicce){
+                setWarning(true);
+                setWarningMessage("Enter Invoiceno")
+                    return
+            }
+            if(!stateenter){
+                setWarning(true);
+                setWarningMessage("Enter State")
+                    return
+            }
+
+            try {
+                // First API call to get Trip_id from GroupTripId
+                const response = await axios.get(`${apiUrl}/getTripIdFromTransferListforinvoiceno`, {
+                    params: {
+                        invoicno:invoicce,
+                        State:stateenter
+                    }
+                });
+
+                if (response.data && response.data.length > 0) {
+                    const transferTripId = response.data[0].Trip_id;
+                    // console.log(response.data, "repondedata", transferTripId)
+                    setMatchTripID(transferTripId)
+                    const BillDate = response.data[0]?.Billdate;
+                    const fromDate1 = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
+                    const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
+                    setOldBillDate(BillDate)
+                    setFromDate(fromDate1);
+                    setToDate(toDate);
+
+                    setCustomer(response.data[0].Organization_name);
+                    setInvoiceno(response.data[0].Invoice_no);
+                    setBillingdate(dayjs(response.data[0]?.Billdate).format('YYYY-MM-DD'));
+                    setServiceStation(response.data[0].State)
+                    setGroupId(response.data[0].Grouptrip_id)
+
+                    
+                    // Second API call to get tripsheet details using transferTripId
+                    const tripsheetResponse = await axios.get(`${apiUrl}/getTripsheetDetailsFromTransferTripId`, {
+                        params: {
+                            transferTripId: transferTripId
+                        }
+                    });
+                    const data = tripsheetResponse.data;
+                    // console.log(data, 'tripresponse');
+                    // const allSameDepartment = data.every(item => item.department === data[0].department);
+
+                    // if (allSameDepartment) {
+                    //     console.log("All department values are the same:", data[0].department);
+                    //     setServiceStation(data[0].department)
+                    // } else {
+                    //     setServiceStation('All')
+                    //     console.log("Department values are not the same.");
+                    // }
+
+
+                    // Filter out rows where tripid is 0
+                    if (data.length > 0) {
+                        const filteredData = data.filter(row => row.tripid !== 0);
+                        const rowsWithUniqueId = filteredData.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        // console.log(rowsWithUniqueId, "enter datas");
+                        setCombinedRows(rowsWithUniqueId)
+                        setRows(rowsWithUniqueId);
+                        setAddEditTrigger(false)
+                        setSuccess(true);
+                        setSuccessMessage("Successfully Listed");
+                    }
+                } else {
+                    setRows([]);
+                    setFromDate();
+                    setToDate();
+
+                    setCustomer();
+                    setInvoiceno();
+                    setBillingdate();
+                    setServiceStation()
+                    setStateEnter()
                     setError(true);
                     setErrorMessage("no data found")
 
@@ -2225,7 +2368,7 @@ const useTransferdataentry = () => {
         selectedCustomerDatas,
         invoiceno,
         setInvoiceno,
-        // handleKeyenter,
+        handleKeyenter,
         customer,
         tripData,
         // bankOptions,
@@ -2238,7 +2381,7 @@ const useTransferdataentry = () => {
         info,
         servicestation,
         setServiceStation,
-        // handleserviceInputChange,
+        handleserviceInputChange,
         handleShow,
         handleCancel,
         handleClickGenerateBill,
@@ -2263,7 +2406,7 @@ const useTransferdataentry = () => {
         setInfo,
         addEditTrigger, setAddEditTrigger,
         infoMessage, setINFOMessage, handlecustomer, isbtnloading, setisbtnloading, iseditloading, setiseditloading, isbillloading, setisbillloading,
-        combinedRows, setCombinedRows
+        combinedRows, setCombinedRows,setBillingdate,stateenter
 
     };
 };

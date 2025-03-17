@@ -47,6 +47,7 @@ const useBooking = () => {
     setpopupOpenmail(false);
   };
   const [nochangedata,setNoChangeData]=useState({})
+  const [dialogmessage,setDialogMessage]=useState(false)
   
   const [escort, setEscort] = useState('No');
   const [transferreport, setTransferreport] = useState('No')
@@ -54,6 +55,13 @@ const useBooking = () => {
   const [isEditbtnload,setisEditbtnload] = useState(false)
    const [deletefile, setDeleteFile] = useState([])
    const [deletefiledata, setDeleteFiledata] = useState([])
+   const [messagedited,setMessageEdited]=useState('')
+   const [messageditedbefore,setMessageEditedBefore]=useState('')
+   const storedUsername = localStorage.getItem("username");
+
+
+   const Roledatauser = localStorage.getItem("SuperAdmin")
+   const datachangeAdmin = Roledatauser === "SuperAdmin" ? true :false;
   
   const [formValues, setFormValues] = useState({
     guestname: "",
@@ -95,12 +103,15 @@ const useBooking = () => {
     const payValue = params.get("paymenttype") || "BTC";
     const dispath = params.get("dispatchcheck");
     const shedOutDate = params.get("shedOutDate")|| dayjs()
-    const startdate = params.get("startdate")|| dayjs()
+    const startdate = params.get("startdate")|| dayjs();
+    const messagedata = params.get("messageedited")|| '';
+    
    
     if (dispath) {
       setSendEmail(false)
       setIsEditMode(dispath)
       setEdit(dispath)
+      setMessageEditedBefore(messagedata)
     }
     const formData = {};
     const parameterKeys = [
@@ -151,7 +162,9 @@ const useBooking = () => {
       "ratenamebook",
       "shedOutDate",
       "escort",
-      'transferreport'
+      'transferreport',
+      'messageedited',
+      'MessageText',
 
 
     ];
@@ -173,6 +186,7 @@ const useBooking = () => {
     setBookingStatus(formData["status"])
     setBook(formData);
     setFormData(formData);
+    // setMessageEdited()
     // console.log(formData,"ll")
   }, [location]);
 
@@ -230,6 +244,7 @@ const useBooking = () => {
     Groups: "",
     escort:'',
     transferreport:"",
+    MessageText:""
   
   }
 
@@ -376,6 +391,30 @@ const useBooking = () => {
       
     ]
   );
+
+ const handleChangetext = (event) => {
+    const { name, value, } = event.target;
+  // const { name, value} = event.target.value;
+  console.log(name,value,"textt")
+  setBook((prevBook) => ({
+    ...prevBook,
+    [name]: value,
+  }));
+  setSelectedCustomerData((prevData) => ({
+    ...prevData,
+    [name]: value,
+  }));
+  setFormData((prevData) => ({
+    ...prevData,
+    [name]: value,
+  }));
+  setMessageEdited(storedUsername)
+  setNoChangeData((prevState) => ({
+    ...prevState,
+    [name]:value
+  }));
+
+ }
 
 //   const handleBookEscortChange = (event) => {
 //     setEscort(event.target.value);
@@ -654,29 +693,52 @@ const useBooking = () => {
     fetchgetvehicleName()
   }, [apiUrl,])
 
+  // Dont Remove------------------------------
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(`${apiUrl}/organizationdata`);
+  //       if (response.status === 200) {
+  //         const userDataArray = await response.json();
+  //         if (userDataArray.length > 0) {
+  //           setOrganisationSendEmail(userDataArray[0])
+  //           setDatatrigger(!datatrigger)
+
+  //         }
+  //          else {
+  //           // setErrorMessage('User data not found.');
+  //           // setError(true);
+  //         }
+  //       }
+  //     }
+  //     catch {
+  //     }
+  //   };
+  //   fetchData();
+  // }, [apiUrl, datatrigger]);
+  // // console.log(nochangedata,"nochnage")
+  // --------------------------------------------------
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/organizationdata`);
-        if (response.status === 200) {
-          const userDataArray = await response.json();
-          if (userDataArray.length > 0) {
-            setOrganisationSendEmail(userDataArray[0])
-            setDatatrigger(!datatrigger)
-
-          }
-           else {
-            // setErrorMessage('User data not found.');
-            // setError(true);
-          }
+        try {
+            const response = await fetch(`${apiUrl}/organizationdata`);
+            if (response.status === 200) {
+                const userDataArray = await response.json();
+                if (userDataArray.length > 0) {
+                    setOrganisationSendEmail(userDataArray[0]);
+                } 
+                else {
+                    // setErrorMessage('User data not found.'); 
+                    // setError(true);
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
         }
-      }
-      catch {
-      }
     };
+
     fetchData();
-  }, [apiUrl, datatrigger]);
-  // console.log(nochangedata,"nochnage")
+}, [apiUrl]);
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -749,6 +811,12 @@ const useBooking = () => {
     const file = e.target.files[0]
     if (file) {
       setFile(file)
+      setNoChangeData((prevValues) => ({
+        ...prevValues,
+        ["Attachimage"]:file,
+      }));
+
+      
     }
     if (booking_no && file) {
       addPdf(booking_no, file)
@@ -980,12 +1048,14 @@ useEffect(() => {
 // console.log(formData.vehiclemodule,selectedCustomerData.vehiclemodule,book.vehiclemodule,selectedCustomerdriver.vehiclemodule,"jss")
   const handleAdd = async () => {
  
-   const guestmobilenodata = selectedCustomerData.guestmobileno || book.guestmobileno
+  //  const guestmobilenodata = selectedCustomerData.guestmobileno || book.guestmobileno
    const servicestationdata = selectedCustomerData.servicestation || book.servicestation
+   const duty = selectedCustomerData.duty || book.duty
    const customerdatas = selectedCustomerData.customer|| book.customer
-   const starttimedata = selectedCustomerData.starttime || book.starttime
-  const guestname = selectedCustomerData.guestname || book.guestname
-  const bookaddress = selectedCustomerData.address1 || book.address1
+   const starttime = selectedCustomerData.starttime || book.starttime
+   const guestname = selectedCustomerData.guestname || book.guestname
+   const reporttime = selectedCustomerData.reporttime || book.reporttime
+   const bookaddress = selectedCustomerData.address1 || book.address1
 
 
     // if (!selectedCustomerData.guestmobileno) {
@@ -1032,41 +1102,49 @@ useEffect(() => {
     //   return;
     // }
 
-     if (!guestmobilenodata) {
-      setError(true);
-      setErrorMessage("Enter Guest Mobile Number");
-      return;
-    }
-
+    if (!customerdatas) {
+      setError(true)
+      setErrorMessage("Enter Customer Name")
+      return
+    }    
     if (!servicestationdata) {
       setError(true);
       setErrorMessage("Enter Station");
       return;
     }
-    if (!reportdate) {
-      setError(true);
-      setErrorMessage("Enter Report Date");
-      return;
-    }
-    if (!customerdatas) {
-      setError(true)
-      setErrorMessage("Enter Customer Name")
-      return
-    }
-    if (!starttimedata) {
-      setError(true)
-      setErrorMessage("Enter starting Time")
-      return
-    }
-   
     if (!guestname) {
       setError(true)
-      setErrorMessage("Enter GuestName")
+      setErrorMessage("Enter Guest Name")
       return
     }
+    // if (!guestmobilenodata) {
+    //   setError(true);
+    //   setErrorMessage("Enter Guest Mobile Number");
+    //   return;
+    // }
     if (!bookaddress) {
       setError(true);
       setErrorMessage("Enter Address Details");
+      return;
+    }
+    if (!duty) {
+      setError(true);
+      setErrorMessage("Enter Duty ");
+      return;
+    }
+    if (!reporttime) {
+      setError(true);
+      setErrorMessage("Enter Shed Out Time");
+      return;
+    }
+    if (!starttime) {
+      setError(true)
+      setErrorMessage("Enter Report Time")
+      return
+    }
+    if (hybdridatabooking && selectetImg.length === 0 ) {
+      setError(true);
+      setErrorMessage("Attach the file");
       return;
     }
 
@@ -1126,7 +1204,9 @@ useEffect(() => {
         customer: restSelectedCustomerData.customer || book.customer,
         escort:formData.escort || selectedCustomerData.escort || book.escort || escort,
         transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport || transferreport,
-        hybridhcldata:hybdridatabooking
+        hybridhcldata:hybdridatabooking,
+        messageedited:messagedited,
+        MessageText:formData.MessageText || selectedCustomerData.MessageText || book.MessageText
 
       };
       // console.log(updatedBook,"pppp")
@@ -1261,11 +1341,13 @@ if (Object.keys(nochangedata).length === 0) {
         customer: restSelectedCustomerData.customer,
         escort:formData.escort || selectedCustomerData.escort || book.escort,
         transferreport:formData.transferreport || selectedCustomerData.transferreport || book.transferreport,
-        hybridhcldata:hybdridatabooking
+        hybridhcldata:hybdridatabooking,
+        messageedited:messagedited,
+        MessageText:formData.MessageText || selectedCustomerData.MessageText || book.MessageText
       };
 
       const editbookno = book.bookingno || selectedCustomerData.bookingno || formData.bookingno
-      const response = await axios.put(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`,
+      const response = await axios.put(`${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}/${datachangeAdmin}`,
         updatedCustomer
       )
       handlebooklogDetails(updatedCustomer, editbookno, "Edited")
@@ -1280,6 +1362,7 @@ if (Object.keys(nochangedata).length === 0) {
         } else {
           setInfo(true);
           setInfoMessage(response.data.message);
+          setisEditbtnload(false)
         }
         setEdit(false)
 
@@ -1343,6 +1426,9 @@ if (Object.keys(nochangedata).length === 0) {
     // }
   // };
 
+
+  // console.log(isEditbtnload,"load")
+
   const handleKeyDown = async (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -1360,6 +1446,8 @@ if (Object.keys(nochangedata).length === 0) {
         setSelectedCustomerData(bookingDetails);
         setSelectedCustomerId(bookingDetails.tripid);
         setBookingStatus(bookingDetails?.status);
+        setMessageEditedBefore(bookingDetails?.messageedited)
+        setMessageEdited(bookingDetails?.messageedited)
         setIsEditMode(true);
         setEdit(true);
         setSendEmail(false);
@@ -1476,7 +1564,7 @@ if (Object.keys(nochangedata).length === 0) {
       localStorage.setItem("username", username);
     }
   }, [user]);
-  const storedUsername = localStorage.getItem("username");
+  // const storedUsername = localStorage.getItem("username");
   const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
   const handleClosedeleteDialog = () => {
     setDialogdeleteOpen(false);
@@ -1492,6 +1580,10 @@ if (Object.keys(nochangedata).length === 0) {
           setImagedata([]);
           setDeleteFile([]);
           setSelectAll(false);
+          setNoChangeData((prevValues) => ({
+            ...prevValues,
+            ["deleteimage"]: "yesdeleted",
+          }));
         }
       })
       .catch((err) => {
@@ -1631,6 +1723,13 @@ if (Object.keys(nochangedata).length === 0) {
     travelsdatafetch(selectedOption)
   };
 
+
+  const handleMessageData  = ()=>{
+    setDialogMessage(true)
+  }
+  const handleCloseMessage = ()=>{
+    setDialogMessage(false)
+  }
   //--------------------------------------------------------
 
   return {
@@ -1711,8 +1810,8 @@ if (Object.keys(nochangedata).length === 0) {
      imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning,
     // handleBookEscortChange,
     // handleAirportTransferChange,
-    transferreport,setTransferreport,escort,setEscort,setNoChangeData,nochangedata,
-    isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload,handleButtonClickwithouttripid,dialogOpentrail,handleCloseDialogtrail,handlecheckbox1
+    transferreport,setTransferreport,escort,setEscort,setNoChangeData,nochangedata,handleCloseMessage,dialogmessage,handleMessageData,messagedited,messageditedbefore,
+    isAddbtnload,setisAddbtnload,isEditbtnload,setisEditbtnload,handleButtonClickwithouttripid,dialogOpentrail,handleCloseDialogtrail,handlecheckbox1,handleChangetext
   };
 };
 export default useBooking;

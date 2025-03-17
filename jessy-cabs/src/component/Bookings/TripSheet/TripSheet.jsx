@@ -4448,7 +4448,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
                         value={
                           formData.hireTypes ||
@@ -4478,7 +4478,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
                         onInputChange={(event, newInputValue) => {
                           if (event && newInputValue) {
@@ -4519,7 +4519,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
                         // onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
                         onInputChange={(event, value) => {
@@ -4565,7 +4565,7 @@ Please Click the link to close E-Tripsheet-`}
                           handleAutocompleteChange(event, value, "vehType")
                         }
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         renderInput={(params) => {
                           return (
                             <TextField {...params} name='vehType' label="Vehicle Type" inputRef={params.inputRef} />
@@ -4585,7 +4585,7 @@ Please Click the link to close E-Tripsheet-`}
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName2")}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         value={selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
                         options={vehileNames?.map((option) => ({
                           label: option,
@@ -4607,7 +4607,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => {
                           handleAutocompleteChange(event, value, "vehicleName");
                           if (!lockdata && value) {
@@ -4640,7 +4640,7 @@ Please Click the link to close E-Tripsheet-`}
                           book.Groups || ""
                         }
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         options={GroupTypes ? GroupTypes.map((option) => ({ label: option?.Option })) : []} // Fallback to an empty array
                         onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
                         renderInput={(params) => {
@@ -4704,7 +4704,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handleDriverChange(event, value, "driverName")}
                         // onInputChange={(event, value) => handleDriverChange(event, value, "driverName")} 
                         onInputChange={(event, value) => {
@@ -4742,7 +4742,7 @@ Please Click the link to close E-Tripsheet-`}
                           book.mobileNo || selectedCustomerDatas.mobileNo || formData.mobileNo || ""}
                         onChange={handleChange}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         label="Driver Phone"
                         id="mobileNo"
                         size='small'
@@ -4766,7 +4766,7 @@ Please Click the link to close E-Tripsheet-`}
                         }
                         onChange={handleChange}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         label="Travels Email"
                         id="travelsemail"
                         size='small'
@@ -4795,7 +4795,7 @@ Please Click the link to close E-Tripsheet-`}
                             }}
 
                             // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                             value={vendorinfo?.vendor_vehicle}
                             options={vehileNames?.map((option) => ({
                               label: option,
@@ -4814,7 +4814,7 @@ Please Click the link to close E-Tripsheet-`}
                             sx={{ width: "100%" }}
 
                             // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head"&& superAdminAccess !== "Billing_Headoffice")}
                             onChange={(event, value) => {
                               if (!lockdata) {
                                 handleAutocompleteVendor(event, value, "vendor_duty")

@@ -23,7 +23,6 @@ const Cards = () => {
   const { totalAmountSum, selectedMonth2, setSelectedMonth2 } = useCard();
   const { selectedMonths, setSelectedMonths, selectedYear, setSelectedYear } = PdfData();
 
-
   const TotalNumber = (number) => {
     if (!number || isNaN(number)) {
       return number; // Return a default or fallback value

@@ -2395,10 +2395,10 @@ router.post('/gmappost-submitForm', (req, res) => {
 // Collect maplogdata for gmapdata table
 router.get('/get-gmapdata/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
+    db.query('SELECT * FROM gmapdata WHERE tripid = ? AND trip_type != "On_Going"', [tripid], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-        }
+        }        
         return res.status(200).json(results);
     });
 });

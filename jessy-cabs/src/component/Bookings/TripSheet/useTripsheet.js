@@ -404,7 +404,7 @@ const useTripsheet = () => {
             try {
                 const { tripid } = selectedMapRow;
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
-                const data = response.data;
+                const data = response.data;                
                 setRow(data);
             } catch (error) {
                 console.error('Error fetching map data:', error);
@@ -539,7 +539,23 @@ const useTripsheet = () => {
         }
     };
     // console.log(mapimageUrls1,"urls")
-
+    const rearrangeTripData = (tripData) => {
+        if (!Array.isArray(tripData)) return [];
+      
+        // Separate start, end, and waypoints
+        const startPoint = tripData.find(item => item.trip_type === "start");
+        const endPoint = tripData.find(item => item.trip_type === "end");
+        const waypoints = tripData.filter(item => item.trip_type !== "start" && item.trip_type !== "end");
+      
+        // Build the final sorted array
+        const sortedTripData = [
+          ...(startPoint ? [startPoint] : []),
+          ...waypoints,
+          ...(endPoint ? [endPoint] : [])
+        ];
+      
+        return sortedTripData;
+      };
 
     const handleTripmaplogClick = async () => {
         try {
@@ -550,7 +566,10 @@ const useTripsheet = () => {
             } else {
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
                 const data = response.data;
-                setRow(data);
+                console.log(data,"d--------------ata-----------");
+                const sortedData = rearrangeTripData(data);
+                console.log(sortedData,"d------------------------------------====================");
+                setRow(sortedData);
                 setMaplogimgPopupOpen(true);
                 // console.log(data, 'mapdata')
             }
@@ -5316,14 +5335,27 @@ const useTripsheet = () => {
             //     let kmfixed2 = Number(km.toFixed(2))
             //     dataextrakms = kmfixed2
             // }
+            // if(Number(totalDays1) === 1){
+            //     let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
+            //     let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
+            //     dataextrakms = kmfixed2
+            // }
+            // else{
+            //     let km = Number(vendortotkm)
+            //     let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
+            //     dataextrakms = kmfixed2
+            // }
             if(Number(totalDays1) === 1){
                 let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
-                let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
+                let kmfixed2 = Number(km.toFixed(2)) 
                 dataextrakms = kmfixed2
             }
             else{
-                let km = Number(vendortotkm)
-                let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
+ 
+                let daysmutilplievendor =  Number(KMS) * Number(totalDays1)
+                // let km = Number(vendortotkm)
+                let km = (Number(vendortotkm) <= daysmutilplievendor) ? daysmutilplievendor : Number(vendortotkm)
+                let kmfixed2 = Number(km.toFixed(2)) 
                 dataextrakms = kmfixed2
             }
             console.log(dataextrahous, "hrs", dataextrakms, "kmsss")
@@ -5632,19 +5664,34 @@ const useTripsheet = () => {
                 // let km = (Number(totkm) <= Number(KMS)) ?  Number(totkm) *  Number(totaldays): Number(totkm)
                 // let cuctomerkm2 = Number(km.toFixed(2))
                 // console.log(km)
-                if(Number(totaldays) === 1){
-                    console.log("duty", duty)
-                    let km1 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
-                    let cuctomerkm21 = Number(km1.toFixed(2)) 
-                    setExtraKM(cuctomerkm21)
-                }
-                else{
-                    let km = Number(totkm) 
-                    let cuctomerkm2 = Number(km.toFixed(2))  * Number(totaldays)
-                    setExtraKM(cuctomerkm2)
-                }
-                // setExtraKM(cuctomerkm2)
+            //     if(Number(totaldays) === 1){
+            //         console.log("duty", duty)
+            //         let km1 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
+            //         let cuctomerkm21 = Number(km1.toFixed(2)) 
+            //         setExtraKM(cuctomerkm21)
+            //     }
+            //     else{
+            //         let km = Number(totkm) 
+            //         let cuctomerkm2 = Number(km.toFixed(2))  * Number(totaldays)
+            //         setExtraKM(cuctomerkm2)
+            //     }
+            //     // setExtraKM(cuctomerkm2)
+            // }
+            if(Number(totaldays) === 1){
+                console.log("duty", duty)
+                let km11 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
+                let cuctomerkm21 = Number(km11.toFixed(2)) 
+                setExtraKM(cuctomerkm21)
             }
+            else{
+                let daysmutilplie =  Number(KMS) * Number(totaldays)
+                let km1 = (Number(totkm) <= daysmutilplie) ? daysmutilplie : Number(totkm)
+                // let km = Number(totkm) 
+                let cuctomerkm2 = Number(km1.toFixed(2))  
+                setExtraKM(cuctomerkm2)
+            }
+            // setExtraKM(cuctomerkm2)
+        }
             else {
                 setExtraKM("")
             }

@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { APIURL } from '../../../url';
 //import useCard from '../../../Dashboard/MainDash/Cards/useCard';
+import { useLocation } from "react-router-dom";
 
 const DataContext = createContext();
 
@@ -28,6 +29,7 @@ export const PdfDataProvider = ({ children }) => {
         telephone: '',
         gstnumber: ''
     });
+    const location = useLocation()
     const [selectedMonths,setSelectedMonths] = useState(getCurrentMonth)
     function getCurrentMonth() {
         const currentDate = new Date();
@@ -36,7 +38,9 @@ export const PdfDataProvider = ({ children }) => {
 
         return currentMonth.toString();
     };
-
+    useEffect(()=>{
+        setSelectedYear(currentYear)
+      },[location])
     useEffect(() => {
         const fetchdata = async () => {
             try {

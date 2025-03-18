@@ -3,6 +3,7 @@ import axios from "axios";
 import { APIURL } from "../../../url";
 import { PdfData } from "../../../Billings/Transfer/TransferReport/PdfContext";
 import { ReportContext } from "../../../Billings/Report/Context/ReportContext";
+import { useLocation } from "react-router-dom";
 
 const useCard = () => {
   const [billAmount, setBillAmount] = useState(null);
@@ -14,6 +15,8 @@ const useCard = () => {
   const { selectedMonths, selectedYear, setSelectedYear } = PdfData();
   // const {value} = ReportContext();
   const { value } = useContext(ReportContext);
+  const location = useLocation()
+  const currentYear = new Date().getFullYear();
 
 
   // console.log(value,'valuecard')
@@ -26,6 +29,10 @@ const useCard = () => {
     return currentMonth.toString();
   };
   const apiUrl = APIURL;
+  useEffect(() => {
+    setSelectedMonth2(getCurrentMonth())
+    // setSelectedYear(currentYear)
+  }, [location])
 
   // useEffect(() => {
   //     const fetchBillAmount = async () => {
@@ -60,6 +67,7 @@ const useCard = () => {
   // }, [apiUrl]);
 
   // getting monthly wise Amount
+
   useEffect(() => {
     // console.log(selectedMonth2, typeof selectedMonth2, 'sssssssssss');
 
@@ -73,7 +81,7 @@ const useCard = () => {
             params: { selectYear: selectedYear } // ✅ Use params for GET requests
           });
           data = response.data;
-          console.log(response, 'response')
+          console.log(response, 'responsebilldata')
 
 
         } else if (selectedMonths !== "All") {

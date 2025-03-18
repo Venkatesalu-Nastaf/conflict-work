@@ -55,7 +55,7 @@ const useBillWiseReceipt = () => {
     { field: "uniqueId", headerName: "Unique Id", width: 130 },
   ];
 
-  const columnsPendingBill = [  
+  const columnsPendingBill = [
     { field: "sno", headerName: "Sno", width: 30 },
     { field: "Invoice_no", headerName: "Invoice No", type: "number", width: 80 },
     balanceAmount
@@ -65,9 +65,9 @@ const useBillWiseReceipt = () => {
         type: "number",
         width: 100,
       }
-      
-      : { field: "BillNo", headerName: "Group Trip No", type: "number", width: 110},
-      
+
+      : { field: "BillNo", headerName: "Group Trip No", type: "number", width: 110 },
+
     {
       field: "BillDate",
       headerName: "Bill Date",
@@ -225,17 +225,11 @@ const useBillWiseReceipt = () => {
 
       const invoice = combinedPendingBill.map((li) => li.BillNo);
       setInvoiceNo(invoice);
-      console.log(combinedPendingBill,"pendingggggggggggggg");
-      
       const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => ({
         id: index + 1, // Assign a unique ID based on the array index
         sno: index + 1, // Sequential SNO
         ...item, // Include all other properties from the original item
       }));
-      
-      console.log(combinedPendingBillWithSnoAndId, "pendinggggggggcombined pending ordered",combinedPendingBill);
-      
-      
       if (combinedPendingBillWithSnoAndId.length === 0) {
         setError(true);
         setPendingBillRows([])
@@ -398,11 +392,47 @@ const useBillWiseReceipt = () => {
     }
   };
 
+  useEffect(() => {
+    if (totals.collectedAmount > totals.totalAmount) {
+      setTotals((prevTotals) => ({
+        ...prevTotals,
+        collectedAmount: totals.totalAmount,
+        totalBalance: 0
+      }));
+    }
+    if (totals.tds > totals.totalAmount) {
+      setTotals((prevTotals) => ({
+        ...prevTotals,
+        // tds:totals.totalAmount,
+        tds: 0,
+        totalBalance: 0,
+        collectedAmount: totals.totalAmount
+      }));
+    }
+    if(totals.collectedAmount === 0){
+      setTotals((prevTotals) => ({
+        ...prevTotals,
+        tds:0
+      }));
+    }
+  }, [totals])
+
+
+
   const handlechange = (event) => {
 
     if (totals.collectedAmount === 0 || totals.collectedAmount === undefined) {
       setError(true)
       setErrorMessage("Enter Collected Amount")
+      return
+    }
+   
+    if ((totals.collectedAmount < 0) || (totals.collectedAmount > totals.totalAmount)) {
+      setTotals((prevTotals) => ({
+        ...prevTotals,
+        collectedAmount: totals.totalAmount,
+        totalBalance: 0
+      }));
       return
     }
     const newTDS = Number(event.target.value) || 0; // Default to 0 if conversion fails
@@ -440,8 +470,7 @@ const useBillWiseReceipt = () => {
       return
     }
     if (balanceAmount === true) {
-      console.log("1111111111111111111111111111111111111");
-      
+
       // if (totals.totalBalance === 0 && totals.collectedAmount !== 0) {
       const uniqueVoucherId = selectedBillRow?.map((li) => li.Voucherid);
       const CollectAmount = selectMatchList?.map((li) => li.Collected);
@@ -499,8 +528,6 @@ const useBillWiseReceipt = () => {
       }
       // }
     } else {
-      console.log('22222222222222222222222222222222222222222');
-      
       if (
         totals.collectedAmount === undefined ||
         totals.collectedAmount === 0
@@ -542,10 +569,10 @@ const useBillWiseReceipt = () => {
         TDS: combinedData.tds,
         Advance: combinedData.recieved || 0,
         TotalAmount: combinedData.totalAmount || 0,
-        BillDate: dayjs(combinedData.Date).format('YYYY-MM-DD'), 
+        BillDate: dayjs(combinedData.Date).format('YYYY-MM-DD'),
         // BillDate: combinedData.Date,
         Collected: totals.collectedAmount,
-        TotalCollected:FullCollectedAmount,
+        TotalCollected: FullCollectedAmount,
         TotalBalance: combinedData.totalBalance,
         Trips: combinedData.Trips,
         //   combinedData.totalAmount - combinedData.collectedAmount ||

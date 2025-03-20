@@ -555,6 +555,7 @@ function App() {
   const [currentVehiclePoint, setCurrentVehiclePoint] = useState(null);
   const [todayVehicle, setTodayVehicle] = useState(null);
   const menuItem = localStorage.getItem('activeMenuItem');
+  const menuselect = localStorage.getItem("menuitemselected");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -602,7 +603,9 @@ function App() {
 
     const fetchData = async () => {
       try {
-        if (menuItem === "RealTime") {
+        // console.log(menuItem,"gps00",menuselect)
+        if (menuItem === "RealTime" || menuselect === "Map page") {
+          // console.log(menuItem,menuselect,"gps00enter")
           const response = await axios.post(`${apiUrl}/getTodayVehiclePoints`);
           // console.log(response.data, "todayalllllvehicleeeee");
           setTodayVehicle(response.data);
@@ -611,13 +614,16 @@ function App() {
         console.error("Error fetching vehicle data:", err);
       }
     };
+    if (menuItem === "RealTime" || menuselect === "Map page") {
+      fetchData();
+      interval = setInterval(fetchData, 5000);
+    }
+    // fetchData();
 
-    fetchData();
-
-    interval = setInterval(fetchData, 5000);
+    // interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
-  }, [apiUrl, menuItem]);
+  }, [apiUrl, menuItem,menuselect]);
 
   useEffect(() => {
     const fetchData = async () => {

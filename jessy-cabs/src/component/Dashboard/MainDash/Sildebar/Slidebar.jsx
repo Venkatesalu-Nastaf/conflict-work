@@ -348,6 +348,7 @@ const Sidebar = () => {
     }
 
     localStorage.setItem("selectedMenuItem", menuItemKey);
+    localStorage.setItem("menuitemselected",name);
     try {
 
       if (hasPermission === 1) {

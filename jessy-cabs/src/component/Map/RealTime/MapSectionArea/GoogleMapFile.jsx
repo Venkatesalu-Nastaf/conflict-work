@@ -35,11 +35,13 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 };
 
 const GoogleMapFile = ({ vehicleCurrentLocation }) => {
-  const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), [vehicleCurrentLocation]);
-  console.log(vehicleCurrentLocation , "Vehicle Locations----------------",center);
+  // const centerdata = {  lat: 13.080555,lng: 80.163118, }
+  // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), [vehicleCurrentLocation]);
+  console.log(vehicleCurrentLocation , "koVehicle Locations----------------");
   const [selectedVehicle, setSelectedVehicle] = useState(null);
 
   // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), []);
+  const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), []);
     const { isLoaded } = useJsApiLoader({
        googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
      });
@@ -52,7 +54,9 @@ const GoogleMapFile = ({ vehicleCurrentLocation }) => {
       // options = {OPTIONS}
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={10}
+        zoom={10
+          
+        }
       >
  <MarkerClustererF 
       

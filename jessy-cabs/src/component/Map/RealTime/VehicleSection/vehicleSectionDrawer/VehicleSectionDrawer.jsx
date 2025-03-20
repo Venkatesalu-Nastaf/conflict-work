@@ -41,6 +41,8 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
     const [selectedTripid, setSelectedTripid] = useState(null);
     const [startTripLocation, setStartTripLocation] = useState([]);
     const [endTripLocation, setEndTripLocation] = useState([]);
+    const [startTripAddress, setStartTripAddress] = useState([]);
+    const [endTripAddress, setEndTripAddress] = useState([]);
     // const [dynamicPolyline, setDynamicPolyline] = useState([]);
     const [tripWayPoints, setTripWayPoints] = useState([]);
     const [tripdropdown,settripdown]=useState([])
@@ -169,6 +171,7 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
 
     //     return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
     // }, [currentDatePoints, filterDate, selectedTripid]);
+ 
 
     const handleTripidChange = (event,value) => {
         console.log(value, "val22222",);
@@ -251,7 +254,77 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
         }
 
     },[open])
+
+    const GOOGLE_MAPS_API_KEY = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE"; // Replace with your API key
     
+      const getAddressFromLatLng = async (lat, lng) => {
+        try {
+          const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
+            params: {
+              latlng: `${lat},${lng}`,
+              key: GOOGLE_MAPS_API_KEY,
+            },
+          });
+    
+          if (response.data.status === "OK" && response.data.results.length > 0) {
+            return response.data.results[0].formatted_address;
+          } else {
+            return "Address not found";
+          }
+        } catch (error) {
+          console.error("Error fetching address:", error);
+          return "Address not found";
+        }
+      };
+      console.log(startMarkerPosition,"tolldps")
+    
+      useEffect(() => {
+        if (startMarkerPosition) {
+          getAddressFromLatLng(parseFloat(startMarkerPosition.Latitude_loc), parseFloat(startMarkerPosition.Longtitude_loc))
+            .then((address) => setStartTripAddress(address));
+        }
+        if (currentPosition) {
+          getAddressFromLatLng(parseFloat(currentPosition.Latitude_loc), parseFloat(currentPosition.Longtitude_loc))
+            .then((address) => setEndTripAddress(address));
+        }
+      }, [startMarkerPosition, currentPosition]);
+      
+      const calculatedataandtime = (startvalue)=>{
+        
+        console.log(startvalue,"val")
+        if( (Object.keys(startvalue).length !== 0)){
+            console.log(startvalue,"starteeeeeeeeeeeeeeeeee",startvalue ? "eneter":"noo")
+        const dateformat = startvalue ? dayjs(startvalue?.Runing_Date).format("DD-MM-YYYY"):""
+        console.log(startvalue,"start")
+        const data = startvalue?.Runing_Time
+        const [hours, minutes] = data?.split(":");
+        console.log(hours,minutes,"hours mminutes")
+       
+
+
+        return `${dateformat} & ${parseInt(hours, 10)}:${parseInt(minutes, 10) }`
+        // return `${dateformat}`
+        }
+        return ''
+
+
+
+      }
+     
+      const datastartdate = useMemo(() => {
+        if (startMarkerPosition) {
+          return calculatedataandtime(startMarkerPosition);
+        }
+        return null; // or some default value
+      }, [startMarkerPosition])
+
+      const dataEnddate = useMemo(() => {
+        if (currentPosition !==  null) {
+          return calculatedataandtime(currentPosition);
+        }
+        return null; // or some default value
+      }, [currentPosition])
+    //  const dataEnddate = useMemo(() => calculatedataandtime(currentPosition), [startMarkerPosition]);
 // console.log(dynamicPolyline1,"poly")
 
     return (
@@ -339,9 +412,13 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
                         <p className='overview-left'>Parked:</p>
                         <p style={{ color: 'green' }}>Speed 13km/h</p>
                     </div>
-                    <div className='overview-content'>
+                    {/* <div className='overview-content'>
                         <span className='overview-left'>Current Location:</span>
-                        {/* <span>{address}</span> */}
+                     <span>{address}</span> *
+                    </div>  */}
+                    <div className='overview-content'>
+                        <span className='overview-left'>Vehicle No:</span>
+                        <span>{vehNo}</span>
                     </div>
                     <div className='overview-content'>
                         <span className='overview-left'>Model:</span>
@@ -382,24 +459,28 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
                     </div>
 
                     <div className='overview-content'>
-                        <span className='overview-left'>Start Time:</span>
-                        <span>06 Aug 24, 11:21 AM</span>
+                        <span className='overview-left'>Start Date & Time:</span>
+                        <span>{datastartdate}</span>
                     </div>
 
                     <div className='overview-content'>
-                        <span className='overview-left'>End Time:</span>
-                        <span>06 Aug 24, 11:46 AM</span>
+                        <span className='overview-left'>End Date & Time:</span>
+                        <span>{dataEnddate}</span>
                     </div>
+                    {selectedTripid &&
+                    <>
 
                     <div className='overview-content'>
                         <span className='overview-left'>Start Location:</span>
-                        <span>Saint Thomas Town, Saint Thomas Town, Kacharakanahalli, Bengaluru, Bangalore Urban, Karnataka</span>
+                        <span>{startTripAddress}</span>
                     </div>
 
                     <div className='overview-content'>
                         <span className='overview-left'>End Location:</span>
-                        <span>Patel G Kulappa Road, Ramaswamipalya, Banasawadi, Bengaluru, Bangalore Urban, Karnataka</span>
+                        <span>{endTripAddress}</span>
                     </div>
+                    </>
+}
                 </div>
             </TabPanel>
             <TabPanel value="2" >

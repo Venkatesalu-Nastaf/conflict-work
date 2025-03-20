@@ -125,8 +125,7 @@ router.post('/particularGpsRecords', (req, res) => {
 });
 
 router.post('/getAlladddateandtripid', (req, res) => {
-    // const todayDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-    // console.log("Today's Date:", todayDate);
+  
     const { selectedDate, vehicleNumber } = req.body;
     const formattedStartDate = moment(selectedDate).format('YYYY-MM-DD');
 
@@ -148,6 +147,36 @@ router.post('/getAlladddateandtripid', (req, res) => {
     })
 })
 
+// router.post('/gettripbasedmapdetails', (req, res) => {
+  
+//     const { tripid } = req.body;
+//     // const formattedStartDate = moment(selectedDate).format('YYYY-MM-DD');
+
+//     // console.log("Today's Date:alllladtaaa", vehicleNumber, formattedStartDate);
+//     const sqlQuery = `SELECT tripid,Groups,vehRegNo,vehicleName FROM tripsheet WHERE tripid = ?   `;
+//     const sqlquery2 = `SELECT fueltype FROM vehicleinfo WHERE vehRegNo = ?   `;
+//     db.query(sqlQuery, [tripid], (error, result) => {
+//         if (error) {
+//             console.log(error, "error");
+//         }
+//         console.log(result, "Today vehicle lists....");
+//         const vehdata = result[0].vehRegNo;
+//         db.query(sqlquery2, [vehdata], (error, result2) => {
+//             if (error) {
+//                 console.log(error, "error");
+//             }
+//             console.log(result, "Today vehicle lists....");
+
+//             const resulttt = [...result,result2]
+
+        
+       
+
+//         // res.status(200).json(result);
+//     })
+// })
+// })
+
 // router.post('/getTodayVehiclePoints', (req, res) => {
 router.post('/getAllVehicleCurrentLocation', (req, res) => {
     // const todayDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
@@ -155,9 +184,10 @@ router.post('/getAllVehicleCurrentLocation', (req, res) => {
     const today = new Date();
 
     const todayDate = today.toLocaleDateString('en-CA');
-    console.log("Today's Date:", todayDate);
+    const formattedStartDate = moment(todayDate).format('YYYY-MM-DD');
+    console.log("Today's Date:",formattedStartDate,todayDate);
     const sqlQuery = `SELECT * FROM VehicleAccessLocation WHERE Runing_Date =?`;
-    db.query(sqlQuery, [todayDate], (error, result) => {
+    db.query(sqlQuery, [formattedStartDate], (error, result) => {
         if (error) {
             console.log(error, "error");
         }
@@ -170,7 +200,9 @@ router.post('/getAllVehicleCurrentLocation', (req, res) => {
 router.post('/getTodayVehiclePoints', (req, res) => {
     const today = new Date();
     const todayDate = today.toLocaleDateString('en-CA');
-    console.log("Today's Date:", todayDate);
+    const formattedStartDate = moment(todayDate).format('YYYY-MM-DD');
+    console.log("Today's Date:",formattedStartDate,todayDate);
+
 
     // Query to get the full row with the latest created_at timestamp for each Vehicle_No
     const sqlQuery = `
@@ -187,7 +219,7 @@ router.post('/getTodayVehiclePoints', (req, res) => {
         WHERE v.Runing_Date = ?;
     `;
 
-    db.query(sqlQuery, [todayDate, todayDate], (error, result) => {
+    db.query(sqlQuery, [formattedStartDate, formattedStartDate], (error, result) => {
         if (error) {
             console.log(error, "error");
             return res.status(500).json({ error: "Database query error" });

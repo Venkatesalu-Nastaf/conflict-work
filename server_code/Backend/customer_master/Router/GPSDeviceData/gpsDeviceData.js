@@ -224,6 +224,7 @@ async function getAddressFromLatLng(lat, lng) {
 
 router.get('/getLatLongByTripId', async (req, res) => {
     const { gpsTripId } = req.query;
+    console.log(gpsTripId, "gpsTripId");
 
     if (!gpsTripId) {
         return res.status(400).json({ error: "gpsTripId is required" });
@@ -231,10 +232,15 @@ router.get('/getLatLongByTripId', async (req, res) => {
 
     const sqlgmapdataQuery = `SELECT * FROM gmapdata WHERE tripid = ?`;
     const sqlQueryCheckReached = `SELECT COUNT(*) AS reachedCount FROM VehicleAccessLocation WHERE Trip_id = ? AND Trip_Status = 'Reached'`;
+    // const sqlQueryAllStatuses = `
+    // SELECT * FROM VehicleAccessLocation 
+    // WHERE Trip_id = ? 
+    // AND Trip_Status IN ('Started', 'Reached', 'On_Going','waypoint','waypoint_Started','waypoint_Reached') 
+    // ORDER BY veh_id ASC`;
     const sqlQueryAllStatuses = `
     SELECT * FROM VehicleAccessLocation 
     WHERE Trip_id = ? 
-    AND Trip_Status IN ('Started', 'Reached', 'On_Going','waypoint','waypoint_Started','waypoint_Reached') 
+    AND Trip_Status IN ('Started', 'Reached', 'On_Going') 
     ORDER BY veh_id ASC`;
 
     db.query(sqlgmapdataQuery, [gpsTripId], (error, gmapResult) => {
@@ -242,8 +248,11 @@ router.get('/getLatLongByTripId', async (req, res) => {
             console.error("Database query error:", error);
             return res.status(500).json({ error: "Internal Server Error" });
         }
+        // console.log(gmapResult, "gmapresultttttttttttttttttttttttttttaaaaaaaaaaaaaaaaaaa");
 
         if (gmapResult.length > 0) {
+            // console.log(gmapResult, "gmapresulttttttttttttttttttttttttttt");
+
             return res.status(200).json(gmapResult);
         }
 
@@ -260,51 +269,130 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         console.log("Database query error:", error);
                         return res.status(500).json({ error: "Internal Server Error" });
                     }
+                    // const fullWaypointCount = allStatusesResult.length - 2;
+                    // console.log(allStatusesResult.length, "alllllllllllllllllllllllllllllllllllllllll", fullWaypointCount);
+
+                //     const totalOnGoing = allStatusesResult
+                //     .map((row, index) => ({ ...row, originalIndex: index })) // Keep track of original index
+                //     .filter(row => row.Trip_Status === 'On_Going');
+                
+                // const waypointsCount = 8;
+                // let selectedWaypointsIndexes = [];
+                
+                // if (totalOnGoing.length > waypointsCount) {
+                //     // Calculate evenly spaced waypoints
+                //     const step = Math.floor(totalOnGoing.length / (waypointsCount + 1));
+                //     for (let i = 1; i <= waypointsCount; i++) {
+                //         selectedWaypointsIndexes.push(totalOnGoing[i * step].originalIndex);
+                //     }
+                // }
 
                     // Process data before inserting
-                    const insertValues = await Promise.all(allStatusesResult.map(async row => {
-                        let location_alpha = '';
-                        let trip_type = '';
-                        console.log(row, 'rrrrrrrrrrrrrrrrrrr=================');
+                    // const insertValues = await Promise.all(allStatusesResult.map(async (row, index) => {
+                    //     let location_alpha = '';
+                    //     let trip_type = '';
+                    //     // console.log(row, 'rrrrrrrrrrrrrrrrrrr=================');
 
-                        if (row.Trip_Status === 'Started') {
-                            location_alpha = 'A';
-                            trip_type = 'start';
-                        } else if (row.Trip_Status === 'On_Going') {
+                    //     // if (row.Trip_Status === 'Started') {
+                    //     //     location_alpha = 'A';
+                    //     //     trip_type = 'start';
+                    //     // } else if (row.Trip_Status === 'On_Going') {
+                    //     //     location_alpha = 'NULL';
+                    //     //     trip_type = 'On_Going';
+                    //     // }
+                    //     // else if (row.Trip_Status === 'waypoint') {
+                    //     //     location_alpha = 'B';
+                    //     //     trip_type = 'waypoint';
+                    //     // }
+                    //     // else if (row.Trip_Status === 'waypoint_Started ') {
+                    //     //     console.log('rrrrrrrrrrrrrrrrrrrrrrr', row.Trip_Status);
+
+                    //     //     location_alpha = 'B';
+                    //     //     trip_type = 'waypoint';
+                    //     // }
+                    //     // else if (row.Trip_Status === 'waypoint_Reached ') {
+                    //     //     console.log('rrrrrrrrrrrrrrrrrrrrrrr', row.Trip_Status);
+
+                    //     //     location_alpha = 'B';
+                    //     //     trip_type = 'waypoint';
+                    //     // }
+                    //     // else if (row.Trip_Status === 'Reached') {
+                    //     //     location_alpha = 'C';
+                    //     //     trip_type = 'end';
+                    //     // }
+
+                    //     if (row.Trip_Status === 'Started') {
+                    //         location_alpha = 'A';
+                    //         trip_type = 'start';
+                    //     } else if (row.Trip_Status === 'On_Going') {
+                    //         if (selectedWaypointsIndexes.includes(index)) {
+                    //             location_alpha = 'B';  // Mark as waypoint
+                    //             trip_type = 'waypoint';
+                    //         } else {
+                    //             location_alpha = 'NULL';
+                    //             trip_type = 'On_Going';
+                    //         }
+                    //     } else if (row.Trip_Status === 'waypoint') {
+                    //         location_alpha = 'B';
+                    //         trip_type = 'waypoint';
+                    //     } else if (row.Trip_Status === 'Reached') {
+                    //         location_alpha = 'C';
+                    //         trip_type = 'end';
+                    //     }
+
+                    //     const formattedTime = row.Tripstarttime ? row.Tripstarttime.substring(0, 5) : null;
+                    //     const address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc); // Get address
+
+                    //     return [
+                    //         row.Trip_id, location_alpha, row.Runing_Date, formattedTime,
+                    //         trip_type, address, row.Latitude_loc, row.Longtitude_loc
+                    //     ];
+                    // }));
+                    const totalOnGoing = allStatusesResult
+                    .map((row, index) => ({ ...row, originalIndex: index })) 
+                    .filter(row => row.Trip_Status === 'On_Going');
+                
+                const waypointsCount = 8;
+                let selectedWaypointsIndexes = [];
+                
+                if (totalOnGoing.length >= waypointsCount) {
+                    const step = Math.floor(totalOnGoing.length / waypointsCount);
+                    
+                    for (let i = 0; i < waypointsCount; i++) {
+                        selectedWaypointsIndexes.push(totalOnGoing[i * step].originalIndex);
+                    }
+                }
+                
+                const insertValues = await Promise.all(allStatusesResult.map(async (row, index) => {
+                    let location_alpha = '';
+                    let trip_type = '';
+                
+                    if (row.Trip_Status === 'Started') {
+                        location_alpha = 'A';
+                        trip_type = 'start';
+                    } else if (row.Trip_Status === 'On_Going') {
+                        if (selectedWaypointsIndexes.includes(index)) {
+                            location_alpha = 'B';  // Mark as waypoint
+                            trip_type = 'waypoint';
+                        } else {
                             location_alpha = 'NULL';
                             trip_type = 'On_Going';
                         }
-                        else if (row.Trip_Status === 'waypoint') {
-                            location_alpha = 'NULL';
-                            trip_type = 'On_Going';
-                        }
-                        else if (row.Trip_Status === 'waypoint_Started ')  {
-                            console.log('rrrrrrrrrrrrrrrrrrrrrrr', row.Trip_Status);
-
-                            location_alpha = 'B';
-                            trip_type = 'waypoint';
-                        } 
-                        else if (row.Trip_Status === 'waypoint_Reached ')  {
-                            console.log('rrrrrrrrrrrrrrrrrrrrrrr', row.Trip_Status);
-
-                            location_alpha = 'B';
-                            trip_type = 'waypoint';
-                        } 
-                        else if (row.Trip_Status === 'Reached') {
-                            location_alpha = 'C';
-                            trip_type = 'end';
-                        }
-
-                        const formattedTime = row.Tripstarttime ? row.Tripstarttime.substring(0, 5) : null;
-                        const address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc); // Get address
-
-                        return [
-                            row.Trip_id, location_alpha, row.Runing_Date, formattedTime,
-                            trip_type, address, row.Latitude_loc, row.Longtitude_loc
-                        ];
-                    }));
-
-                    console.log(insertValues, "insertvalues gmapdata");
+                    } else if (row.Trip_Status === 'Reached') {
+                        location_alpha = 'C';
+                        trip_type = 'end';
+                    }
+                
+                    const formattedTime = row.Tripstarttime ? row.Tripstarttime.substring(0, 5) : null;
+                    const address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                
+                    return [
+                        row.Trip_id, location_alpha, row.Runing_Date, formattedTime,
+                        trip_type, address, row.Latitude_loc, row.Longtitude_loc
+                    ];
+                }));
+                
+                    // console.log(insertValues.length, "insertvalues gmapdata",insertValues);
 
                     const sqlInsertGmapdataQuery = `
                         INSERT INTO gmapdata (tripid, Location_Alpha, date, time, trip_type, place_name, Latitude, Longitude)
@@ -334,17 +422,21 @@ router.get('/appLatLongDetailsByTripId', (req, res) => {
         return res.status(400).json({ error: "Trip ID is required" });
     }
 
+    // const sqlQuery = `SELECT * FROM VehicleAccessLocation 
+    //                   WHERE Trip_Status IN ( "Started","On_Going", "waypoint","waypoint_Started","waypoint_Reached","Reached") 
+    //                   AND Trip_id = ?`;
+
     const sqlQuery = `SELECT * FROM VehicleAccessLocation 
-                      WHERE Trip_Status IN ( "Started","On_Going", "waypoint","waypoint_Started","waypoint_Reached","Reached") 
-                      AND Trip_id = ?`;
+    WHERE Trip_Status IN ( "Started","On_Going", "Reached") 
+    AND Trip_id = ?`;
 
     db.query(sqlQuery, [gpsTripId], (error, result) => {
         if (error) {
             console.error("Database query error:", error);
             return res.status(500).json({ error: "Internal Server Error" });
         }
-        console.log(result,"]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
-        
+        // console.log(result, "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
+
         return res.status(200).json(result);
     });
 });
@@ -357,7 +449,7 @@ router.get('/allLatLongDetailsByTripId', (req, res) => {
     }
 
     const sqlQuery = `SELECT * FROM VehicleAccessLocation 
-                      WHERE Trip_Status IN ( "Started","On_Going", "waypoint","Reached") 
+                      WHERE Trip_Status IN ( "Started","On_Going","Reached") 
                       AND Trip_id = ?`;
 
     db.query(sqlQuery, [gpsTripId], (error, result) => {

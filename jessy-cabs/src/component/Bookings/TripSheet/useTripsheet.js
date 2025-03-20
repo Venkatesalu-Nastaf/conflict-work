@@ -4243,6 +4243,7 @@ const useTripsheet = () => {
                     setSelectedCustomerDatas({})
                     setFormData({})
                     setFormValues({})
+                    setIsEditMode(false)
                     // setBook({})
                     setErrorMessage(`${error.response.data.error}`);
                     // setErrorMessage(" You Don't Have Accesss To This Tripsheet Based On Service Station");
@@ -7823,15 +7824,18 @@ const useTripsheet = () => {
 
     //   getting lat and long from vehcileAccessLocation tables  (gpsdevicedata.js file)
     const gpsTripId = formData.tripid || selectedCustomerData.tripid || book.tripid;
+// console.log(gpsTripId,"gpsTripIdddd111111111");
 
     useEffect(() => {
         const fetchData = async () => {
+            // console.log(gpsTripId,"gpsTripIdddd2222222222");
+
             try {
                 const response = await axios.get(`${apiUrl}/getLatLongByTripId`, {
                     params: { gpsTripId }
                 });
 
-                console.log(response.data, "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
+                console.log(response.data, "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]-------------------------");
                 setTripGpsData(response.data)
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -7841,9 +7845,10 @@ const useTripsheet = () => {
         if (gpsTripId) {
             fetchData();
         }
-    }, [apiUrl, gpsTripId]);
+    }, [apiUrl,enterTrigger]);
     useEffect(() => {
         const fetchData = async () => {
+            // console.log(gpsTripId,"gpsTripIdddd33333333333333");
             try {
                 const response = await axios.get(`${apiUrl}/appLatLongDetailsByTripId`, {
                     params: { gpsTripId }
@@ -7878,7 +7883,7 @@ const useTripsheet = () => {
         if (gpsTripId) {
             fetchData();
         }
-    }, [apiUrl, gpsTripId]);
+    }, [apiUrl, gpsTripId,enterTrigger]);
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
         escort, setEscort, driverdetails,

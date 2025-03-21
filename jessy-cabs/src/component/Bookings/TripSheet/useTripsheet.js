@@ -7227,6 +7227,12 @@ const useTripsheet = () => {
                     setTemporaryStatus(true);
                     return;
                 }
+                if ((oldStatusCheck === "Billed") && (superAdminAccess === "Assistant CFO")) {
+                    setTemporaryStatus(true);
+                    setHideField(true);
+                    setEmptyState(false);
+                    return;
+                }
                 if ((oldStatusCheck === "Billed") && (superAdminAccess !== "SuperAdmin")) {
                     setTemporaryStatus(true);
                     setHideField(true);

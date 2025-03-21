@@ -562,14 +562,15 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     // Add start marker
     markersArray.push(`markers=color:red%7Clabel:A%7C${startLat},${startLng}`);
 
-    // Add waypoint markers (starting from B)
-    wayRoutes.forEach((waypoint, index) => {
-      let label = markerLabels[index + 1]; // Start from B
-      markersArray.push(`markers=color:red%7Clabel:${label}%7C${waypoint.lat},${waypoint.lng}`);
-    });
+    // Add waypoint markers (starting from B) ------commented waypoint markers
+    // wayRoutes.forEach((waypoint, index) => {
+    //   let label = markerLabels[index + 1]; // Start from B
+    //   markersArray.push(`markers=color:red%7Clabel:${label}%7C${waypoint.lat},${waypoint.lng}`);
+    // });
 
     // Add end marker (next label after last waypoint)
-    let endLabel = markerLabels[wayRoutes.length + 1]; // Next letter
+    // let endLabel = markerLabels[wayRoutes.length + 1]; // Next letter
+    let endLabel = "B" // Next letter
     markersArray.push(`markers=color:red%7Clabel:${endLabel}%7C${endLat},${endLng}`);
 
     // Join markers
@@ -646,7 +647,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     // Add waypoints with incrementing alphabet labels
     const waypoints = sortedWaypoints.map((wayRoute) => {
       const label = String.fromCharCode(waypointLabelCharCode++); // "B", "C", "D"...
-      markers.push(`markers=color:red%7Clabel:${label}%7C${wayRoute.lat},${wayRoute.lng}`);
+      // markers.push(`markers=color:red%7Clabel:${label}%7C${wayRoute.lat},${wayRoute.lng}`);
       return {
         location: new window.google.maps.LatLng(wayRoute.lat, wayRoute.lng),
         stopover: true,
@@ -655,7 +656,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
     // Assign next letter to the end marker
     if (endLat && endLng) {
-      const endLabel = String.fromCharCode(waypointLabelCharCode); // Next letter after last waypoint
+      // const endLabel = String.fromCharCode(waypointLabelCharCode); // Next letter after last waypoint
+      const endLabel = "B"; // Next letter after last waypoint
       markers.push(`markers=color:red%7Clabel:${endLabel}%7C${endLat},${endLng}`);
     }
 
@@ -1080,8 +1082,9 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
             /> : ""
             }
             {startLat && directions === null && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
-            {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />}
-            {directions === null && wayRoutes?.map((point, index) => (
+            {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={polyLineWaypoints.length !== fullGpsData.length  ? endLabel : "B"} onClick={() => handleMarkerClick(endRoutes)} />}
+            {/* {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />} */}
+            {directions === null && polyLineWaypoints.length !== fullGpsData.length && wayRoutes?.map((point, index) => (
               point.tripType === "waypoint" && (
                 <Marker
                   key={index}

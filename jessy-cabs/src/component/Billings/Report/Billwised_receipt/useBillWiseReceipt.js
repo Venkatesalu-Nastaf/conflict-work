@@ -11,6 +11,7 @@ const useBillWiseReceipt = () => {
   const [selectMatchList, setSelectMatchList] = useState([]);
   const [accountDetails, setAccountDetails] = useState([]);
   const [invoiceNo, setInvoiceNo] = useState([])
+  const [selectedRows, setSelectedRows] = useState([]);
   const [billWiseReport, setBillWiseReport] = useState({
     Date: dayjs(),
     CustomerName: "",
@@ -30,6 +31,7 @@ const useBillWiseReceipt = () => {
     collectedAmount: 0,
     Trips: 0
   });
+  const [voucherID, setVoucherID] = useState("")
   const [pendingBillRows, setPendingBillRows] = useState([]);
   const [rows, setRows] = useState([]);
   const [selectedBillRow, setSelectedBillRow] = useState([]);
@@ -259,15 +261,65 @@ const useBillWiseReceipt = () => {
   };
 
   const handleRowSelection = (selectionModel) => {
-    const selectedIDs = new Set(selectionModel);
-    const selectedData = pendingBillRows.filter((row) =>
-      selectedIDs.has(row.id)
-    );
-    const selectedInvoiceNo = selectedData.map(li => li.BillNo)
-    setSelectedBillRow(selectedData);
-    setInvoiceNo(selectedInvoiceNo)
+    if (balanceAmount === true) {
+      if (selectionModel.length > 0) {
+        const selectedID = selectionModel[selectionModel.length - 1]; // Get the last selected row
+        console.log(selectedID, "selected ID", balanceAmount);
 
+        setSelectedRows([selectedID]); // Store only the last selected row
+
+        const selectedData = pendingBillRows.filter((row) => row.id === selectedID); // Direct comparison
+        const selectedInvoiceNo = selectedData.map(li => li.BillNo);
+
+        setSelectedBillRow(selectedData);
+        setInvoiceNo(selectedInvoiceNo);
+      } else {
+        setSelectedRows([]);
+        setSelectedBillRow([]);
+        setInvoiceNo([]);
+      }
+    } else {
+      setSelectedRows(selectionModel);
+
+      const selectedIDs = new Set(selectionModel);
+      console.log(selectedIDs, "selected IDs", balanceAmount);
+
+      const selectedData = pendingBillRows.filter((row) => selectedIDs.has(row.id)); // Use `.has()` with Set
+      const selectedInvoiceNo = selectedData.map(li => li.BillNo);
+
+      setSelectedBillRow(selectedData);
+      setInvoiceNo(selectedInvoiceNo);
+    }
   };
+
+  // const handleRowSelection = (selectionModel) => {
+  //   if (balanceAmount === true) {
+  //     const selectedIDs = selectionModel[selectionModel.length - 1]; // Get the last selected row
+  //     console.log(selectedIDs,"selectidddddd",balanceAmount);
+  //     setSelectedRows([selectedIDs]); // Update selection state
+
+  //     const selectedData = pendingBillRows.filter((row) =>
+  //       selectedIDs?.includes(row.id) // Use includes() instead of has()
+  //     );
+
+  //     const selectedInvoiceNo = selectedData.map(li => li.BillNo);
+
+  //     setSelectedBillRow(selectedData);
+  //     setInvoiceNo(selectedInvoiceNo);
+  //   }
+  //   else{
+  //     setSelectedRows(selectionModel); 
+  //   const selectedIDs = new Set(selectionModel);
+  //   console.log(selectedIDs,"selectidddddd22222",balanceAmount);
+  //   const selectedData = pendingBillRows.filter((row) =>
+  //     selectedIDs.has(row.id)
+  //   );
+  //   const selectedInvoiceNo = selectedData.map(li => li.BillNo)
+  //   setSelectedBillRow(selectedData);
+  //   setInvoiceNo(selectedInvoiceNo)
+  // }
+
+  // };
 
   const handleApplyBill = async () => {
     if (selectedBillRow.length === 0 || selectedBillRow.length === undefined) {
@@ -375,6 +427,7 @@ const useBillWiseReceipt = () => {
         uniqueId: row.uniqueid,
         Trips: row.Trips
       }));
+      setVoucherID(updatedRows.length > 0 ? updatedRows[0].BillNo : null);
       const Account = matchedRows.map((li) => li.Account);
       setBillWiseReport((prevState) => ({
         ...prevState,
@@ -409,10 +462,10 @@ const useBillWiseReceipt = () => {
         collectedAmount: totals.totalAmount
       }));
     }
-    if(totals.collectedAmount === 0){
+    if (totals.collectedAmount === 0) {
       setTotals((prevTotals) => ({
         ...prevTotals,
-        tds:0
+        tds: 0
       }));
     }
   }, [totals])
@@ -426,7 +479,7 @@ const useBillWiseReceipt = () => {
       setErrorMessage("Enter Collected Amount")
       return
     }
-   
+
     if ((totals.collectedAmount < 0) || (totals.collectedAmount > totals.totalAmount)) {
       setTotals((prevTotals) => ({
         ...prevTotals,
@@ -727,6 +780,8 @@ const useBillWiseReceipt = () => {
     handlePending,
     handleCollectedChange,
     handleBalanceAmount,
+    voucherID,
+    selectedRows
   };
 };
 

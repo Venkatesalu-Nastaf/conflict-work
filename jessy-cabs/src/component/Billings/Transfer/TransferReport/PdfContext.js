@@ -30,7 +30,7 @@ export const PdfDataProvider = ({ children }) => {
         gstnumber: ''
     });
     const location = useLocation()
-    const [selectedMonths,setSelectedMonths] = useState(getCurrentMonth)
+    const [selectedMonths,setSelectedMonths] = useState(getCurrentMonth())
     function getCurrentMonth() {
         const currentDate = new Date();
 
@@ -40,6 +40,7 @@ export const PdfDataProvider = ({ children }) => {
     };
     useEffect(()=>{
         setSelectedYear(currentYear)
+        setSelectedMonths(getCurrentMonth())
       },[location])
     useEffect(() => {
         const fetchdata = async () => {

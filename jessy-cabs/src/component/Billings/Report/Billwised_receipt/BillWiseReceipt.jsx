@@ -1,4 +1,4 @@
-import React,{useContext} from 'react'
+import React, { useContext, useRef, useEffect } from 'react'
 import "./BillWiseReceipt.css";
 import { TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -27,9 +27,10 @@ import { PermissionContext } from "../../../context/permissionContext";
 
 export const BillWiseReceipt = () => {
 
-  const { organization,  accountDetails, billWiseReport, setBillWiseReport, handlePendingBills
-    , rows,  pendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,handleBalanceAmount,
-    totals, handlechange, handleAddBillReceive, error, errorMessage, success, successMessage, hidePopup, handlePending, handleCollectedChange
+  const { organization, accountDetails, billWiseReport, setBillWiseReport, handlePendingBills
+    , rows, pendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection, handleBalanceAmount,
+    totals, handlechange, handleAddBillReceive, error, errorMessage, success, successMessage, hidePopup, handlePending, handleCollectedChange,
+    voucherID, selectedRows
   } = useBillWiseReceipt();
   const { permissions } = useContext(PermissionContext)
   // const Report_read = permissions[1]?.read;
@@ -50,7 +51,13 @@ export const BillWiseReceipt = () => {
       Date: date.format('YYYY-MM-DD'),
     }));
   };
+  const voucherRef = useRef(null);
 
+  useEffect(() => {
+    if (voucherID && voucherRef.current) {
+      voucherRef.current.focus();
+    }
+  }, [voucherID])
 
   return (
     <>
@@ -69,7 +76,9 @@ export const BillWiseReceipt = () => {
                     className="full-width"
                     label="Voucher ID"
                     name="VoucherId"
+                    value={voucherID || ""}
                     autoComplete="new-password"
+                    inputRef={voucherRef}
                   />
                 </div>
                 <div className="input">
@@ -208,7 +217,7 @@ export const BillWiseReceipt = () => {
                   />
                 </div>
               </div>
-              <div className='bill-wise-reciept-table-main' style={{ display: 'flex', gap:"20px", }}>
+              <div className='bill-wise-reciept-table-main' style={{ display: 'flex', gap: "20px", }}>
                 <div className='bill-wise-reciept-table-first'>
                   <div className='amount-calculator'>
                     <div className='total-inputs' >
@@ -290,7 +299,7 @@ export const BillWiseReceipt = () => {
 
                 <div className='bill-wise-reciept-table-second'>
                   <div style={{ display: 'flex', gap: '10px', paddingBottom: '10px' }}>
-                  <Button variant='contained' onClick={handleBalanceAmount}>Balance Amount</Button>
+                    <Button variant='contained' onClick={handleBalanceAmount}>Balance Amount</Button>
                     <Button variant='contained' onClick={handlePendingBills}>Show Pending Bills</Button>
                     <Button variant='contained' onClick={handleApplyBill}>Apply to list</Button>
                   </div>
@@ -328,10 +337,11 @@ export const BillWiseReceipt = () => {
                         }}
                         pageSizeOptions={[5, 10]}
                         checkboxSelection
+                        rowSelectionModel={selectedRows} // Control selection
                         onRowSelectionModelChange={(newRowSelectionModel) => {
-                          // setRowSelectionModel(newRowSelectionModel);
                           handleRowSelection(newRowSelectionModel);
-                        }} />
+                        }}
+                      />;
                     </Box>
                   </div>
                 </div>

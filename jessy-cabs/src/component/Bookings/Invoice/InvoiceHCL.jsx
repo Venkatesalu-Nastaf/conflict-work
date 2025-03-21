@@ -341,13 +341,14 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
               {routeData.length > 0 && (
                 <div >
                   <h2 style={{ margin: "0px",textAlign:"center" ,fontSize:"17px",fontWeight:'600'}}>Route Summary</h2>
-                  <ol type="1">
+                  {/* <ol type="1"> */}
                     {routeData.map((data, index) => (
                       <li key={index}>
-                        <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p>
+                        {/* <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p> */}
+                        <p style={{margin:'0px'}}><span style={{ fontSize: '20px', marginRight: '5px' }}>•</span> <strong>{data.trip_type}</strong>: {data.place_name}</p>
                       </li>
                     ))}
-                  </ol>
+                  {/* </ol> */}
                 </div>
               )}
             </div>

@@ -396,11 +396,12 @@ const useBillWiseReceipt = () => {
         setTotals({
           amount: totalAmount,
           recieved: totalRecieved,
+          collectedAmount:totalAmount,
           discount: totalDiscount,
           balance: totalBalance,
           totalAmount: totBalance,
           onAccount: totalOnAccount,
-          totalBalance: totBalance,
+          totalBalance: 0,
           tds: totalTDS,
           Trips: tripid.length
         });
@@ -474,11 +475,11 @@ const useBillWiseReceipt = () => {
 
   const handlechange = (event) => {
 
-    if (totals.collectedAmount === 0 || totals.collectedAmount === undefined) {
-      setError(true)
-      setErrorMessage("Enter Collected Amount")
-      return
-    }
+    // if (totals.collectedAmount === 0 || totals.collectedAmount === undefined) {
+    //   setError(true)
+    //   setErrorMessage("Enter Collected Amount")
+    //   return
+    // }
 
     if ((totals.collectedAmount < 0) || (totals.collectedAmount > totals.totalAmount)) {
       setTotals((prevTotals) => ({

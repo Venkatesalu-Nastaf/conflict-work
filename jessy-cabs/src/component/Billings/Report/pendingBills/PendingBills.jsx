@@ -42,7 +42,7 @@ export const PendingBills = () => {
                             <MdOutlineCalendarMonth color="action" />
                         </div>
 
-                        <FormControl 
+                        <FormControl
                             sx={{
                                 m: 1,
                                 minWidth: { xs: 300, sm: 400 }, // Responsive minWidth
@@ -56,7 +56,7 @@ export const PendingBills = () => {
                                 label="Owner Type"
                                 onChange={handlechange}
                             >
-                                {organization.map((org) => (
+                                {["All", ...organization].map((org) => (
                                     <MenuItem key={org} value={org}>
                                         {org}
                                     </MenuItem>

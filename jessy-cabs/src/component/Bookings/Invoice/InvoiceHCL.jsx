@@ -7,6 +7,7 @@ import { Button } from '@mui/material';
 import generatePDF, { Margin } from 'react-to-pdf';
 import dayjs from 'dayjs';
 import { Document, Page } from 'react-pdf';
+import { GoDotFill } from "react-icons/go";
 
 const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, Totaltimes, TotalDays }) => {
 
@@ -67,7 +68,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
               {selectedImage && <img src={selectedImage} alt={"Logo"} />}
             </div>
             <div className="invoice-address">
-              <div style={{height:"110px",}}>
+              <div style={{ height: "110px", }}>
                 <p className='invoice-address-detials-hcl'>{organizationdata?.addressLine1}
                   {organizationdata?.addressLine2}
                   {organizationdata?.city}<br />
@@ -83,9 +84,9 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                   <th id='table-header-hcl'><span>Client Name:</span></th>
                   <td id='table-data'><span >{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}</span></td>
                 </tr>
-                <tr style={{height:"60px"}}>
+                <tr style={{ height: "60px" }}>
                   <th id='table-header-hcl'><span>Address:</span></th>
-                  <td id='table-data' style={{padding:"2px 6px"}}><p className='table-data-add-hcl'>{customerAddress}</p></td>
+                  <td id='table-data' style={{ padding: "2px 6px" }}><p className='table-data-add-hcl'>{customerAddress}</p></td>
                 </tr>
                 <tr>
                   <th id='table-header-hcl'><span>Category:</span></th>
@@ -104,11 +105,11 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                   <th id='table-header-hcl'><span>Emp.Name:</span></th>
                   <td id='table-data'><span>{tripSheetData.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname || book.guestname}</span></td>
                 </tr>
-                <tr style={{height:"60px"}}>
+                <tr style={{ height: "60px" }}>
                   <th id='table-header-hcl'><span>Report Add:</span></th>
                   <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city} </p></td>
                 </tr>
-                <tr style={{height:"60px"}}>
+                <tr style={{ height: "60px" }}>
                   <th id='table-header-hcl'><span>Drop Address:</span></th>
                   <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage} </p></td>
                 </tr>
@@ -323,9 +324,9 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             </div>
           </div>
           <div className='total-values-hcl'>
-            <div id='Totals'><span id='title' style={{fontWeight:"600"}}>Total Parking:  </span><span>{tripSheetData.parking || selectedCustomerData.parking || selectedCustomerDatas.parking || book.parking}</span></div>
-            <div id='Totals'><span id='title' style={{fontWeight:"600"}}>Total Toll:  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
-            <div id='Totals'><span id='title' style={{fontWeight:"600"}}>Total Permit:  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
+            <div id='Totals'><span id='title' style={{ fontWeight: "600" }}>Total Parking:  </span><span>{tripSheetData.parking || selectedCustomerData.parking || selectedCustomerDatas.parking || book.parking}</span></div>
+            <div id='Totals'><span id='title' style={{ fontWeight: "600" }}>Total Toll:  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
+            <div id='Totals'><span id='title' style={{ fontWeight: "600" }}>Total Permit:  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
           </div>
 
 
@@ -340,15 +341,15 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             <div className="tripsheet-RouteSummary-hcl">
               {routeData.length > 0 && (
                 <div >
-                  <h2 style={{ margin: "0px",textAlign:"center" ,fontSize:"17px",fontWeight:'600'}}>Route Summary</h2>
-                  {/* <ol type="1"> */}
-                    {routeData.map((data, index) => (
-                      <li key={index}>
-                        {/* <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p> */}
-                        <p style={{margin:'0px'}}><span style={{ fontSize: '20px', marginRight: '5px' }}>•</span> <strong>{data.trip_type}</strong>: {data.place_name}</p>
-                      </li>
-                    ))}
-                  {/* </ol> */}
+                  <h2 style={{ margin: "0px", textAlign: "center", fontSize: "17px", fontWeight: '600' }}>Route Summary</h2>
+
+                  {routeData.map((data, index) => (
+                    <li key={index}>
+                      {/* <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p> */}
+                      <p style={{ margin: '0px' }}><span style={{ marginRight: '5px' }}><GoDotFill /></span> <strong>{data.trip_type}</strong>: {data.place_name}</p>
+                    </li>
+                  ))}
+
                 </div>
               )}
             </div>

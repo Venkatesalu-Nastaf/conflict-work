@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import generatePDF from 'react-to-pdf';
 import dayjs from 'dayjs';
 import { Document, Page } from 'react-pdf';
+import { GoDotFill } from "react-icons/go";
 
 const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, Totaltimes, totalkm, TotalDays }) => {
 
@@ -47,7 +48,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
               {selectedImage && <img src={selectedImage} alt={"Logo"} />}
             </div>
             <div className="invoice-address">
-              <div style={{height:"110px"}} >
+              <div style={{ height: "110px" }} >
                 <p className='invoice-address-detials'>{organizationdata?.addressLine1}
                   {organizationdata?.addressLine2}
                   {organizationdata?.city}<br />
@@ -207,7 +208,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
               {/* <img src={GmapimageUrl} alt='mapimage' /> */}
               {GmapimageUrl !== "" ?
                 <img src={GmapimageUrl} alt='mapimage' style={{ width: "100%", height: "100%" }} /> : <></>}
-            </div> 
+            </div>
             {/* <div className="tripsheet-RouteSummary">
             <h2>Route Summary</h2>
             <ol type="1">
@@ -218,16 +219,16 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
           </div> */}
             <div className="tripsheet-RouteSummary-normal">
               {routeData.length > 0 && (
-                <div>
-                  <h2 style={{ margin: "0px",textAlign:"center" ,fontSize:"17px",fontWeight:'600' }}>Route Summary</h2>
-                  {/* <ol type="1" style={{fontSize:'11px'}}> */}
-                    {routeData.map((data, index) => (
-                      <li key={index}>
-                        {/* <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p> */}
-                        <p style={{margin:'0px'}}><span style={{ fontSize: '20px', marginRight: '5px' }}>•</span> <strong>{data.trip_type}</strong>: {data.place_name}</p>
-                      </li>
-                    ))}
-                  {/* </ol> */}
+                <div >
+                  <h2 style={{ margin: "0px", textAlign: "center", fontSize: "17px", fontWeight: '600' }}>Route Summary</h2>
+
+                  {routeData.map((data, index) => (
+                    <li key={index}>
+                      {/* <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p> */}
+                      <p style={{ margin: '0px' }}><span style={{ marginRight: '5px' }}><GoDotFill /></span> <strong>{data.trip_type}</strong>: {data.place_name}</p>
+                    </li>
+                  ))}
+
                 </div>
               )}
             </div>

@@ -14,7 +14,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"; // Adapter for dayjs
 import Button from "@mui/material/Button";
 import PlacesAutocomplete from 'react-places-autocomplete';
-
+import startMarkerIcon from "./StartMarkerIcon.png"
+import endMarkerIcon from "./endMarkerIcon.png";
+import wayPointMarker from "./wayPointMarker.png"
 const style2 = {
   position: 'absolute',
   top: '50%',
@@ -153,7 +155,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
             //   tripType: item.trip_type
             // });
           }
-          console.log(polywaypoints, "polywaypoints",fullGpsData);
 
           if (item.trip_type === 'end') {
             console.log('endlat', item.Latitude, parseFloat(item.Latitude), Number(item.Latitude));
@@ -481,6 +482,42 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
   };
 
+  // const handleMapDraw = async () => {
+  //   const directionsService = new window.google.maps.DirectionsService();
+  //   const { start, end, waypoints } = tripData;
+
+  //   if (!startLat || !endLat) {
+  //     setTimeout(() => {
+  //       setErrorMessage(true);
+  //       setTimeout(() => setErrorMessage(false), 1000);
+  //     }, 1000);
+  //     return;
+  //   }
+
+  //   try {
+  //     const directionsResult = await directionsService.route({
+  //       origin: new window.google.maps.LatLng(startLat, startLng),
+  //       destination: new window.google.maps.LatLng(endLat, endLng),
+  //       waypoints: waypoints?.map(point => ({ location: point, stopover: true })) || [],
+  //       travelMode: window.google.maps.TravelMode.DRIVING,
+  //       // provideRouteAlternatives: false,
+  //     });
+
+  //     // Suppress ALL markers (Google’s default ones and custom ones)
+  //     const directionsRenderer = new window.google.maps.DirectionsRenderer({
+  //       suppressMarkers: true, // This removes Google's default markers
+  //     });
+  //     directionsRenderer.setDirections(directionsResult);
+
+  //     setDirections(directionsResult);
+  //     setMapCaptureVerify(true);
+
+  //   } catch (error) {
+  //     console.log("Error fetching directions:", error);
+  //   }
+  // };
+
+
   const handleMapDrawRouteVerify = () => {
 
     setTimeout(() => {
@@ -560,8 +597,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     let markersArray = [];
 
     // Add start marker
-    markersArray.push(`markers=color:red%7Clabel:A%7C${startLat},${startLng}`);
-
+    markersArray.push(`markers=color:0x00FF00%7Clabel:%7C${startLat},${startLng}`);
     // Add waypoint markers (starting from B) ------commented waypoint markers
     // wayRoutes.forEach((waypoint, index) => {
     //   let label = markerLabels[index + 1]; // Start from B
@@ -571,7 +607,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     // Add end marker (next label after last waypoint)
     // let endLabel = markerLabels[wayRoutes.length + 1]; // Next letter
     let endLabel = "B" // Next letter
-    markersArray.push(`markers=color:red%7Clabel:${endLabel}%7C${endLat},${endLng}`);
+    markersArray.push(`markers=color:red%7Clabel:%7C${endLat},${endLng}`);
 
     // Join markers
     const markers = markersArray.join("&");
@@ -641,7 +677,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
     // Add the start marker as 'A'
     if (startLat && startLng) {
-      markers.push(`markers=color:red%7Clabel:A%7C${startLat},${startLng}`);
+      markers.push(`markers=color:0x00FF00%7Clabel:%7C${startLat},${startLng}`);
     }
 
     // Add waypoints with incrementing alphabet labels
@@ -658,7 +694,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     if (endLat && endLng) {
       // const endLabel = String.fromCharCode(waypointLabelCharCode); // Next letter after last waypoint
       const endLabel = "B"; // Next letter after last waypoint
-      markers.push(`markers=color:red%7Clabel:${endLabel}%7C${endLat},${endLng}`);
+      markers.push(`markers=color:red%7Clabel:%7C${endLat},${endLng}`);
     }
 
     const directionsService = new window.google.maps.DirectionsService();
@@ -996,6 +1032,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     ?.filter((li) => li?.Trip_Status === "Reached" && li?.Latitude_loc)
     ?.map((li) => parseFloat(li?.Latitude_loc));
 
+  console.log(directions, "directionsssssssssssssss");
 
   return (
     <>
@@ -1081,10 +1118,79 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
               onClick={handleMapClick}
             /> : ""
             }
-            {startLat && directions === null && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />}
-            {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={polyLineWaypoints.length !== fullGpsData.length  ? endLabel : "B"} onClick={() => handleMarkerClick(endRoutes)} />}
-            {/* {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />} */}
+            {startLat && directions !== null && (
+              <Marker
+                position={{ lat: startLat, lng: startLng }}
+                icon={{
+                  url: startMarkerIcon, // Custom PNG marker
+                  scaledSize: new window.google.maps.Size(40, 40), // Adjust size (smaller than default)
+                }}
+                onClick={() => handleMarkerClick(startRoutes)}
+              />
+            )}
+            {startLat && directions === null && (
+              <Marker
+                position={{ lat: startLat, lng: startLng }}
+                icon={{
+                  url: startMarkerIcon, // Custom PNG marker
+                  scaledSize: new window.google.maps.Size(40, 40), // Adjust size (smaller than default)
+                }}
+                onClick={() => handleMarkerClick(startRoutes)}
+              />
+            )}
+            {endLat && directions !== null && (
+              <Marker
+                position={{ lat: endLat, lng: endLng }}
+                icon={{
+                  url: endMarkerIcon, // Custom PNG marker
+                  scaledSize: new window.google.maps.Size(40, 40), // Adjust size (smaller than default)
+                }}
+                onClick={() => handleMarkerClick(endRoutes)}
+              />
+            )}
+            {endLat && directions === null && (
+              <Marker
+                position={{ lat: endLat, lng: endLng }}
+                icon={{
+                  url: endMarkerIcon, // Custom PNG marker
+                  scaledSize: new window.google.maps.Size(40, 40), // Adjust size (smaller than default)
+                }}
+                onClick={() => handleMarkerClick(endRoutes)}
+              />
+            )}
+             {directions !== null && polyLineWaypoints.length !== fullGpsData.length && wayRoutes?.map((point, index) => (
+              point.tripType === "waypoint" && (
+                <Marker
+                  key={index}
+                  position={{ lat: point.lat, lng: point.lng }}
+                  icon={{
+                    url: wayPointMarker, // Custom PNG marker
+                    scaledSize: new window.google.maps.Size(40, 40), // Adjust size (smaller than default)
+                  }}
+                  onClick={() => handleMarkerClick(point)}
+                />
+
+              )
+            ))}
             {directions === null && polyLineWaypoints.length !== fullGpsData.length && wayRoutes?.map((point, index) => (
+              point.tripType === "waypoint" && (
+                <Marker
+                  key={index}
+                  position={{ lat: point.lat, lng: point.lng }}
+                  icon={{
+                    url: wayPointMarker, // Custom PNG marker
+                    scaledSize: new window.google.maps.Size(40, 40), // Adjust size (smaller than default)
+                  }}
+                  onClick={() => handleMarkerClick(point)}
+                />
+
+              )
+            ))}
+
+            {/* {startLat && directions === null && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />} */}
+            {/* {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={polyLineWaypoints.length !== fullGpsData.length  ? endLabel : "B"} onClick={() => handleMarkerClick(endRoutes)} />} */}
+            {/* {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={endLabel} onClick={() => handleMarkerClick(endRoutes)} />} */}
+            {/* {directions === null && polyLineWaypoints.length !== fullGpsData.length && wayRoutes?.map((point, index) => (
               point.tripType === "waypoint" && (
                 <Marker
                   key={index}
@@ -1093,9 +1199,15 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
                   onClick={() => handleMarkerClick(point)}
                 />
               )
-            ))}
+            ))} */}
 
-            {directions && <DirectionsRenderer directions={directions} />}
+            {/* {directions && <DirectionsRenderer directions={directions} />} */}
+            {directions && (
+              <DirectionsRenderer
+                directions={directions}
+                options={{ suppressMarkers: true }} // Hide default markers
+              />
+            )}
             {polyLineWaypoints.length === fullGpsData.length && startLat === startLatVerify[0] && endLat === endLatVerify[0] && polyLineWaypoints.length > 0 && (
               <Polyline
                 path={polyLineWaypoints}

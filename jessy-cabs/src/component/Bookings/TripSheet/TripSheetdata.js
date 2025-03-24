@@ -894,6 +894,7 @@ export const states = [
       "Botad",
       "Chhota Udepur",
       "Dahod",
+      "Diu Island",
       "Dangs (Ahwa)",
       "Devbhoomi Dwarka",
       "Gandhinagar",

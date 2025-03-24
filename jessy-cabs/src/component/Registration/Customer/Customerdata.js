@@ -106,7 +106,7 @@ export const allStations = [
   "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong",
   "Karimganj", "Kokrajhar", "Lakhimpur", "Morigaon", "Nagaon", "Nalbari", "Sivasagar", "Sonitpur",
   "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong", "Araria", "Arwal",
-  "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj",
+  "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "Diu Island","East Champaran", "Gaya", "Gopalganj",
   "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani",
   "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran",
   "Sheikhpura", "Sheohar", "Sitamarhi", "Supaul", "Vaishali", "West Champaran", "Balod", "Baloda Bazar", "Balrampur",
@@ -342,7 +342,7 @@ export const stateToStations = {
    ],
   "Gujarat": 
   [ "Ahmedabad", "Amreli", "Anand", "Aravalli", "Banas Kantha", "Bharuch", "Bhavnagar",
-    "Botad", "Chhota Udepur", "Dahod", "Dangs", "Gandhinagar", "Gir Somnath", "Jamnagar",
+    "Botad", "Chhota Udepur", "Dahod", "Dangs","Diu Island","Gandhinagar", "Gir Somnath", "Jamnagar",
     "Junagadh", "Kutch", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari",
     "Panchmahal", "Patan", "Porbandar", "Gujarat", "Sabarkantha", "Surat", "Surendranagar",
     "Tapi", "Vadodara", "Valsad"
@@ -1266,6 +1266,7 @@ export const states = [
       "Chhota Udepur",
       "Dahod",
       "Dangs (Ahwa)",
+      "Diu Island",
       "Devbhoomi Dwarka",
       "Gandhinagar",
       "Gir Somnath",

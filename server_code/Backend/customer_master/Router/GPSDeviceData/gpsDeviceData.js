@@ -147,35 +147,44 @@ router.post('/getAlladddateandtripid', (req, res) => {
     })
 })
 
-// router.post('/gettripbasedmapdetails', (req, res) => {
-  
-//     const { tripid } = req.body;
-//     // const formattedStartDate = moment(selectedDate).format('YYYY-MM-DD');
+router.post('/gettripbasedmapdetails', (req, res) => {
+//   console.log(req.body,"ccccccccccc")
+    const { tripid } = req.body;
+    // console.log(tripid,"cc")
+    // const formattedStartDate = moment(selectedDate).format('YYYY-MM-DD');
 
-//     // console.log("Today's Date:alllladtaaa", vehicleNumber, formattedStartDate);
-//     const sqlQuery = `SELECT tripid,Groups,vehRegNo,vehicleName FROM tripsheet WHERE tripid = ?   `;
-//     const sqlquery2 = `SELECT fueltype FROM vehicleinfo WHERE vehRegNo = ?   `;
-//     db.query(sqlQuery, [tripid], (error, result) => {
-//         if (error) {
-//             console.log(error, "error");
-//         }
-//         console.log(result, "Today vehicle lists....");
-//         const vehdata = result[0].vehRegNo;
-//         db.query(sqlquery2, [vehdata], (error, result2) => {
-//             if (error) {
-//                 console.log(error, "error");
-//             }
-//             console.log(result, "Today vehicle lists....");
+    // console.log("Today's Date:alllladtaaa", vehicleNumber, formattedStartDate);
+    const sqlQuery = `SELECT tripid,Groups,vehRegNo,vehicleName FROM tripsheet WHERE tripid = ?   `;
+    const sqlquery2 = `SELECT fueltype FROM vehicleinfo WHERE vehRegNo = ?   `;
+    db.query(sqlQuery, [tripid], (error, result) => {
+        if (error) {
+            console.log(error, "error");
+        }
+        console.log(result, "Today vehicle lists....");
+        const vehdata = result[0]?.vehRegNo;
+        db.query(sqlquery2, [vehdata], (error, result2) => {
+            if (error) {
+                console.log(error, "error");
+            }
+            if(result2.length > 0){
+               
+                const mergedArray = result.map((obj, index) => {
+                    return { ...obj, ...result2[index] };
+                  });
+                  return res.status(200).json(mergedArray);
+            }
+            console.log(result, "Today vehicle lists....");
 
-//             const resulttt = [...result,result2]
+           
+           return res.status(200).json(result);
 
         
        
 
-//         // res.status(200).json(result);
-//     })
-// })
-// })
+        // res.status(200).json(result);
+    })
+})
+})
 
 // router.post('/getTodayVehiclePoints', (req, res) => {
 router.post('/getAllVehicleCurrentLocation', (req, res) => {

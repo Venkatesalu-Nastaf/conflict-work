@@ -1276,6 +1276,8 @@ const handlecheckmaildriver = async (lastBookingno) => {
 
         setIsEditMode(true);
         setEdit(true)
+        setCredentialData(false)
+        setCredentialData2(false)
     }, []);
 
     const handleClickShowPasswords = () => {

@@ -4872,22 +4872,33 @@ const useTripsheet = () => {
         const extraHR11 = extraHR111 || 0
         const datatimetoggle = timeToggle || timetogglenavigate
 
-        console.log(extraHR11, "kk", typeof (extraHR11), ex_hrAmount11, datatimetoggle)
+        console.log(extraHR11, "houwwwwwwwwwwwwwww", typeof (extraHR11), ex_hrAmount11, datatimetoggle)
 
 
         if (datatimetoggle === 1) {
-            console.log(extraHR11, "enetr111111111111")
+            // console.log(extraHR11, "houenetr111111111111")
             if (extraHR11) {
                 // if (extraHR11 !== 0 && extraHR11 !== null && !extraHR11) {
-                console.log(extraHR, "lldaaa", typeof (extraHR))
-                const [hrda, mida = 0] = extraHR11.toString().split('.').map(Number);
-                console.log(hrda, "Hour part", mida, "Minute part", ex_hrAmount11);
+                // console.log(extraHR, "houlldaaa", typeof (extraHR))
+                const [hrda, mida = 0] = extraHR11.toString().split('.');
+             
+const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
+                // console.log(mida,"houmidaa",typeof(mida),Number(mida),Number("90"),midaFormatted)
+                
+                // console.log(hrda, "Hour part", mida, "Minute part", ex_hrAmount11);
+                // const datapointdigit = mida < 10 ? mida * 10 : mida
                 const onehrdata = Number(hrda) * Number(ex_hrAmount11)
-                const result = Math.round((ex_hrAmount11 / 60) * 10) / 10;
-                const etrxamin = result * Number(mida)
+                // console.log(onehrdata,"hou1111",datapointdigit)
+                // const result = Math.round((ex_hrAmount11 / 60) * 10) / 10;
+                const result = (ex_hrAmount11 / 60) * 10 / 10;
+                // console.log(result,"hou2cutsomer")
+                const etrxamin = result.toFixed(2) * Number(midaFormatted)
+                // console.log(etrxamin,"hou3customer",onehrdata,etrxamin)
                 const totalamountwithmin = onehrdata + etrxamin
+                // console.log(totalamountwithmin,"hou4customer")
                 const totalamounthrmin = Math.round(totalamountwithmin)
-                console.log(onehrdata, "ooooomnedd", result, etrxamin, totalamountwithmin, totalamounthrmin)
+                // console.log(totalamounthrmin,"hou5")
+                // console.log(onehrdata, "houoooomnedd", result, etrxamin, totalamountwithmin, totalamounthrmin)
                 return totalamountwithmin
                 // const totalamounthrmin = Math.round(totalamountwithmin)
                 // console.log(onehrdata,"ooooomnedd",result,etrxamin,totalamountwithmin,totalamounthrmin)
@@ -4898,7 +4909,7 @@ const useTripsheet = () => {
             }
         }
         else {
-            console.log("enetr")
+            // console.log("enetr")
             let extraAbout_hr1 = Number(extraHR) * Number(extrahr_amount);
             return extraAbout_hr1
         }
@@ -4912,7 +4923,7 @@ const useTripsheet = () => {
         const extraClac = () => {
             // let extraAbout_hr = Number(extraHR) * Number(extrahr_amount);
             const daghr = datatimeminutescahrges(extraHR, extrahr_amount)
-            console.log(daghr, "datagr")
+            console.log(daghr, "hou")
 
             // const extarhour = Math.round(extraAbout_hr)
             const extarhour = Math.round(daghr)
@@ -4945,19 +4956,23 @@ const useTripsheet = () => {
 
     const vendordatatimeminutescahrges = (vendorhr, vendorhramount) => {
 
-        console.log(vendorhr, "kkkkkkkhrrrven", typeof (vendorhr))
+        console.log(vendorhr, "venkkkkkkkhrrrven", typeof (vendorhr))
         const datatimetoggle = timeTogglevendor || timetogglevendornavigate
         if (datatimetoggle === 1) {
             if (vendorhr !== 0) {
 
-                const [hrdavendor, midavendor = 0] = vendorhr.toString().split('.').map(Number);
-                console.log(hrdavendor, "Hour part", midavendor, "Minute vendorpart", vendorhramount);
+                const [hrdavendor, midavendor = 0] = vendorhr.toString().split('.');
+                const midaFormatted = midavendor?.padEnd(2, '0');
+                // console.log(hrdavendor, "venHour part", midavendor, "Minute vendorpart", vendorhramount,midaFormatted);
                 const onehrdata = Number(hrdavendor) * Number(vendorhramount)
-                const result = Math.round((vendorhramount / 60) * 10) / 10;
+                // const result = Math.round((vendorhramount / 60) * 10) / 10;
+                const result = ((vendorhramount / 60) * 10) / 10;
                 console.log(result, "clatimeeeee")
-                const etrxamin = result * Number(midavendor)
+                const etrxamin = result.toFixed(2) * Number(midaFormatted)
                 const totalamountwithmin = onehrdata + etrxamin
+                // console.log(totalamountwithmin,"venextradd")
                 const totalamounthrmin = Math.round(totalamountwithmin)
+                // console.log(totalamounthrmin)
                 console.log(onehrdata, "ooooomneddvendor", result, etrxamin, totalamountwithmin, totalamounthrmin)
                 return totalamounthrmin
 
@@ -4968,7 +4983,8 @@ const useTripsheet = () => {
         }
         else {
 
-            let extraAbout_hr1 = Number(vendorhr) * Number(vendorhramount);
+            let extraAbout_hr1 = Math.round(Number(vendorhr) * Number(vendorhramount));
+           
             return extraAbout_hr1
         }
     }
@@ -5167,7 +5183,7 @@ const useTripsheet = () => {
         const amount6 = parseFloat(vendorinfo.vendor_toll || vendorinfo?.vendortoll) || 0;
         // console.log(vendorinfo.vendor_toll,"totalAmount1vvvvv",vendorinfo?.vendortoll)
         const amount7 = parseFloat(vendorinfo.vendor_advancepaidtovendor || vendorinfo?.advancepaidtovendor) || 0;
-        const amount8 = parseFloat(vendorinfo?.vendorparking) || 0;
+        const amount8 = parseFloat(vendorinfo.vendor_vendorparking || vendorinfo?.vendorparking) || 0;
         const amount9 = parseFloat(vendorinfo.fuelamount) || 0;
 
         // console.log(amount, "1", amount1, "2", amount2, "3", amount3, "4", amount4, "5", amount5, "6", amount6, "8", amount8)
@@ -5187,7 +5203,7 @@ const useTripsheet = () => {
 
     useEffect(() => {
         calculatevendorTotalAmount()
-    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo.advancepaidtovendor, vendorinfo.fuelamount, vendorinfo?.vendorparking])
+    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo.advancepaidtovendor, vendorinfo.fuelamount, vendorinfo?.vendorparking,vendorinfo.vendor_vendorparking ])
 
 
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
@@ -5308,7 +5324,8 @@ const useTripsheet = () => {
                     console.log(matches, "mmaaa")
 
                     let time = matches - Hours.toFixed(2);
-                    const convertedTime = Number(time.toFixed(2))
+                    // const convertedTime = Number(time.toFixed(2))
+                    const convertedTime = time.toFixed(2)
 
                     console.log(convertedTime, "totalextra",)
                     dataextrahous = convertedTime
@@ -5564,7 +5581,7 @@ const useTripsheet = () => {
 
             // console.log(tothr,"totalhrccc")
             totalHours = await convertTimeToNumber(tothr);
-            // console.log(totalHours,"totalhandcccc")
+            // console.log(totalHours,"aqtotalhandcccc")
             const consvertedTotalHour = totalHours
             // console.log(consvertedTotalHour,"totalccccc")
 
@@ -5631,12 +5648,14 @@ const useTripsheet = () => {
                 //     setExtraHR(convertedTime);
                 // }
                 const matches = consvertedTotalHour
-                console.log(matches, "atch")
+                // console.log(matches, "aqhouatch")
                 if (matches) {
 
                     let time = matches - Hours.toFixed(2);
-                    const convertedTime = Number(time.toFixed(2))
-                    console.log(convertedTime, "totalextra")
+                    // const convertedTime = Number(time.toFixed(2))
+                    // console.log(time,matches,Hours.toFixed(2),"aqcall")
+                    const convertedTime = time.toFixed(2)
+                    // console.log(convertedTime, "aqtotalextra")
 
                     setExtraHR(convertedTime);
                 }

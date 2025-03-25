@@ -660,6 +660,7 @@ const useCustomer = () => {
          setSelectedState(customerData?.state || ""); 
         setIsEditMode(true);
         console.log(customerData,'customer datatatat')
+        setCredentialData(false)
     }
     //search with date
     const handleSearch = async () => {
@@ -1055,12 +1056,12 @@ const useCustomer = () => {
     // Use handleList as a dependency
     const handleClick = async (event, actionName, customerId) => {
         event.preventDefault();
-        console.log(actionName,"jj")
+        // console.log(actionName,"jj")
         const dataordereddata = removeEmptyObjects(customerfieldSets);
         try {
             if (actionName === 'List') {
-                const response = await axios.get(`${apiUrl}/customers`);
-                console.log(response,"ppp")
+                const response = await axios.get(`${apiUrl}/customersgroup`);
+                // console.log(response,"ppp")
                 const data = response.data;
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({

@@ -654,6 +654,7 @@ const useVendorinfo = () => {
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.accountNo);
     setIsEditMode(true);
+    setCredentialData(false)
   }, []);
 
 

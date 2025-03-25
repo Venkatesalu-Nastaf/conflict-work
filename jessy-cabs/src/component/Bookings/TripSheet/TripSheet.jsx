@@ -4225,13 +4225,17 @@ Please Click the link to close E-Tripsheet-`}
                       size="small"
                       name="vpermettovendor"
                       value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
-                      // onChange={(e) => {
-                      //   handleChange(e);
-                      //   setVendorinfodata({
-                      //     ...vendorinfo,
-                      //     vendor_vpermettovendor: e.target.value,
-                      //   });
-                      // }}
+                      onChange={(e) => {
+                        handleChange(e);
+                        setVendorinfodata({
+                          ...vendorinfo,
+                          vendor_vpermettovendor: e.target.value,
+                        });
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vendor_vpermettovendor: e.target.value,
+                        }));
+                      }}
                       disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"&& !a}
                       label="Vendor permit"
                       id="vpermettovendor"
@@ -4248,10 +4252,15 @@ Please Click the link to close E-Tripsheet-`}
                       size="small"
                       name="vendorparking"
                       value={formData.vendorparking || selectedCustomerData.vendorparking || book.vendorparking || ""}
-                      // onChange={(e) => {
-                      //   handleChange(e)
-                      //   setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
-                      // }}
+                      onChange={(e) => {
+                        handleChange(e)
+                        setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vendor_vendorparking: e.target.value ,
+                        }));
+                        
+                      }}
                       disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Vendor Parking"
                       id="vendorparking"
@@ -4268,10 +4277,14 @@ Please Click the link to close E-Tripsheet-`}
                       size="small"
                       name="vendortoll"
                       value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ""}
-                      // onChange={(e) => {
-                      //   handleChange(e)
-                      //   setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
-                      // }}
+                      onChange={(e) => {
+                        handleChange(e)
+                        setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vendortoll: e.target.value ,
+                        }));
+                      }}
                       disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Vendor Toll"
                       id="vendor-vendortoll"

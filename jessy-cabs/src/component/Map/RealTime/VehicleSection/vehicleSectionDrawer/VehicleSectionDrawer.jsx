@@ -47,6 +47,7 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
     const [tripWayPoints, setTripWayPoints] = useState([]);
     const [tripdropdown,settripdown]=useState([])
     const [ridingvaluedata,setRidingValue]=useState([]);
+    const [tripvalue,setTripvalue]=useState([])
     
         const [valuetabs, setValuetabs] = useState('1');
     
@@ -171,6 +172,29 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
 
     //     return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
     // }, [currentDatePoints, filterDate, selectedTripid]);
+    const getbasedtipidformap = async() =>{
+        console.log(selectedTripid,"gg")
+        try{
+         const resposefortrip =  await axios.post(`${apiUrl}/gettripbasedmapdetails`, {
+           
+            tripid: selectedTripid
+        });
+        const result = resposefortrip.data
+        setTripvalue(result)
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        if (selectedTripid) { // Ensure `selectedTripid` is defined before making the request
+            getbasedtipidformap();
+        }
+        else{
+            setTripvalue([])
+        }
+    }, [selectedTripid]); 
  
 
     const handleTripidChange = (event,value) => {
@@ -425,13 +449,17 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo,todayVehicle }) => {
                         {/* <span>{vehicleListData[0]?.yearModel}</span> */}
                     </div>
 
-                    <div className='overview-content-border' >
+                    {/* <div className='overview-content-border' >
                         <span className='overview-left'>Group:</span>
+                    </div> */}
+                      <div className='overview-content-border' >
+                        <span className='overview-left'>vehicle Name:</span>
+                        <span>{tripvalue[0]?.vehicleName}</span>
                     </div>
 
                     <div className='overview-content'>
                         <span className='overview-left'>Fuel Type:</span>
-                        {/* <span>{vehicleListData[0]?.fueltype}</span> */}
+                        <span>{tripvalue[0]?.fueltype}</span>
                     </div>
 
                     <div className='overview-content-dropdown'>

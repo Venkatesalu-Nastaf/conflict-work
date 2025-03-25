@@ -611,6 +611,7 @@ const useRatype = () => {
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
+        setCredentialData(false)
     }, []);
 
     const handleAdd = async () => {
@@ -701,6 +702,7 @@ const useRatype = () => {
                     ...row,
                     id: index + 1,
                 }));
+                console.log(rowsWithUniqueId,"cust")
                 // setRows(rowsWithUniqueId);
                 setRows(data.length > 0 ? rowsWithUniqueId : []);
                
@@ -762,21 +764,22 @@ const useRatype = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                const response = await axios.get(`${apiUrl}/ratetype`);
-                const data = response.data;
-                if (data.length > 0) {
-                    const rowsWithUniqueId = data.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setRows(rowsWithUniqueId);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully listed");
-                } else {
-                    setRows([]);
-                    setError(true);
-                    setErrorMessage("No data found");
-                }
+                handlelist();
+                // const response = await axios.get(`${apiUrl}/ratetype`);
+                // const data = response.data;
+                // if (data.length > 0) {
+                //     const rowsWithUniqueId = data.map((row, index) => ({
+                //         ...row,
+                //         id: index + 1,
+                //     }));
+                //     setRows(rowsWithUniqueId);
+                //     setSuccess(true);
+                //     setSuccessMessage("Successfully listed");
+                // } else {
+                //     setRows([]);
+                //     setError(true);
+                //     setErrorMessage("No data found");
+                // }
             }
 
             else if (actionName === 'Cancel') {

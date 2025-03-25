@@ -464,7 +464,7 @@ router.get('/getFromToBetweenParticularStateBilledDetails', async (req, res) => 
             WHERE Billdate BETWEEN ? AND ? 
             AND State = ? 
             ${customerCondition}`;
-        
+
         const transferListResults = await new Promise((resolve, reject) => {
             db.query(transferListQuery, [fromDate, toDate, department, ...customerParams], (error, results) => {
                 if (error) return reject(error);
@@ -487,7 +487,7 @@ router.get('/getFromToBetweenParticularStateBilledDetails', async (req, res) => 
         AND State = ?
         ${customerCondition.replace('Organization_name', 'Customer')}
     `;
-        
+
         const groupBillingResults = await new Promise((resolve, reject) => {
             db.query(groupBillingQuery, [fromDate, toDate, department, ...customerParams], (error, results) => {
                 if (error) return reject(error);
@@ -521,8 +521,8 @@ router.get('/getFromToBetweenParticularStateBilledDetails', async (req, res) => 
         WHERE Bill_Date BETWEEN ? AND ? 
         AND State = ?
         ${customerCondition.replace('Organization_name', 'Customer')}`;
-    
-        
+
+
         const individualBillingResults = await new Promise((resolve, reject) => {
             db.query(individualBillingQuery, [fromDate, toDate, department, ...customerParams], (error, results) => {
                 if (error) return reject(error);
@@ -536,7 +536,6 @@ router.get('/getFromToBetweenParticularStateBilledDetails', async (req, res) => 
             groupBillingResults: groupBillingInvoices,
             individualBillingResults,
         };
-console.log(combinedResults,"-----------------------------------------------------");
 
         // Extract all Trip IDs
         const allTripIds = [
@@ -544,6 +543,24 @@ console.log(combinedResults,"---------------------------------------------------
             ...groupBillingInvoices.flatMap(item => item.Trip_id ? item.Trip_id.split(',') : []),
             ...individualBillingResults.flatMap(item => item.Trip_id ? item.Trip_id.split(',') : []),
         ];
+
+        const allTripIds1 = [
+            ...transferListResults.map(item => [
+                item.Grouptrip_id,
+                item.Trip_id ? item.Trip_id.split(',').map(tripId => tripId.trim()) : []
+            ]),
+            ...groupBillingInvoices.map(item => [
+                item.ReferenceNo,
+                item.Trip_id ? item.Trip_id.split(',').map(tripId => tripId.trim()) : []
+            ]),
+            ...individualBillingResults.map(item => [
+                item.Invoice_No,
+                item.Trip_id ? item.Trip_id.split(',').map(tripId => tripId.trim()) : []
+            ]),
+        ].map(([groupid, tripIds]) => ({ groupid, tripIds }));
+
+        // console.log(allTripIds);
+
 
         if (allTripIds.length === 0) {
             return res.status(200).json({
@@ -561,7 +578,7 @@ console.log(combinedResults,"---------------------------------------------------
                 invoiceNo: item.Invoice_no,
                 invoiceDate: item.Billdate,
             })) : []),
-            
+
             ...groupBillingInvoices.flatMap(item => {
                 const tripIds = item.Trip_id ? item.Trip_id.split(',').map(tripId => tripId.trim()) : [];
                 return tripIds.map((tripId, index) => ({
@@ -578,18 +595,38 @@ console.log(combinedResults,"---------------------------------------------------
             })) : []),
         ];
 
+        // // Query tripsheet table
+        // db.query("SELECT * FROM tripsheet WHERE tripid IN (?)", [allTripIds], (error, tripsheetResults) => {
+        //     if (error) {
+        //         console.error('Error querying tripsheet:', error);
+        //         return res.status(500).json({ error: 'Error fetching tripsheet data' });
+        //     }
+        const tripIdToGroupMap = {};
+        allTripIds1.forEach(({ groupid, tripIds }) => {
+            tripIds.forEach(tripId => {
+                if (tripId) tripIdToGroupMap[tripId] = groupid;
+            });
+        });
+        
         // Query tripsheet table
         db.query("SELECT * FROM tripsheet WHERE tripid IN (?)", [allTripIds], (error, tripsheetResults) => {
             if (error) {
                 console.error('Error querying tripsheet:', error);
                 return res.status(500).json({ error: 'Error fetching tripsheet data' });
             }
-
+        
+            // Add groupid to tripsheetResults
+            const updatedTripsheetResults = tripsheetResults.map(trip => ({
+                ...trip,
+                groupid: tripIdToGroupMap[trip.tripid] || null
+            }));
+            console.log(updatedTripsheetResults);
+            
             res.status(200).json({
                 combinedResults,
                 allTripIds,
                 allTripDetails,
-                tripsheetResults,
+                tripsheetResults:updatedTripsheetResults,
             });
         });
     } catch (error) {
@@ -616,7 +653,7 @@ router.get('/getParticularStateBilledDetails', async (req, res) => {
             WHERE Billdate BETWEEN ? AND ? 
             AND State = ? 
             ${customerCondition}`;
-        
+
         const transferListResults = await new Promise((resolve, reject) => {
             db.query(transferListQuery, [fromDate, toDate, department, ...customerParams], (error, results) => {
                 if (error) return reject(error);
@@ -631,7 +668,7 @@ router.get('/getParticularStateBilledDetails', async (req, res) => {
             WHERE InvoiceDate BETWEEN ? AND ? 
             AND State = ?
             ${customerCondition.replace('Organization_name', 'Customer')}`;
-        
+
         const groupBillingResults = await new Promise((resolve, reject) => {
             db.query(groupBillingQuery, [fromDate, toDate, department, ...customerParams], (error, results) => {
                 if (error) return reject(error);
@@ -659,7 +696,7 @@ router.get('/getParticularStateBilledDetails', async (req, res) => {
             WHERE Bill_Date BETWEEN ? AND ? 
             AND State = ?
             ${customerCondition.replace('Organization_name', 'Customer')}`;
-        
+
         const individualBillingResults = await new Promise((resolve, reject) => {
             db.query(individualBillingQuery, [fromDate, toDate, department, ...customerParams], (error, results) => {
                 if (error) return reject(error);
@@ -697,7 +734,7 @@ router.get('/getParticularStateBilledDetails', async (req, res) => {
                 invoiceNo: item.Invoice_no,
                 invoiceDate: item.Billdate,
             })) : []),
-            
+
             ...groupBillingInvoices.flatMap(item => {
                 const tripIds = item.Trip_id ? item.Trip_id.split(',').map(tripId => tripId.trim()) : [];
                 return tripIds.map((tripId, index) => ({
@@ -720,7 +757,7 @@ router.get('/getParticularStateBilledDetails', async (req, res) => {
                 console.error('Error querying tripsheet:', error);
                 return res.status(500).json({ error: 'Error fetching tripsheet data' });
             }
-console.log(combinedResults,"cccccccccccccccccccccccccccccc");
+            console.log(combinedResults, "cccccccccccccccccccccccccccccc");
 
             res.status(200).json({
                 combinedResults,

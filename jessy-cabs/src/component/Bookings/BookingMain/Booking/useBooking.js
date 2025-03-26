@@ -821,6 +821,7 @@ const useBooking = () => {
     if (booking_no && file) {
       addPdf(booking_no, file)
     }
+    e.target.value = null
   }
   const [triggerCount, setTriggerCount] = useState(false)
 
@@ -943,10 +944,12 @@ const useBooking = () => {
   //   setSelectetImg((prevImg) => prevImg?.filter((_, i) => i !== index))
   // }
   const handleImagechange2 = (e) => {
-    // console.log(e.target.files,"etarget")
+    // console.log(e,"isssssssssss")
+    // console.log(e.target.files,"isetarget")
     const files = Array.from(e.target.files);
     setSelectetImg((prevImg) => [...prevImg, ...files]);
     // console.log(files,"filesdataaddnewimage")
+    e.target.value = null
     
     // if (files.length > 0) {
     //   setImageDialogOpen(true);

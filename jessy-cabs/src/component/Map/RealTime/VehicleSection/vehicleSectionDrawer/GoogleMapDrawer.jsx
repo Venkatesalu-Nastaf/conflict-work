@@ -1,11 +1,13 @@
 import React, { useMemo, useState,useRef, useEffect } from "react";
 import { GoogleMap, LoadScript, MarkerF, useJsApiLoader, Polyline, InfoBox ,InfoWindow} from "@react-google-maps/api";
-import { MarkerClustererF } from "@react-google-maps/api";
+// import { MarkerClustererF } from "@react-google-maps/api";
 // import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png"
 import caricon from "../../VehicleSection/VehicleInformationDrawer/mapicon.png"
-import startPointIcon from "../VehicleInformationDrawer/startPointIcon.png"
-import startpoint from "../VehicleInformationDrawer/startpoint.png"
-import Reach from "../VehicleInformationDrawer/Reach.png"
+// import startPointIcon from "../VehicleInformationDrawer/startPointIcon.png"
+// import startpoint from "../VehicleInformationDrawer/startpoint.png"
+import endMarkerIcon from '../../../../Bookings/TripSheet/NavigationMap/endMarkerIcon.png'
+import StartMarkerIcon from '../../../../Bookings/TripSheet/NavigationMap/StartMarkerIcon.png'
+// import Reach from "../VehicleInformationDrawer/Reach.png"
 // import VehicleDetailsPopup from '../../VehicleModal/VehicleDetailsPopup';
 import VehicleDetailsPopup from '../../../VehicleModal/VehicleDetailsPopup';
 // import { VehicleMapData } from "../vehicleMapContext/vehcileMapContext"
@@ -351,8 +353,8 @@ const OPTIONS = {
 
         onClick={(e) => handlestartLocation(startMarkerPosition,e)} // Pass clicked location
         icon={{
-          url: startpoint,
-          scaledSize: new window.google.maps.Size(24, 24),
+          url: StartMarkerIcon,
+          scaledSize: new window.google.maps.Size(40, 40),
           origin: new window.google.maps.Point(0, 0),
           anchor: new window.google.maps.Point(12, 12),
           fillColor:"green"
@@ -390,8 +392,8 @@ const OPTIONS = {
         title="ReachedPosition"
         onClick={(e) => handlestartLocation(currentPosition,e)} // Pass clicked location
         icon={{
-          url:Reach,
-          scaledSize: new window.google.maps.Size(24, 24),
+          url:endMarkerIcon,
+          scaledSize: new window.google.maps.Size(40, 40),
           origin: new window.google.maps.Point(0, 0),
           anchor: new window.google.maps.Point(12, 12),
         }}

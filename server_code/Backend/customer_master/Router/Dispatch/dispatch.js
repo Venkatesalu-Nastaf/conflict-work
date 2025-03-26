@@ -223,7 +223,7 @@ WHERE
 (
 
 
-  (status = "Billed" AND tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+  (status = "Billed" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
   OR 
   (status = "Closed"  AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY)  AND DATE_ADD(?, INTERVAL 0 DAY))
   OR 
@@ -387,7 +387,7 @@ Tripquery += ' ORDER BY shedOutDate ASC, reporttime ASC';
 //   WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
 //   AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
 // `;
-if(status !== 'Billed'){
+// if(status !== 'Billed'){
 sqlQuery = `
   SELECT booking.*, tripsheet.*
   FROM tripsheet
@@ -395,16 +395,16 @@ sqlQuery = `
   WHERE tripsheet.startdate >= DATE_ADD(?, INTERVAL 0 DAY) 
   AND tripsheet.startdate <= DATE_ADD(?, INTERVAL 0 DAY)
 `;
-}
-else{
-    sqlQuery = `
-  SELECT booking.*, tripsheet.*
-  FROM tripsheet
-  LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
-  WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-  AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
-`;
-}
+// }
+// else{
+//     sqlQuery = `
+//   SELECT booking.*, tripsheet.*
+//   FROM tripsheet
+//   LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
+//   WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+//   AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
+// `;
+// }
 
 // Initialize query parameters
 queryParams = [formattedFromDate, formattedToDate];

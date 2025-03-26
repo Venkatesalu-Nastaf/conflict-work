@@ -101,6 +101,54 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   useEffect(() => {
     fitMapToBounds();
   }, [startLat, endLat, wayRoutes]); // Recalculate whenever tripData changes
+
+  const [roadPoints, setRoadPoints] = useState([]);
+
+  const getSnappedPoints = async (polywaypoints) => {
+    const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE";
+    const maxPointsPerRequest = 100;
+    let snappedPoints = [];
+
+    const chunkArray = (array, size) => {
+      const chunkedArr = [];
+      for (let i = 0; i < array.length; i += size) {
+        chunkedArr.push(array.slice(i, i + size));
+      }
+      return chunkedArr;
+    };
+
+    const waypointChunks = chunkArray(polywaypoints, maxPointsPerRequest);
+
+    for (const chunk of waypointChunks) {
+      const path = chunk.map((point) => `${point.lat},${point.lng}`).join("|");
+      const url = `https://roads.googleapis.com/v1/snapToRoads?path=${path}&interpolate=true&key=${apiKey}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.snappedPoints) {
+          const chunkSnappedPoints = data.snappedPoints.map((point) => ({
+            lat: point.location.latitude,
+            lng: point.location.longitude,
+          }));
+          snappedPoints = [...snappedPoints, ...chunkSnappedPoints];
+        }
+      } catch (error) {
+        console.log("Error fetching snapped points:", error);
+      }
+    }
+
+    return snappedPoints.length > 0 ? snappedPoints : polywaypoints;
+  };
+
+  useEffect(() => {
+    if (polyLineWaypoints.length > 1) {
+      getSnappedPoints(polyLineWaypoints).then(setRoadPoints);
+    }
+  }, [polyLineWaypoints]);
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -1032,7 +1080,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     ?.filter((li) => li?.Trip_Status === "Reached" && li?.Latitude_loc)
     ?.map((li) => parseFloat(li?.Latitude_loc));
 
-  console.log(directions, "directionsssssssssssssss");
 
   return (
     <>
@@ -1158,7 +1205,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
                 onClick={() => handleMarkerClick(endRoutes)}
               />
             )}
-             {directions !== null && polyLineWaypoints.length !== fullGpsData.length && wayRoutes?.map((point, index) => (
+            {directions !== null && polyLineWaypoints.length !== fullGpsData.length && wayRoutes?.map((point, index) => (
               point.tripType === "waypoint" && (
                 <Marker
                   key={index}
@@ -1210,7 +1257,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
             )}
             {polyLineWaypoints.length === fullGpsData.length && startLat === startLatVerify[0] && endLat === endLatVerify[0] && polyLineWaypoints.length > 0 && (
               <Polyline
-                path={polyLineWaypoints}
+                // path={polyLineWaypoints}
+                path={roadPoints}
                 options={{
                   strokeColor: "#0000FF", // Blue color for the polyline
                   strokeOpacity: 1,

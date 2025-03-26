@@ -757,6 +757,25 @@ app.get('/get-attachedimage/:tripid', (req, res) => {
     res.json({ imagePaths });
   });
 });
+
+app.get('/get-attachedimageforE-tripsheet/:tripid', (req, res) => {
+  const { tripid } = req.params;
+  const query = 'SELECT path FROM tripsheetupload WHERE tripid = ? And documenttype Not IN ("StartingKm","ClosingKm") ';
+  // const query = `SELECT path FROM tripsheetupload WHERE tripid = ? AND documenttype IN ('TripSheet', 'Parking', 'Toll', 'Permit', 'Sign')`;
+  db.query(query, [tripid], (err, results) => {
+    if (err) {
+      return res.status(500).send('Internal Server Error');
+    }
+
+    if (results.length === 0) {
+      // No record found for the given tripid
+      return res.status(404).send('Images not found');
+    }
+
+    const imagePaths = results.map(result => result.path);
+    res.json({ imagePaths });
+  });
+});
 //get a booking mail...
 // const attachedmailDirectory = path.join(__dirname, 'uploads');
 const attachedmailDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');

@@ -4,6 +4,10 @@ import { CopyField } from '@eisberg-labs/mui-copy-field';
 import EditMapCheckComponent from './NavigationMap/EditMapCheckComponent';
 import { Typography, IconButton } from '@mui/material';
 import { Snackbar, Alert } from '@mui/material';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+// import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
 import CloseIcon from '@mui/icons-material/Close';
 import "./TripSheet.css";
@@ -289,7 +293,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,Permissiondeleteroles,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,fueldataamountdis,setFuelAdvancedamountHide,
     setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
-    tripGpsData,fullGpsData,allGpsData
+    tripGpsData,fullGpsData,allGpsData,handleExcelDownloadtrip,handlePdfDownloadtrip,attachedImageEtrip
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -2937,6 +2941,21 @@ const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billin
                                       </div>
                                     </DialogContent>
                                     <DialogActions>
+                                   <div  style={{ paddingRight: '15px' }}>
+                                               <PopupState variant="popover" popupId="demo-popup-menu">
+                                                 {(popupState) => (
+                                                   <React.Fragment>
+                                                     <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                                       Download
+                                                     </Button>
+                                                     <Menu {...bindMenu(popupState)}>
+                                                       <MenuItem onClick={() => handleExcelDownloadtrip()}>Excel</MenuItem>
+                                                       <MenuItem onClick={() => handlePdfDownloadtrip()}>PDF</MenuItem>
+                                                     </Menu>
+                                                   </React.Fragment>
+                                                 )}
+                                               </PopupState>
+                                               </div>
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
                                         Cancel
                                       </Button>
@@ -4428,8 +4447,8 @@ Please Click the link to close E-Tripsheet-`}
                   </div>
                   <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                     <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                      {dayhcl === 1 ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)
-                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)}
+                      {dayhcl === 1 ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImageEtrip} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)
+                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImageEtrip} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)}
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={handlePopupClose} variant="contained" color="primary">

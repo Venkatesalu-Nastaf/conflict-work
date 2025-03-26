@@ -11,6 +11,10 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit3 } from "react-icons/fi";
 import { PermissionContext } from '../../context/permissionContext';
 import { useData1 } from '../../Dashboard/Maindashboard/DataContext';
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+
+import Excel from 'exceljs';
 
 const useTripsheet = () => {
     const { mapButtonTrigger } = useData1()
@@ -94,6 +98,7 @@ const useTripsheet = () => {
     const [mapPopUp, setMapPopUp] = useState(false)
     const [outStationHide, setOutStationHide] = useState(false);
     const [enterTrigger, setEnterTrigger] = useState(null)
+    const [attachedImageEtrip,setAttachImageETrip]=useState('')
     // const [conflicthcldatavalue, setConflictHCLDataValue] = useState([])
     const [conflicthcldatavalue, setConflictHCLDataValue] = useState({
         Hcldatakmvalue: 0,
@@ -324,7 +329,7 @@ const useTripsheet = () => {
         { field: "trip_type", headerName: "Trip Type", width: 120 },
         { field: "place_name", headerName: "Place Name", width: 120 },
         {
-            field: '',
+            field: 'Edit',
             headerName: 'Edit',
             width: 120,
             renderCell: (params) => (
@@ -568,7 +573,7 @@ const useTripsheet = () => {
                 const data = response.data;
                 console.log(data,"d--------------ata-----------");
                 const sortedData = rearrangeTripData(data);
-                console.log(sortedData,"d------------------------------------====================");
+                console.log(sortedData,"pd------------------------------------====================");
                 setRow(sortedData);
                 setMaplogimgPopupOpen(true);
                 // console.log(data, 'mapdata')
@@ -940,6 +945,7 @@ const useTripsheet = () => {
         // setIsHybridCustomer(false)
         // ===---------------
         setAttachedImage("")
+        setAttachImageETrip("")
         setGMapImageUrl("")
         setRouteData('')
         setSignImageUrl('')
@@ -1042,6 +1048,7 @@ const useTripsheet = () => {
             getSignatureImage();
             invoiceRouteData();
             getAttachedImage();
+            getAttachedImageforEtripsheet()
             setPopupOpen(true);
 
         }
@@ -4235,6 +4242,7 @@ const useTripsheet = () => {
                 getSignatureImage();
                 invoiceRouteData();
                 getAttachedImage();
+                getAttachedImageforEtripsheet()
 
             } catch (error) {
                 if (error.response && error.response.status === 404) {
@@ -4556,6 +4564,22 @@ const useTripsheet = () => {
                     const data = await response.json();
                     const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
                     setAttachedImage(attachedImageUrls);
+                }
+            }
+        } catch (error) {
+            console.log("Error", error)
+        }
+    };
+    const getAttachedImageforEtripsheet = async () => {
+        try {
+            const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+
+            if (tripid !== null && tripid && tripid !== "undefined") {
+                const response = await fetch(`${apiUrl}/get-attachedimageforE-tripsheet/${tripid}`);
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
+                    setAttachImageETrip(attachedImageUrls)
                 }
             }
         } catch (error) {
@@ -7909,6 +7933,208 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
             fetchData();
         }
     }, [apiUrl, gpsTripId,enterTrigger]);
+const handleExcelDownloadtrip = async () => {
+    const workbook = new Excel.Workbook();
+    const workSheetName = 'Worksheet-1';
+    try {
+        const fileName = "tripsheetviewGps_Log";
+        const worksheet = workbook.addWorksheet(workSheetName);
+
+        // Define only the headers you need
+       
+// console.log(maplogcolumns,"plog")
+      
+// const columns1 = maplogcolumns.map(({ field, headerName}) => ({
+//     key: field,
+//     header: headerName,
+    
+// }));
+const columns1 = maplogcolumns
+  .map(({ field, headerName }) => ({
+    key: field,
+    header: headerName,
+  }))
+  .filter((column) => column.key !== "Edit" && column.key !== "actions"); 
+console.log(columns1,"plopppp")
+        worksheet.columns = columns1;
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '9BB0C1' },
+            };
+        });
+
+        worksheet.getRow(1).height = 30;
+
+        // Set default column width based on header length
+        worksheet.columns.forEach((column) => {
+            column.width = column.header.length + 5;
+            column.alignment = { horizontal: 'center', vertical: 'middle' };
+        });
+
+        // Add rows of data
+        row.forEach((singleData) => {
+            const row = worksheet.addRow(singleData);
+            worksheet.columns.forEach((column) => {
+                const cellValue = singleData[column.key] || '';
+                const cellLength = cellValue.toString().length;
+                const currentColumnWidth = column.width || 0;
+                column.width = Math.max(currentColumnWidth, cellLength + 5);
+            });
+
+            // Apply borders for each cell
+            row.eachCell((cell) => {
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' },
+                };
+            });
+        });
+
+        // Write to buffer and save the file
+        const buf = await workbook.xlsx.writeBuffer();
+        saveAs(new Blob([buf]), `${fileName}.xlsx`);
+
+    } catch (error) {
+        console.error('<<<ERROR>>>', error);
+    } finally {
+        workbook.removeWorksheet(workSheetName);  // Clean up the worksheet
+    }
+};
+const handlePdfDownloadtrip = ()=>{
+ const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "mm",
+            format: "tabloid" // [width, height] in inches
+        });
+        pdf.setFontSize(15);
+        pdf.setFont('helvetica', 'normal');
+        // pdf.text("VehicleStatement", 10, 10);
+        //  const header = Object.keys(row[0]);
+        const text = "TripsheetGpsLog";
+
+        // Get page width
+        const pageWidth = pdf.internal.pageSize.getWidth();
+
+        // Calculate text width
+        const textWidth = pdf.getTextWidth(text);
+
+        // Calculate the x position to center the text
+        const xPos = (pageWidth - textWidth) / 2;
+
+        // Add text to PDF at calculated position
+        pdf.text(text, xPos, 10);
+
+
+        const header = maplogcolumns
+  .filter((row) => row.field !== "Edit" && row.field !== "actions") // Exclude rows with field "edit" or "actions"
+  .map((row) => row.headerName); 
+        // console.log(header,"plpdff")
+
+      
+       
+        const rowValues = row.map(row => {
+            return maplogcolumns.map(column => row[column.field]);
+        });
+      
+
+
+        
+
+     
+        let fontdata = 1;
+        if (header.length <= 13) {
+            fontdata = 16;
+        }
+        else if (header.length >= 14 && header.length <= 18) {
+            fontdata = 11;
+        }
+        else if (header.length >= 19 && header.length <= 20) {
+            fontdata = 10;
+        } else if (header.length >= 21 && header.length <= 23) {
+            fontdata = 9;
+        }
+        else if (header.length >= 24 && header.length <= 26) {
+            fontdata = 7;
+        }
+        else if (header.length >= 27 && header.length <= 30) {
+            fontdata = 6;
+        }
+        else if (header.length >= 31 && header.length <= 33) {
+            fontdata = 4;
+        } else if (header.length >= 34 && header.length <= 35) {
+            fontdata = 3;
+        }
+        else if (header.length >= 36 && header.length <= 40) {
+            fontdata = 3;
+        }
+        else if (header.length >= 41 && header.length <= 46) {
+            fontdata = 2;
+        }
+        else if (header.length >= 47 && header.length <= 50) {
+            fontdata = 2;
+        }
+
+
+        pdf.autoTable({
+            head: [header],
+            body: rowValues,
+            startY: 20,
+
+            headStyles: {
+                // fontSize: 5,
+                fontSize: fontdata,
+                cellPadding: 1.5, // Decrease padding in header
+
+                minCellHeigh: 8,
+                valign: 'middle',
+
+                font: 'helvetica', // Set font type for body
+
+                cellWidth: 'wrap',
+                // cellWidth: 'auto'
+            },
+
+            bodyStyles: {
+                fontSize: fontdata,
+                valign: 'middle',
+                cellWidth: 'auto'
+                // Adjust the font size for the body
+
+            },
+            // willDrawCell: function (data) {
+            //     // Check if this cell is part of the total row
+            //     if (data.row.index === rowValues.length - 1) {
+            //         const { cell } = data;
+            //         const { x, y, width, height } = cell;
+    
+            //         // Set bold text and increased font size
+            //         pdf.setFont('helvetica', 'bold');
+            //         pdf.setFontSize(9); // Increase the font size as needed
+    
+            //         // Draw top border
+            //         pdf.setDrawColor(0); // Black color
+            //         pdf.setLineWidth(0.5); // Line width
+            //         pdf.line(x, y, x + width, y); // Draw top border
+    
+            //         // Draw bottom border
+            //         pdf.line(x, y + height, x + width, y + height); // Draw bottom border
+            //     }},
+            columnWidth: 'auto'
+
+        });
+        const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+
+        // Scale content
+        pdf.scale(scaleFactor, scaleFactor);
+        const pdfBlob = pdf.output('blob');
+        saveAs(pdfBlob, 'TripsheetGpsLog.pdf');
+}
+
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
         escort, setEscort, driverdetails,
@@ -8046,7 +8272,7 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
         minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage, Permissiondeleteroles, fueldataamountdis, setFuelAdvancedamountHide,
         outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, handleAutocompleteChangecustomer, orderByDropDown, speeddailacesss, speeddailacesssedit,
-        tripGpsData, fullGpsData,allGpsData
+        tripGpsData, fullGpsData,allGpsData,handleExcelDownloadtrip,handlePdfDownloadtrip,attachedImageEtrip
 
     };
 };

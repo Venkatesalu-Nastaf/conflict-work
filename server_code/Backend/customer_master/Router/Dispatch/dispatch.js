@@ -178,21 +178,22 @@ router.get('/pending_tripsheet-show', (req, res) => {
 
 // changes with customer filtering 
 if (status === 'All') {
-  // sqlQuery = `
-  //   SELECT * FROM booking
-  //   WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-  //     AND bookingdate <= DATE_ADD(?, INTERVAL 0 DAY)
-  //     AND (status = 'pending' OR status = 'Cancelled')
-  // `;
-  sqlQuery = `
-  SELECT * FROM booking
-  WHERE 
-  (
-    (status = 'pending' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
-    OR 
-    (status = 'Cancelled' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
-)
-`;
+ 
+//   sqlQuery = `
+//   SELECT * FROM booking
+//   WHERE 
+//   (
+//     (status = 'pending' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+//     OR 
+//     (status = 'Cancelled' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+// )
+// `;
+
+sqlQuery = `
+SELECT * FROM booking
+WHERE status IN ('pending','Cancelled') AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY)
+ `;
+
 
   // Tripquery = `
   //   SELECT * FROM tripsheet
@@ -218,28 +219,36 @@ if (status === 'All') {
    
 // )`
 
-Tripquery = ` SELECT * FROM tripsheet
-WHERE 
-(
+// Tripquery = ` SELECT * FROM tripsheet
+// WHERE 
+// (
 
 
-  (status = "Billed" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
-  OR 
-  (status = "Closed"  AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY)  AND DATE_ADD(?, INTERVAL 0 DAY))
-  OR 
-  (status = "Opened" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
-  OR 
-  (status = "Temporary Closed" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+//   (status = "Billed" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+//   OR 
+//   (status = "Closed"  AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY)  AND DATE_ADD(?, INTERVAL 0 DAY))
+//   OR 
+//   (status = "Opened" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+//   OR 
+//   (status = "Temporary Closed" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
  
-)`
+// )`
+
+Tripquery = `
+SELECT * FROM tripsheet
+WHERE 
+status IN ("Billed", "Closed", "Opened", "Temporary Closed")
+AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY)
+`
 //   Tripquery = `
 //   SELECT * FROM tripsheet
 //   WHERE startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
 //     AND DATE_ADD(?, INTERVAL 0 DAY) AND  status != 'Cancelled'
 // `;
 
-  queryParams = [formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate];
-  queerparamsbooking=[formattedFromDate, formattedToDate,formattedFromDate, formattedToDate]
+  // queryParams = [formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate];
+  queryParams = [formattedFromDate, formattedToDate];
+  queerparamsbooking=[formattedFromDate, formattedToDate]
  
 
 

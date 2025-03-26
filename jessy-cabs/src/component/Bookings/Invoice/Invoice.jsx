@@ -38,6 +38,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
   };
 
   const targetRef = useRef();
+  // console.log(attachedImage,"att")
   return (
     <>
       <div className="invoice-wrapper" ref={targetRef}>

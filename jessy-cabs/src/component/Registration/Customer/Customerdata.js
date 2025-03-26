@@ -122,7 +122,7 @@ export const allStations = [
   "Solan", "Una", "Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "Giridih", "Godda", "Gumla", "Hazaribagh",
   "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj",
   "Seraikela Kharsawan", "Simdega", "West Singhbhum", "Bagalkot", "Ballari", "Belagavi", "Bangalore", "Bidar", "Chamarajanagar","Hubli","Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada",
-  "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru",
+  "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru","Mangalore",
   "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir", "Alappuzha",
   "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad",
   "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad",
@@ -364,7 +364,7 @@ export const stateToStations = {
    [ "Bagalkot", "Ballari", "Belagavi", "Bangalore", "Bidar", "Chamarajanagar",
     "Chikkaballapur", "Chikkamagaluru","Hubli", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad",
     "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya",
-    "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada",
+    "Mysuru","Mangalore", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada",
     "Vijayapura", "Yadgir"
   ],
   "Kerala":
@@ -1422,6 +1422,7 @@ export const states = [
       "Koppal",
       "Mandya",
       "Mysuru (Mysore)",
+      "Mangalore",
       "Raichur",
       "Ramanagara",
       "Shivamogga (Shimoga)",

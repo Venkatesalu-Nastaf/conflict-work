@@ -1051,6 +1051,7 @@ export const states = [
       "Koppal",
       "Mandya",
       "Mysuru (Mysore)",
+      "Mangalore",
       "Raichur",
       "Ramanagara",
       "Shivamogga (Shimoga)",

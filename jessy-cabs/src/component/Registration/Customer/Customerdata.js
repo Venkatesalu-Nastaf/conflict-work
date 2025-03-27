@@ -124,7 +124,7 @@ export const allStations = [
   "Seraikela Kharsawan", "Simdega", "West Singhbhum", "Bagalkot", "Ballari", "Belagavi", "Bangalore", "Bidar", "Chamarajanagar","Hubli","Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada",
   "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru","Mangalore",
   "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir", "Alappuzha",
-  "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad",
+  "Ernakulam", "Idukki", "Kannur", "Kasaragod","Kochin", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad",
   "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad",
   //odisa
   "Angul", "Balangir", "Balasore", "Bhadrak", "Boudh", "Cuttack", "Deogarh",
@@ -368,7 +368,7 @@ export const stateToStations = {
     "Vijayapura", "Yadgir"
   ],
   "Kerala":
-   [ "Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam",
+   [ "Alappuzha", "Ernakulam", "Idukki", "Kannur","Kochin", "Kasaragod", "Kottayam", "Kollam",
     "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"
   ],
   "Madhya Pradesh":
@@ -1443,6 +1443,7 @@ export const states = [
       "Kannur",
       "Kasaragod",
       "Kollam",
+      "Kochin",
       "Kottayam",
       "Kozhikode",
       "Malappuram",

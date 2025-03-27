@@ -1072,6 +1072,7 @@ export const states = [
       "Kannur",
       "Kasaragod",
       "Kollam",
+      "Kochin",
       "Kottayam",
       "Kozhikode",
       "Malappuram",

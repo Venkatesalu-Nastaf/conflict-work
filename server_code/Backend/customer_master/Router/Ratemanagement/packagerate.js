@@ -83,7 +83,11 @@ router.post('/ratemanagement-add', async (req, res) => {
 // delete Rate Management data-------------------------------------------------------------
 router.delete('/ratemanagement/:id', (req, res) => {
     const customerid = req.params.id;
-    db.query('DELETE FROM ratemanagement WHERE id = ?', customerid, (err, result) => {
+    const data = customerid?.split(',').map(Number);
+    // console.log(data,"data",typeof(data))
+    // console.log(req.params.id,"kk",typeof(req.params.id))
+    // db.query('DELETE FROM ratemanagement1 WHERE id = ?', customerid, (err, result) => {
+        db.query('DELETE FROM ratemanagement WHERE id in (?)',[data], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to delete data from MySQL" });
         }

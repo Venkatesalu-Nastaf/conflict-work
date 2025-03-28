@@ -941,7 +941,7 @@ const TransferReport = ({Statename }) => {
         </div>
         <div className="Download-btn">
           <div className="input-field">
-            {billedStatusCheck === "Billed" ?
+            {/* {billedStatusCheck === "Billed" ? */}
               <div className="input" >
                 <PopupState variant="popover" popupId="demo-popup-menu">
                   {(popupState) => (
@@ -958,7 +958,8 @@ const TransferReport = ({Statename }) => {
                     </React.Fragment>
                   )}
                 </PopupState>
-              </div> : ""}
+              </div>
+              
             {/* <div className="input">
               <Button variant="outlined" onClick={() => handleRemove()} >Remove</Button>
             </div> */}

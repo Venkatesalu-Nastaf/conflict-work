@@ -5371,8 +5371,9 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
                 // dataextrakms = KM
                 dataextrakms = kmfixed
             }
+            
 
-            // if (vendorduty === "Outstation") {
+           else if (vendorduty === "Outstation") {
             //     let km = (Number(vendortotkm) <= Number(KMS)) ? Number(vendortotkm) * Number(totalDays1) : Number(vendortotkm)
             //     let kmfixed2 = Number(km.toFixed(2))
             //     dataextrakms = kmfixed2
@@ -5400,7 +5401,11 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
                 let kmfixed2 = Number(km.toFixed(2)) 
                 dataextrakms = kmfixed2
             }
-            console.log(dataextrahous, "hrs", dataextrakms, "kmsss")
+        }
+        else{
+            dataextrakms = 0
+        }
+            console.log(dataextrahous, "hrs", dataextrakms, "kmsss",vendortotkm ,KMS)
 
 
 
@@ -7936,6 +7941,11 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
 const handleExcelDownloadtrip = async () => {
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
+    if(row.length === 0){
+        setError(true)
+        setErrorMessage("No data found ")
+        return
+    }
     try {
         const fileName = "tripsheetviewGps_Log";
         const worksheet = workbook.addWorksheet(workSheetName);
@@ -7975,7 +7985,10 @@ console.log(columns1,"plopppp")
         });
 
         // Add rows of data
-        row.forEach((singleData) => {
+        row.forEach((singleData,index) => {
+            // console.log(singleData,"single")
+            singleData["id"] = index + 1;
+             singleData["date"] = singleData["date"] ? dayjs(singleData["date"]).format("DD-MM-YYYY") : ""
             const row = worksheet.addRow(singleData);
             worksheet.columns.forEach((column) => {
                 const cellValue = singleData[column.key] || '';
@@ -8006,6 +8019,12 @@ console.log(columns1,"plopppp")
     }
 };
 const handlePdfDownloadtrip = ()=>{
+
+    if(row.length === 0){
+        setError(true)
+        setErrorMessage("No data found ")
+        return
+    }
  const pdf = new jsPDF({
             orientation: "landscape",
             unit: "mm",
@@ -8037,9 +8056,41 @@ const handlePdfDownloadtrip = ()=>{
 
       
        
-        const rowValues = row.map(row => {
-            return maplogcolumns.map(column => row[column.field]);
+        // const rowValues = row.map(row,index => {
+        //     return maplogcolumns.map(column =>{ 
+                
+             
+        //             if(column.field === "date"){
+        //                 return dayjs(row[column.field]).format("DD-MM-YYYY")
+        //             }
+        //             if (column.field === "id") {
+        //                 // Set the id field based on the index (index + 1)
+        //                 return row[column.field] = index + 1;
+        //             }
+        //             // row[column.field]
+        //             return row[column.field]
+
+
+        // });
+        // });
+
+        const rowValues = row.map((row, index) => { // Declare index here
+            return maplogcolumns.map(column => { 
+                if (column.field === "date") {
+                    // Format the date field using dayjs
+                    return dayjs(row[column.field]).format("DD-MM-YYYY");
+                }
+                if (column.field === "id") {
+                    // Set the id field based on index + 1
+                    return index + 1;
+                }
+                // Return other fields as-is
+                return row[column.field];
+            });
         });
+console.log(rowValues,"plpdff")
+
+                
       
 
 

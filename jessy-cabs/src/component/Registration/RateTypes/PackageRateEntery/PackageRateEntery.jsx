@@ -73,7 +73,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
     // datevalidity,
     handleShow,
     fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata, loading, setLoading, isbtnloading, setisbtnloading,
-    multipleSelect
+    multipleSelect,setSelectedRowDelete,selectedrowdelete
 
   } = usePackagerateentry();
 
@@ -549,7 +549,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                 onClick={(event) => handleClick(event, "Edit")}
               />
             )}
-            {RateManagement_delete === 1 && isEditMode && (
+            {(RateManagement_delete === 1 && selectedrowdelete.length > 0) && (
               <SpeedDialAction
                 key="delete"
                 icon={<DeleteIcon />}
@@ -616,6 +616,13 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   columns={columns}
                   onRowClick={handleRowClick}
                   pageSize={5}
+                  onRowSelectionModelChange={(newRowSelectionModel) => {
+                console.log(newRowSelectionModel,"model")
+                setSelectedRowDelete(newRowSelectionModel)
+                
+
+                  }}
+                  checkboxSelection
                 />
               )}
             </Box>

@@ -218,10 +218,12 @@ router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => 
           obj.permit = !obj.permit ? 0 : obj.permit;
           obj.parking = !obj.parking ? 0 : obj.parking;
           obj.starttime1 = obj.starttime;
+          obj.totalkmdata = obj.totalkm1;
           obj.gstTax = customerdetails ? customerdetails.gsttax : 'unknown'
           obj.CustomerAddress1 = customerdetails ? customerdetails.Customeraddress1 : 'unknown';
 
         });
+        // console.log(result,"re")
 
 
         return res.status(200).json(result);

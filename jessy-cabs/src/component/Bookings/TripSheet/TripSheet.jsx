@@ -2948,10 +2948,12 @@ const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billin
                                                      <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                                                        Download
                                                      </Button>
+                                                     {row.length > 0 && (
                                                      <Menu {...bindMenu(popupState)}>
                                                        <MenuItem onClick={() => handleExcelDownloadtrip()}>Excel</MenuItem>
                                                        <MenuItem onClick={() => handlePdfDownloadtrip()}>PDF</MenuItem>
                                                      </Menu>
+                                                     )}
                                                    </React.Fragment>
                                                  )}
                                                </PopupState>

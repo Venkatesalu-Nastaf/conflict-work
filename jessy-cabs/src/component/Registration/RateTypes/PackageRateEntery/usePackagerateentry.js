@@ -90,6 +90,7 @@ const usePackagerateentry = () => {
     const [loading, setLoading] = useState(false)
     const [isbtnloading, setisbtnloading] = useState(false)
     const [multipleSelect, setMultipleSelect] = useState(false);
+    const [selectedrowdelete,setSelectedRowDelete]=useState([])
 
     const memoizedUrl = useMemo(() => {
         if (!commonData.ratetype || !commonData.OrganizationName) {
@@ -267,6 +268,7 @@ const usePackagerateentry = () => {
         }))
         setIsEditMode(false);
         setValiditydata([])
+        setSelectedRowDelete([])
     };
 
     const handleRowClick = useCallback((params) => {
@@ -302,6 +304,7 @@ const usePackagerateentry = () => {
 
         });
         setSelectedCustomerId(params.row.id);
+        console.log(params.row.id,"parmas");
         setMultipleSelect(true)
         setIsEditMode(true);
     }, []);
@@ -669,10 +672,11 @@ const usePackagerateentry = () => {
     const handledelete = async () => {
         try {
 
-            await axios.delete(`${apiUrl}/ratemanagement/${selectedCustomerId}`);
+            await axios.delete(`${apiUrl}/ratemanagement/${selectedrowdelete}`);
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
             handleCancel();
+            setSelectedRowDelete([])
             setRows([]);
             handleList()
         }
@@ -724,6 +728,7 @@ const usePackagerateentry = () => {
             [name]: value?.map(option => option?.label), // ✅ Store only labels (array of strings)
         }));
     };
+    // console.log(selectedrowdelete,"delete")/
 
 
     return {
@@ -748,7 +753,7 @@ const usePackagerateentry = () => {
         handleEdit,
         handleShow, handleChange11,
         handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage, validitydata, loading, setLoading, isbtnloading, setisbtnloading,
-        multipleSelect
+        multipleSelect,setSelectedRowDelete,selectedrowdelete
     };
 };
 

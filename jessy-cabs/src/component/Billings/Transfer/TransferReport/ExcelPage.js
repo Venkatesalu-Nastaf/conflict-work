@@ -108,8 +108,9 @@ const useExeclpage = () => {
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
         { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         // { key: "vehType", header: "Vehicle Make", width: 180 },
-        { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
         { key: "vehicleName", header: "Vehicle Make", width: 180 },
+        { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
+        // { key: "vehicleName", header: "Vehicle Make", width: 180 },
         { key: "segement", header: "vehicle Segment", width: 180 },
         { key: "fueltype", header: "Fuel Used", width: 120 },
         // { key: "tripsheetdate", header: "Date", width: 120 },
@@ -125,8 +126,9 @@ const useExeclpage = () => {
         { key: "UserNos_Occupancy", header: "Occupancy", width: 180 },
         { key: "starttime", header: "Shift Times", width: 180 },
         { key: "timeluxury", header: "Initial Time (from Garage) LUXURY 2", width: 180 },
-        { key: "reporttime", header: "Emp.Initial Time", width: 180 },
-        { key: "shedintime", header: "Emp.End Time", width: 180 },
+        // { key: "reporttime", header: "Emp.Initial Time", width: 180 },
+        { key: "starttime1", header: "Emp.Initial Time", width: 180 },
+        { key: "closetime1", header: "Emp.End Time", width: 180 },
         { key: "Endtimeluxury", header: " End Time (At Garage) LUXURY 2", width: 180 },
         { key: "totaltime1", header: "Total Hrs.", width: 120 },
         { key: "totaltime", header: "Final Hrs.", width: 120 },
@@ -216,7 +218,7 @@ const useExeclpage = () => {
     // }
 
     const totalTimeCalculation = (totalTime) => {
-
+    //    console.log(totalTime,"time")
         // Extract hours and minutes using regex
         const hoursMatch = totalTime?.match(/(\d+)h/); // Matches hours
         const minutesMatch = totalTime?.match(/(\d+)m/); // Matches minutes
@@ -237,6 +239,14 @@ const useExeclpage = () => {
         let tollparkparking = (Number(toll) || 0) + (Number(parking) || 0) + (Number(permit) || 0);
         // console.log(tollparkparking, 'ziptotal');
         return tollparkparking;
+    }
+
+    function calculationwithoutadditonalkm(totalkm,addkm) {
+        // console.log(toll, parking, permit, 'zip');
+        // console.log(totalkm,addkm,'ziptotal');
+        let totalkmvalue = (Number(totalkm) || 0) - (Number(addkm) || 0) 
+        // console.log(tollparkparking, 'ziptotal');
+        return totalkmvalue
     }
 
 
@@ -484,12 +494,25 @@ const useExeclpage = () => {
                     singleData2["tripsheetdate"] = singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY") : ""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
                     singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]) : "00.00"
+                     singleData2["starttime1"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]) : "00.00"
+                        singleData2["closetime1"] = singleData2["closetime"] ? removeSeconds(singleData2["closetime"]) : "00.00"
                     //  singleData2["starttime"] = singleData2["starttime"] 
-                    singleData2["timeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["starttime"] : "00.00"
-                    singleData2["Endtimeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["shedintime"] : "00.00"
-                    singleData2["shedin2"] = singleData2["shedin"]
-                    singleData2["totaltime1"] = totalTimeCalculation(singleData2["totaltime"])
-                    singleData2["totaltime"] = totalTimeCalculation(singleData2["totaltime"])
+                    // singleData2["timeluxury"] = singleData2["Groups"] === "Luxzury"  ? singleData2["starttime"] : "00.00"
+                    singleData2["timeluxury"] = singleData2["duty"] === "Outstation"
+                    ? singleData2["reporttime"]
+                    : (singleData2["duty"] !== "Outstation" && singleData2["Groups"] === "Luxzury")
+                      ? ""
+                      : "00.00";
+                    // singleData2["Endtimeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["shedintime"] : "00.00"
+                 singleData2["Endtimeluxury"] = singleData2["duty"] === "Outstation"
+                    ? singleData2["shedintime"]
+                    : (singleData2["duty"] !== "Outstation" && singleData2["Groups"] === "Luxzury")
+                      ? ""
+                      : "00.00";
+                    
+                    singleData2["shedin2"] = calculationwithoutadditonalkm(singleData2["totalkm1"],singleData2["shedkm"])
+                    singleData2["totaltime1"] = totalTimeCalculation(singleData2["TotalTimeWithoutAddHours"])
+                    singleData2["totaltime"] = totalTimeCalculation(singleData2["TotalTimeWithoutAddHours"])
                     singleData2["TOTALtollandpark"] = addTollparkparking(singleData2["toll"], singleData2["parking"], singleData2["permit"])
                     singleData2["opsremark"] = singleData2["opsremark"] ? singleData2["Opremark"] : ''
                     // singleData2["totalcalcAmount1"] = singleData2["totalcalcAmount"]
@@ -750,9 +773,28 @@ const useExeclpage = () => {
                     singleData["tripsheetdate"] = singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY") : ""
                     singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : ""
-                    singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
-                    singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
-                    singleData["totaltime1"] = singleData["totaltime"]
+                    // singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
+                    // singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
+                    // singleData["totaltime1"] = singleData["totaltime"]
+                    singleData["starttime1"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : "00.00"
+                    singleData["closetime1"] = singleData["closetime"] ? removeSeconds(singleData["closetime"]) : "00.00"
+                //  singleData2["starttime"] = singleData2["starttime"] 
+                // singleData2["timeluxury"] = singleData2["Groups"] === "Luxzury"  ? singleData2["starttime"] : "00.00"
+                singleData["timeluxury"] = singleData["duty"] === "Outstation"
+                ? singleData["reporttime"]
+                : (singleData["duty"] !== "Outstation" && singleData["Groups"] === "Luxzury")
+                  ? ""
+                  : "00.00";
+                // singleData2["Endtimeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["shedintime"] : "00.00"
+             singleData["Endtimeluxury"] = singleData["duty"] === "Outstation"
+                ? singleData["shedintime"]
+                : (singleData["duty"] !== "Outstation" && singleData["Groups"] === "Luxzury")
+                  ? ""
+                  : "00.00";
+                
+                singleData["shedin2"] = calculationwithoutadditonalkm(singleData["totalkm1"],singleData["shedkm"])
+                singleData["totaltime1"] = totalTimeCalculation(singleData["TotalTimeWithoutAddHours"])
+                singleData["totaltime"] = totalTimeCalculation(singleData["TotalTimeWithoutAddHours"])
                     singleData["TOTALtollandpark"] = addTollparkparking(singleData["toll"], singleData["parking"], singleData["permit"])
                     singleData["opsremark"] = singleData["opsremark"] ? singleData["Opremark"] : ''
 
@@ -873,7 +915,7 @@ const useExeclpage = () => {
                 for (const data of datalink1) {
                     if (data.attachedimageurl !== null) {
                         const data2 = data.attachedimageurl.split('.').pop()
-                        console.log(data2, "datalonk22")
+                        console.log(data2, "datalonk22ATT")
                         if (data2 === "pdf") {
 
                             const filePath = `${apiurl}/images/${data.attachedimageurl}`;

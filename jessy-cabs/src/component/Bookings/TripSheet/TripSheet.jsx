@@ -3264,7 +3264,7 @@ const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billin
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
 
                                 <div style={{ display: "blocks" }}>
-                                  <Button disabled={!Tripsheet_modify} onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                                  <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
                                 </div>
                                 {/* {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
                                   <button>Share on WhatsApp</button>
@@ -3689,7 +3689,7 @@ Please Click the link to close E-Tripsheet-`}
                                   />
                                 </div>
                               </div>
-
+                                      
                               <div className="input-field tripsheet-vendor-bill-amount-input-field">
                                 <div className="input-g">
                                   <TextField

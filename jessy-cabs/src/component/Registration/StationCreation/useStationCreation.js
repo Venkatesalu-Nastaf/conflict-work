@@ -30,6 +30,11 @@ const useStationCreation = () => {
     const [selectedState, setSelectedState] = useState('');
     const [stationUpdate,setstationUpdate] = useState(false)
     const [isDisabled,setisDisabled] = useState(false)
+    const [stationDatas,setStationDatas] = useState({
+        station:"",
+        state:""
+    })
+    const [open, setOpen] = useState(false);
 
     const {isstationtrigger,setisStationtrigger} = useData()
     //-----------------popup---------------------
@@ -147,6 +152,23 @@ const useStationCreation = () => {
     //     }
     //     return "";
     //   };
+    const handlestationOnChange = (e)=>{
+        const { name, value } = e.target;
+        setStationDatas(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    }
+
+    const handleStationAddData = ()=>{
+       setOpen(true)
+    }
+
+    const handleSubmiStation = ()=>{
+    //  console.log(stationDatas,"stationnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",allStations);
+    //  allStations.push(stationDatas?.station)
+     
+    }
 
     const getStateFromStation = useMemo(() => {
         return (station) => {
@@ -950,7 +972,8 @@ const handleStationChange = async (event, value) => {
         setLoading,
         getStateFromStation,
         handleStationChange,
-        selectedStation, setSelectedStation,selectedState, setSelectedState,isDisabled,setisDisabled,cerendentialdata, setCredentialData
+        selectedStation, setSelectedStation,selectedState, setSelectedState,isDisabled,setisDisabled,cerendentialdata, setCredentialData,
+        handleStationAddData,stationDatas,open,setOpen,handleSubmiStation,handlestationOnChange
     };
 };
 

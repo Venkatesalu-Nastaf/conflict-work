@@ -36,7 +36,8 @@ const useStationCreation = () => {
     })
     const [open, setOpen] = useState(false);
 
-    const {isstationtrigger,setisStationtrigger} = useData()
+    const {isstationtrigger,setisStationtrigger} = useData();
+    const [deletestationdata,setDeleteStationData] = useState(false)
     //-----------------popup---------------------
 
     const hidePopup = () => {
@@ -111,6 +112,7 @@ const useStationCreation = () => {
         setSelectedCustomerData({});
         setRows([]);
         setIsEditMode(false);
+        setDeleteStationData(false)
     };
 
 
@@ -892,7 +894,7 @@ const handleStationChange = async (event, value) => {
     // }, [apiUrl, rows]);
 
 
-    const handleClick = async (event, actionName, stationid) => {
+    const handleClick = async (event, actionName) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
@@ -915,6 +917,7 @@ const handleStationChange = async (event, value) => {
             }
 
             else if (actionName === 'Delete') {
+                try{
                 await axios.delete(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`);
                 setSelectedCustomerData(null);
                 setSuccess(true);
@@ -926,6 +929,11 @@ const handleStationChange = async (event, value) => {
                 setstationUpdate(true);
                 setisStationtrigger(!isstationtrigger)
                 setisDisabled(false)
+                }
+                catch(err){
+                    setError(true);
+                    setErrorMessage("check your network connection");
+                }
 
             }
 
@@ -973,7 +981,7 @@ const handleStationChange = async (event, value) => {
         getStateFromStation,
         handleStationChange,
         selectedStation, setSelectedStation,selectedState, setSelectedState,isDisabled,setisDisabled,cerendentialdata, setCredentialData,
-        handleStationAddData,stationDatas,open,setOpen,handleSubmiStation,handlestationOnChange
+        handleStationAddData,stationDatas,open,setOpen,handleSubmiStation,handlestationOnChange,setDeleteStationData,deletestationdata
     };
 };
 

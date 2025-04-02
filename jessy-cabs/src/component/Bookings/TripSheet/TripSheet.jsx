@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useRef } from 'react';
+import React, { useEffect, useContext, useState, useRef,useMemo } from 'react';
 import { CopyField } from '@eisberg-labs/mui-copy-field';
 // import EditMapComponent from './NavigationMap/EditMapComponent';
 import EditMapCheckComponent from './NavigationMap/EditMapCheckComponent';
@@ -8,6 +8,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 // import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import { ZoomIn, ZoomOut } from "@mui/icons-material";
 
 import CloseIcon from '@mui/icons-material/Close';
 import "./TripSheet.css";
@@ -111,6 +112,8 @@ import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 import { WhatsappShareButton } from 'react-share';
 import LoadingButton from '@mui/lab/LoadingButton';
+
+import DeleteConfirmationDialog from "../../DeleteData/DeleteData";
 // UpdateTbaleRowsGPSSlider TABLE START
 // const columns = [
 //   { field: "id", headerName: "Sno", width: 60 },
@@ -128,7 +131,9 @@ const columns = [
   { field: "tripid", headerName: "TripID", width: 80 },
   { field: "booking_id", headerName: "Booking ID", width: 80 },
 ];
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+
+
+const StyledSpeedDial = styled(SpeedDial)(({ theme,id }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
     bottom: theme.spacing(2),
@@ -138,6 +143,11 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     top: theme.spacing(2),
     left: theme.spacing(2),
   },
+  "& .MuiFab-primary": {
+    backgroundColor: id ?"green": "#1976d2",
+    // color: "white",
+  },
+  
 }));
 
 const style = {
@@ -293,7 +303,10 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,Permissiondeleteroles,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,fueldataamountdis,setFuelAdvancedamountHide,
     setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
-    tripGpsData,fullGpsData,allGpsData,handleExcelDownloadtrip,handlePdfDownloadtrip,attachedImageEtrip
+    tripGpsData,fullGpsData,allGpsData,handleExcelDownloadtrip,handlePdfDownloadtrip,attachedImageEtrip,deletetripasheetdata,setDeleteTripsheetData,
+    // --------------------this zoom code image data----------------------------------------
+    posX,posY,zoom,handleZoomOut,startDrag,stopDrag,handleScrollZoom,handleZoomIn,isDragging,Scale,onDrag
+    // this code zoom image data---------------------------------
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -973,6 +986,10 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     return () => clearTimeout(timeout);
   }, [conflictModalKmBox]);
 const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") ;
+
+const message = useMemo(() => {
+  return formData.MessageText || selectedCustomerData.MessageText || book.MessageText;
+}, [formData.MessageText, selectedCustomerData.MessageText, book.MessageText]);
 
   // console.log(formData.reporttime, selectedCustomerData.reporttime, selectedCustomerDatas.reporttime, book.reporttime, 'rrrrrrrrrrrrrrr');
   return (
@@ -2950,8 +2967,8 @@ const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billin
                                                      </Button>
                                                      {row.length > 0 && (
                                                      <Menu {...bindMenu(popupState)}>
-                                                       <MenuItem onClick={() => handleExcelDownloadtrip()}>Excel</MenuItem>
-                                                       <MenuItem onClick={() => handlePdfDownloadtrip()}>PDF</MenuItem>
+                                                         <MenuItem onClick={() => handleExcelDownloadtrip(row)}>Excel</MenuItem>
+                                                         <MenuItem onClick={() => handlePdfDownloadtrip(row)}>PDF</MenuItem>
                                                      </Menu>
                                                      )}
                                                    </React.Fragment>
@@ -3103,7 +3120,7 @@ const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billin
                                     columns={columns}
                                     onRowClick={handleTripRowClick}
                                     pageSize={5}
-                                    checkboxSelection
+                                    // checkboxSelection
                                   />
                                 </div>
                               </div>
@@ -3151,17 +3168,62 @@ const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billin
                                           border: 'none',
                                         }}
                                       />
-                                    ) : (
-                                      <img
-                                        src={imageUrl}
-                                        alt="Embedded Content"
-                                        style={{
-                                          maxWidth: '100%',
-                                          maxHeight: '600px',
-                                          objectFit: 'contain',
-                                        }}
-                                      />
-                                    )}
+                                    ) : 
+                                    // (
+                                    //   <img
+                                    //     src={imageUrl}
+                                    //     alt="Embedded Content"
+                                    //     style={{
+                                    //       maxWidth: '100%',
+                                    //       maxHeight: '600px',
+                                    //       objectFit: 'contain',
+                                    //     }}
+                                    //   />
+                                    // )
+                                    // this -------------------------zoom image code state----------------------------------------------
+                                    (
+                                    <div style={{ position: "relative" }}>
+                                    {/* Zoom Controls */}
+                                    <div
+                                      style={{
+                                        position: "absolute",
+                                        top: "10px",
+                                        right: "10px",
+                                        display: "flex",
+                                        gap: "5px",
+                                        zIndex: 10, 
+                                      }}
+                                    >
+                                      <IconButton onClick={handleZoomIn} style={{ backgroundColor: "white" }}>
+                                        <ZoomIn />
+                                      </IconButton>
+                                      <IconButton onClick={handleZoomOut} style={{ backgroundColor: "white" }}>
+                                        <ZoomOut />
+                                      </IconButton>
+                                    </div>
+                      
+                                   
+                                    <img
+                                      src={imageUrl}
+                                      alt="Embedded Content"
+                                      style={{
+                                        maxWidth: "100%",
+                                        maxHeight: "600px",
+                                        objectFit: "contain",
+                                        transform: `scale(${zoom}) translate(${posX}px, ${posY}px)`, 
+                                        transition: "transform 0.1s ease-out", 
+                                        cursor: isDragging ? "grabbing" : "grab", 
+                                      }}
+                                      onWheel={handleScrollZoom} 
+                                      onMouseDown={startDrag} 
+                                      onMouseMove={onDrag} 
+                                      onMouseUp={stopDrag} 
+                                      onMouseLeave={stopDrag} 
+                                    />
+                                  </div>
+                                )
+                                // ------------------------this code image zoomm---------------------------------------------------
+                                    }
                                   </>
                                 )}
                               </DialogContent>
@@ -5266,11 +5328,20 @@ Please Click the link to close E-Tripsheet-`}
                 </Box>
               </Modal>
             </div>
+            {deletetripasheetdata &&
+            <DeleteConfirmationDialog
+                open={deletetripasheetdata}
+                onClose={() => setDeleteTripsheetData(false)}
+                onConfirm={handleClick}
+              />
+            }
+
           
             <div>
               <Box className="common-speed-dail">
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"
+                  id={message}
                   icon={<SpeedDialIcon />}
                   direction="left"
                 >
@@ -5305,12 +5376,18 @@ Please Click the link to close E-Tripsheet-`}
                   )} */}
 
                   {isEditMode && speeddailacesss && (
+                    // <SpeedDialAction
+                    //   key="delete"
+                    //   icon={<DeleteIcon />}
+                    //   tooltipTitle="Delete"
+                    //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                    // />
                     <SpeedDialAction
-                      key="delete"
-                      icon={<DeleteIcon />}
-                      tooltipTitle="Delete"
-                      onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
-                    />
+                    key="delete"
+                    icon={<DeleteIcon />}
+                    tooltipTitle="Delete"
+                    onClick={() => setDeleteTripsheetData(true)}
+                  />
                   )}
                   {Tripsheet_new === 1 && !isEditMode && (
                     <SpeedDialAction

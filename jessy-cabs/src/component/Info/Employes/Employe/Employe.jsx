@@ -17,6 +17,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
+import DeleteConfirmationDialog from "../../../DeleteData/DeleteData";
 
 // ICONS
 import useEmployee from "./useEmployee";
@@ -115,7 +116,7 @@ const Employe = () => {
     deletefile,
     handlecheckbox,
     loading,
-    setLoading
+    setLoading,deleteemployeedata,setDeleteEmployeedata,
 
   } = useEmployee();
 
@@ -518,12 +519,19 @@ const Employe = () => {
               />
             )}
             {Employee_delete === 1 && isEditMode && (
+              // <SpeedDialAction
+              //   key="delete"
+              //   icon={<DeleteIcon />}
+              //   tooltipTitle="Delete"
+              //   onClick={(event) => handleClick(event, "Delete")}
+              // />
+
               <SpeedDialAction
-                key="delete"
-                icon={<DeleteIcon />}
-                tooltipTitle="Delete"
-                onClick={(event) => handleClick(event, "Delete")}
-              />
+              key="delete"
+              icon={<DeleteIcon />}
+              tooltipTitle="Delete"
+           onClick={() => setDeleteEmployeedata(true)}
+            />
             )}
             {Employee_new === 1 && !isEditMode && (
               <SpeedDialAction
@@ -595,6 +603,13 @@ const Employe = () => {
 
 
           </div>
+
+       {deleteemployeedata &&   <DeleteConfirmationDialog
+                open={deleteemployeedata}
+                onClose={() => setDeleteEmployeedata(false)}
+                onConfirm={handleClick}
+              />
+              }
 
 
           <div className="table-bookingCopy-Employe ">

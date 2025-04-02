@@ -58,6 +58,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Tooltip from '@mui/material/Tooltip';
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import DeleteConfirmationDialog from '../../../DeleteData/DeleteData';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -118,7 +119,7 @@ const DriverCreation = ({ stationName }) => {
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll,
         handleFileChange, handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2,
-        loading, setLoading,isDButtonLoading,setisDbuttonLoading
+        loading, setLoading,isDButtonLoading,setisDbuttonLoading,deletedriverdate,setDeleteDriverdata
         
     } = useDrivercreation();
 
@@ -555,12 +556,19 @@ const DriverCreation = ({ stationName }) => {
                                 />
                             )}
                             {Supllier_delete === 1 && isEditMode && (
+                                // <SpeedDialAction
+                                //     key="delete"
+                                //     icon={<DeleteIcon />}
+                                //     tooltipTitle="Delete"
+                                //     onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                                // />
                                 <SpeedDialAction
-                                    key="delete"
-                                    icon={<DeleteIcon />}
-                                    tooltipTitle="Delete"
-                                    onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
-                                />
+                                key="delete"
+                                icon={<DeleteIcon />}
+                                tooltipTitle="Delete"
+                                // onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                                onClick={() => setDeleteDriverdata(true)}
+                            />
                             )}
 
                             {Supllier_new === 1 && !isEditMode && (
@@ -659,7 +667,14 @@ const DriverCreation = ({ stationName }) => {
                             />
                         </StyledSpeedDial>
                     </Box> */}
-                    
+                    {deletedriverdate && 
+                     <DeleteConfirmationDialog
+                                open={deletedriverdate}
+                                onClose={() => setDeleteDriverdata(false)}
+                                onConfirm={handleClick}
+                              />
+                    }
+
                     
 
                     <div className="DriverCreation-table-container">

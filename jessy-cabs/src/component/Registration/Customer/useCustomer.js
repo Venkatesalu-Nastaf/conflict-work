@@ -52,6 +52,7 @@ const useCustomer = () => {
     const [selectedStation, setSelectedStation] = useState('');
     const [selectedState, setSelectedState] = useState('');
     const [btnloading, setbtnLoading] = useState(false)
+    const [deletecustomerdata,setDeletecustomerdata]=useState(false);
     // const [cerendentialdataforstations,setCredentialDataforstations]=useState()
 
     //---------------------------------------
@@ -600,6 +601,7 @@ const useCustomer = () => {
         // getcustomerdata("")
         setSelectedStation( "");
          setSelectedState("");
+         setDeletecustomerdata(false)
     };
     const getcustomerdata = async (customerdata) => {
         const datacustomer = customerdata
@@ -1159,7 +1161,7 @@ const useCustomer = () => {
         setInfo, setInfoMessage,
         handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove,
          customerratetype, handleChangeuniquecustomer, cerendentialdata, selectedStation, setSelectedStation, selectedState, setSelectedState,
-         btnloading, setbtnLoading
+         btnloading, setbtnLoading,deletecustomerdata,setDeletecustomerdata
     };
 };
 

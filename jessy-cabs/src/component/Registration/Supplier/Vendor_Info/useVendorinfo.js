@@ -33,7 +33,8 @@ const useVendorinfo = () => {
   const [cerendentialdataforstations, setCredentialDataforstations] = useState()
 
   const [loading, setLoading] = useState(false)
-  const [isAButtonLoading,setisAButtonLoading] = useState(false)
+  const [isAButtonLoading,setisAButtonLoading] = useState(false);
+  const[deletevendordata,setDeletevendordata] = useState(false)
 
 
 
@@ -647,6 +648,7 @@ const useVendorinfo = () => {
     }));
     setSelectedCustomerData({});
     setIsEditMode(false);
+    setDeletevendordata(false)
   };
 
   const handleRowClick = useCallback((params) => {
@@ -972,6 +974,7 @@ const useVendorinfo = () => {
       }
 
       else if (actionName === 'Delete') {
+        try{
         await axios.delete(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`);
         setSelectedCustomerData(null);
         setSuccess(true);
@@ -979,6 +982,11 @@ const useVendorinfo = () => {
         handleCancel();
         handleList();
         setRows([]);
+        }
+        catch(err){
+          setError(true);
+          setErrorMessage("check your network connection");
+        }
       }
 
       else if (actionName === 'Edit') {
@@ -1030,7 +1038,7 @@ const useVendorinfo = () => {
     handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, cerendentialdata, 
     // handleAutocompleteChangestations, 
     infoMessage,
-    loading,setLoading,isAButtonLoading,setisAButtonLoading
+    loading,setLoading,isAButtonLoading,setisAButtonLoading,setDeletevendordata,deletevendordata
   };
 };
 

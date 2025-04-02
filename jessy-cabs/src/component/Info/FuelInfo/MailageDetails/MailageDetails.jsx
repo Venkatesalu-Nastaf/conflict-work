@@ -37,6 +37,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useMailagedetails from './useMailagedetails';
+import DeleteConfirmationDialog from '../../../DeleteData/DeleteData';
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { CircularProgress } from '@mui/material';
@@ -88,7 +89,7 @@ const MailageDetails = () => {
     isEditMode,
     handleEdit,
     loading,
-    setLoading
+    setLoading,setDeleteMilageData,deletemileagedata
 
   } = useMailagedetails();
 
@@ -319,6 +320,13 @@ const MailageDetails = () => {
                 </div>
               }
             </div>
+            {deletemileagedata && 
+            <DeleteConfirmationDialog
+                open={deletemileagedata}
+                onClose={() => setDeleteMilageData(false)}
+                onConfirm={handleClick}
+              />
+            }
             <Box className='common-speed-dail'>
               <StyledSpeedDial
                 ariaLabel="SpeedDial playground example"
@@ -343,12 +351,18 @@ const MailageDetails = () => {
                   />
                 )}
                 {FuelInfo_delete === 1 && isEditMode && (
+                  // <SpeedDialAction
+                  //   key="delete"
+                  //   icon={<DeleteIcon />}
+                  //   tooltipTitle="Delete"
+                  //   onClick={(event) => handleClick(event, "Delete")}
+                  // />
                   <SpeedDialAction
-                    key="delete"
-                    icon={<DeleteIcon />}
-                    tooltipTitle="Delete"
-                    onClick={(event) => handleClick(event, "Delete")}
-                  />
+                  key="delete"
+                  icon={<DeleteIcon />}
+                  tooltipTitle="Delete"
+                  onClick={() => setDeleteMilageData(true)}
+                />
                 )}
                 {FuelInfo_new === 1 &&  !isEditMode &&(
                   <SpeedDialAction

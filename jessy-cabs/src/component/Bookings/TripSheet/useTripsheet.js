@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback, useContext } from 'react';
+import { useState, useEffect, useMemo, useCallback, useContext,useRef } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 
 import Excel from 'exceljs';
+
 
 const useTripsheet = () => {
     const { mapButtonTrigger } = useData1()
@@ -312,6 +313,14 @@ const useTripsheet = () => {
     const [Permissiondeleteroles, setPermissionDeleteRoles] = useState(false)
     const [fueldataamountdis, setFuelDataAmountDis] = useState(false)
     const [fueladvancedamounthide, setFuelAdvancedamountHide] = useState(null)
+    const [deletetripasheetdata,setDeleteTripsheetData]=useState(false);
+// -------------------this zoom imgae in attachfile----------
+    const [zoom, setZoom] = useState(1);
+  const [posX, setPosX] = useState(0); 
+  const [posY, setPosY] = useState(0); 
+  const [isDragging, setIsDragging] = useState(false);
+  const startPos = useRef({ x: 0, y: 0 });
+//   ---------------------------end code zoom image------------------
     const a1 = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO");
 
 
@@ -372,6 +381,23 @@ const useTripsheet = () => {
         },
 
     ];
+    const maplogcolumnsexcel = [
+        { field: "ids", headerName: "Sno"},
+        { field: "tripid", headerName: "TripSheet No"},
+        { field: "time", headerName: "Trip Time" },
+        // { field: "date", headerName: "Trip Date", width: 100, },
+        {
+            field: "date",
+            headerName: "Trip Date",
+         
+        },
+      
+        { field: "trip_type", headerName: "Trip Type"},
+        { field: "place_name", headerName: "Place Name"},
+       
+
+    ];
+   
     const [openEditMapLog, setOpenEditMapLog] = useState(false);
     const handleOpenMapLog = () => setOpenEditMapLog(true);
     const handleCloseMapLog = () => setOpenEditMapLog(false);
@@ -411,6 +437,7 @@ const useTripsheet = () => {
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
                 const data = response.data;                
                 setRow(data);
+                
             } catch (error) {
                 console.error('Error fetching map data:', error);
             }
@@ -634,6 +661,9 @@ const useTripsheet = () => {
         const encodedPath = encodeURIComponent(params.row.path);
         setimgPopupOpen(true);
         setImageUrl(`${apiUrl}/get-image/${encodedPath}`);
+        setPosX(0)
+        setPosY(0)
+        setZoom(1)
     };
     const handleimgPopupClose = () => {
         setimgPopupOpen(false);
@@ -986,6 +1016,7 @@ const useTripsheet = () => {
         // setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
         localStorage.removeItem('selectedTripid');
         setFuelAdvancedamountHide(null)
+        setDeleteTripsheetData(false)
     };
     const handlecheck = async () => {
         const statusdata = formData.status || book.status || selectedCustomerData.status;
@@ -6281,7 +6312,7 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
     //     }
     //     handleHybridCheck()
     // }, [customer, tripID, apiUrl])
-
+// repeteedapi code--------------------------------------------------------------------------
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -6303,6 +6334,7 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
 
         fetchData();
     }, [book, selectedCustomerData, selectedCustomerDatas, formData, apiUrl]);
+    // --------------------------------------------------------------------
 
     const handleEditMap = () => {
         setMapPopUp(true)
@@ -7938,10 +7970,12 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
             fetchData();
         }
     }, [apiUrl, gpsTripId,enterTrigger]);
-const handleExcelDownloadtrip = async () => {
+
+
+const handleExcelDownloadtrip = async(rowdataar) => {
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
-    if(row.length === 0){
+    if(rowdataar.length === 0){
         setError(true)
         setErrorMessage("No data found ")
         return
@@ -7954,18 +7988,20 @@ const handleExcelDownloadtrip = async () => {
        
 // console.log(maplogcolumns,"plog")
       
-// const columns1 = maplogcolumns.map(({ field, headerName}) => ({
+// const columns1 = maplogcolumnsexcel.map(({ field, headerName}) => ({
 //     key: field,
 //     header: headerName,
     
 // }));
-const columns1 = maplogcolumns
+
+ 
+const columns1 = maplogcolumnsexcel
   .map(({ field, headerName }) => ({
     key: field,
     header: headerName,
   }))
-  .filter((column) => column.key !== "Edit" && column.key !== "actions"); 
-console.log(columns1,"plopppp")
+
+console.log(columns1,"hnplopppp",rowdataar)
         worksheet.columns = columns1;
         worksheet.getRow(1).font = { bold: true };
         worksheet.getRow(1).eachCell((cell) => {
@@ -7983,13 +8019,23 @@ console.log(columns1,"plopppp")
             column.width = column.header.length + 5;
             column.alignment = { horizontal: 'center', vertical: 'middle' };
         });
-
+  
+// const data
+const updatedData = rowdataar.map((entry,index) => ({
+    ...entry,
+    date: entry.date ? dayjs(entry.date).format("DD-MM-YYYY") : "",
+    ids :index + 1
+  }));
+  
+  console.log(updatedData,"hnupppppdate");
+        
         // Add rows of data
-        row.forEach((singleData,index) => {
+        updatedData.forEach((singleData,index) => {
             // console.log(singleData,"single")
-            singleData["id"] = index + 1;
-             singleData["date"] = singleData["date"] ? dayjs(singleData["date"]).format("DD-MM-YYYY") : ""
-            const row = worksheet.addRow(singleData);
+         
+          
+           
+            const rowdata= worksheet.addRow(singleData);
             worksheet.columns.forEach((column) => {
                 const cellValue = singleData[column.key] || '';
                 const cellLength = cellValue.toString().length;
@@ -7998,7 +8044,7 @@ console.log(columns1,"plopppp")
             });
 
             // Apply borders for each cell
-            row.eachCell((cell) => {
+            rowdata.eachCell((cell) => {
                 cell.border = {
                     top: { style: 'thin' },
                     left: { style: 'thin' },
@@ -8018,7 +8064,9 @@ console.log(columns1,"plopppp")
         workbook.removeWorksheet(workSheetName);  // Clean up the worksheet
     }
 };
-const handlePdfDownloadtrip = ()=>{
+// console.log(rowexcel,"hnrowexcel",row)
+
+const handlePdfDownloadtrip = (row)=>{
 
     if(row.length === 0){
         setError(true)
@@ -8049,55 +8097,33 @@ const handlePdfDownloadtrip = ()=>{
         pdf.text(text, xPos, 10);
 
 
-        const header = maplogcolumns
-  .filter((row) => row.field !== "Edit" && row.field !== "actions") // Exclude rows with field "edit" or "actions"
-  .map((row) => row.headerName); 
-        // console.log(header,"plpdff")
 
-      
-       
-        // const rowValues = row.map(row,index => {
-        //     return maplogcolumns.map(column =>{ 
-                
-             
-        //             if(column.field === "date"){
-        //                 return dayjs(row[column.field]).format("DD-MM-YYYY")
-        //             }
-        //             if (column.field === "id") {
-        //                 // Set the id field based on the index (index + 1)
-        //                 return row[column.field] = index + 1;
-        //             }
-        //             // row[column.field]
-        //             return row[column.field]
+const header = maplogcolumnsexcel.map((row) => row.headerName); 
 
+// const header = maplogcolumnsexcel
+// .filter((row) => row.field !== "date") // Exclude rows with field "edit" or "actions"
+// .map((row) => row.headerName); 
+        console.log(header,"shnplpdff")
 
-        // });
-        // });
 
         const rowValues = row.map((row, index) => { // Declare index here
-            return maplogcolumns.map(column => { 
-                if (column.field === "date") {
-                    // Format the date field using dayjs
-                    return dayjs(row[column.field]).format("DD-MM-YYYY");
-                }
-                if (column.field === "id") {
+            return maplogcolumnsexcel.map(column => { 
+               
+                if (column.field === "ids") {
                     // Set the id field based on index + 1
                     return index + 1;
                 }
+                if (column.field === "date") {
+                    return dayjs(row.date).format("DD-MM-YYYY") // Format the date field
+                }
+                 
                 // Return other fields as-is
                 return row[column.field];
             });
         });
-console.log(rowValues,"plpdff")
+// console.log(rowValues,"shnplpdff",rowexcel)
 
-                
-      
-
-
-        
-
-     
-        let fontdata = 1;
+                let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
         }
@@ -8185,6 +8211,58 @@ console.log(rowValues,"plpdff")
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'TripsheetGpsLog.pdf');
 }
+
+// ----------------------------------------this code zoom image in attcah file----------------------------
+// Function to handle Zoom In
+const handleZoomIn = () => {
+    setZoom((prevZoom) => Math.min(prevZoom + 0.2, 3)); 
+  };
+
+  // Function to handle Zoom Out
+  const handleZoomOut = () => {
+    setZoom((prevZoom) => Math.max(prevZoom - 0.2, 1)); 
+    if (zoom <= 1.2) {
+      setPosX(0);
+      setPosY(0);
+    }
+  };
+
+  // Handle Zoom using Mouse Scroll
+  const handleScrollZoom = (e) => {
+    e.preventDefault(); 
+    if (e.deltaY < 0) {
+      setZoom((prevZoom) => Math.min(prevZoom + 0.2, 3)); 
+    } else {
+      setZoom((prevZoom) => Math.max(prevZoom - 0.2, 1)); 
+      if (zoom <= 1.2) {
+        setPosX(0);
+        setPosY(0);
+      }
+    }
+  };
+
+  // Start dragging
+  const startDrag = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    startPos.current = { x: e.clientX, y: e.clientY };
+  };
+
+  // Drag the image
+  const onDrag = (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startPos.current.x;
+    const dy = e.clientY - startPos.current.y;
+    setPosX((prevX) => prevX + dx);
+    setPosY((prevY) => prevY + dy);
+    startPos.current = { x: e.clientX, y: e.clientY };
+  };
+
+  // Stop dragging
+  const stopDrag = () => {
+    setIsDragging(false);
+  };
+//   ----------------------------------------this code zoom image in attcah file----------------------------
 
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
@@ -8323,7 +8401,10 @@ console.log(rowValues,"plpdff")
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
         minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage, Permissiondeleteroles, fueldataamountdis, setFuelAdvancedamountHide,
         outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, handleAutocompleteChangecustomer, orderByDropDown, speeddailacesss, speeddailacesssedit,
-        tripGpsData, fullGpsData,allGpsData,handleExcelDownloadtrip,handlePdfDownloadtrip,attachedImageEtrip
+        tripGpsData, fullGpsData,allGpsData,handleExcelDownloadtrip,handlePdfDownloadtrip,attachedImageEtrip,deletetripasheetdata,setDeleteTripsheetData,
+        // this zoom image code state-----------------
+        posX,posY,zoom,handleZoomIn,handleZoomOut,startDrag,stopDrag,handleScrollZoom,isDragging,onDrag
+        // this zoom image code state-----------------
 
     };
 };

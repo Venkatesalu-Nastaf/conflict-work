@@ -40,6 +40,7 @@ const useEmployee = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const [loading, setLoading] = useState(false);
+    const [deleteAgreementdata,setDeleteAgreementdata] = useState(false)
 
     const handleButtonClick = (params) => {
         const { customer } = params.row;
@@ -490,6 +491,7 @@ const useEmployee = () => {
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
+        setDeleteAgreementdata(false)
     };
     
     const handleRowClick =(params) => {
@@ -1163,7 +1165,7 @@ const useEmployee = () => {
         setErrorMessage,
         deletefile,
         loading,
-        setLoading
+        setLoading,deleteAgreementdata,setDeleteAgreementdata
     };
 };
 

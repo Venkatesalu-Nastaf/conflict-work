@@ -51,6 +51,7 @@ import useVendorinfo from './useVendorinfo';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { GrSelect } from "react-icons/gr";
 import { FaCarOn } from "react-icons/fa6";
+import DeleteConfirmationDialog from '../../../DeleteData/DeleteData';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -105,7 +106,7 @@ const Vendorinfo = ({ stationName }) => {
     // fields,
     //  handleAutocompleteChangestations,
     handleEdit, suppilerrate, vechiledata, handleChangeuniquetravelname, handleenterSearch, cerendentialdata,
-    loading,isAButtonLoading
+    loading,isAButtonLoading,setDeletevendordata,deletevendordata
   } = useVendorinfo();
 
 
@@ -493,7 +494,13 @@ const Vendorinfo = ({ stationName }) => {
             </div>
           </div>
         </div>
-       
+        {deletevendordata && 
+        <DeleteConfirmationDialog
+                open={deletevendordata}
+                onClose={() => setDeletevendordata(false)}
+                onConfirm={handleClick}
+              />
+        }
 
 
 
@@ -552,12 +559,18 @@ const Vendorinfo = ({ stationName }) => {
                 />
               )}
               {Supllier_delete === 1 && isEditMode && (
+                // <SpeedDialAction
+                //   key="delete"
+                //   icon={<DeleteIcon />}
+                //   tooltipTitle="Delete"
+                //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                // />
                 <SpeedDialAction
-                  key="delete"
-                  icon={<DeleteIcon />}
-                  tooltipTitle="Delete"
-                  onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
-                />
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={() => setDeletevendordata(true)}
+              />
               )}
               {Supllier_new === 1 && !isEditMode && (
                 <SpeedDialAction

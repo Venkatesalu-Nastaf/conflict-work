@@ -40,6 +40,7 @@ import { RateTypevendor } from '../RateType/RateTypeData.js';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import DeleteConfirmationDialog from '../../../DeleteData/DeleteData.jsx';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -82,7 +83,7 @@ const RateType = () => {
         isEditMode,
         handleEdit,
         handleDateChange, cerendentialdata, handleChangecredent,
-        loading,isRateButtonLoading
+        loading,isRateButtonLoading,deleteratetype,setDeleteRateType
     } = useRatype();
 
     // Permission ------------
@@ -365,8 +366,7 @@ const RateType = () => {
                             )}
                         </PopupState>
                     </div>
-                             {console.log(searchText,"vbnm")
-                             }   
+                           
                     <div className="input-search-ratetype">
                         <div className="icone">
                             <AiOutlineFileSearch color="action" />
@@ -383,6 +383,13 @@ const RateType = () => {
                         />
                     </div>
                 </div>
+                {deleteratetype &&
+                  <DeleteConfirmationDialog
+                                open={deleteratetype}
+                                onClose={() => setDeleteRateType(false)}
+                                onConfirm={handleClick}
+                              />
+                }
 
                 <Box className="common-speed-dail">
                     <StyledSpeedDial
@@ -408,12 +415,18 @@ const RateType = () => {
                             />
                         )}
                         {INFO_delete === 1 && isEditMode &&(
+                            // <SpeedDialAction
+                            //     key="delete"
+                            //     icon={<DeleteIcon />}
+                            //     tooltipTitle="Delete"
+                            //     onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                            // />
                             <SpeedDialAction
-                                key="delete"
-                                icon={<DeleteIcon />}
-                                tooltipTitle="Delete"
-                                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
-                            />
+                            key="delete"
+                            icon={<DeleteIcon />}
+                            tooltipTitle="Delete"
+                            onClick={() => setDeleteRateType(true)}
+                        />
                         )}
                         {INFO_new === 1 && !isEditMode &&(
                             <SpeedDialAction

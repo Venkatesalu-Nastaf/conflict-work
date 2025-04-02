@@ -35,8 +35,8 @@ const useVehicleinfo = () => {
     const [cerendentialdata, setCredentialData] = useState()
 
     const [loading, setLoading] = useState(false)
-    const [isVButonLoading, setisVButtonLoading] = useState(false)
-
+    const [isVButonLoading, setisVButtonLoading] = useState(false);
+    const [deletevehciledata,setDeletevehciledata] = useState(false)
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
         {
@@ -622,6 +622,7 @@ const useVehicleinfo = () => {
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
+        setDeletevehciledata(false)
     };
 
     const handleAutocompleteChange = (event, value, name) => {
@@ -1182,7 +1183,7 @@ const useVehicleinfo = () => {
         }
     };
 
-    const handleClick = async (actionName, vehicleId) => {
+    const handleClick = async (event,actionName) => {
         // try{
         if (actionName === 'List') {
             const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
@@ -1210,6 +1211,7 @@ const useVehicleinfo = () => {
 
         }
         else if (actionName === 'Delete') {
+            try{
             await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`);
             setSelectedCustomerData({});
             handleCancel();
@@ -1218,6 +1220,11 @@ const useVehicleinfo = () => {
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
             handleList();
+        }
+        catch(err){
+            setError(true);
+            setErrorMessage("check your network connection");
+        }
         }
         else if (actionName === 'Edit') {
             handleEdit()
@@ -1485,7 +1492,7 @@ const useVehicleinfo = () => {
         selectAll,
         handleSelectAll,
         handleDocumentDownload, drivername, handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit, handleChangecredent, cerendentialdata,
-        vehiclenames, setVehilcNames, loading, setLoading, isVButonLoading, setisVButtonLoading,
+        vehiclenames, setVehilcNames, loading, setLoading, isVButonLoading, setisVButtonLoading,setDeletevehciledata,deletevehciledata
     };
 };
 

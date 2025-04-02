@@ -34,7 +34,7 @@ const useBooking = () => {
   const [popupOpenmail, setpopupOpenmail] = useState(false);
   const [edit, setEdit] = useState(false)
   const [sendEmail, setSendEmail] = useState(true);
-  const [sendmailguestsms, setSendmailGuestsms] = useState(false);
+  // const [sendmailguestsms, setSendmailGuestsms] = useState(false);
   const [organistaionsendmail, setOrganisationSendEmail] = useState([])
   const [datatrigger, setDatatrigger] = useState(false)
   const [accountinfodata, setAccountInfoData] = useState([])
@@ -58,6 +58,7 @@ const useBooking = () => {
    const [messagedited,setMessageEdited]=useState('')
    const [messageditedbefore,setMessageEditedBefore]=useState('')
    const storedUsername = localStorage.getItem("username");
+   const [deletebookingdata,setDeleteBookingData] = useState(false)
 
 
    const Roledatauser = localStorage.getItem("SuperAdmin")
@@ -436,6 +437,7 @@ const useBooking = () => {
 
   //Entering Manually...
   // console.log(nochangedata,"data")
+  // console.log(sendEmail,"email")
   const handleVehicleChange = (event, value, name) => {
     console.log(name,value)
     if (name === "vehRegNo") {
@@ -881,7 +883,8 @@ const useBooking = () => {
     //--------------------------------------------------------------
 
   const handlecheck = async (lastBookingno) => {
-    if (sendEmail || sendmailguestsms) {
+    // if (sendEmail || sendmailguestsms) {
+      if (sendEmail) {
       const datamode = isEditMode ? selectedCustomerData.status || book.status || bookingStatus : bookingStatus || book.status
       try {
         const user = localStorage.getItem("username")
@@ -1047,6 +1050,7 @@ const useBooking = () => {
 useEffect(() => {
     fetchdatacustomerhybrid();
 }, [fetchdatacustomerhybrid]);
+console.log(sendEmail,"send",hybdridatabooking)
 // console.log(selectetImg,"imgggg")
 // console.log(formData.vehiclemodule,selectedCustomerData.vehiclemodule,book.vehiclemodule,selectedCustomerdriver.vehiclemodule,"jss")
   const handleAdd = async () => {
@@ -1145,11 +1149,17 @@ useEffect(() => {
       setErrorMessage("Enter Report Time")
       return
     }
-    if (hybdridatabooking && selectetImg.length === 0 ) {
+    if (hybdridatabooking && selectetImg.length === 0 && !isEditMode ) {
       setError(true);
       setErrorMessage("Attach the file");
       return;
     }
+    // if (hybdridatabooking && selectetImg.length === 0 ) {
+    //   setError(true);
+    //   setErrorMessage("Attach the file");
+    //   return;
+    // }
+   
 
     try {
       setisAddbtnload(true)
@@ -1214,7 +1224,7 @@ useEffect(() => {
       };
       // console.log(updatedBook,"pppp")
 
-      setSendmailGuestsms(true)
+      // setSendmailGuestsms(true)
       await axios.post(`${apiUrl}/booking`, updatedBook);
       const response = await axios.get(`${apiUrl}/last-booking-no`);
       const lastBookingno = response.data.bookingno;
@@ -1232,15 +1242,20 @@ useEffect(() => {
       setImagedata([])
       setLastBookingNo(lastBookingno);
       setPopupOpen(true);
-      handleCancel();
+      // handleCancel();
       setRowsdriver([])
       setRow([]);
       setRows([]);
       setSuccess(true);
       setisAddbtnload(false)
       setSuccessMessage("Successfully Added");
+      if(sendEmail){
       handlecheck(lastBookingno);
+      }
+
       setEdit(false)
+      setSendEmail(true)
+      handleCancel();
     } 
     // catch (error) {
     //   // const errdata=error.response;
@@ -1362,6 +1377,10 @@ if (Object.keys(nochangedata).length === 0) {
           if (sendEmail) {
             handlecheck(editbookno);
           }
+          else{
+             setSendEmail(true)
+          }
+          
         } else {
           setInfo(true);
           setInfoMessage(response.data.message);
@@ -1374,7 +1393,7 @@ if (Object.keys(nochangedata).length === 0) {
       setRowsdriver([])
       setRows([]);
       handleCancel();
-      setSendEmail(true)
+      // setSendEmail(true)
     } catch (error) {
       // console.error("An error occurred:", error);
       setError(true);
@@ -1401,6 +1420,8 @@ if (Object.keys(nochangedata).length === 0) {
             setSuccessMessage(response.data.message);
             handlebooklogDetails(updatedCustomer, deletebookno, "Delete")
             handlebookdeletebookingdoc(deletebookno)
+            setDeleteBookingData(false)
+            setSendEmail(true)
             //  await axios.delete(`${apiUrl}/bookingDLETEUPLOAD/${book.bookingno || selectedCustomerData.bookingno}`);
             // handlebooklogDetails(updatedCustomer, deletebookno, "Delete")
           } else {
@@ -1415,7 +1436,7 @@ if (Object.keys(nochangedata).length === 0) {
           setRowsdriver([])
         }
       } else if (actionName === "Edit") {
-        setSendEmail(false)
+        // setSendEmail(false)
         handleEdit()
       } else if (actionName === "Add") {
         handleAdd();
@@ -1808,7 +1829,7 @@ if (Object.keys(nochangedata).length === 0) {
     rowdriver,
     handleRowClickdriver,
     selectedCustomerdriver, handleChangeFile, AvilableimageCount, bookingStatus, setBookingStatus, handletravelsAutocompleteChange, accountinfodata,
-    vehileName, infoMessage, handleImagechange2, selectetImg,handleimagedeletewithouttripid,deletefiledata,
+    vehileName, infoMessage, handleImagechange2, selectetImg,handleimagedeletewithouttripid,deletefiledata,setDeleteBookingData,deletebookingdata,
     //  removeSelectedImage,
      imageDialogOpen, handleCloseImageDialog, setImageDialogOpen, CopyEmail, setCopyEmail, setWarning, setWarningMessage, warningMessage, warning,
     // handleBookEscortChange,

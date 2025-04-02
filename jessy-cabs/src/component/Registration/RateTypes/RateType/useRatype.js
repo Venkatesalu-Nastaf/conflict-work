@@ -39,7 +39,8 @@ const useRatype = () => {
     const [infoMessage, setInfoMessage] = useState({});
     const [cerendentialdata,setCredentialData]=useState()
     const [loading, setLoading] = useState(false)
-    const [isRateButtonLoading,setisRateButtonLoading]= useState(false)
+    const [isRateButtonLoading,setisRateButtonLoading]= useState(false);
+    const [deleteratetype,setDeleteRateType]=useState(false)
     
     // handlechange-----------------
     const handleDateChange = (date, name) => {
@@ -604,6 +605,7 @@ const useRatype = () => {
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
+        setDeleteRateType(false)
     };
 
     const handleRowClick = useCallback((params) => {
@@ -788,7 +790,8 @@ const useRatype = () => {
             }
 
             else if (actionName === 'Delete') {
-                await axios.delete(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
+               const data = await axios.delete(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
+               console.log(data,"responsedaata")
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
@@ -848,7 +851,7 @@ const useRatype = () => {
         columns,
         isEditMode,
         handleEdit,
-        handleDateChange,cerendentialdata,handleChangecredent,loading,isRateButtonLoading,setisRateButtonLoading
+        handleDateChange,cerendentialdata,handleChangecredent,loading,isRateButtonLoading,setisRateButtonLoading,deleteratetype,setDeleteRateType
 
     };
 };

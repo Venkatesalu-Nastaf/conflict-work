@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState,useMemo } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
@@ -81,11 +81,12 @@ import { MdDataUsage } from "react-icons/md";
 import Select from '@mui/material/Select';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Document, Page, pdfjs } from 'react-pdf';
+import DeleteConfirmationDialog from "../../../DeleteData/DeleteData";
 // import { textAlign } from "html2canvas/dist/types/css/property-descriptors/text-align";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+const StyledSpeedDial = styled(SpeedDial)(({ theme,id }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
     bottom: theme.spacing(2),
@@ -94,6 +95,10 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
     top: theme.spacing(2),
     left: theme.spacing(2),
+  },
+  "& .MuiFab-primary": {
+    backgroundColor: id ?"green": "#1976d2",
+    // color: "white",
   },
 }));
 
@@ -127,6 +132,7 @@ const Booking = ({ stationName, customerData }) => {
     selectedCustomerDatas,
     formValues,
     handleAutocompleteChange,
+
     setFormData,
     setStartTime,
     handleChangeFile,
@@ -159,7 +165,7 @@ const Booking = ({ stationName, customerData }) => {
     vehileName,
     selectedCustomerdriver, setNoChangeData, nochangedata,
     handleSelectAll, handlecheckbox, selectAll, deletefile, handleButtonClickwithouttripid, dialogOpentrail, handleCloseDialogtrail, handlecheckbox1, selectetImg, deletefiledata,
-    handleimagedeletewithouttripid, handleChangetext, messagedited,messageditedbefore,
+    handleimagedeletewithouttripid, handleChangetext, messagedited,messageditedbefore,setDeleteBookingData,deletebookingdata,
     handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning, handleMessageData, handleCloseMessage, dialogmessage,
     // handleBookEscortChange,handleAirportTransferChange,
     //  transferreport, 
@@ -287,6 +293,9 @@ const Booking = ({ stationName, customerData }) => {
   // console.log(prevHours,"timeeeeeeee+++++++++++");
   const superAdminAccess = localStorage.getItem("SuperAdmin")
   const datahidecustomerdetails = superAdminAccess === "SuperAdmin" ? true : false;
+  const message = useMemo(() => {
+    return formData.MessageText ||selectedCustomerData.MessageText ||book.MessageText
+  }, [formData.MessageText, selectedCustomerData.MessageText, book.MessageText]);
 
   return (
     <div className="booking-form main-content-form Scroll-Style-hide">
@@ -1261,6 +1270,7 @@ const Booking = ({ stationName, customerData }) => {
                 }
               />
             </div>
+         
             <div className="input" style={{ marginTop: '0px' }}>
               <div className="input">
                 {isEditMode ? (
@@ -1293,6 +1303,7 @@ const Booking = ({ stationName, customerData }) => {
         </div>
         <Box className='common-speed-dail'>
           <StyledSpeedDial
+          id={message}
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
             direction="left"
@@ -1306,12 +1317,19 @@ const Booking = ({ stationName, customerData }) => {
               />
             )}
             {Booking_delete === 1 && isEditMode && (
+              // <SpeedDialAction
+              //   key="delete"
+              //   icon={<DeleteIcon />}
+              //   tooltipTitle="Delete"
+              //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+              // />
+
               <SpeedDialAction
-                key="delete"
-                icon={<DeleteIcon />}
-                tooltipTitle="Delete"
-                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
-              />
+              key="delete"
+              icon={<DeleteIcon />}
+              tooltipTitle="Delete"
+              onClick={() => setDeleteBookingData(true)}
+            />
             )}
             {Booking_new === 1 && !isEditMode && (
               <SpeedDialAction
@@ -1832,6 +1850,13 @@ const Booking = ({ stationName, customerData }) => {
             </div>
           </DialogContent>
         </Dialog>
+        {deletebookingdata && 
+        <DeleteConfirmationDialog
+        open={deletebookingdata}
+        onClose={() => setDeleteBookingData(false)}
+        onConfirm={handleClick}
+      />
+        }
 
 
 

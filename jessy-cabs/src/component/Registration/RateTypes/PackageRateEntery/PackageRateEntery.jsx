@@ -34,6 +34,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import DeleteConfirmationDialog from '../../../DeleteData/DeleteData.jsx';
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -73,7 +74,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
     // datevalidity,
     handleShow,
     fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata, loading, setLoading, isbtnloading, setisbtnloading,
-    multipleSelect,setSelectedRowDelete,selectedrowdelete
+    multipleSelect,setSelectedRowDelete,selectedrowdelete,deletepackaagerate,setDeletePackagerate
 
   } = usePackagerateentry();
 
@@ -526,6 +527,13 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
             </div>
           }
         </div>
+{deletepackaagerate && 
+        <DeleteConfirmationDialog
+                                open={deletepackaagerate}
+                                onClose={() => setDeletePackagerate(false)}
+                                onConfirm={handleClick}
+                              />
+}
         <Box className='common-speed-dail'>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
@@ -550,12 +558,18 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
               />
             )}
             {(RateManagement_delete === 1 && selectedrowdelete.length > 0) && (
+              // <SpeedDialAction
+              //   key="delete"
+              //   icon={<DeleteIcon />}
+              //   tooltipTitle="Delete"
+              //   onClick={(event) => handleClick(event, "Delete")}
+              // />
               <SpeedDialAction
-                key="delete"
-                icon={<DeleteIcon />}
-                tooltipTitle="Delete"
-                onClick={(event) => handleClick(event, "Delete")}
-              />
+              key="delete"
+              icon={<DeleteIcon />}
+              tooltipTitle="Delete"
+              onClick={() => setDeletePackagerate(true)}
+            />
             )}
             <SpeedDialAction
               key="Cancel"

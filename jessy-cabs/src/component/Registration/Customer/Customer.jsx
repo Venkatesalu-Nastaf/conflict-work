@@ -49,6 +49,8 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { FaHashtag } from "react-icons/fa";
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import DeleteConfirmationDialog from '../../DeleteData/DeleteData';
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -105,7 +107,8 @@ const Customer = ({ stationName }) => {
     handleChangecustomer, deletedialogbox, setDeletedDialog,
     setInfo, setInfoMessage, loading,
     handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer,
-    cerendentialdata, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStationChange, btnloading, setbtnLoading
+    cerendentialdata, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStationChange, btnloading, setbtnLoading,
+    deletecustomerdata,setDeletecustomerdata
   } = useCustomer();
 
   useEffect(() => {
@@ -815,6 +818,13 @@ const Customer = ({ stationName }) => {
                   )}
                 </div>
               </div>
+           {deletecustomerdata && 
+              <DeleteConfirmationDialog
+                                open={deletecustomerdata}
+                                onClose={() => setDeletecustomerdata(false)}
+                                onConfirm={handleClick}
+                              />
+           }
               <div className='alert-popup-main'>
                 {error &&
                   <div className='alert-popup Error' >
@@ -870,11 +880,18 @@ const Customer = ({ stationName }) => {
                       />
                     )}
                     {Customer_delete === 1 && isEditMode && (
+                      // <SpeedDialAction
+                      //   key="delete"
+                      //   icon={<DeleteIcon />}
+                      //   tooltipTitle="Delete"
+                      //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                      // />
+
                       <SpeedDialAction
                         key="delete"
                         icon={<DeleteIcon />}
                         tooltipTitle="Delete"
-                        onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                        onClick={() =>setDeletecustomerdata(true)}
                       />
                     )}
                     {Customer_new === 1 && !isEditMode && (

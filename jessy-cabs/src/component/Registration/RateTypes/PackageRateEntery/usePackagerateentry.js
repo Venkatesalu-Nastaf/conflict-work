@@ -91,6 +91,7 @@ const usePackagerateentry = () => {
     const [isbtnloading, setisbtnloading] = useState(false)
     const [multipleSelect, setMultipleSelect] = useState(false);
     const [selectedrowdelete,setSelectedRowDelete]=useState([])
+    const [deletepackaagerate,setDeletePackagerate]=useState(false)
 
     const memoizedUrl = useMemo(() => {
         if (!commonData.ratetype || !commonData.OrganizationName) {
@@ -269,6 +270,7 @@ const usePackagerateentry = () => {
         setIsEditMode(false);
         setValiditydata([])
         setSelectedRowDelete([])
+        setDeletePackagerate(false)
     };
 
     const handleRowClick = useCallback((params) => {
@@ -681,7 +683,8 @@ const usePackagerateentry = () => {
             handleList()
         }
         catch {
-
+           setError(true);
+           setErrorMessage("Check your Network Connection");
         }
     }
 
@@ -753,7 +756,7 @@ const usePackagerateentry = () => {
         handleEdit,
         handleShow, handleChange11,
         handleAddExtra, fieldSets, commonData, handleCancelUI, ratename, infoMessage, validitydata, loading, setLoading, isbtnloading, setisbtnloading,
-        multipleSelect,setSelectedRowDelete,selectedrowdelete
+        multipleSelect,setSelectedRowDelete,selectedrowdelete,deletepackaagerate,setDeletePackagerate
     };
 };
 

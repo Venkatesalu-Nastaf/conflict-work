@@ -31,6 +31,7 @@ import { PermissionContext } from '../../context/permissionContext';
 
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import { MdNumbers } from "react-icons/md";
+import DeleteConfirmationDialog from '../../DeleteData/DeleteData';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -100,7 +101,7 @@ const StationCreation = () => {
     setLoading,
     getStateFromStation,
     handleStationChange, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStateChange, isDisabled, setisDisabled,
-    handleStationAddData, stationDatas,open,setOpen,handleSubmiStation,handlestationOnChange
+    handleStationAddData, stationDatas,open,setOpen,handleSubmiStation,handlestationOnChange,setDeleteStationData,deletestationdata
   } = useStationCreation();
 
   useEffect(() => {
@@ -588,6 +589,13 @@ const StationCreation = () => {
                 {/* <Button variant="contained" onClick={() => handleStationAddData()}>Add Station</Button> */}
               </div>
             </div>
+{deletestationdata &&
+            <DeleteConfirmationDialog
+                open={deletestationdata}
+                onClose={() => setDeleteStationData(false)}
+                onConfirm={handleClick}
+              />
+              }
             <div className='alert-popup-main'>
               {error &&
                 <div className='alert-popup Error' >
@@ -671,12 +679,18 @@ const StationCreation = () => {
                   />
                 )}
                 {StationCreation_delete === 1 && isEditMode && (
+                  // <SpeedDialAction
+                  //   key="delete"
+                  //   icon={<DeleteIcon />}
+                  //   tooltipTitle="Delete"
+                  //   onClick={(event) => handleClick(event, "Delete")}
+                  // />
                   <SpeedDialAction
-                    key="delete"
-                    icon={<DeleteIcon />}
-                    tooltipTitle="Delete"
-                    onClick={(event) => handleClick(event, "Delete")}
-                  />
+                  key="delete"
+                  icon={<DeleteIcon />}
+                  tooltipTitle="Delete"
+                  onClick={() => setDeleteStationData(true)}
+                />
                 )}
                 {StationCreation_new === 1 && !isEditMode && (
                   <SpeedDialAction

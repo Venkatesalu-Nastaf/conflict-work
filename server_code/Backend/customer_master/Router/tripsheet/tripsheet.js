@@ -1801,7 +1801,7 @@ router.post('/send-tripsheet-email', async (req, res) => {
                 // from: 'foxfahad386@gmail.com',
                 from: Sendmailauth,
                 to: `${email},${customeremail}`,
-                subject: `JESSY CABS CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
+                subject: `JESSY CABS PVT LTD CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
                 html: `
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1; color: #FFFFFF;">

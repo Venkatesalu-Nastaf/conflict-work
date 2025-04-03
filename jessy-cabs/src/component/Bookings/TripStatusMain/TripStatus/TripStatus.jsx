@@ -161,6 +161,7 @@ Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO" || Roledatause
                         format="DD/MM/YYYY"
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
+                        disabled = {Roledatauser !== "SuperAdmin"}
                       />
                     </DemoContainer>
                   </LocalizationProvider>
@@ -176,6 +177,7 @@ Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO" || Roledatause
                         format="DD/MM/YYYY"
                         value={toDate}
                         onChange={(date) => setToDate(date)}
+                        disabled = {Roledatauser !== "SuperAdmin"}
                       />
                     </DemoContainer>
                   </LocalizationProvider>

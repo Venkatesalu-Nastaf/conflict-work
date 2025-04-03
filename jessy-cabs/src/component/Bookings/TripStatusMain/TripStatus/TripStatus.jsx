@@ -138,10 +138,16 @@ useEffect(() => {
 
 const Roledatauser = localStorage.getItem("SuperAdmin")
 
-const filteredStatus =
-Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO" || Roledatauser === "Billing_Headoffice"
+// const filteredStatus =
+// Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO" || Roledatauser === "Billing_Headoffice"
+//     ? Status // Show all statuses for superAdmin and CFo
+//     : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
+
+// trial code---
+    const filteredStatus =
+Roledatauser === "SuperAdmin"
     ? Status // Show all statuses for superAdmin and CFo
-    : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
+    : Status.filter((option) => option.optionvalue === "pending");
 
   return (
     <div className="TripStatus-form main-content-form Scroll-Style-hide">

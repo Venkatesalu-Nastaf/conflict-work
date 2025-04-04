@@ -49,7 +49,8 @@ import Excel from 'exceljs';
 // ];
 
 const columns = [
-  { field: "id", headerName: "Sno", width: 50 },
+  // { field: "id", headerName: "Sno", width: 50 },
+  { field: "shedOutDate", headerName: "ShedOut Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "bookingno", headerName: "Booking No", width: 110 },
   { field: "tripid", headerName: "Tripsheet No", width: 110 },
   { field: "status", headerName: "Status", width: 110 },
@@ -63,7 +64,6 @@ const columns = [
   { field: "reporttime", headerName: "ShedOut Time", width: 110 },
   { field: "starttime", headerName: "Start Time", width: 100 },
   { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
-  { field: "shedOutDate", headerName: "ShedOut Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "startdate", headerName: "Start Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   // { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
   { field: "bookingdate", headerName: "Booking Date", width: 120, valueFormatter: (params) => params.value ? dayjs(params.value).format('DD/MM/YYYY') : "" },
@@ -92,7 +92,8 @@ const columns = [
 ];
 
 const columnsnormaluser = [
-  { field: "id", headerName: "Sno", width: 50 },
+  // { field: "id", headerName: "Sno", width: 50 },
+  { field: "shedOutDate", headerName: "ShedOut Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "bookingno", headerName: "Booking No", width: 110 },
   { field: "tripid", headerName: "Tripsheet No", width: 110 },
   { field: "status", headerName: "Status", width: 110 },
@@ -106,7 +107,6 @@ const columnsnormaluser = [
   { field: "reporttime", headerName: "ShedOut Time", width: 110 },
   { field: "starttime", headerName: "Start Time", width: 100 },
   { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
-  { field: "shedOutDate", headerName: "ShedOut Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "startdate", headerName: "Start Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   // { field: "vehRegNo", headerName: "VehicleRegNo", width: 130 },
   { field: "bookingdate", headerName: "Booking Date", width: 120, valueFormatter: (params) => params.value ? dayjs(params.value).format('DD/MM/YYYY') : "" },
@@ -162,6 +162,8 @@ const useDispatched = () => {
 
   const [loading, setLoading] = useState(false);
   const [isStations, setisStations] = useState([])
+  const [allDepartment,setAllDepartment] = useState([])
+
   const Roledatauser = localStorage.getItem("SuperAdmin");
 const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
 
@@ -694,6 +696,8 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
   // new working code
   const handleShow = useCallback(async () => {  
     setLoading(true)
+    console.log(department,"departmentttttttttttttt");
+    
     if (!statusvalue) {
       setError(true);
       setErrorMessage("ENTER THE STATUS");
@@ -703,7 +707,7 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
     setRows([]); 
     try {
       // const response = await axios.get(
-      //   `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}`
+      //   `${apiUrl}/pending_tripsheet-show?department=${allDepartment.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}`
       // );
      
       //  console.log(stationsParam ,'stationsParam')
@@ -712,7 +716,7 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
     .map(station => station.Stationname); 
 
       const response = await axios.get(
-        `${apiUrl}/pending_tripsheet-show?department=${department.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}&isStations=${filteredStations}`
+        `${apiUrl}/pending_tripsheet-show?department=${allDepartment.map(dep => dep.label).join(',')}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}&status=${encodeURIComponent(statusvalue)}&VehNo=${encodeURIComponent(VehNo)}&cutomerName=${cutomerName.map(dep => dep.label).join(',')}&isStations=${filteredStations}`
       );
      
       const data = response.data;
@@ -1038,7 +1042,8 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
     handleTripsheetClick,
     columns, handleBookingClick,
     filteredColumns,columsnew,
-    columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,loading,setLoading,isStations,setisStations
+    columnshowall, VehNo, cutomerName, handleVechicleNoChange, handleCustomerChange,loading,setLoading,isStations,setisStations,
+    setdepartment,allDepartment,setAllDepartment
   };
 };
 

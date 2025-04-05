@@ -42,6 +42,7 @@ const Billings = () => {
   const Transfer = permissions[6]?.read;
   const Covering_Bill = permissions[7]?.read;
   const Reports = permissions[8]?.read;
+  const Log_Details = permissions[8]?.read;
   const [activeMenuItem, setActiveMenuItem] = useState('');
   const handleMenuItemClick = (label, alt, e) => {
     localStorage.setItem('activeMenuItem', label);
@@ -59,6 +60,9 @@ const Billings = () => {
         break;
       case "Reports":
         hasPermission = Reports;
+        break;
+        case "Log Details":
+        hasPermission = Log_Details;
         break;
       default:
         break;
@@ -115,6 +119,15 @@ const Billings = () => {
             to={Covering_Bill && ("/home/billing/reports")}
             alt="/home/billing/reports"
             menuItemKey="Reports"
+            activeMenuItem={activeMenuItem}
+            handleMenuItemClick={handleMenuItemClick}
+          /> : <></> }
+          { Log_Details?
+          <MenuItem
+            label="Log Details"
+            to={Covering_Bill && ("/home/billing/LogDetails")}
+            alt="/home/billing/LogDetails"
+            menuItemKey="Log Details"
             activeMenuItem={activeMenuItem}
             handleMenuItemClick={handleMenuItemClick}
           /> : <></> }

@@ -64,6 +64,7 @@ import { PendingBills } from "./component/Billings/Report/pendingBills/PendingBi
 import is from "date-fns/esm/locale/is/index.js";
 import Agreement from "./component/Info/AgreementMain/Agreement/Agreement";
 import AgreementMain from "./component/Info/AgreementMain/AgreementMain";
+import LogSheets from "./component/Billings/LogDetails/Logsheets";
 
 
 function App() {
@@ -819,7 +820,8 @@ function App() {
                   element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)}
                 />
                 <Route path="/home/billing/reports" element={Billing_Reports !== 0 && Billing_Reports !== undefined ? (<Reports stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
-              </Route>
+                <Route path="/home/billing/LogDetails" element={Billing_Reports !== 0 && Billing_Reports !== undefined ? (<LogSheets stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
+                </Route>
 
               <Route path="/home/billing/reports/Pendingbills" element={<PendingBills />}></Route>
               <Route path="/home/accounts" element={<Accounts />}>

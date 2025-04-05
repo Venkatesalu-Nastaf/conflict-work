@@ -268,7 +268,7 @@ const Sidebar = () => {
   const Billing_Transfer = permissions[6]?.read
   const Billing_CoveringBill = permissions[7]?.read
   const Billing_Reports = permissions[8]?.read
-
+const Billing_Logs = permissions[8]?.read
   // const REGISTER = permissions[8]?.read;
   // const SETTING = permissions[12]?.read || permissions[13]?.read;
   // const REGISTER = permissions[9]?.read;
@@ -815,6 +815,19 @@ const Sidebar = () => {
                 label={`${expanded === false ? '' : 'Billing'}`}
                 // to={BILLING && ("/home/billing/billing")}
 
+                // to={
+                //   BILLING_BillingMain ?
+                //     "/home/billing/billing" :
+                //     Billing_Transfer ?
+                //       "/home/billing/transfer" :
+                //       Billing_CoveringBill ?
+                //         "/home/billing/coveringbill" :
+                //         Billing_Reports ?
+                //           "/home/billing/reports" :
+                //           "/home/billing/billing"
+                          
+                // }
+
                 to={
                   BILLING_BillingMain ?
                     "/home/billing/billing" :
@@ -824,9 +837,23 @@ const Sidebar = () => {
                         "/home/billing/coveringbill" :
                         Billing_Reports ?
                           "/home/billing/reports" :
+                          Billing_Logs ?
+                          "/home/billing/LogDetails" :
                           "/home/billing/billing"
+                          
                 }
 
+                // alt={
+                //   BILLING_BillingMain ?
+                //     "/home/billing/billing" :
+                //     Billing_Transfer ?
+                //       "/home/billing/transfer" :
+                //       Billing_CoveringBill ?
+                //         "/home/billing/coveringbill" :
+                //         Billing_Reports ?
+                //           "/home/billing/reports" :
+                //           "/home/billing/billing"
+                // }
 
                 alt={
                   BILLING_BillingMain ?
@@ -837,6 +864,8 @@ const Sidebar = () => {
                         "/home/billing/coveringbill" :
                         Billing_Reports ?
                           "/home/billing/reports" :
+                          Billing_Logs ?
+                          "/home/billing/LogDetails" :
                           "/home/billing/billing"
                 }
                 // to={"/home/billing/billing"}

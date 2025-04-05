@@ -286,27 +286,31 @@ router.get('/getLatLongByTripId', async (req, res) => {
 
     db.query(sqlgmapdataQuery, [gpsTripId], (error, gmapResult) => {
         if (error) {
-            console.error("Database query error:", error);
+            console.log("Database query error:", error);
             return res.status(500).json({ error: "Internal Server Error" });
         }
-        // console.log(gmapResult, "gmapresultttttttttttttttttttttttttttaaaaaaaaaaaaaaaaaaa");
+        
+        console.log(gmapResult, "gmapresultttttttttttttttttttttttttttlengthhhhhhhhhhhhhhhhhhhhh",gmapResult.length);
 
         if (gmapResult.length > 0) {
-            // console.log(gmapResult, "gmapresulttttttttttttttttttttttttttt");
+            // console.log(gmapResult, "gmapresultttttttttttttttttttttttttttinnnnnnnnnnnnnnnnnnnnnnnnnnn");
 
             return res.status(200).json(gmapResult);
         }
+        if(gmapResult.length === 0) {
 
-        db.query(sqlQueryCheckReached, [gpsTripId], (error, reachedResult) => {
-            if (error) {
+        db.query(sqlQueryCheckReached, [gpsTripId], (error1, reachedResult) => {
+            if (error1) {
                 console.log("Database query error:", error);
                 return res.status(500).json({ error: "Internal Server Error" });
             }
 
             const reachedCount = reachedResult[0]?.reachedCount || 0;
+            console.log(reachedCount,"reached counttttttttttttttttttttttttt",reachedResult);
+            
             if (reachedCount > 0) {
-                db.query(sqlQueryAllStatuses, [gpsTripId], async (error, allStatusesResult) => {
-                    if (error) {
+                db.query(sqlQueryAllStatuses, [gpsTripId], async (error2, allStatusesResult) => {
+                    if (error2) {
                         console.log("Database query error:", error);
                         return res.status(500).json({ error: "Internal Server Error" });
                     }
@@ -448,10 +452,12 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
                     });
                 });
+            
             } else {
                 res.status(200).json([]);
             }
         });
+    }
     });
 });
 

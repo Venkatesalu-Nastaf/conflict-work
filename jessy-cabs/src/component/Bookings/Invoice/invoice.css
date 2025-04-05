@@ -487,3 +487,7 @@ border: 1px solid rgb(253, 253, 253);;
   height: auto;  /* Maintains aspect ratio */
   object-fit: contain; /* Ensures proper scaling */
 }
+
+.li-route-summary{
+  font-size: 12px !important;
+}

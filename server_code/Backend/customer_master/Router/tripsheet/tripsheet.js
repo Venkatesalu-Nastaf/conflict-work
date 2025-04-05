@@ -674,7 +674,7 @@ router.post('/getVehcileHistoryData', (req, res) => {
             return res.status(500).json({ error: "Database query failed" });
         }
 
-        console.log("Query result:", result);
+        // console.log("Query result:", result);
 
         return res.status(200).json( result );
     });

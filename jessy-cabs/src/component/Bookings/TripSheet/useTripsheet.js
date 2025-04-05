@@ -7126,6 +7126,7 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
     const timeParts = formattedReportTime?.split(".") || ["0", "0"]; // Default to ["0", "0"] if undefined
     let hours1 = parseInt(timeParts[0] || 0, 10); // Parse hours as an integer
     let minutes1 = parseInt(timeParts[1] || 0, 10); // Parse minutes as an integer
+console.log(hours1,"tripppppppnewwwweeeeeeeee",minutes1);
 
     minutes1 += 30;
 
@@ -7138,11 +7139,14 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
     // console.log(bonusReportTime1, "assssssss");
     let startdatecalc;
     if (bonusReportTime1 === "24.00") {
-        console.log("It's 24.00, converting to 00.00");
+        // console.log("It's 24.00, converting to 00.00");
         startdatecalc = "00.00";
     }
     // console.log(startdatecalc, 'asssssssssssssssssss');
     const bonusReportTime = bonusReportTime1 === "24.00" ? startdatecalc : bonusReportTime1
+    console.log(TripReportTime,"tripppppppnewwww",formattedReportTime,bonusReportTime1,hours1,minutes1,timeParts,"www",bonusReportTime);
+    console.log(formattedReportTime,"formatttttttttttttttttttttttttttttt",parseFloat(formattedReportTime).toFixed(2));
+    
 
     // const bonusReportTime = (parseFloat(formattedReportTime || 0) + 0.30).toFixed(2);
     // console.log(startdatecalc, 'reporttimeeeeee', formattedReportTime, "ee33eeee", convertReportTime);
@@ -7178,7 +7182,7 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
         // console.log("Current Date Object:", currentDateObj);
         // console.log("Formatted Trip Report Date Object:", formattedDateObj);
         // console.log(finalreportTimecalc,"reporttimecalccccc",finalCurrentTimecalc,typeof(finalreportTimecalc),typeof(finalCurrentTimecalc),a);
-
+       const MidNightReportTime = parseFloat(formattedReportTime).toFixed(2);
 
         if (currentDateObj < formattedDateObj) {
             console.log('-----------111111');
@@ -7202,11 +7206,15 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
             setHideField(true);
             console.log("Both dates are equal allowed");
         }
-        else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(finalreportTimecalc) < parseFloat(finalCurrentTimecalc).toFixed(2)) {
+        else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(finalreportTimecalc) < parseFloat(finalCurrentTimecalc).toFixed(2) && parseFloat(MidNightReportTime) < 23.30) {
             console.log('-----------111111444444');
 
             setHideField(true);
             console.log("Both dates are equal not allowed");
+        }
+        else if(currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(MidNightReportTime) >= 23.30){
+            setHideField(false);
+            console.log("midnight 23.30 time is affected");
         }
     }, [enterTrigger, book]);
 

@@ -160,6 +160,11 @@ li {
   margin: 0;
 }
 
+.li-routesummary{
+font-size: 12px !important;
+}
+
+
 .para-route {
   margin: 0; /* Remove space between paragraphs */
   padding: 5px 0; /* Adjust if needed */

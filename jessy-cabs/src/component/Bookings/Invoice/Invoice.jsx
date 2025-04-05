@@ -224,7 +224,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                   <h2 style={{ margin: "0px", textAlign: "center", fontSize: "17px", fontWeight: '600' }}>Route Summary</h2>
 
                   {routeData.map((data, index) => (
-                    <li key={index}>
+                    <li key={index} className='li-route-summary'>
                       {/* <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p> */}
                       <p style={{ margin: '0px' }}><span style={{ marginRight: '5px' }}><GoDotFill /></span> <strong>{data.trip_type}</strong>: {data.place_name}</p>
                     </li>

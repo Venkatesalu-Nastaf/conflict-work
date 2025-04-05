@@ -200,7 +200,7 @@ router.post('/getAllVehicleCurrentLocation', (req, res) => {
         if (error) {
             console.log(error, "error");
         }
-        console.log(result, "Today vehicle lists....");
+        // console.log(result, "Today vehicle lists....");
 
         res.status(200).json(result);
     })
@@ -290,7 +290,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
             return res.status(500).json({ error: "Internal Server Error" });
         }
         
-        console.log(gmapResult, "gmapresultttttttttttttttttttttttttttlengthhhhhhhhhhhhhhhhhhhhh",gmapResult.length);
+        console.log( "gmapresultttttttttttttttttttttttttttlengthhhhhhhhhhhhhhhhhhhhh",gmapResult.length);
 
         if (gmapResult.length > 0) {
             // console.log(gmapResult, "gmapresultttttttttttttttttttttttttttinnnnnnnnnnnnnnnnnnnnnnnnnnn");

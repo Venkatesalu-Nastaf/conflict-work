@@ -25,6 +25,9 @@ const CopyEmailHtmlBooking = () => {
         const data = removeSeconds(updatdata?.starttime)
 
         return `
+          <p>Dear Sir/Madam,</p>
+            <p>Greetings from JESSY CABS PVT LTD !!!</p>
+             <p>Thank you for booking with us! Your booking has been confirmed. Please find the details below:</p>
        <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1; color: #FFFFFF;">
                         <tr>
@@ -88,6 +91,15 @@ const CopyEmailHtmlBooking = () => {
                     </tbody>
                 </table>
                 <p>The Vehicle and Driver details will be sent to you before the pick-up time. Incase of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
+                <br>
+        <br>
+        <p>
+                Warm Regards,<br><br>
+          JESSY CABS PVT LTD | PAN INDIA SERVICES<br>
+            Head Office : Flat No 2, II Floor, Swathi Complex,<br> Nandanam Chennai - 600017
+         24x7 Help Desk : booking@jessycabs.in / 04449105959 / 8754515959<br>
+         www.jessycabs.in
+</p>
     `;
     }
 

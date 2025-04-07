@@ -25,6 +25,8 @@ const DigitalSignature = () => {
 
   const uniqueno = new URLSearchParams(window.location.search).get("uniqueNumber");
   const [successMessage, setSuccessMessage] = useState('')
+  const[success,setSuccess]=useState(false)
+  const[errorMessage,setErrorMessage]=useState('')
 
   const [expired, setExpired] = useState(false)
   const decryptdata = (cipherText) => {
@@ -184,6 +186,13 @@ const DigitalSignature = () => {
 
   const clearSignature = () => {
     sigCanvasRef.current.clear();
+ 
+
+  };
+  const clearSignaturedata = () => {
+    sigCanvasRef.current.clear();
+    clearsignaturedata()
+
   };
 
   const getCurrentDateTimeFormatted = () => {
@@ -256,7 +265,16 @@ const DigitalSignature = () => {
   // const [isSuccess, setIsSuccess] = useState(null);
 
   // Changes with loading  working good
+
+ 
   const saveSignature = async () => {
+
+    
+  if (sigCanvasRef.current.isEmpty()) {
+   setErrorMessage("please sign the signature");
+   setSuccess(false)
+    return;
+  }
     const dataUrl = sigCanvasRef.current.toDataURL("image/png");
     const status = "Updated";
     const datadate = Date.now().toString();
@@ -299,9 +317,9 @@ const DigitalSignature = () => {
           imageName: datadate,
         }),
       });
-      console.log(hh,"llhh")
-  console.log(signtauretimes,"times")
-  console.log(updatedetails,"detils")
+  //     console.log(hh,"llhh")
+  // console.log(signtauretimes,"times")
+  // console.log(updatedetails,"detils")
      const reponse = await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`, signtauretimes);
       console.log(reponse,"ll")
       const response2 = await axios.post(`${apiUrl}/signaturelinkExpiredatas/`, updatedetails)
@@ -312,13 +330,14 @@ const DigitalSignature = () => {
 
       const res = await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`, signaturedata);
       console.log(res, "yyy")
-
+      setSuccess(true)
       setSuccessMessage("Upload successfully");
-
+    
       clearSignature();
       setUploadToll(true);
     } catch (error) {
-      setExpired(0);
+      // setExpired(1)
+      console.log(error)
 
     } finally {
       setIsLoading(false);
@@ -342,6 +361,25 @@ const DigitalSignature = () => {
   }
   const Startsignature = async () => {
     const status = "onSign"
+    const { dateTime, time } = getCurrentDateTimeFormatted();
+    const signtauretimes = {
+      status: status,
+      datesignature: dateTime,
+      signtime: time
+    }
+    const tripId = decryptdata(tripIddata)
+
+    try {
+      // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`, signtauretimes)
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
+  const clearsignaturedata = async () => {
+    const status = "clearSign"
     const { dateTime, time } = getCurrentDateTimeFormatted();
     const signtauretimes = {
       status: status,
@@ -392,9 +430,10 @@ const DigitalSignature = () => {
         </div>
       )}
       <div>
-        <p style={{ textAlign: 'center', color: "green" }}>{successMessage}...</p>
+        <p style={{ textAlign: 'center',color: success ? 'green' : 'red' }}>{success ? successMessage : errorMessage}</p>
+        
 
-        <button className="clear-button" onClick={clearSignature}>
+        <button className="clear-button" onClick={clearSignaturedata}>
           Clear Signature
         </button>
         <button className="clear-button" onClick={saveSignature}>

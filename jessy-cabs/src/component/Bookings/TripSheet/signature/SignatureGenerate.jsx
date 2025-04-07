@@ -251,7 +251,7 @@ const SignatureGenerate = () => {
       };
       const updatedetails = {
         tripid: tripno,
-        Expired: true,
+        Expired: false,
         signExpired: false,
         UploadTollExpired: false,
         ExpiredUploadpage: false
@@ -286,6 +286,16 @@ const SignatureGenerate = () => {
   }
   const handleTollParkinglink = async () => {
     const tripdata = tripId;
+    // const updatedetails = {
+    //   tripid: tripdata,
+    //   Expired: true,
+    //   signExpired: true,
+    //   UploadTollExpired: true,
+    //   ExpiredUploadpage: false
+
+
+
+    // }
     const updatedetails = {
       tripid: tripdata,
       Expired: true,

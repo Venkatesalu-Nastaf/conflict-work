@@ -178,21 +178,22 @@ router.get('/pending_tripsheet-show', (req, res) => {
 
 // changes with customer filtering 
 if (status === 'All') {
-  // sqlQuery = `
-  //   SELECT * FROM booking
-  //   WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-  //     AND bookingdate <= DATE_ADD(?, INTERVAL 0 DAY)
-  //     AND (status = 'pending' OR status = 'Cancelled')
-  // `;
-  sqlQuery = `
-  SELECT * FROM booking
-  WHERE 
-  (
-    (status = 'pending' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
-    OR 
-    (status = 'Cancelled' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
-)
-`;
+ 
+//   sqlQuery = `
+//   SELECT * FROM booking
+//   WHERE 
+//   (
+//     (status = 'pending' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+//     OR 
+//     (status = 'Cancelled' AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+// )
+// `;
+
+sqlQuery = `
+SELECT * FROM booking
+WHERE status IN ('pending','Cancelled') AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY)
+ `;
+
 
   // Tripquery = `
   //   SELECT * FROM tripsheet
@@ -218,28 +219,36 @@ if (status === 'All') {
    
 // )`
 
-Tripquery = ` SELECT * FROM tripsheet
-WHERE 
-(
+// Tripquery = ` SELECT * FROM tripsheet
+// WHERE 
+// (
 
 
-  (status = "Billed" AND tripsheetdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
-  OR 
-  (status = "Closed"  AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY)  AND DATE_ADD(?, INTERVAL 0 DAY))
-  OR 
-  (status = "Opened" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
-  OR 
-  (status = "Temporary Closed" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+//   (status = "Billed" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+//   OR 
+//   (status = "Closed"  AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY)  AND DATE_ADD(?, INTERVAL 0 DAY))
+//   OR 
+//   (status = "Opened" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
+//   OR 
+//   (status = "Temporary Closed" AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY))
  
-)`
+// )`
+
+Tripquery = `
+SELECT * FROM tripsheet
+WHERE 
+status IN ("Billed", "Closed", "Opened", "Temporary Closed")
+AND startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) AND DATE_ADD(?, INTERVAL 0 DAY)
+`
 //   Tripquery = `
 //   SELECT * FROM tripsheet
 //   WHERE startdate BETWEEN DATE_ADD(?, INTERVAL 0 DAY) 
 //     AND DATE_ADD(?, INTERVAL 0 DAY) AND  status != 'Cancelled'
 // `;
 
-  queryParams = [formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate];
-  queerparamsbooking=[formattedFromDate, formattedToDate,formattedFromDate, formattedToDate]
+  // queryParams = [formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate,formattedFromDate, formattedToDate];
+  queryParams = [formattedFromDate, formattedToDate];
+  queerparamsbooking=[formattedFromDate, formattedToDate]
  
 
 
@@ -387,7 +396,7 @@ Tripquery += ' ORDER BY shedOutDate ASC, reporttime ASC';
 //   WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
 //   AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
 // `;
-if(status !== 'Billed'){
+// if(status !== 'Billed'){
 sqlQuery = `
   SELECT booking.*, tripsheet.*
   FROM tripsheet
@@ -395,16 +404,16 @@ sqlQuery = `
   WHERE tripsheet.startdate >= DATE_ADD(?, INTERVAL 0 DAY) 
   AND tripsheet.startdate <= DATE_ADD(?, INTERVAL 0 DAY)
 `;
-}
-else{
-    sqlQuery = `
-  SELECT booking.*, tripsheet.*
-  FROM tripsheet
-  LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
-  WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-  AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
-`;
-}
+// }
+// else{
+//     sqlQuery = `
+//   SELECT booking.*, tripsheet.*
+//   FROM tripsheet
+//   LEFT JOIN booking ON tripsheet.bookingno = booking.bookingno
+//   WHERE tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+//   AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)
+// `;
+// }
 
 // Initialize query parameters
 queryParams = [formattedFromDate, formattedToDate];
@@ -617,12 +626,14 @@ router.get('/VehicleStatement-bookings', (req, res) => {
         advancepaidtovendor: result.advancepaidtovendor || 0
       }));
       // return res.status(200).json(results)
+      // console.log(results,"rr")
       return res.status(200).json(resultsdata)
     }
   )
 })
 
 router.get('/tripsheetvendordata', (req, res) => {
+  const { fromDate, toDate } = req.query;
 
   const sql = `select *,COALESCE(NULLIF(advancepaidtovendor, ''), 0) AS totalvendoramount,
     COALESCE(NULLIF(fuelamount, ''), 0) AS totalfuelamount,
@@ -634,16 +645,16 @@ router.get('/tripsheetvendordata', (req, res) => {
 + COALESCE(NULLIF(vendortoll, ''), 0) 
 + COALESCE(NULLIF(vendorparking, ''), 0) 
 + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandtotal
-from tripsheet`
+from tripsheet where tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)`
   // db.query("SELECT *, Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) AS totalvendoramount FROM tripsheet", (err, results) => {
-    db.query(sql, (err, results) => {
+    db.query(sql,[fromDate, toDate], (err, results) => {
     if (err) {
       console.log(err)
       return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
     }
-    if (results.length === 0) {
-      return res.status(400).json({ error: "Data not Found" });
-    }
+    // if (results.length === 0) {
+    //   return res.status(400).json({ error: "Data not Found" });
+    // }
     
     return res.status(200).json(results)
   }

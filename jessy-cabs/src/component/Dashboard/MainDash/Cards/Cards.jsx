@@ -10,6 +10,7 @@ import { BiPaste } from "react-icons/bi";
 import Updates from "../RightSide/Updates/Updates";
 //import numbro from 'numbro';
 import { PdfData } from "../../../Billings/Transfer/TransferReport/PdfContext";
+import { YearData } from "./yearData";
 const apiUrl = APIURL;
 
 const Cards = () => {
@@ -20,9 +21,7 @@ const Cards = () => {
   const lastMonthTotalPaid = backendmonth?.lastMonth?.totalPaid || 0;
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
   const { totalAmountSum, selectedMonth2, setSelectedMonth2 } = useCard();
-
-  const { selectedMonths, setSelectedMonths } = PdfData();
-
+  const { selectedMonths, setSelectedMonths, selectedYear, setSelectedYear } = PdfData();
 
   const TotalNumber = (number) => {
     if (!number || isNaN(number)) {
@@ -259,12 +258,15 @@ const Cards = () => {
   //   };
   //   fetchData2();
   // }, [selectedMonth2]);
-
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+  };
   return (
     <div className="cards-container">
       <div className="card-filter">
-        <label className="card-filter-label" htmlFor="month">Select Month</label>
-        {/* <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange}>
+        <div>
+          <label className="card-filter-label" htmlFor="month">Select Month</label>
+          {/* <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange}>
           <option value="0">January</option>
           <option value="1">February</option>
           <option value="2">March</option>
@@ -278,22 +280,34 @@ const Cards = () => {
           <option value="10">November</option>
           <option value="11">December</option>
         </select> */}
-        <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange}>
-          <option value="All">All</option>
-          <option value="01">January</option>
-          <option value="02">February</option>
-          <option value="03">March</option>
-          <option value="04">April</option>
-          <option value="05">May</option>
-          <option value="06">June</option>
-          <option value="07">July</option>
-          <option value="08">August</option>
-          <option value="09">September</option>
-          <option value="10">October</option>
-          <option value="11">November</option>
-          <option value="12">December</option>
-        </select>
+          <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange} style={{width:"150px"}}>
+            <option value="All">All</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </div>
+        <div style={{width:'20px'}}>
+          <label className="card-filter-label" htmlFor="year">Year</label>
+
+          <select id="year" name="year" value={selectedYear} onChange={handleYearChange} style={{width:"100px"}}>
+            <option >{selectedYear}</option>
+            {YearData?.map((year) => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+        </div>
       </div>
+
       <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
         <div className="Cards" >
           {cardData.map((card, index) => (

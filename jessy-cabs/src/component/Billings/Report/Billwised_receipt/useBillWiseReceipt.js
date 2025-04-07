@@ -11,6 +11,7 @@ const useBillWiseReceipt = () => {
   const [selectMatchList, setSelectMatchList] = useState([]);
   const [accountDetails, setAccountDetails] = useState([]);
   const [invoiceNo, setInvoiceNo] = useState([])
+  const [selectedRows, setSelectedRows] = useState([]);
   const [billWiseReport, setBillWiseReport] = useState({
     Date: dayjs(),
     CustomerName: "",
@@ -30,6 +31,7 @@ const useBillWiseReceipt = () => {
     collectedAmount: 0,
     Trips: 0
   });
+  const [voucherID, setVoucherID] = useState("")
   const [pendingBillRows, setPendingBillRows] = useState([]);
   const [rows, setRows] = useState([]);
   const [selectedBillRow, setSelectedBillRow] = useState([]);
@@ -57,6 +59,7 @@ const useBillWiseReceipt = () => {
 
   const columnsPendingBill = [
     { field: "sno", headerName: "Sno", width: 30 },
+    { field: "Invoice_no", headerName: "Invoice No", type: "number", width: 80 },
     balanceAmount
       ? {
         field: "Voucherid",
@@ -64,7 +67,9 @@ const useBillWiseReceipt = () => {
         type: "number",
         width: 100,
       }
-      : { field: "BillNo", headerName: "Bill No", type: "number", width: 120 },
+
+      : { field: "BillNo", headerName: "Group Trip No", type: "number", width: 110 },
+
     {
       field: "BillDate",
       headerName: "Bill Date",
@@ -222,17 +227,11 @@ const useBillWiseReceipt = () => {
 
       const invoice = combinedPendingBill.map((li) => li.BillNo);
       setInvoiceNo(invoice);
-      console.log(combinedPendingBill,"pendingggggggggggggg");
-      
       const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => ({
         id: index + 1, // Assign a unique ID based on the array index
         sno: index + 1, // Sequential SNO
         ...item, // Include all other properties from the original item
       }));
-      
-      console.log(combinedPendingBillWithSnoAndId, "pendinggggggggcombined pending ordered",combinedPendingBill);
-      
-      
       if (combinedPendingBillWithSnoAndId.length === 0) {
         setError(true);
         setPendingBillRows([])
@@ -262,15 +261,65 @@ const useBillWiseReceipt = () => {
   };
 
   const handleRowSelection = (selectionModel) => {
-    const selectedIDs = new Set(selectionModel);
-    const selectedData = pendingBillRows.filter((row) =>
-      selectedIDs.has(row.id)
-    );
-    const selectedInvoiceNo = selectedData.map(li => li.BillNo)
-    setSelectedBillRow(selectedData);
-    setInvoiceNo(selectedInvoiceNo)
+    if (balanceAmount === true) {
+      if (selectionModel.length > 0) {
+        const selectedID = selectionModel[selectionModel.length - 1]; // Get the last selected row
+        console.log(selectedID, "selected ID", balanceAmount);
 
+        setSelectedRows([selectedID]); // Store only the last selected row
+
+        const selectedData = pendingBillRows.filter((row) => row.id === selectedID); // Direct comparison
+        const selectedInvoiceNo = selectedData.map(li => li.BillNo);
+
+        setSelectedBillRow(selectedData);
+        setInvoiceNo(selectedInvoiceNo);
+      } else {
+        setSelectedRows([]);
+        setSelectedBillRow([]);
+        setInvoiceNo([]);
+      }
+    } else {
+      setSelectedRows(selectionModel);
+
+      const selectedIDs = new Set(selectionModel);
+      console.log(selectedIDs, "selected IDs", balanceAmount);
+
+      const selectedData = pendingBillRows.filter((row) => selectedIDs.has(row.id)); // Use `.has()` with Set
+      const selectedInvoiceNo = selectedData.map(li => li.BillNo);
+
+      setSelectedBillRow(selectedData);
+      setInvoiceNo(selectedInvoiceNo);
+    }
   };
+
+  // const handleRowSelection = (selectionModel) => {
+  //   if (balanceAmount === true) {
+  //     const selectedIDs = selectionModel[selectionModel.length - 1]; // Get the last selected row
+  //     console.log(selectedIDs,"selectidddddd",balanceAmount);
+  //     setSelectedRows([selectedIDs]); // Update selection state
+
+  //     const selectedData = pendingBillRows.filter((row) =>
+  //       selectedIDs?.includes(row.id) // Use includes() instead of has()
+  //     );
+
+  //     const selectedInvoiceNo = selectedData.map(li => li.BillNo);
+
+  //     setSelectedBillRow(selectedData);
+  //     setInvoiceNo(selectedInvoiceNo);
+  //   }
+  //   else{
+  //     setSelectedRows(selectionModel); 
+  //   const selectedIDs = new Set(selectionModel);
+  //   console.log(selectedIDs,"selectidddddd22222",balanceAmount);
+  //   const selectedData = pendingBillRows.filter((row) =>
+  //     selectedIDs.has(row.id)
+  //   );
+  //   const selectedInvoiceNo = selectedData.map(li => li.BillNo)
+  //   setSelectedBillRow(selectedData);
+  //   setInvoiceNo(selectedInvoiceNo)
+  // }
+
+  // };
 
   const handleApplyBill = async () => {
     if (selectedBillRow.length === 0 || selectedBillRow.length === undefined) {
@@ -347,11 +396,12 @@ const useBillWiseReceipt = () => {
         setTotals({
           amount: totalAmount,
           recieved: totalRecieved,
+          collectedAmount:totalAmount,
           discount: totalDiscount,
           balance: totalBalance,
           totalAmount: totBalance,
           onAccount: totalOnAccount,
-          totalBalance: totBalance,
+          totalBalance: 0,
           tds: totalTDS,
           Trips: tripid.length
         });
@@ -378,6 +428,7 @@ const useBillWiseReceipt = () => {
         uniqueId: row.uniqueid,
         Trips: row.Trips
       }));
+      setVoucherID(updatedRows.length > 0 ? updatedRows[0].BillNo : null);
       const Account = matchedRows.map((li) => li.Account);
       setBillWiseReport((prevState) => ({
         ...prevState,
@@ -395,11 +446,47 @@ const useBillWiseReceipt = () => {
     }
   };
 
+  useEffect(() => {
+    if (totals.collectedAmount > totals.totalAmount) {
+      setTotals((prevTotals) => ({
+        ...prevTotals,
+        collectedAmount: totals.totalAmount,
+        totalBalance: 0
+      }));
+    }
+    if (totals.tds > totals.totalAmount) {
+      setTotals((prevTotals) => ({
+        ...prevTotals,
+        // tds:totals.totalAmount,
+        tds: 0,
+        totalBalance: 0,
+        collectedAmount: totals.totalAmount
+      }));
+    }
+    if (totals.collectedAmount === 0) {
+      setTotals((prevTotals) => ({
+        ...prevTotals,
+        tds: 0
+      }));
+    }
+  }, [totals])
+
+
+
   const handlechange = (event) => {
 
-    if (totals.collectedAmount === 0 || totals.collectedAmount === undefined) {
-      setError(true)
-      setErrorMessage("Enter Collected Amount")
+    // if (totals.collectedAmount === 0 || totals.collectedAmount === undefined) {
+    //   setError(true)
+    //   setErrorMessage("Enter Collected Amount")
+    //   return
+    // }
+
+    if ((totals.collectedAmount < 0) || (totals.collectedAmount > totals.totalAmount)) {
+      setTotals((prevTotals) => ({
+        ...prevTotals,
+        collectedAmount: totals.totalAmount,
+        totalBalance: 0
+      }));
       return
     }
     const newTDS = Number(event.target.value) || 0; // Default to 0 if conversion fails
@@ -437,8 +524,7 @@ const useBillWiseReceipt = () => {
       return
     }
     if (balanceAmount === true) {
-      console.log("1111111111111111111111111111111111111");
-      
+
       // if (totals.totalBalance === 0 && totals.collectedAmount !== 0) {
       const uniqueVoucherId = selectedBillRow?.map((li) => li.Voucherid);
       const CollectAmount = selectMatchList?.map((li) => li.Collected);
@@ -496,8 +582,6 @@ const useBillWiseReceipt = () => {
       }
       // }
     } else {
-      console.log('22222222222222222222222222222222222222222');
-      
       if (
         totals.collectedAmount === undefined ||
         totals.collectedAmount === 0
@@ -539,10 +623,10 @@ const useBillWiseReceipt = () => {
         TDS: combinedData.tds,
         Advance: combinedData.recieved || 0,
         TotalAmount: combinedData.totalAmount || 0,
-        BillDate: dayjs(combinedData.Date).format('YYYY-MM-DD'), 
+        BillDate: dayjs(combinedData.Date).format('YYYY-MM-DD'),
         // BillDate: combinedData.Date,
         Collected: totals.collectedAmount,
-        TotalCollected:FullCollectedAmount,
+        TotalCollected: FullCollectedAmount,
         TotalBalance: combinedData.totalBalance,
         Trips: combinedData.Trips,
         //   combinedData.totalAmount - combinedData.collectedAmount ||
@@ -697,6 +781,8 @@ const useBillWiseReceipt = () => {
     handlePending,
     handleCollectedChange,
     handleBalanceAmount,
+    voucherID,
+    selectedRows
   };
 };
 

@@ -103,10 +103,10 @@ const MonthlyWise = () => {
  
                         <div className='show-all-button monthly-wise-show-all-btn'>
                             <div className="input" >
-                                <Button variant="outlined" onClick={handleShow} >Show</Button>
+                                <Button variant="contained" onClick={handleShow} >Show</Button>
                             </div>
                             <div className="input">
-                                <Button className='text-nowrap' variant="contained" onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
+                                {/* <Button className='text-nowrap' variant="contained" onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button> */}
                             </div>
                         </div>
                     </div>

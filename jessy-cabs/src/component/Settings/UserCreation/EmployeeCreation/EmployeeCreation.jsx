@@ -55,6 +55,7 @@ import useEmplyeecreation from './useEmplyeecreation';
 import Avatar from "@mui/material/Avatar";
 import { PermissionTableEmp } from './PermissionTableEmp/PermissionTableEmp';
 import useEmplyeecreationrole from './PermissionTableEmp/usepermissionRoletype';
+import DeleteConfirmationDialog from '../../../DeleteData/DeleteData';
 
 
 
@@ -101,7 +102,7 @@ const EmployeeCreation = ({ stationName }) => {
     handleClickShowPasswords,
     handleMouseDownPasswords, handleAutocompleteChangeStationName, handleChangeuniquecreation, cerendentialdata,handlerolepermissiondata,
     isEditMode,handlenochangedatarole,emptyrole,setBook,
-    handleEdit, showPermission, setShowPermission, handleCheckboxChangealldata, 
+    handleEdit, showPermission, setShowPermission, handleCheckboxChangealldata,deleteuserceationdata,setDeleteUsercreation,
     // setPermissionsData,setModifyState,setDeleteState,setNewState,
     // rolefield,rolefielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
@@ -301,7 +302,7 @@ setSationNameforUser(updatedData);
                   />
                 </div>
 
-                <div className="input" style={{ paddingRight: '15px' }}>
+                {/* <div className="input" style={{ paddingRight: '15px' }}>
                   <FormLabel htmlFor='SuperAdmin'>SuperAdmin</FormLabel>
                   <Switch
                     label='label'
@@ -312,7 +313,7 @@ setSationNameforUser(updatedData);
 
                     checked={book.superAdmin}
                   />
-                </div>
+                </div> */}
               
                 <div className="input user-creation-station-select-main">
                   <div className="icone">
@@ -425,6 +426,7 @@ setSationNameforUser(updatedData);
                     id="Role"
                     style={{ width: '100%' }}
                   /> */}
+                 
                         
                         <Autocomplete
                                   fullWidth
@@ -646,6 +648,13 @@ setSationNameforUser(updatedData);
 
               </div>
             </div>
+{deleteuserceationdata &&
+            <DeleteConfirmationDialog
+                open={deleteuserceationdata}
+                onClose={() => setDeleteUsercreation(false)}
+                onConfirm={handleClick}
+              />
+}
             <div className='alert-popup-main'>
               {error &&
                 <div className='alert-popup Error' >
@@ -713,12 +722,19 @@ setSationNameforUser(updatedData);
                   />
                 )}
                 {UserCreation_delete === 1 && isEditMode && (
+                  // <SpeedDialAction
+                  //   key="delete"
+                  //   icon={<DeleteIcon />}
+                  //   tooltipTitle="Delete"
+                  //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                  // />
                   <SpeedDialAction
-                    key="delete"
-                    icon={<DeleteIcon />}
-                    tooltipTitle="Delete"
-                    onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
-                  />
+                  key="delete"
+                  icon={<DeleteIcon />}
+                  tooltipTitle="Delete"
+                  onClick={() => setDeleteUsercreation(true)}
+                
+                />
                 )}
                 {UserCreation_new === 1 && !isEditMode && (
                   <SpeedDialAction
@@ -755,6 +771,7 @@ setSationNameforUser(updatedData);
                       <div className='user-table-permission' style={{ cursor: "pointer" }} onClick={() => {
                         togglePermission(row);
                         handleRowClickUser(row)
+                        setRoleFielddropdown('')
                       }}
                         key={index}>
                         {/* <img src={row.profile_image} alt="profile" width="50" /> */}

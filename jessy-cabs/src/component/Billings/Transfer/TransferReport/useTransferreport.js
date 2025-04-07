@@ -32,10 +32,11 @@ const useTransferreport = () => {
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [warning, setWarning] = useState(false);
-  const [warningMessage] = useState({});
+  const [warningMessage,setWarningMessage] = useState({});
   const [popupOpen, setPopupOpen] = useState(false);
   const [misformat, setMisformat] = useState('')
   const [pdfBillList, setPdfBillList] = useState('');
+  const [bookingMail, setBookingMail] = useState(false);
   const [tripID, setTripID] = useState();
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [pdfzipdata, setPdfzipdata] = useState([])
@@ -147,6 +148,12 @@ const useTransferreport = () => {
     }
   }, [error, success, warning, info]);
 
+  const handleCheckboxChange = (event) => {
+    const isChecked = event.target.checked;
+    setBookingMail(isChecked);
+    console.log("Booking Mail", isChecked);
+  };
+
 
   const handleEInvoiceClick = (row) => {
     if (rows.length === 0) {
@@ -196,6 +203,29 @@ const useTransferreport = () => {
     setInfo(false);
     setWarning(false);
   };
+
+  //  useEffect(() => {
+  //   const fetchData = async () => {
+  //     const tripidno = tripno
+  //     try {
+  //       const response = await fetch(`${apiUrl}/booking-docPDFView/${tripidno}`);
+  //       if (response.status === 200) {
+  //         const data = await response.json();
+  //         const attachedImageUrls = data.files
+  //         setBookmailimage(attachedImageUrls);
+  //       }
+
+  //       else {
+  //         const timer = setTimeout(fetchData, 2000);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     }
+  //     catch (err) {
+  //       console.log(err, 'error');
+  //     }
+  //   }
+  //   fetchData()
+  // }, [apiUrl, tripno])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -361,43 +391,43 @@ const useTransferreport = () => {
   //     .catch(() => { });
   // }, []);
 
-  const [routedData, setRoutedData] = useState("");
+  // const [routedData, setRoutedData] = useState("");
 
-  useEffect(() => {
-    const fetchData4 = async () => {
-      try {
-        const fromdate = localStorage.getItem("fromDate");
-        const todate = localStorage.getItem("toDate");
-        const customerValue =
-          encodeURIComponent(customer) ||
-          (tripData.length > 0 ? tripData[0].customer : "");
-        const fromDateValue = fromdate;
-        const toDateValue = todate;
-        const servicestationValue =
-          servicestation || (tripData.length > 0 ? tripData[0].department : "");
-        if (
-          customerValue.trim() !== "" ||
-          fromDateValue.trim() !== "" ||
-          toDateValue.trim() !== "" ||
-          servicestationValue.trim() !== ""
-        ) {
-          const response = await fetch(`${apiUrl}/Get-Billing`, {
-            params: {
-              customer: customerValue,
-              fromDate: fromDateValue,
-              toDate: toDateValue,
-              servicestation: servicestationValue,
-            },
-          });
+  // useEffect(() => {
+  //   const fetchData4 = async () => {
+  //     try {
+  //       const fromdate = localStorage.getItem("fromDate");
+  //       const todate = localStorage.getItem("toDate");
+  //       const customerValue =
+  //         encodeURIComponent(customer) ||
+  //         (tripData.length > 0 ? tripData[0].customer : "");
+  //       const fromDateValue = fromdate;
+  //       const toDateValue = todate;
+  //       const servicestationValue =
+  //         servicestation || (tripData.length > 0 ? tripData[0].department : "");
+  //       if (
+  //         customerValue.trim() !== "" ||
+  //         fromDateValue.trim() !== "" ||
+  //         toDateValue.trim() !== "" ||
+  //         servicestationValue.trim() !== ""
+  //       ) {
+  //         const response = await fetch(`${apiUrl}/Get-Billing`, {
+  //           params: {
+  //             customer: customerValue,
+  //             fromDate: fromDateValue,
+  //             toDate: toDateValue,
+  //             servicestation: servicestationValue,
+  //           },
+  //         });
 
-          const routedData = await response.json();
-          setRoutedData(routedData);
-        }
-      } catch { }
-    };
+  //         const routedData = await response.json();
+  //         setRoutedData(routedData);
+  //       }
+  //     } catch { }
+  //   };
 
-    fetchData4();
-  }, [customer, servicestation, tripData, apiUrl]);
+  //   fetchData4();
+  // }, [customer, servicestation, tripData, apiUrl]);
 
   const [attachedImage, setAttachedImage] = useState("");
   //  its is booking table or tripsheettabel
@@ -510,7 +540,7 @@ const useTransferreport = () => {
 
     console.log("Row Selection Model (Trip Sheet IDs):", tripsheetid);
   };
-  console.log(rowSelectionModel,"rrrrrr",rowSelectionModel.length);
+  // console.log(rowSelectionModel,"rrrrrr",rowSelectionModel.length);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -523,7 +553,7 @@ const useTransferreport = () => {
         // console.log(rowSelectionModel,'Transferreport response')
         // const customer = decodeURIComponent(storedCustomer);
         // console.log(tripID,"exceltrip",rowSelectionModel);
-        
+
         if (tripid.length >= 1) {
 
           // const response = await fetch(
@@ -539,18 +569,18 @@ const useTransferreport = () => {
           );
 
 
-          const tripData =  response.data
+          const tripData = response.data
           // console.log(tripData,"exceltripppppppppppp");
-          
+
           const flattenedTripData = tripData.flat();
           // console.log(flattenedTripData,"flattenedTripData");
           const uniqueData = flattenedTripData.filter((item, index, self) =>
             index === self.findIndex((obj) => obj.tripid === item.tripid)
           );
-          console.log(uniqueData,"flattenedTripDatauniqueData");
+          console.log(uniqueData, "flattenedTripDatauniqueData");
           setPdfzipdata(uniqueData)
           // setPdfzipdata(flattenedTripData)
-        
+
           // console.log(flattenedTripData,"trip dtatas ")
           // setSuccess(true)
         }
@@ -677,6 +707,7 @@ const useTransferreport = () => {
 
   //     fetchData();
   // }, [tripID, apiUrl]);
+  // console.log(tripID,"id")
   useEffect(() => {
     const fetchData = async () => {
       // Only set loading to true if it's a new tripID
@@ -684,6 +715,7 @@ const useTransferreport = () => {
       setRows([]);
 
       let formattedTripID = tripID;
+      // console.log(formattedTripID,"idform")
       // console.log(tripID, 'response');
 
       if (Array.isArray(tripID) && tripID.length === 1 && typeof tripID[0] === 'string') {
@@ -691,6 +723,7 @@ const useTransferreport = () => {
       }
 
       try {
+        // console.log(tripID,"identer")
         const response = await axios.get(`${apiUrl}/getParticularTripsheet`, {
           params: { tripID: formattedTripID }
         });
@@ -730,13 +763,20 @@ const useTransferreport = () => {
     if (event.key === 'Enter') {
       event.preventDefault();
       const InvoiceNo = event.target.value;
+      // console.log(servicestation,"station")
+      if(!servicestation){
+        setWarning(true)
+        setWarningMessage("Select State")
+        return
+      }
       try {
         const response = await axios.get(`${apiUrl}/getParticularInvoiceDetails`, {
           params: {
-            InvoiceNo: InvoiceNo
+            InvoiceNo: InvoiceNo,
+            State:servicestation
           }
         });
-        const Result = response.data;        
+        const Result = response.data;
         if (Result.length > 0) {
 
           setSuccess(true)
@@ -756,10 +796,11 @@ const useTransferreport = () => {
           setGroupTripid(groupTripid)
           const Status = Result?.map(li => li.Status)
 
-          const checkStatus = Status[0];          
+          const checkStatus = Status[0];
           setBilledStatusCheck(checkStatus)
           // const tripid = Result?.map(li =>li.Trip_id)
           const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
+          // console.log(tripid,"stationtripi")
 
           setTripID(tripid)
         }
@@ -779,10 +820,17 @@ const useTransferreport = () => {
       }
     }
   };
+  const handleCancel = () => {
+    setRows([]);
+    setPdfBillList("")
+    setMisformat("")
+    setTripID()
+  }
 
   const handleGroupKeyDown = async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
+      handleCancel();
       const GroupId = event.target.value;
 
       try {
@@ -815,13 +863,23 @@ const useTransferreport = () => {
           setTotalTransferAmount(Amount)
           const Status = Result?.map(li => li.Status)
 
-          const checkStatus = Status[0];          
+          const checkStatus = Status[0];
           setBilledStatusCheck(checkStatus)
           const tripid = Result?.map(li => li.Trip_id.split(',')).flat().join(',');
 
           setTripID(tripid)
         } else {
           setError(true);
+          setRows([])
+          setServiceStation("")
+          setCustomer("")
+          setInvoiceno("")
+          setInvoiceDate("")
+          setEndDate("")
+          setFromDate("")
+          setRatetypeforpage("")
+          setPdfBillList("")
+          setMisformat("")
           setErrorMessage("No data found");
         }
       } catch (error) {
@@ -897,7 +955,7 @@ const useTransferreport = () => {
     warningMessage,
     organizationdata,
     hidePopup,
-    routedData,
+    // routedData,
     date,
     customer,
     tripData,
@@ -915,6 +973,7 @@ const useTransferreport = () => {
     popupOpen,
     pbpopupOpen,
     handlePopupClose,
+    handleCheckboxChange,
     npopupOpen,
     lxpopupOpen,
     handleExcelDownload,
@@ -922,6 +981,8 @@ const useTransferreport = () => {
     handleETripsheetClick,
     routeData,
     roundedAmount,
+    setBookingMail,
+    bookingMail,
     sumTotalAndRounded,
     totalValue,
     organizationaddress1,
@@ -955,7 +1016,8 @@ const useTransferreport = () => {
     loading, setLoading,
     billingGroupDetails,
     setBillingGroupDetails,
-    isButtonloading, setisButtonLoading
+    isButtonloading, setisButtonLoading,
+    // datastatetranfer
   };
 };
 

@@ -25,12 +25,14 @@ const Mailer = () => {
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Mailer" value="Mailer" />
                                 <Tab label="SMS Report" value="SMSReport" />
-                                <Tab label="SMS Format" value="SMSFormat" />
+                                {/* Dont delete this */}
+                                {/* <Tab label="SMS Format" value="SMSFormat" /> */}
                             </TabList>
                         </Box>
                         <TabPanel value="Mailer"><MailDetails /></TabPanel>
                         <TabPanel value="SMSReport"><SMSReport /></TabPanel>
-                        <TabPanel value="SMSFormat"><SMSFormat /></TabPanel>
+                        {/* Dont Delete this */}
+                        {/* <TabPanel value="SMSFormat"><SMSFormat /></TabPanel> */}
                     </TabContext>
                 </Box>
             </div>

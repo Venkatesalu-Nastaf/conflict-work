@@ -44,6 +44,7 @@ const useDrivercreation = () => {
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
     const [datatrigger, setDatatrigger] = useState(false)
     const [deletefile, setDeleteFile] = useState([])
+    const [deletedriverdate,setDeleteDriverdata]=useState(false)
     // const [profileimage,setProfileimage]=useState('')
     // console.log(profileimage,"imagedata")
     // venkat
@@ -780,6 +781,7 @@ const handlePdfDownload = () => {
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
+        setDeleteDriverdata(false)
     };
 
     // const user__id = selectedCustomerData?.driverid || book.driverid;
@@ -1035,7 +1037,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
               }
                
 
-            await axios.post(`${apiUrl}/drivercreation`, formData,)
+            await axios.post(`${apiUrl}/drivercreation`, formData)
             
             const response = await axios.get(`${apiUrl}/lastdrivergetid`);
             const lastdriveridno = response.data.driverid;
@@ -1234,6 +1236,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
             }
 
             else if (actionName === 'Delete') {
+                try{
                 await axios.delete(`${apiUrl}/drivercreation/${selectedCustomerData?.driverid || userid}`);
                 setSelectedCustomerData(null);
                 setSuccess(true);
@@ -1241,6 +1244,11 @@ const handlecheckmaildriver = async (lastBookingno) => {
                 handleCancel();
                 handleList();
                 setRows([]);
+                }
+                catch(err){
+                    setError(true);
+                    setErrorMessage("Check your Network Connection");
+                }
             }
 
             else if (actionName === 'Edit') {
@@ -1276,6 +1284,8 @@ const handlecheckmaildriver = async (lastBookingno) => {
 
         setIsEditMode(true);
         setEdit(true)
+        setCredentialData(false)
+        setCredentialData2(false)
     }, []);
 
     const handleClickShowPasswords = () => {
@@ -1567,7 +1577,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
         handlePdfDownload,
         handleExcelDownload,
         handleFileChange,handleFileUpload, handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2,
-        loading,setLoading,isDButtonLoading,setisDbuttonLoading
+        loading,setLoading,isDButtonLoading,setisDbuttonLoading,deletedriverdate,setDeleteDriverdata
         
         // venkat
     };

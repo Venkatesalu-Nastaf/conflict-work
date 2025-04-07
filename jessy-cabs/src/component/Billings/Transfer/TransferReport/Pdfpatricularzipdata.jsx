@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     // padding: 10,
   },
   heading: {
-    border: '2px solid rgb(0, 0, 0)',
+    // border: '2px solid rgb(15, 1, 1)',
     padding: '20px',
     // height: "",
   },
@@ -1320,10 +1320,17 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
                 <View style={styles.mapdiv}>
 
-                  <View style={{ height: 170, border: '1px solid #000000', width: '60%' }} >
+                  {/* <View style={{ height: 170, border: '1px solid #000000', width: '60%' }} >
                     <Image src={`${apiUrl}/public/map_images/${map_image}`} />
 
-                  </View>
+                  </View> */}
+
+                    {map_image && (
+                      <View style={{ height: 170, border: '1px solid #000000', width: '60%' }}>
+                        <Image src={`${apiUrl}/public/map_images/${map_image}`} />
+                      </View>
+                    )}
+
 
                   <View style={styles.topmap}>
                     <View style={{ flexDirection: 'row', marginTop: "10px" }}>

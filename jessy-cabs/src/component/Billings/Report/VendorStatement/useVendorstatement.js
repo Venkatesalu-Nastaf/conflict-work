@@ -10,6 +10,7 @@ const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "tripid", headerName: "TripNo", width: 130 },
     { field: "tripsheetdate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'), },
+    { field: "customer", header: "Customer Name", width: 150 },
     { field: "travelsname", headerName: "Vendor Name", width: 130 },
     { field: "vendor_vehicle", headerName: "Vehicle", width: 90 },
     { field: "duty", headerName: "Duty", width: 160 },
@@ -863,7 +864,9 @@ const handlePdfDownload = () => {
 
         try {
             const    response = await axios.get(
-                `${apiUrl}/tripsheetvendordata`
+                `${apiUrl}/tripsheetvendordata?fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+                    toDate.toISOString()
+                )}`
             );
             const data = response.data;
             if (data.length > 0) {
@@ -888,7 +891,7 @@ const handlePdfDownload = () => {
         //     setErrorMessage("Check your Network Connection");
         // }
         catch (error) {
-            // console.error("Error occurredddddd:", error);
+            console.log("Error occurredddddd:", error);
          
             // Check if there's no response, indicating a network error
             if (error.message ) {
@@ -931,8 +934,11 @@ const handlePdfDownload = () => {
             try {
                 const response = await axios.get(`${apiUrl}/tripaccounttravelname`)
                 const data = response.data
+                const data3 = data.map(res => res.travelsname)
+                const data2 = ["All",...data3]
+                
               
-                setAccountInfoData(data)
+                setAccountInfoData(data2)
 
             }
             catch (err) {

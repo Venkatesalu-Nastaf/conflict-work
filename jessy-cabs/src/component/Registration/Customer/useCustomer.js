@@ -52,6 +52,7 @@ const useCustomer = () => {
     const [selectedStation, setSelectedStation] = useState('');
     const [selectedState, setSelectedState] = useState('');
     const [btnloading, setbtnLoading] = useState(false)
+    const [deletecustomerdata,setDeletecustomerdata]=useState(false);
     // const [cerendentialdataforstations,setCredentialDataforstations]=useState()
 
     //---------------------------------------
@@ -393,12 +394,12 @@ const useCustomer = () => {
         date: dayjs(),
         address1: '',
         rateType: '',
-        opBalance: '',
+        // opBalance: '',
         underGroup: '',
         gstTax: '0',
-        acType: '',
+        // acType: '',
         entity: '',
-        selectOption: '',
+        // selectOption: '',
         state: '',
         gstnumber: '',
         SalesPerson: '',
@@ -569,12 +570,12 @@ const useCustomer = () => {
             address1: '',
             // customeremail: '',
             rateType: '',
-            opBalance: '',
+            // opBalance: '',
             // phoneno: '',
             underGroup: '',
             gstTax:'0',
-            acType: '',
-            selectOption: '',
+            // acType: '',
+            // selectOption: '',
             // active: '',
             entity: '',
             state: '',
@@ -600,6 +601,7 @@ const useCustomer = () => {
         // getcustomerdata("")
         setSelectedStation( "");
          setSelectedState("");
+         setDeletecustomerdata(false)
     };
     const getcustomerdata = async (customerdata) => {
         const datacustomer = customerdata
@@ -660,6 +662,7 @@ const useCustomer = () => {
          setSelectedState(customerData?.state || ""); 
         setIsEditMode(true);
         console.log(customerData,'customer datatatat')
+        setCredentialData(false)
     }
     //search with date
     const handleSearch = async () => {
@@ -1055,12 +1058,12 @@ const useCustomer = () => {
     // Use handleList as a dependency
     const handleClick = async (event, actionName, customerId) => {
         event.preventDefault();
-        console.log(actionName,"jj")
+        // console.log(actionName,"jj")
         const dataordereddata = removeEmptyObjects(customerfieldSets);
         try {
             if (actionName === 'List') {
-                const response = await axios.get(`${apiUrl}/customers`);
-                console.log(response,"ppp")
+                const response = await axios.get(`${apiUrl}/customersgroup`);
+                // console.log(response,"ppp")
                 const data = response.data;
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -1158,7 +1161,7 @@ const useCustomer = () => {
         setInfo, setInfoMessage,
         handleChangecustomer, handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove,
          customerratetype, handleChangeuniquecustomer, cerendentialdata, selectedStation, setSelectedStation, selectedState, setSelectedState,
-         btnloading, setbtnLoading
+         btnloading, setbtnLoading,deletecustomerdata,setDeletecustomerdata
     };
 };
 

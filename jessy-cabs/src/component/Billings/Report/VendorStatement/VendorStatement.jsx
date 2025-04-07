@@ -82,8 +82,11 @@ const VendorStatement = () => {
                     freeSolo
                     size="small"
                     value={travelsname}
+                    // options={accountinfodata.map((option) => ({
+                    //   label: option?.travelsname,
+                    // }))}
                     options={accountinfodata.map((option) => ({
-                      label: option?.travelsname,
+                      label: option,
                     }))}
                     getOptionLabel={(option) => option.label || travelsname || ""}
                     onChange={handleInputChange}
@@ -152,15 +155,19 @@ const VendorStatement = () => {
                       />
                     </LocalizationProvider>
                 </div>
+                {/* {console.log(travelsname,"trav")} */}
                 <div className="input" style={{ gap: '15px' }}>
                   <div className="">
+                    {travelsname === "All" ? 
+                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} >Show</Button>:
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
+}
                   </div>
-                  <div className="">
+                  {/* <div className="">
                     <Button variant="contained" disabled={!TripStatus_read}
                       onClick={handleShowAll}
                     >Show All</Button>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

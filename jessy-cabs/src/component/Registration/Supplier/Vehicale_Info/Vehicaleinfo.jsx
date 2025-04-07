@@ -70,6 +70,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Modal from '@mui/material/Modal';
 import { Typography, } from '@mui/material';
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteConfirmationDialog from '../../../DeleteData/DeleteData';
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -239,7 +240,7 @@ const Vehicaleinfo = ({ stationName }) => {
     handleDocumentDownload,
     drivername,
     handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
-    loading, isVButonLoading,
+    loading, isVButonLoading,setDeletevehciledata,deletevehciledata
   } = useVehicleinfo();
   const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1,
     vehicleNamesList, handleVehicleDeleteName, handleVehicleEditName, editModal, setEditModal, deleteModal, setDeleteModal, vehicleNameEditFun,
@@ -1301,6 +1302,13 @@ const Vehicaleinfo = ({ stationName }) => {
             </div>
           }
         </div>
+{deletevehciledata &&
+        <DeleteConfirmationDialog
+                open={deletevehciledata}
+                onClose={() => setDeletevehciledata(false)}
+                onConfirm={handleClick}
+              />
+}
 
 
         <Box className='common-speed-dail'>
@@ -1326,12 +1334,19 @@ const Vehicaleinfo = ({ stationName }) => {
               />
             )}
             {Supllier_delete === 1 && isEditMode && (
+              // <SpeedDialAction
+              //   key="delete"
+              //   icon={<DeleteIcon />}
+              //   tooltipTitle="Delete"
+              //   onClick={() => handleClick("Delete")}
+              // />
               <SpeedDialAction
-                key="delete"
-                icon={<DeleteIcon />}
-                tooltipTitle="Delete"
-                onClick={() => handleClick("Delete")}
-              />
+              key="delete"
+              icon={<DeleteIcon />}
+              tooltipTitle="Delete"
+              // onClick={() => handleClick("Delete")}
+              onClick={() => setDeletevehciledata(true)}
+            />
             )}
             {/* {edit ? "" : (Supllier_new === 1 && (
               <SpeedDialAction

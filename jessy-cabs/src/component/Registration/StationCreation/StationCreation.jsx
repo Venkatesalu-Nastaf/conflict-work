@@ -1,6 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import "./StationCreation.css";
 import Box from "@mui/material/Box";
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
@@ -29,8 +31,7 @@ import { PermissionContext } from '../../context/permissionContext';
 
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import { MdNumbers } from "react-icons/md";
-
-
+import DeleteConfirmationDialog from '../../DeleteData/DeleteData';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -43,6 +44,19 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  // border: '1px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 // TABLE START
 const columns = [
@@ -87,6 +101,7 @@ const StationCreation = () => {
     setLoading,
     getStateFromStation,
     handleStationChange, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStateChange, isDisabled, setisDisabled,
+    handleStationAddData, stationDatas,open,setOpen,handleSubmiStation,handlestationOnChange,setDeleteStationData,deletestationdata
   } = useStationCreation();
 
   useEffect(() => {
@@ -95,7 +110,8 @@ const StationCreation = () => {
     }
   }, [actionName, handleClick]);
 
-
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
@@ -207,8 +223,50 @@ const StationCreation = () => {
           />
         )}
       /> */}
+                       <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="station-autocomplete"
+                        freeSolo
+                        value={selectedStation || selectedCustomerData?.Stationname || book.Stationname || ""}
+                        options={(allStations || []).map((option) => ({
+                          label: option,
+                        }))}
+                        // filterOptions={(options, state) => {
+                        //   const inputValue = state.inputValue.trim().toLowerCase();
+                        //   return options.filter(option =>
+                        //     option.label && option.label.toLowerCase().includes(inputValue)
+                        //   );
 
-                      <Autocomplete
+                        // }}
+                        filterOptions={(options, state) => {
+                          const inputValue = state.inputValue.trim().toLowerCase();
+
+                          // Show suggestions that start with the input or match exactly
+                          return options.filter(option => 
+                            option.label.toLowerCase().startsWith(inputValue) || 
+                            option.label.toLowerCase() === inputValue
+                          );
+                          
+                        }}
+                        
+                        
+                        onChange={handleStationChange} 
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            margin="normal"
+                            size="small"
+                            label="Station Name"
+                            name="Stationname"
+                            className="full-width"
+                            autoComplete="new-password"
+                          />
+                        )}
+                      />
+
+
+                      {/* <Autocomplete
                         fullWidth
                         size="small"
                         id="station-autocomplete"
@@ -248,7 +306,7 @@ const StationCreation = () => {
                           />
                         )}
                       />
-
+ */}
 
 
 
@@ -349,18 +407,18 @@ const StationCreation = () => {
                       />
                     )}
                   /> */}
-                                        <TextField
-                          fullWidth
-                          size="small"
-                          id="state-textfield"
-                          value={selectedState || ""}
-                          onChange={handleStateChange}
-                          label="State"
-                          margin="normal"
-                          name="state"
-                          autoComplete="new-password"
-                          disabled={true}
-                      />
+                  <TextField
+                    fullWidth
+                    size="small"
+                    id="state-textfield"
+                    value={selectedState || ""}
+                    onChange={handleStateChange}
+                    label="State"
+                    margin="normal"
+                    name="state"
+                    autoComplete="new-password"
+                    disabled={true}
+                  />
 
 
                 </div>
@@ -460,11 +518,11 @@ const StationCreation = () => {
                       Already registered
                     </span>
                   )} */}
-                   {isDisabled && !isEditMode && (
-  <span style={{ color: 'red', fontSize: '12px', textAlign: 'left', marginLeft: '32px' }}>
-    Already registered
-  </span>
-)}
+                  {isDisabled && !isEditMode && (
+                    <span style={{ color: 'red', fontSize: '12px', textAlign: 'left', marginLeft: '32px' }}>
+                      Already registered
+                    </span>
+                  )}
                 </div>
 
                 <div className="input radio input-station-creaton">
@@ -528,8 +586,16 @@ const StationCreation = () => {
                     <Button variant="contained" disabled={!StationCreation_new} onClick={handleAdd} >Add</Button>
                   )}
                 </div>
+                {/* <Button variant="contained" onClick={() => handleStationAddData()}>Add Station</Button> */}
               </div>
             </div>
+{deletestationdata &&
+            <DeleteConfirmationDialog
+                open={deletestationdata}
+                onClose={() => setDeleteStationData(false)}
+                onConfirm={handleClick}
+              />
+              }
             <div className='alert-popup-main'>
               {error &&
                 <div className='alert-popup Error' >
@@ -560,6 +626,35 @@ const StationCreation = () => {
                 </div>
               }
             </div>
+            {/* station add Modal */}
+            <div>
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <div style={{display:'flex',flexDirection:'column',gap:15}}>
+                 <TextField 
+                  id="station"
+                  label="Station"
+                  name="station"
+                  value={stationDatas?.station}
+                  onChange={handlestationOnChange}
+                 />
+                 <TextField 
+                  id="state"
+                  label="State"
+                  name="state"
+                  value={stationDatas?.state}
+                  onChange={handlestationOnChange}
+                  />
+                 <Button variant='contained' onClick={()=>handleSubmiStation()}>Submit</Button>
+                 </div>
+                </Box>
+              </Modal>
+            </div>
             <Box className='common-speed-dail'>
               <StyledSpeedDial
                 ariaLabel="SpeedDial playground example"
@@ -584,12 +679,18 @@ const StationCreation = () => {
                   />
                 )}
                 {StationCreation_delete === 1 && isEditMode && (
+                  // <SpeedDialAction
+                  //   key="delete"
+                  //   icon={<DeleteIcon />}
+                  //   tooltipTitle="Delete"
+                  //   onClick={(event) => handleClick(event, "Delete")}
+                  // />
                   <SpeedDialAction
-                    key="delete"
-                    icon={<DeleteIcon />}
-                    tooltipTitle="Delete"
-                    onClick={(event) => handleClick(event, "Delete")}
-                  />
+                  key="delete"
+                  icon={<DeleteIcon />}
+                  tooltipTitle="Delete"
+                  onClick={() => setDeleteStationData(true)}
+                />
                 )}
                 {StationCreation_new === 1 && !isEditMode && (
                   <SpeedDialAction

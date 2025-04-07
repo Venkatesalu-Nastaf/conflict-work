@@ -6,43 +6,88 @@ const db = require('../../../db');
 
 // // Add Rate Management database--------------------------------------------------------
 
-router.post('/ratemanagement-add', (req, res) => {
-    const bookDataArray = req.body; // Assuming req.body is an array of objects
+// router.post('/ratemanagement-add', (req, res) => {
+//     const bookDataArray = req.body; // Assuming req.body is an array of objects
+// console.log(bookDataArray,"bookarray");
 
-    // Check if req.body is an array
-    if (!Array.isArray(bookDataArray)) {
-        return res.status(400).json({ error: "Request body must be an array" });
+//     // Check if req.body is an array
+//     if (!Array.isArray(bookDataArray)) {
+//         return res.status(400).json({ error: "Request body must be an array" });
+//     }
+
+//     // Insert each object in the array as a separate row in the database
+//     const insertQueries = bookDataArray.map(bookData => {
+//         return new Promise((resolve, reject) => {
+//             db.query('INSERT INTO ratemanagement SET ?', bookData, (err, result) => {
+//                 if (err) {
+//                     reject(err);
+//                 } else {
+//                     resolve(result);
+//                 }
+//             });
+//         });
+//     });
+
+//     // Execute all insert queries concurrently
+//     Promise.all(insertQueries)
+//         .then(() => {
+//             return res.status(200).json({ message: "Data inserted successfully" });
+//         })
+//         .catch(err => {
+//             console.error(err);
+//             return res.status(500).json({ error: "Failed to insert data into MySQL" });
+//         });
+// });
+router.post('/ratemanagement-add', async (req, res) => {
+    const bookDataArray = req.body; 
+    console.log(bookDataArray, "bookarray");
+
+    // Validate input
+    if (!Array.isArray(bookDataArray) || bookDataArray.length === 0) {
+        return res.status(400).json({ error: "Request body must be a non-empty array" });
     }
 
-    // Insert each object in the array as a separate row in the database
-    const insertQueries = bookDataArray.map(bookData => {
-        return new Promise((resolve, reject) => {
-            db.query('INSERT INTO ratemanagement SET ?', bookData, (err, result) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(result);
-                }
-            });
-        });
-    });
+    try {
+        const insertResults = [];
+        const insertErrors = [];
 
-    // Execute all insert queries concurrently
-    Promise.all(insertQueries)
-        .then(() => {
-            return res.status(200).json({ message: "Data inserted successfully" });
-        })
-        .catch(err => {
-            console.error(err);
-            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        for (const bookData of bookDataArray) {
+            try {
+                const result = await new Promise((resolve, reject) => {
+                    db.query('INSERT INTO ratemanagement SET ?', bookData, (err, result) => {
+                        if (err) reject(err);
+                        else resolve(result);
+                    });
+                });
+                insertResults.push(result);
+            } catch (error) {
+                console.error("Insert error:", error);
+                insertErrors.push({ data: bookData, error: error.message });
+            }
+        }
+
+        return res.status(200).json({
+            message: "Data processed",
+            successCount: insertResults.length,
+            failureCount: insertErrors.length,
+            errors: insertErrors,
         });
+
+    } catch (err) {
+        console.error("Unexpected server error:", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 
 // delete Rate Management data-------------------------------------------------------------
 router.delete('/ratemanagement/:id', (req, res) => {
     const customerid = req.params.id;
-    db.query('DELETE FROM ratemanagement WHERE id = ?', customerid, (err, result) => {
+    const data = customerid?.split(',').map(Number);
+    // console.log(data,"data",typeof(data))
+    // console.log(req.params.id,"kk",typeof(req.params.id))
+    // db.query('DELETE FROM ratemanagement1 WHERE id = ?', customerid, (err, result) => {
+        db.query('DELETE FROM ratemanagement WHERE id in (?)',[data], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to delete data from MySQL" });
         }

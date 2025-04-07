@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback, useContext } from 'react';
+import { useState, useEffect, useMemo, useCallback, useContext,useRef } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -11,6 +11,11 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit3 } from "react-icons/fi";
 import { PermissionContext } from '../../context/permissionContext';
 import { useData1 } from '../../Dashboard/Maindashboard/DataContext';
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+
+import Excel from 'exceljs';
+
 
 const useTripsheet = () => {
     const { mapButtonTrigger } = useData1()
@@ -22,6 +27,9 @@ const useTripsheet = () => {
     const apiUrl = APIURL;
     const superAdminAccess = localStorage.getItem("SuperAdmin")
     const loginusername = localStorage.getItem("username")
+    const [dialogmessagetrip, setDialogMessage] = useState(false)
+    const [messageditedtrip, setMessageEditedtrip] = useState('')
+    const [messageditedbeforetrip, setMessageEditedBeforetrip] = useState('')
     // const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     // const statusCheck = formData.status || selectedCustomerData.status || book.status;
     // THIS APIURL TRANSFER FRO DRIVER APP
@@ -91,6 +99,7 @@ const useTripsheet = () => {
     const [mapPopUp, setMapPopUp] = useState(false)
     const [outStationHide, setOutStationHide] = useState(false);
     const [enterTrigger, setEnterTrigger] = useState(null)
+    const [attachedImageEtrip,setAttachImageETrip]=useState('')
     // const [conflicthcldatavalue, setConflictHCLDataValue] = useState([])
     const [conflicthcldatavalue, setConflictHCLDataValue] = useState({
         Hcldatakmvalue: 0,
@@ -123,7 +132,10 @@ const useTripsheet = () => {
     let [driverBeta, setdriverBeta] = useState('0')
     let [driverbeta_Count, setdriverbeta_Count] = useState('0')
     let [driverBeta_amount, setdriverBeta_amount] = useState('0')
-
+    const [userstatuspermission, setUserStatusPermission] = useState([])
+    const [tripGpsData, setTripGpsData] = useState([]);
+    const [fullGpsData, setFullGpsData] = useState([]);
+    const [allGpsData, setAllGpsData] = useState([]);
     //-----------------------------------------------------------------
     const [packageData, setPackageData] = useState({
         customer: '',
@@ -139,10 +151,11 @@ const useTripsheet = () => {
     });
     const [conflictLoad, setConflictLoad] = useState(null)
     const [selectedStatuschecking, setSelectedStatuschecking] = useState('');
+    const [oldStatusCheck, setOldStatusCheck] = useState('')
     const [openModalConflict, setOpenModalConflict] = useState(null)
     const [openConflictKMPopup, setOpenConflictKMPopup] = useState(null);
-    const [overetripsheetstatus,setOverViewETripsheet]=useState(false)
-    const [overetripsheetoutstation,setOverViewETripsheetOutstation]=useState(null)
+    const [overetripsheetstatus, setOverViewETripsheet] = useState(false)
+    const [overetripsheetoutstation, setOverViewETripsheetOutstation] = useState(null)
     // ----------------------------------------vendorinfo-------------------
     const [lockdata, setLockData] = useState(false)
     // const [lockdata, setLockData] = useState(true)
@@ -247,6 +260,7 @@ const useTripsheet = () => {
 
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
+    const [signimageUrl1, setSignImageUrl1] = useState('');
     const [attachedImage, setAttachedImage] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
 
@@ -290,11 +304,26 @@ const useTripsheet = () => {
     // })
     const [checkstatusapps, setCheckStatusApp] = useState([])
     const usernamedata = localStorage.getItem("username");
-    const [nochangedata,setNoChangeData]=useState({})
+    const [nochangedata, setNoChangeData] = useState({})
     const [checksignandMapverify, setCheckSignandMapVerify] = useState(false)
     const [checksignmapmessage, setCheckSignMapMessage] = useState('')
-   
-    
+    const [orderByDropDown, setOrderByDropDown] = useState([])
+    const [speeddailacesss, setSpeedDialAccessdelete] = useState(false)
+    const [speeddailacesssedit, setSpeedDialAccessedit] = useState(false)
+    const [Permissiondeleteroles, setPermissionDeleteRoles] = useState(false)
+    const [fueldataamountdis, setFuelDataAmountDis] = useState(false)
+    const [fueladvancedamounthide, setFuelAdvancedamountHide] = useState(null)
+    const [deletetripasheetdata,setDeleteTripsheetData]=useState(false);
+// -------------------this zoom imgae in attachfile----------
+    const [zoom, setZoom] = useState(1);
+  const [posX, setPosX] = useState(0); 
+  const [posY, setPosY] = useState(0); 
+  const [isDragging, setIsDragging] = useState(false);
+  const startPos = useRef({ x: 0, y: 0 });
+//   ---------------------------end code zoom image------------------
+    const a1 = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO");
+
+
     const maplogcolumns = [
         { field: "id", headerName: "Sno", width: 70 },
         { field: "tripid", headerName: "TripSheet No", width: 120 },
@@ -309,7 +338,7 @@ const useTripsheet = () => {
         { field: "trip_type", headerName: "Trip Type", width: 120 },
         { field: "place_name", headerName: "Place Name", width: 120 },
         {
-            field: '',
+            field: 'Edit',
             headerName: 'Edit',
             width: 120,
             renderCell: (params) => (
@@ -318,9 +347,9 @@ const useTripsheet = () => {
                     aria-label="open-dialog"
                     // disabled={!Tripsheet_modify1}
                     // disabled={!Tripsheet_modify1 || (superAdminAccess === "0" && temporaryStatus)}
-                    disabled={!Tripsheet_modify1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
+                    disabled={!Tripsheet_modify1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus && !a1)}
                 >
-                    <Button disabled={!Tripsheet_modify1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button disabled={!Tripsheet_modify1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus && !a1)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <FiEdit3 style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -335,9 +364,16 @@ const useTripsheet = () => {
                     onClick={() => handleRemoveMapLogPoint(params)}
                     aria-label="open-dialog"
                     // disabled={!Tripsheet_delete1}
-                    disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
+                    // disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
+                    // disabled={handleDatapermission(Tripsheet_delete1)}
+                    disabled={Permissiondeleteroles}
+                // handleDatapermission(Tripsheet_delete)
                 >
-                    <Button disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
+                    <Button
+                        // disabled={!Tripsheet_delete1 || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
+                        // disabled={handleDatapermission(Tripsheet_delete1)}
+                        disabled={Permissiondeleteroles}
+                        variant="contained" color="primary" style={{ display: 'flex', gap: "5px" }}>
                         <RiDeleteBinLine style={{ fontSize: "18px" }} />
                     </Button>
                 </Button>
@@ -345,6 +381,23 @@ const useTripsheet = () => {
         },
 
     ];
+    const maplogcolumnsexcel = [
+        { field: "ids", headerName: "Sno"},
+        { field: "tripid", headerName: "TripSheet No"},
+        { field: "time", headerName: "Trip Time" },
+        // { field: "date", headerName: "Trip Date", width: 100, },
+        {
+            field: "date",
+            headerName: "Trip Date",
+         
+        },
+      
+        { field: "trip_type", headerName: "Trip Type"},
+        { field: "place_name", headerName: "Place Name"},
+       
+
+    ];
+   
     const [openEditMapLog, setOpenEditMapLog] = useState(false);
     const handleOpenMapLog = () => setOpenEditMapLog(true);
     const handleCloseMapLog = () => setOpenEditMapLog(false);
@@ -382,8 +435,9 @@ const useTripsheet = () => {
             try {
                 const { tripid } = selectedMapRow;
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
-                const data = response.data;
+                const data = response.data;                
                 setRow(data);
+                
             } catch (error) {
                 console.error('Error fetching map data:', error);
             }
@@ -462,7 +516,7 @@ const useTripsheet = () => {
     };
 
     const [mapimageUrls, setMapImageUrls] = useState([]);
-    const [mapimageUrls1, setMapImageUrls1] = useState("");
+    const [mapimageUrls1, setMapImageUrls1] = useState([]);
 
 
     // map1
@@ -481,6 +535,8 @@ const useTripsheet = () => {
             const imageUrl = URL.createObjectURL(responseData);
             setMapImageUrls(imageUrl);
             setMapimgPopupOpen(true);
+            handleTripmapverify()
+
         } catch {
         }
     };
@@ -500,21 +556,38 @@ const useTripsheet = () => {
 
             const responseData = response.data
             // console.log(responseData,"urlstripiii")
-            if (responseData.length > 0) {
-                // setCheckSignandMapVerify(true)
-                // setCheckSignMapMessage("Map and Signature Verified")
-                setMapImageUrls1(responseData);
-            } else {
+            // if (responseData.length > 0) {
+            // setCheckSignandMapVerify(true)
+            // setCheckSignMapMessage("Map and Signature Verified")
+            setMapImageUrls1(responseData);
+            // } else {
 
-                // Assuming you want to display the image directly
-                // const imageUrl = URL.createObjectURL(responseData);
-                setMapImageUrls1("");
-            }
+            // Assuming you want to display the image directly
+            // const imageUrl = URL.createObjectURL(responseData);
+            // setMapImageUrls1([]);
+            // }
             // setMapimgPopupOpen(true);
         } catch {
         }
     };
-
+    // console.log(mapimageUrls1,"urls")
+    const rearrangeTripData = (tripData) => {
+        if (!Array.isArray(tripData)) return [];
+      
+        // Separate start, end, and waypoints
+        const startPoint = tripData.find(item => item.trip_type === "start");
+        const endPoint = tripData.find(item => item.trip_type === "end");
+        const waypoints = tripData.filter(item => item.trip_type !== "start" && item.trip_type !== "end");
+      
+        // Build the final sorted array
+        const sortedTripData = [
+          ...(startPoint ? [startPoint] : []),
+          ...waypoints,
+          ...(endPoint ? [endPoint] : [])
+        ];
+      
+        return sortedTripData;
+      };
 
     const handleTripmaplogClick = async () => {
         try {
@@ -525,9 +598,12 @@ const useTripsheet = () => {
             } else {
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
                 const data = response.data;
-                setRow(data);
+                console.log(data,"d--------------ata-----------");
+                const sortedData = rearrangeTripData(data);
+                console.log(sortedData,"pd------------------------------------====================");
+                setRow(sortedData);
                 setMaplogimgPopupOpen(true);
-                console.log(data, 'mapdata')
+                // console.log(data, 'mapdata')
             }
         } catch {
         }
@@ -585,6 +661,9 @@ const useTripsheet = () => {
         const encodedPath = encodeURIComponent(params.row.path);
         setimgPopupOpen(true);
         setImageUrl(`${apiUrl}/get-image/${encodedPath}`);
+        setPosX(0)
+        setPosY(0)
+        setZoom(1)
     };
     const handleimgPopupClose = () => {
         setimgPopupOpen(false);
@@ -649,7 +728,8 @@ const useTripsheet = () => {
         const timetoggledata = Number(params.get('TimeToggle')) || 0
         const timetogglevendor = Number(params.get('VendorTimeToggle')) || 0
         const lockdatavendor = Number(params.get('lockdatavalue'))
-        console.log(lockdatavendor,"lockvendorlog")
+        const messagedatatrip = params.get("messageedited") || '';
+        // console.log(lockdatavendor,"lockvendorlog")
         setHybridHclNavigate(HCLDATA)
         setTimeToggleNaviagate(timetoggledata)
         setTimeToggleVendorNaviagate(timetogglevendor)
@@ -660,7 +740,8 @@ const useTripsheet = () => {
         //----------------------
         const formData = {};
         const parameterKeys = [
-            'dispatchcheck', 'vehType', 'shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail'
+            'dispatchcheck', 'vehType', 'shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail', 'messageedited',
+            'MessageText',
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -688,6 +769,7 @@ const useTripsheet = () => {
             // setIsEditMode(true);
 
             setIsEditMode(false);
+            setMessageEditedBeforetrip(messagedatatrip)
         }
         else if (formData['dispatchcheck'] === 'true' && formData['status'] !== 'pending') {
             // setIsEditMode(false);
@@ -695,6 +777,14 @@ const useTripsheet = () => {
             setSendEmail(false)
             setDriverSMS(false)
             setIsEditMode(true);
+            setMessageEditedBeforetrip(messagedatatrip)
+            getSignatureImageverify();
+            handleTripmapverify();
+            checksignatureandmap();
+            fuelAdvnacedisabled();
+            handlepermissionforspeedDialedit(Tripsheet_modify1)
+            handlepermissionforspeedDialdelete(Tripsheet_delete1)
+
 
 
 
@@ -709,6 +799,7 @@ const useTripsheet = () => {
         setFormData(formData);
         setSelectedStatus(formData['status'])
         setSelectedStatuschecking(formData['status'])
+        setOldStatusCheck(formData['status'])
         ///calc--------------------------------------
         setcalcPackage(calcPackage);
         setExtraHR(extraHR);
@@ -726,9 +817,12 @@ const useTripsheet = () => {
         setdriverBeta_amount(driverBeta_amount);
         setTotalcalcAmount(totalcalcAmount || formData.totalcalcAmount);
 
+
+
         ///------
     }, [location]);
 
+    // console.log(driverBeta,"driverrrrrrrrrrrrrrrrrrr");
 
     useEffect(() => {
         window.history.replaceState(null, document.title, window.location.pathname);
@@ -851,14 +945,15 @@ const useTripsheet = () => {
         vehType: "",
         vehicleName: "",
         travelsname: "",
-        GroupTripId: ""
+        GroupTripId: "",
+        MessageText: "",
     }
 
     const [book, setBook] = useState(bookData);
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
     const handleCancel = () => {
-        setBook(bookData);
+        setBook({ ...bookData, travelsname: "" }); // Ensure travelsname is empty
         setSelectedCustomerDatas({});
         setSelectedCustomerData({});
         setFormData({});
@@ -880,9 +975,11 @@ const useTripsheet = () => {
         // setIsHybridCustomer(false)
         // ===---------------
         setAttachedImage("")
+        setAttachImageETrip("")
         setGMapImageUrl("")
         setRouteData('')
         setSignImageUrl('')
+        setSignImageUrl1('')
         // -----------
         setSignatureWhattsapplink()
         setCopyDataLink(false)
@@ -901,6 +998,11 @@ const useTripsheet = () => {
             close_shedOut_totalDays: '',
             totalDays: '',
         })
+        setBook(prev => ({ ...prev, travelsname: "" }));
+        setSelectedCustomerData(prev => ({ ...prev, travelsname: "" }));
+        setSelectedCustomerDatas(prev => ({ ...prev, travelsname: "" }));
+        setFormData(prev => ({ ...prev, travelsname: "" }));
+        setGroupTripId("")
         setConflictKMData({
             maximumkm: 0,
             maxtripid: "",
@@ -913,6 +1015,8 @@ const useTripsheet = () => {
         // setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
         // setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
         localStorage.removeItem('selectedTripid');
+        setFuelAdvancedamountHide(null)
+        setDeleteTripsheetData(false)
     };
     const handlecheck = async () => {
         const statusdata = formData.status || book.status || selectedCustomerData.status;
@@ -964,7 +1068,7 @@ const useTripsheet = () => {
 
             return
         }
-        if(overetripsheetstatus && overetripsheetoutstation === "oustation") {
+        if (overetripsheetstatus && overetripsheetoutstation === "oustation") {
             setWarning(true);
             setWarningMessage("Status is closed, u dont have permission open this E-Tripsheet.");
             return
@@ -975,10 +1079,131 @@ const useTripsheet = () => {
             getSignatureImage();
             invoiceRouteData();
             getAttachedImage();
+            getAttachedImageforEtripsheet()
             setPopupOpen(true);
 
         }
     };
+
+
+
+
+
+    const handleAutocompleteChangecustomer = (event, value, name) => {
+
+        const selectedOption = value ? value.label : "";
+
+        if (name === "orderedby") {
+            const selectedOrder = orderByDropDown?.find(option => option?.orderedby === value?.label);
+            //   console.log(selectedOrder,"order")
+            if (selectedOrder) {
+                setBook(prevState => ({
+                    ...prevState,
+                    orderedby: value?.label,
+                    mobile: selectedOrder.orderByMobileNo,
+                    orderbyemail: selectedOrder.orderByEmail,
+                    // servicestation: selectedOrder.servicestation
+                }));
+
+                setSelectedCustomerData((prevState) => ({
+                    ...prevState,
+                    orderedby: value?.label,
+                    mobile: selectedOrder.orderByMobileNo,
+                    orderbyemail: selectedOrder.orderByEmail,
+                    // servicestation: selectedOrder.servicestation
+                }));
+                setFormData((prevState) => ({
+                    ...prevState,
+                    orderedby: value?.label,
+                    mobile: selectedOrder.orderByMobileNo,
+                    orderbyemail: selectedOrder.orderByEmail,
+                    // servicestation: selectedOrder.servicestation
+                }));
+
+                // setNoChangeData((prevState) => ({
+                //   ...prevState,
+                //   orderedby: value?.label,
+                //   orderByMobileNo: selectedOrder.orderByMobileNo,
+                //   orderByEmail: selectedOrder.orderByEmail,
+                // }));
+
+            }
+        }
+        else {
+            // setBook(prevState => ({
+            //   ...prevState,
+            //   [name]: selectedOption
+            // }));
+            // setSelectedCustomerData((prevData) => ({
+            //   ...prevData,
+            //   [name]: selectedOption,
+            // }));
+
+            setBook(prevState => ({
+                ...prevState,
+                [name]: selectedOption,
+                orderedby: '-',
+                mobile: '-',
+                orderbyemail: '-',
+                // servicestation: selectedOrder.servicestation
+            }));
+
+            setSelectedCustomerData((prevState) => ({
+                ...prevState,
+                orderedby: '-',
+                [name]: selectedOption,
+                mobile: '-',
+                orderbyemail: '-',
+                // servicestation: selectedOrder.servicestation
+            }));
+            setFormData((prevState) => ({
+                ...prevState,
+                orderedby: '-',
+                [name]: selectedOption,
+                mobile: '-',
+                orderbyemail: '-',
+                // servicestation: selectedOrder.servicestation
+            }));
+            setNoChangeData((prevValues) => ({
+                ...prevValues,
+                [name]: selectedOption,
+            }));
+        }
+    }
+
+
+    const custmorName = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || '';
+    // console.log(formData.customer ,"form",selectedCustomerData.customer,"dd",book.customer,"ff",packageData.customer,"cust")
+
+    useEffect(() => {
+
+        const fetchcustomerData = async () => {
+            try {
+                if (!custmorName) return
+                const response = await axios.get(
+                    `${apiUrl}/name-orderby/${custmorName}`
+                );
+                const resData = response.data;
+                // console.log(resData,"cust")
+                if (resData.success) {
+                    setOrderByDropDown(resData.data)
+                    // console.log(resData.data,"custjjj")
+
+
+                    // setBook(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
+                    // setSelectedCustomerData(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
+                } else {
+                    setOrderByDropDown([])
+                    // setBook(prev => ({ ...prev, orderedby: '', orderByEmail: '', orderByMobileNo: "" }))
+                    // setSelectedCustomerData(prev => ({ ...prev, orderByEmail: '', orderByMobileNo: "" }))
+                }
+            } catch (error) {
+                // setError(true);
+                // setErrorMessage("Error retrieving vehicle details.");
+            }
+        }
+        fetchcustomerData()
+    }, [custmorName, apiUrl])
 
     const handleDelete = async () => {
         const tripid = selectedCustomerData.tripid;
@@ -1183,95 +1408,97 @@ const useTripsheet = () => {
     const dayhcl1 = hybridhclcustomer || hybridhclnavigate
     // console.log(mapimageUrls1, "urls", typeof (mapimageUrls1), mapimageUrls)
     const checksignatureandmap = async () => {
-        // handleTripmapClick()
-        await handleTripmapverify()
-        // await getSignatureImage()
-        getSignatureImageverify()
-        // console.log(tripID1, "userStatusdatatripi", typeof (tripID1))
-        //    const status1 = formData.status || selectedCustomerData.status || book.status
-        if (tripID1 && userStatus !== null) {
-            // console.log(tripID1, "userStatusdatatripienetr", typeof (tripID1))
-            //     const station = userStatus
-            //     const dayhcl1 = hybridhclcustomer || hybridhclnavigate
+        const userstatusdata = userstatuspermission
+        console.log(signimageUrl1, "sign", mapimageUrls1, userstatuspermission)
+        //   const userstatusdata = userstatuspermission
 
-            // if (stationmap.includes("All") || stationmap.includes("Chennai")) {
-            if (userStatus.includes("All") || userStatus.includes("Chennai")) {
+        if (tripID1 && userstatusdata.length > 0) {
+
+            if (userstatusdata.includes("All") || userstatusdata.includes("Chennai")) {
                 if (dayhcl1 === 1 && status1 === "Closed") {
 
-                    if (!signimageUrl && !mapimageUrls1 && mapimageUrls1 === "") {
+                    // if (!signimageUrl1 && !mapimageUrls1 && mapimageUrls1 === "") {
+                    if (!signimageUrl1 && mapimageUrls1.length === 0) {
+                        console.log("condition1check1")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the signature and Map")
-                        return true;
+                        // return 
                     }
-                    else if (!signimageUrl) {
+                    else if (!signimageUrl1) {
+                        console.log("condition1check2")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the signature")
                         // setError(true);
                         // setErrorMessage("Please upload the signature");
-                        return true;
-                    } else if (!mapimageUrls1 && mapimageUrls1 === "") {
+                        // return 
+                    }
+                    // else if (!mapimageUrls1 && mapimageUrls1 === "") {
+                    else if (mapimageUrls1.length === 0) {
+                        console.log("condition1check3")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the map image")
                         // setError(true);
                         // setErrorMessage("Please upload the map image");
-                        return true;
+                        // return 
                     }
                     else {
+                        console.log("condition1check4")
                         setCheckSignandMapVerify(false)
-                        return false
+                        // return 
                     }
 
                 } else {
                     // if(dayhcl1 === 0 && status1 === "Closed"){
-                    if (!signimageUrl && status1 === "Closed") {
+                    if (!signimageUrl1 && status1 === "Closed") {
+                        console.log("condition1check5")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the signature")
                         // setError(true);
                         // setErrorMessage("Please upload the signature");
-                        return true;
+                        return
                     }
                     // }
                     else {
-                        console.log("withoyttripid")
+                        // console.log("withoyttripid")
+                        console.log("condition1check6")
                         setCheckSignandMapVerify(false)
-                        return false
+                        // return 
                     }
 
 
                 }
 
             }
-            // else if( !stationmap.includes('Chennai') && !stationmap.includes('All')){
-            //     else if( !userStatus.includes('Chennai') && !userStatus.includes('All')){
-            //     if(!signimageUrl && status1 === "Temporary Closed"){
-            //         setCheckSignandMapVerify(true)
-            //         setCheckSignMapMessage("Please upload the signature")
-            //         // setError(true);
-            //         // setErrorMessage("Please upload the signature");
-            //         return;
-            //     }
 
-            // }
             else {
+                console.log("condition1check7")
                 setCheckSignandMapVerify(false);
-                return false;
+                // return 
             }
         }
         else {
+            console.log("condition1check8")
             setCheckSignandMapVerify(false);
-            return false
+            // return 
         }
     }
     useEffect(() => {
         checksignatureandmap()
-    }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate, signimageUrl, mapimageUrls1])
+        // }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate, signimageUrl, mapimageUrls1])
+        // }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate,signimageUrl1, mapimageUrls1])
+        // }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate,signimageUrl1, mapimageUrls1])
+    }, [isEditMode, status1, hybridhclcustomer, hybridhclnavigate, mapimageUrls1, signimageUrl1, location, userstatuspermission])
 
     // console.log(checksignandMapverify, "userStatusdata", typeof (checksignandMapverify))
 
     const handleEdit = async () => {
         // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
         // handleTripmapClick()
+        handleTripmapverify()
+        getSignatureImageverify()
+
         await checksignatureandmap()
+        // console.log(checksignandMapverify,"verify")
 
         const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         const statusdata = checkstatusapps?.length > 0 ? checkstatusapps : "";
@@ -1286,8 +1513,8 @@ const useTripsheet = () => {
         // ) {
 
         if (
-            (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && superAdminAccess  !== "SuperAdmin") ||
-            (checkdata?.status === "Closed" && checkdata?.apps === "Closed" && superAdminAccess  !== "SuperAdmin" )
+            (checkdata?.status === "Billed" && checkdata?.apps === "Closed" && superAdminAccess !== "SuperAdmin") ||
+            (checkdata?.status === "Closed" && checkdata?.apps === "Closed" && superAdminAccess !== "SuperAdmin")
         ) {
             setError(true);
             setErrorMessage(`Tripsheet has been ${checkdata?.status}`);
@@ -1303,7 +1530,7 @@ const useTripsheet = () => {
             setError(true);
             setErrorMessage("Nothing To Change");
             return
-          }
+        }
 
         try {
             setisEditload(true)
@@ -1398,7 +1625,9 @@ const useTripsheet = () => {
                     VendorTimeToggle: timeTogglevendor,
                     Hcldatakmvalue: conflicthcldatavalue.Hcldatakmvalue,
                     HclMaxConflctdata: conflicthcldatavalue.HclMaxConflctdata,
-                    lockdatavalue:lockdata
+                    lockdatavalue: lockdata,
+                    messageedited: messageditedtrip,
+                    MessageText: formData.MessageText || selectedCustomerData.MessageText || book.MessageText
 
                 };
                 const VehcileHistory = {
@@ -1451,6 +1680,7 @@ const useTripsheet = () => {
                 setSmsGuest(true)
                 setSuccess(true);
                 handleCancel();
+                setSelectedStatuschecking('')
                 setisEditload(false)
                 setSuccessMessage("Successfully updated");
                 setLockData(false)
@@ -1460,6 +1690,7 @@ const useTripsheet = () => {
                 setLockDatavendorBill(true)
                 setLockDatacustomerBill(true)
                 setCheckSignandMapVerify(false)
+                fuelAdvnacedisabled()
                 //    const data2= await  checksignatureandmap()
                 //    console.log(data2,"userStatusdata2")
 
@@ -1644,7 +1875,7 @@ const useTripsheet = () => {
                 shedOutDate: formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
                 startdate: formData.startdate || selectedCustomerDatas.startdate || selectedCustomerData.startdate || book.startdate,
                 // closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate,
-                closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate ||formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
+                closedate: formData.closedate || selectedCustomerDatas.closedate || selectedCustomerData.closedate || book.closedate || formData.shedOutDate || selectedCustomerDatas.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate,
                 shedInDate: formData.shedInDate || selectedCustomerDatas.shedInDate || selectedCustomerData.shedInDate || book.shedInDate,
                 startkm: book.startkm,
                 orderbyemail: formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail,
@@ -1698,7 +1929,9 @@ const useTripsheet = () => {
                 VendorTimeToggle: timeTogglevendor,
                 HclMaxConflctdata: 0,
                 Hcldatakmvalue: 0,
-                lockdatavalue:lockdata
+                lockdatavalue: lockdata,
+                messageedited: messageditedtrip,
+                MessageText: formData.MessageText || selectedCustomerData.MessageText || book.MessageText
             };
             // console.log(updatedBook," book")
             const VehcileHistory = {
@@ -1824,7 +2057,7 @@ const useTripsheet = () => {
             ...prevValues,
             [name]: selectedOption,
         }));
-         setNoChangeData((prevValues) => ({
+        setNoChangeData((prevValues) => ({
             ...prevValues,
             [name]: selectedOption,
         }));
@@ -1854,7 +2087,6 @@ const useTripsheet = () => {
 
     const handletravelsAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
-
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
@@ -1908,7 +2140,7 @@ const useTripsheet = () => {
             ...prevValues,
             [name]: parsedDate,
         }));
-        
+
         if (!lockdata) {
             if (name === "shedOutDate") {
                 setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: parsedDate }))
@@ -1918,6 +2150,31 @@ const useTripsheet = () => {
             }
         }
     };
+
+
+    const handleChangetexttrip = (event) => {
+        const { name, value, } = event.target;
+        // const { name, value} = event.target.value;
+        console.log(name, value, "textt")
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+        setMessageEditedtrip(loginusername)
+        setNoChangeData((prevValues) => ({
+            ...prevValues,
+            [name]: value,
+        }));
+
+    }
 
     // speeddaial
     const handleClick = async (event, actionName) => {
@@ -1980,7 +2237,7 @@ const useTripsheet = () => {
             const data = Date.now().toString();
             const formData = new FormData();
             formData.append('image', file);
-            setNoChangeData({...nochangedata,uploaddata:file})
+            setNoChangeData({ ...nochangedata, uploaddata: file })
             try {
                 await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
                 setSuccess(true);
@@ -2129,54 +2386,52 @@ const useTripsheet = () => {
     //     return '';
     // }
 
-// -----------this for E-trisheet and overview hide based on status and station"
+    // -----------this for E-trisheet and overview hide based on status and station"
 
-const Etripsheetoverview = ()=>{
-  const userdatastatusstation = userStatus
-  if(userdatastatusstation !== null){
+    const Etripsheetoverview = () => {
+        const userdatastatusstation = userStatus
+        if (userdatastatusstation !== null) {
 
-  if (statusCheck === "Closed" && superAdminAccess !== "SuperAdmin" &&
-    (!userdatastatusstation.includes("Chennai") && !userdatastatusstation.includes("All"))
-)
-{
-setOverViewETripsheet(true)
-setOverViewETripsheetOutstation("oustation")
+            if (statusCheck === "Closed" && superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Billing_Headoffice" && superAdminAccess !== "Assistant CFO" &&
+                (!userdatastatusstation.includes("Chennai") && !userdatastatusstation.includes("All"))
+            ) {
+                setOverViewETripsheet(true)
+                setOverViewETripsheetOutstation("oustation")
 
-return
-}
+                return
+            }
 
-else if( 
-    (statusCheck === "Closed") && superAdminAccess !== "SuperAdmin" &&
-    (userdatastatusstation.includes("Chennai") || userdatastatusstation.includes("All"))
-){
-    setOverViewETripsheet(true)
-    setOverViewETripsheetOutstation("Instation")
-    return
-}
-else{
-    setOverViewETripsheet(false)
-    setOverViewETripsheetOutstation(null)
-    return
-}
-  }
-  else{
-    setOverViewETripsheet(false)
-    setOverViewETripsheetOutstation(null)
-    
-    return
-  }
+            else if (
+                (statusCheck === "Closed") && superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Billing_Headoffice" && superAdminAccess !== "Assistant CFO" &&
+                (userdatastatusstation.includes("Chennai") || userdatastatusstation.includes("All"))
+            ) {
+                setOverViewETripsheet(true)
+                setOverViewETripsheetOutstation("Instation")
+                return
+            }
+            else {
+                setOverViewETripsheet(false)
+                setOverViewETripsheetOutstation(null)
+                return
+            }
+        }
+        else {
+            setOverViewETripsheet(false)
+            setOverViewETripsheetOutstation(null)
 
-
-
-}
+            return
+        }
 
 
 
+    }
 
-useEffect(() => {
-    Etripsheetoverview();
-  }, [statusCheck, userStatus, superAdminAccess]);
 
+
+
+    useEffect(() => {
+        Etripsheetoverview();
+    }, [statusCheck, userStatus, superAdminAccess]);
 
 
 
@@ -2184,7 +2439,8 @@ useEffect(() => {
 
 
 
-// ------------------------------------------
+
+    // ------------------------------------------
 
     const calculateExkmAmount = () => {
         const exkm = formData.exkm || selectedCustomerData.exkm || book.exkm || packageDetails[0]?.extraKMS;
@@ -2313,6 +2569,7 @@ useEffect(() => {
             ''
         );
     }, [formData.customer, selectedCustomerData.customer, book.customer, packageData.customer]);
+    // console.log(customerdatatimetoggle,"toggle",timeToggle)
     const fetchdatacustomerTimeToggle = useCallback(async () => {
         if (customerdatatimetoggle) {
             try {
@@ -2322,9 +2579,11 @@ useEffect(() => {
                     const res = data[0].TimeToggle;
 
 
-                    setTimeToggle(res); // Update state with the fetched result
+                    setTimeToggle(res);
+                    setTimeToggleNaviagate(res) // Update state with the fetched result
                 } else {
                     setTimeToggle(0);
+                    setTimeToggleNaviagate(0)
                 }
             } catch (error) {
                 console.error('Error fetching customer data:', error);
@@ -2358,13 +2617,16 @@ useEffect(() => {
                     const res = data[0].TimeToggle;
                     // console.log(typeof(res),"custommmmm")
 
-                    setTimeToggleVendor(res); // Update state with the fetched result
+                    setTimeToggleVendor(res);
+                    setTimeToggleVendorNaviagate(res)// Update state with the fetched result
                 } else {
                     setTimeToggleVendor(0);
+                    setTimeToggleVendorNaviagate(0)
                 }
             } catch (error) {
                 console.error('Error fetching customer data:', error);
                 setTimeToggleVendor(0);
+                setTimeToggleVendorNaviagate(0)
             }
         } else {
             setTimeToggleVendor(0);
@@ -2386,17 +2648,20 @@ useEffect(() => {
                     const res = data[0].hybrid;
                     // console.log(data,"cust")
                     setHybridHclCustomer(res)
+                    setHybridHclNavigate(res)
                     // Update state with the fetched result
                 } else {
-                    setHybridHclCustomer('')
+                    setHybridHclCustomer(0)
+                    setHybridHclNavigate(0)
                 }
             } catch (error) {
 
                 console.error('Error fetching customer data:', error);
-                setHybridHclCustomer('')
+                setHybridHclCustomer(0)
+                setHybridHclNavigate(0)
             }
         } else {
-            setHybridHclCustomer('')
+            setHybridHclCustomer(0)
 
         }
     }, [apiUrl, customerdatatimetoggle]); // Memoize the fetch function based on these dependencies
@@ -2431,6 +2696,7 @@ useEffect(() => {
         const duty = formData.duty || selectedCustomerData.duty || book.duty;
         const datatimetoggle = timeToggle || timetogglenavigate
         // console.log( timeToggle,"hhh",timetogglenavigate,datatimetoggle)
+        // console.log(datatimetoggle,"toggletime",timeToggle,"bothna",timetogglenavigate)
         const starttimehybrid = removeSeconds(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime)
 
         const closetimehybrid = removeSeconds(formData.closetime || selectedCustomerData.closetime || book.closetime)
@@ -2887,6 +3153,7 @@ useEffect(() => {
         }
         else {
 
+
             let additionalHours = 0;
             let additionalMinutesValue = 0;
 
@@ -3132,6 +3399,7 @@ useEffect(() => {
         const startKm = formData.shedout || book.shedout || selectedCustomerData.shedout || '';
         const closeKm = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
         const hybridatahcl = hybridhclcustomer || hybridhclnavigate
+        // console.log(typeof(hybridatahcl),"hcl")
 
         // if (hybridhclcustomer === 1) {
         if (hybridatahcl === 1) {
@@ -3351,6 +3619,7 @@ useEffect(() => {
         const totalDays = calculatevendorTotalDays()
         // const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
         const datatimetoggle = timeTogglevendor || timetogglevendornavigate
+        // console.log(datatimetoggle,"togglevendor",timeTogglevendor , timetogglevendornavigate)
 
 
         // let additionalMinutes = 0;
@@ -3795,11 +4064,11 @@ useEffect(() => {
             ...prevData,
             [name]: value,
         }));
-        if(name !== "tripid")
-        setNoChangeData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        if (name !== "tripid")
+            setNoChangeData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
 
         if (event.target.type === 'checkbox') {
             setBook((prevBook) => ({
@@ -3848,7 +4117,7 @@ useEffect(() => {
                 }));
                 setNoChangeData((prevData) => ({
                     ...prevData,
-                    [name]:formattedTime,
+                    [name]: formattedTime,
                 }));
             } else {
                 setBook((prevBook) => ({
@@ -3887,7 +4156,7 @@ useEffect(() => {
                 //     ...prevData,
                 //     [name]:value,
                 // }));
-                if(name !== "tripid")
+                if (name !== "tripid")
                     setNoChangeData((prevData) => ({
                         ...prevData,
                         [name]: value,
@@ -3903,6 +4172,7 @@ useEffect(() => {
     const handleKeyDown = async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
+            localStorage.removeItem("pointscount")
             const tripid = event.target.value;
             const loginUserName = await localStorage.getItem("username")
 
@@ -3913,7 +4183,6 @@ useEffect(() => {
 
                     const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
                     const bookingDetails = response.data;
-
                     handleCancel()
                     if (response.status === 200 && bookingDetails) {
                         if (bookingDetails.status === "Cancelled") {
@@ -3929,11 +4198,12 @@ useEffect(() => {
                             setSelectedCustomerId(bookingDetails.tripid);
                             setSelectedStatus(bookingDetails.status); // Set selected status based on booking details
                             setSelectedStatuschecking(bookingDetails.status)
+                            setOldStatusCheck(bookingDetails.status)
                             // if (!lockdata) {
 
 
-                                setVendorinfodata(restdatavendor)
-                                setVendorbilldata(bookingDetails)
+                            setVendorinfodata(restdatavendor)
+                            setVendorbilldata(bookingDetails)
                             // }
 
                             //--------------calc---------
@@ -3954,10 +4224,12 @@ useEffect(() => {
                             setdriverBeta_amount(bookingDetails.driverBeta_amount);
                             setTotalcalcAmount(bookingDetails.totalcalcAmount);
                             setGroupTripId(bookingDetails.GroupTripId)
-                            setHybridHclCustomer(bookingDetails.Hybriddata)
+                            setHybridHclCustomer(bookingDetails.Hybriddata);
                             setTimeToggle(bookingDetails.TimeToggleData)
                             setTimeToggleVendor(bookingDetails.VendorTimeToggle)
                             setEnterTrigger((prev) => !prev)
+                            setMessageEditedBeforetrip(bookingDetails?.messageedited)
+                            setMessageEditedtrip(bookingDetails?.messageedited)
                             //---------------------------
 
                             setEscort(bookingDetails.escort)
@@ -3979,6 +4251,12 @@ useEffect(() => {
                             setLockDatavendorBill(true)
                             setLockDatacustomerBill(true)
                             localStorage.setItem('selectedTripid', tripid);
+                            getSignatureImageverify();
+                            handleTripmapverify();
+                            checksignatureandmap();
+                            fuelAdvnacedisabled();
+                            handlepermissionforspeedDialedit(Tripsheet_modify1)
+                            handlepermissionforspeedDialdelete(Tripsheet_delete1)
                         }
                     } else {
                         setError(true);
@@ -3995,6 +4273,7 @@ useEffect(() => {
                 getSignatureImage();
                 invoiceRouteData();
                 getAttachedImage();
+                getAttachedImageforEtripsheet()
 
             } catch (error) {
                 if (error.response && error.response.status === 404) {
@@ -4003,6 +4282,7 @@ useEffect(() => {
                     setSelectedCustomerDatas({})
                     setFormData({})
                     setFormValues({})
+                    setIsEditMode(false)
                     // setBook({})
                     setErrorMessage(`${error.response.data.error}`);
                     // setErrorMessage(" You Don't Have Accesss To This Tripsheet Based On Service Station");
@@ -4175,7 +4455,7 @@ useEffect(() => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         try {
             if (tripid !== null && tripid && tripid !== "undefined") {
-                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
+                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004  
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
                     setSignImageUrl(imageUrl);
@@ -4193,14 +4473,19 @@ useEffect(() => {
     };
 
 
-    const getSignatureImageverify = async () => {
+    const getSignatureImageverify = useCallback(async () => {
+        // console.log("adddedddddd")
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+        checksignatureandmap()
         try {
             if (tripid !== null && tripid && tripid !== "undefined") {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
+                // console.log(response,"ddddddddddddddddddddddddd")
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
-                    setSignImageUrl(imageUrl);
+                    // console.log("addeddatyyyyyyyyyyyyyyyyyyyyyyy")
+                    setSignImageUrl1(imageUrl);
+
                     // setSuccess(true)
                     // setSuccessMessage('Signature Added Sucessfully')
 
@@ -4212,7 +4497,9 @@ useEffect(() => {
             setWarningMessage("Failed to fetch signature image. Please try again.");
 
         }
-    };
+    }, [formData, book, isEditMode, signimageUrl1, userstatuspermission])
+
+
 
 
 
@@ -4222,15 +4509,22 @@ useEffect(() => {
         if (file !== null) {
             const datadate = Date.now().toString();
             const formData = new FormData();
-            setNoChangeData({...nochangedata,signatureimagedata:file})
+            setNoChangeData({ ...nochangedata, signatureimagedata: file })
             formData.append("signature_image", file);
             try {
                 await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}/${datadate}`, formData);
                 // await axios.post(`http://localhost:7000/signatureimagesavedriver/${datadate}`,formData)
                 getSignatureImage()
+                getSignatureImageverify()
+                checksignatureandmap()
                 setSignImageUrl(imageUrl);
                 setSuccess(true)
                 setSuccessMessage('Signature Added Sucessfully')
+                setNoChangeData((prevData) => ({
+                    ...prevData,
+                    signatureimage: "done",
+                }));
+
                 // THIS API FRO DRIVER APP 
                 await axios.post(`${apiurltransfer}/signatureimageuploaddriver/${datadate}`, formData)
 
@@ -4256,6 +4550,11 @@ useEffect(() => {
             setSignaturepopup(false);
             setSignImageUrl('')
             getSignatureImage()
+            getSignatureImageverify()
+            setNoChangeData((prevData) => ({
+                ...prevData,
+                signatureimagedelete: "done",
+            }));
         }
         catch (err) {
             console.log(err)
@@ -4302,38 +4601,79 @@ useEffect(() => {
             console.log("Error", error)
         }
     };
+    const getAttachedImageforEtripsheet = async () => {
+        try {
+            const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+
+            if (tripid !== null && tripid && tripid !== "undefined") {
+                const response = await fetch(`${apiUrl}/get-attachedimageforE-tripsheet/${tripid}`);
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
+                    setAttachImageETrip(attachedImageUrls)
+                }
+            }
+        } catch (error) {
+            console.log("Error", error)
+        }
+    };
+
+    // ----------------------------------------
+    // Dont remove this code
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
 
 
+    //         try {
+    //             // const response = await fetch(`${apiUrl}/organizationdata/${encoded}`);
+    //             const response = await fetch(`${apiUrl}/organizationdata`);
+    //             if (response.status === 200) {
 
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setorganizationData(userDataArray[0]);
+    //                     setTriggerData(!triggerdata)
+
+    //                 }
+
+    //             }
+
+    //             // else {
+    //             //     const timer = setTimeout(fetchData, 2000);
+    //             //     return () => clearTimeout(timer);
+    //             // }
+    //         } catch (error) {
+    //             console.log("Error", error)
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [apiUrl, sendEmail, location, organizationdata, triggerdata]);
+    // ---------------------------------
     useEffect(() => {
+
         const fetchData = async () => {
-
-
             try {
-                // const response = await fetch(`${apiUrl}/organizationdata/${encoded}`);
                 const response = await fetch(`${apiUrl}/organizationdata`);
                 if (response.status === 200) {
-
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
-                        setorganizationData(userDataArray[0]);
-                        setTriggerData(!triggerdata)
-
+                        setorganizationData(userDataArray[0]); // Update state safely
                     }
-
-                }
-
-                else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
+                } else {
+                    console.error("Error fetching data, retrying...");
+                    setTimeout(fetchData, 2000); //  Retry only on failure
                 }
             } catch (error) {
-                console.log("Error", error)
+                console.log("Error", error);
             }
         };
 
         fetchData();
-    }, [apiUrl, sendEmail, location, organizationdata, triggerdata]);
+    }, [apiUrl, sendEmail, location]); //  Removed `triggerdata` and `organizationdata`
+
+
 
 
 
@@ -4358,7 +4698,7 @@ useEffect(() => {
         // // Calculate the total hours
         // const totalHours = hours + (minutes || 0) / 60; // if no minutes provided, consider it as 0
         // return totalHours;
-        console.log(timeString, "hhh")
+        // console.log(timeString, "hhh")
         const [hoursPart, minutesPart] = timeString.split('h');
 
         // Convert hours to an integer
@@ -4368,14 +4708,14 @@ useEffect(() => {
         const minutes = parseInt(minutesPart) || 0;
 
         // Convert minutes to a decimal format with two digits
-        console.log(minutes, "mmm")
+        // console.log(minutes, "mmm")
         const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes.toString();
-        console.log(formattedMinutes, "mmminutes")
+        // console.log(formattedMinutes, "mmminutes")
 
         // Combine hours and minutes into a single number as a string and convert to a number
         // const totalHours = parseFloat(`${hours}.${formattedMinutes}`);
         const totalHours = `${hours}.${formattedMinutes}`;
-        console.log(totalHours, "hooo")
+        // console.log(totalHours, "hooo")
         return totalHours;
     }
 
@@ -4412,33 +4752,103 @@ useEffect(() => {
         const NightCount = () => {
             const shedOutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
             const shedInTime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+            const starttimedata = removeSeconds(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime)
+
+            const closetimedata = removeSeconds(formData.closetime || selectedCustomerData.closetime || book.closetime)
+
+            const hybriddata = hybridhclcustomer || hybridhclnavigate
             const TotalDay = calculateTotalDay();
-            const newTimeString = shedOutTime?.replace(":", ".");
-            const newTimeStrings = shedInTime?.replace(":", ".");
+
+            const duty = formData.duty || selectedCustomerData.duty || book.duty;
+            // const newTimeString = shedOutTime?.replace(":", ".");
+            // const newTimeStrings = shedInTime?.replace(":", ".");
+
+            // const newTimeString = hybriddata === 0 ? shedOutTime?.replace(":", ".") : starttimedata?.replace(":", ".")
+            // const newTimeStrings = hybriddata === 0 ? shedInTime?.replace(":", ".") : closetimedata?.replace(":", ".")
+
+            const newTimeString = hybriddata === 0 ? shedOutTime?.replace(":", ".") : hybriddata === 1 && duty === "Outstation" ? shedOutTime?.replace(":", ".") : starttimedata?.replace(":", ".");
+            const newTimeStrings = hybriddata === 0 ? shedInTime?.replace(":", ".") : hybriddata === 1 && duty === "Outstation" ? shedInTime?.replace(":", ".") : closetimedata?.replace(":", ".");
+
+            // console.log(newTimeString,"night2222",newTimeStrings)
+
 
             let calcNight = 0;
 
-            if (calculateTotalDay() === 1) {
-                if (Number(newTimeStrings) > 22.0 || Number(newTimeString) <= 6.00) {
-                    calcNight = 1;
-                }
-                // if (Number(newTimeStrings) > 22.0 && Number(newTimeString) <= 6.00) {
-                //     calcNight = 2;
-                // }
-            }
-            // else if (TotalDay > 1) {
-            //     if (newTimeStrings >= 22.0) {
-            //         calcNight = TotalDay + 1;
-            //     } else {
-            //         calcNight = TotalDay;
-            //     }
-            // }
-            else if (TotalDay > 1) {
+            // let a = 0;
 
-                calcNight = TotalDay - 1;
+            if (duty !== "Outstation") {
+
+                if (calculateTotalDay() === 1) {
+                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                        // console.log(2,"night1")
+                        calcNight = 2;
+                    }
+                    if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                        // console.log(1,"night2")
+                        calcNight = 1;
+                    }
+                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                        // console.log(1,"night3")
+                        calcNight = 1;
+                    }
+
+
+                }
+
+                if (TotalDay > 1) {
+
+                    // console.log(TotalDay,"days")
+                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                        // console.log(TotalDay + 1,"days1")
+                        calcNight = TotalDay + 1;
+                    }
+                    if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                        calcNight = TotalDay;
+                        // console.log(TotalDay ,"days2")
+                    }
+                    if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
+                        calcNight = TotalDay - 1;
+                        // console.log(TotalDay ,"days3")
+                    }
+                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                        calcNight = TotalDay;
+                        // console.log(TotalDay ,"days4")
+                    }
+                    // console.log(calcNight,"daysnii")
+
+
+
+                    // calcNight = TotalDay-1;
+                }
+                // console.log(calcNight,"nightousttaion")
+                // setNightCount(calcNight);
+                setcusnightCount(calcNight)
             }
-            // setNightCount(calcNight);
-            setcusnightCount(calcNight)
+            else {
+                if (calculateTotalDay() === 1) {
+                    if (Number(newTimeString) < 6.00) {
+
+                        calcNight = 1;
+                    }
+                }
+
+
+                if (TotalDay > 1) {
+                    if (Number(newTimeString) < 6.00) {
+                        console.log(Number(newTimeString))
+                        calcNight = TotalDay;
+                    }
+                    else {
+                        calcNight = TotalDay - 1;
+                    }
+
+
+                    // calcNight = TotalDay-1;
+                }
+                // console.log(calcNight,"nightousttion")
+                // setNightCount(calcNight);
+                setcusnightCount(calcNight)
+            }
 
         };
         // setNightTotalCount(calculateTotalDay())
@@ -4446,6 +4856,7 @@ useEffect(() => {
 
         NightCount();
     }, [formData, selectedCustomerData, selectedCustomerDatas, book]);
+    // console.log(cusnightcount,"count")
 
 
 
@@ -4516,22 +4927,33 @@ useEffect(() => {
         const extraHR11 = extraHR111 || 0
         const datatimetoggle = timeToggle || timetogglenavigate
 
-        console.log(extraHR11, "kk", typeof (extraHR11), ex_hrAmount11, datatimetoggle)
+        console.log(extraHR11, "houwwwwwwwwwwwwwww", typeof (extraHR11), ex_hrAmount11, datatimetoggle)
 
 
         if (datatimetoggle === 1) {
-            console.log(extraHR11, "enetr111111111111")
+            // console.log(extraHR11, "houenetr111111111111")
             if (extraHR11) {
                 // if (extraHR11 !== 0 && extraHR11 !== null && !extraHR11) {
-                console.log(extraHR, "lldaaa", typeof (extraHR))
-                const [hrda, mida = 0] = extraHR11.toString().split('.').map(Number);
-                console.log(hrda, "Hour part", mida, "Minute part", ex_hrAmount11);
+                // console.log(extraHR, "houlldaaa", typeof (extraHR))
+                const [hrda, mida = 0] = extraHR11.toString().split('.');
+             
+const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
+                // console.log(mida,"houmidaa",typeof(mida),Number(mida),Number("90"),midaFormatted)
+                
+                // console.log(hrda, "Hour part", mida, "Minute part", ex_hrAmount11);
+                // const datapointdigit = mida < 10 ? mida * 10 : mida
                 const onehrdata = Number(hrda) * Number(ex_hrAmount11)
-                const result = Math.round((ex_hrAmount11 / 60) * 10) / 10;
-                const etrxamin = result * Number(mida)
+                // console.log(onehrdata,"hou1111",datapointdigit)
+                // const result = Math.round((ex_hrAmount11 / 60) * 10) / 10;
+                const result = (ex_hrAmount11 / 60) * 10 / 10;
+                // console.log(result,"hou2cutsomer")
+                const etrxamin = result.toFixed(2) * Number(midaFormatted)
+                // console.log(etrxamin,"hou3customer",onehrdata,etrxamin)
                 const totalamountwithmin = onehrdata + etrxamin
+                // console.log(totalamountwithmin,"hou4customer")
                 const totalamounthrmin = Math.round(totalamountwithmin)
-                console.log(onehrdata, "ooooomnedd", result, etrxamin, totalamountwithmin, totalamounthrmin)
+                // console.log(totalamounthrmin,"hou5")
+                // console.log(onehrdata, "houoooomnedd", result, etrxamin, totalamountwithmin, totalamounthrmin)
                 return totalamountwithmin
                 // const totalamounthrmin = Math.round(totalamountwithmin)
                 // console.log(onehrdata,"ooooomnedd",result,etrxamin,totalamountwithmin,totalamounthrmin)
@@ -4542,7 +4964,7 @@ useEffect(() => {
             }
         }
         else {
-            console.log("enetr")
+            // console.log("enetr")
             let extraAbout_hr1 = Number(extraHR) * Number(extrahr_amount);
             return extraAbout_hr1
         }
@@ -4556,7 +4978,7 @@ useEffect(() => {
         const extraClac = () => {
             // let extraAbout_hr = Number(extraHR) * Number(extrahr_amount);
             const daghr = datatimeminutescahrges(extraHR, extrahr_amount)
-            console.log(daghr, "datagr")
+            console.log(daghr, "hou")
 
             // const extarhour = Math.round(extraAbout_hr)
             const extarhour = Math.round(daghr)
@@ -4589,19 +5011,23 @@ useEffect(() => {
 
     const vendordatatimeminutescahrges = (vendorhr, vendorhramount) => {
 
-        console.log(vendorhr, "kkkkkkkhrrrven", typeof (vendorhr))
+        console.log(vendorhr, "venkkkkkkkhrrrven", typeof (vendorhr))
         const datatimetoggle = timeTogglevendor || timetogglevendornavigate
         if (datatimetoggle === 1) {
             if (vendorhr !== 0) {
 
-                const [hrdavendor, midavendor = 0] = vendorhr.toString().split('.').map(Number);
-                console.log(hrdavendor, "Hour part", midavendor, "Minute vendorpart", vendorhramount);
+                const [hrdavendor, midavendor = 0] = vendorhr.toString().split('.');
+                const midaFormatted = midavendor?.padEnd(2, '0');
+                // console.log(hrdavendor, "venHour part", midavendor, "Minute vendorpart", vendorhramount,midaFormatted);
                 const onehrdata = Number(hrdavendor) * Number(vendorhramount)
-                const result = Math.round((vendorhramount / 60) * 10) / 10;
+                // const result = Math.round((vendorhramount / 60) * 10) / 10;
+                const result = ((vendorhramount / 60) * 10) / 10;
                 console.log(result, "clatimeeeee")
-                const etrxamin = result * Number(midavendor)
+                const etrxamin = result.toFixed(2) * Number(midaFormatted)
                 const totalamountwithmin = onehrdata + etrxamin
+                // console.log(totalamountwithmin,"venextradd")
                 const totalamounthrmin = Math.round(totalamountwithmin)
+                // console.log(totalamounthrmin)
                 console.log(onehrdata, "ooooomneddvendor", result, etrxamin, totalamountwithmin, totalamounthrmin)
                 return totalamounthrmin
 
@@ -4612,7 +5038,8 @@ useEffect(() => {
         }
         else {
 
-            let extraAbout_hr1 = Number(vendorhr) * Number(vendorhramount);
+            let extraAbout_hr1 = Math.round(Number(vendorhr) * Number(vendorhramount));
+           
             return extraAbout_hr1
         }
     }
@@ -4682,35 +5109,77 @@ useEffect(() => {
 
         const newTimeString = shedOutTime?.replace(":", ".");
         const newTimeStrings = shedInTime?.replace(":", ".");
+        const duty = vendorinfo?.vendor_duty;
 
         let calcNight = 0;
+        if (duty !== "Outstation") {
 
-        if (TotalDay === 1) {
-            if (Number(newTimeStrings) >= 22.0 || Number(newTimeString) <= 6.00) {
-                calcNight = 1;
+            if (TotalDay === 1) {
+                // if (Number(newTimeStrings) >= 22.0 || Number(newTimeString) <= 6.00) {
+                //     calcNight = 1;
+                // }
+                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    // console.log(2,"night1")
+                    calcNight = 2;
+                }
+                if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                    // console.log(1,"night2")
+                    calcNight = 1;
+                }
+                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                    // console.log(1,"night3")
+                    calcNight = 1;
+                }
             }
-            // if (Number(newTimeStrings) > 22.0 && Number(newTimeString) <= 6.00) {
-            //     calcNight = 2;
-            // }
+
+
+            if (TotalDay > 1) {
+
+
+                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    // console.log(TotalDay + 1,"days1")
+                    calcNight = TotalDay + 1;
+                }
+                if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                    calcNight = TotalDay;
+                    // console.log(TotalDay ,"days2")
+                }
+                if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
+                    calcNight = TotalDay - 1;
+                    // console.log(TotalDay ,"days3")
+                }
+                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                    calcNight = TotalDay;
+                    // console.log(TotalDay ,"days4")
+                }
+
+
+
+            }
+        } else {
+            if (TotalDay === 1) {
+                if (Number(newTimeString) < 6.00) {
+                    calcNight = 1;
+                }
+            }
+
+            if (TotalDay > 1) {
+                if (Number(newTimeString) < 6.00) {
+                    calcNight = TotalDay;
+                }
+                else {
+                    calcNight = TotalDay - 1;
+                }
+
+
+
+
+
+            }
+            // console.log(calcNight,"nightousttion")
+
         }
 
-        // else if (TotalDay > 1) {
-        //     if (newTimeStrings >= 22.0) {
-        //         calcNight = TotalDay + 1;
-        //     } else {
-        //         calcNight = TotalDay;
-        //     }
-        // }
-
-        else if (TotalDay > 1) {
-
-            calcNight = TotalDay - 1;
-        }
-        // if (newTimeStrings >= 22.0) {
-        //     calcNight = TotalDay + 1;
-        // } else {
-        //     calcNight = TotalDay;
-        // }
 
 
         return calcNight;
@@ -4719,6 +5188,10 @@ useEffect(() => {
     useEffect(() => {
         setVendornightCount(calcNightCount);
     }, [calcNightCount]);
+
+
+
+
 
     useEffect(() => {
         const calcdatavendor = () => {
@@ -4765,7 +5238,7 @@ useEffect(() => {
         const amount6 = parseFloat(vendorinfo.vendor_toll || vendorinfo?.vendortoll) || 0;
         // console.log(vendorinfo.vendor_toll,"totalAmount1vvvvv",vendorinfo?.vendortoll)
         const amount7 = parseFloat(vendorinfo.vendor_advancepaidtovendor || vendorinfo?.advancepaidtovendor) || 0;
-        const amount8 = parseFloat(vendorinfo?.vendorparking) || 0;
+        const amount8 = parseFloat(vendorinfo.vendor_vendorparking || vendorinfo?.vendorparking) || 0;
         const amount9 = parseFloat(vendorinfo.fuelamount) || 0;
 
         // console.log(amount, "1", amount1, "2", amount2, "3", amount3, "4", amount4, "5", amount5, "6", amount6, "8", amount8)
@@ -4785,7 +5258,7 @@ useEffect(() => {
 
     useEffect(() => {
         calculatevendorTotalAmount()
-    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo.advancepaidtovendor, vendorinfo.fuelamount, vendorinfo?.vendorparking])
+    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo.advancepaidtovendor, vendorinfo.fuelamount, vendorinfo?.vendorparking,vendorinfo.vendor_vendorparking ])
 
 
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
@@ -4793,7 +5266,7 @@ useEffect(() => {
 
 
     const fetchdatasupplierraratenametryyyy = async () => {
-        console.log("vendortravelnametryy", selectedCustomerDatas.travelsname, "fff", formData.travelsname, "dd", selectedCustomerData.travelsname, "bb", book.travelsname)
+        // console.log("vendortravelnametryy", selectedCustomerDatas.travelsname, "fff", formData.travelsname, "dd", selectedCustomerData.travelsname, "bb", book.travelsname)
         const supplierdata = selectedCustomerDatas.travelsname ||
             formData.travelsname ||
             selectedCustomerData.travelsname ||
@@ -4884,8 +5357,10 @@ useEffect(() => {
             const extraKMS = Number(vendordata.extraKMS);
             const NHalt = Number(vendordata.NHalt);
             const Bata = Number(vendordata.Bata);
+            const totalDays1 = calculatevendorTotalDays()
             const nHaltdays = Number(vendornightcount);
-            const batahaltdays = Number(vendornightcount)
+            // const batahaltdays = Number(vendornightcount)
+            const batahaltdays = Number(totalDays1)
             console.log(packages, Hours, KMS, Rate, extraHours, extraKMS, NHalt, Bata, "for supplier")
             let dataextrahous, dataextrakms
 
@@ -4904,7 +5379,8 @@ useEffect(() => {
                     console.log(matches, "mmaaa")
 
                     let time = matches - Hours.toFixed(2);
-                    const convertedTime = Number(time.toFixed(2))
+                    // const convertedTime = Number(time.toFixed(2))
+                    const convertedTime = time.toFixed(2)
 
                     console.log(convertedTime, "totalextra",)
                     dataextrahous = convertedTime
@@ -4926,15 +5402,41 @@ useEffect(() => {
                 // dataextrakms = KM
                 dataextrakms = kmfixed
             }
+            
 
-            if (vendorduty === "Outstation") {
-                // console.log(vendorduty,"dutydata")
+           else if (vendorduty === "Outstation") {
+            //     let km = (Number(vendortotkm) <= Number(KMS)) ? Number(vendortotkm) * Number(totalDays1) : Number(vendortotkm)
+            //     let kmfixed2 = Number(km.toFixed(2))
+            //     dataextrakms = kmfixed2
+            // }
+            // if(Number(totalDays1) === 1){
+            //     let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
+            //     let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
+            //     dataextrakms = kmfixed2
+            // }
+            // else{
+            //     let km = Number(vendortotkm)
+            //     let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
+            //     dataextrakms = kmfixed2
+            // }
+            if(Number(totalDays1) === 1){
                 let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
-                let kmfixed2 = Number(km.toFixed(2))
+                let kmfixed2 = Number(km.toFixed(2)) 
                 dataextrakms = kmfixed2
             }
-
-            console.log(dataextrahous, "hrs", dataextrakms, "kmsss")
+            else{
+ 
+                let daysmutilplievendor =  Number(KMS) * Number(totalDays1)
+                // let km = Number(vendortotkm)
+                let km = (Number(vendortotkm) <= daysmutilplievendor) ? daysmutilplievendor : Number(vendortotkm)
+                let kmfixed2 = Number(km.toFixed(2)) 
+                dataextrakms = kmfixed2
+            }
+        }
+        else{
+            dataextrakms = 0
+        }
+            console.log(dataextrahous, "hrs", dataextrakms, "kmsss",vendortotkm ,KMS)
 
 
 
@@ -5096,7 +5598,7 @@ useEffect(() => {
 
     }
 
-console.log(userStatus,"sssss")
+    // console.log(userStatus,"sssss")
     useEffect(() => {
         const a = calculateTotalDay()
 
@@ -5139,7 +5641,7 @@ console.log(userStatus,"sssss")
 
             // console.log(tothr,"totalhrccc")
             totalHours = await convertTimeToNumber(tothr);
-            // console.log(totalHours,"totalhandcccc")
+            // console.log(totalHours,"aqtotalhandcccc")
             const consvertedTotalHour = totalHours
             // console.log(consvertedTotalHour,"totalccccc")
 
@@ -5163,11 +5665,12 @@ console.log(userStatus,"sssss")
             const extraHours = Number(data.extraHours);
             const extraKMS = Number(data.extraKMS);
             const NHalt = Number(data.NHalt);
+            const totaldays = calculateTotalDay()
             const nightHatDays = Number(cusnightcount)
             const NHaltAmount = Math.round(Number(data.NHalt) * nightHatDays);
             setNightCount(nightHatDays);
             // setdriverbeta_Count(calculateTotalDay())
-            setdriverbeta_Count(nightHatDays)
+            setdriverbeta_Count(totaldays)
             setnight_totalAmount(NHaltAmount)
             const Bata = Number(data.Bata);
 
@@ -5205,12 +5708,14 @@ console.log(userStatus,"sssss")
                 //     setExtraHR(convertedTime);
                 // }
                 const matches = consvertedTotalHour
-                console.log(matches, "atch")
+                // console.log(matches, "aqhouatch")
                 if (matches) {
 
                     let time = matches - Hours.toFixed(2);
-                    const convertedTime = Number(time.toFixed(2))
-                    console.log(convertedTime, "totalextra")
+                    // const convertedTime = Number(time.toFixed(2))
+                    // console.log(time,matches,Hours.toFixed(2),"aqcall")
+                    const convertedTime = time.toFixed(2)
+                    // console.log(convertedTime, "aqtotalextra")
 
                     setExtraHR(convertedTime);
                 }
@@ -5231,13 +5736,42 @@ console.log(userStatus,"sssss")
                 let KM = (Number(totkm) - Number(KMS))
                 let cuctomerkm = Number(KM.toFixed(2))
                 setExtraKM(cuctomerkm);
-            } else if (duty === "Outstation") {
+            } 
+            else if (duty === "Outstation") {
                 console.log("duty", duty)
-                let km = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
-                let cuctomerkm2 = Number(km.toFixed(2))
+                // let km = (Number(totkm) <= Number(KMS)) ? Number(KMS) * Number(totaldays) : Number(totkm)
+                // let cuctomerkm2 = Number(km.toFixed(2))
+                // let km = (Number(totkm) <= Number(KMS)) ?  Number(totkm) *  Number(totaldays): Number(totkm)
+                // let cuctomerkm2 = Number(km.toFixed(2))
                 // console.log(km)
+            //     if(Number(totaldays) === 1){
+            //         console.log("duty", duty)
+            //         let km1 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
+            //         let cuctomerkm21 = Number(km1.toFixed(2)) 
+            //         setExtraKM(cuctomerkm21)
+            //     }
+            //     else{
+            //         let km = Number(totkm) 
+            //         let cuctomerkm2 = Number(km.toFixed(2))  * Number(totaldays)
+            //         setExtraKM(cuctomerkm2)
+            //     }
+            //     // setExtraKM(cuctomerkm2)
+            // }
+            if(Number(totaldays) === 1){
+                console.log("duty", duty)
+                let km11 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
+                let cuctomerkm21 = Number(km11.toFixed(2)) 
+                setExtraKM(cuctomerkm21)
+            }
+            else{
+                let daysmutilplie =  Number(KMS) * Number(totaldays)
+                let km1 = (Number(totkm) <= daysmutilplie) ? daysmutilplie : Number(totkm)
+                // let km = Number(totkm) 
+                let cuctomerkm2 = Number(km1.toFixed(2))  
                 setExtraKM(cuctomerkm2)
             }
+            // setExtraKM(cuctomerkm2)
+        }
             else {
                 setExtraKM("")
             }
@@ -5305,15 +5839,38 @@ console.log(userStatus,"sssss")
     //     return true;
     // };
 
+    const handlecalcpackage = (e) => {
+        setcalcPackage(e.target.value)
+        setRatePackage(e.target.value)
+        setNoChangeData((prevData) => ({
+            ...prevData,
+            calcpackage: e.target.value,
+        }));
+    }
+
+    const handlecalcpackageamount = (e) => {
+        setpackage_amount(e.target.value)
+        setNoChangeData((prevData) => ({
+            ...prevData,
+            package_amount: e.target.value,
+        }));
+        // setRatePackage(e.target.value)
+    }
+
 
     const [vehileNames, setVehicleNames] = useState([])
     useEffect(() => {
         const getvehicleName = async () => {
-            const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
-            const data = response.data
-            const names = data?.map(res => res.VechicleNames)
+            try {
+                const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
+                const data = response.data
+                const names = data?.map(res => res.VechicleNames)
 
-            setVehicleNames(names)
+                setVehicleNames(names)
+            }
+            catch (err) {
+                console.log(err)
+            }
         }
         getvehicleName()
 
@@ -5323,15 +5880,15 @@ console.log(userStatus,"sssss")
         setEscort(event.target.value);
         setNoChangeData((prevData) => ({
             ...prevData,
-            escort:event.target.value,
+            escort: event.target.value,
         }));
-        
+
     };
     const handleTransferChange = (event) => {
         setTransferreport(event.target.value);
         setNoChangeData((prevData) => ({
             ...prevData,
-            transferreport:event.target.value,
+            transferreport: event.target.value,
         }));
     };
 
@@ -5342,13 +5899,18 @@ console.log(userStatus,"sssss")
         // if(!isentertripID){
         //     return
         // }
+        handleTripmapverify()
+        // await getSignatureImage()
+        getSignatureImageverify()
+        getSignatureImage()
 
-        console.log(overetripsheetoutstation ,overetripsheetstatus,"over")
+
+        // console.log(overetripsheetoutstation ,overetripsheetstatus,"over")
         if (!isEditMode) {
             return
         }
         // oustation")Instation
-        if(overetripsheetstatus && (overetripsheetoutstation === "Instation" ||overetripsheetoutstation === "oustation") ){
+        if (overetripsheetstatus && (overetripsheetoutstation === "Instation" || overetripsheetoutstation === "oustation")) {
             setWarning(true);
             setWarningMessage("Status is closed, u dont have permission open this Overview.");
             return
@@ -5750,7 +6312,7 @@ console.log(userStatus,"sssss")
     //     }
     //     handleHybridCheck()
     // }, [customer, tripID, apiUrl])
-
+// repeteedapi code--------------------------------------------------------------------------
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -5772,9 +6334,13 @@ console.log(userStatus,"sssss")
 
         fetchData();
     }, [book, selectedCustomerData, selectedCustomerDatas, formData, apiUrl]);
+    // --------------------------------------------------------------------
 
     const handleEditMap = () => {
         setMapPopUp(true)
+        // getSignatureImageverify();
+        // handleTripmapverify();
+        // checksignatureandmap();
         if (manualTripID.length > 0) {
             // setEditMap(!EditMap);
             const editTrigger = "editMode"
@@ -5829,24 +6395,47 @@ console.log(userStatus,"sssss")
         }
     };
 
+    // ----------------Dont Remove This-------------------
+    // const TripID = formData.tripid || selectedCustomerData.tripid || book.tripid
 
-    const TripID = formData.tripid || selectedCustomerData.tripid || book.tripid
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid
+    //         try {
+
+    //             const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${tripid}`)
+    //             setManualTripID(response.data)
+    //         }
+    //         catch (error) {
+    //             // console.log(error);
+
+    //         }
+    //     }    
+    //     fetchData()
+    // }, [manualMarkTrigger, TripID, mapButtonTrigger, mapimgpopupOpen])
+    // ---------------------------------------------------------
 
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid
-            try {
+            const tripid = formData?.tripid || selectedCustomerData?.tripid || book?.tripid;
 
-                const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${tripid}`)
-                setManualTripID(response.data)
+            if (!tripid) {
+                console.warn("TripID is missing, skipping API call");
+                return;
+            }
+
+            try {
+                const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${encodeURIComponent(tripid)}`);
+                setManualTripID(response.data);
             }
             catch (error) {
-                // console.log(error);
-
+                console.error("Error fetching trip data:", error);
             }
-        }
-        fetchData()
-    }, [manualMarkTrigger, TripID, mapButtonTrigger, mapimgpopupOpen])
+        };
+
+        fetchData();
+    }, [manualMarkTrigger, formData.tripid, selectedCustomerData.tripid, book.tripid, mapButtonTrigger, mapimgpopupOpen]);
+
     const handleDeleteMap = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         try {
@@ -6537,6 +7126,7 @@ console.log(userStatus,"sssss")
     const timeParts = formattedReportTime?.split(".") || ["0", "0"]; // Default to ["0", "0"] if undefined
     let hours1 = parseInt(timeParts[0] || 0, 10); // Parse hours as an integer
     let minutes1 = parseInt(timeParts[1] || 0, 10); // Parse minutes as an integer
+console.log(hours1,"tripppppppnewwwweeeeeeeee",minutes1);
 
     minutes1 += 30;
 
@@ -6549,11 +7139,14 @@ console.log(userStatus,"sssss")
     // console.log(bonusReportTime1, "assssssss");
     let startdatecalc;
     if (bonusReportTime1 === "24.00") {
-        console.log("It's 24.00, converting to 00.00");
+        // console.log("It's 24.00, converting to 00.00");
         startdatecalc = "00.00";
     }
     // console.log(startdatecalc, 'asssssssssssssssssss');
     const bonusReportTime = bonusReportTime1 === "24.00" ? startdatecalc : bonusReportTime1
+    console.log(TripReportTime,"tripppppppnewwww",formattedReportTime,bonusReportTime1,hours1,minutes1,timeParts,"www",bonusReportTime);
+    console.log(formattedReportTime,"formatttttttttttttttttttttttttttttt",parseFloat(formattedReportTime).toFixed(2));
+    
 
     // const bonusReportTime = (parseFloat(formattedReportTime || 0) + 0.30).toFixed(2);
     // console.log(startdatecalc, 'reporttimeeeeee', formattedReportTime, "ee33eeee", convertReportTime);
@@ -6589,7 +7182,7 @@ console.log(userStatus,"sssss")
         // console.log("Current Date Object:", currentDateObj);
         // console.log("Formatted Trip Report Date Object:", formattedDateObj);
         // console.log(finalreportTimecalc,"reporttimecalccccc",finalCurrentTimecalc,typeof(finalreportTimecalc),typeof(finalCurrentTimecalc),a);
-
+       const MidNightReportTime = parseFloat(formattedReportTime).toFixed(2);
 
         if (currentDateObj < formattedDateObj) {
             console.log('-----------111111');
@@ -6613,13 +7206,17 @@ console.log(userStatus,"sssss")
             setHideField(true);
             console.log("Both dates are equal allowed");
         }
-        else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(finalreportTimecalc) < parseFloat(finalCurrentTimecalc).toFixed(2)) {
+        else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(finalreportTimecalc) < parseFloat(finalCurrentTimecalc).toFixed(2) && parseFloat(MidNightReportTime) < 23.30) {
             console.log('-----------111111444444');
 
             setHideField(true);
             console.log("Both dates are equal not allowed");
         }
-    }, [enterTrigger,book]);
+        else if(currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(MidNightReportTime) >= 23.30){
+            setHideField(false);
+            console.log("midnight 23.30 time is affected");
+        }
+    }, [enterTrigger, book]);
 
     // }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
 
@@ -6644,7 +7241,7 @@ console.log(userStatus,"sssss")
                 console.log("superAdminAccess:", superAdminAccess);
 
                 // Normalize station data for consistency
-                const normalizedStation = station.map(s => s.trim().toLowerCase());
+                // const normalizedStation = station.map(s => s.trim().toLowerCase());
 
                 // Condition 1: Temporary Closed with All or Chennai
                 // if (
@@ -6653,17 +7250,16 @@ console.log(userStatus,"sssss")
                 //     (station.includes("Chennai") || station.includes("All"))
                 // )
                 if (
-                    (statusCheck === "Temporary Closed") &&
-                    (superAdminAccess !== "SuperAdmin" ) &&
+                    (oldStatusCheck === "Temporary Closed") &&
+                    (superAdminAccess !== "SuperAdmin") &&
                     (station.includes("Chennai") || station.includes("All"))
-                )
-                 {
+                ) {
                     console.log("Condition 1: Temporary Closed with All or Chennai");
                     setTemporaryStatus(false);
                     setEmptyState(false)
                     return;
                 }
-                if (statusCheck === "Opened") {
+                if (oldStatusCheck === "Opened") {
                     setTemporaryStatus(false);
                     setEmptyState(false)
                     return
@@ -6676,10 +7272,16 @@ console.log(userStatus,"sssss")
                 // ) 
 
                 if (
-                    (statusCheck === "Temporary Closed") &&
+                    (oldStatusCheck === "Temporary Closed") &&
                     (superAdminAccess !== "SuperAdmin") &&
                     (!station.includes("Chennai") || !station.includes("All"))
-                ) 
+                )
+
+                // if (
+                //     (oldStatusCheck === "Temporary Closed") &&
+                //     (superAdminAccess !== "SuperAdmin") &&   (superAdminAccess !== "Billing_Headoffice") && (superAdminAccess !== "Assistant CFO")
+                //     (!station.includes("Chennai") || !station.includes("All"))
+                // ) 
                 {
                     console.log("Condition 2: Temporary Closed without All or Chennai");
                     setTemporaryStatus(true);
@@ -6687,9 +7289,9 @@ console.log(userStatus,"sssss")
                     setHideField(true)
                     return;
                 }
-                  // Condition 4: Closed with Chennai or All
-                  if (
-                    (statusCheck === "Closed") &&
+                // Condition 4: Closed with Chennai or All
+                if (
+                    (oldStatusCheck === "Closed") &&
                     (station.includes("Chennai") || station.includes("All"))
                 ) {
                     console.log("Condition 4: Closed with Chennai or All");
@@ -6704,14 +7306,25 @@ console.log(userStatus,"sssss")
                 //     (!station.includes("Chennai") || !station.includes("All"))
                 // ) 
                 if (
-                    (statusCheck === "Closed") &&
+                    (oldStatusCheck === "Closed") &&
                     (superAdminAccess !== "SuperAdmin") &&
                     (!station.includes("Chennai") || !station.includes("All"))
-                ) 
-                {
+                ) {
                     console.log("Condition 33: Temporary Closed without All or Chennai");
                     setEmptyState(true);
                     setTemporaryStatus(true);
+                    return;
+                }
+                if ((oldStatusCheck === "Billed") && (superAdminAccess === "Assistant CFO")) {
+                    setTemporaryStatus(true);
+                    setHideField(true);
+                    setEmptyState(false);
+                    return;
+                }
+                if ((oldStatusCheck === "Billed") && (superAdminAccess !== "SuperAdmin")) {
+                    setTemporaryStatus(true);
+                    setHideField(true);
+                    setEmptyState(true);
                     return;
                 }
 
@@ -6722,7 +7335,7 @@ console.log(userStatus,"sssss")
                     return;
                 }
 
-              
+
 
                 // Condition 5: Closed and superAdminAccess is 0
                 // if (
@@ -6731,11 +7344,10 @@ console.log(userStatus,"sssss")
                 //     (!station.includes("Chennai") && !station.includes("All"))
                 // )
                 if (
-                    statusCheck === "Closed" &&
+                    oldStatusCheck === "Closed" &&
                     superAdminAccess !== "SuperAdmin" &&
                     (!station.includes("Chennai") && !station.includes("All"))
-                )
-                 {
+                ) {
                     console.log("Condition 5: Closed without Chennai or All and superAdminAccess 0");
                     setTemporaryStatus(true);
                     setEmptyState(true);
@@ -6751,8 +7363,7 @@ console.log(userStatus,"sssss")
                 if (
                     (statusCheck === "Closed" || statusCheck === "Billed") &&
                     (superAdminAccess !== "SuperAdmin")
-                ) 
-                {
+                ) {
                     console.log("Condition 6: Closed or Billed and superAdminAccess is 0");
                     setEmptyState(true);
                     setHideField(true)
@@ -6760,7 +7371,7 @@ console.log(userStatus,"sssss")
                 }
 
                 // Condition 7: Not Closed
-                if (statusCheck !== "Closed") {
+                if (oldStatusCheck !== "Closed") {
                     console.log("Condition 7: Not Closed");
                     setEmptyState(false);
                     setTemporaryStatus(false);
@@ -6772,7 +7383,7 @@ console.log(userStatus,"sssss")
         };
 
         fetchData();
-    }, [enterTrigger,book]);
+    }, [enterTrigger, book]);
 
     // Edit Button Hide
 
@@ -6791,6 +7402,9 @@ console.log(userStatus,"sssss")
             else if (statuschecking === "Temporary Closed" && ((station.includes('Chennai') || station.includes('All')))) {
                 SetEditButtonStatusCheck(false)
             }
+            else if (statuschecking === "Temporary Closed" && ((!station.includes('Chennai') || !station.includes('All'))) && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO")) {
+                SetEditButtonStatusCheck(false)
+            }
             else if (statuschecking === "Temporary Closed" || statuschecking === "Closed" || statuschecking === "Billed") {
                 SetEditButtonStatusCheck(true)
             }
@@ -6807,88 +7421,856 @@ console.log(userStatus,"sssss")
         EditButtonHide()
     }, [statuschecking])
 
-    
-
-    // getVehcileHistoryData in vehcileHistoryData
-
 
     useEffect(() => {
-        const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo;
-        const datecheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate;
-
-        const fetchData = async () => {
-
+        const fetchDatastatus = async () => {
             try {
-                const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, {
-                    vehicleNo: vehicleNo,
-                    dateCheck: datecheck
+                const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
+                    username: loginusername,
                 });
-                // console.log(response.data, "conflictdataaaa");
+                const data = response.data;
+                const station = data?.map(li => li.stationname.split(",")).flat();
+                console.log(station, "disuseraww")
+                setUserStatusPermission(station)
 
-                const mainDatas = response.data;
-                const minData = mainDatas.reduce((min, current) => {
-                    const timesWithDates = [
-                        { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
-                        { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
-                        { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
-                        { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
-                    ].filter(entry => entry.time && entry.date);
-
-                    // Find the minimum time in the current row
-                    const minCurrentRow = timesWithDates.reduce((minRow, currentRow) => {
-                        return parseFloat(currentRow.time) < parseFloat(minRow.time) ? currentRow : minRow;
-                    }, timesWithDates[0]);
-
-                    // Compare with the overall minimum
-                    return parseFloat(minCurrentRow.time) < parseFloat(min.time) ? minCurrentRow : min;
-                }, { time: Infinity, date: null, tripid: null }); // Start with an impossibly high time
-                setMinTimeData(minData)
-
-
-
-                const maxData = mainDatas.reduce((max, current) => {
-                    const timesWithDates = [
-                        { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
-                        { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
-                        { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
-                        { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
-                    ].filter(entry => entry.time && entry.date);
-
-                    // Find the maximum time in the current row
-                    const maxCurrentRow = timesWithDates.reduce((maxRow, currentRow) => {
-                        return parseFloat(currentRow.time) > parseFloat(maxRow.time) ? currentRow : maxRow;
-                    }, timesWithDates[0]);
-
-                    // Compare with the overall maximum
-                    return parseFloat(maxCurrentRow.time) > parseFloat(max.time) ? maxCurrentRow : max;
-                }, { time: -Infinity, date: null, tripid: null }); // Start with an impossibly low time
-                setMaxTimeData(maxData)
-
-
-                // const rowsWithShedInDate = mainDatas?.filter(current =>
-                //     current?.shedindate !== null && current?.shedindate !== datecheck
-                // );
-                const notEqualRows = mainDatas?.filter(current =>
-                    current?.shedindate !== null && current?.shedindate !== datecheck
-                );
-
-                const equalRows = mainDatas?.filter(current =>
-                    current?.shedindate !== null && current?.shedindate === datecheck
-                );
-                const rowsWithShedInDate = notEqualRows?.length > 0 ? notEqualRows : equalRows;
-
-                setShedInTimeData(rowsWithShedInDate)
 
 
             }
             catch (err) {
-                console.log(err, "error");
+                console.log(err)
+            }
+        }
+        fetchDatastatus()
+    }, [loginusername, isEditMode])
+
+
+    // const statuschecking = selectedStatus;
+    // console.log(statuschecking,'status checking',selectedCustomerData.status,book.status,selectedStatus);
+    const handleDatapermission = useCallback((datatrip) => {
+        // console.log("joo")
+        const userstation = userStatus
+        if (userstation !== null) {
+
+            // console.log(statuschecking,"percheck")
+            if ((statuschecking === "Closed" || statuschecking === "Billed") && ((userstation.includes('Chennai') || userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO" || superAdminAccess !== "SuperAdmin")) {
+                // SetArticfialchangedata(true)
+                // console.log("pernotstatus1")
+                setPermissionDeleteRoles(true)
+                return
+            }
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed") && ((userstation.includes('Chennai') || userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice" && datatrip === 1)) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return
+            }
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed") && ((userstation.includes('Chennai') || userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice" && datatrip === 0)) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return
+            }
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed") && ((userstation.includes('Chennai') || userstation.includes('All'))) && (superAdminAccess !== "Billing_Headoffice") && datatrip === 1) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return
+            }
+            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice") && datatrip === 1) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return
+            }
+            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice") && datatrip === 0) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return
+            }
+            else if ((statuschecking === "Opened" || statuschecking === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess === "Assistant CFO") && datatrip === 1) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return
+            }
+            else if ((statuschecking === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess !== "Billing_Headoffice") && datatrip === 1) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                setPermissionDeleteRoles(false)
+                return
+            }
+            else if (superAdminAccess === "SuperAdmin") {
+
+                // console.log("pernotstatus3")
+                setPermissionDeleteRoles(false)
+                return
+            }
+            else {
+                setPermissionDeleteRoles(true)
+                return
+            }
+        }
+        else {
+            setPermissionDeleteRoles(true)
+            return
+        }
+
+
+
+
+
+    }, [userStatus])
+
+    // const handlepermissionforspeedDialdelete = useCallback((datatrip)=>{
+    //     // console.log("call the datadelete")
+    //     const userstation = userStatus
+    //     if(userstation !== null){
+
+
+    //     // console.log(userstation,"callstate")
+    //     console.log("deletepernotstatus211",statuschecking,superAdminAccess,datatrip )
+    //     //  if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1)  ) {
+    //     //     if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')) ) ) {
+    //     //     console.log("deletepernotstatus2",statuschecking)
+    //     //     // SetArticfialchangedata(false)
+    //     //     console.log("deletecondition1")
+
+    //     //     setSpeedDialAccessdelete(true)
+    //     //     return  
+    //     // }
+    //     if ((statuschecking === "Opened" && statuschecking === "Temporary Closed" ) &&  (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')) ) ) {
+    //         console.log("deletepernotstatus2",statuschecking)
+    //         // SetArticfialchangedata(false)
+    //         console.log("deletecondition1")
+
+    //         setSpeedDialAccessdelete(true)
+    //         return  
+    //     }
+    //     else if ((statuschecking !== "Closed" && statuschecking !== "Billed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && ((superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") && datatrip === 1)) {
+    //         console.log("deletecondition2")
+    //         setSpeedDialAccessdelete(true)
+    //         return
+    //     }
+    //     else if ((statuschecking === "Opened" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+    //         setSpeedDialAccessedit(true)
+    //     }
+
+    //     else if(superAdminAccess === "SuperAdmin"){
+
+    //         // console.log("pernotstatus3")
+    //         console.log("deletecondition3")
+    //         setSpeedDialAccessdelete(true)
+    //         return 
+    //     }
+    //     else{
+    //         console.log("deletecondition4")
+    //         setSpeedDialAccessdelete(false)
+    //         return 
+    //     }
+    // }
+    // else{
+    //     console.log("deletecondition5")
+    //     setSpeedDialAccessdelete(false)
+    //     return 
+    // }
+    // },[userStatus,statuschecking])
+
+
+    const handlepermissionforspeedDialdelete = (datatrip) => {
+        // console.log("call the datadelete")
+        const userstation = userStatus
+        if (userStatus !== null) {
+            // console.log(userstation,"callstate")
+            // console.log("call the dataedit",datatrip)
+            if ((statuschecking !== "Closed" && statuschecking !== "Billed") && (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')))) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                //    console.log("callfirst")
+                setSpeedDialAccessdelete(true)
+
+                return
+            }
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && ((superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") && datatrip === 1)) {
+                setSpeedDialAccessdelete(true)
+            }
+            else if ((statuschecking === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+                setSpeedDialAccessdelete(true)
+            }
+            // else if ((statuschecking === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+            //     setSpeedDialAccessedit(true)
+            // }
+
+
+
+            else if (superAdminAccess === "SuperAdmin") {
+
+                // console.log("pernotstatus3")
+                setSpeedDialAccessdelete(true)
+                return
+            }
+            else {
+                // console.log("calllast")
+                setSpeedDialAccessdelete(false)
+                return
+            }
+        }
+        else {
+            setSpeedDialAccessdelete(false)
+            return
+        }
+    }
+
+    const handlepermissionforspeedDialedit = (datatrip) => {
+        const userstation = userStatus
+        if (userStatus !== null) {
+            // console.log(userstation,"callstate")
+            // console.log("call the dataedit",datatrip)
+            if ((statuschecking !== "Closed" && statuschecking !== "Billed") && (superAdminAccess !== "SuperAdmin" && datatrip === 1) && ((userstation.includes('Chennai') || userstation.includes('All')))) {
+                // console.log("pernotstatus2",statuschecking)
+                // SetArticfialchangedata(false)
+                //    console.log("callfirst")
+                setSpeedDialAccessedit(true)
+
+                return
+            }
+            else if ((statuschecking !== "Closed" && statuschecking !== "Billed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && ((superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") && datatrip === 1)) {
+                setSpeedDialAccessedit(true)
+                return
+            }
+            else if ((statuschecking === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+                setSpeedDialAccessedit(true)
+                return
+            }
+            // else if ((statuschecking === "Temporary Closed" ) && ((!userstation.includes('Chennai') || !userstation.includes('All')) ) && (superAdminAccess !== "SuperAdmin" && datatrip === 1)) {
+            //     setSpeedDialAccessedit(true)
+            // }
+
+
+
+            else if (superAdminAccess === "SuperAdmin") {
+
+                // console.log("pernotstatus3")
+                setSpeedDialAccessedit(true)
+                return
+            }
+            else {
+                // console.log("calllast")
+                setSpeedDialAccessedit(false)
+                return
+            }
+        }
+        else {
+            setSpeedDialAccessedit(false)
+            return
+        }
+    }
+
+    //    const advancefuel = vendorinfo.fuelamount
+
+    const fuelAdvnacedisabled = useCallback(() => {
+        // const advancefuel = vendorinfo.fuelamount
+        // console.log(advancefuel,"disfule")
+        const advancefuel = vendorinfo.fuelamount
+        // console.log(advancefuel,"disfule")
+        const userstation = userstatuspermission
+
+        // console.log(userstation,"dis",userstatuspermission,oldStatusCheck)
+
+        if (userstatuspermission.length > 0) {
+            if (advancefuel && fueladvancedamounthide === null) {
+
+                if ((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')))) {
+                    console.log("discondition1")
+                    setFuelDataAmountDis(true)
+
+                    return
+                }
+                else if ((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')))) {
+                    setFuelDataAmountDis(true)
+                    console.log("discondition2")
+                    return
+                }
+                else {
+                    console.log("discondition3")
+                    setFuelDataAmountDis(true)
+                    return
+                }
+
+
+            }
+            else {
+                if ((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')))) {
+                    console.log("discondition4")
+                    setFuelDataAmountDis(false)
+                    return
+                }
+                else if ((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')))) {
+                    console.log("discondition5")
+                    setFuelDataAmountDis(false)
+                    return
+                }
+                else if ((oldStatusCheck === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess !== "Billing_Headoffice" && superAdminAccess !== "Assistant CFO")) {
+                    console.log("discondition6")
+                    setFuelDataAmountDis(true)
+                    return
+                }
+                else if ((oldStatusCheck === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice" && superAdminAccess === "Assistant CFO")) {
+                    console.log("discondition7")
+                    setFuelDataAmountDis(false)
+                    return
+                }
+
 
             }
         }
-        fetchData()
-    }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues])
+        else {
+            console.log("discondition8")
+            setFuelDataAmountDis(false)
+            return
+        }
 
+    }, [userStatus, oldStatusCheck, isEditMode, userstatuspermission])
+
+    //    console.log(fueldataamountdis,"diss")
+    useEffect(() => {
+        handleDatapermission(Tripsheet_delete1)
+        handlepermissionforspeedDialedit(Tripsheet_modify1)
+        handlepermissionforspeedDialdelete(Tripsheet_delete1)
+
+        // fuelAdvnacedisabled()
+    }, [statuschecking, userStatus, isEditMode])
+
+    useEffect(() => {
+        fuelAdvnacedisabled()
+        // console.log("calldis")
+    }, [vendorinfo, userstatuspermission])
+    //     console.log(fueldataamountdis,"dis"
+
+    // console.log(speeddailacesss,"callper",speeddailacesssedit,userStatus)
+
+
+
+    // getVehcileHistoryData in vehcileHistoryData
+
+
+    // useEffect(() => {
+    //     const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo;
+    //     const datecheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate;
+
+    //     const fetchData = async () => {
+
+    //         try {
+    //             const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, {
+    //                 vehicleNo: vehicleNo,
+    //                 dateCheck: datecheck
+    //             });
+    //             // console.log(response.data, "conflictdataaaa");
+
+    //             const mainDatas = response.data;
+    //             const minData = mainDatas.reduce((min, current) => {
+    //                 const timesWithDates = [
+    //                     { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
+    //                     { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
+    //                     { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
+    //                     { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
+    //                 ].filter(entry => entry.time && entry.date);
+
+    //                 // Find the minimum time in the current row
+    //                 const minCurrentRow = timesWithDates.reduce((minRow, currentRow) => {
+    //                     return parseFloat(currentRow.time) < parseFloat(minRow.time) ? currentRow : minRow;
+    //                 }, timesWithDates[0]);
+
+    //                 // Compare with the overall minimum
+    //                 return parseFloat(minCurrentRow.time) < parseFloat(min.time) ? minCurrentRow : min;
+    //             }, { time: Infinity, date: null, tripid: null }); // Start with an impossibly high time
+    //             setMinTimeData(minData)
+
+
+
+    //             const maxData = mainDatas.reduce((max, current) => {
+    //                 const timesWithDates = [
+    //                     { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
+    //                     { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
+    //                     { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
+    //                     { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
+    //                 ].filter(entry => entry.time && entry.date);
+
+    //                 // Find the maximum time in the current row
+    //                 const maxCurrentRow = timesWithDates.reduce((maxRow, currentRow) => {
+    //                     return parseFloat(currentRow.time) > parseFloat(maxRow.time) ? currentRow : maxRow;
+    //                 }, timesWithDates[0]);
+
+    //                 // Compare with the overall maximum
+    //                 return parseFloat(maxCurrentRow.time) > parseFloat(max.time) ? maxCurrentRow : max;
+    //             }, { time: -Infinity, date: null, tripid: null }); // Start with an impossibly low time
+    //             setMaxTimeData(maxData)
+
+
+    //             // const rowsWithShedInDate = mainDatas?.filter(current =>
+    //             //     current?.shedindate !== null && current?.shedindate !== datecheck
+    //             // );
+    //             const notEqualRows = mainDatas?.filter(current =>
+    //                 current?.shedindate !== null && current?.shedindate !== datecheck
+    //             );
+
+    //             const equalRows = mainDatas?.filter(current =>
+    //                 current?.shedindate !== null && current?.shedindate === datecheck
+    //             );
+    //             const rowsWithShedInDate = notEqualRows?.length > 0 ? notEqualRows : equalRows;
+
+    //             setShedInTimeData(rowsWithShedInDate)
+
+
+    //         }
+    //         catch (err) {
+    //             console.log(err, "error");
+
+    //         }
+    //     }
+    //     fetchData()
+    // }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues])
+    useEffect(() => {
+        const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || "";
+        const dateCheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate || "";
+
+        if (!vehicleNo || !dateCheck) {
+            console.warn("Missing vehicleNo or dateCheck. Skipping API call.");
+            return;
+        }
+
+        const fetchData = async () => {
+            try {
+                const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, { vehicleNo, dateCheck });
+                const mainDatas = response.data;
+
+                if (!mainDatas.length) {
+                    console.warn("No data received.");
+                    return;
+                }
+
+                const getMinMaxData = (isMin) => {
+                    return mainDatas.reduce((result, current) => {
+                        const timesWithDates = [
+                            { time: current.shedouttime?.replace(":", "."), date: current.shedoutdate, tripid: current.Tripid },
+                            { time: current.reporttime?.replace(":", "."), date: current.reportdate, tripid: current.Tripid },
+                            { time: current.closetime?.replace(":", "."), date: current.closedate, tripid: current.Tripid },
+                            { time: current.shedintime?.replace(":", "."), date: current.shedindate, tripid: current.Tripid }
+                        ].filter(entry => entry.time && entry.date);
+
+                        if (!timesWithDates.length) return result;
+
+                        const bestCurrentRow = timesWithDates.reduce((bestRow, currentRow) => {
+                            return isMin
+                                ? parseFloat(currentRow.time) < parseFloat(bestRow.time) ? currentRow : bestRow
+                                : parseFloat(currentRow.time) > parseFloat(bestRow.time) ? currentRow : bestRow;
+                        }, timesWithDates[0]);
+
+                        return isMin
+                            ? parseFloat(bestCurrentRow.time) < parseFloat(result.time) ? bestCurrentRow : result
+                            : parseFloat(bestCurrentRow.time) > parseFloat(result.time) ? bestCurrentRow : result;
+                    }, { time: isMin ? Infinity : -Infinity, date: null, tripid: null });
+                };
+
+                setMinTimeData(getMinMaxData(true));
+                setMaxTimeData(getMinMaxData(false));
+
+                const notEqualRows = mainDatas.filter(current => current?.shedindate && current?.shedindate !== dateCheck);
+                setShedInTimeData(notEqualRows.length > 0 ? notEqualRows : mainDatas.filter(current => current?.shedindate === dateCheck));
+
+            } catch (err) {
+                console.error("API Error:", err);
+            }
+        };
+
+        fetchData();
+    }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues]);
+
+    const handleMessagetrip = () => {
+        setDialogMessage(true)
+    }
+    const handleCloseMessagetrip = () => {
+        setDialogMessage(false)
+    }
+    //   useEffect(()=>{
+    //     getSignatureImageverify();
+    //     handleTripmapverify();
+    //     checksignatureandmap();
+    //     fuelAdvnacedisabled();
+    //   },[])
+
+    useEffect(() => {
+        const initialize = async () => {
+            try {
+                // console.log("count1")
+                await checksignatureandmap();
+                await getSignatureImageverify();
+                await handleTripmapverify();
+                await checksignatureandmap();
+                fuelAdvnacedisabled();
+            } catch (error) {
+                console.error("Initialization failed:", error);
+            }
+        };
+
+        initialize();
+    }, [isAddload, status1, userstatuspermission]);
+
+    //   getting lat and long from vehcileAccessLocation tables  (gpsdevicedata.js file)
+    const gpsTripId = formData.tripid || selectedCustomerData.tripid || book.tripid;
+// console.log(gpsTripId,"gpsTripIdddd111111111");
+
+    useEffect(() => {
+        const fetchData = async () => {
+            // console.log(gpsTripId,"gpsTripIdddd2222222222");
+
+            try {
+                const response = await axios.get(`${apiUrl}/getLatLongByTripId`, {
+                    params: { gpsTripId }
+                });
+
+                console.log(response.data, "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]-------------------------");
+                setTripGpsData(response.data)
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        if (gpsTripId) {
+            fetchData();
+        }
+    }, [apiUrl,enterTrigger]);
+    useEffect(() => {
+        const fetchData = async () => {
+            // console.log(gpsTripId,"gpsTripIdddd33333333333333");
+            try {
+                const response = await axios.get(`${apiUrl}/appLatLongDetailsByTripId`, {
+                    params: { gpsTripId }
+                });
+
+                console.log(response.data, "fullgpsdataaaaaaaa");
+                setFullGpsData(response.data)
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        if (gpsTripId) {
+            fetchData();
+        }
+    }, [apiUrl, gpsTripId]);
+    // allLatLongDetailsByTripId
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/allLatLongDetailsByTripId`, {
+                    params: { gpsTripId }
+                });
+
+                console.log(response.data, "fullgpsdataaaaaaaa");
+                setAllGpsData(response.data)
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        if (gpsTripId) {
+            fetchData();
+        }
+    }, [apiUrl, gpsTripId,enterTrigger]);
+
+
+const handleExcelDownloadtrip = async(rowdataar) => {
+    const workbook = new Excel.Workbook();
+    const workSheetName = 'Worksheet-1';
+    if(rowdataar.length === 0){
+        setError(true)
+        setErrorMessage("No data found ")
+        return
+    }
+    try {
+        const fileName = "tripsheetviewGps_Log";
+        const worksheet = workbook.addWorksheet(workSheetName);
+
+        // Define only the headers you need
+       
+// console.log(maplogcolumns,"plog")
+      
+// const columns1 = maplogcolumnsexcel.map(({ field, headerName}) => ({
+//     key: field,
+//     header: headerName,
+    
+// }));
+
+ 
+const columns1 = maplogcolumnsexcel
+  .map(({ field, headerName }) => ({
+    key: field,
+    header: headerName,
+  }))
+
+console.log(columns1,"hnplopppp",rowdataar)
+        worksheet.columns = columns1;
+        worksheet.getRow(1).font = { bold: true };
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '9BB0C1' },
+            };
+        });
+
+        worksheet.getRow(1).height = 30;
+
+        // Set default column width based on header length
+        worksheet.columns.forEach((column) => {
+            column.width = column.header.length + 5;
+            column.alignment = { horizontal: 'center', vertical: 'middle' };
+        });
+  
+// const data
+const updatedData = rowdataar.map((entry,index) => ({
+    ...entry,
+    date: entry.date ? dayjs(entry.date).format("DD-MM-YYYY") : "",
+    ids :index + 1
+  }));
+  
+  console.log(updatedData,"hnupppppdate");
+        
+        // Add rows of data
+        updatedData.forEach((singleData,index) => {
+            // console.log(singleData,"single")
+         
+          
+           
+            const rowdata= worksheet.addRow(singleData);
+            worksheet.columns.forEach((column) => {
+                const cellValue = singleData[column.key] || '';
+                const cellLength = cellValue.toString().length;
+                const currentColumnWidth = column.width || 0;
+                column.width = Math.max(currentColumnWidth, cellLength + 5);
+            });
+
+            // Apply borders for each cell
+            rowdata.eachCell((cell) => {
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' },
+                };
+            });
+        });
+
+        // Write to buffer and save the file
+        const buf = await workbook.xlsx.writeBuffer();
+        saveAs(new Blob([buf]), `${fileName}.xlsx`);
+
+    } catch (error) {
+        console.error('<<<ERROR>>>', error);
+    } finally {
+        workbook.removeWorksheet(workSheetName);  // Clean up the worksheet
+    }
+};
+// console.log(rowexcel,"hnrowexcel",row)
+
+const handlePdfDownloadtrip = (row)=>{
+
+    if(row.length === 0){
+        setError(true)
+        setErrorMessage("No data found ")
+        return
+    }
+ const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "mm",
+            format: "tabloid" // [width, height] in inches
+        });
+        pdf.setFontSize(15);
+        pdf.setFont('helvetica', 'normal');
+        // pdf.text("VehicleStatement", 10, 10);
+        //  const header = Object.keys(row[0]);
+        const text = "TripsheetGpsLog";
+
+        // Get page width
+        const pageWidth = pdf.internal.pageSize.getWidth();
+
+        // Calculate text width
+        const textWidth = pdf.getTextWidth(text);
+
+        // Calculate the x position to center the text
+        const xPos = (pageWidth - textWidth) / 2;
+
+        // Add text to PDF at calculated position
+        pdf.text(text, xPos, 10);
+
+
+
+const header = maplogcolumnsexcel.map((row) => row.headerName); 
+
+// const header = maplogcolumnsexcel
+// .filter((row) => row.field !== "date") // Exclude rows with field "edit" or "actions"
+// .map((row) => row.headerName); 
+        console.log(header,"shnplpdff")
+
+
+        const rowValues = row.map((row, index) => { // Declare index here
+            return maplogcolumnsexcel.map(column => { 
+               
+                if (column.field === "ids") {
+                    // Set the id field based on index + 1
+                    return index + 1;
+                }
+                if (column.field === "date") {
+                    return dayjs(row.date).format("DD-MM-YYYY") // Format the date field
+                }
+                 
+                // Return other fields as-is
+                return row[column.field];
+            });
+        });
+// console.log(rowValues,"shnplpdff",rowexcel)
+
+                let fontdata = 1;
+        if (header.length <= 13) {
+            fontdata = 16;
+        }
+        else if (header.length >= 14 && header.length <= 18) {
+            fontdata = 11;
+        }
+        else if (header.length >= 19 && header.length <= 20) {
+            fontdata = 10;
+        } else if (header.length >= 21 && header.length <= 23) {
+            fontdata = 9;
+        }
+        else if (header.length >= 24 && header.length <= 26) {
+            fontdata = 7;
+        }
+        else if (header.length >= 27 && header.length <= 30) {
+            fontdata = 6;
+        }
+        else if (header.length >= 31 && header.length <= 33) {
+            fontdata = 4;
+        } else if (header.length >= 34 && header.length <= 35) {
+            fontdata = 3;
+        }
+        else if (header.length >= 36 && header.length <= 40) {
+            fontdata = 3;
+        }
+        else if (header.length >= 41 && header.length <= 46) {
+            fontdata = 2;
+        }
+        else if (header.length >= 47 && header.length <= 50) {
+            fontdata = 2;
+        }
+
+
+        pdf.autoTable({
+            head: [header],
+            body: rowValues,
+            startY: 20,
+
+            headStyles: {
+                // fontSize: 5,
+                fontSize: fontdata,
+                cellPadding: 1.5, // Decrease padding in header
+
+                minCellHeigh: 8,
+                valign: 'middle',
+
+                font: 'helvetica', // Set font type for body
+
+                cellWidth: 'wrap',
+                // cellWidth: 'auto'
+            },
+
+            bodyStyles: {
+                fontSize: fontdata,
+                valign: 'middle',
+                cellWidth: 'auto'
+                // Adjust the font size for the body
+
+            },
+            // willDrawCell: function (data) {
+            //     // Check if this cell is part of the total row
+            //     if (data.row.index === rowValues.length - 1) {
+            //         const { cell } = data;
+            //         const { x, y, width, height } = cell;
+    
+            //         // Set bold text and increased font size
+            //         pdf.setFont('helvetica', 'bold');
+            //         pdf.setFontSize(9); // Increase the font size as needed
+    
+            //         // Draw top border
+            //         pdf.setDrawColor(0); // Black color
+            //         pdf.setLineWidth(0.5); // Line width
+            //         pdf.line(x, y, x + width, y); // Draw top border
+    
+            //         // Draw bottom border
+            //         pdf.line(x, y + height, x + width, y + height); // Draw bottom border
+            //     }},
+            columnWidth: 'auto'
+
+        });
+        const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+
+        // Scale content
+        pdf.scale(scaleFactor, scaleFactor);
+        const pdfBlob = pdf.output('blob');
+        saveAs(pdfBlob, 'TripsheetGpsLog.pdf');
+}
+
+// ----------------------------------------this code zoom image in attcah file----------------------------
+// Function to handle Zoom In
+const handleZoomIn = () => {
+    setZoom((prevZoom) => Math.min(prevZoom + 0.2, 3)); 
+  };
+
+  // Function to handle Zoom Out
+  const handleZoomOut = () => {
+    setZoom((prevZoom) => Math.max(prevZoom - 0.2, 1)); 
+    if (zoom <= 1.2) {
+      setPosX(0);
+      setPosY(0);
+    }
+  };
+
+  // Handle Zoom using Mouse Scroll
+  const handleScrollZoom = (e) => {
+    e.preventDefault(); 
+    if (e.deltaY < 0) {
+      setZoom((prevZoom) => Math.min(prevZoom + 0.2, 3)); 
+    } else {
+      setZoom((prevZoom) => Math.max(prevZoom - 0.2, 1)); 
+      if (zoom <= 1.2) {
+        setPosX(0);
+        setPosY(0);
+      }
+    }
+  };
+
+  // Start dragging
+  const startDrag = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    startPos.current = { x: e.clientX, y: e.clientY };
+  };
+
+  // Drag the image
+  const onDrag = (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startPos.current.x;
+    const dy = e.clientY - startPos.current.y;
+    setPosX((prevX) => prevX + dx);
+    setPosY((prevY) => prevY + dy);
+    startPos.current = { x: e.clientX, y: e.clientY };
+  };
+
+  // Stop dragging
+  const stopDrag = () => {
+    setIsDragging(false);
+  };
+//   ----------------------------------------this code zoom image in attcah file----------------------------
 
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
@@ -7021,12 +8403,16 @@ console.log(userStatus,"sssss")
         handleEditMap,
         handleDeleteMap, copydatalink, setCopyDataLink,
         // conflictenddate, 
-        groupTripId, setGroupTripId, mapPopUp, setMapPopUp,
+        groupTripId, setGroupTripId, mapPopUp, setMapPopUp, oldStatusCheck, getSignatureImageverify, checksignatureandmap,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
-        isAddload, setisAddload, isEditload, setisEditload,
+        isAddload, setisAddload, isEditload, setisEditload, handleChangetexttrip, handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip, messageditedtrip, messageditedbeforetrip,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
-        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage,
-        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger,setNoChangeData,nochangedata,
+        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage, Permissiondeleteroles, fueldataamountdis, setFuelAdvancedamountHide,
+        outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, handleAutocompleteChangecustomer, orderByDropDown, speeddailacesss, speeddailacesssedit,
+        tripGpsData, fullGpsData,allGpsData,handleExcelDownloadtrip,handlePdfDownloadtrip,attachedImageEtrip,deletetripasheetdata,setDeleteTripsheetData,
+        // this zoom image code state-----------------
+        posX,posY,zoom,handleZoomIn,handleZoomOut,startDrag,stopDrag,handleScrollZoom,isDragging,onDrag
+        // this zoom image code state-----------------
 
     };
 };

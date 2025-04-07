@@ -28,6 +28,7 @@ const useEmployee = () => {
     const [searchText, setSearchText] = useState('');
     const [isEditMode, setIsEditMode] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [deleteemployeedata,setDeleteEmployeedata] = useState(false)
 
     const [loading, setLoading] = useState(false);
 
@@ -520,6 +521,7 @@ const useEmployee = () => {
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
+        setDeleteEmployeedata(false)
     };
 
     const handleRowClick = useCallback((params) => {
@@ -713,12 +715,18 @@ const useEmployee = () => {
             }
 
             else if (actionName === 'Delete') {
+                try{
                 await axios.delete(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`);
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
                 setRows([]);
+                }
+                catch(err){
+                    setError(true);
+                    setErrorMessage("Failed to Delete Employee Data");
+                }
             }
 
             else if (actionName === 'Edit') {
@@ -908,7 +916,7 @@ const useEmployee = () => {
         setErrorMessage,
         deletefile,
         loading,
-        setLoading
+        setLoading,deleteemployeedata,setDeleteEmployeedata,
     };
 };
 

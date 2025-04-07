@@ -30,14 +30,13 @@ const useExeclpage = () => {
         { key: "orderedby", header: "Category", width: 120 },
         { key: "duty", header: "Route Type", width: 120 },
         { key: "duty1", header: "Sub Route Type", width: 150 },
-
         { key: "VendorName", header: "Vendor Name", width: 150 },
         // { key: "Vendor", header: "Vendor", width: 120 },
-        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
+        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
+        { key: "vehicleName", header: "Vehicle Actual Make", width: 180 },
         { key: "vehType", header: "Vehicle Type (Requested)", width: 200 },
         // { key: "vechicletype", header: "Vehicle Actual Make", width: 180 },
-        { key: "vehicleName", header: "Vehicle Actual Make", width: 180 },
         // { key: "vehTypebilling", header: "Billing Vehicle Type", width: 180 },
         { key: "fueltype", header: "Fuel Type", width: 120 },
         // { key: "tripsheetdate", header: "Date", width: 120 },
@@ -47,9 +46,9 @@ const useExeclpage = () => {
         { key: "guestname", header: "Travelled Employee Name", width: 200 },
         { key: "Gender", header: "Gender", width: 100 },
         { key: "escort", header: "Escort Route", width: 150 },
- 
+
         { key: "address1", header: "Pickup Point / Shed", width: 180 },
-        { key: "useage", header: "Drop Point", width: 200},
+        { key: "useage", header: "Drop Point", width: 200 },
         { key: "starttime", header: "Shift Timing", width: 150 },
         { key: "UserNos_Occupancy", header: "User Nos / Occupancy", width: 180 },
         { key: "location", header: "Location", width: 120 },
@@ -78,7 +77,8 @@ const useExeclpage = () => {
         { key: "ex_hrAmount", header: "Extra HRs Amount", width: 160 },
 
         { key: "night_totalAmount", header: "Night Charges", width: 150 },
-        { key: "driverBeta", header: "Driver Bhatta", width: 150 },
+        // { key: "driverBeta", header: "Driver Bhatta", width: 150 },
+        { key: "driverBeta_amount", header: "Driver Bhatta", width: 150 },
         { key: "OutstationCharges", header: "Outstation Charges", width: 180 },
         { key: "withoutTaxes", header: "Total Amount", width: 150 },
         // { key: "PenaltyAmount", header: "Penalty Amount", width: 150 },
@@ -89,7 +89,7 @@ const useExeclpage = () => {
         { key: "toll", header: "Toll", width: 100 },
         { key: "TOTALtollandpark", header: "DND/Toll/Parking Amount", width: 200 },
         { key: "totalcalcAmount1", header: "Amount With All Taxes", width: 200 },
-        {key: "shedInDate",header: "End Date",width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "")},
+        { key: "shedInDate", header: "End Date", width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "") },
 
 
 
@@ -105,12 +105,12 @@ const useExeclpage = () => {
         { key: "duty", header: "Route Type", width: 120 },
         { key: "calcPackage", header: "Package", width: 150 },
         { key: "VendorName", header: "Vendor Name", width: 150 },
-        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
+        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         // { key: "vehType", header: "Vehicle Make", width: 180 },
         { key: "vehicleName", header: "Vehicle Make", width: 180 },
         { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
-
+        // { key: "vehicleName", header: "Vehicle Make", width: 180 },
         { key: "segement", header: "vehicle Segment", width: 180 },
         { key: "fueltype", header: "Fuel Used", width: 120 },
         // { key: "tripsheetdate", header: "Date", width: 120 },
@@ -124,10 +124,11 @@ const useExeclpage = () => {
         { key: "remark", header: "Runing Details", width: 150 },
         { key: "Zonetranfer", header: "Zone for Airport transfers", width: 150 },
         { key: "UserNos_Occupancy", header: "Occupancy", width: 180 },
-        { key: "starttime", header: "shift Times", width: 180 },
-        { key: "timeluxury", header: "Time (from Garage) LUXURY 2", width: 180 },
-        { key: "reporttime", header: "Emp.Initial Time", width: 180 },
-        { key: "shedintime", header: "Emp.End Time", width: 180 },
+        { key: "starttime", header: "Shift Times", width: 180 },
+        { key: "timeluxury", header: "Initial Time (from Garage) LUXURY 2", width: 180 },
+        // { key: "reporttime", header: "Emp.Initial Time", width: 180 },
+        { key: "starttime1", header: "Emp.Initial Time", width: 180 },
+        { key: "closetime1", header: "Emp.End Time", width: 180 },
         { key: "Endtimeluxury", header: " End Time (At Garage) LUXURY 2", width: 180 },
         { key: "totaltime1", header: "Total Hrs.", width: 120 },
         { key: "totaltime", header: "Final Hrs.", width: 120 },
@@ -135,10 +136,11 @@ const useExeclpage = () => {
         { key: "startkm", header: "Emp.Initial km", width: 180 },
         { key: "closekm", header: "Emp.End Km", width: 180 },
         { key: "shedin", header: "End Km (At Garage)  LUXURY 2", width: 180 },
-        { key: "totalkm1", header: "Total Km", width: 120 },
+        // { key: "totalkm1", header: "Total Km", width: 120 },
+        { key: "shedin2", header: "Total Km", width: 120 },
         { key: "TOTALtollandpark", header: "DND/Toll/Parking Amount", width: 200 },
         { key: "totalcalcAmount", header: "Total Amount", width: 150 },
-        {key: "shedInDate",header: "End Date",width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "")},
+        { key: "shedInDate", header: "End Date", width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "") },
         { key: "opsremark", header: "Ops Remarks", width: 150 }
 
     ]
@@ -158,52 +160,52 @@ const useExeclpage = () => {
 
     };
     // function addPercentage(amount, percent) {
-    
+
     //     amount = parseFloat(amount) || 0;
     //     percent = parseFloat(percent) || 0;
-    
+
     //     let percentageValue = (amount * percent) / 100;
-    
+
     //     const datapercent = amount + percentageValue;
-    
+
     //     return datapercent.toFixed(2);
     // }
 
 
-    function addPercentage(amount1, percent1,toll1) {
-    
-       let amount = parseFloat(amount1) || 0;
-       let percent = parseFloat(percent1) || 0;
-       let  tollamount = parseFloat(toll1) || 0;
-       console.log(amount,percent,tollamount,'zipgstadddd')
-    
-      
-    
+    function addPercentage(amount1, percent1, toll1) {
+
+        let amount = parseFloat(amount1) || 0;
+        let percent = parseFloat(percent1) || 0;
+        let tollamount = parseFloat(toll1) || 0;
+        //    console.log(amount,percent,tollamount,'zipgstadddd')
+
+
+
         const datapercent = amount + percent + tollamount;
-        console.log(datapercent,'zipgstaddddpercent',Math.round(datapercent))
-    
+        // console.log(datapercent,'zipgstaddddpercent',Math.round(datapercent))
+
         return Math.round(datapercent);
     }
-    
+
 
     // function addPercentage(amount, percent) {
     //     console.log(amount,percent,'zippppppppppppppppppppp');
 
     //     let percentageValue = (amount * percent) / 100 || 0;
-      
+
     //     const datapercent = amount + percentageValue
     //     return datapercent.toFixed(2)
     // }
-    
-    function withoutTaxesdata(total,toll,parking,permit) {
-        let withoutaxValue = total-toll-parking-permit;
+
+    function withoutTaxesdata(total, toll, parking, permit) {
+        let withoutaxValue = total - toll - parking - permit;
         return withoutaxValue;
     }
 
-    function totalamountgst(gst,total) {
-        console.log(gst,total,'zipgst')
+    function totalamountgst(gst, total) {
+        // console.log(gst,total,'zipgst')
         let gsttax = (gst * total) / 100;
-        console.log(gsttax,'zipgst')
+        // console.log(gsttax,'zipgst')
         return gsttax.toFixed(2);
 
     }
@@ -215,35 +217,60 @@ const useExeclpage = () => {
     //     return tollparkparking;
     // }
 
+    const totalTimeCalculation = (totalTime) => {
+    //    console.log(totalTime,"time")
+        // Extract hours and minutes using regex
+        const hoursMatch = totalTime?.match(/(\d+)h/); // Matches hours
+        const minutesMatch = totalTime?.match(/(\d+)m/); // Matches minutes
+
+        // Convert to numbers (if not found, default to 0)
+        const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+        const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+
+        // Format as HH:MM (ensuring minutes are two digits)
+        const formattedTime = `${hours}:${minutes.toString().padStart(2, "0")}`;
+
+        return formattedTime;
+    };
+
+
     function addTollparkparking(toll, parking, permit) {
-        console.log(toll, parking, permit, 'zip');
+        // console.log(toll, parking, permit, 'zip');
         let tollparkparking = (Number(toll) || 0) + (Number(parking) || 0) + (Number(permit) || 0);
-        console.log(tollparkparking, 'ziptotal');
+        // console.log(tollparkparking, 'ziptotal');
         return tollparkparking;
     }
-    
+
+    function calculationwithoutadditonalkm(totalkm,addkm) {
+        // console.log(toll, parking, permit, 'zip');
+        // console.log(totalkm,addkm,'ziptotal');
+        let totalkmvalue = (Number(totalkm) || 0) - (Number(addkm) || 0) 
+        // console.log(tollparkparking, 'ziptotal');
+        return totalkmvalue
+    }
+
 
 
 
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
-    
+
 
     function removeSeconds(time) {
         // Split the time string by colon (:)
         const timeParts = time.split(':');
-      
+
         // Check if there are seconds (length 3), return hours:minutes
         if (timeParts.length === 3) {
-          return `${timeParts[0]}:${timeParts[1]}`;
+            return `${timeParts[0]}:${timeParts[1]}`;
         }
-      
+
         // If there's only hours:minutes, return it as is
         return time;
-      }
+    }
 
-    const handleExcelDownload = async (misformat, invoice, invoicedate,customerData) => {
-        console.log(misformat, invoice, invoicedate,customerData, "zipexcel")
+    const handleExcelDownload = async (misformat, invoice, invoicedate, customerData) => {
+        console.log(misformat, invoice, invoicedate, customerData, "zipexcel")
         const data = invoice;
         const data2 = invoice;
 
@@ -278,12 +305,18 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 data.map((singleData, index) => {
-                    console.log(data,'datas of excel datss')
-                
+                    console.log(data, 'datas of excel datss')
+
+                    if (singleData["duty"] === "Outstation") {
+                        singleData["originalExtraKM"] = singleData["extraKM"]; // Store original value
+                        singleData["extraKM"] = 0;
+                        singleData["extraHR"] = 0;
+                        singleData["ex_kmAmount"] = 0;
+                    }
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
                     const location = `${singleData.address1}`;
@@ -294,28 +327,32 @@ const useExeclpage = () => {
                     singleData["VendorName"] = " Jessy Cabs"
                     singleData["UserNos_Occupancy"] = 1
                     singleData["OutstationCharges"] = 0
-                    singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    // singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    // singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"])  : singleData["calcPackage"];
+                    singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"] || singleData["originalExtraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"]) : singleData["calcPackage"];
+                    singleData["package_amount"] = singleData["duty"] === "Outstation" ? singleData["ex_kmAmount"] : singleData["package_amount"]
                     singleData["vechicletype"] = singleData["vehType"]
                     // singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
-    
 
-                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
-                     singleData["sheoutDatetrip"]=singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY"):""
-                    singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):"00:00"
-                    singleData["starttime1"]= removeSeconds(singleData["starttime1"])
+
+                    singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                    singleData["sheoutDatetrip"] = singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY") : ""
+                    singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : "00:00"
+                    singleData["starttime1"] = removeSeconds(singleData["starttime1"])
+
                     // singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax,singleData["totalcalcAmount"])
-                    
-                    singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):"00:00"
-                    singleData["withoutTaxes"] =  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"],singleData["parking"],singleData["permit"])
-                    singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax,singleData["withoutTaxes"])
+
+                    singleData["closetime"] = singleData["closetime"] ? removeSeconds(singleData["closetime"]) : "00:00"
+                    singleData["withoutTaxes"] = withoutTaxesdata(singleData["totalcalcAmount"], singleData["toll"], singleData["parking"], singleData["permit"])
+                    singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax, singleData["withoutTaxes"])
                     singleData["gstTaxes"] = customerData[0]?.gstTax
-                    singleData["TOTALtollandpark"] =  addTollparkparking(singleData["toll"],singleData["parking"],singleData["permit"])
+                    singleData["TOTALtollandpark"] = addTollparkparking(singleData["toll"], singleData["parking"], singleData["permit"])
                     // singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
                     // singleData["totalcalcAmount1"]= customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],customerData[0]?.gstTax)
-                    singleData["totalcalcAmount1"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["withoutTaxes"],singleData["gstTax1"], singleData["TOTALtollandpark"])
+                    singleData["totalcalcAmount1"] = customerData[0]?.gstTax === 0 ? singleData["totalcalcAmount"] : addPercentage(singleData["withoutTaxes"], singleData["gstTax1"], singleData["TOTALtollandpark"])
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -328,19 +365,42 @@ const useExeclpage = () => {
                         column.width = Math.max(currentColumnWidth, cellLength + 5);
                     });
                 });
-                const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseInt(row.withoutTaxes || 0, 10), 0);
-                const totalAmountgstAmount = data.reduce((sum, row) => sum + parseInt(row.gstTax1 || 0, 10), 0);
-                const totalparkandtollAmount = data.reduce((sum, row) => sum + parseInt(row.TOTALtollandpark || 0, 10), 0);
-                const Amountwithtax = data.reduce((sum, row) => sum + parseInt(row.totalcalcAmount1 || 0, 10), 0);
+
+
+                // Ensure all numbers are considered with decimals
+                const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseFloat(row.withoutTaxes || 0), 0);
+                const totalAmountgstAmount = data.reduce((sum, row) => sum + parseFloat(row.gstTax1 || 0), 0);
+                const totalparkandtollAmount = data.reduce((sum, row) => sum + parseFloat(row.TOTALtollandpark || 0), 0);
+
+                // Calculate total with all taxes
+                const Amountwithtax = totalAmountnoaddpark + totalAmountgstAmount + totalparkandtollAmount;
+
+                // Round the final total
+                const roundedAmountWithTax = Math.round(Amountwithtax);
+
                 const totalRow = worksheet.addRow({});
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value = totalAmountgstAmount;
                 totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = roundedAmountWithTax; // Ensure final rounding
+
+                // const totalAmountnoaddpark = data.reduce((sum, row) => sum + parseInt(row.withoutTaxes || 0, 10), 0);
+                // // const totalAmountgstAmount = data.reduce((sum, row) => sum + parseInt(row.gstTax1 || 0, 10), 0);
+                // const totalAmountgstAmount = Math.round(
+                //     data.reduce((sum, row) => sum + parseFloat(row.gstTax1 || 0), 0)
+                // );
+                // const totalparkandtollAmount = data.reduce((sum, row) => sum + parseInt(row.TOTALtollandpark || 0, 10), 0);
+                // const Amountwithtax = data.reduce((sum, row) => sum + parseInt(row.totalcalcAmount1 || 0, 10), 0);
+                // const totalRow = worksheet.addRow({});
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
+                // totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
                 totalRow.eachCell((cell) => {
                     cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.alignment = { horizontal: 'left', vertical: 'left' };
                     cell.border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -371,7 +431,7 @@ const useExeclpage = () => {
 
                 // write the content using writeBuffer
                 const buf = await workbook.xlsx.writeBuffer();
-                 
+
                 // download the processed file
 
                 saveAs(new Blob([buf]), `${fileName}.xlsx`);
@@ -390,7 +450,7 @@ const useExeclpage = () => {
 
         else if (misformat === "New MIS") {
             try {
-              
+
 
                 const fileName = `MIS ${dayjs(invoicedate).format(" MMMM D")}`
                 // creating one worksheet in workbook
@@ -414,11 +474,11 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet1.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 data2.forEach((singleData2, index) => {
-                   
+
                     singleData2["SNo"] = index + 1;
                     const location = `${singleData2.address1}`;
                     singleData2['location'] = location
@@ -426,18 +486,34 @@ const useExeclpage = () => {
                     singleData2["EscortRoute"] = singleData2["escort"] ? singleData2["escort"] : 'N/A'
                     singleData2["VendorName"] = " Jessy Cabs"
                     singleData2["UserNos_Occupancy"] = 1
-                    singleData2["calcPackage"] =  singleData2["duty"] === "Transfer" || singleData2["duty"] === "Outstation" ? singleData2["duty"] :singleData2["calcPackage"]
+                    singleData2["calcPackage"] = singleData2["duty"] === "Transfer" || singleData2["duty"] === "Outstation" ? singleData2["duty"] : singleData2["calcPackage"]
                     singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
-                    singleData2["shedInDate"]=singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD/MM/YYYY"):""
-                    singleData2["tripsheetdate"]=singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY"):""
+                    singleData2["sheoutDatetrip"] = singleData2["shedOutDate"] ? dayjs(singleData2["shedOutDate"]).format("DD/MM/YYYY") : ""
+                    singleData2["shedInDate"] = singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD/MM/YYYY") : ""
+                    singleData2["tripsheetdate"] = singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY") : ""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
-                    singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]):"00.00"
+                    singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]) : "00.00"
+                     singleData2["starttime1"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]) : "00.00"
+                        singleData2["closetime1"] = singleData2["closetime"] ? removeSeconds(singleData2["closetime"]) : "00.00"
                     //  singleData2["starttime"] = singleData2["starttime"] 
-                    singleData2["timeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["starttime"] : "00.00"
-                    singleData2["Endtimeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["shedintime"] : "00.00"
-                    singleData2["totaltime1"] = singleData2["totaltime"]
-                    singleData2["TOTALtollandpark"] = addTollparkparking(singleData2["toll"],singleData2["parking"],singleData2["permit"])
+                    // singleData2["timeluxury"] = singleData2["Groups"] === "Luxzury"  ? singleData2["starttime"] : "00.00"
+                    singleData2["timeluxury"] = singleData2["duty"] === "Outstation"
+                    ? singleData2["reporttime"]
+                    : (singleData2["duty"] !== "Outstation" && singleData2["Groups"] === "Luxzury")
+                      ? ""
+                      : "00.00";
+                    // singleData2["Endtimeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["shedintime"] : "00.00"
+                 singleData2["Endtimeluxury"] = singleData2["duty"] === "Outstation"
+                    ? singleData2["shedintime"]
+                    : (singleData2["duty"] !== "Outstation" && singleData2["Groups"] === "Luxzury")
+                      ? ""
+                      : "00.00";
+                    
+                    singleData2["shedin2"] = calculationwithoutadditonalkm(singleData2["totalkm1"],singleData2["shedkm"])
+                    singleData2["totaltime1"] = totalTimeCalculation(singleData2["TotalTimeWithoutAddHours"])
+                    singleData2["totaltime"] = totalTimeCalculation(singleData2["TotalTimeWithoutAddHours"])
+                    singleData2["TOTALtollandpark"] = addTollparkparking(singleData2["toll"], singleData2["parking"], singleData2["permit"])
                     singleData2["opsremark"] = singleData2["opsremark"] ? singleData2["Opremark"] : ''
                     // singleData2["totalcalcAmount1"] = singleData2["totalcalcAmount"]
                     // singleData2["totalcalcAmount1"] = singleData2["totalcalcAmount"]
@@ -482,7 +558,7 @@ const useExeclpage = () => {
             } catch (error) {
                 console.error('<<<ERRROR>>>', error);
                 console.error('Something Went Wrong', error.message);
-            } 
+            }
             // finally {
             //     // removing worksheet's instance to create new one
             //     workbook.removeWorksheet(workSheetName);
@@ -493,14 +569,14 @@ const useExeclpage = () => {
     }
 
 
-    const handledatazipDownload = async (tripheaderIndex,misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel,customerData,stationData) => {
+    const handledatazipDownload = async (tripheaderIndex, misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel, customerData, stationData, bookingMail) => {
         console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation, " console for datas")
-        
+
         const data = invoice;
         const customername = customer;
         const workbook = new Excel.Workbook();
-        console.log(data,"exceldataaa");
-        
+        console.log(data, "exceldataaa");
+
 
         try {
             const zip = new JSZip();
@@ -541,7 +617,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 const uniqueData = data.filter((value, index, self) =>
@@ -562,22 +638,25 @@ const useExeclpage = () => {
                     singleData["OutstationCharges"] = 0
                     singleData["vechicletype"] = singleData["vehType"]
                     singleData["vehTypebilling"] = singleData["vehType"]
-                    singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    // singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"]) : singleData["calcPackage"];
+                    singleData["package_amount"] = singleData["duty"] === "Outstation" ? singleData["ex_kmAmount"] : singleData["package_amount"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
-                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
-                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
-                    singleData["starttime"]=singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
+                    singleData["tripsheetdate"] = singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY") : ""
+                    singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                    singleData["sheoutDatetrip"] = singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY") : ""
+                    singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : ""
                     singleData["starttime1"] = removeSeconds(singleData["starttime"])
-                    singleData["closetime"]=singleData["closetime"] ? removeSeconds(singleData["closetime"]):""
-                    singleData["withoutTaxes"]=  withoutTaxesdata(singleData["totalcalcAmount"],singleData["toll"],singleData["parking"],singleData["permit"])
-                    singleData["TOTALtollandpark"] = addTollparkparking(singleData["toll"],singleData["parking"],singleData["permit"])
+                    singleData["closetime"] = singleData["closetime"] ? removeSeconds(singleData["closetime"]) : ""
+                    singleData["withoutTaxes"] = withoutTaxesdata(singleData["totalcalcAmount"], singleData["toll"], singleData["parking"], singleData["permit"])
+                    singleData["TOTALtollandpark"] = addTollparkparking(singleData["toll"], singleData["parking"], singleData["permit"])
                     // singleData["totalcalcAmount"]=singleData["gstTax"] === 0 ? singleData["totalcalcAmount"]: addPercentage(singleData["totalcalcAmount"],singleData["gstTax"])
-                    singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax,singleData["withoutTaxes"])
+                    singleData["gstTax1"] = totalamountgst(customerData[0]?.gstTax, singleData["withoutTaxes"])
                     singleData["gstTaxes"] = customerData[0]?.gstTax
                     // singleData["totalcalcAmount1"] = customerData[0]?.gstTax ? singleData["totalcalcAmount"] : addPercentage(singleData["withoutTaxes"],singleData["gstTax1"], singleData["TOTALtollandpark"])
-                    singleData["totalcalcAmount1"] = addPercentage(singleData["withoutTaxes"],singleData["gstTax1"], singleData["TOTALtollandpark"])
+                    singleData["totalcalcAmount1"] = addPercentage(singleData["withoutTaxes"], singleData["gstTax1"], singleData["TOTALtollandpark"])
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -598,12 +677,12 @@ const useExeclpage = () => {
                 const totalRow = worksheet.addRow({});
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Outstation Charges') + 1).value = 'TOTAL';
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Total Amount') + 1).value = totalAmountnoaddpark;
-                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value =  totalAmountgstAmount;
+                totalRow.getCell(columns2.findIndex(col => col.header === 'GST Amount') + 1).value = totalAmountgstAmount;
                 totalRow.getCell(columns2.findIndex(col => col.header === 'DND/Toll/Parking Amount') + 1).value = totalparkandtollAmount;
                 totalRow.getCell(columns2.findIndex(col => col.header === 'Amount With All Taxes') + 1).value = Amountwithtax;
                 totalRow.eachCell((cell) => {
                     cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.alignment = { horizontal: 'left', vertical: 'left' };
                     cell.border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -612,7 +691,7 @@ const useExeclpage = () => {
                     };
                 });
 
-          
+
 
 
 
@@ -671,7 +750,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                    column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 const uniqueData = data.filter((value, index, self) =>
@@ -685,18 +764,38 @@ const useExeclpage = () => {
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
                     singleData["UserNos_Occupancy"] = 1
-                    singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
+                    singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] : singleData["calcPackage"]
                     singleData["VendorName"] = " Jesscy Cabs"
                     singleData["vehType1"] = singleData["vehType"]
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
-                    singleData["tripsheetdate"]=singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY"):""
-                    singleData["shedInDate"]=singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY"):""
-                    singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]):""
-                    singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
-                    singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
-                    singleData["totaltime1"] = singleData["totaltime"]
-                    singleData["TOTALtollandpark"] = addTollparkparking(singleData["toll"],singleData["parking"],singleData["permit"])
+                    singleData["sheoutDatetrip"] = singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY") : ""
+                    singleData["tripsheetdate"] = singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY") : ""
+                    singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                    singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : ""
+                    // singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
+                    // singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
+                    // singleData["totaltime1"] = singleData["totaltime"]
+                    singleData["starttime1"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : "00.00"
+                    singleData["closetime1"] = singleData["closetime"] ? removeSeconds(singleData["closetime"]) : "00.00"
+                //  singleData2["starttime"] = singleData2["starttime"] 
+                // singleData2["timeluxury"] = singleData2["Groups"] === "Luxzury"  ? singleData2["starttime"] : "00.00"
+                singleData["timeluxury"] = singleData["duty"] === "Outstation"
+                ? singleData["reporttime"]
+                : (singleData["duty"] !== "Outstation" && singleData["Groups"] === "Luxzury")
+                  ? ""
+                  : "00.00";
+                // singleData2["Endtimeluxury"] = singleData2["Groups"] === "Luxzury" ? singleData2["shedintime"] : "00.00"
+             singleData["Endtimeluxury"] = singleData["duty"] === "Outstation"
+                ? singleData["shedintime"]
+                : (singleData["duty"] !== "Outstation" && singleData["Groups"] === "Luxzury")
+                  ? ""
+                  : "00.00";
+                
+                singleData["shedin2"] = calculationwithoutadditonalkm(singleData["totalkm1"],singleData["shedkm"])
+                singleData["totaltime1"] = totalTimeCalculation(singleData["TotalTimeWithoutAddHours"])
+                singleData["totaltime"] = totalTimeCalculation(singleData["TotalTimeWithoutAddHours"])
+                    singleData["TOTALtollandpark"] = addTollparkparking(singleData["toll"], singleData["parking"], singleData["permit"])
                     singleData["opsremark"] = singleData["opsremark"] ? singleData["Opremark"] : ''
 
                     worksheet.addRow(singleData);
@@ -711,7 +810,7 @@ const useExeclpage = () => {
                         column.width = Math.max(currentColumnWidth, cellLength + 5);
                     });
                 });
-                console.log(data , "data of old format excel")
+                console.log(data, "data of old format excel")
                 // loop through all of the rows and set the outline style.
                 worksheet.eachRow({ includeEmpty: false }, (row) => {
                     // store each cell to currentCell
@@ -762,7 +861,7 @@ const useExeclpage = () => {
                 ).toBlob();
 
                 const pdfBytes = await blob.arrayBuffer();
-// dont delete this code
+                // dont delete this code
                 const reactPDFDocument = await PDFDocument.load(pdfBytes);
 
                 // const data = await JSON.parse(pdfData.bookattachedimage)
@@ -775,12 +874,12 @@ const useExeclpage = () => {
                 const uniqueJsonStringbook1 = JSON.stringify(uniqueArraybook1);
                 const datalink1 = JSON.parse(uniqueJsonStringbook1)
 
-                //  const data = await JSON.parse(pdfData.bookattachedimage)
-                // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
-                // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-                // const datalink = JSON.parse(uniqueJsonStringbook)
+                const data = await JSON.parse(pdfData.bookattachedimage)
+                const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+                const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+                const datalink = JSON.parse(uniqueJsonStringbook)
 
-                
+
 
                 // return datalink
 
@@ -816,7 +915,7 @@ const useExeclpage = () => {
                 for (const data of datalink1) {
                     if (data.attachedimageurl !== null) {
                         const data2 = data.attachedimageurl.split('.').pop()
-                        console.log(data2, "datalonk22")
+                        console.log(data2, "datalonk22ATT")
                         if (data2 === "pdf") {
 
                             const filePath = `${apiurl}/images/${data.attachedimageurl}`;
@@ -835,28 +934,31 @@ const useExeclpage = () => {
                         }
                     }
                 }
-                // for (const data of datalink) {
-                //     if (data.imagees !== null) {
-                //         const data2 = data.imagees.split('.').pop()
-                //         console.log(data2, "datalonk22")
-                //         if (data2 === "pdf") {
+                if (bookingMail) {
+                    console.log(bookingMail, "jhgfffffff")
+                    for (const data of datalink) {
+                        if (data.imagees !== null) {
+                            const data2 = data.imagees.split('.').pop()
+                            console.log(data2, "datalonk22")
+                            if (data2 === "pdf") {
 
-                //             const filePath = `${apiurl}/images/${data.imagees}`;
-                //             console.log(filePath, "datalinkpdfpath")
+                                const filePath = `${apiurl}/images/${data.imagees}`;
+                                console.log(filePath, "datalinkpdfpath")
 
-                //             // Fetch the PDF file
-                //             const response = await fetch(filePath);
-                //             const pdfBytes = await response.arrayBuffer();
+                                // Fetch the PDF file
+                                const response = await fetch(filePath);
+                                const pdfBytes = await response.arrayBuffer();
 
-                //             // Load the PDF document
-                //             const pdfDocument = await PDFDocument.load(pdfBytes);
-                //             console.log(pdfDocument)
+                                // Load the PDF document
+                                const pdfDocument = await PDFDocument.load(pdfBytes);
+                                console.log(pdfDocument)
 
-                //             // Add the PDF document to the array
-                //             pdfDocuments.push(pdfDocument);
-                //         }
-                //     }
-                // }
+                                // Add the PDF document to the array
+                                pdfDocuments.push(pdfDocument);
+                            }
+                        }
+                    }
+                }
 
 
                 const mergedPDFDocument = await PDFDocument.create();
@@ -901,7 +1003,7 @@ const useExeclpage = () => {
             // Wait for all promises to resolve
             await Promise.all(pdfPromises);
 
-            const zipContent = await zip.generateAsync({ type: 'blob' });            
+            const zipContent = await zip.generateAsync({ type: 'blob' });
             // Download the ZIP file
             saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format(" MMMM D")}.zip`);
         }

@@ -58,7 +58,8 @@ const useMailagedetails = () => {
   const [warningMessage] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const[deletemileagedata,setDeleteMilageData]=useState(false)
 
   //----------------------popup-----------------
   const hidePopup = () => {
@@ -145,6 +146,7 @@ const useMailagedetails = () => {
     setFinalOdometer(0);
     setInitialOdometer(0);
     setIsEditMode(false);
+    setDeleteMilageData(false)
   };
   const handleRowClick = useCallback((params) => {
     const customerData = params.row;
@@ -350,6 +352,7 @@ useEffect(() => {
         handleCancel();
         setRows([]);
       } else if (actionName === "Delete") {
+        try{
         await axios.delete(`${apiUrl}/fueldetails/${selectedCustomerData?.id}`);
         setSelectedCustomerData(null);
         setSuccess(true);
@@ -357,6 +360,12 @@ useEffect(() => {
         handleCancel();
         setRows([]);
         handleList();
+        }
+        catch (error) {
+          // console.error("Error deleting data:", error);
+          setError(true);
+          setErrorMessage("Failed to Delete Data");
+        }
       } else if (actionName === "Edit") {
         const selectedCustomer = rows.find(
           (row) => row.VehicleNo === selectedCustomerData?.id
@@ -439,7 +448,8 @@ useEffect(() => {
     isEditMode,
     handleEdit,
     loading,
-    setLoading
+    setLoading,
+    setDeleteMilageData,deletemileagedata
   };
 };
 

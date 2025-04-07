@@ -38,7 +38,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Checkbox from '@mui/material/Checkbox';
 //import Skeleton from '@mui/material/Skeleton';
-import {  CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -77,7 +77,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     // handleShowAll,
     department,
     hidePopup,
-    handleInputChange,
+    // handleInputChange,
     handleExcelDownload,
     handlePdfDownload,
     reversedRows,
@@ -90,12 +90,14 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     filteredColumns,
     columnshowall,
     columsnew,
-     //setCutomerName,
-     // setVehNo, 
-      handleBookingClick,
-      loading,
-      isStations,setisStations
-     // setLoading
+    //setCutomerName,
+    // setVehNo, 
+    handleBookingClick,
+    loading,
+    isStations, setisStations,
+    setdepartment,
+    allDepartment,setAllDepartment
+    // setLoading
   } = useTripStatus();
   useEffect(() => {
     if (actionName === 'List') {
@@ -115,33 +117,51 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
   // })
   useEffect(() => {
     if (customer?.length > 1) {
-        setAllCustomer([...customer, { customer: "All" }]);
+      setAllCustomer([...customer, { customer: "All" }]);
     } else {
-        setAllCustomer(customer);
+      setAllCustomer(customer);
     }
-}, [customer]); // Include customer as a dependency
+  }, [customer]); // Include customer as a dependency
 
-useEffect(() => {
+  useEffect(() => {
 
-  if (stationName?.length > 0) {
-    setisStations(stationName)
-  }
-}, [stationName])
+    if (stationName?.length > 0) {
+      setisStations(stationName)
+    }
+  }, [stationName])
 
 
   const CustomNoRowsOverlay = () => (
     <div style={{ textAlign: 'center', padding: '20px' }}>
-        {/* Optionally, you can add your own message or styles */}
-        <p></p>
+      {/* Optionally, you can add your own message or styles */}
+      <p></p>
     </div>
-);
+  );
 
-const Roledatauser = localStorage.getItem("SuperAdmin")
+  const Roledatauser = localStorage.getItem("SuperAdmin")
 
-const filteredStatus =
-Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO"
-    ? Status // Show all statuses for superAdmin and CFo
-    : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
+  const filteredStatus =
+    Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO" || Roledatauser === "Billing_Headoffice"
+      ? Status // Show all statuses for superAdmin and CFo
+      : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
+
+      const handleInputChange = (event, newValue) => {
+        console.log(newValue, "newValue Change");
+      
+        const departmentFilter = newValue?.map(li => li.label);
+      
+        if (departmentFilter[0] === "All") {
+          // Convert stationName to the required format
+          const updatedStations = stationName.map(({ Stationname }) => ({ label: Stationname }));
+          setdepartment(newValue);
+          setAllDepartment(updatedStations)
+
+        } else {
+          setdepartment(newValue);
+          setAllDepartment(newValue)
+        }
+      };
+      
 
   return (
     <div className="TripStatus-form main-content-form Scroll-Style-hide">
@@ -212,29 +232,40 @@ Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO"
                     id="Department"
                     size="small"
                     value={department}
-                    options={stationName.map((option) => ({
-                      label: option.Stationname,
-                    }))}
+                    options={[{ label: "All" }, ...stationName.map(option => ({ label: option.Stationname }))]}
                     isOptionEqualToValue={(option, value) => option.label === value.label}
-                    onChange={(event, value) => handleInputChange(event, value)}
+                    onChange={(event, value) => {
+                      if (value.some(v => v.label === "All")) {
+                        // If "All" is selected, only keep "All"
+                        handleInputChange(event, [{ label: "All" }]);
+                      } else {
+                        // If any other option is selected, remove "All"
+                        const filteredValues = value.filter(v => v.label !== "All");
+                        handleInputChange(event, filteredValues);
+                      }
+                    }}
                     disableCloseOnSelect
-                    renderOption={(props, option, { selected }) => (
-                      <li {...props}>
-                        <Checkbox
-                          icon={icon}
-                          checkedIcon={checkedIcon}
-                          style={{ marginRight: 8 }}
-                          checked={selected}
-                        />
-                        {option.label}
-                      </li>
-                    )}
-                    renderInput={(params) => {
+                    renderOption={(props, option, { selected }) => {
+                      const isAllSelected = department.some(d => d.label === "All");
+
                       return (
-                        <TextField {...params} label="Department" inputRef={params.inputRef} />
+                        <li {...props}>
+                          <Checkbox
+                            icon={icon}
+                            checkedIcon={checkedIcon}
+                            style={{ marginRight: 8 }}
+                            checked={isAllSelected || selected} // Ensure all checkboxes are checked when "All" is selected
+                          />
+                          {option.label}
+                        </li>
                       );
                     }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Department" inputRef={params.inputRef} />
+                    )}
                   />
+
+
                 </div>
                 <div className="input">
                   <div className="icone">
@@ -457,43 +488,43 @@ Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO"
                 pageSize={5}
               />
             </Box>*/}
-            <div className="table-bookingCopy-TripStatus">
-    <div className='trip-status-table'>
-        <Box
-            sx={{
+        <div className="table-bookingCopy-TripStatus">
+          <div className='trip-status-table'>
+            <Box
+              sx={{
                 height: 400, // Adjust this value to fit your needs
                 position: 'relative', // Ensure the loading box is positioned relative to the Box
                 '& .MuiDataGrid-virtualScroller': {
-                    '&::-webkit-scrollbar': {
-                        width: '8px', // Adjust the scrollbar width here
-                        height: '8px', // Adjust the scrollbar height here
-                    },
-                    '&::-webkit-scrollbar-track': {
-                        backgroundColor: '#f1f1f1',
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#457cdc',
-                        borderRadius: '20px',
-                        minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
-                    },
-                    '&::-webkit-scrollbar-thumb:hover': {
-                        backgroundColor: '#3367d6',
-                    },
+                  '&::-webkit-scrollbar': {
+                    width: '8px', // Adjust the scrollbar width here
+                    height: '8px', // Adjust the scrollbar height here
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#457cdc',
+                    borderRadius: '20px',
+                    minHeight: '60px', // Minimum height of the scrollbar thumb (scroll indicator)
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#3367d6',
+                  },
                 },
-            }}
-        >
-            <DataGrid
+              }}
+            >
+              <DataGrid
                 rows={reversedRows}
                 // columns={columnshowall ? columns : filteredColumns}
                 columns={columnshowall ? columsnew : filteredColumns}
                 onRowClick={(event) => handleButtonClick(event.row)}
                 pageSize={5}
-               // loading={loading} // This will show the built-in loading overlay
-               components={{
-                NoRowsOverlay: CustomNoRowsOverlay, // Use custom overlay
-            }}
-            />
-            {loading && (
+                // loading={loading} // This will show the built-in loading overlay
+                components={{
+                  NoRowsOverlay: CustomNoRowsOverlay, // Use custom overlay
+                }}
+              />
+              {loading && (
                 // <Box
                 //     sx={{
                 //       position: 'absolute', // Position the loading spinner absolutely
@@ -542,26 +573,26 @@ Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO"
                 //     />
                 // </Box>
                 <Box
-                sx={{
-                  position: 'absolute', // Position the loading spinner absolutely
-                  top: '50%', // Adjust this value based on your DataGrid header height
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)', // Center the spinner horizontally
-                  zIndex: 1, // Ensure it appears above the DataGrid
-                  width: '100%', // Make it full width of the parent
-                  height: '70%', // Make it full height of the parent
-                  display: 'flex', // Use flexbox for centering
-                  justifyContent: 'center', // Center horizontally
-                  alignItems: 'center', // Center vertically
-                }}
-              >
-                <CircularProgress />
-                    
+                  sx={{
+                    position: 'absolute', // Position the loading spinner absolutely
+                    top: '50%', // Adjust this value based on your DataGrid header height
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)', // Center the spinner horizontally
+                    zIndex: 1, // Ensure it appears above the DataGrid
+                    width: '100%', // Make it full width of the parent
+                    height: '70%', // Make it full height of the parent
+                    display: 'flex', // Use flexbox for centering
+                    justifyContent: 'center', // Center horizontally
+                    alignItems: 'center', // Center vertically
+                  }}
+                >
+                  <CircularProgress />
+
                 </Box>
-            )}
-        </Box>
-            
-            <Dialog open={popupOpen} onClose={handlePopupClose}> 
+              )}
+            </Box>
+
+            <Dialog open={popupOpen} onClose={handlePopupClose}>
               <DialogTitle>Select an Option</DialogTitle>
               <DialogContent>
                 {selectedRow && (

@@ -1,7 +1,8 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoogleMap, MarkerF, LoadScript, Polyline } from "@react-google-maps/api";
 import useMapParticularData from "./useMapParticularData";
 import startPointIcon from "../VehicleInformationDrawer/startPointIcon.png"
+import blackicon from "../VehicleInformationDrawer/blackmapicon.png"
 import { chennaiCoordinates } from "../../MapSection/mapData";
 import { Button } from "@mui/material";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -21,12 +22,12 @@ const center = {
 const MapParticularTrip = ({ selectedTripid }) => {
 
     const { startTripLocation, endTripLocation, selectTripid, setSelectTripid, dynamicPolyline,
-        fullPathTrip, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths, speedState, isPlaying, togglePlayPause
+        fullPathTrip, handle10xDrawPaths, handle20xDrawPaths, handle50xDrawPaths, speedState, isPlaying, togglePlayPause,currentPosition
     } = useMapParticularData();
 
-    const {tripModalOpen, setTripModalOpen } = VehicleMapData();
-        const [clickPosition, setClickPosition] = useState({ top: 0, left: 0 });
-    
+    const { tripModalOpen, setTripModalOpen } = VehicleMapData();
+    const [clickPosition, setClickPosition] = useState({ top: 0, left: 0 });
+
     useEffect(() => {
         if (selectedTripid !== null) {
             setSelectTripid(selectedTripid)
@@ -111,7 +112,19 @@ const MapParticularTrip = ({ selectedTripid }) => {
                     />
                     {tripModalOpen && <TripDetailModal position={clickPosition} setTripModalOpen={setTripModalOpen} />}
                 </div>
-
+                { dynamicPolyline.length!==0 && dynamicPolyline.length !== fullPathTrip.length &&
+                <MarkerF
+                    position={{
+                        lat: currentPosition.lat,
+                        lng: currentPosition.lng,
+                    }}
+                    icon={{
+                        url: blackicon,
+                        scaledSize: new window.google.maps.Size(24, 24),
+                        origin: new window.google.maps.Point(0, 0),
+                        anchor: new window.google.maps.Point(12, 12),
+                    }}
+                />}
             </GoogleMap>
             <div className='playButton'>
                 <div>

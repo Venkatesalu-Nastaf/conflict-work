@@ -49,6 +49,8 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { FaHashtag } from "react-icons/fa";
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import DeleteConfirmationDialog from '../../DeleteData/DeleteData';
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -105,7 +107,8 @@ const Customer = ({ stationName }) => {
     handleChangecustomer, deletedialogbox, setDeletedDialog,
     setInfo, setInfoMessage, loading,
     handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer,
-    cerendentialdata, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStationChange, btnloading, setbtnLoading
+    cerendentialdata, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStationChange, btnloading, setbtnLoading,
+    deletecustomerdata,setDeletecustomerdata
   } = useCustomer();
 
   useEffect(() => {
@@ -160,7 +163,6 @@ const Customer = ({ stationName }) => {
                     className='full-width'
                     autoComplete="new-password"
                     value={selectedCustomerData?.customerId || ""}
-
                   />
                 </div>
                 {/* <div className="input">
@@ -288,7 +290,10 @@ const Customer = ({ stationName }) => {
                     }
                   />
                 </div>
-                <div className="input">
+       {/* ------------------------------------------------------------------ */}
+                {/* Dont remove this field */}
+
+                {/* <div className="input">
                   <div className="icone">
                     <AccountBalanceWalletIcon color="action" />
                   </div>
@@ -303,9 +308,9 @@ const Customer = ({ stationName }) => {
                     onChange={handleChange}
                     id="opBalance"
                   />
-                </div>
+                </div> */}
 
-                <div className="input radio">
+                {/* <div className="input radio">
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
                       A/C Type
@@ -331,7 +336,9 @@ const Customer = ({ stationName }) => {
                       />
                     </RadioGroup>
                   </FormControl>
-                </div>
+                </div> */}
+        {/* ------------------------------------------------------ */}
+
                 <div className='customer-billing-group-input-division input'>
                   <FormLabel htmlFor='hybrid'>Hybrid</FormLabel>
                   <Switch
@@ -545,7 +552,10 @@ const Customer = ({ stationName }) => {
                     )}
                   />
                 </div>
-                <div className="input">
+
+                {/* Dont delete this code  */}
+                
+                {/* <div className="input">
                   <div className='icone'>
                     <GrSelect />
                   </div>
@@ -568,7 +578,7 @@ const Customer = ({ stationName }) => {
                     }
                     }
                   />
-                </div>
+                </div> */}
                 <div className="input">
                   <div className="icone">
                     <StoreIcon color="action" />
@@ -808,6 +818,13 @@ const Customer = ({ stationName }) => {
                   )}
                 </div>
               </div>
+           {deletecustomerdata && 
+              <DeleteConfirmationDialog
+                                open={deletecustomerdata}
+                                onClose={() => setDeletecustomerdata(false)}
+                                onConfirm={handleClick}
+                              />
+           }
               <div className='alert-popup-main'>
                 {error &&
                   <div className='alert-popup Error' >
@@ -863,11 +880,18 @@ const Customer = ({ stationName }) => {
                       />
                     )}
                     {Customer_delete === 1 && isEditMode && (
+                      // <SpeedDialAction
+                      //   key="delete"
+                      //   icon={<DeleteIcon />}
+                      //   tooltipTitle="Delete"
+                      //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                      // />
+
                       <SpeedDialAction
                         key="delete"
                         icon={<DeleteIcon />}
                         tooltipTitle="Delete"
-                        onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                        onClick={() =>setDeletecustomerdata(true)}
                       />
                     )}
                     {Customer_new === 1 && !isEditMode && (

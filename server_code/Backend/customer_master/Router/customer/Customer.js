@@ -38,7 +38,7 @@ router.delete('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   db.query('DELETE FROM customers WHERE customerId = ?', customerId, (err, result) => {
     if (err) {
-      console.log(err,"oo")
+      console.log(err, "oo")
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }
     if (result.affectedRows === 0) {
@@ -130,12 +130,12 @@ router.get('/customeraddress/:customername', (req, res) => {
   const customername = req.params.customername;
   db.query('select address1,gstnumber,state,billingGroup,customer from customers where customer = ?', [customername], (err, result) => {
     if (err) {
-      console.log(err,'cust eror');
-      
+      console.log(err, 'cust eror');
+
       return res.status(500).json({ error: 'Failed to get data in MySQL' });
     }
-    console.log(result,'customer result');
-    
+    console.log(result, 'customer result');
+
     return res.status(200).json(result)
   })
 })
@@ -154,21 +154,21 @@ router.get('/customersgroup', (req, res) => {
   //   GROUP BY
   //     c.customer;
   // `;
-//   const query = `
-//  SELECT
-//   c.*,
-//   GROUP_CONCAT(co.orderedby) AS orderedby,
-//   GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
-//   GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
-// FROM
-//   customers c
-// INNER JOIN
-//   customerOrderdata co ON c.customer = co.customer
-// GROUP BY
-//   c.customerId, c.customer
-// `;
+  //   const query = `
+  //  SELECT
+  //   c.*,
+  //   GROUP_CONCAT(co.orderedby) AS orderedby,
+  //   GROUP_CONCAT(co.orderByEmail) AS orderByEmail,
+  //   GROUP_CONCAT(co.orderByMobileNo) AS orderByMobileNo
+  // FROM
+  //   customers c
+  // INNER JOIN
+  //   customerOrderdata co ON c.customer = co.customer
+  // GROUP BY
+  //   c.customerId, c.customer
+  // `;
 
-const query = `
+  const query = `
 SELECT
  c.*,
  GROUP_CONCAT(co.orderedby) AS orderedby,
@@ -187,7 +187,7 @@ GROUP BY
       console.log(err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
-    console.log(results,"kk")
+    console.log(results, "kk")
     return res.status(200).json(results);
   });
 });
@@ -219,7 +219,7 @@ router.get('/gstdetails/:customer', (req, res) => {
 
   const customer = req.params.customer;
   const sqlquery = "select gstTax,state,address1,gstnumber,servicestation,billingGroup,customer from customers where customer=?";
-    db.query(sqlquery, [customer], (err, result) => {
+  db.query(sqlquery, [customer], (err, result) => {
     if (err) {
       console.log(err, 'error');
     }
@@ -342,7 +342,7 @@ router.delete("/deletecustomerorderdatasdata/:id", (req, res) => {
 
   db.query("delete from customerOrderdata where id=?", [deleteid], (err, results) => {
     if (err) {
-      console.log("ordercustomer",err)
+      console.log("ordercustomer", err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
 
@@ -374,26 +374,142 @@ router.delete("/deletecustomerorderdata/:customer", (req, res) => {
   })
 })
 
+// getting customer details by customertype and getting group by billing tables
+
+router.post("/monthlyWiseBillingDataReport", (req, res) => {
+  const { customerType, fromDate, toDate } = req.body;
+  const formattedFromDate = moment(fromDate).format("YYYY-MM-DD");
+  const formattedToDate = moment(toDate).format("YYYY-MM-DD");
+
+  console.log(formattedFromDate, "formatted Dates", formattedToDate, customerType);
+
+  // Prepare query and params based on customerType
+  const customerSqlQuery = customerType === "All"
+    ? `SELECT Customer, customerType,address1 FROM customers`
+    : `SELECT Customer, customerType,address1 FROM customers WHERE customerType = ?`;
+
+  const queryParams = customerType === "All" ? [] : [customerType];
+
+  // Step 1: Fetch customers based on customerType
+  db.query(customerSqlQuery, queryParams, (err, customers) => {
+    if (err) {
+      console.log(err, "error");
+      return res.status(500).json({ error: "Database error in customer query" });
+    }
+
+    if (customers.length === 0) {
+      return res.json({
+        customerDetails: [],
+        transferList: [],
+        groupBilling: [],
+        individualBilling: []
+      });
+    }
+
+    const customerNames = customers.map((c) => c.Customer);
+    const customerAddressMap = {};
+
+    customers.forEach((c) => {
+      customerAddressMap[c.Customer] = c.address1;
+    });
+
+    // Step 2: Fetch customer details (orderByEmail)
+    const customerDetailsQuery = `SELECT customer, orderByEmail FROM customerOrderdata WHERE customer IN (?)`;
+
+    db.query(customerDetailsQuery, [customerNames], (err, customerDetails) => {
+      if (err) {
+        console.log(err, "error");
+        return res.status(500).json({ error: "Database error in customer details query" });
+      }
+
+      // const enrichedCustomerDetails = customerDetails.map((c) => ({
+      //   ...c,
+      //   address: customerAddressMap[c.customer] || null,
+      //   customerType: customers?.find(cust => cust.Customer === c.customer)?.customerType || null
+      // }));
+      const uniqueCustomerDetailsMap = new Map();
+      customerDetails.forEach((c) => {
+        if (!uniqueCustomerDetailsMap.has(c.customer)) {
+          uniqueCustomerDetailsMap.set(c.customer, {
+            ...c,
+            address: customerAddressMap[c.customer] || null,
+            customerType: customers?.find(cust => cust.Customer === c.customer)?.customerType || null
+          });
+        }
+      });
+
+      const enrichedCustomerDetails = Array.from(uniqueCustomerDetailsMap.values());
+
+      // Step 3: Fetch data from Transfer_list
+      const transferListQuery = `
+        SELECT Grouptrip_id, Invoice_no, Billdate, Organization_name, Amount, FromDate, EndDate 
+        FROM Transfer_list  
+        WHERE Billdate BETWEEN ? AND ? AND Organization_name IN (?)`;
+
+      db.query(transferListQuery, [formattedFromDate, formattedToDate, customerNames], (err, transferData) => {
+        if (err) {
+          console.log(err, "error");
+          return res.status(500).json({ error: "Database error in transfer list query" });
+        }
+
+        // Step 4: Fetch data from Group_billing
+        const GroupBillingQuery = `
+          SELECT ReferenceNo AS Grouptrip_id, InvoiceDate AS Billdate, Customer AS Organization_name, FromDate, ToDate AS EndDate, Amount
+          FROM Group_billing 
+          WHERE InvoiceDate BETWEEN ? AND ? AND Customer IN (?)`;
+
+        db.query(GroupBillingQuery, [formattedFromDate, formattedToDate, customerNames], (err, groupData) => {
+          if (err) {
+            console.log(err, "error");
+            return res.status(500).json({ error: "Database error in group billing query" });
+          }
+
+          // Step 5: Fetch data from Individual_Billing
+          const IndividualBillingQuery = `
+            SELECT Invoice_No AS Invoice_no, Bill_Date AS Billdate, Customer AS Organization_name, Amount, TripStartDate AS FromDate
+            FROM Individual_Billing 
+            WHERE Bill_Date BETWEEN ? AND ? AND Customer IN (?)`;
+
+          db.query(IndividualBillingQuery, [formattedFromDate, formattedToDate, customerNames], (err, individualData) => {
+            if (err) {
+              console.log(err, "errorindi");
+              return res.status(500).json({ error: "Database error in individual billing query" });
+            }
+
+            res.json({
+              customerDetails: enrichedCustomerDetails,
+              transferList: transferData,
+              groupBilling: groupData,
+              individualBilling: individualData,
+            });
+          });
+        });
+      });
+    });
+  });
+});
+
+
+
 router.get("/Monthilywisedatatrip", (req, res) => {
   const { customer, fromDate, toDate } = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  console.log(formattedFromDate, "f", formattedToDate,customer)
 
 
   let query = 'SELECT * FROM customers';
-let params = [];
+  let params = [];
 
-if (customer !== "All") {
+  if (customer !== "All") {
     query += ' WHERE customerType = ?';
     params.push(customer);
-}
+  }
 
-    db.query(query, params, (err, results) => {
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(400).json(err)
     }
- 
+
     const datas = results?.map((data) => data.customer)
     const sql = `
   SELECT 
@@ -409,19 +525,19 @@ if (customer !== "All") {
     customer,orderbyemail,billingno
 `;
 
-// const sql = `
-// SELECT 
-//   customer,
-//   SUM(IFNULL(totalcalcAmount, 0))  AS totalAmount
-// FROM 
-//   tripsheet
-// WHERE 
-//  tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-//  AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
-//   AND customer IN (?)
-// GROUP BY 
-//   customer
-// `;
+    // const sql = `
+    // SELECT 
+    //   customer,
+    //   SUM(IFNULL(totalcalcAmount, 0))  AS totalAmount
+    // FROM 
+    //   tripsheet
+    // WHERE 
+    //  tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+    //  AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+    //   AND customer IN (?)
+    // GROUP BY 
+    //   customer
+    // `;
 
     db.query(sql, [fromDate, toDate, datas], (err, results1) => {
       if (err) {

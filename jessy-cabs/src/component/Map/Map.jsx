@@ -15,6 +15,7 @@ import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ClearIcon from '@mui/icons-material/Clear';
 import { PermissionContext } from '../context/permissionContext';
+import { VehicleMapData } from './vehicleMapContext/vehcileMapContext';
 const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
@@ -31,6 +32,7 @@ const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
 };
 
 const Map = () => {
+  const {vehicleTab,setVehicleTab} = VehicleMapData();
   const [activeMenuItem, setActiveMenuItem] = useState('');
   const { permissions } = useContext(PermissionContext)
   // const Maps = permissions[21]?.read;
@@ -60,6 +62,8 @@ const Map = () => {
     }
   }, [warning]);
   const handleMenuItemClick = (menuItem, alt, e) => {
+    console.log(menuItem,"mmmmmmmmmmmmmmmmmmmmmmmmmm");
+    
     localStorage.setItem('activeMenuItem', menuItem);
     setActiveMenuItem(menuItem);
     let hasPermission = 0;

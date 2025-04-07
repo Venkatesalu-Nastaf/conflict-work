@@ -24,28 +24,42 @@ const useMonthlyWise = () => {
 
   const columns = [
     { field: 'id', headerName: 'Sno', width: 20 },
-    {
-      field: 'billingno',
-      headerName: 'Bill No',
-      // type: 'number',
-      width: 90,
-    },
-    { field: 'customer', headerName: 'Customer Name', width: 180 },
-    { field: 'address', headerName: 'Address', width: 180 },
+    // {
+    //   field: 'billingno',
+    //   headerName: 'Bill No',
+    //   // type: 'number',
+    //   width: 90,
+    // },
+    { field: 'customer', headerName: 'Customer Name', width: 200 },
+    { field: 'address', headerName: 'Address', width: 300 },
     { field: 'totalAmount', headerName: 'Amount', width: 130 },
-    { field: 'orderbyemail', headerName: 'Email', width: 180 },
-    { field: 'customertype', headerName: 'CustomerType', width: 130 },
-    { field: 'customerId', headerName: 'CustomerID', width: 130 },
+    { field: 'orderByEmail', headerName: 'Email', width: 180 },
+    { field: 'customerType', headerName: 'CustomerType', width: 130 },
+    // { field: 'customerId', headerName: 'CustomerID', width: 130 },
 
   ];
 
+  const excelcolumns = [
+    { field: 'id', headerName: 'Sno', width: 20 },
+    // {
+    //   field: 'billingno',
+    //   headerName: 'Bill No',
+    //   // type: 'number',
+    //   width: 90,
+    // },
+    { field: 'customer', headerName: 'Customer Name', width: 180 },
+    { field: 'totalAmount', headerName: 'Amount', width: 130 },
+        { field: 'address', headerName: 'Address', width: 300 },
+    { field: 'orderByEmail', headerName: 'Email', width: 180 },
+    { field: 'customerType', headerName: 'CustomerType', width: 130 },
+    // { field: 'customerId', headerName: 'CustomerID', width: 130 },
 
+  ];
 
   const handleAutocompleteChange = (event, value) => {
     const selectedOption = value ? value.label : '';
     setCustpmerType(selectedOption)
   };
-
 
   const handleShow = async () => {
 
@@ -56,15 +70,51 @@ const useMonthlyWise = () => {
     }
 
     try {
-      const response = await axios.get(
-        `${apiUrl}/Monthilywisedatatrip?fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
-          toDate.toISOString())}&customer=${encodeURIComponent(customertypedata)}`
-      );
-      const data = response.data;
-      console.log(data)
+      // const response1 = await axios.get(
+      //   `${apiUrl}/Monthilywisedatatrip?fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+      //     toDate.toISOString())}&customer=${encodeURIComponent(customertypedata)}`
+      // );
+      const response = await axios.post(`${apiUrl}/monthlyWiseBillingDataReport`, {
+        customerType: customertypedata,
+        fromDate: fromDate,
+        toDate: toDate
+      })
+      console.log(response.data, "monthlyresponsedata");
+      const { customerDetails, transferList, individualBilling, groupBilling } = response.data;
 
-      if (data.length > 0) {
-        const rowsWithUniqueId = data.map((row, index) => ({
+      // Create a map to store total amounts for each organization
+      const amountMap = new Map();
+
+      // Helper function to accumulate amounts
+      const accumulateAmount = (data) => {
+        data.forEach(({ Organization_name, Amount }) => {
+          if (Organization_name) {
+            amountMap.set(Organization_name, (amountMap.get(Organization_name) || 0) + parseInt(Amount));
+          }
+        });
+      };
+
+      // Aggregate amounts from all billing sources
+      accumulateAmount(transferList);
+      accumulateAmount(individualBilling);
+      accumulateAmount(groupBilling);
+
+      // Filter and merge customer details
+      const mergedCustomerDetails = customerDetails
+        .map(({ customerType, customer, orderByEmail, address }) => ({
+          customerType,
+          customer,
+          orderByEmail,
+          address: address,
+          totalAmount: amountMap.get(customer) || 0, // Assign total amount if available
+        }))
+        .filter(({ totalAmount }) => totalAmount > 0); // Return only matched customers
+
+      console.log(mergedCustomerDetails, "Final Merged Customer Details");
+    
+
+      if (mergedCustomerDetails.length > 0) {
+        const rowsWithUniqueId = mergedCustomerDetails.map((row, index) => ({
           ...row,
           id: index + 1,
         }));
@@ -72,7 +122,8 @@ const useMonthlyWise = () => {
         // setRows([])
         setSuccess(true);
         setSuccessMessage("successfully listed")
-      } else {
+      }
+      else {
         setRows([]);
         setError(true);
         setErrorMessage("no data found")
@@ -89,6 +140,7 @@ const useMonthlyWise = () => {
       // Check if there's no response, indicating a network error
       if (error.message) {
         setError(true);
+        console.log(error, "error Message");
         setErrorMessage("Check your internet connection");
         // console.log('Network error');
       } else if (error.response) {
@@ -103,6 +155,63 @@ const useMonthlyWise = () => {
     }
 
   }
+
+  // const handleShow = async () => {
+
+  //   if (!customertypedata) {
+  //     setWarning(true)
+  //     setWarningMessage("Enter The Customertype")
+  //     return
+  //   }
+
+  //   try {
+  //     const response = await axios.get(
+  //       `${apiUrl}/Monthilywisedatatrip?fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+  //         toDate.toISOString())}&customer=${encodeURIComponent(customertypedata)}`
+  //     );
+  //     const data = response.data;
+  //     console.log(data)
+
+  //     if (data.length > 0) {
+  //       const rowsWithUniqueId = data.map((row, index) => ({
+  //         ...row,
+  //         id: index + 1,
+  //       }));
+  //       setRows(rowsWithUniqueId)
+  //       // setRows([])
+  //       setSuccess(true);
+  //       setSuccessMessage("successfully listed")
+  //     } else {
+  //       setRows([]);
+  //       setError(true);
+  //       setErrorMessage("no data found")
+  //     }
+  //   }
+  //   // catch {
+  //   //   setRows([]);
+  //   //   setError(true);
+  //   //   setErrorMessage("Error retrieving data");
+  //   // }
+  //   catch (error) {
+  //     // console.error("Error occurredddddd:", error);
+
+  //     // Check if there's no response, indicating a network error
+  //     if (error.message) {
+  //       setError(true);
+  //       setErrorMessage("Check your internet connection");
+  //       // console.log('Network error');
+  //     } else if (error.response) {
+  //       setError(true);
+  //       // Handle other Axios errors (like 4xx or 5xx responses)
+  //       setErrorMessage("Failed to Show : " + (error.response.data.message || error.message));
+  //     } else {
+  //       // Fallback for other errors
+  //       setError(true);
+  //       setErrorMessage("An unexpected error occurred: " + error.message);
+  //     }
+  //   }
+
+  // }
 
   const handleShowAll = async () => {
 
@@ -153,7 +262,7 @@ const useMonthlyWise = () => {
       const fileName = "Monthylywise Reports"
       // creating one worksheet in workbook
       const worksheet = workbook.addWorksheet(workSheetName);
-      const columndata = columns.map(key => ({ key: key.field, header: key.headerName }));
+      const columndata = excelcolumns.map(key => ({ key: key.field, header: key.headerName }));
       //         worksheet.columns = columnsexcel
 
       worksheet.columns = columndata;

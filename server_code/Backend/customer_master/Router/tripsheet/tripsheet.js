@@ -144,9 +144,12 @@ router.post('/tripsheet-add', (req, res) => {
         VendorTimeToggle,
         HclMaxConflctdata,
         Hcldatakmvalue,
-        lockdatavalue
+        lockdatavalue,
+        messageedited,
+        MessageText
 
     } = req.body
+  
     const addCustomerData = {
         tripid,
         bookingno,
@@ -279,7 +282,9 @@ router.post('/tripsheet-add', (req, res) => {
         TotalTimeWithoutAddHours,
         Hybriddata,
         TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
-        Hcldatakmvalue,lockdatavalue
+        Hcldatakmvalue,lockdatavalue,
+        messageedited,
+        MessageText
     }
     console.log(addCustomerData, 'tripsheetadddata');
 
@@ -669,7 +674,7 @@ router.post('/getVehcileHistoryData', (req, res) => {
             return res.status(500).json({ error: "Database query failed" });
         }
 
-        console.log("Query result:", result);
+        // console.log("Query result:", result);
 
         return res.status(200).json( result );
     });
@@ -940,7 +945,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount, TotalTimeWithoutAddHours, Hybriddata, TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
-        Hcldatakmvalue,lockdatavalue } = req.body
+        Hcldatakmvalue,lockdatavalue, messageedited,MessageText } = req.body
 
 
     const updatedCustomerData = {
@@ -1073,7 +1078,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
         TotalTimeWithoutAddHours, Hybriddata, TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
-        Hcldatakmvalue,lockdatavalue
+        Hcldatakmvalue,lockdatavalue, messageedited,MessageText
     }
     // console.log(updatedCustomerData,"llll")
 
@@ -1389,7 +1394,7 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
                 if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
                     // its for fetch by All
                     // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" `, tripid, (err, result) => {
-                        if(datarole === "SuperAdmin" || datarole === "Assistant CFO") {
+                        if(datarole === "SuperAdmin" || datarole === "Assistant CFO"|| datarole === "Billing_Headoffice") {
                             console.log(datarole,"inside")
                         await db.query(`SELECT * FROM tripsheet WHERE tripid = ?   `, tripid, (err, result) => {
                         if (err) {
@@ -1428,7 +1433,7 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
                             return res.status(404).json({ error: 'You Dont Have Accesss To This Tripsheet Based On Service Station' });
                         }
                         else if (result.length > 0) {
-                              if(datarole === "SuperAdmin" || datarole === "Assistant CFO") {
+                              if(datarole === "SuperAdmin" || datarole === "Assistant CFO"|| datarole === "Billing_Headoffice") {
                             // db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
                                 db.query(`SELECT * FROM tripsheet WHERE tripid = ?  AND department IN (?) `, [tripid, arryData], (err, result) => {
                                 if (err) {
@@ -1796,7 +1801,7 @@ router.post('/send-tripsheet-email', async (req, res) => {
                 // from: 'foxfahad386@gmail.com',
                 from: Sendmailauth,
                 to: `${email},${customeremail}`,
-                subject: `JESSY CABS CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
+                subject: `JESSY CABS PVT LTD CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
                 html: `
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1; color: #FFFFFF;">
@@ -2390,10 +2395,11 @@ router.post('/gmappost-submitForm', (req, res) => {
 // Collect maplogdata for gmapdata table
 router.get('/get-gmapdata/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
+    // db.query('SELECT * FROM gmapdata WHERE tripid = ? AND trip_type != "On_Going"', [tripid], (err, results) => {
+        db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-        }
+        }        
         return res.status(200).json(results);
     });
 });
@@ -2477,60 +2483,126 @@ router.delete('/dlete-mapLocationPoint/:payload', (req, res) => {
 //------------------------------------
 
 
-router.get(`/t4hr-pack`, (req, res) => {
-    // Extract dynamic inputs from query parameters
-    const totalHours = req.query.totalHours;
-    // const vehicletype = req.query.vehicletype;
-    const VehicleName = req.query.vehicleName;
-    const duty = req.query.duty;
-    const totkm = req.query.totkm;
-    const OrganizationName = req.query.organizationname;
-    const stations = req.query.stations;
+// router.get(`/t4hr-packolddddd`, (req, res) => {
+//     // Extract dynamic inputs from query parameters
+//     const totalHours = req.query.totalHours;
+//     // const vehicletype = req.query.vehicletype;
+//     const VehicleName = req.query.vehicleName;
+//     const duty = req.query.duty;
+//     const totkm = req.query.totkm;
+//     const OrganizationName = req.query.organizationname;
+//     const stations = req.query.stations;
 
-    console.log(totalHours, VehicleName, duty, totkm, OrganizationName, stations, 'rate');
+//     console.log(totalHours, VehicleName, duty, totkm, OrganizationName, stations, 'rate');
 
-    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !stations) {
-        res.status(400).json({ error: 'Missing required parameters' });
-        return;
+//     if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !stations) {
+//         res.status(400).json({ error: 'Missing required parameters' });
+//         return;
+//     }
+
+
+
+//     // const sql = `SELECT * 
+//     //                 FROM ratemanagement
+//     //                 WHERE duty = ?
+//     //                     AND VehicleName = ?
+//     //                     AND OrganizationName =?
+//     //                     AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? ))
+//     //                 ORDER BY UptoHours 
+//     //                 LIMIT 1;`
+
+//     const sql = `SELECT * 
+//                     FROM ratemanagement
+//                     WHERE duty = ?
+//                         AND VehicleName = ?
+//                         AND OrganizationName =?
+//                         AND stations = ?
+//                         AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? ))
+//                     ORDER BY UptoHours 
+//                     LIMIT 1;`
+
+//     // Execute the query with dynamic parameters 
+//     db.query(sql, [duty, VehicleName, OrganizationName, stations, totalHours, totkm, duty, VehicleName, OrganizationName, stations], (error, results) => {
+//         // Check if any rows were returned
+//         if (results.length === 0) {
+//             return res.status(404).json({ error: 'No data found' });
+//         }
+
+//         // Send the fetched row in the response
+//         console.log(results, 'resultreate');
+
+//         res.json(results[0]);
+//     });
+// });
+
+// router.get(`/totalhrsuppiler-packolddd`, (req, res) => {
+//     // Extract dynamic inputs from query parameters
+//     const totalHours = req.query.totalHours;
+//     const ratetype = req.query.ratetype;
+//     // const vehicletype = req.query.vehicletype;
+//     const VehicleName = req.query.vehicleName;
+//     const duty = req.query.duty;
+//     const totkm = req.query.totkm;
+//     const OrganizationName = req.query.organizationname;
+//     const stations = req.query.stations;
+
+//     console.log(totalHours, "tt", ratetype, "rate", VehicleName, "name", duty, "duty", totkm, "totkmm", OrganizationName, "organnan", stations)
+
+
+//     if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !ratetype || !stations) {
+//         res.status(400).json({ error: 'Missing required parameters' });
+//         return;
+//     }
+
+//     const sql = `SELECT * 
+//                     FROM ratemanagement
+//                     WHERE duty = ?
+//                         AND VehicleName = ?
+//                         AND OrganizationName =?
+//                         AND ratetype = ?
+//                         AND stations = ?
+//                         AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ?))
+//                     ORDER BY UptoHours 
+//                     LIMIT 1;`
+
+//     // Execute the query with dynamic parameters 
+//     db.query(sql, [duty, VehicleName, OrganizationName, ratetype, stations, totalHours, totkm, duty, VehicleName, OrganizationName, stations], (error, results) => {
+
+//         // Check if any rows were returned
+//         if (results.length === 0) {
+//             return res.status(404).json({ error: 'No data found' });
+//         }
+
+//         // Send the fetched row in the response
+//         console.log(results[0], "supplier", results)
+//         res.json(results[0]);
+//     });
+// });
+
+
+
+// ------------------------------new code package rate------------------------------------------------------
+
+function checkConditions(data, value) {
+    let selectedObject = null;
+  console.log(data,"ffff",value)
+    // Loop through the array
+    for (let i = 0; i < data.length; i++) {
+        if (value < data[i].UptoKMS) {
+            selectedObject = data[i]; // Store the first matching object
+            break; // Exit loop when first condition is met
+        }
     }
 
+    // If no object satisfies the condition, return the last object
+    return selectedObject !== null ? selectedObject : data[data.length - 1];
+}
 
-
-    // const sql = `SELECT * 
-    //                 FROM ratemanagement
-    //                 WHERE duty = ?
-    //                     AND VehicleName = ?
-    //                     AND OrganizationName =?
-    //                     AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? ))
-    //                 ORDER BY UptoHours 
-    //                 LIMIT 1;`
-
-    const sql = `SELECT * 
-                    FROM ratemanagement
-                    WHERE duty = ?
-                        AND VehicleName = ?
-                        AND OrganizationName =?
-                        AND stations = ?
-                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? ))
-                    ORDER BY UptoHours 
-                    LIMIT 1;`
-
-    // Execute the query with dynamic parameters 
-    db.query(sql, [duty, VehicleName, OrganizationName, stations, totalHours, totkm, duty, VehicleName, OrganizationName, stations], (error, results) => {
-        // Check if any rows were returned
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'No data found' });
-        }
-
-        // Send the fetched row in the response
-        console.log(results, 'resultreate');
-
-        res.json(results[0]);
-    });
-});
 
 router.get(`/totalhrsuppiler-pack`, (req, res) => {
+
     // Extract dynamic inputs from query parameters
+    
     const totalHours = req.query.totalHours;
     const ratetype = req.query.ratetype;
     // const vehicletype = req.query.vehicletype;
@@ -2553,25 +2625,150 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
                     WHERE duty = ?
                         AND VehicleName = ?
                         AND OrganizationName =?
-                        AND ratetype = ?
+                  
                         AND stations = ?
-                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ?))
-                    ORDER BY UptoHours 
-                    LIMIT 1;`
+                        AND ratetype = ?
+                          AND (? < UptoHours)
+                           ORDER BY UptoHours 
+                           `
+                    
+
+                          
+   const sql2 = `SELECT * FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? And ratetype = "Supplier" ORDER BY UptoHours desc LIMIT 1`
 
     // Execute the query with dynamic parameters 
-    db.query(sql, [duty, VehicleName, OrganizationName, ratetype, stations, totalHours, totkm, duty, VehicleName, OrganizationName, stations], (error, results) => {
-
-        // Check if any rows were returned
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'No data found' });
+    db.query(sql, [duty, VehicleName, OrganizationName, stations,ratetype,totalHours], (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: "Internal Server Error" })
         }
 
-        // Send the fetched row in the response
-        console.log(results[0], "supplier", results)
-        res.json(results[0]);
+        // Check if any rows were returned
+        console.log(results, "resultsverfied")
+        if (results.length === 0) {
+            db.query(sql2, [duty, VehicleName, OrganizationName, stations], (error1, results2) => {
+                if (error1) {
+                    return res.status(500).json({ error: "Internal Server Error" })
+                }
+                console.log(results2, "resultsverfied22222222222")
+                if (results2.length === 0) {
+                    return res.status(404).json({ error: 'No data found' });
+                }
+                return  res.json(results2[0]);
+            })
+         
+        }
+        if(results.length === 1){
+        
+           return res.json(results[0]);
+        }
+        if(results.length > 1){
+
+        const resultsdata = results
+        const updatedData = resultsdata.map((item) => {
+            if (item.UptoKMS === 0) {
+              return { ...item, UptoKMS:item.KMS };  // Example: Increase KMS by 10
+            }
+            return item;
+          });
+        //   console.log(updatedData, "updatedData")
+
+          
+        console.log(checkConditions(updatedData,totkm),"pp")
+       const datacheck =  checkConditions(updatedData,totkm)
+
+       let selectedObject = results.find(obj => obj.id === datacheck["id"] );
+      return  res.json(selectedObject);
+        }
+
     });
 });
+
+// -----------------------customer pack rate--------------------------------------
+
+
+
+router.get(`/t4hr-pack`, (req, res) => {
+    // Extract dynamic inputs from query parameters
+    const totalHours = req.query.totalHours;
+    // const vehicletype = req.query.vehicletype;
+    const VehicleName = req.query.vehicleName;
+    const duty = req.query.duty;
+    const totkm = req.query.totkm;
+    const OrganizationName = req.query.organizationname;
+    const stations = req.query.stations;
+
+    console.log(totalHours, VehicleName, duty, totkm, OrganizationName, stations, 'ratecuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
+
+  
+
+    if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !stations) {
+        res.status(400).json({ error: 'Missing required parameters' });
+        return;
+    }
+
+    const sql = `SELECT * 
+    FROM ratemanagement
+    WHERE duty = ?
+        AND VehicleName = ?
+        AND OrganizationName =?
+  
+        AND stations = ?
+        AND ratetype = "Customer"
+          AND (? < UptoHours)
+           ORDER BY UptoHours 
+           `
+    
+
+          
+const sql2 = `SELECT * FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? And ratetype = "Customer" ORDER BY UptoHours desc LIMIT 1`
+
+ 
+    db.query(sql, [duty, VehicleName, OrganizationName, stations,totalHours], (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: "Internal Server Error" })
+        }
+        // Check if any rows were returned
+        console.log(results, "resultsverfied")
+        if (results.length === 0) {
+            db.query(sql2, [duty, VehicleName, OrganizationName, stations], (error1, results2) => {
+                if (error1) {
+                    return res.status(500).json({ error: "Internal Server Error" })
+                }
+                console.log(results2, "resultsverfied22222222222")
+                if (results2.length === 0) {
+                    return res.status(404).json({ error: 'No data found' });
+                }
+                return  res.json(results2[0]);
+            })
+         
+        }
+        if(results.length === 1){
+        
+           return res.json(results[0]);
+        }
+        if(results.length > 1){
+
+        const resultsdata = results
+        const updatedData = resultsdata.map((item) => {
+            if (item.UptoKMS === 0) {
+              return { ...item, UptoKMS:item.KMS };  // Example: Increase KMS by 10
+            }
+            return item;
+          });
+        //   console.log(updatedData, "updatedData")
+
+          
+        console.log(checkConditions(updatedData,totkm),"pp")
+       const datacheck =  checkConditions(updatedData,totkm)
+
+       let selectedObject = results.find(obj => obj.id === datacheck["id"] );
+      return  res.json(selectedObject);
+        }
+
+    });
+});
+// ------------------------
+// -------------------------------------------------end code  package rate---------------------------------------------
 
 
 

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import "./PackageRateEntery.css";
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
@@ -31,7 +31,10 @@ import { MdCancelPresentation } from "react-icons/md";
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-
+import Checkbox from '@mui/material/Checkbox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import DeleteConfirmationDialog from '../../../DeleteData/DeleteData.jsx';
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -46,6 +49,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const PackageRateEntery = ({ vehileName, stationname }) => {
 
+  // console.log(vehileName,"N")
   const {
     rows,
     error,
@@ -62,12 +66,15 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
     handleAdd,
     hidePopup,
     handleAutocompleteChange,
+    handleAutocompleteMultipleChange,
     columns,
     isEditMode,
     handleEdit,
+    handleChange11,
     // datevalidity,
     handleShow,
-    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata,loading,setLoading,isbtnloading,setisbtnloading
+    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata, loading, setLoading, isbtnloading, setisbtnloading,
+    multipleSelect,setSelectedRowDelete,selectedrowdelete,deletepackaagerate,setDeletePackagerate
 
   } = usePackagerateentry();
 
@@ -81,6 +88,8 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
   const RateManagement_delete = permissions[10]?.delete;
 
   //--------------------------------------------------------------------
+  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   return (
     <div className="PackageRateEntery-form main-content-form Scroll-Style-hide">
@@ -134,11 +143,12 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                     }
                   />
                 </div>
+
                 <div className="input PackageRateEntery-input">
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-vehicleType"
@@ -156,13 +166,44 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       )
                     }
                     }
+                  /> */}
+                  <Autocomplete
+                    fullWidth
+                    // multiple={!multipleSelect}
+                    multiple
+                    id="free-solo-demo-vehicleType"
+                    freeSolo
+                    size="small"
+                    sx={{ width: "100%" }}
+                    options={vehileName?.map((option) => ({
+                      label: option,
+                    })) || []}
+                    disableCloseOnSelect
+                    value={Array.isArray(commonData?.vehicleName) ? commonData?.vehicleName.map(label => ({ label })) : []}
+                    isOptionEqualToValue={(option, value) => option.label === value.label}
+                    onChange={(event, value) => handleAutocompleteMultipleChange(event, value, "vehicleName")}
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.label}
+                      </li>
+                    )}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Vehicle Type" name="vehicleName" inputRef={params.inputRef} />
+                    )}
                   />
+
                 </div>
                 <div className="input">
                   <div className="icone">
                     <WarehouseIcon color="action" />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     size="small"
                     id="stations"
@@ -179,7 +220,38 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       )
                     }
                     }
+                  /> */}
+                  <Autocomplete
+                    fullWidth
+                    multiple
+                    id="stations"
+                    freeSolo
+                    size="small"
+                    // value={commonData?.stations?.map(label => ({ label })) || []} // Convert stored array back to objects
+                    value={Array.isArray(commonData?.stations) ? commonData.stations.map(label => ({ label })) : []}
+                    options={stationname.map(option => ({
+                      label: option.Stationname,
+                    }))}
+                    disableCloseOnSelect
+                    isOptionEqualToValue={(option, value) => option.label === value.label}
+                    onChange={(event, value) => handleAutocompleteMultipleChange(event, value, "stations")}
+                    renderOption={(props, option, { selected }) => (
+                      <li {...props}>
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.label}
+                      </li>
+                    )}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                    )}
                   />
+
+
                 </div>
                 <div className=" PackageRateEntery-input">
                   <div className="icone">
@@ -188,7 +260,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   <TextField
                     size="small"
                     id="Validity"
-                    sx={{  
+                    sx={{
                       minWidth: { xs: 200, sm: 350 }, // Responsive minWidth
 
                     }}
@@ -207,6 +279,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
             </div>
           </div>
         </div>
+
 
         {/* //-----------------------------------------addpackage------------------------------- */}
 
@@ -238,6 +311,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       }
                       }
                     />
+                    {console.log(fieldSet?.duty === "Local" ? true : false, "Local", fieldSet?.duty)}
                   </div>
                   <div className="input">
                     <TextField
@@ -248,6 +322,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       label="Package"
                       name="package"
                       autoComplete="new-password"
+                      disabled={fieldSet?.duty === "Local" ? true : false}
                       value={fieldSet.package || ""}
                       onChange={(e) => handleChange(e, index)}
                     />
@@ -262,7 +337,18 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       name="Hours"
                       autoComplete="new-password"
                       value={fieldSet.Hours || ""}
-                      onChange={(e) => handleChange(e, index)}
+                      // onChange={(e) => handleChange(e, index)}
+                      onChange={(e) => {
+                        if (fieldSet?.duty === "Local") {
+
+                          handleChange11(e, index)
+                          // handleChange(e, index)
+                        }
+                        else {
+                          handleChange(e, index)
+                        }
+                      }
+                      }
                     />
                   </div>
                   <div className="input">
@@ -275,7 +361,18 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       name="KMS"
                       autoComplete="new-password"
                       value={fieldSet.KMS || ""}
-                      onChange={(e) => handleChange(e, index)}
+                      // onChange={(e) => handleChange(e, index)}
+                      onChange={(e) => {
+                        if (fieldSet?.duty === "Local") {
+
+
+                          handleChange11(e, index)
+                        }
+                        else {
+                          handleChange(e, index)
+                        }
+                      }
+                      }
                     />
                   </div>
                   <div className="input">
@@ -343,7 +440,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
-                  
+
                   <div className="input">
                     <TextField
                       type='number'
@@ -389,7 +486,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   <div className="input package-rate-entry-edit-division" style={{ justifyContent: 'start' }}>
                     {isEditMode ? (
                       // <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
-                      <LoadingButton loading={isbtnloading}variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</LoadingButton>
+                      <LoadingButton loading={isbtnloading} variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</LoadingButton>
                     ) : (
                       // <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
                       <LoadingButton loading={isbtnloading} variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</LoadingButton>
@@ -430,6 +527,13 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
             </div>
           }
         </div>
+{deletepackaagerate && 
+        <DeleteConfirmationDialog
+                                open={deletepackaagerate}
+                                onClose={() => setDeletePackagerate(false)}
+                                onConfirm={handleClick}
+                              />
+}
         <Box className='common-speed-dail'>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
@@ -453,13 +557,19 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                 onClick={(event) => handleClick(event, "Edit")}
               />
             )}
-            {RateManagement_delete === 1 && isEditMode && (
+            {(RateManagement_delete === 1 && selectedrowdelete.length > 0) && (
+              // <SpeedDialAction
+              //   key="delete"
+              //   icon={<DeleteIcon />}
+              //   tooltipTitle="Delete"
+              //   onClick={(event) => handleClick(event, "Delete")}
+              // />
               <SpeedDialAction
-                key="delete"
-                icon={<DeleteIcon />}
-                tooltipTitle="Delete"
-                onClick={(event) => handleClick(event, "Delete")}
-              />
+              key="delete"
+              icon={<DeleteIcon />}
+              tooltipTitle="Delete"
+              onClick={() => setDeletePackagerate(true)}
+            />
             )}
             <SpeedDialAction
               key="Cancel"
@@ -479,14 +589,14 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
         </Box>
         <div className="table-bookingCopy-PackageRateEntery">
           <div className='package-rate-entry-table'>
-  
+
             <Box
               sx={{
-                height: 400, 
+                height: 400,
                 position: 'relative',
                 '& .MuiDataGrid-virtualScroller': {
                   '&::-webkit-scrollbar': {
-                    width: '8px', 
+                    width: '8px',
                     height: '8px',
                   },
                   '&::-webkit-scrollbar-track': {
@@ -495,7 +605,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   '&::-webkit-scrollbar-thumb': {
                     backgroundColor: '#457cdc',
                     borderRadius: '20px',
-                    minHeight: '60px', 
+                    minHeight: '60px',
                   },
                   '&::-webkit-scrollbar-thumb:hover': {
                     backgroundColor: '#3367d6',
@@ -503,25 +613,32 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                 },
               }}
             >
-                {loading ? (
-                                <Box
-                                    sx={{
-                                        position: 'absolute', 
-                                        top: '50%', 
-                                        left: '50%', 
-                                        transform: 'translate(-50%, -50%)', 
-                                    }}
-                                >
-                                    <CircularProgress />
-                                </Box>
-                            ) : (
-                          <DataGrid
-                            rows={rows}
-                            columns={columns}
-                            onRowClick={handleRowClick}
-                            pageSize={5}
-                          />
-                            )}
+              {loading ? (
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  onRowClick={handleRowClick}
+                  pageSize={5}
+                  onRowSelectionModelChange={(newRowSelectionModel) => {
+                console.log(newRowSelectionModel,"model")
+                setSelectedRowDelete(newRowSelectionModel)
+                
+
+                  }}
+                  checkboxSelection
+                />
+              )}
             </Box>
           </div>
         </div>

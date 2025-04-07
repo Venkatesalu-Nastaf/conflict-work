@@ -1,7 +1,8 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState,useMemo } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
+import Textarea from '@mui/joy/Textarea';
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
@@ -26,6 +27,9 @@ import {
   FormControl,
   Checkbox,
 } from "@mui/material";
+// import Box from "@mui/material/Box";
+// import TabList from "@mui/joy/TabList";
+import Modal from '@mui/material/Modal';
 
 // ICONS
 import { PiCarSimpleFill } from "react-icons/pi";
@@ -66,6 +70,8 @@ import DialogContent from "@mui/material/DialogContent";
 import { APIURL } from "../../../url";
 // speed dial 
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import MessageIcon from '@mui/icons-material/Message';
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
@@ -75,10 +81,12 @@ import { MdDataUsage } from "react-icons/md";
 import Select from '@mui/material/Select';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Document, Page, pdfjs } from 'react-pdf';
+import DeleteConfirmationDialog from "../../../DeleteData/DeleteData";
+// import { textAlign } from "html2canvas/dist/types/css/property-descriptors/text-align";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+const StyledSpeedDial = styled(SpeedDial)(({ theme,id }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
     bottom: theme.spacing(2),
@@ -87,6 +95,10 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
     top: theme.spacing(2),
     left: theme.spacing(2),
+  },
+  "& .MuiFab-primary": {
+    backgroundColor: id ?"green": "#1976d2",
+    // color: "white",
   },
 }));
 
@@ -120,6 +132,7 @@ const Booking = ({ stationName, customerData }) => {
     selectedCustomerDatas,
     formValues,
     handleAutocompleteChange,
+
     setFormData,
     setStartTime,
     handleChangeFile,
@@ -150,18 +163,18 @@ const Booking = ({ stationName, customerData }) => {
     edit, AvilableimageCount,
     // handleKeyEnterdriver,
     vehileName,
-    selectedCustomerdriver,setNoChangeData,nochangedata,
+    selectedCustomerdriver, setNoChangeData, nochangedata,
     handleSelectAll, handlecheckbox, selectAll, deletefile, handleButtonClickwithouttripid, dialogOpentrail, handleCloseDialogtrail, handlecheckbox1, selectetImg, deletefiledata,
-    handleimagedeletewithouttripid,
-    handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning,
+    handleimagedeletewithouttripid, handleChangetext, messagedited,messageditedbefore,setDeleteBookingData,deletebookingdata,
+    handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning, handleMessageData, handleCloseMessage, dialogmessage,
     // handleBookEscortChange,handleAirportTransferChange,
     //  transferreport, 
-     setTransferreport, 
+    setTransferreport,
     //  escort,
-      setEscort, isAddbtnload, 
-      // setisAddbtnload,
-       isEditbtnload, 
-      //  setisEditbtnload
+    setEscort, isAddbtnload,
+    // setisAddbtnload,
+    isEditbtnload,
+    //  setisEditbtnload
   } = useBooking();
 
   const { getHtmlContentdata } = CopyEmailHtmlBooking();
@@ -174,11 +187,11 @@ const Booking = ({ stationName, customerData }) => {
   const [numPages, setNumPages] = useState(null);
   const shedOutTimeRef = useRef(null);
   const reportTimeRef = useRef(null);
-  
-    const [prevHours, setPrevHours] = useState({
-      shedOutTime:"",
-      reportTime:""
-    });
+
+  const [prevHours, setPrevHours] = useState({
+    shedOutTime: "",
+    reportTime: ""
+  });
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -277,7 +290,12 @@ const Booking = ({ stationName, customerData }) => {
       setWarningMessage("Check Your Trip Status")
     }
   }
-// console.log(prevHours,"timeeeeeeee+++++++++++");
+  // console.log(prevHours,"timeeeeeeee+++++++++++");
+  const superAdminAccess = localStorage.getItem("SuperAdmin")
+  const datahidecustomerdetails = superAdminAccess === "SuperAdmin" ? true : false;
+  const message = useMemo(() => {
+    return formData.MessageText ||selectedCustomerData.MessageText ||book.MessageText
+  }, [formData.MessageText, selectedCustomerData.MessageText, book.MessageText]);
 
   return (
     <div className="booking-form main-content-form Scroll-Style-hide">
@@ -465,11 +483,11 @@ const Booking = ({ stationName, customerData }) => {
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "orderedby")
                 }
-                onInputChange={(event, value) =>{
-                  if(event !== null){
-                  setNoChangeData({ ...nochangedata,orderedby: event.target.value })
+                onInputChange={(event, value) => {
+                  if (event !== null) {
+                    setNoChangeData({ ...nochangedata, orderedby: event.target.value })
                   }
-                   handleAutocompleteChange(event, value, "orderedby")
+                  handleAutocompleteChange(event, value, "orderedby")
                 }}
 
                 value={
@@ -498,55 +516,98 @@ const Booking = ({ stationName, customerData }) => {
               />
 
             </div>
-            <div className="input">
-              <div className="icone">
-                <AddIcCallTwoToneIcon color="action" />
+
+
+            {datahidecustomerdetails ? <>
+              <div className="input">
+                <div className="icone">
+                  <AddIcCallTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  name="orderByMobileNo"
+                  autoComplete="new-password"
+                  className="full-width"
+                  value={
+                    selectedCustomerData?.orderByMobileNo ||
+                    book?.mobile ||
+                    book?.orderByMobileNo ||
+                    formData?.orderByMobileNo ||
+                    selectedCustomerDatas?.orderByMobileNo ||
+                    ""
+                  }
+
+                  onChange={handleChange}
+                  label="Order by Mobile No"
+                  id="orderByMobileNo"
+                  margin="normal"
+                  size="small"
+                />
               </div>
-              <TextField
-                name="orderByMobileNo"
-                autoComplete="new-password"
-                className="full-width"
-                value={
-                  selectedCustomerData?.orderByMobileNo ||
-                  book?.mobile ||
-                  book?.orderByMobileNo ||
-                  formData?.orderByMobileNo ||
-                  selectedCustomerDatas?.orderByMobileNo ||
-                  ""
-                }
-
-                onChange={handleChange}
-                label="Order by Mobile No"
-                id="orderByMobileNo"
-                margin="normal"
-                size="small"
-              />
-            </div>
 
 
-            <div className="input">
-              <div className="icone">
-                <ForwardToInboxIcon color="action" />
+              <div className="input">
+                <div className="icone">
+                  <ForwardToInboxIcon color="action" />
+                </div>
+                <TextField
+                  name="orderByEmail"
+                  className="full-width"
+                  autoComplete="new-password"
+                  value={
+                    selectedCustomerData.orderByEmail ||
+                    book.orderByEmail ||
+                    book.orderbyemail ||
+                    formData.orderByemail ||
+                    selectedCustomerDatas.orderByEmail ||
+                    ""
+                  }
+                  onChange={handleChange}
+                  label="Order By Email"
+                  id="orderByEmail"
+                  margin="normal"
+                  size="small"
+                />
               </div>
-              <TextField
-                name="orderByEmail"
-                className="full-width"
-                autoComplete="new-password"
-                value={
-                  selectedCustomerData.orderByEmail ||
-                  book.orderByEmail ||
-                  book.orderbyemail ||
-                  formData.orderByemail ||
-                  selectedCustomerDatas.orderByEmail ||
-                  ""
-                }
-                onChange={handleChange}
-                label="Order By Email"
-                id="orderByEmail"
-                margin="normal"
-                size="small"
-              />
-            </div>
+
+            </> : <>
+              <div className="input">
+                <div className="icone">
+                  <AddIcCallTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  name="orderByMobileNo"
+                  autoComplete="new-password"
+                  className="full-width"
+
+                  disabled={!datahidecustomerdetails}
+                  label="Order by Mobile No"
+                  id="orderByMobileNo"
+                  margin="normal"
+                  size="small"
+                />
+              </div>
+
+
+              <div className="input">
+                <div className="icone">
+                  <ForwardToInboxIcon color="action" />
+                </div>
+                <TextField
+                  name="orderByEmail"
+                  className="full-width"
+                  autoComplete="new-password"
+                  disabled={!datahidecustomerdetails}
+                  label="Order By Email"
+                  id="orderByEmail"
+                  margin="normal"
+                  size="small"
+                />
+              </div>
+
+
+
+            </>
+            }
 
             <div className="input service-station-input">
               <div className="icone">
@@ -991,9 +1052,9 @@ const Booking = ({ stationName, customerData }) => {
                       const [hours, minutes] = value.split(':');
                       setPrevHours((prevState) => ({
                         ...prevState,
-                        shedOutTime:hours
-                      }));                          
-                      if (shedOutTimeRef.current && (parseInt(minutes)===59) && prevHours?.shedOutTime === hours) {
+                        shedOutTime: hours
+                      }));
+                      if (shedOutTimeRef.current && (parseInt(minutes) === 59) && prevHours?.shedOutTime === hours) {
                         shedOutTimeRef.current.focus();
                       }
                       setBook({ ...book, reporttime: event.target.value });
@@ -1022,19 +1083,19 @@ const Booking = ({ stationName, customerData }) => {
                     onChange={(event) => {
                       let value = event.target.value;
                       const [hours, minutes] = value.split(':');
-                      
+
                       setPrevHours((prevState) => ({
                         ...prevState,
-                        reportTime:hours
-                      }));                          
-                      if (reportTimeRef.current && (parseInt(minutes)===59) && prevHours?.reportTime === hours) {
+                        reportTime: hours
+                      }));
+                      if (reportTimeRef.current && (parseInt(minutes) === 59) && prevHours?.reportTime === hours) {
                         reportTimeRef.current.focus();
                       }
                       setFormData({ ...formData, starttime: event.target.value });
                       setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
                       setBook({ ...book, starttime: event.target.value });
                       setStartTime(event.target.value);
-                      setNoChangeData({ ...nochangedata,starttime: event.target.value  });
+                      setNoChangeData({ ...nochangedata, starttime: event.target.value });
                     }}
                     name="starttime"
                   />
@@ -1209,6 +1270,7 @@ const Booking = ({ stationName, customerData }) => {
                 }
               />
             </div>
+         
             <div className="input" style={{ marginTop: '0px' }}>
               <div className="input">
                 {isEditMode ? (
@@ -1241,6 +1303,7 @@ const Booking = ({ stationName, customerData }) => {
         </div>
         <Box className='common-speed-dail'>
           <StyledSpeedDial
+          id={message}
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
             direction="left"
@@ -1254,12 +1317,19 @@ const Booking = ({ stationName, customerData }) => {
               />
             )}
             {Booking_delete === 1 && isEditMode && (
+              // <SpeedDialAction
+              //   key="delete"
+              //   icon={<DeleteIcon />}
+              //   tooltipTitle="Delete"
+              //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+              // />
+
               <SpeedDialAction
-                key="delete"
-                icon={<DeleteIcon />}
-                tooltipTitle="Delete"
-                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
-              />
+              key="delete"
+              icon={<DeleteIcon />}
+              tooltipTitle="Delete"
+              onClick={() => setDeleteBookingData(true)}
+            />
             )}
             {Booking_new === 1 && !isEditMode && (
               <SpeedDialAction
@@ -1274,6 +1344,13 @@ const Booking = ({ stationName, customerData }) => {
               icon={<CancelPresentationIcon />}
               tooltipTitle="Cancel"
               onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+            />
+            <SpeedDialAction
+              key="Message"
+              icon={<MessageIcon />}
+              tooltipTitle="Message"
+              onClick={handleMessageData}
+
             />
           </StyledSpeedDial>
         </Box>
@@ -1365,12 +1442,12 @@ const Booking = ({ stationName, customerData }) => {
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
                 // onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
-                onInputChange={(event, value) =>{
-                  if(event !== null){
-                    setNoChangeData({ ...nochangedata,vehRegNo: value });
+                onInputChange={(event, value) => {
+                  if (event !== null) {
+                    setNoChangeData({ ...nochangedata, vehRegNo: value });
                   }
-                   handleVehicleChange(event, value, "vehRegNo")
-                  }} 
+                  handleVehicleChange(event, value, "vehRegNo")
+                }}
                 // onKeyDown={handleKeyEnterdriver}
                 value={selectedCustomerData?.vehRegNo || book.vehRegNo || ''}  // Reflect vehRegNo correctly
                 options={vechiledata?.map((option) => ({ label: option?.vehRegNo }))}  // Map vehRegNo from data
@@ -1451,12 +1528,12 @@ const Booking = ({ stationName, customerData }) => {
                 sx={{ width: "100%" }}
                 onChange={(event, value) => handleDriverChange(event, value, "driverName")}
                 // onInputChange={(event, value) => handleDriverChange(event, value, "driverName")}  // Handle manual input
-                          onInputChange={(event, value) =>{ 
-                            if(event !== null){
-                              setNoChangeData({ ...nochangedata,driverName: value });
-                            }
-                            handleDriverChange(event, value, "driverName")
-                          }}
+                onInputChange={(event, value) => {
+                  if (event !== null) {
+                    setNoChangeData({ ...nochangedata, driverName: value });
+                  }
+                  handleDriverChange(event, value, "driverName")
+                }}
                 // onKeyDown={handleKeyEnterdriver}
                 value={selectedCustomerData?.driverName || book.driverName || ""} // Reflect the driverName correctly
                 options={drivername?.map((option) => ({ label: option.drivername }))} // Map drivername from data
@@ -1639,6 +1716,74 @@ const Booking = ({ stationName, customerData }) => {
         </div>
         {/* {console.log(allFile, "filealll")} */}
 
+
+        <Modal
+          open={dialogmessage}
+          onClose={handleCloseMessage}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              top: '40%',
+              right: '-8%',
+              transform: 'translate(-50%, -50%)',
+              width: '400px',
+              height: '200px',
+              bgcolor: 'white',
+              // border: '1px solid #000',
+              borderRadius: 2,
+              textAlign: 'center',
+              boxShadow: 24,
+              p: 1,
+              overflowY: 'auto'
+            }}
+          >
+
+
+            <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'self-start' }}>
+              <p>Edited By: <span>{messageditedbefore}</span></p>
+
+              <div className="input1 pick-up-address-input2">
+                <TextField
+                  name="MessageText"
+                  margin="normal"
+                  size="small"
+                  autoComplete="new-password"
+                  className="full-width"
+                 
+                  label="Message"
+                  id="MessageText "
+                  multiline
+                  rows={2}
+                  sx={{ width: "100%" }}
+                  value={
+                    formData.MessageText ||
+                    selectedCustomerData.MessageText ||
+                    book.MessageText ||
+                    ""
+                  }
+                  // onChange={(event) => handleChangetext(event)}
+                  onChange={(e) => {
+                    handleChangetext(e)
+                  }} 
+                />
+
+              </div>
+              <div className="message_data">
+                <Button onClick={handleCloseMessage}>Done</Button>
+              </div>
+            </div>
+          </Box>
+        </Modal>
+
+
+
+
         <Dialog open={dialogOpen} onClose={handleCloseDialog}>
           <DialogContent>
             <div className="vehicle-info-dailog-box-div1" style={{ width: "600px" }}>
@@ -1705,6 +1850,13 @@ const Booking = ({ stationName, customerData }) => {
             </div>
           </DialogContent>
         </Dialog>
+        {deletebookingdata && 
+        <DeleteConfirmationDialog
+        open={deletebookingdata}
+        onClose={() => setDeleteBookingData(false)}
+        onConfirm={handleClick}
+      />
+        }
 
 
 

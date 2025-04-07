@@ -1,9 +1,14 @@
-import React, { useEffect, useContext, useState, useRef } from 'react';
+import React, { useEffect, useContext, useState, useRef,useMemo } from 'react';
 import { CopyField } from '@eisberg-labs/mui-copy-field';
-import EditMapComponent from './NavigationMap/EditMapComponent';
+// import EditMapComponent from './NavigationMap/EditMapComponent';
 import EditMapCheckComponent from './NavigationMap/EditMapCheckComponent';
 import { Typography, IconButton } from '@mui/material';
 import { Snackbar, Alert } from '@mui/material';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+// import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import { ZoomIn, ZoomOut } from "@mui/icons-material";
 
 import CloseIcon from '@mui/icons-material/Close';
 import "./TripSheet.css";
@@ -38,6 +43,8 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { TextField, FormControlLabel, FormControl, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import EmailIcon from "@mui/icons-material/Email";
+import MessageIcon from '@mui/icons-material/Message';
+
 
 //dialog box
 import Dialog from '@mui/material/Dialog';
@@ -105,15 +112,28 @@ import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 import { WhatsappShareButton } from 'react-share';
 import LoadingButton from '@mui/lab/LoadingButton';
+
+import DeleteConfirmationDialog from "../../DeleteData/DeleteData";
 // UpdateTbaleRowsGPSSlider TABLE START
+// const columns = [
+//   { field: "id", headerName: "Sno", width: 60 },
+//   { field: "documenttype", headerName: "Document Type", width: 180 },
+//   { field: "path", headerName: "Attach Path", width: 160 },
+//   { field: "tripid", headerName: "TripID", width: 100 },
+//   { field: "booking_id", headerName: "Booking ID", width: 110 },
+// ];
+
 const columns = [
-  { field: "id", headerName: "Sno", width: 60 },
-  { field: "documenttype", headerName: "Document Type", width: 180 },
+  { field: "id", headerName: "Sno", width: 20 },
+  { field: "documenttype", headerName: "Document Type", width: 130 },
   { field: "path", headerName: "Attach Path", width: 160 },
-  { field: "tripid", headerName: "TripID", width: 100 },
-  { field: "booking_id", headerName: "Booking ID", width: 110 },
+  { field: "name", headerName: "File Name", width: 160 },
+  { field: "tripid", headerName: "TripID", width: 80 },
+  { field: "booking_id", headerName: "Booking ID", width: 80 },
 ];
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+
+
+const StyledSpeedDial = styled(SpeedDial)(({ theme,id }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
     bottom: theme.spacing(2),
@@ -123,6 +143,11 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     top: theme.spacing(2),
     left: theme.spacing(2),
   },
+  "& .MuiFab-primary": {
+    backgroundColor: id ?"green": "#1976d2",
+    // color: "white",
+  },
+  
 }));
 
 const style = {
@@ -154,13 +179,14 @@ const style1 = {
 };
 
 
-const TripSheet = ({ stationName, logoImage }) => {
+const TripSheet = ({ stationName, logoImage, customerData }) => {
 
   const stationOptions = stationName?.filter(option => option?.Stationname !== "All")
+  const CustomerNames = customerData.map((el) => ({ customer: el?.customer }))
 
   const superAdminAccess = localStorage.getItem("SuperAdmin")
   const filteredStatus =
-  superAdminAccess === "SuperAdmin" || superAdminAccess === "Assistant CFO"
+    superAdminAccess === "SuperAdmin" 
       ? Status // Show all statuses for superAdmin and CFo
       : Status.filter((option) => option.optionvalue !== "Billed");
 
@@ -268,15 +294,19 @@ const TripSheet = ({ stationName, logoImage }) => {
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
-    handleDeleteMap, copydatalink, setCopyDataLink,
+    handleDeleteMap, copydatalink, setCopyDataLink,speeddailacesssedit,speeddailacesss,checksignatureandmap,getSignatureImageverify,
     //  conflictenddate,
-    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess,
-    setSuccessMessage,
+    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess,oldStatusCheck,
+    setSuccessMessage,handleChangetexttrip,handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip,messageditedtrip,messageditedbeforetrip,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,
-    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,
-    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata,
+    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,Permissiondeleteroles,
+    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,fueldataamountdis,setFuelAdvancedamountHide,
+    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
+    tripGpsData,fullGpsData,allGpsData,handleExcelDownloadtrip,handlePdfDownloadtrip,attachedImageEtrip,deletetripasheetdata,setDeleteTripsheetData,
+    // --------------------this zoom code image data----------------------------------------
+    posX,posY,zoom,handleZoomOut,startDrag,stopDrag,handleScrollZoom,handleZoomIn,isDragging,Scale,onDrag
+    // this code zoom image data---------------------------------
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
@@ -295,14 +325,14 @@ const TripSheet = ({ stationName, logoImage }) => {
   const vendorinfoOverviewCloseRef = useRef(null);
 
   const [prevHours, setPrevHours] = useState({
-    shedOutTime:"",
-    startTime:"",
-    closeTime:"",
-    ShedInTime:"",
-    vendorinfoStartTime:"",
-    vendorinfoCloseTime:"",
-    vendorinfoOverviewStartTime:"",
-    vendorinfoOverviewCloseTime:"",
+    shedOutTime: "",
+    startTime: "",
+    closeTime: "",
+    ShedInTime: "",
+    vendorinfoStartTime: "",
+    vendorinfoCloseTime: "",
+    vendorinfoOverviewStartTime: "",
+    vendorinfoOverviewCloseTime: "",
   });
 
   // const Tripsheet_read = permissions[3]?.read;
@@ -310,6 +340,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   const Tripsheet_new = permissions[3]?.new;
   const Tripsheet_modify = permissions[3]?.modify;
   const Tripsheet_delete = permissions[3]?.delete;
+
   const billing_read = permissions[4]?.read;
 
   // varibles for validation 
@@ -423,15 +454,22 @@ const TripSheet = ({ stationName, logoImage }) => {
         const imageUrl = URL.createObjectURL(await response.blob());
         setSignImageUrl(imageUrl); // Update state
         setSignaturepopup(true);
-        setSuccess(true);
+        checksignatureandmap();
+        getSignatureImageverify()
+        // setSuccess(true);
         setWarning(false);
-        setSuccessMessage("Signature loaded successfully!");
+        // setSuccessMessage("Signature loaded successfully!");
+      
+        console.log("success")
       } else {
         setSignImageUrl(""); // Clear state
         if (fileInputRefdata.current) {
           fileInputRefdata.current.click();
           setSignatureupload(false);
-          setSuccessMessage("Please upload a signature image.");
+          checksignatureandmap();
+          getSignatureImageverify()
+          console.log("successno")
+          // setSuccessMessage("Please upload a signature image.");
         } else {
           console.error("File input ref is not available");
         }
@@ -560,12 +598,27 @@ const TripSheet = ({ stationName, logoImage }) => {
   // }
 
   const ratefor = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
+  const vehicleRegisterNo1 = formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo || '';
   const [fueltype, setFuelType] = useState('')
   useEffect(() => {
     const fetchFuleType = async () => {
-      if (!ratefor) return
-      const data = await axios.get(`${apiurl}/getFuelType/${ratefor}`)
-      setFuelType(data?.data[0]?.fueltype)
+      if (!vehicleRegisterNo1) {
+        return
+      }
+      else {
+        const responedata = await axios.get(`${apiurl}/getFuelType/${vehicleRegisterNo1}`)
+        // console.log(responedata,"datafueleee")
+        const datafuel = responedata.data
+        // console.log(datafuel,"datafuel")
+        if (datafuel.length > 0) {
+
+          setFuelType(datafuel[0].fueltype)
+          // setFuelType(data?.data[0]?.fueltype)
+        }
+        else {
+          setFuelType('')
+        }
+      }
     }
 
     fetchFuleType()
@@ -701,7 +754,7 @@ const TripSheet = ({ stationName, logoImage }) => {
     const finalshedincalc = parseFloat(shedintimeformat).toFixed(2);
     const shedoutTimeFormat = reportTime?.replace(":", ".")
     const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
-    const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';    
+    const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';
     const parseDate = (dateStr) => {
       const [day, month, year] = dateStr?.split('-');
       return new Date(`${year}-${month}-${day}`);
@@ -913,7 +966,7 @@ const TripSheet = ({ stationName, logoImage }) => {
   useEffect(() => {
     let timeout;
     console.log(conflictModalbox, "conflictttttttttttt")
-    if (conflictModalbox && emptyState!==true) {
+    if (conflictModalbox && emptyState !== true) {
       timeout = setTimeout(() => {
         setError(true);
         setErrorMessage("There is a conflict with this trip sheet in Date and Time");
@@ -932,6 +985,11 @@ const TripSheet = ({ stationName, logoImage }) => {
     }
     return () => clearTimeout(timeout);
   }, [conflictModalKmBox]);
+const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") ;
+
+const message = useMemo(() => {
+  return formData.MessageText || selectedCustomerData.MessageText || book.MessageText;
+}, [formData.MessageText, selectedCustomerData.MessageText, book.MessageText]);
 
   // console.log(formData.reporttime, selectedCustomerData.reporttime, selectedCustomerDatas.reporttime, book.reporttime, 'rrrrrrrrrrrrrrr');
   return (
@@ -1001,8 +1059,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     // disabled={editButtonStatusCheck && superAdminAccess !== "SuperAdmin"}
-                    
-                   disabled={editButtonStatusCheck && superAdminAccess !== "SuperAdmin"}
+
+                    disabled={editButtonStatusCheck && superAdminAccess !== "SuperAdmin"}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
                     value={Status.find((option) => option.optionvalue)?.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                     // options={Status.map((option) => ({
@@ -1180,28 +1238,67 @@ const TripSheet = ({ stationName, logoImage }) => {
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
-                  <TextField
+                  {/* <TextField
                     name="customer"
                     size='small'
                     value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
                     onChange={handleChange}
                     label="Customer"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     id="standard-size-customer"
                     required
                     autoComplete="password"
+                  /> */}
+
+
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="customer"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    // onChange={(event, value) => {
+                    //   handleAutocompleteChangecustomer(event, value, "customer")
+                    // }}
+
+                    onChange={(event, value) => {
+                      if (superAdminAccess === "SuperAdmin") {
+                        handleAutocompleteChangecustomer(event, value, "customer")
+                      }
+                      else {
+                        setError(true)
+                        setErrorMessage("u don't change customer data")
+                      }
+                    }
+                    }
+                    value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
+                    options={CustomerNames?.map((option) => ({
+                      label: option.customer,
+                    }))}
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    getOptionLabel={(option) => option.label || formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          label="Customer"
+                          name="customer"
+                          inputRef={params.inputRef}
+                        />
+                      );
+                    }}
                   />
                 </div>
                 <div className="input">
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
-                  <TextField
+                  {/* <TextField
                     name="orderedby"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
-                    
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+
                     size="small"
                     value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
                     onChange={handleChange}
@@ -1209,43 +1306,127 @@ const TripSheet = ({ stationName, logoImage }) => {
                     id="standard-size-orderedby"
                     autoComplete="password"
                     required
-                  />
-                </div>
+                  /> */}
 
-                <div className="input">
-                  <div className="icone">
-                    <PhoneIphoneIcon color="action" />
-                  </div>
-                  <TextField
-                    name="mobile"
-                    value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
-                    onChange={handleChange}
-                    label="Mobile"
-                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
-                    id="standard-size-mobile"
-                    size="small"
-                    autoComplete="password"
-                    required
-                  />
-                </div>
 
-                <div className="input">
-                  <div className="icone">
-                    <AttachEmailIcon color="action" />
-                  </div>
-                  <TextField
-                    name="orderbyemail"
-                    value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
-                    onChange={handleChange}
-                    // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
-                    label="Order By Email"
-                    id="orderbyemail"
+                  <Autocomplete
+                    fullWidth
                     size="small"
-                    autoComplete="password"
+                    id="orderedby"
+                    freeSolo
+                    sx={{ width: "100%" }}
+                    onChange={(event, value) => {
+                      if (superAdminAccess === "SuperAdmin") {
+                        handleAutocompleteChangecustomer(event, value, "orderedby")
+                      }
+                      else {
+                        setError(true)
+                        setErrorMessage("u don't change customer data")
+                      }
+                    }
+                    }
+                    // onInputChange={(event, value) =>{
+                    //   if(event !== null){
+                    //   setNoChangeData({ ...nochangedata,orderedby: event.target.value })
+                    //   }
+                    //    handleAutocompleteChange(event, value, "orderedby")
+                    // }}
+
+                    value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
+
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    options={orderByDropDown?.map((option) => ({
+
+                      label: option?.orderedby,
+                    }))}
+                    getOptionLabel={(option) => option?.label || formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ""}
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          label="Ordered By"
+                          name="orderedby"
+                          inputRef={params.inputRef}
+                        />
+
+                      );
+                    }}
                   />
+
                 </div>
+                {/* {console.log(formData.mobile,"fo",selectedCustomerData.mobile,"bb",book.mobile,"mobile")} */}
+                {superAdminAccess === "SuperAdmin" ? <>
+                  <div className="input">
+                    <div className="icone">
+                      <PhoneIphoneIcon color="action" />
+                    </div>
+                    <TextField
+                      name="mobile"
+                      value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
+                      // onChange={handleChange}
+                      label="Mobile"
+                      // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      id="standard-size-mobile"
+                      size="small"
+                      autoComplete="password"
+                      required
+                    />
+                  </div>
+
+                  <div className="input">
+                    <div className="icone">
+                      <AttachEmailIcon color="action" />
+                    </div>
+                    <TextField
+                      name="orderbyemail"
+                      value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
+                      // onChange={handleChange}
+                      // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      label="Order By Email"
+                      id="orderbyemail"
+                      size="small"
+                      autoComplete="password"
+                    />
+                  </div>
+                </> : <>
+                  <div className="input">
+                    <div className="icone">
+                      <PhoneIphoneIcon color="action" />
+                    </div>
+                    <TextField
+                      name="mobile"
+
+                      // onChange={handleChange}
+                      label="Mobile"
+                      // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      id="standard-size-mobile"
+                      size="small"
+                      autoComplete="password"
+                      required
+                    />
+                  </div>
+
+                  <div className="input">
+                    <div className="icone">
+                      <AttachEmailIcon color="action" />
+                    </div>
+                    <TextField
+                      name="orderbyemail"
+
+                      // onChange={handleChange}
+                      // disabled={hideField && superAdminAccess !== "SuperAdmin"}
+                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      label="Order By Email"
+                      id="orderbyemail"
+                      size="small"
+                      autoComplete="password"
+                    />
+                  </div>
+
+                </>}
 
                 <div className="input">
                   <div className="icone">
@@ -1258,7 +1439,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
                     value={stationOptions?.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                     options={stationOptions?.map((option) => ({
@@ -1284,7 +1465,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     label="Guest Name"
                     name="guestname"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
                     onChange={handleChange}
                     size="small"
@@ -1301,7 +1482,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Phone (Cell)"
                     id="guestmobileno"
                     size="small"
@@ -1318,7 +1499,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.email || selectedCustomerData.email || formValues.email || book.email || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Email"
                     id="email"
                     size="small"
@@ -1338,7 +1519,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     name="address1"
                     multiline
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     rows={2}
                     sx={{ width: "100%" }}
                     autoComplete="new-password"
@@ -1356,7 +1537,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size="small"
                     name="useage"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
                     onChange={handleChange}
                     label="Usage"
@@ -1376,7 +1557,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     onChange={(event, value) => {
                       handleAutocompleteChange(event, value, "duty")
                       if (!lockdata) {
@@ -1408,7 +1589,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     size="small"
                     name="request"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
                     onChange={handleChange}
                     label="Request"
@@ -1451,7 +1632,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Cost Code"
                     id="customer-customercode"
                     autoComplete="password"
@@ -1468,7 +1649,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     onChange={handleChange}
                     name="employeeno"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Employee No"
                     id="employeeno"
                     autoComplete="password"
@@ -1485,7 +1666,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="demo-simple-select"
                         // value={bookingStatus}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         value={escort}
                         // label="Status"
                         onChange={handleEscortChange}
@@ -1531,7 +1712,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="demo-simple-select"
                         value={transferreport}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         onChange={handleTransferChange}
                       >
                         <MenuItem value={'Yes'}>Yes</MenuItem>
@@ -1648,7 +1829,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
 
-                          disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
 
                           id="shedOutDate"
                           value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
@@ -1704,7 +1885,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                          disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                           id="startdate"
                           value={
                             formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
@@ -1788,7 +1969,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <DatePicker
                           label="Close Date"
                           id="closedate"
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"&& !a}
                           value={
                             formData?.closedate ||
                               selectedCustomerData?.closedate
@@ -1856,7 +2037,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         <DatePicker
                           label="Shed In Date"
                           id="shedInDate"
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           value={formData.shedInDate || selectedCustomerData.shedInDate ? dayjs(selectedCustomerData.shedInDate) : null || book.shedInDate ? dayjs(book.shedInDate) : null}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -1902,7 +2083,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         name="totaldays"
                         value={calculateTotalDay()}
                         label="Total Days"
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         size="small"
                         type="number"
                         id="totaldays"
@@ -1935,22 +2116,22 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                          disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                           value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                           onChange={(event) => {
                             let value = event.target.value;
                             const [hours, minutes] = value.split(':');
                             const correctedValue = `${hours}:${minutes}`;
-                         
+
                             setPrevHours((prevState) => ({
                               ...prevState,
                               shedOutTime: hours
-                            }));                          
-                            if (fileInputRefdata.current && (parseInt(minutes)===59) && prevHours?.shedOutTime === hours) {
+                            }));
+                            if (fileInputRefdata.current && (parseInt(minutes) === 59) && prevHours?.shedOutTime === hours) {
                               fileInputRefdata.current.focus();
                             }
-                           
-                         
+
+
                             setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
                             setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                             setBook({ ...book, reporttime: event.target.value });
@@ -1997,26 +2178,26 @@ const TripSheet = ({ stationName, logoImage }) => {
                         id="starttime"
                         // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                         // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                        disabled={shedoutDisabled  && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         name="starttime"
                         ref={reporttimeRef}
                         value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
                         onChange={(event) => {
                           const rTime = event.target.value;
-                           
+
                           let value = event.target.value;
                           const [hours, minutes] = value.split(':');
-                          console.log(minutes, "timeeeeeeeee",hours,hours.length);  
-                          console.log(hours,"timeeeeeeee++++++",hours);
-                          
+                          console.log(minutes, "timeeeeeeeee", hours, hours.length);
+                          console.log(hours, "timeeeeeeee++++++", hours);
+
                           setPrevHours((prevState) => ({
                             ...prevState,
-                            startTime:hours
-                          }));                          
-                          if (reporttimeRef.current && (parseInt(minutes)===59) && prevHours?.startTime === hours) {
+                            startTime: hours
+                          }));
+                          if (reporttimeRef.current && (parseInt(minutes) === 59) && prevHours?.startTime === hours) {
                             reporttimeRef.current.focus();
                           }
-                         
+
 
                           // if (reporttimeRef.current && ((hours[0] !== "0") && (minutes[0] !== "0")) ) {
                           //   reporttimeRef.current.focus();
@@ -2060,20 +2241,20 @@ const TripSheet = ({ stationName, logoImage }) => {
                         name="closetime"
                         id="closetime"
                         ref={closeTimeRef}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"&& !a}
                         value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                         onChange={(event) => {
                           const rTime = event.target.value;
                           let value = event.target.value;
                           const [hours, minutes] = value.split(':');
-                          console.log(minutes, "timeeeeeeeee",hours,hours.length);
-                        
+                          console.log(minutes, "timeeeeeeeee", hours, hours.length);
+
 
                           setPrevHours((prevState) => ({
                             ...prevState,
-                            closeTime:hours
-                          }));                          
-                          if (closeTimeRef.current && (parseInt(minutes)===59) && prevHours?.closeTime === hours) {
+                            closeTime: hours
+                          }));
+                          if (closeTimeRef.current && (parseInt(minutes) === 59) && prevHours?.closeTime === hours) {
                             closeTimeRef.current.focus();
                           }
                           // Update the time without restriction
@@ -2123,20 +2304,20 @@ const TripSheet = ({ stationName, logoImage }) => {
                         type="time"
                         name="shedintime"
                         ref={shedinTimeRef}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
                         onChange={(event) => {
                           const rTime = event.target.value;
                           let value = event.target.value;
                           const [hours, minutes] = value.split(':');
-                          console.log(minutes, "timeeeeeeeee",hours,hours.length);
-                        
+                          console.log(minutes, "timeeeeeeeee", hours, hours.length);
+
 
                           setPrevHours((prevState) => ({
                             ...prevState,
-                            ShedInTime:hours
-                          }));                          
-                          if (shedinTimeRef.current && (parseInt(minutes)===59) && prevHours?.ShedInTime === hours) {
+                            ShedInTime: hours
+                          }));
+                          if (shedinTimeRef.current && (parseInt(minutes) === 59) && prevHours?.ShedInTime === hours) {
                             shedinTimeRef.current.focus();
                           }
                           // Always allow input and set the state
@@ -2209,7 +2390,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                             additionalTime.additionaltime ||
                             ''
                           }
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" || outStationHide}
+                          // disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" || outStationHide}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           onChange={handleChange}
                           id="additionaltime"
                           size="small"
@@ -2236,7 +2418,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               ? calculateTotalTimes()
                               : ""
                           }
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           // onChange={handleChange}
                           id="totaltime"
                           size='small'
@@ -2348,7 +2530,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                               // }
                             }
                           }}
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           label="Shed Out"
                           id="shedout"
                           size='small'
@@ -2383,7 +2565,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             // }
                           }
                         }}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         size="small"
                         label="Start KM"
                         type="number"
@@ -2417,7 +2599,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             // }
                           }
                         }}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         label="Close KM"
                         size="small"
                         type="number"
@@ -2457,7 +2639,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                             // }
                           }
                         }}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         label="Shed In"
                         type="number"
                         id="shedin"
@@ -2481,7 +2663,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                           handleChange(e)
                         }
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" || outStationHide}
+                      // disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a || outStationHide}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a }
                       label="Add KM"
                       type="number"
                       id="shedkm"
@@ -2498,7 +2681,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                     <TextField
                       name="totalkm1"
                       value={calculateTotalKilometers()}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       // onChange={handleChange}
                       label="Total KM"
                       id="totalkm1"
@@ -2558,7 +2741,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           vpermettovendor: value,
                         }));
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Permit"
                       id="permit"
                       size="small"
@@ -2610,7 +2793,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                           vendorparking: value,
                         }));
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Parking"
                       id="parking"
                       size="small"
@@ -2663,7 +2846,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                         }));
 
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Toll"
                       id="toll"
                       size="small"
@@ -2751,7 +2934,10 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       <Button
                                         // onClick={handleDeleteMap}
                                         onClick={handleOpen}
-                                        variant="contained" color="primary" disabled={superAdminAccess !== "SuperAdmin" && temporaryStatus}>
+                                        variant="contained" color="primary" 
+                                        // disabled={superAdminAccess !== "SuperAdmin" && (temporaryStatus || hideField)}>
+                                          //  disabled={handleDatapermission(Tripsheet_delete)}>
+                                              disabled={Permissiondeleteroles}>
                                         Delete map
                                       </Button>
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
@@ -2772,6 +2958,23 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       </div>
                                     </DialogContent>
                                     <DialogActions>
+                                   <div  style={{ paddingRight: '15px' }}>
+                                               <PopupState variant="popover" popupId="demo-popup-menu">
+                                                 {(popupState) => (
+                                                   <React.Fragment>
+                                                     <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                                       Download
+                                                     </Button>
+                                                     {row.length > 0 && (
+                                                     <Menu {...bindMenu(popupState)}>
+                                                         <MenuItem onClick={() => handleExcelDownloadtrip(row)}>Excel</MenuItem>
+                                                         <MenuItem onClick={() => handlePdfDownloadtrip(row)}>PDF</MenuItem>
+                                                     </Menu>
+                                                     )}
+                                                   </React.Fragment>
+                                                 )}
+                                               </PopupState>
+                                               </div>
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
                                         Cancel
                                       </Button>
@@ -2800,6 +3003,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       }
                                     />
                                   </div>
+                                  {/* {console.log(!Tripsheet_modify ,"pertrip" ,superAdminAccess !== "SuperAdmin",temporaryStatus,)} */}
                                   <Modal
                                     open={openEditMapLog}
                                     onClose={handleCloseMapLog}
@@ -2831,7 +3035,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     </Box>
                                   </Modal>
                                   <div className="input">
-                                    <Button variant="contained" disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} onClick={handleUpload} className='full-width'>Upload Doc</Button>
+                                    <Button variant="contained" disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus && !a)} onClick={handleUpload} className='full-width'>Upload Doc</Button>
                                   </div>
                                 </div>
                                 <div className="in-feild" style={{ marginTop: '20px' }}>
@@ -2841,7 +3045,7 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </div>
                                   <div className="input">
                                     <Button
-                                      disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && signaturedisabled)}
+                                      disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && signaturedisabled && !a)}
                                       // disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
                                       onClick={handlesignatureimages}
                                       variant="contained"
@@ -2886,7 +3090,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                                       <Button variant="contained" onClick={() => {
                                         handlesignaturemageDelete()
 
-                                      }} color="primary" disabled={!Tripsheet_delete}>
+                                      }} color="primary" 
+                                      // disabled={!Tripsheet_delete}
+                                      // disabled={!Tripsheet_delete && (superAdminAccess === "SuperAdmin" || superAdminAccess === "Billing_Headoffice" )}
+                                      // disabled={handleDatapermission(Tripsheet_delete)}
+                                       disabled={Permissiondeleteroles}
+                                      >
                                         Delete
                                       </Button>
                                     </DialogActions>
@@ -2898,8 +3107,8 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   </div> */}
                                   <div className="input">
                                     {manualTripID.length > 0 ?
-                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
-                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)} className='full-width' onClick={handleEditMap} >Manual Marking</Button>
+                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus && !a)} className='full-width' onClick={handleEditMap}>Edit Map</Button> :
+                                      <Button variant='outlined' disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus && !a)} className='full-width' onClick={handleEditMap} >Manual Marking</Button>
                                     }
                                   </div>
                                 </div>
@@ -2911,11 +3120,12 @@ const TripSheet = ({ stationName, logoImage }) => {
                                     columns={columns}
                                     onRowClick={handleTripRowClick}
                                     pageSize={5}
-                                    checkboxSelection
+                                    // checkboxSelection
                                   />
                                 </div>
                               </div>
                             </div>
+      
                             <Dialog
                               open={imgpopupOpen}
                               onClose={handleimgPopupClose}
@@ -2958,17 +3168,62 @@ const TripSheet = ({ stationName, logoImage }) => {
                                           border: 'none',
                                         }}
                                       />
-                                    ) : (
-                                      <img
-                                        src={imageUrl}
-                                        alt="Embedded Content"
-                                        style={{
-                                          maxWidth: '100%',
-                                          maxHeight: '600px',
-                                          objectFit: 'contain',
-                                        }}
-                                      />
-                                    )}
+                                    ) : 
+                                    // (
+                                    //   <img
+                                    //     src={imageUrl}
+                                    //     alt="Embedded Content"
+                                    //     style={{
+                                    //       maxWidth: '100%',
+                                    //       maxHeight: '600px',
+                                    //       objectFit: 'contain',
+                                    //     }}
+                                    //   />
+                                    // )
+                                    // this -------------------------zoom image code state----------------------------------------------
+                                    (
+                                    <div style={{ position: "relative" }}>
+                                    {/* Zoom Controls */}
+                                    <div
+                                      style={{
+                                        position: "absolute",
+                                        top: "10px",
+                                        right: "10px",
+                                        display: "flex",
+                                        gap: "5px",
+                                        zIndex: 10, 
+                                      }}
+                                    >
+                                      <IconButton onClick={handleZoomIn} style={{ backgroundColor: "white" }}>
+                                        <ZoomIn />
+                                      </IconButton>
+                                      <IconButton onClick={handleZoomOut} style={{ backgroundColor: "white" }}>
+                                        <ZoomOut />
+                                      </IconButton>
+                                    </div>
+                      
+                                   
+                                    <img
+                                      src={imageUrl}
+                                      alt="Embedded Content"
+                                      style={{
+                                        maxWidth: "100%",
+                                        maxHeight: "600px",
+                                        objectFit: "contain",
+                                        transform: `scale(${zoom}) translate(${posX}px, ${posY}px)`, 
+                                        transition: "transform 0.1s ease-out", 
+                                        cursor: isDragging ? "grabbing" : "grab", 
+                                      }}
+                                      onWheel={handleScrollZoom} 
+                                      onMouseDown={startDrag} 
+                                      onMouseMove={onDrag} 
+                                      onMouseUp={stopDrag} 
+                                      onMouseLeave={stopDrag} 
+                                    />
+                                  </div>
+                                )
+                                // ------------------------this code image zoomm---------------------------------------------------
+                                    }
                                   </>
                                 )}
                               </DialogContent>
@@ -2977,7 +3232,11 @@ const TripSheet = ({ stationName, logoImage }) => {
                                   variant="contained"
                                   color="secondary"
                                   // disabled={!Tripsheet_delete}
-                                  disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
+                                  
+                                  // disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
+                                  // disabled={!Tripsheet_delete && (superAdminAccess === "SuperAdmin" || superAdminAccess === "Billing_Headoffice" )}
+                                  // disabled={handleDatapermission(Tripsheet_delete)}
+                                   disabled={Permissiondeleteroles}
                                   onClick={() => {
                                     handleimagedelete(selectedRow);
                                     handleimgPopupClose();
@@ -3060,25 +3319,25 @@ const TripSheet = ({ stationName, logoImage }) => {
 
                         </TabPanel>
                         {/* <TabPanel value={billing_read ? 2 : 1} sx={{ p: 2 }}> */}
-                    
+
                         <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 2 : 1} sx={{ p: 2 }}>
                           <div className="Customer-Message-Slider">
                             <div className="input-field">
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
 
                                 <div style={{ display: "blocks" }}>
-                                  <Button disabled={!Tripsheet_modify} onClick={generateAndCopyLinkdata}>Generate Link</Button>
-                                </div>                               
+                                  <Button onClick={generateAndCopyLinkdata}>Generate Link</Button>
+                                </div>
                                 {/* {appsstatus !== "Closed" && signaturelinkwhatsapp && <WhatsappShareButton url={signaturelinkwhatsapp} title={"Please Click the linke to close E-Tripsheet-"} separator=" - ">
                                   <button>Share on WhatsApp</button>
                                 </WhatsappShareButton>
                                 } */}
 
-                                 {appsstatus !== "Closed" && signaturelinkwhatsapp && 
-                                // <WhatsappShareButton url={signaturelinkwhatsapp} title={"Trip details from JESSY CABS Guest Name ${guestname} . Please Click the link to close E-Tripsheet-"} separator=" - ">
-                                <WhatsappShareButton 
-  url={signaturelinkwhatsapp} 
-title={`Trip details from JESSY CABS, 
+                                {appsstatus !== "Closed" && signaturelinkwhatsapp &&
+                                  // <WhatsappShareButton url={signaturelinkwhatsapp} title={"Trip details from JESSY CABS Guest Name ${guestname} . Please Click the link to close E-Tripsheet-"} separator=" - ">
+                                  <WhatsappShareButton
+                                    url={signaturelinkwhatsapp}
+                                    title={`Trip details from JESSY CABS, 
   Guest Name: ${formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''} 
   Contact no: ${formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''} 
   T.S no: ${formData.tripid || selectedCustomerData.tripid || book.tripid || ''} 
@@ -3086,11 +3345,11 @@ title={`Trip details from JESSY CABS,
   Reporting Time: ${(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime) ? dayjs(formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime, "HH:mm:ss").format("HH:mm") : ''} 
   Reporting Address: ${formData.address1 || selectedCustomerData.address1 || book.address1 || ''}.JESSYCABS.
 
-Please Click the link to close E-Tripsheet-`} 
- separator=" - "
->
-                                  <button>Share on WhatsApp</button>
-                                </WhatsappShareButton>
+Please Click the link to close E-Tripsheet-`}
+                                    separator=" - "
+                                  >
+                                    <button>Share on WhatsApp</button>
+                                  </WhatsappShareButton>
                                 }
                                 {copydatalink && signaturelinkwhatsapp &&
                                   <CopyField
@@ -3121,7 +3380,7 @@ Please Click the link to close E-Tripsheet-`}
                         </TabPanel>
                         {/* {billing_read ? <TabPanel value={billing_read ? 0 : ""} sx={{ p: 2 }}> */}
                         {/* {superpower ? <TabPanel value={superpower === "" ? 0 : ""} sx={{ p: 2 }}> */}
-                         {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin")? 0 : ""} sx={{ p: 2 }}>
+                        {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 0 : ""} sx={{ p: 2 }}>
                           <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }} className='bill-section'>
                             <div className="Customer-Customer-Bill-Slider bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
 
@@ -3277,9 +3536,9 @@ Please Click the link to close E-Tripsheet-`}
                                             setPrevHours((prevState) => ({
                                               ...prevState,
                                               // ShedInTime:hours
-                                              vendorinfoOverviewStartTime:hours
-                                            }));                          
-                                            if (vendorinfoOverviewStartRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoOverviewStartTime === hours) {
+                                              vendorinfoOverviewStartTime: hours
+                                            }));
+                                            if (vendorinfoOverviewStartRef.current && (parseInt(minutes) === 59) && prevHours?.vendorinfoOverviewStartTime === hours) {
                                               vendorinfoOverviewStartRef.current.focus();
                                             }
                                             setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
@@ -3317,9 +3576,9 @@ Please Click the link to close E-Tripsheet-`}
                                           setPrevHours((prevState) => ({
                                             ...prevState,
                                             // ShedInTime:hours
-                                            vendorinfoOverviewCloseTime:hours
-                                          }));                          
-                                          if (vendorinfoOverviewCloseRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoOverviewCloseTime === hours) {
+                                            vendorinfoOverviewCloseTime: hours
+                                          }));
+                                          if (vendorinfoOverviewCloseRef.current && (parseInt(minutes) === 59) && prevHours?.vendorinfoOverviewCloseTime === hours) {
                                             vendorinfoOverviewCloseRef.current.focus();
                                           }
                                           setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
@@ -3422,10 +3681,11 @@ Please Click the link to close E-Tripsheet-`}
                                   <TextField
                                     name="Vendor_Calcpackage"
                                     // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
-                                    value={vendorinfo?.vendor_duty === "Transfer" || vendorinfo?.vendor_duty === "Outstation" ? vendorinfo?.vendor_duty : vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
+                                    value={vendorinfo?.vendor_duty === "Transfer" || vendorinfo?.vendor_duty === "Outstation" ? vendorinfo?.vendor_duty : vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || ''}
                                     // value={vendorbilldata.Vendor_Calcpackage || vendorpassvalue.Vendor_Calcpackage || 0}
                                     label="Package"
                                     id="Vendor_Calcpackage"
+                                    onChange={handlevendor_billdata}
                                     disabled={lockdatavendorbill}
                                     size="small"
                                     sx={{ m: 1, width: "100%" }}
@@ -3434,11 +3694,14 @@ Please Click the link to close E-Tripsheet-`}
                                 <div className="input-g">
                                   <TextField
                                     name="Vendor_rateAmount"
-                                    value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || 0}
+                                    value={vendorbilldata.Vendor_rateAmount || vendorpassvalue.Vendor_rateAmount || ""}
+
                                     size="small"
                                     disabled={lockdatavendorbill}
+                                    onChange={handlevendor_billdata}
                                     label="Amount"
                                     autoComplete="password"
+
                                     id="Vendor_rateAmount"
                                   />
                                 </div>
@@ -3488,7 +3751,7 @@ Please Click the link to close E-Tripsheet-`}
                                   />
                                 </div>
                               </div>
-
+                                      
                               <div className="input-field tripsheet-vendor-bill-amount-input-field">
                                 <div className="input-g">
                                   <TextField
@@ -3617,10 +3880,11 @@ Please Click the link to close E-Tripsheet-`}
                               </div>
 
                             </div>
+
                             {
                               // i command this line already condition work this 
                               // Number(superpower) === 1 && billing_read === 1 ? 
-                              superpower === "SuperAdmin" &&  superpower !== "Assistant CFO" ?
+                              superpower === "SuperAdmin" && superpower !== "Assistant CFO" ?
                                 <div className="Customer-Customer-Bill-Slider Customer-Customer-Bill-Slider-popup">
                                   <p className='bill-topics'>Customer Bill</p>
                                   <div className="input-field">
@@ -3636,6 +3900,7 @@ Please Click the link to close E-Tripsheet-`}
                                         id="pack"
                                         size="small"
                                         variant="standard"
+                                        onChange={handlecalcpackage}
                                         disabled={lockdatacustomerbill}
                                         autoComplete="password"
                                         sx={{ m: 1, width: "60ch" }}
@@ -3647,9 +3912,10 @@ Please Click the link to close E-Tripsheet-`}
                                       </div>
                                       <TextField
                                         name="amount5"
-                                        value={package_amount || formData.calcPackage || 0}
+                                        value={package_amount || ''}
                                         size="small"
                                         label="Amount"
+                                        onChange={handlecalcpackageamount}
                                         autoComplete="password"
                                         id="amount5"
                                         variant="standard"
@@ -3879,12 +4145,12 @@ Please Click the link to close E-Tripsheet-`}
                                       <TextField
                                         name="driverconvenience1"
                                         className='customer-bill-input'
-                                        value={driverBeta}
+                                        value={driverBeta || 0}
                                         disabled={lockdatacustomerbill}
                                         onChange={(e) => {
                                           if (!lockdatacustomerbill) {
                                             setdriverBeta(e.target.value)
-                                            setNoChangeData({ ...nochangedata, driverBeta: e.target.value })
+                                            // setNoChangeData({ ...nochangedata, driverBeta: e.target.value })
                                           } else {
                                             setWarning(true);
                                             setWarningMessage("IS not locked,locked Enter Again");
@@ -3968,9 +4234,14 @@ Please Click the link to close E-Tripsheet-`}
                       <DialogActions className='tripsheet-cancel-save-btn'>
                         <Button className='tripsheet-cancel-button' onClick={handleClose}>Cancel</Button>
                         {isEditMode ?
-                          <Button variant="contained" onClick={handleEdit} disabled={superAdminAccess !== "SuperAdmin" && temporaryStatus} >
-                            Save
-                          </Button>
+                          // <Button variant="contained" onClick={handleEdit} disabled={superAdminAccess !== "SuperAdmin" && editButtonStatusCheck} >
+                          //   Save
+                          // </Button>
+
+
+
+  editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <Button  variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}> Save</Button>
+
                           : <></>
                         }
                       </DialogActions>
@@ -4037,14 +4308,18 @@ Please Click the link to close E-Tripsheet-`}
                       size="small"
                       name="vpermettovendor"
                       value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
-                      // onChange={(e) => {
-                      //   handleChange(e);
-                      //   setVendorinfodata({
-                      //     ...vendorinfo,
-                      //     vendor_vpermettovendor: e.target.value,
-                      //   });
-                      // }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      onChange={(e) => {
+                        handleChange(e);
+                        setVendorinfodata({
+                          ...vendorinfo,
+                          vendor_vpermettovendor: e.target.value,
+                        });
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vendor_vpermettovendor: e.target.value,
+                        }));
+                      }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"&& !a}
                       label="Vendor permit"
                       id="vpermettovendor"
                       autoComplete="password"
@@ -4060,11 +4335,16 @@ Please Click the link to close E-Tripsheet-`}
                       size="small"
                       name="vendorparking"
                       value={formData.vendorparking || selectedCustomerData.vendorparking || book.vendorparking || ""}
-                      // onChange={(e) => {
-                      //   handleChange(e)
-                      //   setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
-                      // }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      onChange={(e) => {
+                        handleChange(e)
+                        setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vendor_vendorparking: e.target.value ,
+                        }));
+                        
+                      }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Vendor Parking"
                       id="vendorparking"
                       autoComplete="password"
@@ -4080,11 +4360,15 @@ Please Click the link to close E-Tripsheet-`}
                       size="small"
                       name="vendortoll"
                       value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ""}
-                      // onChange={(e) => {
-                      //   handleChange(e)
-                      //   setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
-                      // }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      onChange={(e) => {
+                        handleChange(e)
+                        setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
+                        setNoChangeData((prevData) => ({
+                          ...prevData,
+                          vendortoll: e.target.value ,
+                        }));
+                      }}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Vendor Toll"
                       id="vendor-vendortoll"
                       autoComplete="password"
@@ -4103,7 +4387,7 @@ Please Click the link to close E-Tripsheet-`}
                     size="small"
                     name="remark"
                     value={formData.remark || selectedCustomerData.remark || book.remark || ''}
-                    disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                    disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                     onChange={(e) => {
                       handleChange(e);
 
@@ -4145,9 +4429,11 @@ Please Click the link to close E-Tripsheet-`}
                         // handleChange(e)
                         setVendorinfodata({ ...vendorinfo, fuelamount: e.target.value })
                         setNoChangeData({ ...nochangedata, fuelamount: e.target.value })
+                        setFuelAdvancedamountHide(e.target.value)
 
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      // disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                      disabled={superAdminAccess !== "SuperAdmin" && fueldataamountdis}
                       label="Fuel Amount"
                       id="fuelamount"
                       autoComplete="password"
@@ -4183,7 +4469,8 @@ Please Click the link to close E-Tripsheet-`}
                         handleChange(e)
                         setVendorinfodata({ ...vendorinfo, vendor_advancepaidtovendor: e.target.value, advancepaidtovendor: e.target.value })
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"}
+                      // disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                      disabled={superpower !== "SuperAdmin"}
                       label="Vendor Advance"
                       id="advance-paid-to-vendor"
                       autoComplete="password"
@@ -4224,8 +4511,8 @@ Please Click the link to close E-Tripsheet-`}
                   </div>
                   <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                     <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                      {dayhcl === 1 ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)
-                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImage} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)}
+                      {dayhcl === 1 ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImageEtrip} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)
+                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImageEtrip} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)}
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -4257,7 +4544,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
                         value={
                           formData.hireTypes ||
@@ -4287,8 +4574,13 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
+                        onInputChange={(event, newInputValue) => {
+                          if (event && newInputValue) {
+                            handletravelsAutocompleteChange(event, { label: newInputValue.trim() }, "travelsname");
+                          }
+                        }}
                         value={
                           selectedCustomerDatas.travelsname ||
                           formData.travelsname ||
@@ -4323,7 +4615,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}
                         // onInputChange={(event, value) => handleVehicleChange(event, value, "vehRegNo")}  // Handle manual input
                         onInputChange={(event, value) => {
@@ -4369,7 +4661,7 @@ Please Click the link to close E-Tripsheet-`}
                           handleAutocompleteChange(event, value, "vehType")
                         }
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         renderInput={(params) => {
                           return (
                             <TextField {...params} name='vehType' label="Vehicle Type" inputRef={params.inputRef} />
@@ -4389,7 +4681,7 @@ Please Click the link to close E-Tripsheet-`}
                         sx={{ width: "100%" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName2")}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         value={selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
                         options={vehileNames?.map((option) => ({
                           label: option,
@@ -4411,7 +4703,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => {
                           handleAutocompleteChange(event, value, "vehicleName");
                           if (!lockdata && value) {
@@ -4444,7 +4736,7 @@ Please Click the link to close E-Tripsheet-`}
                           book.Groups || ""
                         }
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         options={GroupTypes ? GroupTypes.map((option) => ({ label: option?.Option })) : []} // Fallback to an empty array
                         onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
                         renderInput={(params) => {
@@ -4508,7 +4800,7 @@ Please Click the link to close E-Tripsheet-`}
                         freeSolo
                         sx={{ width: "100%" }}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handleDriverChange(event, value, "driverName")}
                         // onInputChange={(event, value) => handleDriverChange(event, value, "driverName")} 
                         onInputChange={(event, value) => {
@@ -4546,7 +4838,7 @@ Please Click the link to close E-Tripsheet-`}
                           book.mobileNo || selectedCustomerDatas.mobileNo || formData.mobileNo || ""}
                         onChange={handleChange}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         label="Driver Phone"
                         id="mobileNo"
                         size='small'
@@ -4570,7 +4862,7 @@ Please Click the link to close E-Tripsheet-`}
                         }
                         onChange={handleChange}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         label="Travels Email"
                         id="travelsemail"
                         size='small'
@@ -4599,7 +4891,7 @@ Please Click the link to close E-Tripsheet-`}
                             }}
 
                             // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                           disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                             value={vendorinfo?.vendor_vehicle}
                             options={vehileNames?.map((option) => ({
                               label: option,
@@ -4618,7 +4910,7 @@ Please Click the link to close E-Tripsheet-`}
                             sx={{ width: "100%" }}
 
                             // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head") }
+                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head"&& superAdminAccess !== "Billing_Headoffice")}
                             onChange={(event, value) => {
                               if (!lockdata) {
                                 handleAutocompleteVendor(event, value, "vendor_duty")
@@ -4736,9 +5028,9 @@ Please Click the link to close E-Tripsheet-`}
                                   if (!lockdata) {
                                     setPrevHours((prevState) => ({
                                       ...prevState,
-                                      vendorinfoStartTime:hours
-                                    }));                          
-                                    if (vendorinfoStartRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoStartTime === hours) {
+                                      vendorinfoStartTime: hours
+                                    }));
+                                    if (vendorinfoStartRef.current && (parseInt(minutes) === 59) && prevHours?.vendorinfoStartTime === hours) {
                                       vendorinfoStartRef.current.focus();
                                     }
                                     setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value });
@@ -4772,9 +5064,9 @@ Please Click the link to close E-Tripsheet-`}
                                 if (!lockdata) {
                                   setPrevHours((prevState) => ({
                                     ...prevState,
-                                    vendorinfoCloseTime:hours
-                                  }));                          
-                                  if (vendorinfoCloseRef.current && (parseInt(minutes)===59) && prevHours?.vendorinfoCloseTime === hours) {
+                                    vendorinfoCloseTime: hours
+                                  }));
+                                  if (vendorinfoCloseRef.current && (parseInt(minutes) === 59) && prevHours?.vendorinfoCloseTime === hours) {
                                     vendorinfoCloseRef.current.focus();
                                   }
                                   setVendorinfodata({ ...vendorinfo, vendorshedintime: event.target.value });
@@ -4904,6 +5196,72 @@ Please Click the link to close E-Tripsheet-`}
               </div>
             </div>
 
+
+            <Modal
+          open={dialogmessagetrip}
+          onClose={handleCloseMessagetrip}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              top: '40%',
+              right: '-8%',
+              transform: 'translate(-50%, -50%)',
+              width: '400px',
+              height: '200px',
+              bgcolor: 'white',
+              // border: '1px solid #000',
+              borderRadius: 2,
+              textAlign: 'center',
+              boxShadow: 24,
+              p: 1,
+              overflowY: 'auto'
+            }}
+          >
+
+{/* {console.log( formData.MessageText ,selectedCustomerData.MessageText,book.MessageText,"Text")} */}
+            <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'self-start' }}>
+              <p>Edited By: <span>{messageditedbeforetrip}</span></p>
+
+              <div className="input1 pick-up-address-input2">
+                <TextField
+                  name="MessageText"
+                  margin="normal"
+                  size="small"
+                  autoComplete="new-password"
+                  className="full-width"
+                 
+                  label="Message"
+                  id="MessageTexttripsheet "
+                  multiline
+                  rows={2}
+                  sx={{ width: "100%" }}
+                  value={
+                    formData.MessageText ||
+                    selectedCustomerData.MessageText ||
+                    book.MessageText ||
+                    ""
+                  }
+                  // onChange={(event) => handleChangetext(event)}
+                  onChange={(e) => {
+                    handleChangetexttrip(e)
+                  }} 
+                />
+
+              </div>
+              <div className="message_data">
+                <Button onClick={handleCloseMessagetrip}>Done</Button>
+              </div>
+            </div>
+          </Box>
+        </Modal>
+
+
             <div >
               <Modal
                 open={mapPopUp}
@@ -4960,7 +5318,7 @@ Please Click the link to close E-Tripsheet-`}
                     </div>
 
                   </Box>
-                  <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} />
+                  <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} tripGpsData={tripGpsData} fullGpsData={fullGpsData} allGpsData={allGpsData} />
 
 
                   {/* <EditMapComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} /> */}
@@ -4970,29 +5328,66 @@ Please Click the link to close E-Tripsheet-`}
                 </Box>
               </Modal>
             </div>
+            {deletetripasheetdata &&
+            <DeleteConfirmationDialog
+                open={deletetripasheetdata}
+                onClose={() => setDeleteTripsheetData(false)}
+                onConfirm={handleClick}
+              />
+            }
 
+          
             <div>
               <Box className="common-speed-dail">
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"
+                  id={message}
                   icon={<SpeedDialIcon />}
                   direction="left"
                 >
-                  {Tripsheet_modify === 1 && isEditMode && (
+                  {/* {Tripsheet_modify === 1 && isEditMode && (
                     <SpeedDialAction
                       key="edit"
                       icon={<ModeEditIcon />}
                       tooltipTitle="Edit"
+                      // disabled={Tripsheet_modify === 1}
+                      onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                    />
+                  )} */}
+
+                  
+
+{isEditMode && speeddailacesssedit && (
+                    <SpeedDialAction
+                      key="edit"
+                      icon={<ModeEditIcon />}
+                      tooltipTitle="Edit"
+                      // disabled={Tripsheet_modify === 1}
                       onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
                     />
                   )}
-                  {Tripsheet_delete === 1 && isEditMode && (
+                  {/* {Tripsheet_delete === 1 && isEditMode && (
                     <SpeedDialAction
                       key="delete"
                       icon={<DeleteIcon />}
                       tooltipTitle="Delete"
                       onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                     />
+                  )} */}
+
+                  {isEditMode && speeddailacesss && (
+                    // <SpeedDialAction
+                    //   key="delete"
+                    //   icon={<DeleteIcon />}
+                    //   tooltipTitle="Delete"
+                    //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                    // />
+                    <SpeedDialAction
+                    key="delete"
+                    icon={<DeleteIcon />}
+                    tooltipTitle="Delete"
+                    onClick={() => setDeleteTripsheetData(true)}
+                  />
                   )}
                   {Tripsheet_new === 1 && !isEditMode && (
                     <SpeedDialAction
@@ -5008,6 +5403,13 @@ Please Click the link to close E-Tripsheet-`}
                     tooltipTitle="Cancel"
                     onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                   />
+                   <SpeedDialAction
+              key="Message"
+              icon={<MessageIcon />}
+              tooltipTitle="Message"
+              onClick={handleMessagetrip}
+
+            />
                 </StyledSpeedDial>
               </Box>
             </div>

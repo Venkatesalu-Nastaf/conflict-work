@@ -145,12 +145,12 @@ export const GstReport = ({ stationName, Statename }) => {
           </div>
           <div className='input'>
             <div className="input" >
-              {/* <Button onClick={handleShow} variant="outlined">Show</Button> */}
-              <LoadingButton loading={isGstbtnloading} onClick={handleShow} variant="outlined">Show</LoadingButton>
+              <Button onClick={handleShow} variant="contained">Show</Button>
+              {/* <LoadingButton loading={isGstbtnloading} onClick={handleShow} variant="outlined">Show</LoadingButton> */}
             </div>
             <div className="input">
               {/* <Button className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }} onClick={handleShowAll}>Show All</Button> */}
-              <LoadingButton  loading={isGstbtnloading} className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }} onClick={handleShowAll}>Show All</LoadingButton>
+              {/* <LoadingButton  loading={isGstbtnloading} className='text-nowrap' variant="contained" style={{ whiteSpace: 'nowrap' }} onClick={handleShowAll}>Show All</LoadingButton> */}
             </div>
           </div>
         </div>

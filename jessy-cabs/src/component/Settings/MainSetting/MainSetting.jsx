@@ -25,16 +25,16 @@ const MainSetting = ({ logoImage }) => {
                 aria-label="lab API tabs example"
               >
                 <Tab label="Organization Details" className="tablists" value="Organization" />
-                <Tab label="Tax Setting" className="tablists" value="Tax_Setting" />
+                {/* <Tab label="Tax Setting" className="tablists" value="Tax_Setting" /> */}
                 <Tab label="BackUp" className="tablists" value="Back_Up" />
               </TabList>
             </Box>
             <TabPanel value="Organization">
               <Organization logoImage={logoImage} />
             </TabPanel>
-            <TabPanel value="Tax_Setting">
+            {/* <TabPanel value="Tax_Setting">
               <TaxSetting />
-            </TabPanel>
+            </TabPanel> */}
             <TabPanel value="Back_Up" className="back-up-component">
               <BackUp />
             </TabPanel>

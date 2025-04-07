@@ -67,12 +67,15 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
     Email,
     created_at
   } = req.body;
+
+  const formattedToDate = moment(joiningdate).format('YYYY-MM-DD');
+  
   console.log(drivername,
     username,
     stations,
     Mobileno,
     userpassword,
-    joiningdate,
+    formattedToDate,
     active,
     address1,
     licenseno,
@@ -84,7 +87,7 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
  
 
   const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,Profile_image,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
-  db.query(sql, [drivername, username, stations, Mobileno,joiningdate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,profile_image,created_at], (err, result) => {
+  db.query(sql, [drivername, username, stations, Mobileno,formattedToDate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,profile_image,created_at], (err, result) => {
     if (err) {
       console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });

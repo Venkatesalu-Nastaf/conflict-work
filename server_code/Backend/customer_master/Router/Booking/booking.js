@@ -233,17 +233,24 @@ router.delete('/bookingDLETEUPLOAD/:bookingno', async (req, res) => {
 
 
 // update booking details
-router.put('/booking/:bookingno', async (req, res) => {
+router.put('/booking/:bookingno/:dataadmin', async (req, res) => {
     const bookingno = req.params.bookingno;
+    const datasuperADMIN = req.params.dataadmin;
+    const dd = datasuperADMIN === "true" ? "yes":"no"
+  
     const updatedCustomerData = req.body;
     try {
         //check this booking added tripsheet or not
+        if(dd === "no"){
         const checkBookingId = await query('select bookingno from tripsheet where bookingno=?', [bookingno])
         if (checkBookingId.length > 0) return res.json({ message: "This Booking dosen't allowed to edit", error: false, success: true })
+        }
 
         // Update the booking
+       
         const updateResult = await query('UPDATE booking SET ? WHERE bookingno = ?', [updatedCustomerData, bookingno])
         if (updateResult.affectedRows === 0) return res.json({ message: "Booking Id not found", error: false, success: true });
+        
 
         return res.status(201).json({ message: "Updated successfully", success: true, error: false });
 
@@ -714,14 +721,14 @@ router.post('/send-email', async (req, res) => {
                 // from: 'foxfahad386@gmail.com',
                 from: Sendmailauth,
                 to: `${email},${customeremail}`,
-                subject: `JESSY CABS Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
+                subject: `JESSY CABS PVT LTD Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
                 html: `
             <p>Dear Sir/Madam,</p>
-             <p>Thank you for booking with us!!! Your booking has been confirmed. Please find the details below:</p>
+             <p>Thank you for booking with us! Your booking has been confirmed. Please find the details below:</p>
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1; color: #FFFFFF;">
                         <tr>
-                            <th colspan="2" style="padding: 8px; text-align: center;">JESSY CABS Booking Confirmation </th>
+                            <th colspan="2" style="padding: 8px; text-align: center;">JESSY CABS PVT LTD Booking Confirmation </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -945,9 +952,18 @@ router.post('/send-onbook-email', async (req, res) => {
 //     });
 // });
 // image or pdf upload 
+// const booking_storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'uploads')
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//     }
+// })
+router.use(express.static('customer_master'));
 const booking_storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads')
+        cb(null, './customer_master/public/imagesUploads_doc')
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
@@ -962,11 +978,14 @@ router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
     const { created_at } = req.body;
+    const dynamicfileType = fileType.replace(/^[^/]+\//, "Booking Attachment/");
+    console.log(booking_id, "ll", fileName, "ll", fileType, path,dynamicfileType)
+
     console.log("booking_id", booking_id, fileType, fileName, created_at)
     console.log("id", booking_id)
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;
-    db.query(sql, [booking_id, fileName, fileType, created_at], (err, result) => {
+    db.query(sql, [booking_id, fileName, dynamicfileType, created_at], (err, result) => {
         if (err) {
             return res.json({ Message: "Error" });
         }
@@ -981,8 +1000,8 @@ router.post('/upload-booking-image', booking_uploadfile.single("file"), async (r
     const fileName = req.file.filename;
     const path = req.file.path;
     const { created_at } = req.body;
-    console.log(booking_id, "ll", fileName, "ll", fileType, path)
     const dynamicfileType = fileType.replace(/^[^/]+\//, "Booking Attachment/");
+    console.log(booking_id, "ll", fileName, "ll", fileType, path,dynamicfileType)
 
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;

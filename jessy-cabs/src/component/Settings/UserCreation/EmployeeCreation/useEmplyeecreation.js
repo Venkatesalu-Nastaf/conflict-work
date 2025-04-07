@@ -30,6 +30,7 @@ const useEmplyeecreation = () => {
     const [cerendentialdata, setCredentialData] = useState()
     const [showPermission, setShowPermission] = useState(true);
     const [emptyrole,setEmptyrole] = useState(true);
+    const [deleteuserceationdata,setDeleteUsercreation]=useState(false)
   
    
     // const [rolefiledsdata,setRoleFieldData] =useState([])
@@ -401,7 +402,7 @@ const indexRanges = [
         EmailApp_Password: '',
         Sender_Mail:'',
         active: false,
-        superAdmin: false,
+        // superAdmin: false,
         RoleUser:""
     });
   
@@ -456,7 +457,7 @@ const indexRanges = [
             Sender_Mail:'',
             active: false,
              RoleUser:" ",
-            superAdmin: false
+            // superAdmin: false
         }));
 
         setPermissionsData(initialPermissionsData);
@@ -465,7 +466,8 @@ const indexRanges = [
         setModifyState(false)
         setNewState(false);
         setIsEditMode(false)
-        setEmptyrole(false)
+        setEmptyrole(false);
+        setDeleteUsercreation(false)
     
     };
     
@@ -824,7 +826,7 @@ const indexRanges = [
 
 
     /// list of options ---------------------------------
-    const handleClick = async (event, actionName, userid) => {
+    const handleClick = async (event, actionName) => {
         event.preventDefault();
 
 
@@ -1147,11 +1149,12 @@ const indexRanges = [
         handleClickShowPasswords,
         handleMouseDownPasswords,
         isEditMode,handlenochangedatarole,setBook,emptyrole,setEmptyrole,
-        handleEdit, handleChangeuniquecreation, cerendentialdata, showPermission, setShowPermission, handleCheckboxChangealldata,setPermissionsData,handlerolepermissiondata,
+        handleEdit, handleChangeuniquecreation, cerendentialdata, showPermission, setShowPermission, handleCheckboxChangealldata,setPermissionsData,handlerolepermissiondata,deleteuserceationdata,setDeleteUsercreation,
         // rolefield,setRoleField,
         // rolefielddropdown,setRoleFielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
         //ffor permission
+        deleteuserceationdata,setDeleteUsercreation,
         permissionsData, handleSwitchChange, handleCheckboxChange, setReadState,setModifyState,setDeleteState,setNewState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
     };
 };

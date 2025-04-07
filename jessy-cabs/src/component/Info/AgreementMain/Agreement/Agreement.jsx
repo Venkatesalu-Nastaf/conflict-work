@@ -56,6 +56,7 @@ import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOu
 import { CircularProgress } from '@mui/material';
 import { APIURL } from "../../../url";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import DeleteConfirmationDialog from "../../../DeleteData/DeleteData";
 
 // import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from "../../../context/permissionContext";
@@ -136,7 +137,8 @@ const Agreement = ({organizationNames}) => {
     deletefile,
     handlecheckbox,
     loading,
-    setLoading
+    setLoading,deleteAgreementdata,setDeleteAgreementdata
+  
 
   } = useEmployee();
   // console.log(organizationNames,"ppppppppppppp")
@@ -614,12 +616,18 @@ const Agreement = ({organizationNames}) => {
               />
             )}
             {Agreement_delete === 1 && isEditMode && (
+              // <SpeedDialAction
+              //   key="delete"
+              //   icon={<DeleteIcon />}
+              //   tooltipTitle="Delete"
+              //   onClick={(event) => handleClick(event, "Delete")}
+              // />
               <SpeedDialAction
-                key="delete"
-                icon={<DeleteIcon />}
-                tooltipTitle="Delete"
-                onClick={(event) => handleClick(event, "Delete")}
-              />
+              key="delete"
+              icon={<DeleteIcon />}
+              tooltipTitle="Delete"
+              onClick={() => setDeleteAgreementdata(true)}
+            />
             )}
             {Agreement_new === 1 && !isEditMode && (
               <SpeedDialAction
@@ -684,6 +692,14 @@ const Agreement = ({organizationNames}) => {
               </div>
             </div>
           </div>
+
+        {deleteAgreementdata && 
+         <DeleteConfirmationDialog
+                open={deleteAgreementdata}
+                onClose={() => setDeleteAgreementdata(false)}
+                onConfirm={handleClick}
+              />
+        }
           
           <div className="table-bookingCopy-Employe ">
             <div className="registration-employee-table">

@@ -39,7 +39,8 @@ const useRatype = () => {
     const [infoMessage, setInfoMessage] = useState({});
     const [cerendentialdata,setCredentialData]=useState()
     const [loading, setLoading] = useState(false)
-    const [isRateButtonLoading,setisRateButtonLoading]= useState(false)
+    const [isRateButtonLoading,setisRateButtonLoading]= useState(false);
+    const [deleteratetype,setDeleteRateType]=useState(false)
     
     // handlechange-----------------
     const handleDateChange = (date, name) => {
@@ -604,6 +605,7 @@ const useRatype = () => {
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
+        setDeleteRateType(false)
     };
 
     const handleRowClick = useCallback((params) => {
@@ -611,6 +613,7 @@ const useRatype = () => {
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
+        setCredentialData(false)
     }, []);
 
     const handleAdd = async () => {
@@ -701,6 +704,7 @@ const useRatype = () => {
                     ...row,
                     id: index + 1,
                 }));
+                console.log(rowsWithUniqueId,"cust")
                 // setRows(rowsWithUniqueId);
                 setRows(data.length > 0 ? rowsWithUniqueId : []);
                
@@ -762,21 +766,22 @@ const useRatype = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                const response = await axios.get(`${apiUrl}/ratetype`);
-                const data = response.data;
-                if (data.length > 0) {
-                    const rowsWithUniqueId = data.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setRows(rowsWithUniqueId);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully listed");
-                } else {
-                    setRows([]);
-                    setError(true);
-                    setErrorMessage("No data found");
-                }
+                handlelist();
+                // const response = await axios.get(`${apiUrl}/ratetype`);
+                // const data = response.data;
+                // if (data.length > 0) {
+                //     const rowsWithUniqueId = data.map((row, index) => ({
+                //         ...row,
+                //         id: index + 1,
+                //     }));
+                //     setRows(rowsWithUniqueId);
+                //     setSuccess(true);
+                //     setSuccessMessage("Successfully listed");
+                // } else {
+                //     setRows([]);
+                //     setError(true);
+                //     setErrorMessage("No data found");
+                // }
             }
 
             else if (actionName === 'Cancel') {
@@ -785,7 +790,8 @@ const useRatype = () => {
             }
 
             else if (actionName === 'Delete') {
-                await axios.delete(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
+               const data = await axios.delete(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
+               console.log(data,"responsedaata")
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
@@ -845,7 +851,7 @@ const useRatype = () => {
         columns,
         isEditMode,
         handleEdit,
-        handleDateChange,cerendentialdata,handleChangecredent,loading,isRateButtonLoading,setisRateButtonLoading
+        handleDateChange,cerendentialdata,handleChangecredent,loading,isRateButtonLoading,setisRateButtonLoading,deleteratetype,setDeleteRateType
 
     };
 };

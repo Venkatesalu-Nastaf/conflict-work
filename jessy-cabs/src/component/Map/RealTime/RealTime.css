@@ -65,11 +65,12 @@
 }
 
 .main-body-container {
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
   gap: 10px;
   justify-content: space-between;
-  margin-top: 38px;
+  margin-top: 38px; */
+  width: 100%;
 }
 
 

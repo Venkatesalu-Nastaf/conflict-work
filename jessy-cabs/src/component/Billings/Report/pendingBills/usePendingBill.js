@@ -93,7 +93,7 @@ const usePendingBill = () => {
                 setPendingBill(prevState => ({
                     ...prevState,
                     TotalAmount: totalAmount,
-                    Balance: totalBalance
+                    Balance: totalBalance || 0
                 }));
                 setRows(bills);
                 setSuccess(true);

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, {useContext } from 'react';
 import "./TransferDataEntry.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -9,7 +9,7 @@ import { Menu, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import PopupState, {bindMenu } from 'material-ui-popup-state';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { Autocomplete } from "@mui/material";
 import { PermissionContext } from '../../../context/permissionContext';
@@ -20,15 +20,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { faBuilding, faFileInvoiceDollar, faTags } from "@fortawesome/free-solid-svg-icons";
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+// import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferdataentry from './useTransferdataentry';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Box } from '@mui/material';
-import Skeleton from '@mui/material/Skeleton';
+// import Skeleton from '@mui/material/Skeleton';
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-const TransferDataEntry = ({ stationName, organizationNames }) => {
+const TransferDataEntry = ({organizationNames,Statename }) => {
   const {
     rows,
     error,
@@ -41,10 +41,10 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     Billingdate,
     selectedCustomerDatas,
     invoiceno,
-    // handleKeyenter,
+    handleKeyenter,
     customer,
-    tripData,
-    setCustomer,
+    // tripData,
+    // setCustomer,
     fromDate,
     handleDateChange,
     setFromDate,
@@ -59,8 +59,8 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     handleClickGenerateBill,
     handleExcelDownload,
     handlePdfDownload,
-    handleBillRemove,
-    handleAddOrganization,
+    // handleBillRemove,
+    // handleAddOrganization,
     totalKm,
     totalTime,
     totalAmount,
@@ -75,12 +75,17 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     handleKeyDown,
     handleRemove,
     loading,
-    setLoading,
-    setServiceStation,
-    setInfo,
-    setINFOMessage,
-    handlecustomer, isbtnloading, setisbtnloading, iseditloading, setiseditloading, isbillloading, setisbillloading,
-    addEditTrigger, setAddEditTrigger
+    // setLoading,
+    // setServiceStation,
+    // setInfo,
+    // setINFOMessage,
+    handlecustomer, isbtnloading,
+    //  setisbtnloading, iseditloading, setiseditloading, 
+     isbillloading,
+      // setisbillloading,
+    addEditTrigger,
+    //  setAddEditTrigger, 
+     setBillingdate,stateenter
     //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
@@ -106,7 +111,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
   const getRowClassName = (params) => {
 
     return params.row.status === "Billed" ? 'green-row' : 'red-row';
-}
+  }
 
   return (
     <div className="TransferDataEntry-form main-content-form Scroll-Style-hide">
@@ -132,25 +137,49 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       autoComplete='off'
                     />
                   </div>
-
+{/* {console.log(Billingdate,"bill")} */}
                   <div className='input'>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
                     </div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
-                        <DatePicker
+                        {/* <DatePicker
                           id="Billingdate"
                           className='full-width'
                           label="Bill Date"
                           name="Billingdate"
-                          value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
+                          value={Billingdate || (selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null)}
+                          // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
                           format="DD/MM/YYYY"
+                        /> */}
+                        <DatePicker
+                          label="Bill Date"
+                          id="Billingdate"
+                          className="full-width"
+                          value={
+                            Billingdate
+                              ? dayjs(Billingdate) // If `Billingdate` exists, use it
+                              : selectedCustomerDatas?.Billingdate
+                                ? dayjs(selectedCustomerDatas.Billingdate) // Else, use `selectedCustomerDatas.Billingdate`
+                                : formDataTransfer?.Billdate
+                                  ? dayjs(formDataTransfer.Billdate) // Else, fallback to `formDataTransfer.Billdate`
+                                  : null
+                          }
+                          format="DD/MM/YYYY"
+                          onChange={(date) => {
+                            handleDateChange(date, "Billingdate");
+                            setBillingdate(dayjs(date).format("YYYY-MM-DD"));
+                          }}
+                          renderInput={(params) => (
+                            <TextField {...params} value={Billingdate || selectedCustomerDatas?.Billingdate || ""} />
+                          )}
                         />
+
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
-                  <div className="input" >
+                  {/* <div className="input" >
                     <div className="icone">
                       <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                     </div>
@@ -163,11 +192,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       value={invoiceno || ''}
                       onChange={(event) => handlechnageinvoice(event)}
                       autoComplete='off'
-                      // onKeyDown={handleKeyenter}
+                      onKeyDown={handleKeyenter}
                       disabled={groupdisable}
 
                     />
-                  </div>
+                  </div> */}
                   <div className="input">
                     <div className="icone">
                       <HailOutlinedIcon color="action" />
@@ -183,23 +212,30 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
 
                       onChange={(event, value) => handlecustomer(value)}
 
-                      //  onChange={(event, value) => {
-                      //   if (!groupId) {
-                      //     setCustomer(value)
-
-                      //   }
-                      //    else {
-
-                      //     setInfo(true)
-                      //     setINFOMessage("not change customer ")
-                      //   }
-                      //   }}
-                      // onChange={(event, value) => setCustomer(value)}
+                      
                       renderInput={(params) => {
                         return (
                           <TextField {...params} label="Organization" name='customer' inputRef={params.inputRef} />
                         );
                       }}
+                    />
+                  </div>
+                  <div className="input" >
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
+                    </div>
+                    <TextField
+                      size="small"
+                      id="invoiceno"
+                      className='full-width'
+                      label="Invoice No"
+                      name="invoiceno"
+                      value={invoiceno || ''}
+                      onChange={(event) => handlechnageinvoice(event)}
+                      autoComplete='off'
+                      onKeyDown={handleKeyenter}
+                      disabled={groupdisable}
+
                     />
                   </div>
                   <div className="input" >
@@ -250,9 +286,41 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       }}
                     /> */}
 
+                   {invoiceno ? <>
 
+                    {/* <TextField
+                      size="small"
+                      id="freet-station"
+                      className='full-width'
 
-                    <TextField
+                      label="State"
+                      name='station'
+                      value={servicestation || ""}
+
+                      autoComplete='off'
+                    /> */}
+                    {/* {console.log(servicestation,"state",stateenter)} */}
+
+                                            <Autocomplete
+                                                            fullWidth
+                                                            id="free-Stations"
+                                                            freeSolo
+                                                            size="small"
+                                                            value={servicestation || stateenter}
+                                                            // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
+                                                            options={Statename.map((option) => ({
+                                                                label: option.state,
+                                                            }))}
+                                                            onChange={(event, value) => handleserviceInputChange(event, value)}
+                                                            renderInput={(params) => {
+                                                                return (
+                                                                    <TextField {...params} label="State" inputRef={params.inputRef}  value={servicestation || stateenter} />
+                                                                );
+                                                            }}
+                                                        /> 
+                                                        </>:
+
+                         <TextField
                       size="small"
                       id="freet-station"
                       className='full-width'
@@ -263,8 +331,9 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
 
                       autoComplete='off'
                     />
+                                                          }
                   </div>
-                  
+
                   <div className="input">
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -327,7 +396,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
-                  
+
                   <div className="input">
                     <Button variant="contained" disabled={!Transfer_read} onClick={() => handleShow()} >List</Button>
                   </div>
@@ -524,33 +593,33 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                   //     backgroundColor: invoiceNoCheck ? 'darkred' : 'darkgreen', // Same hover effect for selected row
                   //   },
                   // },
-                     '& .green-row': {
-                                            backgroundColor: invoiceNoCheck ? "#eb492f" : '#65B741' ,
-                                            color: 'white',
-                                            '&:hover': {
-                                                backgroundColor: invoiceNoCheck ? "red" : '#21b90f' ,
+                  '& .green-row': {
+                    backgroundColor: invoiceNoCheck ? "#eb492f" : '#65B741',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: invoiceNoCheck ? "red" : '#21b90f',
 
-                                            },
-                                        },
-                                        '& .red-row': {
-                                            backgroundColor: '#E72929',
-                                            color: 'white',
-                                            '&:hover': {
-                                                backgroundColor: '#ec2424',
-                                            },
-                                        },
-                                        '& .Mui-selected.green-row': {
-                                            backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
-                                            '&:hover': {
-                                                backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
-                                            },
-                                        },
-                                        '& .Mui-selected.red-row': {
-                                            backgroundColor: '#E72929 !important',
-                                            '&:hover': {
-                                                backgroundColor: '#ec2424 !important',
-                                            },
-                                        },
+                    },
+                  },
+                  '& .red-row': {
+                    backgroundColor: '#E72929',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: '#ec2424',
+                    },
+                  },
+                  '& .Mui-selected.green-row': {
+                    backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
+                    '&:hover': {
+                      backgroundColor: invoiceNoCheck ? "#eb492f !important" : '#65B741 !important',
+                    },
+                  },
+                  '& .Mui-selected.red-row': {
+                    backgroundColor: '#E72929 !important',
+                    '&:hover': {
+                      backgroundColor: '#ec2424 !important',
+                    },
+                  },
                 }}
               />
             </Box>

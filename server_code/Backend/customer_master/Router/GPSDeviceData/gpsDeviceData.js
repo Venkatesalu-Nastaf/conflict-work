@@ -270,7 +270,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
     if (!gpsTripId) {
         return res.status(400).json({ error: "gpsTripId is required" });
     }
-
+    const filterSqlCheckQuery = `SELECT * FROM gmapdata WHERE trip_type="start" AND tripid =?`;
     const sqlgmapdataQuery = `SELECT * FROM gmapdata WHERE tripid = ?`;
     const sqlQueryCheckReached = `SELECT COUNT(*) AS reachedCount FROM VehicleAccessLocation WHERE Trip_id = ? AND Trip_Status = 'Reached'`;
     // const sqlQueryAllStatuses = `
@@ -443,14 +443,38 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         INSERT INTO gmapdata (tripid, Location_Alpha, date, time, trip_type, place_name, Latitude, Longitude)
                         VALUES ?`;
 
-                    db.query(sqlInsertGmapdataQuery, [insertValues], (error, insertResult) => {
-                        if (error) {
-                            console.log("Database insert error:", error);
+                    // db.query(sqlInsertGmapdataQuery, [insertValues], (error, insertResult) => {
+                    //     if (error) {
+                    //         console.log("Database insert error:", error);
+                    //         return res.status(500).json({ error: "Internal Server Error" });
+                    //     }
+                    //     console.log("Inserted rows:", insertResult.affectedRows);
+                    //     res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
+                    // });
+              
+                    db.query(filterSqlCheckQuery, [gpsTripId], async (error3, checkStartResult) => {
+                        if (error3) {
+                            console.log("Error checking existing 'start' record:", error3);
                             return res.status(500).json({ error: "Internal Server Error" });
                         }
-                        console.log("Inserted rows:", insertResult.affectedRows);
-                        res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
+                    console.log(checkStartResult,"ccccccccccccccccccccccccccccccccccccs");
+                    
+                        if (checkStartResult.length > 0) {
+                            console.log("Start trip already exists in gmapdata.");
+                            return res.status(200).json({ message: "Start trip already inserted", existing: true });
+                        }
+                    
+                        // Proceed to insert the gmapdata (sqlInsertGmapdataQuery)
+                        db.query(sqlInsertGmapdataQuery, [insertValues], (error, insertResult) => {
+                            if (error) {
+                                console.log("Database insert error:", error);
+                                return res.status(500).json({ error: "Internal Server Error" });
+                            }
+                            console.log("Inserted rows:", insertResult.affectedRows);
+                            res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
+                        });
                     });
+                    
                 });
             
             } else {

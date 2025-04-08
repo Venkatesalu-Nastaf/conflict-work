@@ -790,6 +790,7 @@ const indexRanges = [
 
             await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, data);
             handleList()
+            setCredentialData();
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
@@ -1154,7 +1155,7 @@ const indexRanges = [
         // rolefielddropdown,setRoleFielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
         //ffor permission
-        deleteuserceationdata,setDeleteUsercreation,
+        deleteuserceationdata,setDeleteUsercreation,setCredentialData,
         permissionsData, handleSwitchChange, handleCheckboxChange, setReadState,setModifyState,setDeleteState,setNewState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
     };
 };

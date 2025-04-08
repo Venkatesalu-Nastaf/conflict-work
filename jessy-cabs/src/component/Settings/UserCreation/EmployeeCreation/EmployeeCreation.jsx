@@ -106,7 +106,7 @@ const EmployeeCreation = ({ stationName }) => {
     // setPermissionsData,setModifyState,setDeleteState,setNewState,
     // rolefield,rolefielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
-    permissionsData, handleSwitchChange, handleCheckboxChange, setEmptyrole,setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
+    permissionsData, handleSwitchChange, handleCheckboxChange, setEmptyrole,setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows,setCredentialData
   } = useEmplyeecreation();
 
   const {permissionsData1,setRoleFielddropdown,emptyroletype,setEmptyroletype,handleCheckboxChangealldata1,modalrolefield,error1,errormessage1,handleButtondeleteClickrole, handleEditrole,hidePopup1,handleAddrole, handleSwitchChange1,handleOpenModal,isModalOpen,successMessage1,success1, handleCloseModal,handleCheckboxChange1, readState1, newState1, modifyState1, deleteState1, handleSwitchforthatrow1, handleSwitchforallrows1,rolefield,rolefielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1}=useEmplyeecreationrole();
@@ -772,6 +772,7 @@ setSationNameforUser(updatedData);
                         togglePermission(row);
                         handleRowClickUser(row)
                         setRoleFielddropdown('')
+                        setCredentialData()
                       }}
                         key={index}>
                         {/* <img src={row.profile_image} alt="profile" width="50" /> */}

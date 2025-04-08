@@ -215,7 +215,7 @@ const useBooking = () => {
     address1: "",
     report: "",
     vehicleName: "",
-    paymenttype: "",
+    paymenttype:"BTC",
     // shedOutDate: '',
     // startdate: "",
     shedOutDate:dayjs(),
@@ -243,8 +243,8 @@ const useBooking = () => {
     mobileNo: "",
     travelsemail: "",
     Groups: "",
-    escort:'',
-    transferreport:"",
+    escort:'No',
+    transferreport:"No",
     MessageText:""
   
   }
@@ -1755,6 +1755,9 @@ if (Object.keys(nochangedata).length === 0) {
     setDialogMessage(false)
   }
   //--------------------------------------------------------
+//   console.log(formData.transferreport ,selectedCustomerData.transferreport ,book.transferreport,"trans",transferreport)
+// console.log(formData.escort,selectedCustomerData.escort,book.escort,"transescooooooo",escort)
+// console.log(formData.paymenttype,selectedCustomerData.paymenttype,book.paymenttype,"transpayyyyyyyyyyyy")
 
   return {
     handleSelectAll, handlecheckbox, selectAll, deletefile,

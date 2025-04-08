@@ -79,6 +79,10 @@ const CopyEmailHtmlcontent = () => {
                             <td style="padding: 8px;"><strong>Drop Address :</strong></td>
                             <td style="padding: 8px;">${updatdata?.dropuseage}</td>
                         </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Duty :</strong></td>
+                            <td style="padding: 8px;">${updatdata?.duty}</td>
+                        </tr>
                 <tr>
                     <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
                     <td style="padding: 8px;">${updatdata?.vehRegNo}</td>

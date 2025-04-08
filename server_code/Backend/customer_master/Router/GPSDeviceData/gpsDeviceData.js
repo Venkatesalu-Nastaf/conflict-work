@@ -272,8 +272,13 @@ router.get('/getLatLongByTripId', async (req, res) => {
     }
     const filterSqlCheckQuery = `SELECT * FROM gmapdata WHERE trip_type="start" AND tripid =?`;
     const sqlgmapdataQuery = `SELECT * FROM gmapdata WHERE tripid = ?`;
-    const sqlQueryCheckReached = `SELECT COUNT(*) AS reachedCount FROM VehicleAccessLocation WHERE Trip_id = ? AND Trip_Status = 'Reached'`;
-    // const sqlQueryAllStatuses = `
+    // const sqlQueryCheckReached = `SELECT COUNT(*) AS reachedCount FROM VehicleAccessLocation WHERE Trip_id = ? AND Trip_Status = 'Reached' `;
+    const sqlQueryCheckReached = `
+    SELECT COUNT(*) AS reachedCount 
+    FROM VehicleAccessLocation 
+    WHERE Trip_id = ? AND Trip_Status = 'Reached' AND gps_status IS NULL
+  `;
+      // const sqlQueryAllStatuses = `
     // SELECT * FROM VehicleAccessLocation 
     // WHERE Trip_id = ? 
     // AND Trip_Status IN ('Started', 'Reached', 'On_Going','waypoint','waypoint_Started','waypoint_Reached') 

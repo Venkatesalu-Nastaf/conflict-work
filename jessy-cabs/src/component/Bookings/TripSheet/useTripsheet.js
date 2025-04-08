@@ -1043,7 +1043,8 @@ const useTripsheet = () => {
                         Sendmailauth: organizationdata.Sender_Mail,
                         Mailauthpass: organizationdata.EmailApp_Password,
                         Addresscutsomer: formData.address1 || selectedCustomerData.address1 || book.address1 || '',
-                        dropuseage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''
+                        dropuseage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || '',
+                        duty: formData.duty || selectedCustomerData.duty || book.duty || ''
 
                     };
                     await axios.post(`${apiUrl}/send-tripsheet-email`, dataToSend);
@@ -4917,7 +4918,7 @@ const useTripsheet = () => {
             const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount || 0) + Number(driverBeta_amount) + Number(permit) + Number(parking) + Number(toll);
 
             const total = totalcalc - Number(customer_advance)
-            const convetTotal = Math.ceil(total)
+            const convetTotal = Math.ceil(total);            
             setTotalcalcAmount(Number(convetTotal));
         }
         totalAmountCalc()
@@ -8285,8 +8286,8 @@ const useTripsheet = () => {
                 const respone = await axios.post(`${apiUrl}/deleteMapByTripid/${tripid}`)
                 console.log(respone.data);
                 setManualTripID([])
-                setError(true)
-                setErrorMessage("Successfully Deleted")
+                setSuccess(true)
+                setSuccessMessage("Successfully Deleted")
                 handleTripmapverify()
                 setMapImageUrls1("")
                 setMapDataDeleteModal(false)

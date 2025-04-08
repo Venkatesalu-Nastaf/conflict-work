@@ -14,6 +14,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"; // Adapter for dayjs
 import Button from "@mui/material/Button";
 import PlacesAutocomplete from 'react-places-autocomplete';
+import newWayPointMarker from './newPointMarker.png'
 import startMarkerIcon from "./StartMarkerIcon.png"
 import endMarkerIcon from "./endMarkerIcon.png";
 import wayPointMarker from "./wayPointMarker.png"
@@ -450,6 +451,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   };
 
   const handleMapClick = (event) => {
+    console.log(event, "eeeeeeeeeeeeeeeeeeeeeeeeeeee");
+
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
     setCenter({ lat, lng }); // Update center to clicked location
@@ -1080,6 +1083,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     ?.filter((li) => li?.Trip_Status === "Reached" && li?.Latitude_loc)
     ?.map((li) => parseFloat(li?.Latitude_loc));
 
+  console.log(fullGpsData, 'gggggggggggggggggggggggggggggggggggggggggggg');
 
   return (
     <>
@@ -1219,20 +1223,41 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
               )
             ))}
-            {directions === null && polyLineWaypoints.length !== fullGpsData.length && wayRoutes?.map((point, index) => (
+            {/* {directions === null && polyLineWaypoints.length !== fullGpsData.length && wayRoutes?.map((point, index) => (
               point.tripType === "waypoint" && (
                 <Marker
                   key={index}
                   position={{ lat: point.lat, lng: point.lng }}
                   icon={{
-                    url: wayPointMarker, // Custom PNG marker
+                    // url: wayPointMarker, // Custom PNG marker
+                    url:newWayPointMarker,
                     scaledSize: new window.google.maps.Size(40, 40), // Adjust size (smaller than default)
                   }}
                   onClick={() => handleMarkerClick(point)}
                 />
 
               )
-            ))}
+            ))} */}
+            {directions === null &&
+              polyLineWaypoints.length !== fullGpsData.length &&
+              wayRoutes?.map((point, index) => {
+                if (point.tripType === "waypoint") {
+                  const matched = fullGpsData.some(gps => parseFloat(gps.Latitude_loc) === parseFloat(point.lat));
+
+                  return (
+                    <Marker
+                      key={index}
+                      position={{ lat: point.lat, lng: point.lng }}
+                      icon={{
+                        url: matched ? wayPointMarker : newWayPointMarker,
+                        scaledSize: new window.google.maps.Size(40, 40),
+                      }}
+                      onClick={() => handleMarkerClick(point)}
+                    />
+                  );
+                }
+                return null;
+              })}
 
             {/* {startLat && directions === null && <Marker position={{ lat: startLat, lng: startLng }} label="A" onClick={() => handleMarkerClick(startRoutes)} />} */}
             {/* {endLat && directions === null && <Marker position={{ lat: endLat, lng: endLng }} label={polyLineWaypoints.length !== fullGpsData.length  ? endLabel : "B"} onClick={() => handleMarkerClick(endRoutes)} />} */}

@@ -24,7 +24,6 @@ const LogSheets = ({organizationNames}) => {
                             </TabList>
                         </Box>
                          <TabPanel value="logDetails"><LogDetails /></TabPanel>
-                         <LogDetails />
                     </TabContext>
                 </Box>
             </div>

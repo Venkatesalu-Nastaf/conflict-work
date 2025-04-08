@@ -664,7 +664,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
     servicestation: formData.department || formValues.department || selectedCustomerData.department || book.department || '',
     Addresscutsomer: formData.address1 || selectedCustomerData.address1 || book.address1 || '',
-    dropuseage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''
+    dropuseage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || '',
+    duty: formData.duty || selectedCustomerData.duty || book.duty || ''
   }
 
   const handlecopiedemailcontent = () => {
@@ -2985,7 +2986,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       </div>
                                     </DialogContent>
                                     <DialogActions>
-                                      <Button variant='contained' onClick={() => handleMapDataDelete()}>Delete</Button>
+                                      <Button variant='contained' onClick={() => handleMapDataDelete()}>Delete Full Log</Button>
                                       <div style={{ paddingRight: '15px' }}>
                                         <PopupState variant="popover" popupId="demo-popup-menu">
                                           {(popupState) => (
@@ -3018,7 +3019,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                         <div style={{ display:'flex',flexDirection:'column',gap: 15 }}>
                                           <div>
                                             <Typography variant="body2" sx={{ color: "#333", fontWeight: 500,fontSize:20 }}>
-                                              Are you sure you want to delete?
+                                              Are you sure want to delete the log data?
                                             </Typography>
                                           </div>
                                           <div>

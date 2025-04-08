@@ -1702,7 +1702,7 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
 //send email from tripsheet page-----------------------------------
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
-        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, Addresscutsomer, dropuseage, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass, requestno } = req.body;
+        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, Addresscutsomer, dropuseage, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass, requestno,duty } = req.body;
         // const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
         const formattedFromDate = moment(startdate).format('DD-MM-YYYY');
         console.log(formattedFromDate, "date")
@@ -1861,6 +1861,10 @@ router.post('/send-tripsheet-email', async (req, res) => {
                         <tr>
                             <td style="padding: 8px;"><strong>Drop Address :</strong></td>
                             <td style="padding: 8px;">${dropuseage}</td>
+                        </tr>
+                            <tr>
+                            <td style="padding: 8px;"><strong>Duty :</strong></td>
+                            <td style="padding: 8px;">${duty}</td>
                         </tr>
                         <tr>
                         <td style="padding: 8px;"><strong>Car Sent</strong></td>
@@ -2446,24 +2450,63 @@ router.post('/deleteMapByTripid/:tripid', (req, res) => {
 
     // First delete query for mapimage
     const deleteQuery = `DELETE FROM mapimage WHERE tripid = ?`;
-    db.query(deleteQuery, [tripid], (error, result) => {
+    const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
+    const updateVehicleAccessLocationQuery = `UPDATE VehicleAccessLocation SET gps_status = 'Cleared' WHERE Trip_id = ?`;
+
+    db.query(deleteQuery, [tripid], (error, result1) => {
         if (error) {
             console.log(error, 'error');
             return res.status(500).json({ message: 'Error deleting from mapimage', error });
         }
 
         // Second delete query for gmapdata
-        const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
-        db.query(deleteMapDataQuery, [tripid], (error, result) => {
+        db.query(deleteMapDataQuery, [tripid], (error, result2) => {
             if (error) {
                 console.log(error, 'error');
                 return res.status(500).json({ message: 'Error deleting from gmapdata', error });
             }
 
-            return res.status(200).json({ message: 'Deletion successful', result });
+            // Now update VehicleAccessLocation
+            db.query(updateVehicleAccessLocationQuery, [tripid], (error, updateResult) => {
+                if (error) {
+                    console.log(error, 'error');
+                    return res.status(500).json({ message: 'Error updating gps_status', error });
+                }
+
+                return res.status(200).json({ message: 'Deletion and update successful', result: { mapimage: result1, gmapdata: result2, vehicleAccess: updateResult } });
+            });
         });
     });
 });
+
+// router.post('/deleteMapByTripid/:tripid', (req, res) => {
+//     const tripid = req.params.tripid;
+
+//     // First delete query for mapimage
+//     const deleteQuery = `DELETE FROM mapimage WHERE tripid = ?`;
+//     const updateVehicleAccessLocationQuery = `UPDATE VehicleAccessLocation set gps_status = 'Cleared' WHERE Trip_id = ?`;
+//     db.query(deleteQuery, [tripid], (error, result) => {
+//         if (error) {
+//             console.log(error, 'error');
+//             return res.status(500).json({ message: 'Error deleting from mapimage', error });
+//         }
+
+//         // Second delete query for gmapdata
+//         const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
+//         db.query(deleteMapDataQuery, [tripid], (error, result) => {
+//             if (error) {
+//                 console.log(error, 'error');
+//                 return res.status(500).json({ message: 'Error deleting from gmapdata', error });
+//             }
+//             console.log(result, "deleteed---------------------------");
+//             if (result.affectedRows > 0) {
+                
+//             }
+
+//             return res.status(200).json({ message: 'Deletion successful', result });
+//         });
+//     });
+// });
 
 
 router.post('/updateGPS-LOG/:tripid', (req, res) => {

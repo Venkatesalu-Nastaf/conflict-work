@@ -603,7 +603,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                                 {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
                                 / {item.vehicleName2}
                               </Text> */}
-                              <View style={{flexDirection:'column'}}>
+                              <View style={{flexDirection:'column',marginTop:'3px'}}>
 
                               <View style={{width:'100%',}}>
                               {item?.duty === "Outstation" ?

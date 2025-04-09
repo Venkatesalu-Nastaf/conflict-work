@@ -106,7 +106,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const [roadPoints, setRoadPoints] = useState([]);
 
   const getSnappedPoints = async (polywaypoints) => {
-    const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE";
+    // const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE";
+    const apiKey = "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk";
     const maxPointsPerRequest = 100;
     let snappedPoints = [];
 
@@ -666,7 +667,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     // Construct Static Map URL
     const staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap?size=800x500&dpi=720";
     const pathParam = `path=enc:${encodeURIComponent(encodePath)}`;
-    const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE";
+    // const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE";
+    const apiKey = "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk";
 
     const finalStaticMapUrl = `${staticMapUrl}&${markers}&${pathParam}&key=${apiKey}`;
 
@@ -969,7 +971,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   };
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+    // googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+    googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk",
   });
 
   if (!isLoaded) {

@@ -665,7 +665,7 @@ router.post('/send-email', async (req, res) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 8px;"><strong>Trip No:</strong></td>
+                            <td style="padding: 8px;"><strong>Booking No:</strong></td>
                             <td style="padding: 8px; color: #000">${bookingno || ""}</td>
                         </tr>
                         <tr>
@@ -742,7 +742,7 @@ router.post('/send-email', async (req, res) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 8px;"><strong>Trip No:</strong></td>
+                            <td style="padding: 8px;"><strong>Booking No:</strong></td>
                             <td style="padding: 8px;">${bookingno}</td>
                         </tr>
                         <tr>

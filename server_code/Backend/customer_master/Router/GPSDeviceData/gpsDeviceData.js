@@ -241,7 +241,10 @@ router.post('/getTodayVehiclePoints', (req, res) => {
 
 const axios = require('axios');
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE'; // Replace with your API key
+// const GOOGLE_MAPS_API_KEY = 'AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE'; // Replace with your API key
+const GOOGLE_MAPS_API_KEY = 'AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk'; // Replace with your API key
+
+
 
 async function getAddressFromLatLng(lat, lng) {
     try {

@@ -982,6 +982,10 @@ const useTripsheet = () => {
         setRouteData('')
         setSignImageUrl('')
         setSignImageUrl1('')
+        setCloseTime('')
+        setStartTime('')
+        setreporttime('')
+        setshedintime('')
         // -----------
         setSignatureWhattsapplink()
         setCopyDataLink(false)
@@ -1497,6 +1501,7 @@ const useTripsheet = () => {
     // console.log(checksignandMapverify, "userStatusdata", typeof (checksignandMapverify))
 
     const handleEdit = async () => {
+        const closetimecheck = closetime || book.closetime || formData.closetime || selectedCustomerData.closetime;
         // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
         // handleTripmapClick()
         handleTripmapverify()
@@ -1654,6 +1659,7 @@ const useTripsheet = () => {
                     drivername: driverName,
                 };
                 console.log(VehcileHistory, "editVehicleHistory");
+                console.log(updatedCustomer,"updated customerrrrrrrrrrr",closetimecheck);
 
                 const tripsheetlogtripid = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
 
@@ -4284,6 +4290,7 @@ const useTripsheet = () => {
                             setSelectedStatus(bookingDetails.status); // Set selected status based on booking details
                             setSelectedStatuschecking(bookingDetails.status)
                             setOldStatusCheck(bookingDetails.status)
+                            setCloseTime(bookingDetails.closetime)
                             // if (!lockdata) {
 
 
@@ -4368,7 +4375,7 @@ const useTripsheet = () => {
                     setFormData({})
                     setFormValues({})
                     setIsEditMode(false)
-                    // setBook({})
+                    setBook({})
                     setErrorMessage(`${error.response.data.error}`);
                     // setErrorMessage(" You Don't Have Accesss To This Tripsheet Based On Service Station");
                 } else {
@@ -4380,6 +4387,7 @@ const useTripsheet = () => {
         }
     }
 
+console.log(selectedCustomerData,"selectedcustomerdataaaaaaaaaaa",closetime,formData,bookData);
 
 
     const handleRowClick = (params) => {

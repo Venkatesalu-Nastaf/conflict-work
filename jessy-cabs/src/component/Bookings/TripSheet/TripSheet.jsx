@@ -2107,6 +2107,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                       <CalendarMonthIcon color="action" />
                     </div>
                     <DemoItem>
+                      {duty === "Outstation" ?
                       <TextField
                         name="totaldays"
                         value={calculateTotalDay()}
@@ -2117,7 +2118,19 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         id="totaldays"
                         // variant="standard"
                         autoComplete="password"
-                      />
+                      /> :
+                      <TextField
+                      name="totaldays"
+                      value={"-"}
+                      label="Total Days"
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                      size="small"
+                      // type="number"
+                      id="totaldays"
+                      // variant="standard"
+                      autoComplete="password"
+                    /> 
+}
                     </DemoItem>
                   </div>}
 
@@ -2172,12 +2185,16 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                             // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
                             //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                             // }
-                            if (!lockdata && dayhcl === 0) {
+                            // if (!lockdata && dayhcl === 0) {
+                            //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            // }
+                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            // }
+                            if (!lockdata) {
                               setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                             }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                              setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
-                            }
+                           
                           }}
                         />
                       </div>
@@ -2236,9 +2253,9 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           setFormData({ ...formData, starttime: rTime });
                           setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
                           setNoChangeData({ ...nochangedata, starttime: rTime });
-                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
-                            setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
-                          }
+                          // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                          //   setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
+                          // }
                           // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                           //   setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
                           // }
@@ -2291,12 +2308,15 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           setBook({ ...book, closetime: rTime });
                           setCloseTime(rTime);
                           setNoChangeData({ ...nochangedata, closetime: rTime });
-                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
-                            setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                          }
+                          // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                          //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          // }
                           // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                           //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                           // }
+                          if (!lockdata) {
+                            setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          }
                         }}
                       />
                     </div>
@@ -2356,46 +2376,48 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           setNoChangeData({ ...nochangedata, shedintime: rTime });
 
                           // Check if the day difference is 1, and validate the time
-                          if (calculateTotalDay() === 1) {
-                            if (closeTimeVar && rTime <= closeTimeVar) {
-                              // If the shed in time is invalid, display an error message but allow input
-                              console.log("Invalid Shed In Time");
-                            } else {
+                          // if (calculateTotalDay() === 1) {
+                          //   if (closeTimeVar && rTime <= closeTimeVar) {
+                          //     // If the shed in time is invalid, display an error message but allow input
+                          //     console.log("Invalid Shed In Time");
+                          //   }
+                            //  else {
                               // Valid input, you can handle any additional logic here
-                              if (!lockdata && dayhcl === 0) {
-                                setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                              }
-                              if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                                setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                              }
+                              // if (!lockdata && dayhcl === 0) {
+                              //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                              // }
+                              // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                              // }
                               // if (lockdata && dayhcl === 0) {
                               //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                               // }
                               // if (lockdata && dayhcl === 1 && duty === "Outstation") {
                               //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
                               // }
-                            }
-                          } else {
-                            // If the day difference is more than 1, allow any time
-                            // if (!lockdata && dayhcl === 0) {
-                            //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                             // }
-                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                            // }
-                            if (!lockdata && dayhcl === 0) {
-                              setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                            }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                            }
-                            // if (lockdata && dayhcl === 0) {
-                            //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                            // }
-                            // if (lockdata && dayhcl === 1 && duty === "Outstation") {
-                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                            // }
-                          }
+                          // } 
+                          // else {
+                          //   // If the day difference is more than 1, allow any time
+                          //   // if (!lockdata && dayhcl === 0) {
+                          //   //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          //   // }
+                          //   // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                          //   //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          //   // }
+                          //   if (!lockdata && dayhcl === 0) {
+                          //     setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          //   }
+                          //   if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                          //     setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          //   }
+                          //   // if (lockdata && dayhcl === 0) {
+                          //   //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          //   // }
+                          //   // if (lockdata && dayhcl === 1 && duty === "Outstation") {
+                          //   //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          //   // }
+                          // }
                         }}
                       />
                     </div>
@@ -2544,12 +2566,15 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                             if (value >= 0) {
                               handleChange(e)
                               setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
-                              if (!lockdata && dayhcl === 0) {
+                              // if (!lockdata && dayhcl === 0) {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              // }
+                              if (!lockdata) {
                                 setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                               }
-                              if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                                setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                              }
+                              // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              // }
                               // if (lockdata && dayhcl === 0) {
                               //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                               // }
@@ -2585,9 +2610,10 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           if (value >= 0) {
                             handleChange(e)
                             setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
-                            if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                            }
+                            // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            // }
+                            
                             // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                             //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                             // }
@@ -2619,7 +2645,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           if (value >= 0) {
                             setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
                             handleChange(e)
-                            if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            if (!lockdata) {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                             }
                             // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
@@ -2652,12 +2678,12 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           if (value >= 0) {
                             setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
                             handleChange(e)
-                            if (!lockdata && dayhcl === 0) {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
-                            }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
-                            }
+                            // if (!lockdata && dayhcl === 0) {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            // }
+                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            // }
 
                             // if (lockdata && dayhcl === 0) {
                             //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
@@ -3555,6 +3581,8 @@ Please Click the link to close E-Tripsheet-`}
                                 </div>
 
                                 <div className="input-g">
+
+                                  {vendorinfo?.vendor_duty === "Outstation" ?
                                   <TextField
                                     name="vendortotaldays"
                                     value={calculatevendorTotalDays()}
@@ -3565,6 +3593,17 @@ Please Click the link to close E-Tripsheet-`}
                                     id="totaldays"
                                     sx={{ width: "100%" }}
                                   />
+                                  :
+                                  <TextField
+                                  name="vendortotaldays"
+                                  value={"-"}
+                                  label="Total Days"
+                                  disabled={lockdata}
+                                  size="small"
+                                  // type="number"
+                                  id="totaldays"
+                                  sx={{ width: "100%" }}
+                                />}
                                 </div>
 
                               </div>
@@ -5048,6 +5087,7 @@ Please Click the link to close E-Tripsheet-`}
                         </div>
 
                         <div className="input-g">
+                        {vendorinfo?.vendor_duty === "Outstation" ? 
                           <TextField
                             name="vendortotaldays"
                             value={calculatevendorTotalDays()}
@@ -5058,6 +5098,18 @@ Please Click the link to close E-Tripsheet-`}
                             id="totaldays"
                             sx={{ width: "100%" }}
                           />
+                          :
+                          <TextField
+                          name="vendortotaldays"
+                          value={"-"}
+                          label="Total Days"
+                          disabled={lockdata}
+                          size="small"
+                          // type="number"
+                          id="totaldays"
+                          sx={{ width: "100%" }}
+                        />
+                        }
                         </div>
 
                       </div>

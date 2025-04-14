@@ -2150,7 +2150,10 @@ const useTripsheet = () => {
             if (name === "shedOutDate") {
                 setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: parsedDate }))
             }
-            else if (name === "shedInDate") {
+            // else if (name === "shedInDate") {
+            //     setVendorinfodata((prev) => ({ ...prev, vendorshedInDate: parsedDate }))
+            // }
+            else if (name === "closedate") {
                 setVendorinfodata((prev) => ({ ...prev, vendorshedInDate: parsedDate }))
             }
         }
@@ -2529,12 +2532,50 @@ const useTripsheet = () => {
     };
 
 
+    // const calculateTotalDay = () => {
+    //     const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
+    //     const closeDate = formData.closedate || selectedCustomerData.closedate || book.closedate;
+    //     const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+    //     const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+    //     const hybriddata = hybridhclcustomer || hybridhclnavigate
+    //     const duty = formData.duty || selectedCustomerData.duty || book.duty;
+    //     if (shedoutdate && shedindate ) {
+    //         const shedOutDateObj = dayjs(shedoutdate).startOf('day');
+    //         const shedindateObj = dayjs(shedindate).startOf('day');
+
+    //         if (shedOutDateObj.isAfter(shedindateObj)) {
+    //             // console.log('Shed Out Date is greater than Shed In Date');
+    //             // return 'Shed Out Date is greater';
+    //             return 0;
+    //         } else if (shedOutDateObj.isSame(shedindateObj)) {
+    //             return 1;
+    //         } else {
+    //             const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
+    //             return totalDays + 1;
+    //         }
+    //     } else if (startDate && closeDate && !shedoutdate && !shedindate) {
+    //         const startDateObj = dayjs(startDate).startOf('day');
+    //         const closeDateObj = dayjs(closeDate).startOf('day');
+
+    //         const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+
+    //         if (totalDays > 0) {
+
+    //             return totalDays;
+    //         }
+    //         return '';
+    //     }
+
+    //     return '';
+    // };
     const calculateTotalDay = () => {
         const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
         const closeDate = formData.closedate || selectedCustomerData.closedate || book.closedate;
         const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
         const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-        if (shedoutdate && shedindate) {
+        const hybriddata = hybridhclcustomer || hybridhclnavigate
+        const duty = formData.duty || selectedCustomerData.duty || book.duty;
+        if (shedoutdate && shedindate && hybriddata === 0) {
             const shedOutDateObj = dayjs(shedoutdate).startOf('day');
             const shedindateObj = dayjs(shedindate).startOf('day');
 
@@ -2548,18 +2589,56 @@ const useTripsheet = () => {
                 const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
                 return totalDays + 1;
             }
-        } else if (startDate && closeDate && !shedoutdate && !shedindate) {
+        } else if (hybriddata === 1 ) {
+            if(startDate && closeDate && duty !== "Outstation") {
             const startDateObj = dayjs(startDate).startOf('day');
             const closeDateObj = dayjs(closeDate).startOf('day');
 
-            const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+            // const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
 
-            if (totalDays > 0) {
+            // if (totalDays > 0) {
 
-                return totalDays;
+            //     return totalDays;
+            // }
+            // return '';
+            if (startDateObj.isAfter(closeDateObj)) {
+                // console.log('Shed Out Date is greater than Shed In Date');
+                // return 'Shed Out Date is greater';
+                return 0;
+            } else if (startDateObj.isSame(closeDateObj)) {
+                return 1;
+            } else {
+                const totalDays = closeDateObj.diff(startDateObj, 'days');
+                return totalDays + 1;
             }
-            return '';
         }
+        else if (shedoutdate && shedindate && duty === "Outstation") 
+        {
+            const startDateObj1 = dayjs(shedoutdate).startOf('day');
+            const closeDateObj1 = dayjs(shedindate).startOf('day');
+
+            // const totalDays1 = closeDateObj1.diff(startDateObj1, 'days') + 1;
+
+            // if (totalDays1 > 0) {
+
+            //     return totalDays1;
+            // }
+            // return '';
+            if (startDateObj1.isAfter(closeDateObj1)) {
+                // console.log('Shed Out Date is greater than Shed In Date');
+                // return 'Shed Out Date is greater';
+                return 0;
+            } else if (startDateObj1.isSame(closeDateObj1)) {
+                return 1;
+            } else {
+                const totalDays = closeDateObj1.diff(startDateObj1, 'days');
+                return totalDays + 1;
+            }
+        }
+        else{
+             return ''
+        }
+    }
 
         return '';
     };
@@ -2696,7 +2775,8 @@ const useTripsheet = () => {
         const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
         const shedinTime = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
         const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
-        const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
+        // const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
+        const totalDays = calculateTotalDay() || book.totaldays;
         // const datatimetoggle = timeToggle;
         const duty = formData.duty || selectedCustomerData.duty || book.duty;
         const datatimetoggle = timeToggle || timetogglenavigate

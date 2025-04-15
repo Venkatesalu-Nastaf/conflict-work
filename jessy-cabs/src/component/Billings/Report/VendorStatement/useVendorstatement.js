@@ -9,7 +9,7 @@ import Excel from 'exceljs';
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "tripid", headerName: "TripNo", width: 130 },
-    { field: "tripsheetdate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'), },
+    { field: "shedOutDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'), },
     { field: "customer", header: "Customer Name", width: 150 },
     { field: "travelsname", headerName: "Vendor Name", width: 130 },
     { field: "vendor_vehicle", headerName: "Vehicle", width: 90 },

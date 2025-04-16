@@ -19,6 +19,8 @@ const DigitalSignature = () => {
   // THSI API FOR DRIVER APP APIURL TRANFER
   const apiurltransfer = Apiurltransfer;
   const sigCanvasRef = useRef(null);
+  const [dsiabelbutton,setDisableButton]=useState(false);
+
 
   const tripIddata = new URLSearchParams(window.location.search).get("trip");
 
@@ -332,7 +334,7 @@ const DigitalSignature = () => {
       console.log(res, "yyy")
       setSuccess(true)
       setSuccessMessage("Upload successfully");
-    
+      setDisableButton(true)
       clearSignature();
       setUploadToll(true);
     } catch (error) {
@@ -371,7 +373,7 @@ const DigitalSignature = () => {
 
     try {
       // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`, signtauretimes)
+      await axios.post(`${apiUrl}/Acceptsignaturedatatimes/${tripId}`, signtauretimes)
     }
     catch (err) {
       console.log(err)
@@ -390,7 +392,7 @@ const DigitalSignature = () => {
 
     try {
       // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`, signtauretimes)
+      await axios.post(`${apiUrl}/dataclearsignaturedatatimes/${tripId}`, signtauretimes)
     }
     catch (err) {
       console.log(err)
@@ -401,6 +403,7 @@ const DigitalSignature = () => {
 
   return (
     <div>
+      {!dsiabelbutton ? <>
       <SignatureCanvas
         ref={sigCanvasRef}
         penColor="black"
@@ -433,13 +436,15 @@ const DigitalSignature = () => {
         <p style={{ textAlign: 'center',color: success ? 'green' : 'red' }}>{success ? successMessage : errorMessage}</p>
         
 
-        <button className="clear-button" onClick={clearSignaturedata}>
+        {!dsiabelbutton ? <button  disabled={dsiabelbutton} className="clear-button" onClick={clearSignaturedata}>
           Clear Signature
-        </button>
+        </button>:<></>
+}
         <button className="clear-button" onClick={saveSignature}>
           Done
         </button>
       </div>
+      </>:<></>}
       <Dialog open={uploadtoll}>
         <DialogContent>
 

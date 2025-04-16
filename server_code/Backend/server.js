@@ -1043,6 +1043,47 @@ app.post("/signaturedatatimes/:tripid", (req, res) => {
   })
 })
 
+app.post("/dataclearsignaturedatatimes/:tripid", (req, res) => {
+  const tripid = req.params.tripid;
+  const {
+    status,
+    datesignature,
+    signtime,
+     } = req.body;
+
+
+
+  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, datesignature, signtime, status], (err, results) => {
+    if (err) {
+      // console.log(err,"errins")
+      return res.status(400).json(err)
+    }
+   
+      return res.status(200).json("data insert successfully")
+ 
+
+  })
+})
+app.post("/Acceptsignaturedatatimes/:tripid", (req, res) => {
+  const tripid = req.params.tripid;
+  const {
+    status,
+    datesignature,
+    signtime,
+    } = req.body;
+  
+
+  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, datesignature, signtime, status], (err, results) => {
+    if (err) {
+      // console.log(err,"errins")
+      return res.status(400).json(err)
+    }
+ 
+      return res.status(200).json("data insert successfully")
+  
+
+  })
+})
 
 
 // app.get("/getFuelType/:fuelType", (req, res) => {

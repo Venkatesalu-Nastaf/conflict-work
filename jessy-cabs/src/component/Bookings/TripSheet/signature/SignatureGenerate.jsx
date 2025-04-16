@@ -262,7 +262,7 @@ const SignatureGenerate = () => {
       console.log(signtauretimes, 'sign data')
       const response = await axios.post(`${apiUrl}/generate-link/${tripno}`);
       await axios.post(`${apiUrl}/signaturelinkExpiredatas/`, updatedetails)
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`, signtauretimes);
+      await axios.post(`${apiUrl}/Acceptsignaturedatatimes/${tripno}`, signtauretimes);
 
       const data = response.data.link;
       // console.log(data,"lll")

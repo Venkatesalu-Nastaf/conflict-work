@@ -19,7 +19,7 @@ import {
   Hire,
   PayType,
   GroupTypes,
-  vehicaleinfos
+  // vehicaleinfos
 } from "./Booking";
 import {
   TextField,
@@ -1471,20 +1471,32 @@ const Booking = ({ stationName, customerData }) => {
                 id="vehiclemodule"
                 freeSolo
                 size="small"
+                // value={
+                //   selectedCustomerData.vehiclemodule ||
+                //   book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||
+                //   ""
+                // }
                 value={
-                  selectedCustomerData.vehiclemodule ||
-                  book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||
+                  selectedCustomerData.vehicleTyped ||
+                  book.vehicleTyped || selectedCustomerdriver.vehicleTyped ||
                   ""
                 }
-                options={vehicaleinfos?.map((option) => ({
-                  label: option?.Option,
+                // options={vehicaleinfos?.map((option) => ({
+                //   label: option?.Option,
+                // }))}
+                options={vehileName.map((option) => ({
+                  label: option,
                 }))}
                 onChange={(event, value) =>
-                  handleAutocompleteChange(event, value, "vehiclemodule")
+                  handleAutocompleteChange(event, value, "vehicleTyped")
                 }
+                // renderInput={(params) => {
+                //   return (
+                //     <TextField {...params} label="Vehicle Type" name="vehicleType" inputRef={params.inputRef} />
+                //   );
                 renderInput={(params) => {
                   return (
-                    <TextField {...params} label="Vehicle Type" name="vehicleType" inputRef={params.inputRef} />
+                    <TextField {...params} label="Vehicle Type"  name="vehicleName" inputRef={params.inputRef} />
                   );
                 }}
               />

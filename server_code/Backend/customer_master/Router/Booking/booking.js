@@ -514,16 +514,27 @@ router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
     console.log("customer", travelname);
 
     // Query to perform left joins
+    // const query = `
+    //     SELECT 
+    //         ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
+    //         vi.Groups,vi.vehicleName, vi.vehType as vehiclemodule, 
+    //         dc.Mobileno As mobileNo
+    //     FROM accountinfo ai
+    //     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+    //     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+    //     WHERE ai.travelsname=?
+    // `;
+
     const query = `
-        SELECT 
-            ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
-            vi.Groups,vi.vehicleName, vi.vehType as vehiclemodule, 
-            dc.Mobileno As mobileNo
-        FROM accountinfo ai
-        LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
-        LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
-        WHERE ai.travelsname=?
-    `;
+    SELECT 
+        ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
+        vi.Groups,vi.vehicleName as vehicleTyped,
+        dc.Mobileno As mobileNo
+    FROM accountinfo ai
+    LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+    LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+    WHERE ai.travelsname=?
+`;
 
     db.query(query, [travelname], (err, result) => {
         if (err) {
@@ -538,42 +549,42 @@ router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
 
 
 
-router.get('/drivername-detailsaccountbooking/:driver', (req, res) => {
-    const customer = req.params.driver;
-    console.log("customer", customer);
+// router.get('/drivername-detailsaccountbooking/:driver', (req, res) => {
+//     const customer = req.params.driver;
+//     console.log("customer", customer);
 
-    // Query to perform left joins
-    // const query = `
-    //     SELECT 
-    //         ai.*,
-    //         vi.Groups,vi.hiretypes as hireTypes,vi.vehicleName, vi.vehType as vehiclemodule, 
-    //         dc.Mobileno As mobileNo
-    //     FROM accountinfo ai
-    //     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
-    //     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
-    //     WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
-    // `;
-    const query = `
-    SELECT 
-         ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
-        vi.Groups,vi.vehicleName,vi.vehType as vehiclemodule, 
-        dc.Mobileno As mobileNo
-    FROM accountinfo ai
-    LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
-    LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
-    WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
-`;
+//     // Query to perform left joins
+//     // const query = `
+//     //     SELECT 
+//     //         ai.*,
+//     //         vi.Groups,vi.hiretypes as hireTypes,vi.vehicleName, vi.vehType as vehiclemodule, 
+//     //         dc.Mobileno As mobileNo
+//     //     FROM accountinfo ai
+//     //     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+//     //     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+//     //     WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
+//     // `;
+//     const query = `
+//     SELECT 
+//          ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
+//         vi.Groups,vi.vehicleName,vi.vehType as vehiclemodule, 
+//         dc.Mobileno As mobileNo
+//     FROM accountinfo ai
+//     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+//     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+//     WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
+// `;
 
-    db.query(query, [`%${customer}%`, `%${customer}%`], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to retrieve customer details ' });
-        }
-        if (result.length === 0) {
-            return res.status(404).json({ error: 'Data not found' });
-        }
-        return res.status(200).json(result);
-    });
-});
+//     db.query(query, [`%${customer}%`, `%${customer}%`], (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to retrieve customer details ' });
+//         }
+//         if (result.length === 0) {
+//             return res.status(404).json({ error: 'Data not found' });
+//         }
+//         return res.status(200).json(result);
+//     });
+// });
 //send email from booking page
 // router.post('/send-email', async (req, res) => {
 //     try {

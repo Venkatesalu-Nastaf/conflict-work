@@ -4665,11 +4665,11 @@ Please Click the link to close E-Tripsheet-`}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
                         disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
-                        onInputChange={(event, newInputValue) => {
-                          if (event && newInputValue) {
-                            handletravelsAutocompleteChange(event, { label: newInputValue.trim() }, "travelsname");
-                          }
-                        }}
+                        // onInputChange={(event, newInputValue) => {
+                        //   if (event && newInputValue) {
+                        //     handletravelsAutocompleteChange(event, { label: newInputValue.trim() }, "travelsname");
+                        //   }
+                        // }}
                         value={
                           selectedCustomerDatas.travelsname ||
                           formData.travelsname ||
@@ -4730,7 +4730,7 @@ Please Click the link to close E-Tripsheet-`}
                         )}
                       />
                     </div>
-                    <div className="input">
+                    {/* <div className="input">
                       <div className="icone">
                         <PiCarSimpleFill color="action" />
                       </div>
@@ -4757,7 +4757,7 @@ Please Click the link to close E-Tripsheet-`}
                           );
                         }}
                       />
-                    </div>
+                    </div> */}
                     <div className="input">
                       <div className="icone">
                         <NoCrashIcon color="action" />

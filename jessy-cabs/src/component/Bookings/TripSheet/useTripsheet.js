@@ -37,7 +37,7 @@ const useTripsheet = () => {
     //  const signatureurlinkurl=`http://localhost:3000/SignatureGenerate`
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
-        vehType: '',
+        // vehType: '',
 
         driverName: '',
         vehRegNo: '',
@@ -139,7 +139,7 @@ const useTripsheet = () => {
     //-----------------------------------------------------------------
     const [packageData, setPackageData] = useState({
         customer: '',
-        vehType: '',
+        // vehType: '',
         duty: '',
         totalkm1: '',
         totaltime: '',
@@ -284,7 +284,7 @@ const useTripsheet = () => {
         tripid: '',
         startdate: '',
         duty: '',
-        vehType: '',
+        // vehType: '',
         vehRegNo: '',
         driverName: '',
         mobileNo: '',
@@ -680,7 +680,7 @@ const useTripsheet = () => {
         useage: '',
         hireTypes: '',
         department: '',
-        vehType: '',
+        // vehType: '',
         vehRegNo: '',
         driverName: '',
         mobileNo: '',
@@ -742,7 +742,7 @@ const useTripsheet = () => {
         //----------------------
         const formData = {};
         const parameterKeys = [
-            'dispatchcheck', 'vehType', 'shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail', 'messageedited',
+            'dispatchcheck','shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo','driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail', 'messageedited',
             'MessageText',
         ];
         parameterKeys.forEach(key => {
@@ -751,6 +751,7 @@ const useTripsheet = () => {
                 formData[key] = value;
             }
         });
+        console.log(formData, 'formdataaa');
 
         const formvendorinfo = {};
         const parameterKeys1 = [
@@ -944,7 +945,7 @@ const useTripsheet = () => {
         Groups: '',
         travelsemail: '',
         hireTypes: "",
-        vehType: "",
+        // vehType: "",
         vehicleName: "",
         travelsname: "",
         GroupTripId: "",
@@ -1236,7 +1237,7 @@ const useTripsheet = () => {
 
     const vehilcedetails = {
         vehRegNo: selectedCustomerDatas.vehRegNo || '',
-        vehType: selectedCustomerDatas.vehType || '',
+        // vehType: selectedCustomerDatas.vehType || '',
         driverName: selectedCustomerDatas.driverName || '',
         mobileNo: selectedCustomerDatas.mobileNo || '',
     }
@@ -1800,7 +1801,7 @@ const useTripsheet = () => {
         const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         const mobileNo = selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo;
         const Email = formData.email || selectedCustomerData.email || formValues.email || book.email;
-        const vehType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
+        // const vehType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
         const tripnodata = formData.tripid || selectedCustomerData.tripid || book.tripid
         // const
         if (!customer) {
@@ -1813,11 +1814,11 @@ const useTripsheet = () => {
             setErrorMessage("Please fill vehRegNo field");
             return;
         }
-        if (!vehType) {
-            setError(true);
-            setErrorMessage("Please fill vehType field");
-            return;
-        }
+        // if (!vehType) {
+        //     setError(true);
+        //     setErrorMessage("Please fill vehType field");
+        //     return;
+        // }
         if (!driverName) {
             setError(true);
             setErrorMessage("Please fill driverName field");
@@ -3645,7 +3646,7 @@ const useTripsheet = () => {
                 setBook(prevState => ({
                     ...prevState,
                     vehRegNo: manualInput,
-                    vehType: selectedVehicle?.vehType || prevState.vehType,  // Ensure key is "vehType" here
+                    // vehType: selectedVehicle?.vehType || prevState.vehType,  // Ensure key is "vehType" here
                     Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
                     hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes,
                     vehicleName2: selectedVehicle?.vehicleName || prevState.vehicleName2
@@ -3654,7 +3655,7 @@ const useTripsheet = () => {
                 setSelectedCustomerData(prevState => ({
                     ...prevState,
                     vehRegNo: manualInput,
-                    vehType: selectedVehicle?.vehType || prevState.vehType,  // Consistently use "vehType"
+                    // vehType: selectedVehicle?.vehType || prevState.vehType,  // Consistently use "vehType"
                     Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
                     hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes,
                     vehicleName2: selectedVehicle?.vehicleName || prevState.vehicleName2

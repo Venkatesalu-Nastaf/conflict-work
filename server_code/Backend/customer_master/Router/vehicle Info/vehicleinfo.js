@@ -367,7 +367,7 @@ router.get('/searchvehicleinfo', (req, res) => {
       'vehicleId',
       'vehicleName',
       'hiretypes',
-      'vehType',
+      // 'vehType',
       'fueltype',
       'Groups',
       'doadate',

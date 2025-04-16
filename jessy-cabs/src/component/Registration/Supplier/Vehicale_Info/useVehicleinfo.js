@@ -63,7 +63,7 @@ const useVehicleinfo = () => {
         { field: "vehRegNo", headerName: "Vehicle Reg No", width: 130 },
         { field: "stations", headerName: "Stations", width: 170 },
         { field: "hiretypes", headerName: "Hire types", width: 170 },
-        { field: "vehType", headerName: "Vehicle Type", width: 130 },
+        // { field: "vehType", headerName: "Vehicle Type", width: 130 },
         { field: "fueltype", headerName: "Fuel Type", width: 130 },
         { field: "Groups", headerName: "Groups Type", width: 130 },
         { field: "owner", headerName: "Owner", width: 90 },
@@ -561,7 +561,7 @@ const useVehicleinfo = () => {
 
         vehicleName: '',
         hiretypes: '',
-        vehType: '',
+        // vehType: '',
         fueltype: '',
         Groups: '',
         doadate: dayjs(),
@@ -593,7 +593,7 @@ const useVehicleinfo = () => {
             ...prevBook,
             vehicleName: '',
             hiretypes: '',
-            vehType: '',
+            // vehType: '',
             fueltype: '',
             Groups: '',
             doadate: dayjs(),
@@ -891,11 +891,11 @@ const useVehicleinfo = () => {
             return;
         }
 
-        if (!book.vehType) {
-            setWarning(true);
-            setWarningMessage("Choose vehicletype");
-            return;
-        }
+        // if (!book.vehType) {
+        //     setWarning(true);
+        //     setWarningMessage("Choose vehicletype");
+        //     return;
+        // }
         if (!book.mobileNo) {
             setWarning(true);
             setWarningMessage("Enter MobileNo");

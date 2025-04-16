@@ -35,7 +35,7 @@ const useExeclpage = () => {
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
         { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         { key: "vehicleName", header: "Vehicle Actual Make", width: 180 },
-        { key: "vehType", header: "Vehicle Type (Requested)", width: 200 },
+        // { key: "vehType", header: "Vehicle Type (Requested)", width: 200 },
         // { key: "vechicletype", header: "Vehicle Actual Make", width: 180 },
         // { key: "vehTypebilling", header: "Billing Vehicle Type", width: 180 },
         { key: "fueltype", header: "Fuel Type", width: 120 },
@@ -109,7 +109,7 @@ const useExeclpage = () => {
         { key: "vehicleName2", header: "Vehicle Name", width: 120 },
         // { key: "vehType", header: "Vehicle Make", width: 180 },
         { key: "vehicleName", header: "Vehicle Make", width: 180 },
-        { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
+        // { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
         // { key: "vehicleName", header: "Vehicle Make", width: 180 },
         { key: "segement", header: "vehicle Segment", width: 180 },
         { key: "fueltype", header: "Fuel Used", width: 120 },
@@ -331,7 +331,7 @@ const useExeclpage = () => {
                     // singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"])  : singleData["calcPackage"];
                     singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"] || singleData["originalExtraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"]) : singleData["calcPackage"];
                     singleData["package_amount"] = singleData["duty"] === "Outstation" ? singleData["ex_kmAmount"] : singleData["package_amount"]
-                    singleData["vechicletype"] = singleData["vehType"]
+                    // singleData["vechicletype"] = singleData["vehType"]
                     // singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
@@ -487,7 +487,7 @@ const useExeclpage = () => {
                     singleData2["VendorName"] = " Jessy Cabs"
                     singleData2["UserNos_Occupancy"] = 1
                     singleData2["calcPackage"] = singleData2["duty"] === "Transfer" || singleData2["duty"] === "Outstation" ? singleData2["duty"] : singleData2["calcPackage"]
-                    singleData2["vehType1"] = singleData2["vehType"]
+                    // singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
                     singleData2["sheoutDatetrip"] = singleData2["shedOutDate"] ? dayjs(singleData2["shedOutDate"]).format("DD/MM/YYYY") : ""
                     singleData2["shedInDate"] = singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD/MM/YYYY") : ""
@@ -636,8 +636,8 @@ const useExeclpage = () => {
                     singleData["VendorName"] = " Jessy Cabs"
                     singleData["UserNos_Occupancy"] = 1
                     singleData["OutstationCharges"] = 0
-                    singleData["vechicletype"] = singleData["vehType"]
-                    singleData["vehTypebilling"] = singleData["vehType"]
+                    // singleData["vechicletype"] = singleData["vehType"]
+                    // singleData["vehTypebilling"] = singleData["vehType"]
                     // singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
                     singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"]) : singleData["calcPackage"];
                     singleData["package_amount"] = singleData["duty"] === "Outstation" ? singleData["ex_kmAmount"] : singleData["package_amount"]
@@ -766,7 +766,7 @@ const useExeclpage = () => {
                     singleData["UserNos_Occupancy"] = 1
                     singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] : singleData["calcPackage"]
                     singleData["VendorName"] = " Jesscy Cabs"
-                    singleData["vehType1"] = singleData["vehType"]
+                    // singleData["vehType1"] = singleData["vehType"]
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
                     singleData["sheoutDatetrip"] = singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY") : ""

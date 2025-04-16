@@ -413,7 +413,7 @@ router.get('/drivername-detailsaccount/:driver', (req, res) => {
     const query = `
     SELECT 
         ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hiretypes,ai.vehRegNo,ai.driverName,
-        vi.Groups,vi.vehicleName As vehicleName2, vi.vehType, 
+        vi.Groups,vi.vehicleName As vehicleName2,
         dc.Mobileno As mobileNo
     FROM accountinfo ai
     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
@@ -454,7 +454,7 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
     const query = `
         SELECT 
              ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hiretypes,ai.vehRegNo,ai.driverName,
-            vi.Groups, vi.vehicleName As vehicleName2, vi.vehType, 
+            vi.Groups, vi.vehicleName As vehicleName2,
             dc.Mobileno As mobileNo
         FROM accountinfo ai
         LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo

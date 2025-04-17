@@ -316,7 +316,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
     // --------------------this zoom code image data----------------------------------------
     posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, Scale, onDrag, handleFullDeleteMapData,
-    mapDataDeleteModal, setMapDataDeleteModal
+    mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide
     // this code zoom image data---------------------------------
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
@@ -1304,7 +1304,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     options={CustomerNames?.map((option) => ({
                       label: option.customer,
                     }))}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     getOptionLabel={(option) => option.label || formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || ''}
                     renderInput={(params) => {
                       return (
@@ -1362,7 +1362,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
                     value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
 
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     options={orderByDropDown?.map((option) => ({
 
                       label: option?.orderedby,
@@ -1394,7 +1394,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                       // onChange={handleChange}
                       label="Mobile"
                       // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                       id="standard-size-mobile"
                       size="small"
                       autoComplete="password"
@@ -1411,7 +1411,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                       value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
                       // onChange={handleChange}
                       // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                       label="Order By Email"
                       id="orderbyemail"
                       size="small"
@@ -1429,7 +1429,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                       // onChange={handleChange}
                       label="Mobile"
                       // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                       id="standard-size-mobile"
                       size="small"
                       autoComplete="password"
@@ -1446,7 +1446,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
                       // onChange={handleChange}
                       // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                       label="Order By Email"
                       id="orderbyemail"
                       size="small"
@@ -1467,7 +1467,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
                     value={stationOptions?.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                     options={stationOptions?.map((option) => ({
@@ -1493,7 +1493,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     label="Guest Name"
                     name="guestname"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
                     onChange={handleChange}
                     size="small"
@@ -1510,7 +1510,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     value={formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Phone (Cell)"
                     id="guestmobileno"
                     size="small"
@@ -1527,7 +1527,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     value={formData.email || selectedCustomerData.email || formValues.email || book.email || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Email"
                     id="email"
                     size="small"
@@ -1547,7 +1547,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     name="address1"
                     multiline
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     rows={2}
                     sx={{ width: "100%" }}
                     autoComplete="new-password"
@@ -1565,7 +1565,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     size="small"
                     name="useage"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
                     onChange={handleChange}
                     label="Usage"
@@ -1585,7 +1585,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     onChange={(event, value) => {
                       handleAutocompleteChange(event, value, "duty")
                       if (!lockdata) {
@@ -1617,7 +1617,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     size="small"
                     name="request"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
                     onChange={handleChange}
                     label="Request"
@@ -1660,7 +1660,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Cost Code"
                     id="customer-customercode"
                     autoComplete="password"
@@ -1677,7 +1677,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     onChange={handleChange}
                     name="employeeno"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Employee No"
                     id="employeeno"
                     autoComplete="password"
@@ -1694,7 +1694,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         id="demo-simple-select"
                         // value={bookingStatus}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         value={escort}
                         // label="Status"
                         onChange={handleEscortChange}
@@ -1740,7 +1740,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         id="demo-simple-select"
                         value={transferreport}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         onChange={handleTransferChange}
                       >
                         <MenuItem value={'Yes'}>Yes</MenuItem>
@@ -1857,7 +1857,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
 
-                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                          disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
 
                           id="shedOutDate"
                           value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
@@ -1913,7 +1913,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                          disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                           id="startdate"
                           value={
                             formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
@@ -2157,7 +2157,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                          disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                           value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                           onChange={(event) => {
                             let value = event.target.value;
@@ -2223,7 +2223,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         id="starttime"
                         // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                         // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                        disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         name="starttime"
                         ref={reporttimeRef}
                         value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}

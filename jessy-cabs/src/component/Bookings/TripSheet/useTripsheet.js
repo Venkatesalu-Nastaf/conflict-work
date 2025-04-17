@@ -271,6 +271,7 @@ const useTripsheet = () => {
     const [temporaryStatus, setTemporaryStatus] = useState(null);
     const [emptyState, setEmptyState] = useState(false);
     const [userStatus, setUserStatus] = useState(null);
+    const [outStationDispatchHide,setOutStationDispatchHide] = useState(false);
 
     const [routeData, setRouteData] = useState('');
     const [tripSheetData, setTripSheetData] = useState({
@@ -4388,7 +4389,6 @@ const useTripsheet = () => {
         }
     }
 
-console.log(selectedCustomerData,"selectedcustomerdataaaaaaaaaaa",closetime,formData,bookData);
 
 
     const handleRowClick = (params) => {
@@ -7220,7 +7220,6 @@ console.log(selectedCustomerData,"selectedcustomerdataaaaaaaaaaa",closetime,form
     const timeParts = formattedReportTime?.split(".") || ["0", "0"]; // Default to ["0", "0"] if undefined
     let hours1 = parseInt(timeParts[0] || 0, 10); // Parse hours as an integer
     let minutes1 = parseInt(timeParts[1] || 0, 10); // Parse minutes as an integer
-    console.log(hours1, "tripppppppnewwwweeeeeeeee", minutes1);
 
     minutes1 += 30;
 
@@ -7238,8 +7237,6 @@ console.log(selectedCustomerData,"selectedcustomerdataaaaaaaaaaa",closetime,form
     }
     // console.log(startdatecalc, 'asssssssssssssssssss');
     const bonusReportTime = bonusReportTime1 === "24.00" ? startdatecalc : bonusReportTime1
-    console.log(TripReportTime, "tripppppppnewwww", formattedReportTime, bonusReportTime1, hours1, minutes1, timeParts, "www", bonusReportTime);
-    console.log(formattedReportTime, "formatttttttttttttttttttttttttttttt", parseFloat(formattedReportTime).toFixed(2));
 
 
     // const bonusReportTime = (parseFloat(formattedReportTime || 0) + 0.30).toFixed(2);
@@ -7310,7 +7307,7 @@ console.log(selectedCustomerData,"selectedcustomerdataaaaaaaaaaa",closetime,form
             setHideField(false);
             console.log("midnight 23.30 time is affected");
         }
-    }, [enterTrigger, book]);
+    }, [enterTrigger, book,finalCurrentTime]);
 
     // }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
 
@@ -7343,6 +7340,15 @@ console.log(selectedCustomerData,"selectedcustomerdataaaaaaaaaaa",closetime,form
                 //     (superAdminAccess === "0") &&
                 //     (station.includes("Chennai") || station.includes("All"))
                 // )
+                // check outstation and hide booking details in tripsheet
+                if (!station.includes("Chennai") && !station.includes("All")) {
+                    console.log(superAdminAccess, "superAdminAccesssssssssssssssssss", station, !station.includes("Chennai"));
+                    console.log("outstationnnnnnnnnnnnnnnnnnnnnnnnnnn");
+                
+                    setOutStationDispatchHide(true);
+                    return;
+                }
+                
                 if (
                     (oldStatusCheck === "Temporary Closed") &&
                     (superAdminAccess !== "SuperAdmin") &&
@@ -8533,7 +8539,7 @@ console.log(selectedCustomerData,"selectedcustomerdataaaaaaaaaaa",closetime,form
         tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
         // this zoom image code state-----------------
         posX, posY, zoom, handleZoomIn, handleZoomOut, startDrag, stopDrag, handleScrollZoom, isDragging, onDrag, handleFullDeleteMapData,
-        mapDataDeleteModal, setMapDataDeleteModal
+        mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide
         // this zoom image code state-----------------
 
     };

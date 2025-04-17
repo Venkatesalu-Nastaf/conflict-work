@@ -11,7 +11,7 @@ router.get('/tripsheet_driver_details', (req, res) => {
         return res.status(400).json({ error: 'Invalid status parameter' });
     }
 
-    let sqlQuery = 'SELECT id, driverName, vehType, startdate, mobileNo, apps FROM tripsheet';
+    let sqlQuery = 'SELECT id, driverName, startdate, mobileNo,vehicleName apps FROM tripsheet';
 
     // Adjust the SQL query based on the selected status
     if (apps === 'active') {

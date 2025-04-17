@@ -4873,42 +4873,101 @@ const useTripsheet = () => {
             if (duty !== "Outstation") {
 
                 if (calculateTotalDay() === 1) {
-                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
-                        // console.log(2,"night1")
+                    // if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    //     // console.log(2,"night1")
+                    //     calcNight = 2;
+                    // }
+                    // if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                    //     // console.log(1,"night2")
+                    //     calcNight = 1;
+                    // }
+                    // if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                    //     // console.log(1,"night3")
+                    //     calcNight = 1;
+                    // }
+                    if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
+                  
+                        calcNight = 0;
+                    }
+                    if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
+                    
+                        calcNight = 0;
+                    }
+                    if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
+                       
+                        calcNight = 1;
+                    }
+                   
+                    if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
+                      
                         calcNight = 2;
                     }
                     if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
-                        // console.log(1,"night2")
+                       
                         calcNight = 1;
                     }
-                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
-                        // console.log(1,"night3")
+                 
+                    if (Number(newTimeStrings) > 22.0 && Number(newTimeString) >= 6.00) {
+                       
                         calcNight = 1;
                     }
-
 
                 }
 
                 if (TotalDay > 1) {
 
                     // console.log(TotalDay,"days")
-                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    // if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    //     // console.log(TotalDay + 1,"days1")
+                    //     calcNight = TotalDay + 1;
+                    // }
+                    // if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                    //     calcNight = TotalDay;
+                    //     // console.log(TotalDay ,"days2")
+                    // }
+                    // if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
+                    //     calcNight = TotalDay - 1;
+                    //     // console.log(TotalDay ,"days3")
+                    // }
+                    // if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                    //     calcNight = TotalDay;
+                    //     // console.log(TotalDay ,"days4")
+                    // }
+                    // console.log(calcNight,"daysnii")
+                    if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
+                  
+                        calcNight = TotalDay - 1;
+                    }
+                    if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
+                     
+                        calcNight = TotalDay - 1;
+                        
+                    }
+                    if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
+                      
+                        calcNight = TotalDay ;
+                    }
+    
+                    if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
                         // console.log(TotalDay + 1,"days1")
+                       
                         calcNight = TotalDay + 1;
                     }
                     if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                      
                         calcNight = TotalDay;
                         // console.log(TotalDay ,"days2")
                     }
                     if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
+                       
                         calcNight = TotalDay - 1;
                         // console.log(TotalDay ,"days3")
                     }
-                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                    if (Number(newTimeStrings) > 22.0 && Number(newTimeString) >= 6.00) {
+                        // console.log(1,"qqnight77")
                         calcNight = TotalDay;
                         // console.log(TotalDay ,"days4")
                     }
-                    // console.log(calcNight,"daysnii")
 
 
 
@@ -5212,37 +5271,67 @@ const useTripsheet = () => {
                 // if (Number(newTimeStrings) >= 22.0 || Number(newTimeString) <= 6.00) {
                 //     calcNight = 1;
                 // }
-                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
-                    // console.log(2,"night1")
+                if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
+                  
+                    calcNight = 0;
+                }
+                if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
+                
+                    calcNight = 0;
+                }
+                if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
+                   
+                    calcNight = 1;
+                }
+               
+                if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
+                  
                     calcNight = 2;
                 }
                 if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
-                    // console.log(1,"night2")
+                   
                     calcNight = 1;
                 }
-                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
-                    // console.log(1,"night3")
+             
+                if (Number(newTimeStrings) > 22.0 && Number(newTimeString) >= 6.00) {
+                   
                     calcNight = 1;
                 }
             }
 
 
             if (TotalDay > 1) {
+                if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
+                  
+                    calcNight = TotalDay - 1;
+                }
+                if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
+                 
+                    calcNight = TotalDay - 1;
+                    
+                }
+                if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
+                  
+                    calcNight = TotalDay ;
+                }
 
-
-                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
                     // console.log(TotalDay + 1,"days1")
+                   
                     calcNight = TotalDay + 1;
                 }
                 if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                  
                     calcNight = TotalDay;
                     // console.log(TotalDay ,"days2")
                 }
                 if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
+                   
                     calcNight = TotalDay - 1;
                     // console.log(TotalDay ,"days3")
                 }
-                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                if (Number(newTimeStrings) > 22.0 && Number(newTimeString) >= 6.00) {
+                    // console.log(1,"qqnight77")
                     calcNight = TotalDay;
                     // console.log(TotalDay ,"days4")
                 }

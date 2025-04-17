@@ -6,7 +6,7 @@ const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "driverName", headerName: "Driver Name", width: 130 },
     { field: "startdate", headerName: "Date", width: 130 },
-    { field: "vehType", headerName: "Vehicle Type", width: 130 },
+    { field: "vehicleName", headerName: "Vehicle Type", width: 130 },
     { field: "apps", headerName: "Active", width: 130 },
     { field: "mobileNo", headerName: "Mobile", width: 130 },
 ];

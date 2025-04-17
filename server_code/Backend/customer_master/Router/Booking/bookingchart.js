@@ -6,10 +6,10 @@ const db = require('../../../db'); // Import your MySQL connection
 router.get('/bookingchart', (req, res) => {
     const { fromDate, toDate } = req.query;
     const query = `
-      SELECT vehType, COUNT(*) AS count
+      SELECT vehicleName as vehType, COUNT(*) AS count
       FROM booking
       WHERE bookingdate BETWEEN ? AND ?
-      GROUP BY vehType
+      GROUP BY vehicleName
     `;
     const values = [fromDate, toDate];
 

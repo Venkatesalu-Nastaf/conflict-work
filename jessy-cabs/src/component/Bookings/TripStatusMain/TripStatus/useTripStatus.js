@@ -748,7 +748,10 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
             ...row,
             // starttime: dayjs(row.starttime, "HH:mm:ss").format("HH:mm"),
             starttime: removeSeconds(row.starttime),
-            servicestation:row.department
+            servicestation:row.department,
+            remarks:row.remark,
+            registerno:row.request,
+            orderByEmail:row.orderbyemail
          
           }));
          

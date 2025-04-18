@@ -1704,6 +1704,7 @@ const useTripsheet = () => {
                 setLockDatacustomerBill(true)
                 setCheckSignandMapVerify(false)
                 fuelAdvnacedisabled()
+              setDriverDetails([])
                 //    const data2= await  checksignatureandmap()
                 //    console.log(data2,"userStatusdata2")
 
@@ -1981,6 +1982,8 @@ const useTripsheet = () => {
             setisAddload(false)
             setSuccessMessage("Successfully Added");
             setLockData(false)
+            setDriverDetails([])
+
             // setLockDatavendorBill(false)
             // setLockDatacustomerBill(false)
             // setLockData(true)
@@ -2102,27 +2105,27 @@ const useTripsheet = () => {
         const selectedOption = value ? value.label : '';
         setBook((prevBook) => ({
             ...prevBook,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         setSelectedCustomerData((prevData) => ({
             ...prevData,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         setSelectedCustomerDatas((prevData) => ({
             ...prevData,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         setFormValues((prevValues) => ({
             ...prevValues,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         setTripSheetData((prevValues) => ({
             ...prevValues,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         setNoChangeData((prevValues) => ({
             ...prevValues,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         travelsdatafetch(selectedOption)
 

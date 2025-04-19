@@ -61,7 +61,7 @@ const Info = () => {
       case "Mailers":
         hasPermission = Mailers;
         break;
-      case "Fuel Info":
+      case "Log Details":
         hasPermission = Fuel_Info;
         break;
       case "Employee":
@@ -133,10 +133,10 @@ const Info = () => {
             /> : <></>}
           {Fuel_Info ?
             <MenuItem
-              label="Fuel Info"
-              to={Fuel_Info && ("/home/info/fuelinfo")}
-              alt={"/home/info/fuelinfo"}
-              menuItemKey="FuelInfo"
+              label="Log Details"
+              to={Fuel_Info && ("/home/info/LogDetails")}
+              alt={"/home/info/LogDetails"}
+              menuItemKey="LogDetails"
               activeMenuItem={activeMenuItem}
               handleMenuItemClick={handleMenuItemClick}
             /> : <></>}

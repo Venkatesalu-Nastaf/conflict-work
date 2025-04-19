@@ -328,7 +328,7 @@ console.log(newState,readState,modifyState,deleteState,"state")
               </tr>
 
               <tr className='user-permission-even-no-rows'>
-                <td className='td-content-og'>Fuel Info <Switch
+                <td className='td-content-og'>LogDetails<Switch
                   checked={permissionsData[19]?.read && permissionsData[19]?.new && permissionsData[19]?.modify && permissionsData[19]?.delete} onChange={handleSwitchforthatrow(19)}
                   inputProps={{ 'aria-label': 'controlled' }}
                 /></td>

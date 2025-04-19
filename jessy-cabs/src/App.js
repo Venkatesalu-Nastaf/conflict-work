@@ -10,7 +10,9 @@ import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
 import Bookings from "./component/Bookings/Bookings";
 import Accounts from "./component/Accounts/Accounts";
-import FuelInfo from "./component/Info/FuelInfo/FuelInfo";
+// import FuelInfo from "./component/Info/FuelInfo/FuelInfo";
+// import FuelInfo from "./component/Info/FuelInfo/Logsheets";
+import LogDetails from "./component/Info/LogDetails/Logsheets";
 // import RateTypes from "./component/Info/RateTypes/RateTypes";
 import RateTypes from "./component/Registration/RateTypes/RateTypes";
 import Transfer from "./component/Billings/Transfer/Transfer";
@@ -61,10 +63,10 @@ import AddVehicle from "./component/Map/Vehicle/AddVehicle/AddVehicle";
 import Employes from "./component/Info/Employes/Employes"
 import { Records } from "./component/Map/Records/Records";
 import { PendingBills } from "./component/Billings/Report/pendingBills/PendingBills";
-import is from "date-fns/esm/locale/is/index.js";
-import Agreement from "./component/Info/AgreementMain/Agreement/Agreement";
+// import is from "date-fns/esm/locale/is/index.js";
+// import Agreement from "./component/Info/AgreementMain/Agreement/Agreement";
 import AgreementMain from "./component/Info/AgreementMain/AgreementMain";
-import LogSheets from "./component/Billings/LogDetails/Logsheets";
+// import LogSheets from "./component/Billings/LogDetails/Logsheets";
 
 
 function App() {
@@ -693,7 +695,7 @@ function App() {
                   (
                     Billing_permission ? (BILLING_BillingMain ? <Navigate to="/home/billing/billing" /> : Billing_Transfer ? <Navigate to="/home/billing/transfer" /> : Billing_CoveringBill ? <Navigate to="/home/billing/coveringbill" /> : Billing_Reports ? <Navigate to="/home/billing/reports" /> : <></>) :
                       (
-                        Register_page_permission ? (R_RATEtype ? <Navigate to="/home/registration/ratetype" /> : R_Customer ? <Navigate to="/home/registration/customer" /> : R_Supllier ? <Navigate to="/home/registration/supplier" /> : R_Station ? <Navigate to="/home/registration/stationcreation" /> : <></>) : (Setting_page_permission ? (userCreation1 ? <Navigate to="/home/settings/usercreation" /> : Main_Setting ? <Navigate to="/home/settings/mainsetting" /> : <></>) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (INFO_MAILER ? <Navigate to="/home/info/mailer" /> : INFO_FuelInfo ? <Navigate to="/home/info/fuelinfo" /> : INFO_Employee ? <Navigate to="/home/info/employee" /> : <></>) : (<Navigate to="/home/usersettings/usersetting" />))
+                        Register_page_permission ? (R_RATEtype ? <Navigate to="/home/registration/ratetype" /> : R_Customer ? <Navigate to="/home/registration/customer" /> : R_Supllier ? <Navigate to="/home/registration/supplier" /> : R_Station ? <Navigate to="/home/registration/stationcreation" /> : <></>) : (Setting_page_permission ? (userCreation1 ? <Navigate to="/home/settings/usercreation" /> : Main_Setting ? <Navigate to="/home/settings/mainsetting" /> : <></>) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (INFO_MAILER ? <Navigate to="/home/info/mailer" /> : INFO_FuelInfo ? <Navigate to="/home/info/LogDetails" /> : INFO_Employee ? <Navigate to="/home/info/employee" /> : <></>) : (<Navigate to="/home/usersettings/usersetting" />))
                       )
                   )
                 )
@@ -807,7 +809,7 @@ function App() {
                 <Route path="/home/info/mailer" element={INFO_MAILER !== 0 && INFO_MAILER !== undefined ? (<Mailer />) : (<NoPermission />)} />
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
-                <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 && INFO_FuelInfo !== undefined ? (<FuelInfo />) : (<NoPermission />)} />
+                <Route path="/home/info/LogDetails" element={INFO_FuelInfo !== 0 && INFO_FuelInfo !== undefined ? (<LogDetails />) : (<NoPermission />)} />
                 <Route path="/home/info/employee" element={INFO_Employee !== 0 && INFO_Employee !== undefined ? (<Employes />) : (<NoPermission />)} />
                 <Route path="/home/info/agreement" element={INFO_Agreement !== 0 && INFO_Agreement !== undefined ? (<AgreementMain organizationNames={organizationNames} />) : (<NoPermission />)} />
               </Route>
@@ -820,7 +822,7 @@ function App() {
                   element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)}
                 />
                 <Route path="/home/billing/reports" element={Billing_Reports !== 0 && Billing_Reports !== undefined ? (<Reports stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
-                <Route path="/home/billing/LogDetails" element={Billing_Reports !== 0 && Billing_Reports !== undefined ? (<LogSheets stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
+                {/* <Route path="/home/billing/LogDetails" element={Billing_Reports !== 0 && Billing_Reports !== undefined ? (<LogSheets stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} /> */}
                 </Route>
 
               <Route path="/home/billing/reports/Pendingbills" element={<PendingBills />}></Route>

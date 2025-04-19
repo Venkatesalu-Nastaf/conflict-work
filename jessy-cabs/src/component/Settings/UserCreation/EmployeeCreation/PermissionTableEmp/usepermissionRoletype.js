@@ -146,7 +146,7 @@ const useEmplyeecreationrole = () => {
         { id: 17, name: 'INFO', read: false, new: false, modify: false, delete: false },
         // { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
         { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
-        { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
+        { id: 19, name: 'Log Details', read: false, new: false, modify: false, delete: false },
         { id: 20, name: 'Employee', read: false, new: false, modify: false, delete: false },
         { id: 21, name: 'Agreement', read: false, new: false, modify: false, delete: false },
         { id: 22, name: 'Dashboard', read: false },

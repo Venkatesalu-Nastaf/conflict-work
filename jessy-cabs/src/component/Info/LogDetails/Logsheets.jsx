@@ -7,7 +7,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import LogDetails from './LogDetails/LogDetails';
 
-const LogSheets = ({organizationNames}) => {
+const LogSheets = () => {
     const [value, setValue] = React.useState("logDetails");
 
     const handleChange = (event, newValue) => {

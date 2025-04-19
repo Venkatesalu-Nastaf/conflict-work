@@ -108,10 +108,10 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const getSnappedPoints = async (polywaypoints) => {
     // const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE";
     const apiKey = "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk";
-    const maxPointsPerRequest = 100;
+    const maxPointsPerRequest = 15;
     let snappedPoints = [];
 
-    const chunkArray = (array, size) => {
+    const chunkArray = (array, size) => {      
       const chunkedArr = [];
       for (let i = 0; i < array.length; i += size) {
         chunkedArr.push(array.slice(i, i + size));
@@ -124,6 +124,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     for (const chunk of waypointChunks) {
       const path = chunk.map((point) => `${point.lat},${point.lng}`).join("|");
       const url = `https://roads.googleapis.com/v1/snapToRoads?path=${path}&interpolate=true&key=${apiKey}`;
+      // const url = `https://roads.googleapis.com/v1/nearestRoads?path=${path}&interpolate=true&key=${apiKey}`;
+
 
       try {
         const response = await fetch(url);
@@ -143,7 +145,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
     return snappedPoints.length > 0 ? snappedPoints : polywaypoints;
   };
-
+ 
   useEffect(() => {
     if (polyLineWaypoints.length > 1) {
       getSnappedPoints(polyLineWaypoints).then(setRoadPoints);
@@ -1086,7 +1088,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     ?.filter((li) => li?.Trip_Status === "Reached" && li?.Latitude_loc)
     ?.map((li) => parseFloat(li?.Latitude_loc));
 
-  console.log(fullGpsData, 'gggggggggggggggggggggggggggggggggggggggggggg');
+  // console.log(fullGpsData, 'gggggggggggggggggggggggggggggggggggggggggggg');
 
   return (
     <>

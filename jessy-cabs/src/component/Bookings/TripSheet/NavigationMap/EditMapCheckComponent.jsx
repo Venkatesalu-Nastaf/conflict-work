@@ -34,7 +34,7 @@ const mapStyles = {
   width: "100%"
 };
 
-const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closetime, tripGpsData, fullGpsData, allGpsData }) => {
+const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closetime, tripGpsData, fullGpsData, allGpsData,GmapimageUrl }) => {
   const [tripData, setTripData] = useState({
     start: null,
     end: null,
@@ -103,12 +103,33 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     fitMapToBounds();
   }, [startLat, endLat, wayRoutes]); // Recalculate whenever tripData changes
 
+  const DeleteMapImage = async () => {
+    console.log(tripid, "delete map triggered");
+  
+    if (clickedPoint.tripType === 'end' || clickedPoint.tripType === 'start' ||clickedPoint.tripType === 'waypoint') {
+      try {
+        if (tripid !== null && tripid && tripid !== "undefined") {
+          const response = await fetch(`${apiUrl}/deleteMapImagesByTripId/${tripid}`, {
+            method: 'DELETE',
+          });
+  
+          const result = await response.json();
+          GmapimageUrl("")
+          console.log("Delete response:", result);
+        }
+      } catch (error) {
+        console.log("Error deleting map image:", error);
+      }
+    }
+  };
+  
+
   const [roadPoints, setRoadPoints] = useState([]);
 
   const getSnappedPoints = async (polywaypoints) => {
     // const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE";
     const apiKey = "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk";
-    const maxPointsPerRequest = 15;
+    const maxPointsPerRequest = 100;
     let snappedPoints = [];
 
     const chunkArray = (array, size) => {      
@@ -388,10 +409,13 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
       // Check if it's the start marker, end marker, or a waypoint
       if (clickedPoint.tripType === 'start') {
+        DeleteMapImage()
         updatedTripData.start = null;
       } else if (clickedPoint.tripType === 'end') {
+        DeleteMapImage()
         updatedTripData.end = null;
       } else if (clickedPoint.tripType === 'waypoint') {
+        DeleteMapImage()
         updatedTripData.waypoints = updatedTripData.waypoints.filter(
           (point) => point.lat !== clickedPoint.lat || point.lng !== clickedPoint.lng
         );

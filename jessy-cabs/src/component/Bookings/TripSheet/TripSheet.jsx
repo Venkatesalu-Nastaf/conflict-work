@@ -316,7 +316,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
     // --------------------this zoom code image data----------------------------------------
     posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, Scale, onDrag, handleFullDeleteMapData,
-    mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide
+    mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide,setGMapImageUrl
     // this code zoom image data---------------------------------
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
@@ -5420,7 +5420,7 @@ Please Click the link to close E-Tripsheet-`}
                     </div>
 
                   </Box>
-                  <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} tripGpsData={tripGpsData} fullGpsData={fullGpsData} allGpsData={allGpsData} />
+                  <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} tripGpsData={tripGpsData} fullGpsData={fullGpsData} allGpsData={allGpsData} GmapimageUrl={setGMapImageUrl} />
 
 
                   {/* <EditMapComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} /> */}

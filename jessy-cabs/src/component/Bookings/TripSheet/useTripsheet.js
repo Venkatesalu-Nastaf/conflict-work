@@ -8631,7 +8631,7 @@ const useTripsheet = () => {
         tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
         // this zoom image code state-----------------
         posX, posY, zoom, handleZoomIn, handleZoomOut, startDrag, stopDrag, handleScrollZoom, isDragging, onDrag, handleFullDeleteMapData,
-        mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide
+        mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide,setGMapImageUrl
         // this zoom image code state-----------------
 
     };

@@ -3116,9 +3116,9 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                 </div>
                                 <div className="in-feild" style={{ marginTop: '20px' }}>
 
-                                  <div className="input">
+                                  {/* <div className="input">
                                     <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
-                                  </div>
+                                  </div> */}
                                   <div className="input">
                                     <Button
                                       disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && signaturedisabled && !a)}

@@ -276,6 +276,21 @@ app.get('/getmapimages/:tripid', (req, res) => {
   });
 });
 
+app.delete('/deleteMapImagesByTripId/:tripid', (req, res) => {
+  const { tripid } = req.params;
+
+  const query = `DELETE FROM mapimage WHERE tripid = ?`;
+
+  db.query(query, [tripid], (err, result) => {
+    if (err) {
+      console.log("Error in map delete:", err);
+      return res.status(500).json({ error: 'Database delete error' });
+    }
+
+    res.json({ message: 'Map images deleted successfully', affectedRows: result.affectedRows });
+  });
+});
+
 
 app.get('/getmapimagesverfiy/:tripid', (req, res) => {
   const { tripid } = req.params;

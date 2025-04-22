@@ -696,7 +696,7 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
   // new working code
   const handleShow = useCallback(async () => {  
     setLoading(true)
-    console.log(department,"departmentttttttttttttt");
+    // console.log(department,"departmentttttttttttttt");
     
     if (!statusvalue) {
       setError(true);

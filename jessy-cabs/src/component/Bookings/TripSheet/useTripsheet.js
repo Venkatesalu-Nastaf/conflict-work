@@ -770,48 +770,48 @@ const useTripsheet = () => {
     };
 
     //refresh button function
-    const handleRefresh = async () => {
-        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
-        // const bookingno = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
-        try {
-            if (!tripid) {
-                setError(true);
-                setErrorMessage("Please enter the tripid");
-            } else {
-                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${tripid}`);
-                const data = response.data;
+    // const handleRefresh = async () => {
+    //     const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+    //     // const bookingno = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+    //     try {
+    //         if (!tripid) {
+    //             setError(true);
+    //             setErrorMessage("Please enter the tripid");
+    //         } else {
+    //             const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${tripid}`);
+    //             const data = response.data;
 
-                //sepration of data----------------------------
-                let tripResults = [];
-                let bookingResults = [];
+    //             //sepration of data----------------------------
+    //             let tripResults = [];
+    //             let bookingResults = [];
 
-                data?.map((item) => {
-                    if (item.type === "tripResults") {
-                        tripResults = item.data
-                    } else if (item.type === "bookingResults") {
-                        bookingResults = item.data
-                    }
-                })
-                const bothData = [...tripResults, ...bookingResults]
-                //------------------------
+    //             data?.map((item) => {
+    //                 if (item.type === "tripResults") {
+    //                     tripResults = item.data
+    //                 } else if (item.type === "bookingResults") {
+    //                     bookingResults = item.data
+    //                 }
+    //             })
+    //             const bothData = [...tripResults, ...bookingResults]
+    //             //------------------------
 
-                if (bothData.length > 0) {
-                    const rowsWithUniqueId = bothData.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setRows(rowsWithUniqueId);
-                    setSuccess(true);
-                    setSuccessMessage("successfully listed")
-                } else {
-                    setRows([]);
-                    setError(true);
-                    setErrorMessage("no data found")
-                }
-            }
-        } catch {
-        }
-    };
+    //             if (bothData.length > 0) {
+    //                 const rowsWithUniqueId = bothData.map((row, index) => ({
+    //                     ...row,
+    //                     id: index + 1,
+    //                 }));
+    //                 setRows(rowsWithUniqueId);
+    //                 setSuccess(true);
+    //                 setSuccessMessage("successfully listed")
+    //             } else {
+    //                 setRows([]);
+    //                 setError(true);
+    //                 setErrorMessage("no data found")
+    //             }
+    //         }
+    //     } catch {
+    //     }
+    // };
 
 
     //list data in row
@@ -945,6 +945,7 @@ const useTripsheet = () => {
             fuelAdvnacedisabled();
             handlepermissionforspeedDialedit(Tripsheet_modify1)
             handlepermissionforspeedDialdelete(Tripsheet_delete1)
+            handleRefresh()
 
 
 
@@ -1742,6 +1743,7 @@ const useTripsheet = () => {
                 setCheckSignandMapVerify(false)
                 fuelAdvnacedisabled()
               setDriverDetails([])
+              handleRefresh()
               handleTripmaplogClick()
                 //    const data2= await  checksignatureandmap()
                 //    console.log(data2,"userStatusdata2")
@@ -2299,6 +2301,7 @@ const useTripsheet = () => {
                 await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
                 setSuccess(true);
                 setSuccessMessage("Successfully added");
+                handleRefresh()
 
                 if (documentType === 'Toll' || documentType === 'Parking') {
                     await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
@@ -8530,6 +8533,56 @@ const useTripsheet = () => {
             setErrorMessage("Already Map Data Deleted")
         }
     }
+
+    const handleRefresh = async () => {
+      
+        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+        // const tripid2 = formData?.tripid || selectedCustomerData?.tripid || book?.tripid;
+        // console.log(tripid,"xop")
+        // console.log(gpsTripId,"xoppppppppppppppppp",tripID1)
+        // const bookingno = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+        try {
+            if (!tripid) {
+                // setRows([])
+               return
+            } else {
+                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${tripid}`);
+                const data = response.data;
+
+                //sepration of data----------------------------
+                let tripResults = [];
+                let bookingResults = [];
+
+                data?.map((item) => {
+                    if (item.type === "tripResults") {
+                        tripResults = item.data
+                    } else if (item.type === "bookingResults") {
+                        bookingResults = item.data
+                    }
+                })
+                const bothData = [...tripResults, ...bookingResults]
+                //------------------------
+
+                if (bothData.length > 0) {
+                    const rowsWithUniqueId = bothData.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    // setSuccess(true);
+                    // setSuccessMessage("successfully listed")
+                } else {
+                    setRows([]);
+                    // setError(true);
+                    // setErrorMessage("no data found")
+                }
+            }
+        } catch {
+        }
+    };
+    useEffect(()=>{
+        handleRefresh()
+    },[gpsTripId])
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
         escort, setEscort, driverdetails,

@@ -22,10 +22,10 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
   function removeSeconds(time) {
     // Split the time string by colon (:)
     if (time !== "undefined") {
-      const timeParts = time.split(':');
+      const timeParts = time?.split(':');
 
       // Check if there are seconds (length 3), return hours:minutes
-      if (timeParts.length === 3) {
+      if (timeParts?.length === 3) {
         return `${timeParts[0]}:${timeParts[1]}`;
       }
 
@@ -40,7 +40,6 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
   };
 
   const targetRef = useRef();
-  // console.log(attachedImage,"att")
   return (
     <>
       <div className="invoice-wrapper" ref={targetRef}>

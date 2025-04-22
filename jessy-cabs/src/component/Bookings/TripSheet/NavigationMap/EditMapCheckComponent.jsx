@@ -106,7 +106,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const DeleteMapImage = async () => {
     console.log(tripid, "delete map triggered");
   
-    if (clickedPoint.tripType === 'end' || clickedPoint.tripType === 'start' ||clickedPoint.tripType === 'waypoint') {
+    // if (clickedPoint.tripType === 'end' || clickedPoint.tripType === 'start' ||clickedPoint.tripType === 'waypoint') {
       try {
         if (tripid !== null && tripid && tripid !== "undefined") {
           const response = await fetch(`${apiUrl}/deleteMapImagesByTripId/${tripid}`, {
@@ -119,7 +119,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
         }
       } catch (error) {
         console.log("Error deleting map image:", error);
-      }
+      // }
     }
   };
   
@@ -384,6 +384,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       const response = await axios.post(`${apiUrl}/gmappost-submitForm`, payload);
       console.log(response.data, 'response from backend');
       setMapUpdate(!mapUpdate);
+      DeleteMapImage();
       setPopupOpen(false);
       setMapContent({
         tripid: '',

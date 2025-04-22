@@ -37,10 +37,10 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
   function removeSeconds(time) {
     // Split the time string by colon (:)
     if (time !== "undefined") {
-      const timeParts = time.split(':');
+      const timeParts = time?.split(':');
 
       // Check if there are seconds (length 3), return hours:minutes
-      if (timeParts.length === 3) {
+      if (timeParts?.length === 3) {
         return `${timeParts[0]}:${timeParts[1]}`;
       }
 

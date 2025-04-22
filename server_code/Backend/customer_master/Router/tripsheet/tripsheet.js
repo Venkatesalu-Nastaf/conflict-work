@@ -2511,17 +2511,17 @@ router.post('/deleteMapByTripid/:tripid', (req, res) => {
 
 router.post('/updateGPS-LOG/:tripid', (req, res) => {
     const tripid = req.params.tripid; // Correctly accessing the tripid parameter from the URL
-    const { time, date, trip_type } = req.body; // Extracting time and date from the request body
+    const { time, date, trip_type,id } = req.body; // Extracting time and date from the request body
 
     if (!tripid || !time || !date) {
         return res.status(400).json({ error: 'Missing required parameters' });
     }
 
     // SQL query to update the database
-    const query = 'UPDATE gmapdata SET time = ?, date = ? WHERE tripid = ? AND trip_type = ?';
+    const query = 'UPDATE gmapdata SET time = ?, date = ? WHERE tripid = ? AND trip_type = ? AND id = ?';
 
     // Execute the query with the provided parameters
-    db.query(query, [time, date, tripid, trip_type], (err, result) => {
+    db.query(query, [time, date, tripid, trip_type,id], (err, result) => {
         if (err) {
             console.error('Error updating GPS log:', err);
             return res.status(500).json({ error: 'Database error' });

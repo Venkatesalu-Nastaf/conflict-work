@@ -6674,7 +6674,8 @@ const useTripsheet = () => {
             setErrorMessage("Successfully Deleted")
             handleTripmapverify()
             setMapImageUrls1("")
-
+            setGMapImageUrl("")
+            setRouteData("")
             setMapimgPopupOpen(false)
         }
         catch (error) {

@@ -2359,8 +2359,8 @@ router.post('/gmappost-submitForm', (req, res) => {
                     console.log('Starting deletion and insertion process');
 
                     // First DELETE query: delete records matching latitude, longitude, and tripType
-                    const deleteQuery1 = "DELETE FROM gmapdata WHERE Latitude = ? AND Longitude = ? ";
-                    const deleteValues1 = [latitude, longitude];
+                    const deleteQuery1 = "DELETE FROM gmapdata WHERE Latitude = ? AND Longitude = ? AND tripid = ?";
+                    const deleteValues1 = [latitude, longitude,tripid];
 
                     db.query(deleteQuery1, deleteValues1, (err, deleteResults1) => {
                         if (err) {

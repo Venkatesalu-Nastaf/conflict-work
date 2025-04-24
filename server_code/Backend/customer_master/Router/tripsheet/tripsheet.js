@@ -2670,6 +2670,113 @@ function checkConditions(data, value) {
 }
 
 
+// router.get(`/totalhrsuppiler-pack`, (req, res) => {
+
+//     // Extract dynamic inputs from query parameters
+
+//     const totalHours = req.query.totalHours;
+//     const ratetype = req.query.ratetype;
+//     // const vehicletype = req.query.vehicletype;
+//     const VehicleName = req.query.vehicleName;
+//     const duty = req.query.duty;
+//     const totkm = req.query.totkm;
+//     const OrganizationName = req.query.organizationname;
+//     const stations = req.query.stations;
+
+//     console.log(totalHours, "tt", ratetype, "rate", VehicleName, "name", duty, "duty", totkm, "totkmm", OrganizationName, "organnan", stations)
+
+
+//     if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !ratetype || !stations) {
+//         res.status(400).json({ error: 'Missing required parameters' });
+//         return;
+//     }
+
+//     const sql = `SELECT * 
+//                     FROM ratemanagement
+//                     WHERE duty = ?
+//                         AND VehicleName = ?
+//                         AND OrganizationName =?
+                  
+//                         AND stations = ?
+//                         AND ratetype = ?
+//                           AND (? < UptoHours)
+//                            ORDER BY UptoHours 
+//                            `
+
+
+
+//     const sql2 = `SELECT * FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? And ratetype = "Supplier" ORDER BY UptoHours desc LIMIT 1`
+
+//     // Execute the query with dynamic parameters 
+//     db.query(sql, [duty, VehicleName, OrganizationName, stations, ratetype, totalHours], (error, results) => {
+//         if (error) {
+//             return res.status(500).json({ error: "Internal Server Error" })
+//         }
+
+//         // Check if any rows were returned
+//         console.log(results, "resultsverfied")
+//         if (results.length === 0) {
+//             db.query(sql2, [duty, VehicleName, OrganizationName, stations], (error1, results2) => {
+//                 if (error1) {
+//                     return res.status(500).json({ error: "Internal Server Error" })
+//                 }
+//                 console.log(results2, "resultsverfied22222222222")
+//                 if (results2.length === 0) {
+//                     return res.status(404).json({ error: 'No data found' });
+//                 }
+//                 return res.json(results2[0]);
+//             })
+
+//         }
+//         if (results.length === 1) {
+
+//             return res.json(results[0]);
+//         }
+//         if (results.length > 1) {
+
+//             const resultsdata = results
+//             const updatedData = resultsdata.map((item) => {
+//                 if (item.UptoKMS === 0) {
+//                     return { ...item, UptoKMS: item.KMS };  // Example: Increase KMS by 10
+//                 }
+//                 return item;
+//             });
+//             //   console.log(updatedData, "updatedData")
+
+
+//             console.log(checkConditions(updatedData, totkm), "pp")
+//             const datacheck = checkConditions(updatedData, totkm)
+
+//             let selectedObject = results.find(obj => obj.id === datacheck["id"]);
+//             return res.json(selectedObject);
+//         }
+
+//     });
+// });
+function checkConditionsupplier(data, value) {
+    let selectedObject = null;
+    // console.log(data, "ffff", value)
+    // Loop through the array
+    for (let i = 0; i < data.length; i++) {
+        if(data[i].UptoKMS === 0){
+            selectedObject = data[i];
+            break;
+        }
+        else{
+            if (value < data[i].UptoKMS ) {
+                    selectedObject = data[i]; // Store the first matching object
+                    break; // Exit loop when first condition is met
+                }
+        } // if (value < data[i].UptoKMS) {
+        //     selectedObject = data[i]; // Store the first matching object
+        //     break; // Exit loop when first condition is met
+        // }
+       
+    }
+
+    // If no object satisfies the condition, return the last object
+    return selectedObject !== null ? selectedObject : data[data.length - 1];
+}
 router.get(`/totalhrsuppiler-pack`, (req, res) => {
 
     // Extract dynamic inputs from query parameters
@@ -2735,17 +2842,17 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
         if (results.length > 1) {
 
             const resultsdata = results
-            const updatedData = resultsdata.map((item) => {
-                if (item.UptoKMS === 0) {
-                    return { ...item, UptoKMS: item.KMS };  // Example: Increase KMS by 10
-                }
-                return item;
-            });
+            // const updatedData = resultsdata.map((item) => {
+            //     if (item.UptoKMS === 0) {
+            //         return { ...item, UptoKMS: item.KMS };  // Example: Increase KMS by 10
+            //     }
+            //     return item;
+            // });
             //   console.log(updatedData, "updatedData")
 
 
-            console.log(checkConditions(updatedData, totkm), "pp")
-            const datacheck = checkConditions(updatedData, totkm)
+            console.log(checkConditionsupplier(resultsdata, totkm), "pp")
+            const datacheck = checkConditionsupplier(resultsdata, totkm)
 
             let selectedObject = results.find(obj => obj.id === datacheck["id"]);
             return res.json(selectedObject);

@@ -43,6 +43,12 @@ const useBillWiseReceipt = () => {
   const columns = [
     { field: "sno", headerName: "Sno", width: 50 },
     {
+      field: "Invoice_no",
+      headerName: "Invoice No",
+      type: "number",
+      width: 90,
+    },
+    {
       field: "BillNo",
       headerName: "Bill No",
       type: "number",
@@ -232,6 +238,8 @@ const useBillWiseReceipt = () => {
         sno: index + 1, // Sequential SNO
         ...item, // Include all other properties from the original item
       }));
+      console.log(combinedPendingBillWithSnoAndId,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+      
       if (combinedPendingBillWithSnoAndId.length === 0) {
         setError(true);
         setPendingBillRows([])
@@ -260,7 +268,7 @@ const useBillWiseReceipt = () => {
     }
   };
 
-  const handleRowSelection = (selectionModel) => {
+  const handleRowSelection = (selectionModel) => {    
     if (balanceAmount === true) {
       if (selectionModel.length > 0) {
         const selectedID = selectionModel[selectionModel.length - 1]; // Get the last selected row
@@ -270,6 +278,7 @@ const useBillWiseReceipt = () => {
 
         const selectedData = pendingBillRows.filter((row) => row.id === selectedID); // Direct comparison
         const selectedInvoiceNo = selectedData.map(li => li.BillNo);
+        console.log(selectionModel,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk------------",selectedData);
 
         setSelectedBillRow(selectedData);
         setInvoiceNo(selectedInvoiceNo);
@@ -286,6 +295,7 @@ const useBillWiseReceipt = () => {
 
       const selectedData = pendingBillRows.filter((row) => selectedIDs.has(row.id)); // Use `.has()` with Set
       const selectedInvoiceNo = selectedData.map(li => li.BillNo);
+      console.log(selectionModel,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk------------22222222222222222",selectedData);
 
       setSelectedBillRow(selectedData);
       setInvoiceNo(selectedInvoiceNo);
@@ -322,6 +332,8 @@ const useBillWiseReceipt = () => {
   // };
 
   const handleApplyBill = async () => {
+    console.log(selectedBillRow,"selectedbillrowwwwwwwwwwwwwwwwwwwwww");
+
     if (selectedBillRow.length === 0 || selectedBillRow.length === undefined) {
       setError(true)
       setErrorMessage("Select The Row")
@@ -365,6 +377,7 @@ const useBillWiseReceipt = () => {
             balance: balance,
           };
         });
+console.log(updatedRows,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk11111111111111111111");
 
         setRows(updatedRows);
         const totalAmount = updatedRows.reduce(
@@ -634,6 +647,7 @@ const useBillWiseReceipt = () => {
       };
 
       const BillNo = rows.map((li) => li.BillNo);
+console.log(formattedData,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkformatteddataaaaaaa",combinedData,invoiceNo);
 
       try {
         // Post the formatted data

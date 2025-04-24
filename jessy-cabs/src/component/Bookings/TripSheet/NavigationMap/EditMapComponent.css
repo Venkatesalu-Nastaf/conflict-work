@@ -11,7 +11,7 @@ margin-top: 20px;
     padding: 10px;
     border: none;
     border-radius: 8px;
-
+    cursor: pointer;
 }
 
 .Capture-View{
@@ -21,6 +21,7 @@ margin-top: 20px;
     padding: 10px;
     border: none;
     border-radius: 8px;
+    cursor: pointer;
 }
 .search-input-field{
     /* margin-left: 10px;

@@ -1050,61 +1050,71 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const handleSelect = async (address) => {
     console.log(address, 'newaddress');
     setAddress(address);
-
-    const geocoder = new window.google.maps.Geocoder();
-
+  
     try {
-      const results = await new Promise((resolve, reject) => {
-        geocoder.geocode({ address: address }, (results, status) => {
-          if (status === 'OK' && results && results.length > 0) {
-            resolve(results);
-          } else {
-            reject(new Error(`Geocode failed: ${status}`));
-          }
-        });
-      });
-
-      if (results[0].geometry && results[0].geometry.location) {
-        const latLng = results[0].geometry.location;
-        const lat = latLng.lat();
-        const lng = latLng.lng();
-
-        if (mapInstance) {
+      if (!window.google || !mapInstance) {
+        console.log("Google Maps API or map instance not available");
+        return;
+      }
+  
+      const service = new window.google.maps.places.PlacesService(mapInstance);
+  
+      const placeRequest = {
+        query: address,
+        fields: ['name', 'geometry'],
+      };
+  
+      service.findPlaceFromQuery(placeRequest, (results, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
+          const result = results[0];
+          const location = result.geometry.location;
+          console.log(location.lat(), location.lng(), "Exact Places API location");
+  
+          const lat = location.lat();
+          const lng = location.lng();
+  
+          // Set map center and zoom 16 immediately
           mapInstance.setCenter({ lat, lng });
-          mapInstance.setZoom(16); // Set desired zoom level
+          mapInstance.setZoom(16);
+  
+          // Call your popup and marker setter
           submitPopup({ lat, lng });
-          setMarkerPosition({ lat, lng }); // Set marker position to the geocoded location
-
-          const bounds = results[0].geometry.bounds;
+          setMarkerPosition({ lat, lng });
+  
+          // Draw bounds polyline if available
+          const bounds = result.geometry.viewport;
           if (bounds) {
             const ne = bounds.getNorthEast();
             const sw = bounds.getSouthWest();
-
-            // Define polyline path for dotted line around bounds
+  
             const path = [
               { lat: ne.lat(), lng: ne.lng() },
               { lat: ne.lat(), lng: sw.lng() },
               { lat: sw.lat(), lng: sw.lng() },
               { lat: sw.lat(), lng: ne.lng() },
-              { lat: ne.lat(), lng: ne.lng() } // Close the path
+              { lat: ne.lat(), lng: ne.lng() } // close path
             ];
-
+  
             console.log("Setting polyline path:", path);
             setPolylinePath(path);
-
-            mapInstance.setZoom(13)
+  
+            // Optionally adjust zoom again
+            // mapInstance.setZoom(13);
           } else {
             console.log("Bounds not available");
           }
+  
         } else {
-          console.log("Map instance not available");
+          console.error("PlacesService search failed:", status);
         }
-      }
+      });
+  
     } catch (error) {
       console.error("Error occurred in handleSelect:", error.message);
     }
   };
-
+  
+  
   const startLatVerify = allGpsData
     ?.filter((li) => li?.Trip_Status === "Started" && li?.Latitude_loc)
     ?.map((li) => parseFloat(li?.Latitude_loc));
@@ -1408,7 +1418,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
                 <button onClick={handleMapDraw} className="draw-route">Draw Route</button>
               )}
               {fullGpsData.length !== polyLineWaypoints.length || (startLat !== startLatVerify[0] || endLatVerify[0] !== endLat) ? <button onClick={() => handleMapCapture()} className="Capture-View" >Capture View</button> :
-                <button onClick={() => handleNoEditCapture()} className="Capture-View" >Capture Vieww</button>}
+                <button onClick={() => handleNoEditCapture()} className="Capture-View" >Capture View</button>}
             </div>
             <div style={{ position: "absolute", top: "3px", left: "40%" }}>
               {success ? <p style={{ display: "flex", justifyContent: "center", color: '#347928', fontSize: "22px", fontWeight: 600 }}>Successfully Captured....</p> :

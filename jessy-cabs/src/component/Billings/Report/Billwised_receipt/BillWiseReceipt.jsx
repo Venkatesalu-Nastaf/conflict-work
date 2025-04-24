@@ -299,7 +299,7 @@ export const BillWiseReceipt = () => {
 
                 <div className='bill-wise-reciept-table-second'>
                   <div style={{ display: 'flex', gap: '10px', paddingBottom: '10px' }}>
-                    <Button variant='contained' onClick={handleBalanceAmount}>Balance Amount</Button>
+                    {/* <Button variant='contained' onClick={handleBalanceAmount}>Balance Amount</Button> */}
                     <Button variant='contained' onClick={handlePendingBills}>Show Pending Bills</Button>
                     <Button variant='contained' onClick={handleApplyBill}>Apply to list</Button>
                   </div>

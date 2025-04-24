@@ -268,6 +268,10 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                             <span>Ref No: </span>
                             <span className="invoice">{refno}</span>
                         </h3>
+                        <h3 className="Refnotext">
+                            <span>HSN Code: </span>
+                            <span className="invoice">996601</span>
+                        </h3>
                     </div>
                 </div>
 

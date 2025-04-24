@@ -559,6 +559,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                         <Text style={[styles.total, { fontSize: 10 }]}>Invoice No: </Text>
                         <Text style={[styles.text2, { fontSize: 10 }]}>Invoice Date:</Text>
                         <Text style={[styles.text2, { fontSize: 10 }]}>Group Ref No:</Text>
+                        <Text style={[styles.text2, { fontSize: 10 }]}>HSN CODE:</Text>
                       </View>
                       <View>
                         <Text style={[styles.invoicerightside, { fontSize: 10 }]}>{invoiceno}</Text>
@@ -566,6 +567,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                           {dayjs(invoiceDate).format('DD-MM-YYYY')}
                         </Text>
                         <Text style={[styles.invoicerightside, { fontSize: 10 }]}>{groupTripid}</Text>
+                        <Text style={[styles.invoicerightside, { fontSize: 10 }]}>996601</Text>
                       </View>
                     </View>
 

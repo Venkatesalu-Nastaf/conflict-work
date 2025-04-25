@@ -408,13 +408,23 @@ router.get('/getLatLongByTripId', async (req, res) => {
                 const waypointsCount = 8;
                 let selectedWaypointsIndexes = [];
                 
-                if (totalOnGoing.length >= waypointsCount) {
-                    const step = Math.floor(totalOnGoing.length / waypointsCount);
+                // if (totalOnGoing.length >= waypointsCount) {
+                //     const step = Math.floor(totalOnGoing.length / waypointsCount);
                     
+                //     for (let i = 0; i < waypointsCount; i++) {
+                //         selectedWaypointsIndexes.push(totalOnGoing[i * step].originalIndex);
+                //     }
+                // }
+                if (totalOnGoing.length <= waypointsCount) {
+                    // If 8 or less, pick all their indexes
+                    selectedWaypointsIndexes = totalOnGoing.map(row => row.originalIndex);
+                  } else {
+                    // If more than 8, pick in steps
+                    const step = Math.floor(totalOnGoing.length / waypointsCount);
                     for (let i = 0; i < waypointsCount; i++) {
-                        selectedWaypointsIndexes.push(totalOnGoing[i * step].originalIndex);
+                      selectedWaypointsIndexes.push(totalOnGoing[i * step].originalIndex);
                     }
-                }
+                  }
                 
                 const insertValues = await Promise.all(allStatusesResult.map(async (row, index) => {
                     let location_alpha = '';

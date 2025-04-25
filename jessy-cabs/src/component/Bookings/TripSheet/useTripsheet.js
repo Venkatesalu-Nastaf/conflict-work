@@ -723,24 +723,65 @@ const useTripsheet = () => {
         }
     };
     // console.log(mapimageUrls1,"urls")
-    const rearrangeTripData = (tripData) => {
-        if (!Array.isArray(tripData)) return [];
+//     const rearrangeTripData = (tripData) => {
+//         if (!Array.isArray(tripData)) return [];
+// console.log(tripData,"tripdataaaaaaaaaaaaaaaaaaaaaa");
+// const a = tripData.map(li => li.time);
+// console.log(a,"tripdataaaaaaaaaaaaaaaaaaaaaappppppppppppppppppppppppppppppppppp");
 
-        // Separate start, end, and waypoints
-        const startPoint = tripData.find(item => item.trip_type === "start");
-        const endPoint = tripData.find(item => item.trip_type === "end");
-        const waypoints = tripData.filter(item => item.trip_type !== "start" && item.trip_type !== "end");
 
-        // Build the final sorted array
-        const sortedTripData = [
-            ...(startPoint ? [startPoint] : []),
-            ...waypoints,
-            ...(endPoint ? [endPoint] : [])
-        ];
+//         // Separate start, end, and waypoints
+//         const startPoint = tripData.find(item => item.trip_type === "start");
+//         const endPoint = tripData.find(item => item.trip_type === "end");
+//         const waypoints = tripData.filter(item => item.trip_type !== "start" && item.trip_type !== "end");
 
-        return sortedTripData;
+//         // Build the final sorted array
+//         const sortedTripData = [
+//             ...(startPoint ? [startPoint] : []),
+//             ...waypoints,
+//             ...(endPoint ? [endPoint] : [])
+//         ];
+
+//         return sortedTripData;
+//     };
+
+const rearrangeTripData = (tripData) => {
+    if (!Array.isArray(tripData)) return [];
+  
+    const convertTime = (timeStr) => {
+      if (!timeStr) return 0;
+      const [h, m] = timeStr.split(":").map(Number);
+      return parseFloat(`${h}.${m < 10 ? "0" : ""}${m}`);
     };
-
+  
+    const startPoint = tripData.find(item => item.trip_type === "start");
+    const endPoint = tripData.find(item => item.trip_type === "end");
+  
+    const waypoints = tripData
+      .filter(item => item.trip_type !== "start" && item.trip_type !== "end")
+      .map(item => ({
+        ...item,
+        numericDate: new Date(item.date).getTime(), 
+        numericTime: convertTime(item.time)
+      }))
+      .sort((a, b) => {
+        if (a.numericDate !== b.numericDate) {
+          return a.numericDate - b.numericDate;
+        } else {
+          return a.numericTime - b.numericTime;
+        }
+      });
+  
+    const sortedTripData = [
+      ...(startPoint ? [startPoint] : []),
+      ...waypoints.map(({ numericDate, numericTime, ...rest }) => rest), 
+      ...(endPoint ? [endPoint] : [])
+    ];
+  
+    return sortedTripData;
+  };
+  
+  
     const handleTripmaplogClick = async () => {
         try {
             const tripid = selectedRow?.tripid || book?.tripid || selectedCustomerData?.tripid || formData?.tripid;

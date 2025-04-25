@@ -170,7 +170,7 @@ router.post('/getAllBills', (req, res) => {
     const { fromDate, toDate, CustomerName } = customerData;
 
     console.log(customerData, fromDate, toDate, "Received filter data");
-
+    const AccountQuery = `SELECT Account FROM BillWiseReceipt WHERE CustomerName = ?`;
     const individualBillingPromise = new Promise((resolve, reject) => {
         const Individual_BillingQuery = `
             SELECT * FROM Individual_Billing 
@@ -236,7 +236,6 @@ router.post('/getAllBills', (req, res) => {
                         })
                     )
                 ).flat();
-console.log(updatedResult,"ttttttttttttttttttttttttttttttttttttttttttttttttttt");
 
                 resolve(updatedResult);
             } catch (err) {
@@ -259,11 +258,19 @@ console.log(updatedResult,"ttttttttttttttttttttttttttttttttttttttttttttttttttt")
             resolve(result);
         });
     });
+    const accountPromise = new Promise((resolve, reject) => {
+        db.query(AccountQuery, [CustomerName], (err, result) => {
+            if (err) {
+                console.log(err, "error fetching accounts");
+                return reject('Error fetching account details');
+            }
+            resolve(result);
+        });
+    });
 
-    Promise.all([individualBillingPromise, groupBillingPromise, transferListPromise])
-    .then(([individualBilling, groupBilling, transferListBilling]) => {
+    Promise.all([individualBillingPromise, groupBillingPromise, transferListPromise,accountPromise])
+    .then(([individualBilling, groupBilling, transferListBilling,accountDetails]) => {
         // Normalize individual billing
-        console.log(groupBilling,"gggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
 
         const normalizedIndividual = individualBilling.map(item => ({
             ...item,
@@ -287,20 +294,24 @@ console.log(updatedResult,"ttttttttttttttttttttttttttttttttttttttttttttttttttt")
             Customer: item.Organization_name,
             InvoiceDate: item.Billdate,
         }));
+        const AccountDetails = accountDetails.map(item =>({
+            Account : item.Account
+        }))
 
         // Combine into one array
         const allBills = [
             ...normalizedIndividual,
             ...normalizedGroup,
-            ...normalizedTransfer
-        ];
+            ...normalizedTransfer,
+        ];        
+        const accountValue = accountDetails.length > 0 ? accountDetails[0].Account : null;
 
         // Add incrementing ID starting from 1
         const allBillsWithId = allBills.map((item, index) => ({
             id: index + 1,
-            ...item
+            Account: accountValue,
+            ...item,
         }));
-
         res.status(200).json(allBillsWithId); // ✅ returns [{ id: 1, ... }]
     })
     .catch((error) => {

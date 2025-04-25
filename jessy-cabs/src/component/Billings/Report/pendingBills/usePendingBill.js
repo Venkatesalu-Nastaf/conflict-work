@@ -77,13 +77,13 @@ const usePendingBill = () => {
     // };
 
     const addSerialNumber = (bills) => {
-        console.log(bills, "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
       
         return bills.map((bill, index) => ({
           sno: index + 1,
           ...bill,
           TotalCollected: bill.BillReportStatus === "Success" ? Number(bill.Amount) : 0,
-          TotalBalance: bill.BillReportStatus === "Success" ? 0 : Number(bill.Amount)
+          TotalBalance: bill.BillReportStatus === "Success" ? 0 : Number(bill.Amount),
+          Account: bill.BillReportStatus === "Success" ? bill.Account : ""
         }));
       };
       
@@ -98,12 +98,10 @@ const usePendingBill = () => {
         try {
             const { TotalAmount, Balance, ...customerData } = pendingBill;
             const response = await axios.post(`${apiUrl}/${endpoint}`, { customerData });
-            console.log(response.data,"allllbillsssssssssssssssssssssssssssss");
             
 
             if (response.data && response.data.length > 0) {
                 const bills = addSerialNumber(response.data);        
-                console.log(bills,"pendingbillsssssss");
                         
                 const totalAmount = bills.reduce((sum, bill) => sum + parseFloat(bill.Amount), 0);
                 const totalBalance = bills.reduce((sum, bill) => sum + parseFloat(bill.TotalBalance), 0);
@@ -318,7 +316,7 @@ const handlePdfDownload = () => {
         { field: 'Amount', headerName: 'Bill Amount', width: 180 },
         { field: 'TotalCollected', headerName: 'Collected', width: 180 },
         { field: 'TotalBalance', headerName: 'Balance', width: 180 },
-        // { field: 'Account', headerName: 'Account', width: 180 },
+        { field: 'Account', headerName: 'Account', width: 180 },
 
     ];
 
@@ -344,7 +342,7 @@ const handlePdfDownload = () => {
         row.Amount, 
         row.TotalCollected, 
         row.TotalBalance, 
-        // row.Account
+        row.Account
     ]);
 
     tableRows.push(totalRow);

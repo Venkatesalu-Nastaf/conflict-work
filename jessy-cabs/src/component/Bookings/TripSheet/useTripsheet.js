@@ -930,6 +930,7 @@ const rearrangeTripData = (tripData) => {
         const timetogglevendor = Number(params.get('VendorTimeToggle')) || 0
         const lockdatavendor = Number(params.get('lockdatavalue'))
         const messagedatatrip = params.get("messageedited") || '';
+        const additonkm = params.get("shedkm")||'';
         // console.log(lockdatavendor,"lockvendorlog")
         setHybridHclNavigate(HCLDATA)
         setTimeToggleNaviagate(timetoggledata)
@@ -1019,6 +1020,7 @@ const rearrangeTripData = (tripData) => {
         setdriverbeta_Count(driverbeta_Count);
         setdriverBeta_amount(driverBeta_amount);
         setTotalcalcAmount(totalcalcAmount || formData.totalcalcAmount);
+        setShedKilometers({"shedkm":additonkm})
 
 
 
@@ -4322,10 +4324,10 @@ const rearrangeTripData = (tripData) => {
                     ...prevValues,
                     [name]: value,
                 }));
-                setShedKilometers((prevValues) => ({
-                    ...prevValues,
-                    [name]: value,
-                }));
+                // setShedKilometers((prevValues) => ({
+                //     ...prevValues,
+                //     [name]: value,
+                // }));
                 setAdditionalTime((prevValues) => ({
                     ...prevValues,
                     [name]: value,
@@ -4334,11 +4336,18 @@ const rearrangeTripData = (tripData) => {
                 //     ...prevData,
                 //     [name]:value,
                 // }));
-                if (name !== "tripid")
+                if (name !== "tripid"){
                     setNoChangeData((prevData) => ({
                         ...prevData,
                         [name]: value,
                     }));
+                }
+                if (name === "shedkm"){
+                    setShedKilometers((prevValues) => ({
+                        ...prevValues,
+                        [name]: value,
+                    }));
+                }
 
             }
         }
@@ -4409,6 +4418,7 @@ const rearrangeTripData = (tripData) => {
                             setEnterTrigger((prev) => !prev)
                             setMessageEditedBeforetrip(bookingDetails?.messageedited)
                             setMessageEditedtrip(bookingDetails?.messageedited)
+                            setShedKilometers({"shedkm":bookingDetails?.shedkm})
                             //---------------------------
 
                             setEscort(bookingDetails.escort)
@@ -5254,7 +5264,8 @@ const rearrangeTripData = (tripData) => {
             if (vendorhr !== 0) {
 
                 const [hrdavendor, midavendor = 0] = vendorhr.toString().split('.');
-                const midaFormatted = midavendor?.padEnd(2, '0');
+                // const midaFormatted = midavendor?.padEnd(2, '0');
+                const midaFormatted = midavendor !== 0 ? midavendor?.padEnd(2, '0') : midavendor
                 // console.log(hrdavendor, "venHour part", midavendor, "Minute vendorpart", vendorhramount,midaFormatted);
                 const onehrdata = Number(hrdavendor) * Number(vendorhramount)
                 // const result = Math.round((vendorhramount / 60) * 10) / 10;

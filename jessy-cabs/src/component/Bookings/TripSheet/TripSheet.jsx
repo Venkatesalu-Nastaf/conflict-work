@@ -2710,7 +2710,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     </div>
                     <TextField
                       name="shedkm"
-                      value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
+                      // value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
+                      value={shedKilometers.shedkm ||formData.shedkm || book.shedkm || selectedCustomerData.shedkm ||  ''}
                       onChange={(e) => {
                         const value = e.target.value;
                         if (value >= 0) {

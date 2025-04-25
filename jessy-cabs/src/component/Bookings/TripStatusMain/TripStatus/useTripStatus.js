@@ -394,7 +394,7 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
   
       worksheet.columns.forEach((column) => {
         column.width = column.header.length + 5;
-        column.alignment = { horizontal: 'center', vertical: 'middle' };
+        // column.alignment = { horizontal: 'center', vertical: 'middle' };
       });
   
       // Function to format date to "DD-MM-YYYY"
@@ -459,6 +459,12 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
             bottom: { style: 'thin' },
             right: { style: 'thin' },
           };
+          const isHeader = row.number === 1;
+          worksheet.getCell(cellAddress).alignment = {
+              horizontal: isHeader ? 'center' : 'left',
+              vertical: 'middle',
+          };
+        
         });
       });
   

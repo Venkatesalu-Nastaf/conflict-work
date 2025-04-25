@@ -305,7 +305,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'left', vertical: 'left' };
+                    // column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 data.map((singleData, index) => {
@@ -425,6 +425,11 @@ const useExeclpage = () => {
                             bottom: { style: 'thin' },
                             right: { style: 'thin' },
                         };
+                        const isHeader = row.number === 1;
+                        worksheet.getCell(cellAddress).alignment = {
+                            horizontal: isHeader ? 'center' : 'left',
+                            vertical: 'middle',
+                        };
                     });
 
                 });
@@ -474,7 +479,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet1.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'left', vertical: 'left' };
+                    // column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 data2.forEach((singleData2, index) => {
@@ -548,6 +553,11 @@ const useExeclpage = () => {
                             bottom: { style: 'thin' },
                             right: { style: 'thin' },
                         };
+                        const isHeader = row.number === 1;
+                        worksheet1.getCell(cellAddress).alignment = {
+                            horizontal: isHeader ? 'center' : 'left',
+                            vertical: 'middle',
+                        };
                     });
                 });
                 // write the content using writeBuffer
@@ -617,7 +627,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'left', vertical: 'left' };
+                    // column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 const uniqueData = data.filter((value, index, self) =>
@@ -712,6 +722,11 @@ const useExeclpage = () => {
                             bottom: { style: 'thin' },
                             right: { style: 'thin' },
                         };
+                        const isHeader = row.number === 1;
+                        worksheet.getCell(cellAddress).alignment = {
+                            horizontal: isHeader ? 'center' : 'left',
+                            vertical: 'middle',
+                        };
                     });
                 });
                 const folderName = 'Old MIS FOLDER';
@@ -750,7 +765,7 @@ const useExeclpage = () => {
                 // loop through all of the columns and set the alignment with width.
                 worksheet.columns.forEach((column) => {
                     column.width = column.header.length + 5;
-                    column.alignment = { horizontal: 'left', vertical: 'left' };
+                    // column.alignment = { horizontal: 'left', vertical: 'left' };
                 });
 
                 const uniqueData = data.filter((value, index, self) =>
@@ -827,6 +842,11 @@ const useExeclpage = () => {
                             left: { style: 'thin' },
                             bottom: { style: 'thin' },
                             right: { style: 'thin' },
+                        };
+                        const isHeader = row.number === 1;
+                        worksheet.getCell(cellAddress).alignment = {
+                            horizontal: isHeader ? 'center' : 'left',
+                            vertical: 'middle',
                         };
                     });
                 });

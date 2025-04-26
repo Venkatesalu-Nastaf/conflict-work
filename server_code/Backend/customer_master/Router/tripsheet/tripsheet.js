@@ -1702,7 +1702,7 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
 //send email from tripsheet page-----------------------------------
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
-        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, Addresscutsomer, dropuseage, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass, requestno,duty } = req.body;
+        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, Addresscutsomer, dropuseage, startdate, vehRegNo,vehicleNameee, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass, requestno,duty } = req.body;
         // const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
         const formattedFromDate = moment(startdate).format('DD-MM-YYYY');
         console.log(formattedFromDate, "date")
@@ -1812,7 +1812,7 @@ router.post('/send-tripsheet-email', async (req, res) => {
                 subject: `JESSY CABS PVT LTD CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
                 html: `
                 <p>Dear Sir/Madam,</p>
-                <p>Greetings from JESSY CABS PVT LTD !!!</p>
+                <p>Greetings from JESSY CABS PVT LTD </p>
                 <p>Thank you for booking with us! Please find the allocated Cab/Chauffeur details below:</p>
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1; color: #FFFFFF;">
@@ -1822,19 +1822,19 @@ router.post('/send-tripsheet-email', async (req, res) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 8px;"><strong>Trip No</strong></td>
+                            <td style="padding: 8px;"><strong>Trip No :</strong></td>
                             <td style="padding: 8px;">${bookingno}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong>Name of Guest</strong></td>
+                            <td style="padding: 8px;"><strong>Name of Guest :</strong></td>
                             <td style="padding: 8px;">${guestname}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong>Contact Number </strong></td>
+                            <td style="padding: 8px;"><strong>Contact Number :</strong></td>
                             <td style="padding: 8px;">${guestmobileno}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong>Location </strong></td>
+                            <td style="padding: 8px;"><strong>Location :</strong></td>
                             <td style="padding: 8px;">${servicestation}</td>
                         </tr>
                         <tr>
@@ -1842,20 +1842,20 @@ router.post('/send-tripsheet-email', async (req, res) => {
                             <td style="padding: 8px;">${formattedFromDate}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong> Time(24HR) </strong></td>
+                            <td style="padding: 8px;"><strong> Time(24HR) :</strong></td>
                             <td style="padding: 8px;">${starttime} Hrs</td>
                         </tr>
                        
                         ${requestno ? `
                             <tr>
-                             <td style="padding: 8px;"><strong>Request Id:</strong></td>
+                             <td style="padding: 8px;"><strong>Request Id :</strong></td>
                               <td style="padding: 8px; color: #000;">${requestno}</td>
                               </tr>
                                ` : ''}
                        
                       
                           <tr>
-                            <td style="padding: 8px;"><strong>Reporting Address:</strong></td>
+                            <td style="padding: 8px;"><strong>Reporting Address :</strong></td>
                             <td style="padding: 8px;">${Addresscutsomer}</td>
                         </tr>
                         <tr>
@@ -1867,12 +1867,12 @@ router.post('/send-tripsheet-email', async (req, res) => {
                             <td style="padding: 8px;">${duty}</td>
                         </tr>
                         <tr>
-                        <td style="padding: 8px;"><strong>Car Sent</strong></td>
+                        <td style="padding: 8px;"><strong>Type Of Car Required :</strong></td>
                         <td style="padding: 8px;color: #000"">${vehType}</td>
                     </tr>
                     <tr>
-                            <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
-                            <td style="padding: 8px;color: #000"">${vehRegNo}</td>
+                            <td style="padding: 8px;"><strong>Vehicle Details :</strong></td>
+                            <td style="padding: 8px;color: #000"">${vehRegNo} / ${vehicleNameee} </td>
                         </tr>
                         <tr>
                         <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>

@@ -1121,6 +1121,7 @@ const rearrangeTripData = (tripData) => {
                         vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
                         mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
                         vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
+                        vehicleNameee: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
                         requestno: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
                         starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
                         startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,

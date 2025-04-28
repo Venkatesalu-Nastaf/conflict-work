@@ -280,7 +280,7 @@ const useVehicleinfo = () => {
             // Loop through all of the columns and set alignment and width
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
-                column.alignment = { horizontal: 'center', vertical: 'middle' };
+                // column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
 
             // Add rows to worksheet
@@ -305,6 +305,11 @@ const useVehicleinfo = () => {
                         left: { style: 'thin' },
                         bottom: { style: 'thin' },
                         right: { style: 'thin' },
+                    };
+                    const isHeader = row.number === 1;
+                    worksheet.getCell(cellAddress).alignment = {
+                        horizontal: isHeader ? 'center' : 'left',
+                        vertical: 'middle',
                     };
                 });
             });

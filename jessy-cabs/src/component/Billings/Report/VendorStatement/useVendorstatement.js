@@ -228,7 +228,7 @@ const handleExcelDownload = async () => {
         // loop through all of the columns and set the alignment with width.
         worksheet.columns.forEach((column) => {
             column.width = column.header.length + 5;
-            column.alignment = { horizontal: 'center', vertical: 'middle' };
+            // column.alignment = { horizontal: 'center', vertical: 'middle' };
         });
 
         // rows.forEach((singleData, index) => {
@@ -315,7 +315,7 @@ const handleExcelDownload = async () => {
     
                 totalRow.eachCell((cell) => {
                     cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    // cell.alignment = { horizontal: 'center', vertical: 'middle' };
                     cell.border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -340,6 +340,11 @@ const handleExcelDownload = async () => {
                             left: { style: 'thin' },
                             bottom: { style: 'thin' },
                             right: { style: 'thin' },
+                        };
+                        const isHeader = row.number === 1;
+                        worksheet.getCell(cellAddress).alignment = {
+                            horizontal: isHeader ? 'center' : 'left',
+                            vertical: 'middle',
                         };
                     });
                 });

@@ -780,7 +780,7 @@ setCustomerData(datas)
           pattern: 'solid',
           fgColor: { argb: '9BB0C1' }
         };
-        cell.alignment = { vertical: 'middle', horizontal: 'left' }; 
+        // cell.alignment = { vertical: 'middle', horizontal: 'centre' }; 
       });
       Customerdata.forEach((item) => {
         const rowData = {};
@@ -829,7 +829,7 @@ setCustomerData(datas)
 
       totalRow.eachCell((cell) => {
         cell.font = { bold: true };
-        cell.alignment = { horizontal: 'center', vertical: 'middle' };
+        cell.alignment = { horizontal: 'left', vertical: 'middle' };
         cell.border = {
             top: { style: 'thin' },
             left: { style: 'thin' },
@@ -838,16 +838,45 @@ setCustomerData(datas)
         };
     });
       // Step 5: Optional - Add border to all cells
+      // worksheet.eachRow({ includeEmpty: false }, (row) => {
+      //   row.eachCell((cell) => {
+      //     cell.border = {
+      //       top: { style: 'thin' },
+      //       bottom: { style: 'thin' },
+      //       left: { style: 'thin' },
+      //       right: { style: 'thin' }
+      //     };
+      //     const isHeader = row.number === 1;
+      //                   worksheet.getCell(cell).alignment = {
+      //                       horizontal: isHeader ? 'center' : 'left',
+      //                       vertical: 'middle',
+      //                   };
+      //   });
+      // });
       worksheet.eachRow({ includeEmpty: false }, (row) => {
-        row.eachCell((cell) => {
-          cell.border = {
-            top: { style: 'thin' },
-            bottom: { style: 'thin' },
-            left: { style: 'thin' },
-            right: { style: 'thin' }
-          };
+        // store each cell to currentCell
+        const currentCell = row._cells;
+
+        // loop through currentCell to apply border only for the non-empty cell of excel
+        currentCell.forEach((singleCell) => {
+
+            const cellAddress = singleCell._address;
+
+            // apply border
+            worksheet.getCell(cellAddress).border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' },
+            };
+            const isHeader = row.number === 1;
+            worksheet.getCell(cellAddress).alignment = {
+                horizontal: isHeader ? 'center' : 'left',
+                vertical: 'middle',
+            };
         });
-      });
+    });
+
    
       // Step 6: Download the file
       const buf = await workbook.xlsx.writeBuffer();

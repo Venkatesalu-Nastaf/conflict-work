@@ -104,7 +104,7 @@ const handleExcelDownload = async () => {
         // Set default column width based on header length
         worksheet.columns.forEach((column) => {
             column.width = column.header.length + 5;
-            column.alignment = { horizontal: 'center', vertical: 'middle' };
+            // column.alignment = { horizontal: 'center', vertical: 'middle' };
         });
 
         // Add rows of data
@@ -124,6 +124,11 @@ const handleExcelDownload = async () => {
                     left: { style: 'thin' },
                     bottom: { style: 'thin' },
                     right: { style: 'thin' },
+                };
+                const isHeader = row.number === 1;
+                worksheet.getCell(cell).alignment = {
+                    horizontal: isHeader ? 'center' : 'left',
+                    vertical: 'middle',
                 };
             });
         });

@@ -261,7 +261,7 @@ const useGstReport = () => {
 
                 // Center-align all data cells
                 newRow.eachCell({ includeEmpty: true }, (cell) => {
-                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.alignment = { horizontal: 'left', vertical: 'middle' };
                 });
             });
 
@@ -297,7 +297,7 @@ const useGstReport = () => {
 
             // Center-align the totals row cells
             totalsRow.eachCell({ includeEmpty: true }, (cell) => {
-                cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                cell.alignment = { horizontal: 'left', vertical: 'middle' };
             });
 
             const buf = await workbook.xlsx.writeBuffer();

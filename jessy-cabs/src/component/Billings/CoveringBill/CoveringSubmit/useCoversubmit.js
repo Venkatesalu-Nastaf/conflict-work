@@ -101,7 +101,7 @@ const useCoversubmit = () => {
             worksheet.getRow(1).height = 30;
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
-                column.alignment = { horizontal: 'center', vertical: 'middle' };
+                // column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
     
             formattedRows.forEach((singleData) => {
@@ -113,13 +113,36 @@ const useCoversubmit = () => {
                     column.width = Math.max(currentColumnWidth, cellLength + 5);
                 });
             });
+            // worksheet.eachRow({ includeEmpty: false }, (row) => {
+            //     row.eachCell((cell) => {
+            //         cell.border = {
+            //             top: { style: 'thin' },
+            //             left: { style: 'thin' },
+            //             bottom: { style: 'thin' },
+            //             right: { style: 'thin' },
+            //         };
+            //         const isHeader = row.number === 1;
+            //         worksheet.getCell(cell).alignment = {
+            //             horizontal: isHeader ? 'center' : 'left',
+            //             vertical: 'middle',
+            //         };
+            //     });
+            // });
+
             worksheet.eachRow({ includeEmpty: false }, (row) => {
-                row.eachCell((cell) => {
-                    cell.border = {
+                const currentCell = row._cells;
+                currentCell.forEach((singleCell) => {
+                    const cellAddress = singleCell._address;
+                    worksheet.getCell(cellAddress).border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
                         bottom: { style: 'thin' },
                         right: { style: 'thin' },
+                    };
+                    const isHeader = row.number === 1;
+                    worksheet.getCell(cellAddress).alignment = {
+                        horizontal: isHeader ? 'center' : 'left',
+                        vertical: 'middle',
                     };
                 });
             });

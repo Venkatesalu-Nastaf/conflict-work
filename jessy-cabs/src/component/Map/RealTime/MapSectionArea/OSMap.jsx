@@ -1,11 +1,14 @@
-import React, { useState, useEffect,useMemo } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import React from "react";
+import { MapContainer, TileLayer, Marker, Popup,Tooltip} from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png";
+import "./osmap.css"
 
-// Custom car icon
+
+
+
 const customIcon = new L.Icon({
   iconUrl: caricon,
   iconSize: [80, 80],
@@ -131,9 +134,19 @@ const OSMap = ({todayVehicle }) => {
               position={[parseFloat(vehicle.Latitude_loc), parseFloat(vehicle.Longtitude_loc)]}
               icon={customIcon}
             >
+              
+                <Tooltip className="tooltip" direction="top"  offset={[0, -60]} opacity={1} permanent>
+    <div style={{backgroundColor: '#203254', fontWeight: 'bold',
+    color: '#FFF', borderRadius: '6px', boxShadow: '0px 2px 6px rgba(0,0,0,0.3)', width: '70px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', textAlign: 'center', overflow: 'hidden',padding: '2px',}}>
+      {/* {vehicle.Vehicle_No} or any text you want */}
+      {vehicle?.Vehicle_No.slice(-4)}
+
+    </div>
+  </Tooltip>
+
               <Popup>
                 <div><strong>Vehicle No:</strong> {vehicle.Vehicle_No}</div>
-                <div><strong>Group:</strong> {vehicle.Group}</div>
+                <div><strong>Group1:</strong> {vehicle.Group}</div>
                 <div><strong>Driver:</strong> {vehicle.Driver}</div>
                 <div><strong>Location:</strong> {vehicle.Location}</div>
                 <div><strong>Nearest Address:</strong> {vehicle.Nearest_Address}</div>

@@ -1109,7 +1109,28 @@ router.get('/bookinglogdetailsget', (req, res) => {
 });
 
 
-
+// navigate booking to tripsheet to chack status
+router.get('/getBookingStatusByTripId', (req, res) => {
+    const { tripid } = req.query;
+    console.log(tripid, " <-- received tripid in query");
+  
+    if (!tripid) {
+      return res.status(400).json({ error: "Trip ID is required" });
+    }
+  
+    const sqlQuery = `SELECT status FROM booking WHERE bookingno = ?`;
+    db.query(sqlQuery, [tripid], (error, result) => {
+      if (error) {
+        console.error(error, "SQL query error");
+        return res.status(500).json({ error: "Internal server error" });
+      }
+  
+      console.log(result, " <-- result from booking table");
+  
+      return res.json(result);
+    });
+  });
+  
 
 
 

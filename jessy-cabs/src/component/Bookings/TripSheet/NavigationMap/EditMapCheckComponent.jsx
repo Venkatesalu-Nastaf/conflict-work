@@ -520,14 +520,20 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
       }, 1000);
       return;
     }
+console.log(startLat,startLng,"starttttttttt",endLat,endLng,"starttttttttttttt",waypoints);
 
     try {
       const directionsResult = await directionsService.route({
+        // origin: new window.google.maps.LatLng(startLat, startLng),
+        // destination: new window.google.maps.LatLng(endLat, endLng),
+        // waypoints: waypoints?.map(point => ({ location: point, stopover: true })) || [],
         origin: new window.google.maps.LatLng(startLat, startLng),
-        destination: new window.google.maps.LatLng(endLat, endLng),
-        waypoints: waypoints?.map(point => ({ location: point, stopover: true })) || [],
+destination: new window.google.maps.LatLng(endLat, endLng),
+waypoints: waypoints?.map(point => ({ location: point, stopover: true })) || [],
+
         travelMode: window.google.maps.TravelMode.DRIVING,
       });
+console.log(directionsResult,"directionssssssssssssssssssssssssssssssssssssssssssssssssssssss");
 
       // origin: new window.google.maps.LatLng(startLatitude, startLongitude),
       // destination: new window.google.maps.LatLng(endLatitude, endLongitude),

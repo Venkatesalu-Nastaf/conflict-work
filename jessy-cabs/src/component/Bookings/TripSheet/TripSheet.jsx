@@ -316,7 +316,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
     // --------------------this zoom code image data----------------------------------------
     posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, Scale, onDrag, handleFullDeleteMapData,
-    mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide,setGMapImageUrl
+    mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide,setGMapImageUrl,bookingTripStatus
     // this code zoom image data---------------------------------
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
@@ -2005,7 +2005,9 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                               : selectedCustomerData?.shedOutDate
                                 ? dayjs(selectedCustomerData.shedOutDate)
                                 : null ||
-                                  book?.closedate ? dayjs(book?.closedate) : dayjs(book?.shedOutDate)
+                                // book?.closedate ? dayjs(book?.closedate) : dayjs(book?.shedOutDate)
+                                  book?.shedOutDate && bookingTripStatus[0]?.status === "pending" ? dayjs(book?.shedOutDate) : null ||
+                                  book?.closedate && bookingTripStatus[0]?.status !== "pending" ? dayjs(book?.closedate) : null
                           }
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -2038,8 +2040,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                               inputRef={inputRef}
                               value={
                                 selectedCustomerData?.closedate ||
-                                selectedCustomerData?.shedOutDate ||
-                                ""
+                                selectedCustomerData?.shedOutDate || book?.closedate
                               }
                             />
                           )}

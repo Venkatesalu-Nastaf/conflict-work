@@ -394,7 +394,10 @@ const useTripsheet = () => {
     const [temporaryStatus, setTemporaryStatus] = useState(null);
     const [emptyState, setEmptyState] = useState(false);
     const [userStatus, setUserStatus] = useState(null);
-    const [outStationDispatchHide,setOutStationDispatchHide] = useState(false);
+    const [outStationDispatchHide, setOutStationDispatchHide] = useState(false);
+
+    // status check in booking
+    const [bookingTripStatus,setBookingTripStatus] = useState('');
 
     const [routeData, setRouteData] = useState('');
     const [tripSheetData, setTripSheetData] = useState({
@@ -533,25 +536,25 @@ const useTripsheet = () => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
 
         console.log(tripid, "delete map triggered");
-      
-          try {
+
+        try {
             if (tripid !== null && tripid && tripid !== "undefined") {
-              const response = await fetch(`${apiUrl}/deleteMapImagesByTripId/${tripid}`, {
-                method: 'DELETE',
-              });
-      
-              const result = await response.json();
-              setGMapImageUrl("")
-              console.log("Delete response:", result);
+                const response = await fetch(`${apiUrl}/deleteMapImagesByTripId/${tripid}`, {
+                    method: 'DELETE',
+                });
+
+                const result = await response.json();
+                setGMapImageUrl("")
+                console.log("Delete response:", result);
             }
-          } catch (error) {
+        } catch (error) {
             console.log("Error deleting map image:", error);
-          }
-      };
+        }
+    };
     const handleRemoveMapLogPoint = async (params) => {
         try {
             const id = params.id;
-            const resdata = await axios.delete(`${apiUrl}/dlete-mapLocationPoint/${id}`)            
+            const resdata = await axios.delete(`${apiUrl}/dlete-mapLocationPoint/${id}`)
             if (resdata.status === 200) {
                 DeleteMapImage()
                 handleTripmaplogClick()
@@ -561,10 +564,10 @@ const useTripsheet = () => {
         }
     }
     const handleEditMapDetails = async () => {
-        if (!selectedMapRow) return;        
-        const { tripid, time, date, trip_type,id } = selectedMapRow;
+        if (!selectedMapRow) return;
+        const { tripid, time, date, trip_type, id } = selectedMapRow;
         try {
-            const response = await axios.post(`${apiUrl}/updateGPS-LOG/${tripid}`, { time, date, trip_type,id });
+            const response = await axios.post(`${apiUrl}/updateGPS-LOG/${tripid}`, { time, date, trip_type, id });
             if (response.status === 200) {
                 setOpenEditMapLog(false); // Close the modal
             }
@@ -585,8 +588,6 @@ const useTripsheet = () => {
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
                 const data = response.data;
                 const sortedData = rearrangeTripData(data)
-                console.log(sortedData,"responseeeeeeeeeeeeeeessssssssssssssssssssssssss111111111111111111");
-                
                 setRow(sortedData);
 
             } catch (error) {
@@ -723,65 +724,65 @@ const useTripsheet = () => {
         }
     };
     // console.log(mapimageUrls1,"urls")
-//     const rearrangeTripData = (tripData) => {
-//         if (!Array.isArray(tripData)) return [];
-// console.log(tripData,"tripdataaaaaaaaaaaaaaaaaaaaaa");
-// const a = tripData.map(li => li.time);
-// console.log(a,"tripdataaaaaaaaaaaaaaaaaaaaaappppppppppppppppppppppppppppppppppp");
+    //     const rearrangeTripData = (tripData) => {
+    //         if (!Array.isArray(tripData)) return [];
+    // console.log(tripData,"tripdataaaaaaaaaaaaaaaaaaaaaa");
+    // const a = tripData.map(li => li.time);
+    // console.log(a,"tripdataaaaaaaaaaaaaaaaaaaaaappppppppppppppppppppppppppppppppppp");
 
 
-//         // Separate start, end, and waypoints
-//         const startPoint = tripData.find(item => item.trip_type === "start");
-//         const endPoint = tripData.find(item => item.trip_type === "end");
-//         const waypoints = tripData.filter(item => item.trip_type !== "start" && item.trip_type !== "end");
+    //         // Separate start, end, and waypoints
+    //         const startPoint = tripData.find(item => item.trip_type === "start");
+    //         const endPoint = tripData.find(item => item.trip_type === "end");
+    //         const waypoints = tripData.filter(item => item.trip_type !== "start" && item.trip_type !== "end");
 
-//         // Build the final sorted array
-//         const sortedTripData = [
-//             ...(startPoint ? [startPoint] : []),
-//             ...waypoints,
-//             ...(endPoint ? [endPoint] : [])
-//         ];
+    //         // Build the final sorted array
+    //         const sortedTripData = [
+    //             ...(startPoint ? [startPoint] : []),
+    //             ...waypoints,
+    //             ...(endPoint ? [endPoint] : [])
+    //         ];
 
-//         return sortedTripData;
-//     };
+    //         return sortedTripData;
+    //     };
 
-const rearrangeTripData = (tripData) => {
-    if (!Array.isArray(tripData)) return [];
-  
-    const convertTime = (timeStr) => {
-      if (!timeStr) return 0;
-      const [h, m] = timeStr.split(":").map(Number);
-      return parseFloat(`${h}.${m < 10 ? "0" : ""}${m}`);
+    const rearrangeTripData = (tripData) => {
+        if (!Array.isArray(tripData)) return [];
+
+        const convertTime = (timeStr) => {
+            if (!timeStr) return 0;
+            const [h, m] = timeStr.split(":").map(Number);
+            return parseFloat(`${h}.${m < 10 ? "0" : ""}${m}`);
+        };
+
+        const startPoint = tripData.find(item => item.trip_type === "start");
+        const endPoint = tripData.find(item => item.trip_type === "end");
+
+        const waypoints = tripData
+            .filter(item => item.trip_type !== "start" && item.trip_type !== "end")
+            .map(item => ({
+                ...item,
+                numericDate: new Date(item.date).getTime(),
+                numericTime: convertTime(item.time)
+            }))
+            .sort((a, b) => {
+                if (a.numericDate !== b.numericDate) {
+                    return a.numericDate - b.numericDate;
+                } else {
+                    return a.numericTime - b.numericTime;
+                }
+            });
+
+        const sortedTripData = [
+            ...(startPoint ? [startPoint] : []),
+            ...waypoints.map(({ numericDate, numericTime, ...rest }) => rest),
+            ...(endPoint ? [endPoint] : [])
+        ];
+
+        return sortedTripData;
     };
-  
-    const startPoint = tripData.find(item => item.trip_type === "start");
-    const endPoint = tripData.find(item => item.trip_type === "end");
-  
-    const waypoints = tripData
-      .filter(item => item.trip_type !== "start" && item.trip_type !== "end")
-      .map(item => ({
-        ...item,
-        numericDate: new Date(item.date).getTime(), 
-        numericTime: convertTime(item.time)
-      }))
-      .sort((a, b) => {
-        if (a.numericDate !== b.numericDate) {
-          return a.numericDate - b.numericDate;
-        } else {
-          return a.numericTime - b.numericTime;
-        }
-      });
-  
-    const sortedTripData = [
-      ...(startPoint ? [startPoint] : []),
-      ...waypoints.map(({ numericDate, numericTime, ...rest }) => rest), 
-      ...(endPoint ? [endPoint] : [])
-    ];
-  
-    return sortedTripData;
-  };
-  
-  
+
+
     const handleTripmaplogClick = async () => {
         try {
             const tripid = selectedRow?.tripid || book?.tripid || selectedCustomerData?.tripid || formData?.tripid;
@@ -791,22 +792,22 @@ const rearrangeTripData = (tripData) => {
             } else {
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
                 const data = response.data;
-                if(data.length > 0){
-                console.log(data, "d--------------ata-----------");
-                const sortedData = rearrangeTripData(data);
-                console.log(sortedData, "pd------------------------------------====================");
-                setRow(sortedData);
-                setMaplogimgPopupOpen(true);
+                if (data.length > 0) {
+                    console.log(data, "d--------------ata-----------");
+                    const sortedData = rearrangeTripData(data);
+                    console.log(sortedData, "pd------------------------------------====================");
+                    setRow(sortedData);
+                    setMaplogimgPopupOpen(true);
                 }
-                else{
+                else {
                     setRow([])
                 }
                 // console.log(data, 'mapdata')
             }
-        
-        } catch(err) {
+
+        } catch (err) {
             setRow([])
-            console.log(err,"error");
+            console.log(err, "error");
         }
     };
 
@@ -930,7 +931,7 @@ const rearrangeTripData = (tripData) => {
         const timetogglevendor = Number(params.get('VendorTimeToggle')) || 0
         const lockdatavendor = Number(params.get('lockdatavalue'))
         const messagedatatrip = params.get("messageedited") || '';
-        const additonkm = params.get("shedkm")||'';
+        const additonkm = params.get("shedkm") || '';
         // console.log(lockdatavendor,"lockvendorlog")
         setHybridHclNavigate(HCLDATA)
         setTimeToggleNaviagate(timetoggledata)
@@ -942,7 +943,7 @@ const rearrangeTripData = (tripData) => {
         //----------------------
         const formData = {};
         const parameterKeys = [
-            'dispatchcheck','shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo','driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail', 'messageedited',
+            'dispatchcheck', 'shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail', 'messageedited',
             'MessageText',
         ];
         parameterKeys.forEach(key => {
@@ -1020,7 +1021,7 @@ const rearrangeTripData = (tripData) => {
         setdriverbeta_Count(driverbeta_Count);
         setdriverBeta_amount(driverBeta_amount);
         setTotalcalcAmount(totalcalcAmount || formData.totalcalcAmount);
-        setShedKilometers({"shedkm":additonkm})
+        setShedKilometers({ "shedkm": additonkm })
 
 
 
@@ -1034,7 +1035,7 @@ const rearrangeTripData = (tripData) => {
         const initialFormData = {};
         setFormData(initialFormData);
     }, []);
-    
+
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
     const handleCancel = () => {
@@ -1743,7 +1744,7 @@ const rearrangeTripData = (tripData) => {
                     drivername: driverName,
                 };
                 console.log(VehcileHistory, "editVehicleHistory");
-                console.log(updatedCustomer,"updated customerrrrrrrrrrr",closetimecheck);
+                console.log(updatedCustomer, "updated customerrrrrrrrrrr", closetimecheck);
 
                 const tripsheetlogtripid = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
 
@@ -1786,9 +1787,9 @@ const rearrangeTripData = (tripData) => {
                 setLockDatacustomerBill(true)
                 setCheckSignandMapVerify(false)
                 fuelAdvnacedisabled()
-              setDriverDetails([])
-              handleRefresh()
-              handleTripmaplogClick()
+                setDriverDetails([])
+                handleRefresh()
+                handleTripmaplogClick()
                 //    const data2= await  checksignatureandmap()
                 //    console.log(data2,"userStatusdata2")
 
@@ -2685,56 +2686,55 @@ const rearrangeTripData = (tripData) => {
                 const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
                 return totalDays + 1;
             }
-        } else if (hybriddata === 1 ) {
-            if(startDate && closeDate && duty !== "Outstation") {
-            const startDateObj = dayjs(startDate).startOf('day');
-            const closeDateObj = dayjs(closeDate).startOf('day');
+        } else if (hybriddata === 1) {
+            if (startDate && closeDate && duty !== "Outstation") {
+                const startDateObj = dayjs(startDate).startOf('day');
+                const closeDateObj = dayjs(closeDate).startOf('day');
 
-            // const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+                // const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
 
-            // if (totalDays > 0) {
+                // if (totalDays > 0) {
 
-            //     return totalDays;
-            // }
-            // return '';
-            if (startDateObj.isAfter(closeDateObj)) {
-                // console.log('Shed Out Date is greater than Shed In Date');
-                // return 'Shed Out Date is greater';
-                return 0;
-            } else if (startDateObj.isSame(closeDateObj)) {
-                return 1;
-            } else {
-                const totalDays = closeDateObj.diff(startDateObj, 'days');
-                return totalDays + 1;
+                //     return totalDays;
+                // }
+                // return '';
+                if (startDateObj.isAfter(closeDateObj)) {
+                    // console.log('Shed Out Date is greater than Shed In Date');
+                    // return 'Shed Out Date is greater';
+                    return 0;
+                } else if (startDateObj.isSame(closeDateObj)) {
+                    return 1;
+                } else {
+                    const totalDays = closeDateObj.diff(startDateObj, 'days');
+                    return totalDays + 1;
+                }
+            }
+            else if (shedoutdate && shedindate && duty === "Outstation") {
+                const startDateObj1 = dayjs(shedoutdate).startOf('day');
+                const closeDateObj1 = dayjs(shedindate).startOf('day');
+
+                // const totalDays1 = closeDateObj1.diff(startDateObj1, 'days') + 1;
+
+                // if (totalDays1 > 0) {
+
+                //     return totalDays1;
+                // }
+                // return '';
+                if (startDateObj1.isAfter(closeDateObj1)) {
+                    // console.log('Shed Out Date is greater than Shed In Date');
+                    // return 'Shed Out Date is greater';
+                    return 0;
+                } else if (startDateObj1.isSame(closeDateObj1)) {
+                    return 1;
+                } else {
+                    const totalDays = closeDateObj1.diff(startDateObj1, 'days');
+                    return totalDays + 1;
+                }
+            }
+            else {
+                return ''
             }
         }
-        else if (shedoutdate && shedindate && duty === "Outstation") 
-        {
-            const startDateObj1 = dayjs(shedoutdate).startOf('day');
-            const closeDateObj1 = dayjs(shedindate).startOf('day');
-
-            // const totalDays1 = closeDateObj1.diff(startDateObj1, 'days') + 1;
-
-            // if (totalDays1 > 0) {
-
-            //     return totalDays1;
-            // }
-            // return '';
-            if (startDateObj1.isAfter(closeDateObj1)) {
-                // console.log('Shed Out Date is greater than Shed In Date');
-                // return 'Shed Out Date is greater';
-                return 0;
-            } else if (startDateObj1.isSame(closeDateObj1)) {
-                return 1;
-            } else {
-                const totalDays = closeDateObj1.diff(startDateObj1, 'days');
-                return totalDays + 1;
-            }
-        }
-        else{
-             return ''
-        }
-    }
 
         return '';
     };
@@ -4337,13 +4337,13 @@ const rearrangeTripData = (tripData) => {
                 //     ...prevData,
                 //     [name]:value,
                 // }));
-                if (name !== "tripid"){
+                if (name !== "tripid") {
                     setNoChangeData((prevData) => ({
                         ...prevData,
                         [name]: value,
                     }));
                 }
-                if (name === "shedkm"){
+                if (name === "shedkm") {
                     setShedKilometers((prevValues) => ({
                         ...prevValues,
                         [name]: value,
@@ -4417,9 +4417,10 @@ const rearrangeTripData = (tripData) => {
                             setTimeToggle(bookingDetails.TimeToggleData)
                             setTimeToggleVendor(bookingDetails.VendorTimeToggle)
                             setEnterTrigger((prev) => !prev)
+                            setMaplogimgPopupOpen(false)
                             setMessageEditedBeforetrip(bookingDetails?.messageedited)
                             setMessageEditedtrip(bookingDetails?.messageedited)
-                            setShedKilometers({"shedkm":bookingDetails?.shedkm})
+                            setShedKilometers({ "shedkm": bookingDetails?.shedkm })
                             //---------------------------
 
                             setEscort(bookingDetails.escort)
@@ -4981,29 +4982,29 @@ const rearrangeTripData = (tripData) => {
                     //     calcNight = 1;
                     // }
                     if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
-                  
+
                         calcNight = 0;
                     }
                     if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
-                    
+
                         calcNight = 0;
                     }
                     if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
-                       
+
                         calcNight = 1;
                     }
-                   
+
                     if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
-                      
+
                         calcNight = 2;
                     }
                     if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
-                       
+
                         calcNight = 1;
                     }
-                 
+
                     if (Number(newTimeStrings) > 22.0 && Number(newTimeString) >= 6.00) {
-                       
+
                         calcNight = 1;
                     }
 
@@ -5030,31 +5031,31 @@ const rearrangeTripData = (tripData) => {
                     // }
                     // console.log(calcNight,"daysnii")
                     if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
-                  
+
                         calcNight = TotalDay - 1;
                     }
                     if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
-                     
+
                         calcNight = TotalDay - 1;
-                        
+
                     }
                     if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
-                      
-                        calcNight = TotalDay ;
+
+                        calcNight = TotalDay;
                     }
-    
+
                     if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
                         // console.log(TotalDay + 1,"days1")
-                       
+
                         calcNight = TotalDay + 1;
                     }
                     if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
-                      
+
                         calcNight = TotalDay;
                         // console.log(TotalDay ,"days2")
                     }
                     if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
-                       
+
                         calcNight = TotalDay - 1;
                         // console.log(TotalDay ,"days3")
                     }
@@ -5161,7 +5162,7 @@ const rearrangeTripData = (tripData) => {
             const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount || 0) + Number(driverBeta_amount) + Number(permit) + Number(parking) + Number(toll);
 
             const total = totalcalc - Number(customer_advance)
-            const convetTotal = Math.ceil(total);            
+            const convetTotal = Math.ceil(total);
             setTotalcalcAmount(Number(convetTotal));
         }
         totalAmountCalc()
@@ -5368,29 +5369,29 @@ const rearrangeTripData = (tripData) => {
                 //     calcNight = 1;
                 // }
                 if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
-                  
+
                     calcNight = 0;
                 }
                 if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
-                
+
                     calcNight = 0;
                 }
                 if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
-                   
+
                     calcNight = 1;
                 }
-               
+
                 if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
-                  
+
                     calcNight = 2;
                 }
                 if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
-                   
+
                     calcNight = 1;
                 }
-             
+
                 if (Number(newTimeStrings) > 22.0 && Number(newTimeString) >= 6.00) {
-                   
+
                     calcNight = 1;
                 }
             }
@@ -5398,31 +5399,31 @@ const rearrangeTripData = (tripData) => {
 
             if (TotalDay > 1) {
                 if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
-                  
+
                     calcNight = TotalDay - 1;
                 }
                 if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
-                 
+
                     calcNight = TotalDay - 1;
-                    
+
                 }
                 if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
-                  
-                    calcNight = TotalDay ;
+
+                    calcNight = TotalDay;
                 }
 
                 if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
                     // console.log(TotalDay + 1,"days1")
-                   
+
                     calcNight = TotalDay + 1;
                 }
                 if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
-                  
+
                     calcNight = TotalDay;
                     // console.log(TotalDay ,"days2")
                 }
                 if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
-                   
+
                     calcNight = TotalDay - 1;
                     // console.log(TotalDay ,"days3")
                 }
@@ -6606,7 +6607,7 @@ const rearrangeTripData = (tripData) => {
     //             const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
     //             const data = response.data;
     //             console.log(data,"responseeeeeeeeeeeeeeessssssssssssssssssssssssss");
-                
+
     //             setRow(data);
     //         } catch (error) {
     //             console.error('Error fetching map data:', error);
@@ -7495,7 +7496,7 @@ const rearrangeTripData = (tripData) => {
             setHideField(false);
             console.log("midnight 23.30 time is affected");
         }
-    }, [enterTrigger, book,finalCurrentTime]);
+    }, [enterTrigger, book, finalCurrentTime]);
 
     // }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
 
@@ -7532,11 +7533,11 @@ const rearrangeTripData = (tripData) => {
                 if (!station.includes("Chennai") && !station.includes("All")) {
                     console.log(superAdminAccess, "superAdminAccesssssssssssssssssss", station, !station.includes("Chennai"));
                     console.log("outstationnnnnnnnnnnnnnnnnnnnnnnnnnn");
-                
+
                     setOutStationDispatchHide(true);
                     return;
                 }
-                
+
                 if (
                     (oldStatusCheck === "Temporary Closed") &&
                     (superAdminAccess !== "SuperAdmin") &&
@@ -8589,7 +8590,7 @@ const rearrangeTripData = (tripData) => {
     }
 
     const handleRefresh = async () => {
-      
+
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
         // const tripid2 = formData?.tripid || selectedCustomerData?.tripid || book?.tripid;
         // console.log(tripid,"xop")
@@ -8598,7 +8599,7 @@ const rearrangeTripData = (tripData) => {
         try {
             if (!tripid) {
                 // setRows([])
-               return
+                return
             } else {
                 const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${tripid}`);
                 const data = response.data;
@@ -8634,9 +8635,32 @@ const rearrangeTripData = (tripData) => {
         } catch {
         }
     };
-    useEffect(()=>{
+    useEffect(() => {
         handleRefresh()
-    },[gpsTripId])
+    }, [gpsTripId])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+            console.log(tripid, "tripiddddddddddddddddppppppppppppp");
+            try {
+                if (tripid !== undefined && tripid !== null && tripid !== "") {
+                    const response = await axios.get(`${apiUrl}/getBookingStatusByTripId`, {
+                        params: { tripid }
+                    });
+                    console.log(response.data, "statuscheckingggggggggggggggggggggggggg");
+                    setBookingTripStatus(response.data)
+                }
+            }
+
+            catch (error) {
+                console.log(error, "erorrrrrrrrr");
+
+            }
+        }
+        fetchData();
+    }, [book, location]);
+
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
         escort, setEscort, driverdetails,
@@ -8777,7 +8801,7 @@ const rearrangeTripData = (tripData) => {
         tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
         // this zoom image code state-----------------
         posX, posY, zoom, handleZoomIn, handleZoomOut, startDrag, stopDrag, handleScrollZoom, isDragging, onDrag, handleFullDeleteMapData,
-        mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide,setGMapImageUrl
+        mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl,bookingTripStatus
         // this zoom image code state-----------------
 
     };

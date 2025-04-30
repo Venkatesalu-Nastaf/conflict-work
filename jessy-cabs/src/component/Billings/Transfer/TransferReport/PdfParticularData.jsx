@@ -559,7 +559,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
 
                       <tr>
                         <td>Total </td>
-                        <td>{triptotaldays}</td>
+                        {/* <td>{triptotaldays}</td> */}
+                          <td>{duty === "Outstation"   ? {triptotaldays} : <>{'-'}</>}</td>
                         <td>{triptotaltime}</td>
                         {customerData[0]?.hybrid === 1 && duty !== "Outstation" ? <td> {hclKm}</td> : <td>{triptotalkms}</td>}
                       </tr>
@@ -586,7 +587,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
 
                       <tr>
                         <td style={{ padding: "7px" }}>Total </td>
-                        <td style={{ padding: "7px" }}>{triptotaldays}</td>
+                        {/* <td style={{ padding: "7px" }}>{triptotaldays}</td> */}
+                        <td style={{ padding: "7px" }}>{duty === "Outstation"   ? {triptotaldays} : <>{'-'}</>}</td>
                         <td style={{ padding: "7px" }}>{triptotaltime}</td>
                         <td style={{ padding: "7px" }}>{triptotalkms}</td>
                       </tr>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback, useContext,useRef } from 'react';
+import { useState, useEffect, useMemo, useCallback, useContext, useRef } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -37,7 +37,7 @@ const useTripsheet = () => {
     //  const signatureurlinkurl=`http://localhost:3000/SignatureGenerate`
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
-        vehType: '',
+        // vehType: '',
 
         driverName: '',
         vehRegNo: '',
@@ -99,12 +99,135 @@ const useTripsheet = () => {
     const [mapPopUp, setMapPopUp] = useState(false)
     const [outStationHide, setOutStationHide] = useState(false);
     const [enterTrigger, setEnterTrigger] = useState(null)
-    const [attachedImageEtrip,setAttachImageETrip]=useState('')
+    const [attachedImageEtrip, setAttachImageETrip] = useState('')
     // const [conflicthcldatavalue, setConflictHCLDataValue] = useState([])
     const [conflicthcldatavalue, setConflictHCLDataValue] = useState({
         Hcldatakmvalue: 0,
         HclMaxConflctdata: 0
     });
+
+    // book data
+    const bookData = {
+        tripid: '',
+        bookingno: '',
+        status: '',
+        tripsheetdate: '',
+        billingno: '',
+        apps: '',
+        customer: '',
+        orderedby: '',
+        orderbyemail: '',
+        mobile: '',
+        guestname: '',
+        guestmobileno: '',
+        email: '',
+        address1: '',
+        department: '',
+        vehRegNo: '',
+        driverName: '',
+        mobileNo: '',
+        driversmsexbetta: '',
+        gps: '',
+        duty: '',
+        pickup: '',
+        useage: '',
+        request: '',
+        shedOutDate: '',
+        vehicleName2: "",
+        startdate: '',
+        closedate: '',
+        shedInDate: '',
+        employeeno: '',
+        reporttime: '',
+        starttime: '',
+        closetime: '',
+        shedintime: '',
+        advancepaidtovendor: '',
+        customercode: '',
+        shedkm: '',
+        shedin: '',
+        shedout: '',
+        startkm: '',
+        closekm: '',
+        permit: '',
+        parking: '',
+        toll: '',
+        emailcheck: '',
+        vpermettovendor: '',
+        vendortoll: '',
+        customeradvance: '',
+        email1: '',
+        documentnotes: '',
+        VendorTripNo: '',
+        vehicles: '',
+        duty1: '',
+        startdate1: '',
+        closedate1: '',
+        totaldays: '',
+        starttime2: '',
+        closetime2: '',
+        totaltime: '',
+        startkm1: '',
+        closekm1: '',
+        totalkm1: '',
+        remark: '',
+        caramount: '',
+        minkm: '',
+        minhrs: '',
+        package: '',
+        amount: '',
+        exkm: '',
+        amount1: '',
+        exHrs: '',
+        amount2: '',
+        night: '',
+        amount3: '',
+        driverconvenience: '',
+        amount4: '',
+        netamount: '',
+        vehcommission: '',
+        manualbills: '',
+        pack: '',
+        amount5: '',
+        exkm1: '',
+        amount6: '',
+        exHrs1: '',
+        amount7: '',
+        night1: '',
+        amount8: '',
+        driverconvenience1: '',
+        amount9: '',
+        rud: '',
+        netamount1: '',
+        discount: '',
+        ons: '',
+        balance: '',
+        fcdate: '',
+        taxdate: '',
+        insdate: '',
+        stpermit: '',
+        maintenancetype: '',
+        kilometer: '',
+        selects: '',
+        documenttype: '',
+        on1: '',
+        smsguest: '',
+        booker: '',
+        DriverSMS: '',
+        manualbillss: '',
+        reload: '',
+        locks: '',
+        Groups: '',
+        travelsemail: '',
+        hireTypes: "",
+        // vehType: "",
+        vehicleName: "",
+        travelsname: "",
+        GroupTripId: "",
+        MessageText: "",
+    }
+
+    const [book, setBook] = useState(bookData);
 
     // Loading//
 
@@ -139,7 +262,7 @@ const useTripsheet = () => {
     //-----------------------------------------------------------------
     const [packageData, setPackageData] = useState({
         customer: '',
-        vehType: '',
+        // vehType: '',
         duty: '',
         totalkm1: '',
         totaltime: '',
@@ -265,10 +388,16 @@ const useTripsheet = () => {
     const [GmapimageUrl, setGMapImageUrl] = useState('');
 
     // const [isentertripID,setisenterTripid] = useState(false)
+    const [mapDataDeleteModal, setMapDataDeleteModal] = useState(false);
+
 
     const [temporaryStatus, setTemporaryStatus] = useState(null);
     const [emptyState, setEmptyState] = useState(false);
     const [userStatus, setUserStatus] = useState(null);
+    const [outStationDispatchHide, setOutStationDispatchHide] = useState(false);
+
+    // status check in booking
+    const [bookingTripStatus,setBookingTripStatus] = useState('');
 
     const [routeData, setRouteData] = useState('');
     const [tripSheetData, setTripSheetData] = useState({
@@ -282,7 +411,7 @@ const useTripsheet = () => {
         tripid: '',
         startdate: '',
         duty: '',
-        vehType: '',
+        // vehType: '',
         vehRegNo: '',
         driverName: '',
         mobileNo: '',
@@ -313,14 +442,14 @@ const useTripsheet = () => {
     const [Permissiondeleteroles, setPermissionDeleteRoles] = useState(false)
     const [fueldataamountdis, setFuelDataAmountDis] = useState(false)
     const [fueladvancedamounthide, setFuelAdvancedamountHide] = useState(null)
-    const [deletetripasheetdata,setDeleteTripsheetData]=useState(false);
-// -------------------this zoom imgae in attachfile----------
+    const [deletetripasheetdata, setDeleteTripsheetData] = useState(false);
+    // -------------------this zoom imgae in attachfile----------
     const [zoom, setZoom] = useState(1);
-  const [posX, setPosX] = useState(0); 
-  const [posY, setPosY] = useState(0); 
-  const [isDragging, setIsDragging] = useState(false);
-  const startPos = useRef({ x: 0, y: 0 });
-//   ---------------------------end code zoom image------------------
+    const [posX, setPosX] = useState(0);
+    const [posY, setPosY] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
+    const startPos = useRef({ x: 0, y: 0 });
+    //   ---------------------------end code zoom image------------------
     const a1 = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO");
 
 
@@ -382,30 +511,52 @@ const useTripsheet = () => {
 
     ];
     const maplogcolumnsexcel = [
-        { field: "ids", headerName: "Sno"},
-        { field: "tripid", headerName: "TripSheet No"},
+        { field: "ids", headerName: "Sno" },
+        { field: "tripid", headerName: "TripSheet No" },
         { field: "time", headerName: "Trip Time" },
         // { field: "date", headerName: "Trip Date", width: 100, },
         {
             field: "date",
             headerName: "Trip Date",
-         
+
         },
-      
-        { field: "trip_type", headerName: "Trip Type"},
-        { field: "place_name", headerName: "Place Name"},
-       
+
+        { field: "trip_type", headerName: "Trip Type" },
+        { field: "place_name", headerName: "Place Name" },
+
 
     ];
-   
+
     const [openEditMapLog, setOpenEditMapLog] = useState(false);
     const handleOpenMapLog = () => setOpenEditMapLog(true);
     const handleCloseMapLog = () => setOpenEditMapLog(false);
+
+    // delete map image by removing any log datas
+    const DeleteMapImage = async () => {
+        const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+
+        console.log(tripid, "delete map triggered");
+
+        try {
+            if (tripid !== null && tripid && tripid !== "undefined") {
+                const response = await fetch(`${apiUrl}/deleteMapImagesByTripId/${tripid}`, {
+                    method: 'DELETE',
+                });
+
+                const result = await response.json();
+                setGMapImageUrl("")
+                console.log("Delete response:", result);
+            }
+        } catch (error) {
+            console.log("Error deleting map image:", error);
+        }
+    };
     const handleRemoveMapLogPoint = async (params) => {
         try {
             const id = params.id;
             const resdata = await axios.delete(`${apiUrl}/dlete-mapLocationPoint/${id}`)
             if (resdata.status === 200) {
+                DeleteMapImage()
                 handleTripmaplogClick()
             }
         } catch (err) {
@@ -414,9 +565,9 @@ const useTripsheet = () => {
     }
     const handleEditMapDetails = async () => {
         if (!selectedMapRow) return;
-        const { tripid, time, date, trip_type } = selectedMapRow;
+        const { tripid, time, date, trip_type, id } = selectedMapRow;
         try {
-            const response = await axios.post(`${apiUrl}/updateGPS-LOG/${tripid}`, { time, date, trip_type });
+            const response = await axios.post(`${apiUrl}/updateGPS-LOG/${tripid}`, { time, date, trip_type, id });
             if (response.status === 200) {
                 setOpenEditMapLog(false); // Close the modal
             }
@@ -435,11 +586,13 @@ const useTripsheet = () => {
             try {
                 const { tripid } = selectedMapRow;
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
-                const data = response.data;                
-                setRow(data);
-                
+                const data = response.data;
+                const sortedData = rearrangeTripData(data)
+                setRow(sortedData);
+
             } catch (error) {
                 console.error('Error fetching map data:', error);
+                setRow([])
             }
         };
         fetchData()
@@ -571,23 +724,64 @@ const useTripsheet = () => {
         }
     };
     // console.log(mapimageUrls1,"urls")
+    //     const rearrangeTripData = (tripData) => {
+    //         if (!Array.isArray(tripData)) return [];
+    // console.log(tripData,"tripdataaaaaaaaaaaaaaaaaaaaaa");
+    // const a = tripData.map(li => li.time);
+    // console.log(a,"tripdataaaaaaaaaaaaaaaaaaaaaappppppppppppppppppppppppppppppppppp");
+
+
+    //         // Separate start, end, and waypoints
+    //         const startPoint = tripData.find(item => item.trip_type === "start");
+    //         const endPoint = tripData.find(item => item.trip_type === "end");
+    //         const waypoints = tripData.filter(item => item.trip_type !== "start" && item.trip_type !== "end");
+
+    //         // Build the final sorted array
+    //         const sortedTripData = [
+    //             ...(startPoint ? [startPoint] : []),
+    //             ...waypoints,
+    //             ...(endPoint ? [endPoint] : [])
+    //         ];
+
+    //         return sortedTripData;
+    //     };
+
     const rearrangeTripData = (tripData) => {
         if (!Array.isArray(tripData)) return [];
-      
-        // Separate start, end, and waypoints
+
+        const convertTime = (timeStr) => {
+            if (!timeStr) return 0;
+            const [h, m] = timeStr.split(":").map(Number);
+            return parseFloat(`${h}.${m < 10 ? "0" : ""}${m}`);
+        };
+
         const startPoint = tripData.find(item => item.trip_type === "start");
         const endPoint = tripData.find(item => item.trip_type === "end");
-        const waypoints = tripData.filter(item => item.trip_type !== "start" && item.trip_type !== "end");
-      
-        // Build the final sorted array
+
+        const waypoints = tripData
+            .filter(item => item.trip_type !== "start" && item.trip_type !== "end")
+            .map(item => ({
+                ...item,
+                numericDate: new Date(item.date).getTime(),
+                numericTime: convertTime(item.time)
+            }))
+            .sort((a, b) => {
+                if (a.numericDate !== b.numericDate) {
+                    return a.numericDate - b.numericDate;
+                } else {
+                    return a.numericTime - b.numericTime;
+                }
+            });
+
         const sortedTripData = [
-          ...(startPoint ? [startPoint] : []),
-          ...waypoints,
-          ...(endPoint ? [endPoint] : [])
+            ...(startPoint ? [startPoint] : []),
+            ...waypoints.map(({ numericDate, numericTime, ...rest }) => rest),
+            ...(endPoint ? [endPoint] : [])
         ];
-      
+
         return sortedTripData;
-      };
+    };
+
 
     const handleTripmaplogClick = async () => {
         try {
@@ -598,60 +792,68 @@ const useTripsheet = () => {
             } else {
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
                 const data = response.data;
-                console.log(data,"d--------------ata-----------");
-                const sortedData = rearrangeTripData(data);
-                console.log(sortedData,"pd------------------------------------====================");
-                setRow(sortedData);
-                setMaplogimgPopupOpen(true);
+                if (data.length > 0) {
+                    console.log(data, "d--------------ata-----------");
+                    const sortedData = rearrangeTripData(data);
+                    console.log(sortedData, "pd------------------------------------====================");
+                    setRow(sortedData);
+                    setMaplogimgPopupOpen(true);
+                }
+                else {
+                    setRow([])
+                }
                 // console.log(data, 'mapdata')
             }
-        } catch {
+
+        } catch (err) {
+            setRow([])
+            console.log(err, "error");
         }
     };
 
     //refresh button function
-    const handleRefresh = async () => {
-        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
-        // const bookingno = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
-        try {
-            if (!tripid) {
-                setError(true);
-                setErrorMessage("Please enter the tripid");
-            } else {
-                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${tripid}`);
-                const data = response.data;
+    // const handleRefresh = async () => {
+    //     const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+    //     // const bookingno = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+    //     try {
+    //         if (!tripid) {
+    //             setError(true);
+    //             setErrorMessage("Please enter the tripid");
+    //         } else {
+    //             const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${tripid}`);
+    //             const data = response.data;
 
-                //sepration of data----------------------------
-                let tripResults = [];
-                let bookingResults = [];
+    //             //sepration of data----------------------------
+    //             let tripResults = [];
+    //             let bookingResults = [];
 
-                data?.map((item) => {
-                    if (item.type === "tripResults") {
-                        tripResults = item.data
-                    } else if (item.type === "bookingResults") {
-                        bookingResults = item.data
-                    }
-                })
-                const bothData = [...tripResults, ...bookingResults]
-                //------------------------
+    //             data?.map((item) => {
+    //                 if (item.type === "tripResults") {
+    //                     tripResults = item.data
+    //                 } else if (item.type === "bookingResults") {
+    //                     bookingResults = item.data
+    //                 }
+    //             })
+    //             const bothData = [...tripResults, ...bookingResults]
+    //             //------------------------
 
-                if (bothData.length > 0) {
-                    const rowsWithUniqueId = bothData.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setRows(rowsWithUniqueId);
-                    setSuccess(true);
-                    setSuccessMessage("successfully listed")
-                } else {
-                    setRows([]);
-                    setError(true);
-                    setErrorMessage("no data found")
-                }
-            }
-        } catch {
-        }
-    };
+    //             if (bothData.length > 0) {
+    //                 const rowsWithUniqueId = bothData.map((row, index) => ({
+    //                     ...row,
+    //                     id: index + 1,
+    //                 }));
+    //                 setRows(rowsWithUniqueId);
+    //                 setSuccess(true);
+    //                 setSuccessMessage("successfully listed")
+    //             } else {
+    //                 setRows([]);
+    //                 setError(true);
+    //                 setErrorMessage("no data found")
+    //             }
+    //         }
+    //     } catch {
+    //     }
+    // };
 
 
     //list data in row
@@ -678,7 +880,7 @@ const useTripsheet = () => {
         useage: '',
         hireTypes: '',
         department: '',
-        vehType: '',
+        // vehType: '',
         vehRegNo: '',
         driverName: '',
         mobileNo: '',
@@ -729,6 +931,7 @@ const useTripsheet = () => {
         const timetogglevendor = Number(params.get('VendorTimeToggle')) || 0
         const lockdatavendor = Number(params.get('lockdatavalue'))
         const messagedatatrip = params.get("messageedited") || '';
+        const additonkm = params.get("shedkm") || '';
         // console.log(lockdatavendor,"lockvendorlog")
         setHybridHclNavigate(HCLDATA)
         setTimeToggleNaviagate(timetoggledata)
@@ -740,7 +943,7 @@ const useTripsheet = () => {
         //----------------------
         const formData = {};
         const parameterKeys = [
-            'dispatchcheck', 'vehType', 'shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail', 'messageedited',
+            'dispatchcheck', 'shedInDate', 'tripsheetdate', 'travelsemail', "vehicleName", "vehicleName2", 'travelsname', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'shedOutDate', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'vendorparking', 'fuelamount', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups', 'orderbyemail', 'messageedited',
             'MessageText',
         ];
         parameterKeys.forEach(key => {
@@ -749,6 +952,7 @@ const useTripsheet = () => {
                 formData[key] = value;
             }
         });
+        console.log(formData, 'formdataaa');
 
         const formvendorinfo = {};
         const parameterKeys1 = [
@@ -784,6 +988,7 @@ const useTripsheet = () => {
             fuelAdvnacedisabled();
             handlepermissionforspeedDialedit(Tripsheet_modify1)
             handlepermissionforspeedDialdelete(Tripsheet_delete1)
+            handleRefresh()
 
 
 
@@ -816,6 +1021,7 @@ const useTripsheet = () => {
         setdriverbeta_Count(driverbeta_Count);
         setdriverBeta_amount(driverBeta_amount);
         setTotalcalcAmount(totalcalcAmount || formData.totalcalcAmount);
+        setShedKilometers({ "shedkm": additonkm })
 
 
 
@@ -829,127 +1035,7 @@ const useTripsheet = () => {
         const initialFormData = {};
         setFormData(initialFormData);
     }, []);
-    const bookData = {
-        tripid: '',
-        bookingno: '',
-        status: '',
-        tripsheetdate: '',
-        billingno: '',
-        apps: '',
-        customer: '',
-        orderedby: '',
-        orderbyemail: '',
-        mobile: '',
-        guestname: '',
-        guestmobileno: '',
-        email: '',
-        address1: '',
-        department: '',
-        vehRegNo: '',
-        driverName: '',
-        mobileNo: '',
-        driversmsexbetta: '',
-        gps: '',
-        duty: '',
-        pickup: '',
-        useage: '',
-        request: '',
-        shedOutDate: '',
-        vehicleName2: "",
-        startdate: '',
-        closedate: '',
-        shedInDate: '',
-        employeeno: '',
-        reporttime: '',
-        starttime: '',
-        closetime: '',
-        shedintime: '',
-        advancepaidtovendor: '',
-        customercode: '',
-        shedkm: '',
-        shedin: '',
-        shedout: '',
-        startkm: '',
-        closekm: '',
-        permit: '',
-        parking: '',
-        toll: '',
-        emailcheck: '',
-        vpermettovendor: '',
-        vendortoll: '',
-        customeradvance: '',
-        email1: '',
-        documentnotes: '',
-        VendorTripNo: '',
-        vehicles: '',
-        duty1: '',
-        startdate1: '',
-        closedate1: '',
-        totaldays: '',
-        starttime2: '',
-        closetime2: '',
-        totaltime: '',
-        startkm1: '',
-        closekm1: '',
-        totalkm1: '',
-        remark: '',
-        caramount: '',
-        minkm: '',
-        minhrs: '',
-        package: '',
-        amount: '',
-        exkm: '',
-        amount1: '',
-        exHrs: '',
-        amount2: '',
-        night: '',
-        amount3: '',
-        driverconvenience: '',
-        amount4: '',
-        netamount: '',
-        vehcommission: '',
-        manualbills: '',
-        pack: '',
-        amount5: '',
-        exkm1: '',
-        amount6: '',
-        exHrs1: '',
-        amount7: '',
-        night1: '',
-        amount8: '',
-        driverconvenience1: '',
-        amount9: '',
-        rud: '',
-        netamount1: '',
-        discount: '',
-        ons: '',
-        balance: '',
-        fcdate: '',
-        taxdate: '',
-        insdate: '',
-        stpermit: '',
-        maintenancetype: '',
-        kilometer: '',
-        selects: '',
-        documenttype: '',
-        on1: '',
-        smsguest: '',
-        booker: '',
-        DriverSMS: '',
-        manualbillss: '',
-        reload: '',
-        locks: '',
-        Groups: '',
-        travelsemail: '',
-        hireTypes: "",
-        vehType: "",
-        vehicleName: "",
-        travelsname: "",
-        GroupTripId: "",
-        MessageText: "",
-    }
 
-    const [book, setBook] = useState(bookData);
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
     const handleCancel = () => {
@@ -980,6 +1066,10 @@ const useTripsheet = () => {
         setRouteData('')
         setSignImageUrl('')
         setSignImageUrl1('')
+        setCloseTime('')
+        setStartTime('')
+        setreporttime('')
+        setshedintime('')
         // -----------
         setSignatureWhattsapplink()
         setCopyDataLink(false)
@@ -1014,7 +1104,7 @@ const useTripsheet = () => {
         setNoChangeData({})
         // setCheckCloseKM({ maxShedInkm: '', maxTripId: "" })
         // setConflictEndDate({ maxShedInDate: null, TripIdconflictdate: null, conflictTimer: null })
-        localStorage.removeItem('selectedTripid');
+        // localStorage.removeItem('selectedTripid');
         setFuelAdvancedamountHide(null)
         setDeleteTripsheetData(false)
     };
@@ -1032,6 +1122,7 @@ const useTripsheet = () => {
                         vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
                         mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
                         vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
+                        vehicleNameee: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
                         requestno: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
                         starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
                         startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
@@ -1039,7 +1130,10 @@ const useTripsheet = () => {
                         customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
                         servicestation: formData.department || formValues.department || selectedCustomerData.department || book.department || '',
                         Sendmailauth: organizationdata.Sender_Mail,
-                        Mailauthpass: organizationdata.EmailApp_Password
+                        Mailauthpass: organizationdata.EmailApp_Password,
+                        Addresscutsomer: formData.address1 || selectedCustomerData.address1 || book.address1 || '',
+                        dropuseage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || '',
+                        duty: formData.duty || selectedCustomerData.duty || book.duty || ''
 
                     };
                     await axios.post(`${apiUrl}/send-tripsheet-email`, dataToSend);
@@ -1074,7 +1168,7 @@ const useTripsheet = () => {
             return
         }
         else {
-            localStorage.setItem('selectedTripid', tripid);
+            // localStorage.setItem('selectedTripid', tripid);
             getMapImaage();
             getSignatureImage();
             invoiceRouteData();
@@ -1227,7 +1321,7 @@ const useTripsheet = () => {
 
     const vehilcedetails = {
         vehRegNo: selectedCustomerDatas.vehRegNo || '',
-        vehType: selectedCustomerDatas.vehType || '',
+        // vehType: selectedCustomerDatas.vehType || '',
         driverName: selectedCustomerDatas.driverName || '',
         mobileNo: selectedCustomerDatas.mobileNo || '',
     }
@@ -1492,6 +1586,7 @@ const useTripsheet = () => {
     // console.log(checksignandMapverify, "userStatusdata", typeof (checksignandMapverify))
 
     const handleEdit = async () => {
+        const closetimecheck = closetime || book.closetime || formData.closetime || selectedCustomerData.closetime;
         // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
         // handleTripmapClick()
         handleTripmapverify()
@@ -1649,6 +1744,7 @@ const useTripsheet = () => {
                     drivername: driverName,
                 };
                 console.log(VehcileHistory, "editVehicleHistory");
+                console.log(updatedCustomer, "updated customerrrrrrrrrrr", closetimecheck);
 
                 const tripsheetlogtripid = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
 
@@ -1691,6 +1787,9 @@ const useTripsheet = () => {
                 setLockDatacustomerBill(true)
                 setCheckSignandMapVerify(false)
                 fuelAdvnacedisabled()
+                setDriverDetails([])
+                handleRefresh()
+                handleTripmaplogClick()
                 //    const data2= await  checksignatureandmap()
                 //    console.log(data2,"userStatusdata2")
 
@@ -1789,7 +1888,7 @@ const useTripsheet = () => {
         const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         const mobileNo = selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo;
         const Email = formData.email || selectedCustomerData.email || formValues.email || book.email;
-        const vehType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
+        // const vehType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
         const tripnodata = formData.tripid || selectedCustomerData.tripid || book.tripid
         // const
         if (!customer) {
@@ -1802,11 +1901,11 @@ const useTripsheet = () => {
             setErrorMessage("Please fill vehRegNo field");
             return;
         }
-        if (!vehType) {
-            setError(true);
-            setErrorMessage("Please fill vehType field");
-            return;
-        }
+        // if (!vehType) {
+        //     setError(true);
+        //     setErrorMessage("Please fill vehType field");
+        //     return;
+        // }
         if (!driverName) {
             setError(true);
             setErrorMessage("Please fill driverName field");
@@ -1968,6 +2067,8 @@ const useTripsheet = () => {
             setisAddload(false)
             setSuccessMessage("Successfully Added");
             setLockData(false)
+            setDriverDetails([])
+
             // setLockDatavendorBill(false)
             // setLockDatacustomerBill(false)
             // setLockData(true)
@@ -2089,27 +2190,27 @@ const useTripsheet = () => {
         const selectedOption = value ? value.label : '';
         setBook((prevBook) => ({
             ...prevBook,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         setSelectedCustomerData((prevData) => ({
             ...prevData,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         setSelectedCustomerDatas((prevData) => ({
             ...prevData,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         setFormValues((prevValues) => ({
             ...prevValues,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         setTripSheetData((prevValues) => ({
             ...prevValues,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         setNoChangeData((prevValues) => ({
             ...prevValues,
-            [name]: selectedOption,
+            ["travelsname"]: selectedOption,
         }));
         travelsdatafetch(selectedOption)
 
@@ -2145,7 +2246,10 @@ const useTripsheet = () => {
             if (name === "shedOutDate") {
                 setVendorinfodata((prev) => ({ ...prev, vendorshedOutDate: parsedDate }))
             }
-            else if (name === "shedInDate") {
+            // else if (name === "shedInDate") {
+            //     setVendorinfodata((prev) => ({ ...prev, vendorshedInDate: parsedDate }))
+            // }
+            else if (name === "closedate") {
                 setVendorinfodata((prev) => ({ ...prev, vendorshedInDate: parsedDate }))
             }
         }
@@ -2242,6 +2346,7 @@ const useTripsheet = () => {
                 await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}/${data}`, formData);
                 setSuccess(true);
                 setSuccessMessage("Successfully added");
+                handleRefresh()
 
                 if (documentType === 'Toll' || documentType === 'Parking') {
                     await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
@@ -2524,12 +2629,50 @@ const useTripsheet = () => {
     };
 
 
+    // const calculateTotalDay = () => {
+    //     const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
+    //     const closeDate = formData.closedate || selectedCustomerData.closedate || book.closedate;
+    //     const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
+    //     const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+    //     const hybriddata = hybridhclcustomer || hybridhclnavigate
+    //     const duty = formData.duty || selectedCustomerData.duty || book.duty;
+    //     if (shedoutdate && shedindate ) {
+    //         const shedOutDateObj = dayjs(shedoutdate).startOf('day');
+    //         const shedindateObj = dayjs(shedindate).startOf('day');
+
+    //         if (shedOutDateObj.isAfter(shedindateObj)) {
+    //             // console.log('Shed Out Date is greater than Shed In Date');
+    //             // return 'Shed Out Date is greater';
+    //             return 0;
+    //         } else if (shedOutDateObj.isSame(shedindateObj)) {
+    //             return 1;
+    //         } else {
+    //             const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
+    //             return totalDays + 1;
+    //         }
+    //     } else if (startDate && closeDate && !shedoutdate && !shedindate) {
+    //         const startDateObj = dayjs(startDate).startOf('day');
+    //         const closeDateObj = dayjs(closeDate).startOf('day');
+
+    //         const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+
+    //         if (totalDays > 0) {
+
+    //             return totalDays;
+    //         }
+    //         return '';
+    //     }
+
+    //     return '';
+    // };
     const calculateTotalDay = () => {
         const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
         const closeDate = formData.closedate || selectedCustomerData.closedate || book.closedate;
         const shedoutdate = formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate;
         const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-        if (shedoutdate && shedindate) {
+        const hybriddata = hybridhclcustomer || hybridhclnavigate
+        const duty = formData.duty || selectedCustomerData.duty || book.duty;
+        if (shedoutdate && shedindate && hybriddata === 0) {
             const shedOutDateObj = dayjs(shedoutdate).startOf('day');
             const shedindateObj = dayjs(shedindate).startOf('day');
 
@@ -2543,17 +2686,54 @@ const useTripsheet = () => {
                 const totalDays = shedindateObj.diff(shedOutDateObj, 'days');
                 return totalDays + 1;
             }
-        } else if (startDate && closeDate && !shedoutdate && !shedindate) {
-            const startDateObj = dayjs(startDate).startOf('day');
-            const closeDateObj = dayjs(closeDate).startOf('day');
+        } else if (hybriddata === 1) {
+            if (startDate && closeDate && duty !== "Outstation") {
+                const startDateObj = dayjs(startDate).startOf('day');
+                const closeDateObj = dayjs(closeDate).startOf('day');
 
-            const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+                // const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
 
-            if (totalDays > 0) {
+                // if (totalDays > 0) {
 
-                return totalDays;
+                //     return totalDays;
+                // }
+                // return '';
+                if (startDateObj.isAfter(closeDateObj)) {
+                    // console.log('Shed Out Date is greater than Shed In Date');
+                    // return 'Shed Out Date is greater';
+                    return 0;
+                } else if (startDateObj.isSame(closeDateObj)) {
+                    return 1;
+                } else {
+                    const totalDays = closeDateObj.diff(startDateObj, 'days');
+                    return totalDays + 1;
+                }
             }
-            return '';
+            else if (shedoutdate && shedindate && duty === "Outstation") {
+                const startDateObj1 = dayjs(shedoutdate).startOf('day');
+                const closeDateObj1 = dayjs(shedindate).startOf('day');
+
+                // const totalDays1 = closeDateObj1.diff(startDateObj1, 'days') + 1;
+
+                // if (totalDays1 > 0) {
+
+                //     return totalDays1;
+                // }
+                // return '';
+                if (startDateObj1.isAfter(closeDateObj1)) {
+                    // console.log('Shed Out Date is greater than Shed In Date');
+                    // return 'Shed Out Date is greater';
+                    return 0;
+                } else if (startDateObj1.isSame(closeDateObj1)) {
+                    return 1;
+                } else {
+                    const totalDays = closeDateObj1.diff(startDateObj1, 'days');
+                    return totalDays + 1;
+                }
+            }
+            else {
+                return ''
+            }
         }
 
         return '';
@@ -2691,7 +2871,8 @@ const useTripsheet = () => {
         const shedoutTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime
         const shedinTime = formData.shedintime || selectedCustomerData.shedintime || selectedCustomerDatas.shedintime || book.shedintime
         const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
-        const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
+        // const totalDays = formData.totaldays || calculateTotalDay() || book.totaldays;
+        const totalDays = calculateTotalDay() || book.totaldays;
         // const datatimetoggle = timeToggle;
         const duty = formData.duty || selectedCustomerData.duty || book.duty;
         const datatimetoggle = timeToggle || timetogglenavigate
@@ -3554,7 +3735,7 @@ const useTripsheet = () => {
                 setBook(prevState => ({
                     ...prevState,
                     vehRegNo: manualInput,
-                    vehType: selectedVehicle?.vehType || prevState.vehType,  // Ensure key is "vehType" here
+                    // vehType: selectedVehicle?.vehType || prevState.vehType,  // Ensure key is "vehType" here
                     Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
                     hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes,
                     vehicleName2: selectedVehicle?.vehicleName || prevState.vehicleName2
@@ -3563,7 +3744,7 @@ const useTripsheet = () => {
                 setSelectedCustomerData(prevState => ({
                     ...prevState,
                     vehRegNo: manualInput,
-                    vehType: selectedVehicle?.vehType || prevState.vehType,  // Consistently use "vehType"
+                    // vehType: selectedVehicle?.vehType || prevState.vehType,  // Consistently use "vehType"
                     Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
                     hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes,
                     vehicleName2: selectedVehicle?.vehicleName || prevState.vehicleName2
@@ -4144,10 +4325,10 @@ const useTripsheet = () => {
                     ...prevValues,
                     [name]: value,
                 }));
-                setShedKilometers((prevValues) => ({
-                    ...prevValues,
-                    [name]: value,
-                }));
+                // setShedKilometers((prevValues) => ({
+                //     ...prevValues,
+                //     [name]: value,
+                // }));
                 setAdditionalTime((prevValues) => ({
                     ...prevValues,
                     [name]: value,
@@ -4156,11 +4337,18 @@ const useTripsheet = () => {
                 //     ...prevData,
                 //     [name]:value,
                 // }));
-                if (name !== "tripid")
+                if (name !== "tripid") {
                     setNoChangeData((prevData) => ({
                         ...prevData,
                         [name]: value,
                     }));
+                }
+                if (name === "shedkm") {
+                    setShedKilometers((prevValues) => ({
+                        ...prevValues,
+                        [name]: value,
+                    }));
+                }
 
             }
         }
@@ -4199,6 +4387,7 @@ const useTripsheet = () => {
                             setSelectedStatus(bookingDetails.status); // Set selected status based on booking details
                             setSelectedStatuschecking(bookingDetails.status)
                             setOldStatusCheck(bookingDetails.status)
+                            setCloseTime(bookingDetails.closetime)
                             // if (!lockdata) {
 
 
@@ -4228,8 +4417,10 @@ const useTripsheet = () => {
                             setTimeToggle(bookingDetails.TimeToggleData)
                             setTimeToggleVendor(bookingDetails.VendorTimeToggle)
                             setEnterTrigger((prev) => !prev)
+                            setMaplogimgPopupOpen(false)
                             setMessageEditedBeforetrip(bookingDetails?.messageedited)
                             setMessageEditedtrip(bookingDetails?.messageedited)
+                            setShedKilometers({ "shedkm": bookingDetails?.shedkm })
                             //---------------------------
 
                             setEscort(bookingDetails.escort)
@@ -4283,7 +4474,7 @@ const useTripsheet = () => {
                     setFormData({})
                     setFormValues({})
                     setIsEditMode(false)
-                    // setBook({})
+                    setBook({})
                     setErrorMessage(`${error.response.data.error}`);
                     // setErrorMessage(" You Don't Have Accesss To This Tripsheet Based On Service Station");
                 } else {
@@ -4573,7 +4764,6 @@ const useTripsheet = () => {
                     const responseData = await response.blob();
                     const imageUrl = URL.createObjectURL(responseData);
                     setGMapImageUrl(imageUrl);
-
                 }
             }
             return '';
@@ -4779,42 +4969,101 @@ const useTripsheet = () => {
             if (duty !== "Outstation") {
 
                 if (calculateTotalDay() === 1) {
-                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
-                        // console.log(2,"night1")
-                        calcNight = 2;
+                    // if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    //     // console.log(2,"night1")
+                    //     calcNight = 2;
+                    // }
+                    // if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                    //     // console.log(1,"night2")
+                    //     calcNight = 1;
+                    // }
+                    // if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                    //     // console.log(1,"night3")
+                    //     calcNight = 1;
+                    // }
+                    if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
+
+                        calcNight = 0;
                     }
-                    if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
-                        // console.log(1,"night2")
-                        calcNight = 1;
+                    if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
+
+                        calcNight = 0;
                     }
-                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
-                        // console.log(1,"night3")
+                    if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
+
                         calcNight = 1;
                     }
 
+                    if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
+
+                        calcNight = 2;
+                    }
+                    if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+
+                        calcNight = 1;
+                    }
+
+                    if (Number(newTimeStrings) > 22.0 && Number(newTimeString) >= 6.00) {
+
+                        calcNight = 1;
+                    }
 
                 }
 
                 if (TotalDay > 1) {
 
                     // console.log(TotalDay,"days")
-                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    // if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    //     // console.log(TotalDay + 1,"days1")
+                    //     calcNight = TotalDay + 1;
+                    // }
+                    // if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+                    //     calcNight = TotalDay;
+                    //     // console.log(TotalDay ,"days2")
+                    // }
+                    // if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
+                    //     calcNight = TotalDay - 1;
+                    //     // console.log(TotalDay ,"days3")
+                    // }
+                    // if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                    //     calcNight = TotalDay;
+                    //     // console.log(TotalDay ,"days4")
+                    // }
+                    // console.log(calcNight,"daysnii")
+                    if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
+
+                        calcNight = TotalDay - 1;
+                    }
+                    if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
+
+                        calcNight = TotalDay - 1;
+
+                    }
+                    if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
+
+                        calcNight = TotalDay;
+                    }
+
+                    if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
                         // console.log(TotalDay + 1,"days1")
+
                         calcNight = TotalDay + 1;
                     }
                     if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+
                         calcNight = TotalDay;
                         // console.log(TotalDay ,"days2")
                     }
                     if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
+
                         calcNight = TotalDay - 1;
                         // console.log(TotalDay ,"days3")
                     }
-                    if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                    if (Number(newTimeStrings) > 22.0 && Number(newTimeString) >= 6.00) {
+                        // console.log(1,"qqnight77")
                         calcNight = TotalDay;
                         // console.log(TotalDay ,"days4")
                     }
-                    // console.log(calcNight,"daysnii")
 
 
 
@@ -4913,7 +5162,7 @@ const useTripsheet = () => {
             const totalcalc = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount || 0) + Number(driverBeta_amount) + Number(permit) + Number(parking) + Number(toll);
 
             const total = totalcalc - Number(customer_advance)
-            const convetTotal = Math.ceil(total)
+            const convetTotal = Math.ceil(total);
             setTotalcalcAmount(Number(convetTotal));
         }
         totalAmountCalc()
@@ -4936,10 +5185,10 @@ const useTripsheet = () => {
                 // if (extraHR11 !== 0 && extraHR11 !== null && !extraHR11) {
                 // console.log(extraHR, "houlldaaa", typeof (extraHR))
                 const [hrda, mida = 0] = extraHR11.toString().split('.');
-             
-const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
+
+                const midaFormatted = mida !== 0 ? mida?.padEnd(2, '0') : mida
                 // console.log(mida,"houmidaa",typeof(mida),Number(mida),Number("90"),midaFormatted)
-                
+
                 // console.log(hrda, "Hour part", mida, "Minute part", ex_hrAmount11);
                 // const datapointdigit = mida < 10 ? mida * 10 : mida
                 const onehrdata = Number(hrda) * Number(ex_hrAmount11)
@@ -5017,7 +5266,8 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
             if (vendorhr !== 0) {
 
                 const [hrdavendor, midavendor = 0] = vendorhr.toString().split('.');
-                const midaFormatted = midavendor?.padEnd(2, '0');
+                // const midaFormatted = midavendor?.padEnd(2, '0');
+                const midaFormatted = midavendor !== 0 ? midavendor?.padEnd(2, '0') : midavendor
                 // console.log(hrdavendor, "venHour part", midavendor, "Minute vendorpart", vendorhramount,midaFormatted);
                 const onehrdata = Number(hrdavendor) * Number(vendorhramount)
                 // const result = Math.round((vendorhramount / 60) * 10) / 10;
@@ -5039,7 +5289,7 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
         else {
 
             let extraAbout_hr1 = Math.round(Number(vendorhr) * Number(vendorhramount));
-           
+
             return extraAbout_hr1
         }
     }
@@ -5118,37 +5368,67 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
                 // if (Number(newTimeStrings) >= 22.0 || Number(newTimeString) <= 6.00) {
                 //     calcNight = 1;
                 // }
-                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
-                    // console.log(2,"night1")
+                if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
+
+                    calcNight = 0;
+                }
+                if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
+
+                    calcNight = 0;
+                }
+                if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
+
+                    calcNight = 1;
+                }
+
+                if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
+
                     calcNight = 2;
                 }
                 if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
-                    // console.log(1,"night2")
+
                     calcNight = 1;
                 }
-                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
-                    // console.log(1,"night3")
+
+                if (Number(newTimeStrings) > 22.0 && Number(newTimeString) >= 6.00) {
+
                     calcNight = 1;
                 }
             }
 
 
             if (TotalDay > 1) {
+                if (Number(newTimeStrings) === 22.0 && Number(newTimeString) === 6.00) {
 
+                    calcNight = TotalDay - 1;
+                }
+                if (Number(newTimeStrings) === 22.00 && Number(newTimeString) > 6.00) {
 
-                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) < 6.00) {
+                    calcNight = TotalDay - 1;
+
+                }
+                if (Number(newTimeStrings) === 22.00 && Number(newTimeString) < 6.00) {
+
+                    calcNight = TotalDay;
+                }
+
+                if (Number(newTimeStrings) > 22.0 && Number(newTimeString) < 6.00) {
                     // console.log(TotalDay + 1,"days1")
+
                     calcNight = TotalDay + 1;
                 }
                 if (Number(newTimeStrings) < 22.0 && Number(newTimeString) < 6.00) {
+
                     calcNight = TotalDay;
                     // console.log(TotalDay ,"days2")
                 }
                 if (Number(newTimeStrings) < 22.0 && Number(newTimeString) >= 6.00) {
+
                     calcNight = TotalDay - 1;
                     // console.log(TotalDay ,"days3")
                 }
-                if (Number(newTimeStrings) >= 22.0 && Number(newTimeString) >= 6.00) {
+                if (Number(newTimeStrings) > 22.0 && Number(newTimeString) >= 6.00) {
+                    // console.log(1,"qqnight77")
                     calcNight = TotalDay;
                     // console.log(TotalDay ,"days4")
                 }
@@ -5258,7 +5538,7 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
 
     useEffect(() => {
         calculatevendorTotalAmount()
-    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo.advancepaidtovendor, vendorinfo.fuelamount, vendorinfo?.vendorparking,vendorinfo.vendor_vendorparking ])
+    }, [vendorbilldata.Vendor_rateAmount, vendorbilldata.Vendor_totalAmountHours, vendorbilldata.Vendor_totalAmountKms, vendorbilldata.Vendor_NightbataTotalAmount, vendorbilldata.Vendor_BataTotalAmount, vendornightdatatotalAmount, vendorExtrahrTotalAmount, vendorExtarkmTotalAmount, vendorinfo.vpermettovendor, vendorinfo.vendortoll, vendorinfo.vendor_vpermettovendor, vendorinfo.vendor_toll, vendorinfo.vendor_advancepaidtovendor, vendorinfo.advancepaidtovendor, vendorinfo.fuelamount, vendorinfo?.vendorparking, vendorinfo.vendor_vendorparking])
 
 
     let vendordata, vendortotkm, vendortothr, vendortotalHours, vendorduty, vendorvehicleNames, vendorratetype, vendorstations;
@@ -5402,41 +5682,41 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
                 // dataextrakms = KM
                 dataextrakms = kmfixed
             }
-            
 
-           else if (vendorduty === "Outstation") {
-            //     let km = (Number(vendortotkm) <= Number(KMS)) ? Number(vendortotkm) * Number(totalDays1) : Number(vendortotkm)
-            //     let kmfixed2 = Number(km.toFixed(2))
-            //     dataextrakms = kmfixed2
-            // }
-            // if(Number(totalDays1) === 1){
-            //     let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
-            //     let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
-            //     dataextrakms = kmfixed2
-            // }
-            // else{
-            //     let km = Number(vendortotkm)
-            //     let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
-            //     dataextrakms = kmfixed2
-            // }
-            if(Number(totalDays1) === 1){
-                let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
-                let kmfixed2 = Number(km.toFixed(2)) 
-                dataextrakms = kmfixed2
+
+            else if (vendorduty === "Outstation") {
+                //     let km = (Number(vendortotkm) <= Number(KMS)) ? Number(vendortotkm) * Number(totalDays1) : Number(vendortotkm)
+                //     let kmfixed2 = Number(km.toFixed(2))
+                //     dataextrakms = kmfixed2
+                // }
+                // if(Number(totalDays1) === 1){
+                //     let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
+                //     let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
+                //     dataextrakms = kmfixed2
+                // }
+                // else{
+                //     let km = Number(vendortotkm)
+                //     let kmfixed2 = Number(km.toFixed(2)) * Number(totalDays1)
+                //     dataextrakms = kmfixed2
+                // }
+                if (Number(totalDays1) === 1) {
+                    let km = (Number(vendortotkm) <= Number(KMS)) ? Number(KMS) : Number(vendortotkm)
+                    let kmfixed2 = Number(km.toFixed(2))
+                    dataextrakms = kmfixed2
+                }
+                else {
+
+                    let daysmutilplievendor = Number(KMS) * Number(totalDays1)
+                    // let km = Number(vendortotkm)
+                    let km = (Number(vendortotkm) <= daysmutilplievendor) ? daysmutilplievendor : Number(vendortotkm)
+                    let kmfixed2 = Number(km.toFixed(2))
+                    dataextrakms = kmfixed2
+                }
             }
-            else{
- 
-                let daysmutilplievendor =  Number(KMS) * Number(totalDays1)
-                // let km = Number(vendortotkm)
-                let km = (Number(vendortotkm) <= daysmutilplievendor) ? daysmutilplievendor : Number(vendortotkm)
-                let kmfixed2 = Number(km.toFixed(2)) 
-                dataextrakms = kmfixed2
+            else {
+                dataextrakms = 0
             }
-        }
-        else{
-            dataextrakms = 0
-        }
-            console.log(dataextrahous, "hrs", dataextrakms, "kmsss",vendortotkm ,KMS)
+            console.log(dataextrahous, "hrs", dataextrakms, "kmsss", vendortotkm, KMS)
 
 
 
@@ -5736,7 +6016,7 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
                 let KM = (Number(totkm) - Number(KMS))
                 let cuctomerkm = Number(KM.toFixed(2))
                 setExtraKM(cuctomerkm);
-            } 
+            }
             else if (duty === "Outstation") {
                 console.log("duty", duty)
                 // let km = (Number(totkm) <= Number(KMS)) ? Number(KMS) * Number(totaldays) : Number(totkm)
@@ -5744,34 +6024,34 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
                 // let km = (Number(totkm) <= Number(KMS)) ?  Number(totkm) *  Number(totaldays): Number(totkm)
                 // let cuctomerkm2 = Number(km.toFixed(2))
                 // console.log(km)
-            //     if(Number(totaldays) === 1){
-            //         console.log("duty", duty)
-            //         let km1 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
-            //         let cuctomerkm21 = Number(km1.toFixed(2)) 
-            //         setExtraKM(cuctomerkm21)
-            //     }
-            //     else{
-            //         let km = Number(totkm) 
-            //         let cuctomerkm2 = Number(km.toFixed(2))  * Number(totaldays)
-            //         setExtraKM(cuctomerkm2)
-            //     }
-            //     // setExtraKM(cuctomerkm2)
-            // }
-            if(Number(totaldays) === 1){
-                console.log("duty", duty)
-                let km11 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
-                let cuctomerkm21 = Number(km11.toFixed(2)) 
-                setExtraKM(cuctomerkm21)
+                //     if(Number(totaldays) === 1){
+                //         console.log("duty", duty)
+                //         let km1 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
+                //         let cuctomerkm21 = Number(km1.toFixed(2)) 
+                //         setExtraKM(cuctomerkm21)
+                //     }
+                //     else{
+                //         let km = Number(totkm) 
+                //         let cuctomerkm2 = Number(km.toFixed(2))  * Number(totaldays)
+                //         setExtraKM(cuctomerkm2)
+                //     }
+                //     // setExtraKM(cuctomerkm2)
+                // }
+                if (Number(totaldays) === 1) {
+                    console.log("duty", duty)
+                    let km11 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
+                    let cuctomerkm21 = Number(km11.toFixed(2))
+                    setExtraKM(cuctomerkm21)
+                }
+                else {
+                    let daysmutilplie = Number(KMS) * Number(totaldays)
+                    let km1 = (Number(totkm) <= daysmutilplie) ? daysmutilplie : Number(totkm)
+                    // let km = Number(totkm) 
+                    let cuctomerkm2 = Number(km1.toFixed(2))
+                    setExtraKM(cuctomerkm2)
+                }
+                // setExtraKM(cuctomerkm2)
             }
-            else{
-                let daysmutilplie =  Number(KMS) * Number(totaldays)
-                let km1 = (Number(totkm) <= daysmutilplie) ? daysmutilplie : Number(totkm)
-                // let km = Number(totkm) 
-                let cuctomerkm2 = Number(km1.toFixed(2))  
-                setExtraKM(cuctomerkm2)
-            }
-            // setExtraKM(cuctomerkm2)
-        }
             else {
                 setExtraKM("")
             }
@@ -6312,28 +6592,30 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
     //     }
     //     handleHybridCheck()
     // }, [customer, tripID, apiUrl])
-// repeteedapi code--------------------------------------------------------------------------
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const tripId = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+    // repeteedapi code--------------------------------------------------------------------------
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const tripId = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
 
-                if (!tripId) {
-                    return; // Exit early if tripId is not defined
-                }
+    //             if (!tripId) {
+    //                 return; // Exit early if tripId is not defined
+    //             }
 
-                const tripid = tripId.toString(); // Convert to string if defined
+    //             const tripid = tripId.toString(); // Convert to string if defined
 
-                const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
-                const data = response.data;
-                setRow(data);
-            } catch (error) {
-                console.error('Error fetching map data:', error);
-            }
-        };
+    //             const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
+    //             const data = response.data;
+    //             console.log(data,"responseeeeeeeeeeeeeeessssssssssssssssssssssssss");
 
-        fetchData();
-    }, [book, selectedCustomerData, selectedCustomerDatas, formData, apiUrl]);
+    //             setRow(data);
+    //         } catch (error) {
+    //             console.error('Error fetching map data:', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [book, selectedCustomerData, selectedCustomerDatas, formData, apiUrl]);
     // --------------------------------------------------------------------
 
     const handleEditMap = () => {
@@ -6446,7 +6728,8 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
             setErrorMessage("Successfully Deleted")
             handleTripmapverify()
             setMapImageUrls1("")
-
+            setGMapImageUrl("")
+            setRouteData("")
             setMapimgPopupOpen(false)
         }
         catch (error) {
@@ -7126,7 +7409,6 @@ const midaFormatted = mida !== 0 ?  mida?.padEnd(2, '0'):mida
     const timeParts = formattedReportTime?.split(".") || ["0", "0"]; // Default to ["0", "0"] if undefined
     let hours1 = parseInt(timeParts[0] || 0, 10); // Parse hours as an integer
     let minutes1 = parseInt(timeParts[1] || 0, 10); // Parse minutes as an integer
-console.log(hours1,"tripppppppnewwwweeeeeeeee",minutes1);
 
     minutes1 += 30;
 
@@ -7144,9 +7426,7 @@ console.log(hours1,"tripppppppnewwwweeeeeeeee",minutes1);
     }
     // console.log(startdatecalc, 'asssssssssssssssssss');
     const bonusReportTime = bonusReportTime1 === "24.00" ? startdatecalc : bonusReportTime1
-    console.log(TripReportTime,"tripppppppnewwww",formattedReportTime,bonusReportTime1,hours1,minutes1,timeParts,"www",bonusReportTime);
-    console.log(formattedReportTime,"formatttttttttttttttttttttttttttttt",parseFloat(formattedReportTime).toFixed(2));
-    
+
 
     // const bonusReportTime = (parseFloat(formattedReportTime || 0) + 0.30).toFixed(2);
     // console.log(startdatecalc, 'reporttimeeeeee', formattedReportTime, "ee33eeee", convertReportTime);
@@ -7182,7 +7462,7 @@ console.log(hours1,"tripppppppnewwwweeeeeeeee",minutes1);
         // console.log("Current Date Object:", currentDateObj);
         // console.log("Formatted Trip Report Date Object:", formattedDateObj);
         // console.log(finalreportTimecalc,"reporttimecalccccc",finalCurrentTimecalc,typeof(finalreportTimecalc),typeof(finalCurrentTimecalc),a);
-       const MidNightReportTime = parseFloat(formattedReportTime).toFixed(2);
+        const MidNightReportTime = parseFloat(formattedReportTime).toFixed(2);
 
         if (currentDateObj < formattedDateObj) {
             console.log('-----------111111');
@@ -7212,11 +7492,11 @@ console.log(hours1,"tripppppppnewwwweeeeeeeee",minutes1);
             setHideField(true);
             console.log("Both dates are equal not allowed");
         }
-        else if(currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(MidNightReportTime) >= 23.30){
+        else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(MidNightReportTime) >= 23.30) {
             setHideField(false);
             console.log("midnight 23.30 time is affected");
         }
-    }, [enterTrigger, book]);
+    }, [enterTrigger, book, finalCurrentTime]);
 
     // }, [CurrentDate, formattedTripReportDate, TripReportDate, TripReportTime, CurrentTime]);
 
@@ -7249,6 +7529,15 @@ console.log(hours1,"tripppppppnewwwweeeeeeeee",minutes1);
                 //     (superAdminAccess === "0") &&
                 //     (station.includes("Chennai") || station.includes("All"))
                 // )
+                // check outstation and hide booking details in tripsheet
+                if (!station.includes("Chennai") && !station.includes("All")) {
+                    console.log(superAdminAccess, "superAdminAccesssssssssssssssssss", station, !station.includes("Chennai"));
+                    console.log("outstationnnnnnnnnnnnnnnnnnnnnnnnnnn");
+
+                    setOutStationDispatchHide(true);
+                    return;
+                }
+
                 if (
                     (oldStatusCheck === "Temporary Closed") &&
                     (superAdminAccess !== "SuperAdmin") &&
@@ -7918,7 +8207,7 @@ console.log(hours1,"tripppppppnewwwweeeeeeeee",minutes1);
 
     //   getting lat and long from vehcileAccessLocation tables  (gpsdevicedata.js file)
     const gpsTripId = formData.tripid || selectedCustomerData.tripid || book.tripid;
-// console.log(gpsTripId,"gpsTripIdddd111111111");
+    // console.log(gpsTripId,"gpsTripIdddd111111111");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -7939,7 +8228,7 @@ console.log(hours1,"tripppppppnewwwweeeeeeeee",minutes1);
         if (gpsTripId) {
             fetchData();
         }
-    }, [apiUrl,enterTrigger]);
+    }, [apiUrl, enterTrigger]);
     useEffect(() => {
         const fetchData = async () => {
             // console.log(gpsTripId,"gpsTripIdddd33333333333333");
@@ -7977,111 +8266,111 @@ console.log(hours1,"tripppppppnewwwweeeeeeeee",minutes1);
         if (gpsTripId) {
             fetchData();
         }
-    }, [apiUrl, gpsTripId,enterTrigger]);
+    }, [apiUrl, gpsTripId, enterTrigger]);
 
 
-const handleExcelDownloadtrip = async(rowdataar) => {
-    const workbook = new Excel.Workbook();
-    const workSheetName = 'Worksheet-1';
-    if(rowdataar.length === 0){
-        setError(true)
-        setErrorMessage("No data found ")
-        return
-    }
-    try {
-        const fileName = "tripsheetviewGps_Log";
-        const worksheet = workbook.addWorksheet(workSheetName);
+    const handleExcelDownloadtrip = async (rowdataar) => {
+        const workbook = new Excel.Workbook();
+        const workSheetName = 'Worksheet-1';
+        if (rowdataar.length === 0) {
+            setError(true)
+            setErrorMessage("No data found ")
+            return
+        }
+        try {
+            const fileName = "tripsheetviewGps_Log";
+            const worksheet = workbook.addWorksheet(workSheetName);
 
-        // Define only the headers you need
-       
-// console.log(maplogcolumns,"plog")
-      
-// const columns1 = maplogcolumnsexcel.map(({ field, headerName}) => ({
-//     key: field,
-//     header: headerName,
-    
-// }));
+            // Define only the headers you need
 
- 
-const columns1 = maplogcolumnsexcel
-  .map(({ field, headerName }) => ({
-    key: field,
-    header: headerName,
-  }))
+            // console.log(maplogcolumns,"plog")
 
-console.log(columns1,"hnplopppp",rowdataar)
-        worksheet.columns = columns1;
-        worksheet.getRow(1).font = { bold: true };
-        worksheet.getRow(1).eachCell((cell) => {
-            cell.fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: '9BB0C1' },
-            };
-        });
+            // const columns1 = maplogcolumnsexcel.map(({ field, headerName}) => ({
+            //     key: field,
+            //     header: headerName,
 
-        worksheet.getRow(1).height = 30;
+            // }));
 
-        // Set default column width based on header length
-        worksheet.columns.forEach((column) => {
-            column.width = column.header.length + 5;
-            column.alignment = { horizontal: 'center', vertical: 'middle' };
-        });
-  
-// const data
-const updatedData = rowdataar.map((entry,index) => ({
-    ...entry,
-    date: entry.date ? dayjs(entry.date).format("DD-MM-YYYY") : "",
-    ids :index + 1
-  }));
-  
-  console.log(updatedData,"hnupppppdate");
-        
-        // Add rows of data
-        updatedData.forEach((singleData,index) => {
-            // console.log(singleData,"single")
-         
-          
-           
-            const rowdata= worksheet.addRow(singleData);
-            worksheet.columns.forEach((column) => {
-                const cellValue = singleData[column.key] || '';
-                const cellLength = cellValue.toString().length;
-                const currentColumnWidth = column.width || 0;
-                column.width = Math.max(currentColumnWidth, cellLength + 5);
-            });
 
-            // Apply borders for each cell
-            rowdata.eachCell((cell) => {
-                cell.border = {
-                    top: { style: 'thin' },
-                    left: { style: 'thin' },
-                    bottom: { style: 'thin' },
-                    right: { style: 'thin' },
+            const columns1 = maplogcolumnsexcel
+                .map(({ field, headerName }) => ({
+                    key: field,
+                    header: headerName,
+                }))
+
+            console.log(columns1, "hnplopppp", rowdataar)
+            worksheet.columns = columns1;
+            worksheet.getRow(1).font = { bold: true };
+            worksheet.getRow(1).eachCell((cell) => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '9BB0C1' },
                 };
             });
-        });
 
-        // Write to buffer and save the file
-        const buf = await workbook.xlsx.writeBuffer();
-        saveAs(new Blob([buf]), `${fileName}.xlsx`);
+            worksheet.getRow(1).height = 30;
 
-    } catch (error) {
-        console.error('<<<ERROR>>>', error);
-    } finally {
-        workbook.removeWorksheet(workSheetName);  // Clean up the worksheet
-    }
-};
-// console.log(rowexcel,"hnrowexcel",row)
+            // Set default column width based on header length
+            worksheet.columns.forEach((column) => {
+                column.width = column.header.length + 5;
+                column.alignment = { horizontal: 'center', vertical: 'middle' };
+            });
 
-const handlePdfDownloadtrip = (row)=>{
+            // const data
+            const updatedData = rowdataar.map((entry, index) => ({
+                ...entry,
+                date: entry.date ? dayjs(entry.date).format("DD-MM-YYYY") : "",
+                ids: index + 1
+            }));
 
-    if(row.length === 0){
-        setError(true)
-        setErrorMessage("No data found ")
-        return
-    }
- const pdf = new jsPDF({
+            console.log(updatedData, "hnupppppdate");
+
+            // Add rows of data
+            updatedData.forEach((singleData, index) => {
+                // console.log(singleData,"single")
+
+
+
+                const rowdata = worksheet.addRow(singleData);
+                worksheet.columns.forEach((column) => {
+                    const cellValue = singleData[column.key] || '';
+                    const cellLength = cellValue.toString().length;
+                    const currentColumnWidth = column.width || 0;
+                    column.width = Math.max(currentColumnWidth, cellLength + 5);
+                });
+
+                // Apply borders for each cell
+                rowdata.eachCell((cell) => {
+                    cell.border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                });
+            });
+
+            // Write to buffer and save the file
+            const buf = await workbook.xlsx.writeBuffer();
+            saveAs(new Blob([buf]), `${fileName}.xlsx`);
+
+        } catch (error) {
+            console.error('<<<ERROR>>>', error);
+        } finally {
+            workbook.removeWorksheet(workSheetName);  // Clean up the worksheet
+        }
+    };
+    // console.log(rowexcel,"hnrowexcel",row)
+
+    const handlePdfDownloadtrip = (row) => {
+
+        if (row.length === 0) {
+            setError(true)
+            setErrorMessage("No data found ")
+            return
+        }
+        const pdf = new jsPDF({
             orientation: "landscape",
             unit: "mm",
             format: "tabloid" // [width, height] in inches
@@ -8106,17 +8395,17 @@ const handlePdfDownloadtrip = (row)=>{
 
 
 
-const header = maplogcolumnsexcel.map((row) => row.headerName); 
+        const header = maplogcolumnsexcel.map((row) => row.headerName);
 
-// const header = maplogcolumnsexcel
-// .filter((row) => row.field !== "date") // Exclude rows with field "edit" or "actions"
-// .map((row) => row.headerName); 
-        console.log(header,"shnplpdff")
+        // const header = maplogcolumnsexcel
+        // .filter((row) => row.field !== "date") // Exclude rows with field "edit" or "actions"
+        // .map((row) => row.headerName); 
+        console.log(header, "shnplpdff")
 
 
         const rowValues = row.map((row, index) => { // Declare index here
-            return maplogcolumnsexcel.map(column => { 
-               
+            return maplogcolumnsexcel.map(column => {
+
                 if (column.field === "ids") {
                     // Set the id field based on index + 1
                     return index + 1;
@@ -8124,14 +8413,14 @@ const header = maplogcolumnsexcel.map((row) => row.headerName);
                 if (column.field === "date") {
                     return dayjs(row.date).format("DD-MM-YYYY") // Format the date field
                 }
-                 
+
                 // Return other fields as-is
                 return row[column.field];
             });
         });
-// console.log(rowValues,"shnplpdff",rowexcel)
+        // console.log(rowValues,"shnplpdff",rowexcel)
 
-                let fontdata = 1;
+        let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
         }
@@ -8196,16 +8485,16 @@ const header = maplogcolumnsexcel.map((row) => row.headerName);
             //     if (data.row.index === rowValues.length - 1) {
             //         const { cell } = data;
             //         const { x, y, width, height } = cell;
-    
+
             //         // Set bold text and increased font size
             //         pdf.setFont('helvetica', 'bold');
             //         pdf.setFontSize(9); // Increase the font size as needed
-    
+
             //         // Draw top border
             //         pdf.setDrawColor(0); // Black color
             //         pdf.setLineWidth(0.5); // Line width
             //         pdf.line(x, y, x + width, y); // Draw top border
-    
+
             //         // Draw bottom border
             //         pdf.line(x, y + height, x + width, y + height); // Draw bottom border
             //     }},
@@ -8218,59 +8507,159 @@ const header = maplogcolumnsexcel.map((row) => row.headerName);
         pdf.scale(scaleFactor, scaleFactor);
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'TripsheetGpsLog.pdf');
-}
-
-// ----------------------------------------this code zoom image in attcah file----------------------------
-// Function to handle Zoom In
-const handleZoomIn = () => {
-    setZoom((prevZoom) => Math.min(prevZoom + 0.2, 3)); 
-  };
-
-  // Function to handle Zoom Out
-  const handleZoomOut = () => {
-    setZoom((prevZoom) => Math.max(prevZoom - 0.2, 1)); 
-    if (zoom <= 1.2) {
-      setPosX(0);
-      setPosY(0);
     }
-  };
 
-  // Handle Zoom using Mouse Scroll
-  const handleScrollZoom = (e) => {
-    e.preventDefault(); 
-    if (e.deltaY < 0) {
-      setZoom((prevZoom) => Math.min(prevZoom + 0.2, 3)); 
-    } else {
-      setZoom((prevZoom) => Math.max(prevZoom - 0.2, 1)); 
-      if (zoom <= 1.2) {
-        setPosX(0);
-        setPosY(0);
-      }
+    // ----------------------------------------this code zoom image in attcah file----------------------------
+    // Function to handle Zoom In
+    const handleZoomIn = () => {
+        setZoom((prevZoom) => Math.min(prevZoom + 0.2, 3));
+    };
+
+    // Function to handle Zoom Out
+    const handleZoomOut = () => {
+        setZoom((prevZoom) => Math.max(prevZoom - 0.2, 1));
+        if (zoom <= 1.2) {
+            setPosX(0);
+            setPosY(0);
+        }
+    };
+
+    // Handle Zoom using Mouse Scroll
+    const handleScrollZoom = (e) => {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+            setZoom((prevZoom) => Math.min(prevZoom + 0.2, 3));
+        } else {
+            setZoom((prevZoom) => Math.max(prevZoom - 0.2, 1));
+            if (zoom <= 1.2) {
+                setPosX(0);
+                setPosY(0);
+            }
+        }
+    };
+
+    // Start dragging
+    const startDrag = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+        startPos.current = { x: e.clientX, y: e.clientY };
+    };
+
+    // Drag the image
+    const onDrag = (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startPos.current.x;
+        const dy = e.clientY - startPos.current.y;
+        setPosX((prevX) => prevX + dx);
+        setPosY((prevY) => prevY + dy);
+        startPos.current = { x: e.clientX, y: e.clientY };
+    };
+
+    // Stop dragging
+    const stopDrag = () => {
+        setIsDragging(false);
+    };
+    //   ----------------------------------------this code zoom image in attcah file----------------------------
+
+    const handleFullDeleteMapData = async () => {
+        const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+        console.log(tripid, "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+        if (row.length > 0) {
+
+            try {
+                const respone = await axios.post(`${apiUrl}/deleteMapByTripid/${tripid}`)
+                console.log(respone.data);
+                setManualTripID([])
+                setSuccess(true)
+                setSuccessMessage("Successfully Deleted")
+                handleTripmapverify()
+                setMapImageUrls1("")
+                setMapDataDeleteModal(false)
+                setMaplogimgPopupOpen(false)
+
+            }
+            catch (error) {
+                console.log(error, 'error');
+
+            }
+        }
+        else {
+            setError(true)
+            setErrorMessage("Already Map Data Deleted")
+        }
     }
-  };
 
-  // Start dragging
-  const startDrag = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-    startPos.current = { x: e.clientX, y: e.clientY };
-  };
+    const handleRefresh = async () => {
 
-  // Drag the image
-  const onDrag = (e) => {
-    if (!isDragging) return;
-    const dx = e.clientX - startPos.current.x;
-    const dy = e.clientY - startPos.current.y;
-    setPosX((prevX) => prevX + dx);
-    setPosY((prevY) => prevY + dy);
-    startPos.current = { x: e.clientX, y: e.clientY };
-  };
+        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+        // const tripid2 = formData?.tripid || selectedCustomerData?.tripid || book?.tripid;
+        // console.log(tripid,"xop")
+        // console.log(gpsTripId,"xoppppppppppppppppp",tripID1)
+        // const bookingno = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+        try {
+            if (!tripid) {
+                // setRows([])
+                return
+            } else {
+                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${tripid}`);
+                const data = response.data;
 
-  // Stop dragging
-  const stopDrag = () => {
-    setIsDragging(false);
-  };
-//   ----------------------------------------this code zoom image in attcah file----------------------------
+                //sepration of data----------------------------
+                let tripResults = [];
+                let bookingResults = [];
+
+                data?.map((item) => {
+                    if (item.type === "tripResults") {
+                        tripResults = item.data
+                    } else if (item.type === "bookingResults") {
+                        bookingResults = item.data
+                    }
+                })
+                const bothData = [...tripResults, ...bookingResults]
+                //------------------------
+
+                if (bothData.length > 0) {
+                    const rowsWithUniqueId = bothData.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    // setSuccess(true);
+                    // setSuccessMessage("successfully listed")
+                } else {
+                    setRows([]);
+                    // setError(true);
+                    // setErrorMessage("no data found")
+                }
+            }
+        } catch {
+        }
+    };
+    useEffect(() => {
+        handleRefresh()
+    }, [gpsTripId])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+            console.log(tripid, "tripiddddddddddddddddppppppppppppp");
+            try {
+                if (tripid !== undefined && tripid !== null && tripid !== "") {
+                    const response = await axios.get(`${apiUrl}/getBookingStatusByTripId`, {
+                        params: { tripid }
+                    });
+                    console.log(response.data, "statuscheckingggggggggggggggggggggggggg");
+                    setBookingTripStatus(response.data)
+                }
+            }
+
+            catch (error) {
+                console.log(error, "erorrrrrrrrr");
+
+            }
+        }
+        fetchData();
+    }, [book, location]);
 
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
@@ -8409,9 +8798,10 @@ const handleZoomIn = () => {
         hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
         minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage, Permissiondeleteroles, fueldataamountdis, setFuelAdvancedamountHide,
         outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, handleAutocompleteChangecustomer, orderByDropDown, speeddailacesss, speeddailacesssedit,
-        tripGpsData, fullGpsData,allGpsData,handleExcelDownloadtrip,handlePdfDownloadtrip,attachedImageEtrip,deletetripasheetdata,setDeleteTripsheetData,
+        tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
         // this zoom image code state-----------------
-        posX,posY,zoom,handleZoomIn,handleZoomOut,startDrag,stopDrag,handleScrollZoom,isDragging,onDrag
+        posX, posY, zoom, handleZoomIn, handleZoomOut, startDrag, stopDrag, handleScrollZoom, isDragging, onDrag, handleFullDeleteMapData,
+        mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl,bookingTripStatus
         // this zoom image code state-----------------
 
     };

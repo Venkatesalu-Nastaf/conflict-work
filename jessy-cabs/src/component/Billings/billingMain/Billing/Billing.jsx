@@ -393,9 +393,9 @@ const Billing = ({Statename}) => {
                                         <CarCrashIcon color="action" />
                                     </div>
                                     <TextField
-                                        name="vehType"
+                                        name="vehicleName"
                                         autoComplete="new-password"
-                                        value={book.vehType || selectbillingdata.vehType|| ''}
+                                        value={book.vehicleName || selectbillingdata.vehicleName|| ''}
                                         onChange={handleChange}
                                         label="Vehicle Type"
                                         id="vehType"

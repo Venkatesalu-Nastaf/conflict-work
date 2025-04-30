@@ -413,7 +413,7 @@ router.get('/drivername-detailsaccount/:driver', (req, res) => {
     const query = `
     SELECT 
         ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hiretypes,ai.vehRegNo,ai.driverName,
-        vi.Groups,vi.vehicleName As vehicleName2, vi.vehType, 
+        vi.Groups,vi.vehicleName As vehicleName2,
         dc.Mobileno As mobileNo
     FROM accountinfo ai
     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
@@ -454,7 +454,7 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
     const query = `
         SELECT 
              ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hiretypes,ai.vehRegNo,ai.driverName,
-            vi.Groups, vi.vehicleName As vehicleName2, vi.vehType, 
+            vi.Groups, vi.vehicleName As vehicleName2,
             dc.Mobileno As mobileNo
         FROM accountinfo ai
         LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
@@ -514,16 +514,27 @@ router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
     console.log("customer", travelname);
 
     // Query to perform left joins
+    // const query = `
+    //     SELECT 
+    //         ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
+    //         vi.Groups,vi.vehicleName, vi.vehType as vehiclemodule, 
+    //         dc.Mobileno As mobileNo
+    //     FROM accountinfo ai
+    //     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+    //     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+    //     WHERE ai.travelsname=?
+    // `;
+
     const query = `
-        SELECT 
-            ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
-            vi.Groups,vi.vehicleName, vi.vehType as vehiclemodule, 
-            dc.Mobileno As mobileNo
-        FROM accountinfo ai
-        LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
-        LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
-        WHERE ai.travelsname=?
-    `;
+    SELECT 
+        ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
+        vi.Groups,vi.vehicleName as vehicleTyped,
+        dc.Mobileno As mobileNo
+    FROM accountinfo ai
+    LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+    LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+    WHERE ai.travelsname=?
+`;
 
     db.query(query, [travelname], (err, result) => {
         if (err) {
@@ -538,42 +549,42 @@ router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
 
 
 
-router.get('/drivername-detailsaccountbooking/:driver', (req, res) => {
-    const customer = req.params.driver;
-    console.log("customer", customer);
+// router.get('/drivername-detailsaccountbooking/:driver', (req, res) => {
+//     const customer = req.params.driver;
+//     console.log("customer", customer);
 
-    // Query to perform left joins
-    // const query = `
-    //     SELECT 
-    //         ai.*,
-    //         vi.Groups,vi.hiretypes as hireTypes,vi.vehicleName, vi.vehType as vehiclemodule, 
-    //         dc.Mobileno As mobileNo
-    //     FROM accountinfo ai
-    //     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
-    //     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
-    //     WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
-    // `;
-    const query = `
-    SELECT 
-         ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
-        vi.Groups,vi.vehicleName,vi.vehType as vehiclemodule, 
-        dc.Mobileno As mobileNo
-    FROM accountinfo ai
-    LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
-    LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
-    WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
-`;
+//     // Query to perform left joins
+//     // const query = `
+//     //     SELECT 
+//     //         ai.*,
+//     //         vi.Groups,vi.hiretypes as hireTypes,vi.vehicleName, vi.vehType as vehiclemodule, 
+//     //         dc.Mobileno As mobileNo
+//     //     FROM accountinfo ai
+//     //     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+//     //     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+//     //     WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
+//     // `;
+//     const query = `
+//     SELECT 
+//          ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
+//         vi.Groups,vi.vehicleName,vi.vehType as vehiclemodule, 
+//         dc.Mobileno As mobileNo
+//     FROM accountinfo ai
+//     LEFT JOIN vehicleinfo vi ON ai.vehRegNo = vi.vehRegNo
+//     LEFT JOIN drivercreation dc ON ai.driverName = dc.driverName
+//     WHERE ai.driverName LIKE ? OR ai.vehRegNo LIKE ?
+// `;
 
-    db.query(query, [`%${customer}%`, `%${customer}%`], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to retrieve customer details ' });
-        }
-        if (result.length === 0) {
-            return res.status(404).json({ error: 'Data not found' });
-        }
-        return res.status(200).json(result);
-    });
-});
+//     db.query(query, [`%${customer}%`, `%${customer}%`], (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to retrieve customer details ' });
+//         }
+//         if (result.length === 0) {
+//             return res.status(404).json({ error: 'Data not found' });
+//         }
+//         return res.status(200).json(result);
+//     });
+// });
 //send email from booking page
 // router.post('/send-email', async (req, res) => {
 //     try {
@@ -665,7 +676,7 @@ router.post('/send-email', async (req, res) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 8px;"><strong>Trip No:</strong></td>
+                            <td style="padding: 8px;"><strong>Booking No:</strong></td>
                             <td style="padding: 8px; color: #000">${bookingno || ""}</td>
                         </tr>
                         <tr>
@@ -705,7 +716,15 @@ router.post('/send-email', async (req, res) => {
                     </tbody>
                 </table>
                 <p>In case of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
-
+ <br>
+                  <br>
+                   <p>
+                Warm Regards,<br><br>
+                 JESSY CABS PVT LTD | PAN INDIA SERVICES<br>
+                 Head Office : Flat No 2, II Floor, Swathi Complex, Nandanam Chennai - 600017<br>
+                24x7 Help Desk : booking@jessycabs.in / 04449105959 / 8754515959<br>
+              www.jessycabs.in
+              </p>
         
           `,
             };
@@ -721,9 +740,10 @@ router.post('/send-email', async (req, res) => {
                 // from: 'foxfahad386@gmail.com',
                 from: Sendmailauth,
                 to: `${email},${customeremail}`,
-                subject: `JESSY CABS PVT LTD Booking Confirmation For ${guestname} - Travel Request No. ${bookingno} `,
+                subject: `JESSY CABS PVT LTD BOOKING CONFIRMATION FOR ${guestname} - Travel Request No. ${bookingno} `,
                 html: `
             <p>Dear Sir/Madam,</p>
+            <p>Greetings from JESSY CABS PVT LTD !!!</p>
              <p>Thank you for booking with us! Your booking has been confirmed. Please find the details below:</p>
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1; color: #FFFFFF;">
@@ -733,7 +753,7 @@ router.post('/send-email', async (req, res) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 8px;"><strong>Trip No:</strong></td>
+                            <td style="padding: 8px;"><strong>Booking No:</strong></td>
                             <td style="padding: 8px;">${bookingno}</td>
                         </tr>
                         <tr>
@@ -790,7 +810,15 @@ router.post('/send-email', async (req, res) => {
                     </tbody>
                 </table>
                 <p>The Vehicle and Driver details will be sent to you before the pick-up time. Incase of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
-        
+                  <br>
+        <br>
+        <p>
+                Warm Regards,<br><br>
+JESSY CABS PVT LTD | PAN INDIA SERVICES<br>
+Head Office : Flat No 2, II Floor, Swathi Complex, Nandanam Chennai - 600017<br>
+24x7 Help Desk : booking@jessycabs.in / 04449105959 / 8754515959<br>
+www.jessycabs.in
+</p>
           `,
             }
             // await transporter.sendMail(ownerMailOptions1);
@@ -1081,7 +1109,28 @@ router.get('/bookinglogdetailsget', (req, res) => {
 });
 
 
-
+// navigate booking to tripsheet to chack status
+router.get('/getBookingStatusByTripId', (req, res) => {
+    const { tripid } = req.query;
+    console.log(tripid, " <-- received tripid in query");
+  
+    if (!tripid) {
+      return res.status(400).json({ error: "Trip ID is required" });
+    }
+  
+    const sqlQuery = `SELECT status FROM booking WHERE bookingno = ?`;
+    db.query(sqlQuery, [tripid], (error, result) => {
+      if (error) {
+        console.error(error, "SQL query error");
+        return res.status(500).json({ error: "Internal server error" });
+      }
+  
+      console.log(result, " <-- result from booking table");
+  
+      return res.json(result);
+    });
+  });
+  
 
 
 

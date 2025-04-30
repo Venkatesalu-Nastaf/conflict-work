@@ -251,7 +251,7 @@ const SignatureGenerate = () => {
       };
       const updatedetails = {
         tripid: tripno,
-        Expired: true,
+        Expired: false,
         signExpired: false,
         UploadTollExpired: false,
         ExpiredUploadpage: false
@@ -262,7 +262,7 @@ const SignatureGenerate = () => {
       console.log(signtauretimes, 'sign data')
       const response = await axios.post(`${apiUrl}/generate-link/${tripno}`);
       await axios.post(`${apiUrl}/signaturelinkExpiredatas/`, updatedetails)
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripno}`, signtauretimes);
+      await axios.post(`${apiUrl}/Acceptsignaturedatatimes/${tripno}`, signtauretimes);
 
       const data = response.data.link;
       // console.log(data,"lll")
@@ -286,6 +286,16 @@ const SignatureGenerate = () => {
   }
   const handleTollParkinglink = async () => {
     const tripdata = tripId;
+    // const updatedetails = {
+    //   tripid: tripdata,
+    //   Expired: true,
+    //   signExpired: true,
+    //   UploadTollExpired: true,
+    //   ExpiredUploadpage: false
+
+
+
+    // }
     const updatedetails = {
       tripid: tripdata,
       Expired: true,

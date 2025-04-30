@@ -1197,7 +1197,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
 
                       <View style={styles.labeltag22}>
-                        <Text>{triptotaldays ? triptotaldays : 0}</Text>
+                        {/* <Text>{triptotaldays ? triptotaldays : 0}</Text> */}
+                        <Text>{duty === "Outstation" ? triptotaldays : "-"}</Text>
 
                       </View>
 
@@ -1280,7 +1281,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
 
                       <View style={styles.labeltag22}>
-                        <Text>{triptotaldays ? triptotaldays : 0}</Text>
+                        {/* <Text>{triptotaldays ? triptotaldays : 0}</Text> */}
+                        <Text>{duty === "Outstation" ? triptotaldays : "-"}</Text>
 
                       </View>
 

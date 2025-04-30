@@ -245,7 +245,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
               />
             </div>
 
-            <div className="input">
+            {/* <div className="input">
               <div className="icone">
                 <GiMatterStates color="action" />
               </div>
@@ -279,7 +279,51 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                   );
                 }}
               />
-            </div>
+            </div> */}
+
+            <div className="input">
+                              <div className="icone">
+                                <GiMatterStates color="action" />
+                              </div>
+                              <Autocomplete
+                                fullWidth
+                                multiple
+                                id="Department"
+                                size="small"
+                                value={department}
+                                options={[{ label: "All" }, ...stationName.map(option => ({ label: option.Stationname }))]}
+                                isOptionEqualToValue={(option, value) => option.label === value.label}
+                                onChange={(event, value) => {
+                                  if (value.some(v => v.label === "All")) {
+                                    // If "All" is selected, only keep "All"
+                                    handleInputChange(event, [{ label: "All" }]);
+                                  } else {
+                                    // If any other option is selected, remove "All"
+                                    const filteredValues = value.filter(v => v.label !== "All");
+                                    handleInputChange(event, filteredValues);
+                                  }
+                                }}
+                                disableCloseOnSelect
+                                renderOption={(props, option, { selected }) => {
+                                  const isAllSelected = department.some(d => d.label === "All");
+            
+                                  return (
+                                    <li {...props}>
+                                      <Checkbox
+                                        icon={icon}
+                                        checkedIcon={checkedIcon}
+                                        style={{ marginRight: 8 }}
+                                        checked={isAllSelected || selected} // Ensure all checkboxes are checked when "All" is selected
+                                      />
+                                      {option.label}
+                                    </li>
+                                  );
+                                }}
+                                renderInput={(params) => (
+                                  <TextField {...params} label="Department" inputRef={params.inputRef} />
+                                )}
+                              />
+                              </div>
 
             <div className="input">
               <div className="icone">

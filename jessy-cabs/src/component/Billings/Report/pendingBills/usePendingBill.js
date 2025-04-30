@@ -9,10 +9,10 @@ import { saveAs } from 'file-saver';
 const usePendingBill = () => {
     const columns = [
         { field: 'sno', headerName: 'S.no', width: 100 },
-        { field: 'uniqueid', headerName: 'Bill No', width: 180 },
-        { field: 'BillDate', headerName: 'Bill Date', width: 180, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),  },
-        { field: 'CustomerName', headerName: 'Customer Name', width: 180 },
-        { field: 'TotalAmount', headerName: 'Bill Amount', width: 180 },
+        { field: 'Invoice_no', headerName: 'Invoice No', width: 180 },
+        { field: 'InvoiceDate', headerName: 'Bill Date', width: 180, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),  },
+        { field: 'Customer', headerName: 'Customer Name', width: 180 },
+        { field: 'Amount', headerName: 'Bill Amount', width: 180 },
         { field: 'TotalCollected', headerName: 'Collected', width: 180 },
         { field: 'TotalBalance', headerName: 'Balance', width: 180 },
         { field: 'Account', headerName: 'Account', width: 180 },
@@ -67,12 +67,26 @@ const usePendingBill = () => {
         }));
     };
 
+    // const addSerialNumber = (bills) => {
+    //     console.log(bills,"kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+        
+    //     return bills.map((bill, index) => ({
+    //         sno: index + 1,
+    //         ...bill
+    //     }));
+    // };
+
     const addSerialNumber = (bills) => {
+      
         return bills.map((bill, index) => ({
-            sno: index + 1,
-            ...bill
+          sno: index + 1,
+          ...bill,
+          TotalCollected: bill.BillReportStatus === "Success" ? Number(bill.Amount) : 0,
+          TotalBalance: bill.BillReportStatus === "Success" ? 0 : Number(bill.Amount),
+          Account: bill.BillReportStatus === "Success" ? bill.Account : ""
         }));
-    };
+      };
+      
 
     const fetchBills = async (endpoint, successMessage, errorMessage) => {
         if (pendingBill.CustomerName === "") {
@@ -84,10 +98,12 @@ const usePendingBill = () => {
         try {
             const { TotalAmount, Balance, ...customerData } = pendingBill;
             const response = await axios.post(`${apiUrl}/${endpoint}`, { customerData });
+            
 
             if (response.data && response.data.length > 0) {
-                const bills = addSerialNumber(response.data);                
-                const totalAmount = bills.reduce((sum, bill) => sum + parseFloat(bill.TotalAmount), 0);
+                const bills = addSerialNumber(response.data);        
+                        
+                const totalAmount = bills.reduce((sum, bill) => sum + parseFloat(bill.Amount), 0);
                 const totalBalance = bills.reduce((sum, bill) => sum + parseFloat(bill.TotalBalance), 0);
 
                 setPendingBill(prevState => ({
@@ -293,25 +309,26 @@ const handlePdfDownload = () => {
     const doc = new jsPDF();
 
     const columns = [
-        { field: 'sno', headerName: 'SNO' },
-        { field: 'uniqueid', headerName: 'Unique ID' },
-        { field: 'BillDate', headerName: 'Bill Date' },
-        { field: 'CustomerName', headerName: 'Customer Name' },
-        { field: 'TotalAmount', headerName: 'Total Amount' },
-        { field: 'Collected', headerName: 'Collected' },
-        { field: 'TotalBalance', headerName: 'Total Balance' },
-        { field: 'Account', headerName: 'Account' }
+        { field: 'sno', headerName: 'S.no', width: 100 },
+        { field: 'Invoice_no', headerName: 'Invoice No', width: 180 },
+        { field: 'InvoiceDate', headerName: 'Bill Date', width: 180, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),  },
+        { field: 'Customer', headerName: 'Customer Name', width: 180 },
+        { field: 'Amount', headerName: 'Bill Amount', width: 180 },
+        { field: 'TotalCollected', headerName: 'Collected', width: 180 },
+        { field: 'TotalBalance', headerName: 'Balance', width: 180 },
+        { field: 'Account', headerName: 'Account', width: 180 },
+
     ];
 
     const tableColumn = columns.map(column => column.headerName);
 
-    const totalSum = rows.reduce((acc, row) => acc + parseFloat(row.TotalAmount || 0), 0);
-    const totalCollected = rows.reduce((acc, row) => acc + parseFloat(row.Collected || 0), 0);
+    const totalSum = rows.reduce((acc, row) => acc + parseFloat(row.Amount || 0), 0);
+    const totalCollected = rows.reduce((acc, row) => acc + parseFloat(row.TotalCollected || 0), 0);
     const totalBalance = rows.reduce((acc, row) => acc + parseFloat(row.TotalBalance || 0), 0);
 
     const totalRow = columns.map(column => {
-        if (column.field === 'TotalAmount') return totalSum;
-        if (column.field === 'Collected') return totalCollected;
+        if (column.field === 'Amount') return totalSum;
+        if (column.field === 'TotalCollected') return totalCollected;
         if (column.field === 'TotalBalance') return totalBalance;
         if (column.headerName === 'Customer Name') return 'Total';
         return '';
@@ -319,11 +336,11 @@ const handlePdfDownload = () => {
 
     const tableRows = rows.map(row => [
         row.sno, 
-        row.uniqueid, 
-        row.BillDate ? dayjs(row.BillDate).format('DD-MM-YYYY') : '', // Format BillDate here
-        row.CustomerName, 
-        row.TotalAmount, 
-        row.Collected, 
+        row.Invoice_no, 
+        row.InvoiceDate ? dayjs(row.InvoiceDate).format('DD-MM-YYYY') : '', // Format BillDate here
+        row.Customer, 
+        row.Amount, 
+        row.TotalCollected, 
         row.TotalBalance, 
         row.Account
     ]);
@@ -383,24 +400,25 @@ const handlePdfDownload = () => {
 
             // Define columns with their field and headerName
             const columns = [
-                { field: 'sno', headerName: 'SNO' },
-                { field: 'uniqueid', headerName: 'Unique ID' },
-                { field: 'BillDate', headerName: 'Bill Date' },
-                { field: 'CustomerName', headerName: 'Customer Name' },
-                { field: 'TotalAmount', headerName: 'Total Amount' },
-                { field: 'Collected', headerName: 'Collected' },
-                { field: 'TotalBalance', headerName: 'Total Balance' },
-                { field: 'Account', headerName: 'Account' }
+                { field: 'sno', headerName: 'S.no', width: 100 },
+                { field: 'Invoice_no', headerName: 'Invoice No', width: 180 },
+                { field: 'InvoiceDate', headerName: 'Bill Date', width: 180, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),  },
+                { field: 'Customer', headerName: 'Customer Name', width: 180 },
+                { field: 'Amount', headerName: 'Bill Amount', width: 180 },
+                { field: 'TotalCollected', headerName: 'Collected', width: 180 },
+                { field: 'TotalBalance', headerName: 'Balance', width: 180 },
+                { field: 'Account', headerName: 'Account', width: 180 },
+        
             ];
 
             // Define column widths
             const columnWidths = {
-                id: 10,
-                uniqueid: 20,
-                BillDate: 20,
-                CustomerName: 20,
-                TotalAmount: 30,
-                Collected: 20,
+                sno: 10,
+                Invoice_no: 20,
+                InvoiceDate: 20,
+                Customer: 50,
+                Amount: 30,
+                TotalCollected: 20,
                 TotalBalance: 20,
                 Account: 15
             };
@@ -422,7 +440,7 @@ const handlePdfDownload = () => {
                     pattern: 'solid',
                     fgColor: { argb: '9BB0C1' } // Light blue background color
                 };
-                cell.alignment = { horizontal: 'center', vertical: 'middle' }; // Center-align headers
+                cell.alignment = { horizontal: 'left', vertical: 'middle' }; // Center-align headers
             });
 
             worksheet.getRow(1).height = 30;
@@ -431,34 +449,34 @@ const handlePdfDownload = () => {
             rows.forEach(row => {
                 const newRow = worksheet.addRow({
                     sno: row.sno,
-                    uniqueid: row.uniqueid,
-                    BillDate: row.BillDate  ? dayjs(row.BillDate).format('DD-MM-YYYY') : '',
-                    CustomerName: row.CustomerName,
-                    TotalAmount: row.TotalAmount,
-                    Collected: row.Collected,
+                    Invoice_no: row.Invoice_no,
+                    InvoiceDate: row.InvoiceDate  ? dayjs(row.InvoiceDate).format('DD-MM-YYYY') : '',
+                    Customer: row.Customer,
+                    Amount: row.Amount,
+                    TotalCollected: row.TotalCollected,
                     TotalBalance: row.TotalBalance,
                     Account: row.Account
                 });
 
                 // Center-align all data cells
                 newRow.eachCell({ includeEmpty: true }, (cell) => {
-                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    cell.alignment = { horizontal: 'left', vertical: 'middle' };
                 });
             });
 
             // Calculate totals
-            const totalAmount = rows.reduce((sum, row) => sum + parseFloat(row.TotalAmount || 0), 0);
-            const totalCollected = rows.reduce((sum, row) => sum + parseFloat(row.Collected || 0), 0);
+            const totalAmount = rows.reduce((sum, row) => sum + parseFloat(row.Amount || 0), 0);
+            const totalCollected = rows.reduce((sum, row) => sum + parseFloat(row.TotalCollected || 0), 0);
             const totalBalance = rows.reduce((sum, row) => sum + parseFloat(row.TotalBalance || 0), 0);
 
             // Add totals row at the bottom
             const totalsRow = worksheet.addRow({
-                id: '',
-                uniqueid: '',
-                BillDate: '',
-                CustomerName: 'Totals',
-                TotalAmount: totalAmount,
-                Collected: totalCollected,
+                sno: '',
+                Invoice_no: '',
+                InvoiceDate: '',
+                Customer: 'Totals',
+                Amount: totalAmount,
+                TotalCollected: totalCollected,
                 TotalBalance: totalBalance,
                 Account: ''
             });
@@ -470,7 +488,7 @@ const handlePdfDownload = () => {
 
             // Center-align the totals row cells
             totalsRow.eachCell({ includeEmpty: true }, (cell) => {
-                cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                cell.alignment = { horizontal: 'left', vertical: 'middle' };
             });
 
             const buf = await workbook.xlsx.writeBuffer();

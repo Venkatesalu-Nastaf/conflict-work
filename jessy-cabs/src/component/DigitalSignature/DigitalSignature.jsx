@@ -19,12 +19,16 @@ const DigitalSignature = () => {
   // THSI API FOR DRIVER APP APIURL TRANFER
   const apiurltransfer = Apiurltransfer;
   const sigCanvasRef = useRef(null);
+  const [dsiabelbutton,setDisableButton]=useState(false);
+
 
   const tripIddata = new URLSearchParams(window.location.search).get("trip");
 
 
   const uniqueno = new URLSearchParams(window.location.search).get("uniqueNumber");
   const [successMessage, setSuccessMessage] = useState('')
+  const[success,setSuccess]=useState(false)
+  const[errorMessage,setErrorMessage]=useState('')
 
   const [expired, setExpired] = useState(false)
   const decryptdata = (cipherText) => {
@@ -184,6 +188,13 @@ const DigitalSignature = () => {
 
   const clearSignature = () => {
     sigCanvasRef.current.clear();
+ 
+
+  };
+  const clearSignaturedata = () => {
+    sigCanvasRef.current.clear();
+    clearsignaturedata()
+
   };
 
   const getCurrentDateTimeFormatted = () => {
@@ -256,7 +267,16 @@ const DigitalSignature = () => {
   // const [isSuccess, setIsSuccess] = useState(null);
 
   // Changes with loading  working good
+
+ 
   const saveSignature = async () => {
+
+    
+  if (sigCanvasRef.current.isEmpty()) {
+   setErrorMessage("please sign the signature");
+   setSuccess(false)
+    return;
+  }
     const dataUrl = sigCanvasRef.current.toDataURL("image/png");
     const status = "Updated";
     const datadate = Date.now().toString();
@@ -299,9 +319,9 @@ const DigitalSignature = () => {
           imageName: datadate,
         }),
       });
-      console.log(hh,"llhh")
-  console.log(signtauretimes,"times")
-  console.log(updatedetails,"detils")
+  //     console.log(hh,"llhh")
+  // console.log(signtauretimes,"times")
+  // console.log(updatedetails,"detils")
      const reponse = await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`, signtauretimes);
       console.log(reponse,"ll")
       const response2 = await axios.post(`${apiUrl}/signaturelinkExpiredatas/`, updatedetails)
@@ -312,13 +332,14 @@ const DigitalSignature = () => {
 
       const res = await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`, signaturedata);
       console.log(res, "yyy")
-
+      setSuccess(true)
       setSuccessMessage("Upload successfully");
-
+      setDisableButton(true)
       clearSignature();
       setUploadToll(true);
     } catch (error) {
-      setExpired(0);
+      // setExpired(1)
+      console.log(error)
 
     } finally {
       setIsLoading(false);
@@ -352,7 +373,26 @@ const DigitalSignature = () => {
 
     try {
       // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
-      await axios.post(`${apiUrl}/signaturedatatimes/${tripId}`, signtauretimes)
+      await axios.post(`${apiUrl}/Acceptsignaturedatatimes/${tripId}`, signtauretimes)
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
+  const clearsignaturedata = async () => {
+    const status = "clearSign"
+    const { dateTime, time } = getCurrentDateTimeFormatted();
+    const signtauretimes = {
+      status: status,
+      datesignature: dateTime,
+      signtime: time
+    }
+    const tripId = decryptdata(tripIddata)
+
+    try {
+      // await axios.post(`${apiUrl}/signaturedatatimes/${tripId}/${status}`)
+      await axios.post(`${apiUrl}/dataclearsignaturedatatimes/${tripId}`, signtauretimes)
     }
     catch (err) {
       console.log(err)
@@ -363,6 +403,7 @@ const DigitalSignature = () => {
 
   return (
     <div>
+      {!dsiabelbutton ? <>
       <SignatureCanvas
         ref={sigCanvasRef}
         penColor="black"
@@ -392,15 +433,18 @@ const DigitalSignature = () => {
         </div>
       )}
       <div>
-        <p style={{ textAlign: 'center', color: "green" }}>{successMessage}...</p>
+        <p style={{ textAlign: 'center',color: success ? 'green' : 'red' }}>{success ? successMessage : errorMessage}</p>
+        
 
-        <button className="clear-button" onClick={clearSignature}>
+        {!dsiabelbutton ? <button  disabled={dsiabelbutton} className="clear-button" onClick={clearSignaturedata}>
           Clear Signature
-        </button>
+        </button>:<></>
+}
         <button className="clear-button" onClick={saveSignature}>
           Done
         </button>
       </div>
+      </>:<></>}
       <Dialog open={uploadtoll}>
         <DialogContent>
 

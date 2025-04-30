@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useRef,useMemo } from 'react';
+import React, { useEffect, useContext, useState, useRef, useMemo } from 'react';
 import { CopyField } from '@eisberg-labs/mui-copy-field';
 // import EditMapComponent from './NavigationMap/EditMapComponent';
 import EditMapCheckComponent from './NavigationMap/EditMapCheckComponent';
@@ -133,7 +133,7 @@ const columns = [
 ];
 
 
-const StyledSpeedDial = styled(SpeedDial)(({ theme,id }) => ({
+const StyledSpeedDial = styled(SpeedDial)(({ theme, id }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
     bottom: theme.spacing(2),
@@ -144,10 +144,10 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme,id }) => ({
     left: theme.spacing(2),
   },
   "& .MuiFab-primary": {
-    backgroundColor: id ?"green": "#1976d2",
+    backgroundColor: id ? "green" : "#1976d2",
     // color: "white",
   },
-  
+
 }));
 
 const style = {
@@ -177,7 +177,17 @@ const style1 = {
   boxShadow: 24,
   p: 4,
 };
-
+const style3 = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  // border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const TripSheet = ({ stationName, logoImage, customerData }) => {
 
@@ -186,7 +196,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
   const superAdminAccess = localStorage.getItem("SuperAdmin")
   const filteredStatus =
-    superAdminAccess === "SuperAdmin" 
+    superAdminAccess === "SuperAdmin"
       ? Status // Show all statuses for superAdmin and CFo
       : Status.filter((option) => option.optionvalue !== "Billed");
 
@@ -294,18 +304,19 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
-    handleDeleteMap, copydatalink, setCopyDataLink,speeddailacesssedit,speeddailacesss,checksignatureandmap,getSignatureImageverify,
+    handleDeleteMap, copydatalink, setCopyDataLink, speeddailacesssedit, speeddailacesss, checksignatureandmap, getSignatureImageverify,
     //  conflictenddate,
-    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess,oldStatusCheck,
-    setSuccessMessage,handleChangetexttrip,handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip,messageditedtrip,messageditedbeforetrip,
+    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess, oldStatusCheck,
+    setSuccessMessage, handleChangetexttrip, handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip, messageditedtrip, messageditedbeforetrip,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas,Permissiondeleteroles,
-    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer,fueldataamountdis,setFuelAdvancedamountHide,
+    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, Permissiondeleteroles,
+    userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer, fueldataamountdis, setFuelAdvancedamountHide,
     setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
-    tripGpsData,fullGpsData,allGpsData,handleExcelDownloadtrip,handlePdfDownloadtrip,attachedImageEtrip,deletetripasheetdata,setDeleteTripsheetData,
+    tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
     // --------------------this zoom code image data----------------------------------------
-    posX,posY,zoom,handleZoomOut,startDrag,stopDrag,handleScrollZoom,handleZoomIn,isDragging,Scale,onDrag
+    posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, Scale, onDrag, handleFullDeleteMapData,
+    mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide,setGMapImageUrl,bookingTripStatus
     // this code zoom image data---------------------------------
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
@@ -459,7 +470,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
         // setSuccess(true);
         setWarning(false);
         // setSuccessMessage("Signature loaded successfully!");
-      
+
         console.log("success")
       } else {
         setSignImageUrl(""); // Clear state
@@ -652,6 +663,9 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     status: formData.status || book.status || selectedCustomerData.status,
     customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
     servicestation: formData.department || formValues.department || selectedCustomerData.department || book.department || '',
+    Addresscutsomer: formData.address1 || selectedCustomerData.address1 || book.address1 || '',
+    dropuseage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || '',
+    duty: formData.duty || selectedCustomerData.duty || book.duty || ''
   }
 
   const handlecopiedemailcontent = () => {
@@ -985,11 +999,25 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     }
     return () => clearTimeout(timeout);
   }, [conflictModalKmBox]);
-const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO") ;
+  const a = oldStatusCheck === "Temporary Closed" && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO");
 
-const message = useMemo(() => {
-  return formData.MessageText || selectedCustomerData.MessageText || book.MessageText;
-}, [formData.MessageText, selectedCustomerData.MessageText, book.MessageText]);
+  const message = useMemo(() => {
+    return formData.MessageText || selectedCustomerData.MessageText || book.MessageText;
+  }, [formData.MessageText, selectedCustomerData.MessageText, book.MessageText]);
+
+  const handleMapDataDelete = () => {
+    if (row.length > 0) {
+      setMapDataDeleteModal(true)
+    }
+    else {
+      setError(true)
+      setErrorMessage("Already Map Data Deleted")
+    }
+  }
+
+  const handleDeleteMapDataClose = () => {
+    setMapDataDeleteModal(false)
+  }
 
   // console.log(formData.reporttime, selectedCustomerData.reporttime, selectedCustomerDatas.reporttime, book.reporttime, 'rrrrrrrrrrrrrrr');
   return (
@@ -1276,7 +1304,7 @@ const message = useMemo(() => {
                     options={CustomerNames?.map((option) => ({
                       label: option.customer,
                     }))}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     getOptionLabel={(option) => option.label || formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || ''}
                     renderInput={(params) => {
                       return (
@@ -1334,7 +1362,7 @@ const message = useMemo(() => {
 
                     value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
 
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     options={orderByDropDown?.map((option) => ({
 
                       label: option?.orderedby,
@@ -1366,7 +1394,7 @@ const message = useMemo(() => {
                       // onChange={handleChange}
                       label="Mobile"
                       // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                       id="standard-size-mobile"
                       size="small"
                       autoComplete="password"
@@ -1383,7 +1411,7 @@ const message = useMemo(() => {
                       value={formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail || ''}
                       // onChange={handleChange}
                       // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                       label="Order By Email"
                       id="orderbyemail"
                       size="small"
@@ -1401,7 +1429,7 @@ const message = useMemo(() => {
                       // onChange={handleChange}
                       label="Mobile"
                       // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                       id="standard-size-mobile"
                       size="small"
                       autoComplete="password"
@@ -1418,7 +1446,7 @@ const message = useMemo(() => {
 
                       // onChange={handleChange}
                       // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                      disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                      disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                       label="Order By Email"
                       id="orderbyemail"
                       size="small"
@@ -1439,7 +1467,7 @@ const message = useMemo(() => {
                     freeSolo
                     sx={{ width: "100%" }}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
                     value={stationOptions?.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                     options={stationOptions?.map((option) => ({
@@ -1465,7 +1493,7 @@ const message = useMemo(() => {
                     label="Guest Name"
                     name="guestname"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
                     onChange={handleChange}
                     size="small"
@@ -1482,7 +1510,7 @@ const message = useMemo(() => {
                     value={formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Phone (Cell)"
                     id="guestmobileno"
                     size="small"
@@ -1499,7 +1527,7 @@ const message = useMemo(() => {
                     value={formData.email || selectedCustomerData.email || formValues.email || book.email || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Email"
                     id="email"
                     size="small"
@@ -1519,7 +1547,7 @@ const message = useMemo(() => {
                     name="address1"
                     multiline
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     rows={2}
                     sx={{ width: "100%" }}
                     autoComplete="new-password"
@@ -1537,7 +1565,7 @@ const message = useMemo(() => {
                     size="small"
                     name="useage"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
                     onChange={handleChange}
                     label="Usage"
@@ -1557,7 +1585,7 @@ const message = useMemo(() => {
                     freeSolo
                     sx={{ width: "100%" }}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     onChange={(event, value) => {
                       handleAutocompleteChange(event, value, "duty")
                       if (!lockdata) {
@@ -1589,7 +1617,7 @@ const message = useMemo(() => {
                     size="small"
                     name="request"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     value={selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request || ''}
                     onChange={handleChange}
                     label="Request"
@@ -1632,7 +1660,7 @@ const message = useMemo(() => {
                     value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
                     onChange={handleChange}
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Cost Code"
                     id="customer-customercode"
                     autoComplete="password"
@@ -1649,7 +1677,7 @@ const message = useMemo(() => {
                     onChange={handleChange}
                     name="employeeno"
                     // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                    disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                    disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                     label="Employee No"
                     id="employeeno"
                     autoComplete="password"
@@ -1666,7 +1694,7 @@ const message = useMemo(() => {
                         id="demo-simple-select"
                         // value={bookingStatus}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         value={escort}
                         // label="Status"
                         onChange={handleEscortChange}
@@ -1712,7 +1740,7 @@ const message = useMemo(() => {
                         id="demo-simple-select"
                         value={transferreport}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                        disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         onChange={handleTransferChange}
                       >
                         <MenuItem value={'Yes'}>Yes</MenuItem>
@@ -1829,7 +1857,7 @@ const message = useMemo(() => {
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
 
-                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                          disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
 
                           id="shedOutDate"
                           value={formData?.shedOutDate || selectedCustomerData?.shedOutDate ? dayjs(selectedCustomerData?.shedOutDate) : null || book?.shedOutDate ? dayjs(book?.shedOutDate) : null}
@@ -1885,7 +1913,7 @@ const message = useMemo(() => {
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                          disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                           id="startdate"
                           value={
                             formData.startdate || (selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null) || (book.startdate ? dayjs(book.startdate) : null)
@@ -1969,7 +1997,7 @@ const message = useMemo(() => {
                         <DatePicker
                           label="Close Date"
                           id="closedate"
-                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"&& !a}
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           value={
                             formData?.closedate ||
                               selectedCustomerData?.closedate
@@ -1977,7 +2005,9 @@ const message = useMemo(() => {
                               : selectedCustomerData?.shedOutDate
                                 ? dayjs(selectedCustomerData.shedOutDate)
                                 : null ||
-                                  book?.closedate ? dayjs(book?.closedate) : dayjs(book?.shedOutDate)
+                                // book?.closedate ? dayjs(book?.closedate) : dayjs(book?.shedOutDate)
+                                  book?.shedOutDate && bookingTripStatus[0]?.status === "pending" ? dayjs(book?.shedOutDate) : null ||
+                                  book?.closedate && bookingTripStatus[0]?.status !== "pending" ? dayjs(book?.closedate) : null
                           }
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -2010,8 +2040,7 @@ const message = useMemo(() => {
                               inputRef={inputRef}
                               value={
                                 selectedCustomerData?.closedate ||
-                                selectedCustomerData?.shedOutDate ||
-                                ""
+                                selectedCustomerData?.shedOutDate || book?.closedate
                               }
                             />
                           )}
@@ -2079,6 +2108,7 @@ const message = useMemo(() => {
                       <CalendarMonthIcon color="action" />
                     </div>
                     <DemoItem>
+                      {duty === "Outstation" ?
                       <TextField
                         name="totaldays"
                         value={calculateTotalDay()}
@@ -2089,7 +2119,19 @@ const message = useMemo(() => {
                         id="totaldays"
                         // variant="standard"
                         autoComplete="password"
-                      />
+                      /> :
+                      <TextField
+                      name="totaldays"
+                      value={"-"}
+                      label="Total Days"
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                      size="small"
+                      // type="number"
+                      id="totaldays"
+                      // variant="standard"
+                      autoComplete="password"
+                    /> 
+}
                     </DemoItem>
                   </div>}
 
@@ -2116,7 +2158,7 @@ const message = useMemo(() => {
 
                           // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                           // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                          disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                          disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                           value={formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime || ''}
                           onChange={(event) => {
                             let value = event.target.value;
@@ -2144,12 +2186,16 @@ const message = useMemo(() => {
                             // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
                             //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                             // }
-                            if (!lockdata && dayhcl === 0) {
+                            // if (!lockdata && dayhcl === 0) {
+                            //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            // }
+                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
+                            // }
+                            if (!lockdata) {
                               setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                             }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                              setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
-                            }
+                           
                           }}
                         />
                       </div>
@@ -2178,7 +2224,7 @@ const message = useMemo(() => {
                         id="starttime"
                         // disabled={hideField && superAdminAccess !== "SuperAdmin" && temporaryStatus}
                         // disabled={shedoutDisabled && superAdminAccess !== "SuperAdmin"}
-                        disabled={shedoutDisabled && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
+                        disabled={(hideField || outStationDispatchHide) && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head")}
                         name="starttime"
                         ref={reporttimeRef}
                         value={formData.starttime || selectedCustomerData.starttime || book.starttime || selectedCustomerDatas.starttime || ''}
@@ -2208,9 +2254,9 @@ const message = useMemo(() => {
                           setFormData({ ...formData, starttime: rTime });
                           setSelectedCustomerData({ ...selectedCustomerData, starttime: rTime });
                           setNoChangeData({ ...nochangedata, starttime: rTime });
-                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
-                            setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
-                          }
+                          // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                          //   setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
+                          // }
                           // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                           //   setVendorinfodata({ ...vendorinfo, vendorreporttime: rTime })
                           // }
@@ -2241,7 +2287,7 @@ const message = useMemo(() => {
                         name="closetime"
                         id="closetime"
                         ref={closeTimeRef}
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"&& !a}
+                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                         value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                         onChange={(event) => {
                           const rTime = event.target.value;
@@ -2263,12 +2309,15 @@ const message = useMemo(() => {
                           setBook({ ...book, closetime: rTime });
                           setCloseTime(rTime);
                           setNoChangeData({ ...nochangedata, closetime: rTime });
-                          if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
-                            setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                          }
+                          // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                          //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          // }
                           // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                           //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                           // }
+                          if (!lockdata) {
+                            setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          }
                         }}
                       />
                     </div>
@@ -2328,46 +2377,48 @@ const message = useMemo(() => {
                           setNoChangeData({ ...nochangedata, shedintime: rTime });
 
                           // Check if the day difference is 1, and validate the time
-                          if (calculateTotalDay() === 1) {
-                            if (closeTimeVar && rTime <= closeTimeVar) {
-                              // If the shed in time is invalid, display an error message but allow input
-                              console.log("Invalid Shed In Time");
-                            } else {
+                          // if (calculateTotalDay() === 1) {
+                          //   if (closeTimeVar && rTime <= closeTimeVar) {
+                          //     // If the shed in time is invalid, display an error message but allow input
+                          //     console.log("Invalid Shed In Time");
+                          //   }
+                            //  else {
                               // Valid input, you can handle any additional logic here
-                              if (!lockdata && dayhcl === 0) {
-                                setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                              }
-                              if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                                setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                              }
+                              // if (!lockdata && dayhcl === 0) {
+                              //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                              // }
+                              // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                              // }
                               // if (lockdata && dayhcl === 0) {
                               //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                               // }
                               // if (lockdata && dayhcl === 1 && duty === "Outstation") {
                               //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
                               // }
-                            }
-                          } else {
-                            // If the day difference is more than 1, allow any time
-                            // if (!lockdata && dayhcl === 0) {
-                            //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
                             // }
-                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                            // }
-                            if (!lockdata && dayhcl === 0) {
-                              setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                            }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                            }
-                            // if (lockdata && dayhcl === 0) {
-                            //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                            // }
-                            // if (lockdata && dayhcl === 1 && duty === "Outstation") {
-                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                            // }
-                          }
+                          // } 
+                          // else {
+                          //   // If the day difference is more than 1, allow any time
+                          //   // if (!lockdata && dayhcl === 0) {
+                          //   //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          //   // }
+                          //   // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                          //   //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          //   // }
+                          //   if (!lockdata && dayhcl === 0) {
+                          //     setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          //   }
+                          //   if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                          //     setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          //   }
+                          //   // if (lockdata && dayhcl === 0) {
+                          //   //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          //   // }
+                          //   // if (lockdata && dayhcl === 1 && duty === "Outstation") {
+                          //   //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          //   // }
+                          // }
                         }}
                       />
                     </div>
@@ -2516,12 +2567,15 @@ const message = useMemo(() => {
                             if (value >= 0) {
                               handleChange(e)
                               setKmValue(pre => ({ ...pre, shedOutState: e.target.value }))
-                              if (!lockdata && dayhcl === 0) {
+                              // if (!lockdata && dayhcl === 0) {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              // }
+                              if (!lockdata) {
                                 setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                               }
-                              if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                                setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                              }
+                              // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                              // }
                               // if (lockdata && dayhcl === 0) {
                               //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                               // }
@@ -2557,9 +2611,10 @@ const message = useMemo(() => {
                           if (value >= 0) {
                             handleChange(e)
                             setKmValue(pre => ({ ...pre, startKMState: e.target.value }))
-                            if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
-                            }
+                            // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
+                            // }
+                            
                             // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                             //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                             // }
@@ -2591,7 +2646,7 @@ const message = useMemo(() => {
                           if (value >= 0) {
                             setKmValue(pre => ({ ...pre, closeKMState: e.target.value }))
                             handleChange(e)
-                            if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
+                            if (!lockdata) {
                               setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
                             }
                             // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
@@ -2624,12 +2679,12 @@ const message = useMemo(() => {
                           if (value >= 0) {
                             setKmValue(pre => ({ ...pre, shedInState: e.target.value }))
                             handleChange(e)
-                            if (!lockdata && dayhcl === 0) {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
-                            }
-                            if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                              setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
-                            }
+                            // if (!lockdata && dayhcl === 0) {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            // }
+                            // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                            //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
+                            // }
 
                             // if (lockdata && dayhcl === 0) {
                             //   setVendorinfodata((prev) => ({ ...prev, vendorshedinkm: e.target.value }))
@@ -2656,7 +2711,8 @@ const message = useMemo(() => {
                     </div>
                     <TextField
                       name="shedkm"
-                      value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
+                      // value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
+                      value={shedKilometers.shedkm ||formData.shedkm || book.shedkm || selectedCustomerData.shedkm ||  ''}
                       onChange={(e) => {
                         const value = e.target.value;
                         if (value >= 0) {
@@ -2664,7 +2720,7 @@ const message = useMemo(() => {
                         }
                       }}
                       // disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a || outStationHide}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a }
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Add KM"
                       type="number"
                       id="shedkm"
@@ -2934,10 +2990,10 @@ const message = useMemo(() => {
                                       <Button
                                         // onClick={handleDeleteMap}
                                         onClick={handleOpen}
-                                        variant="contained" color="primary" 
+                                        variant="contained" color="primary"
                                         // disabled={superAdminAccess !== "SuperAdmin" && (temporaryStatus || hideField)}>
-                                          //  disabled={handleDatapermission(Tripsheet_delete)}>
-                                              disabled={Permissiondeleteroles}>
+                                        //  disabled={handleDatapermission(Tripsheet_delete)}>
+                                        disabled={Permissiondeleteroles}>
                                         Delete map
                                       </Button>
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
@@ -2958,27 +3014,49 @@ const message = useMemo(() => {
                                       </div>
                                     </DialogContent>
                                     <DialogActions>
-                                   <div  style={{ paddingRight: '15px' }}>
-                                               <PopupState variant="popover" popupId="demo-popup-menu">
-                                                 {(popupState) => (
-                                                   <React.Fragment>
-                                                     <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                                                       Download
-                                                     </Button>
-                                                     {row.length > 0 && (
-                                                     <Menu {...bindMenu(popupState)}>
-                                                         <MenuItem onClick={() => handleExcelDownloadtrip(row)}>Excel</MenuItem>
-                                                         <MenuItem onClick={() => handlePdfDownloadtrip(row)}>PDF</MenuItem>
-                                                     </Menu>
-                                                     )}
-                                                   </React.Fragment>
-                                                 )}
-                                               </PopupState>
-                                               </div>
+                                      <Button variant='contained' onClick={() => handleMapDataDelete()}>Delete Full Log</Button>
+                                      <div style={{ paddingRight: '15px' }}>
+                                        <PopupState variant="popover" popupId="demo-popup-menu">
+                                          {(popupState) => (
+                                            <React.Fragment>
+                                              <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                                Download
+                                              </Button>
+                                              {row.length > 0 && (
+                                                <Menu {...bindMenu(popupState)}>
+                                                  <MenuItem onClick={() => handleExcelDownloadtrip(row)}>Excel</MenuItem>
+                                                  <MenuItem onClick={() => handlePdfDownloadtrip(row)}>PDF</MenuItem>
+                                                </Menu>
+                                              )}
+                                            </React.Fragment>
+                                          )}
+                                        </PopupState>
+                                      </div>
+
                                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">
                                         Cancel
                                       </Button>
                                     </DialogActions>
+                                    <Modal
+                                      open={mapDataDeleteModal}
+                                      onClose={handleDeleteMapDataClose}
+                                      aria-labelledby="modal-modal-title"
+                                      aria-describedby="modal-modal-description"
+                                    >
+                                      <Box sx={style3}>
+                                        <div style={{ display:'flex',flexDirection:'column',gap: 15 }}>
+                                          <div>
+                                            <Typography variant="body2" sx={{ color: "#333", fontWeight: 500,fontSize:20 }}>
+                                              Are you sure want to delete the log data?
+                                            </Typography>
+                                          </div>
+                                          <div>
+                                            <Button onClick={() => handleDeleteMapDataClose()}>No</Button>
+                                            <Button onClick={() => handleFullDeleteMapData()}>Yes</Button>
+                                          </div>
+                                        </div>
+                                      </Box>
+                                    </Modal>
                                   </Dialog>
                                 </div>
                                 <div className="in-feild" style={{ marginTop: '10px' }}>
@@ -3040,9 +3118,9 @@ const message = useMemo(() => {
                                 </div>
                                 <div className="in-feild" style={{ marginTop: '20px' }}>
 
-                                  <div className="input">
+                                  {/* <div className="input">
                                     <Button variant="outlined" onClick={handleRefresh} className='full-width'>Refresh</Button>
-                                  </div>
+                                  </div> */}
                                   <div className="input">
                                     <Button
                                       disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && signaturedisabled && !a)}
@@ -3090,11 +3168,11 @@ const message = useMemo(() => {
                                       <Button variant="contained" onClick={() => {
                                         handlesignaturemageDelete()
 
-                                      }} color="primary" 
-                                      // disabled={!Tripsheet_delete}
-                                      // disabled={!Tripsheet_delete && (superAdminAccess === "SuperAdmin" || superAdminAccess === "Billing_Headoffice" )}
-                                      // disabled={handleDatapermission(Tripsheet_delete)}
-                                       disabled={Permissiondeleteroles}
+                                      }} color="primary"
+                                        // disabled={!Tripsheet_delete}
+                                        // disabled={!Tripsheet_delete && (superAdminAccess === "SuperAdmin" || superAdminAccess === "Billing_Headoffice" )}
+                                        // disabled={handleDatapermission(Tripsheet_delete)}
+                                        disabled={Permissiondeleteroles}
                                       >
                                         Delete
                                       </Button>
@@ -3120,12 +3198,12 @@ const message = useMemo(() => {
                                     columns={columns}
                                     onRowClick={handleTripRowClick}
                                     pageSize={5}
-                                    // checkboxSelection
+                                  // checkboxSelection
                                   />
                                 </div>
                               </div>
                             </div>
-      
+
                             <Dialog
                               open={imgpopupOpen}
                               onClose={handleimgPopupClose}
@@ -3168,61 +3246,61 @@ const message = useMemo(() => {
                                           border: 'none',
                                         }}
                                       />
-                                    ) : 
-                                    // (
-                                    //   <img
-                                    //     src={imageUrl}
-                                    //     alt="Embedded Content"
-                                    //     style={{
-                                    //       maxWidth: '100%',
-                                    //       maxHeight: '600px',
-                                    //       objectFit: 'contain',
-                                    //     }}
-                                    //   />
-                                    // )
-                                    // this -------------------------zoom image code state----------------------------------------------
-                                    (
-                                    <div style={{ position: "relative" }}>
-                                    {/* Zoom Controls */}
-                                    <div
-                                      style={{
-                                        position: "absolute",
-                                        top: "10px",
-                                        right: "10px",
-                                        display: "flex",
-                                        gap: "5px",
-                                        zIndex: 10, 
-                                      }}
-                                    >
-                                      <IconButton onClick={handleZoomIn} style={{ backgroundColor: "white" }}>
-                                        <ZoomIn />
-                                      </IconButton>
-                                      <IconButton onClick={handleZoomOut} style={{ backgroundColor: "white" }}>
-                                        <ZoomOut />
-                                      </IconButton>
-                                    </div>
-                      
-                                   
-                                    <img
-                                      src={imageUrl}
-                                      alt="Embedded Content"
-                                      style={{
-                                        maxWidth: "100%",
-                                        maxHeight: "600px",
-                                        objectFit: "contain",
-                                        transform: `scale(${zoom}) translate(${posX}px, ${posY}px)`, 
-                                        transition: "transform 0.1s ease-out", 
-                                        cursor: isDragging ? "grabbing" : "grab", 
-                                      }}
-                                      onWheel={handleScrollZoom} 
-                                      onMouseDown={startDrag} 
-                                      onMouseMove={onDrag} 
-                                      onMouseUp={stopDrag} 
-                                      onMouseLeave={stopDrag} 
-                                    />
-                                  </div>
-                                )
-                                // ------------------------this code image zoomm---------------------------------------------------
+                                    ) :
+                                      // (
+                                      //   <img
+                                      //     src={imageUrl}
+                                      //     alt="Embedded Content"
+                                      //     style={{
+                                      //       maxWidth: '100%',
+                                      //       maxHeight: '600px',
+                                      //       objectFit: 'contain',
+                                      //     }}
+                                      //   />
+                                      // )
+                                      // this -------------------------zoom image code state----------------------------------------------
+                                      (
+                                        <div style={{ position: "relative" }}>
+                                          {/* Zoom Controls */}
+                                          <div
+                                            style={{
+                                              position: "absolute",
+                                              top: "10px",
+                                              right: "10px",
+                                              display: "flex",
+                                              gap: "5px",
+                                              zIndex: 10,
+                                            }}
+                                          >
+                                            <IconButton onClick={handleZoomIn} style={{ backgroundColor: "white" }}>
+                                              <ZoomIn />
+                                            </IconButton>
+                                            <IconButton onClick={handleZoomOut} style={{ backgroundColor: "white" }}>
+                                              <ZoomOut />
+                                            </IconButton>
+                                          </div>
+
+
+                                          <img
+                                            src={imageUrl}
+                                            alt="Embedded Content"
+                                            style={{
+                                              maxWidth: "100%",
+                                              maxHeight: "600px",
+                                              objectFit: "contain",
+                                              transform: `scale(${zoom}) translate(${posX}px, ${posY}px)`,
+                                              transition: "transform 0.1s ease-out",
+                                              cursor: isDragging ? "grabbing" : "grab",
+                                            }}
+                                            onWheel={handleScrollZoom}
+                                            onMouseDown={startDrag}
+                                            onMouseMove={onDrag}
+                                            onMouseUp={stopDrag}
+                                            onMouseLeave={stopDrag}
+                                          />
+                                        </div>
+                                      )
+                                      // ------------------------this code image zoomm---------------------------------------------------
                                     }
                                   </>
                                 )}
@@ -3232,11 +3310,11 @@ const message = useMemo(() => {
                                   variant="contained"
                                   color="secondary"
                                   // disabled={!Tripsheet_delete}
-                                  
+
                                   // disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
                                   // disabled={!Tripsheet_delete && (superAdminAccess === "SuperAdmin" || superAdminAccess === "Billing_Headoffice" )}
                                   // disabled={handleDatapermission(Tripsheet_delete)}
-                                   disabled={Permissiondeleteroles}
+                                  disabled={Permissiondeleteroles}
                                   onClick={() => {
                                     handleimagedelete(selectedRow);
                                     handleimgPopupClose();
@@ -3505,6 +3583,8 @@ Please Click the link to close E-Tripsheet-`}
                                 </div>
 
                                 <div className="input-g">
+
+                                  {vendorinfo?.vendor_duty === "Outstation" ?
                                   <TextField
                                     name="vendortotaldays"
                                     value={calculatevendorTotalDays()}
@@ -3515,6 +3595,17 @@ Please Click the link to close E-Tripsheet-`}
                                     id="totaldays"
                                     sx={{ width: "100%" }}
                                   />
+                                  :
+                                  <TextField
+                                  name="vendortotaldays"
+                                  value={"-"}
+                                  label="Total Days"
+                                  disabled={lockdata}
+                                  size="small"
+                                  // type="number"
+                                  id="totaldays"
+                                  sx={{ width: "100%" }}
+                                />}
                                 </div>
 
                               </div>
@@ -3751,7 +3842,7 @@ Please Click the link to close E-Tripsheet-`}
                                   />
                                 </div>
                               </div>
-                                      
+
                               <div className="input-field tripsheet-vendor-bill-amount-input-field">
                                 <div className="input-g">
                                   <TextField
@@ -4240,7 +4331,7 @@ Please Click the link to close E-Tripsheet-`}
 
 
 
-  editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <Button  variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}> Save</Button>
+                          editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}> Save</Button>
 
                           : <></>
                         }
@@ -4319,7 +4410,7 @@ Please Click the link to close E-Tripsheet-`}
                           vendor_vpermettovendor: e.target.value,
                         }));
                       }}
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin"&& !a}
+                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Vendor permit"
                       id="vpermettovendor"
                       autoComplete="password"
@@ -4340,9 +4431,9 @@ Please Click the link to close E-Tripsheet-`}
                         setVendorinfodata({ ...vendorinfo, vendor_vendorparking: e.target.value })
                         setNoChangeData((prevData) => ({
                           ...prevData,
-                          vendor_vendorparking: e.target.value ,
+                          vendor_vendorparking: e.target.value,
                         }));
-                        
+
                       }}
                       disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                       label="Vendor Parking"
@@ -4365,7 +4456,7 @@ Please Click the link to close E-Tripsheet-`}
                         setVendorinfodata({ ...vendorinfo, vendor_toll: e.target.value })
                         setNoChangeData((prevData) => ({
                           ...prevData,
-                          vendortoll: e.target.value ,
+                          vendortoll: e.target.value,
                         }));
                       }}
                       disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
@@ -4576,11 +4667,11 @@ Please Click the link to close E-Tripsheet-`}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
                         disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handletravelsAutocompleteChange(event, value, "travelsname ")}
-                        onInputChange={(event, newInputValue) => {
-                          if (event && newInputValue) {
-                            handletravelsAutocompleteChange(event, { label: newInputValue.trim() }, "travelsname");
-                          }
-                        }}
+                        // onInputChange={(event, newInputValue) => {
+                        //   if (event && newInputValue) {
+                        //     handletravelsAutocompleteChange(event, { label: newInputValue.trim() }, "travelsname");
+                        //   }
+                        // }}
                         value={
                           selectedCustomerDatas.travelsname ||
                           formData.travelsname ||
@@ -4641,7 +4732,7 @@ Please Click the link to close E-Tripsheet-`}
                         )}
                       />
                     </div>
-                    <div className="input">
+                    {/* <div className="input">
                       <div className="icone">
                         <PiCarSimpleFill color="action" />
                       </div>
@@ -4668,7 +4759,7 @@ Please Click the link to close E-Tripsheet-`}
                           );
                         }}
                       />
-                    </div>
+                    </div> */}
                     <div className="input">
                       <div className="icone">
                         <NoCrashIcon color="action" />
@@ -4910,7 +5001,7 @@ Please Click the link to close E-Tripsheet-`}
                             sx={{ width: "100%" }}
 
                             // disabled={hideField && superAdminAccess !== "SuperAdmin"}
-                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head"&& superAdminAccess !== "Billing_Headoffice")}
+                            disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                             onChange={(event, value) => {
                               if (!lockdata) {
                                 handleAutocompleteVendor(event, value, "vendor_duty")
@@ -4998,6 +5089,7 @@ Please Click the link to close E-Tripsheet-`}
                         </div>
 
                         <div className="input-g">
+                        {vendorinfo?.vendor_duty === "Outstation" ? 
                           <TextField
                             name="vendortotaldays"
                             value={calculatevendorTotalDays()}
@@ -5008,6 +5100,18 @@ Please Click the link to close E-Tripsheet-`}
                             id="totaldays"
                             sx={{ width: "100%" }}
                           />
+                          :
+                          <TextField
+                          name="vendortotaldays"
+                          value={"-"}
+                          label="Total Days"
+                          disabled={lockdata}
+                          size="small"
+                          // type="number"
+                          id="totaldays"
+                          sx={{ width: "100%" }}
+                        />
+                        }
                         </div>
 
                       </div>
@@ -5198,68 +5302,68 @@ Please Click the link to close E-Tripsheet-`}
 
 
             <Modal
-          open={dialogmessagetrip}
-          onClose={handleCloseMessagetrip}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box
-            sx={{
-              position: 'absolute',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              top: '40%',
-              right: '-8%',
-              transform: 'translate(-50%, -50%)',
-              width: '400px',
-              height: '200px',
-              bgcolor: 'white',
-              // border: '1px solid #000',
-              borderRadius: 2,
-              textAlign: 'center',
-              boxShadow: 24,
-              p: 1,
-              overflowY: 'auto'
-            }}
-          >
+              open={dialogmessagetrip}
+              onClose={handleCloseMessagetrip}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box
+                sx={{
+                  position: 'absolute',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  top: '40%',
+                  right: '-8%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '400px',
+                  height: '200px',
+                  bgcolor: 'white',
+                  // border: '1px solid #000',
+                  borderRadius: 2,
+                  textAlign: 'center',
+                  boxShadow: 24,
+                  p: 1,
+                  overflowY: 'auto'
+                }}
+              >
 
-{/* {console.log( formData.MessageText ,selectedCustomerData.MessageText,book.MessageText,"Text")} */}
-            <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'self-start' }}>
-              <p>Edited By: <span>{messageditedbeforetrip}</span></p>
+                {/* {console.log( formData.MessageText ,selectedCustomerData.MessageText,book.MessageText,"Text")} */}
+                <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'self-start' }}>
+                  <p>Edited By: <span>{messageditedbeforetrip}</span></p>
 
-              <div className="input1 pick-up-address-input2">
-                <TextField
-                  name="MessageText"
-                  margin="normal"
-                  size="small"
-                  autoComplete="new-password"
-                  className="full-width"
-                 
-                  label="Message"
-                  id="MessageTexttripsheet "
-                  multiline
-                  rows={2}
-                  sx={{ width: "100%" }}
-                  value={
-                    formData.MessageText ||
-                    selectedCustomerData.MessageText ||
-                    book.MessageText ||
-                    ""
-                  }
-                  // onChange={(event) => handleChangetext(event)}
-                  onChange={(e) => {
-                    handleChangetexttrip(e)
-                  }} 
-                />
+                  <div className="input1 pick-up-address-input2">
+                    <TextField
+                      name="MessageText"
+                      margin="normal"
+                      size="small"
+                      autoComplete="new-password"
+                      className="full-width"
 
-              </div>
-              <div className="message_data">
-                <Button onClick={handleCloseMessagetrip}>Done</Button>
-              </div>
-            </div>
-          </Box>
-        </Modal>
+                      label="Message"
+                      id="MessageTexttripsheet "
+                      multiline
+                      rows={2}
+                      sx={{ width: "100%" }}
+                      value={
+                        formData.MessageText ||
+                        selectedCustomerData.MessageText ||
+                        book.MessageText ||
+                        ""
+                      }
+                      // onChange={(event) => handleChangetext(event)}
+                      onChange={(e) => {
+                        handleChangetexttrip(e)
+                      }}
+                    />
+
+                  </div>
+                  <div className="message_data">
+                    <Button onClick={handleCloseMessagetrip}>Done</Button>
+                  </div>
+                </div>
+              </Box>
+            </Modal>
 
 
             <div >
@@ -5318,7 +5422,7 @@ Please Click the link to close E-Tripsheet-`}
                     </div>
 
                   </Box>
-                  <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} tripGpsData={tripGpsData} fullGpsData={fullGpsData} allGpsData={allGpsData} />
+                  <EditMapCheckComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} tripGpsData={tripGpsData} fullGpsData={fullGpsData} allGpsData={allGpsData} GmapimageUrl={setGMapImageUrl} />
 
 
                   {/* <EditMapComponent tripid={tripid} edit="editMode" starttime={starttime} startdate={startdate} closedate={closedate} closetime={endtime} /> */}
@@ -5329,14 +5433,14 @@ Please Click the link to close E-Tripsheet-`}
               </Modal>
             </div>
             {deletetripasheetdata &&
-            <DeleteConfirmationDialog
+              <DeleteConfirmationDialog
                 open={deletetripasheetdata}
                 onClose={() => setDeleteTripsheetData(false)}
                 onConfirm={handleClick}
               />
             }
 
-          
+
             <div>
               <Box className="common-speed-dail">
                 <StyledSpeedDial
@@ -5355,9 +5459,9 @@ Please Click the link to close E-Tripsheet-`}
                     />
                   )} */}
 
-                  
 
-{isEditMode && speeddailacesssedit && (
+
+                  {isEditMode && speeddailacesssedit && (
                     <SpeedDialAction
                       key="edit"
                       icon={<ModeEditIcon />}
@@ -5383,11 +5487,11 @@ Please Click the link to close E-Tripsheet-`}
                     //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                     // />
                     <SpeedDialAction
-                    key="delete"
-                    icon={<DeleteIcon />}
-                    tooltipTitle="Delete"
-                    onClick={() => setDeleteTripsheetData(true)}
-                  />
+                      key="delete"
+                      icon={<DeleteIcon />}
+                      tooltipTitle="Delete"
+                      onClick={() => setDeleteTripsheetData(true)}
+                    />
                   )}
                   {Tripsheet_new === 1 && !isEditMode && (
                     <SpeedDialAction
@@ -5403,13 +5507,13 @@ Please Click the link to close E-Tripsheet-`}
                     tooltipTitle="Cancel"
                     onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                   />
-                   <SpeedDialAction
-              key="Message"
-              icon={<MessageIcon />}
-              tooltipTitle="Message"
-              onClick={handleMessagetrip}
+                  <SpeedDialAction
+                    key="Message"
+                    icon={<MessageIcon />}
+                    tooltipTitle="Message"
+                    onClick={handleMessagetrip}
 
-            />
+                  />
                 </StyledSpeedDial>
               </Box>
             </div>

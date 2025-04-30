@@ -268,7 +268,7 @@ const Sidebar = () => {
   const Billing_Transfer = permissions[6]?.read
   const Billing_CoveringBill = permissions[7]?.read
   const Billing_Reports = permissions[8]?.read
-const Billing_Logs = permissions[8]?.read
+// const Billing_Logs = permissions[8]?.read
   // const REGISTER = permissions[8]?.read;
   // const SETTING = permissions[12]?.read || permissions[13]?.read;
   // const REGISTER = permissions[9]?.read;
@@ -401,8 +401,8 @@ const Billing_Logs = permissions[8]?.read
       navigate("/home/info/ratemanagement");
     } else if (window.location.pathname !== "/home/info/mailer") {
       navigate("/home/info/mailer");
-    } else if (window.location.pathname !== "/home/info/fuelinfo") {
-      navigate("/home/info/fuelinfo");
+    } else if (window.location.pathname !== "/home/info/LogDetails") {
+      navigate("/home/info/LogDetails");
     } else if (window.location.pathname !== "/home/registration/customer") {
       navigate("/home/registration/customer");
     }
@@ -815,19 +815,6 @@ const Billing_Logs = permissions[8]?.read
                 label={`${expanded === false ? '' : 'Billing'}`}
                 // to={BILLING && ("/home/billing/billing")}
 
-                // to={
-                //   BILLING_BillingMain ?
-                //     "/home/billing/billing" :
-                //     Billing_Transfer ?
-                //       "/home/billing/transfer" :
-                //       Billing_CoveringBill ?
-                //         "/home/billing/coveringbill" :
-                //         Billing_Reports ?
-                //           "/home/billing/reports" :
-                //           "/home/billing/billing"
-                          
-                // }
-
                 to={
                   BILLING_BillingMain ?
                     "/home/billing/billing" :
@@ -837,13 +824,11 @@ const Billing_Logs = permissions[8]?.read
                         "/home/billing/coveringbill" :
                         Billing_Reports ?
                           "/home/billing/reports" :
-                          Billing_Logs ?
-                          "/home/billing/LogDetails" :
                           "/home/billing/billing"
                           
                 }
 
-                // alt={
+                // to={
                 //   BILLING_BillingMain ?
                 //     "/home/billing/billing" :
                 //     Billing_Transfer ?
@@ -852,7 +837,10 @@ const Billing_Logs = permissions[8]?.read
                 //         "/home/billing/coveringbill" :
                 //         Billing_Reports ?
                 //           "/home/billing/reports" :
+                //           Billing_Logs ?
+                //           "/home/billing/LogDetails" :
                 //           "/home/billing/billing"
+                          
                 // }
 
                 alt={
@@ -864,10 +852,22 @@ const Billing_Logs = permissions[8]?.read
                         "/home/billing/coveringbill" :
                         Billing_Reports ?
                           "/home/billing/reports" :
-                          Billing_Logs ?
-                          "/home/billing/LogDetails" :
                           "/home/billing/billing"
                 }
+
+                // alt={
+                //   BILLING_BillingMain ?
+                //     "/home/billing/billing" :
+                //     Billing_Transfer ?
+                //       "/home/billing/transfer" :
+                //       Billing_CoveringBill ?
+                //         "/home/billing/coveringbill" :
+                //         Billing_Reports ?
+                //           "/home/billing/reports" :
+                //           Billing_Logs ?
+                //           "/home/billing/LogDetails" :
+                //           "/home/billing/billing"
+                // }
                 // to={"/home/billing/billing"}
                 // alt="/home/billing/billing"
                 value="/home/billing"
@@ -1006,7 +1006,7 @@ const Billing_Logs = permissions[8]?.read
                   mailer ?
                     "/home/info/mailer"
                     : Fuel
-                      ? "/home/info/fuelinfo"
+                      ? "/home/info/LogDetails"
                       : Employee1
                         ? "/home/info/employee" :
                         Aggrement ?
@@ -1027,7 +1027,7 @@ const Billing_Logs = permissions[8]?.read
                   mailer
                     ? "/home/info/mailer"
                     : Fuel
-                      ? "/home/info/fuelinfo"
+                      ? "/home/info/LogDetails"
                       : Employee1
                         ? "/home/info/employee"
                         :  Aggrement ?
@@ -1192,7 +1192,7 @@ const Billing_Logs = permissions[8]?.read
               </div> :<></>}
               {Fuel ?
               <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/fuelinfo')}>
+                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/LogDetails')}>
                   <span>
                     <BsFillFuelPumpFill />
                   </span>

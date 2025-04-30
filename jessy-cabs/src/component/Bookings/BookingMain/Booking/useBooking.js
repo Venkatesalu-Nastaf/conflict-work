@@ -159,14 +159,14 @@ const useBooking = () => {
       "orderByEmail",
       "orderbyemail",
       "mobile",
-      "vehiclemodule",
+      // "vehiclemodule",
       "ratenamebook",
       "shedOutDate",
       "escort",
       'transferreport',
       'messageedited',
       'MessageText',
-
+      'vehicleTyped'
 
     ];
 
@@ -215,7 +215,7 @@ const useBooking = () => {
     address1: "",
     report: "",
     vehicleName: "",
-    paymenttype: "",
+    paymenttype:"BTC",
     // shedOutDate: '',
     // startdate: "",
     shedOutDate:dayjs(),
@@ -238,14 +238,15 @@ const useBooking = () => {
     hireTypes: "",
     travelsname: "",
     vehRegNo: "",
-    vehiclemodule: "",
+    // vehiclemodule: "",
     driverName: "",
     mobileNo: "",
     travelsemail: "",
     Groups: "",
-    escort:'',
-    transferreport:"",
-    MessageText:""
+    escort:'No',
+    transferreport:"No",
+    MessageText:"",
+    vehicleTyped:""
   
   }
 
@@ -455,7 +456,7 @@ const useBooking = () => {
         setBook(prevState => ({
           ...prevState,
           vehRegNo: manualInput,
-          vehiclemodule: selectedVehicle?.vehType || prevState.vehiclemodule,  // Keep current value if not found
+          // vehiclemodule: selectedVehicle?.vehType || prevState.vehiclemodule,  // Keep current value if not found
           Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
           hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
         }));
@@ -463,7 +464,7 @@ const useBooking = () => {
         setSelectedCustomerData(prevState => ({
           ...prevState,
           vehRegNo: manualInput,
-          vehiclemodule: selectedVehicle?.vehType || prevState.vehiclemodule,  // Keep current value if not found
+          // vehiclemodule: selectedVehicle?.vehType || prevState.vehiclemodule,  // Keep current value if not found
           Groups: selectedVehicle?.Groups || prevState.Groups,  // Same logic for Groups
           hireTypes: selectedVehicle?.hiretypes || prevState.hireTypes
         }));
@@ -1206,7 +1207,8 @@ console.log(sendEmail,"send",hybdridatabooking)
         hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
         vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
-        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||"A/C",
+        // vehiclemodule: "A/C",
+        vehicleTyped: formData.vehicleTyped || selectedCustomerData.vehicleTyped || book.vehicleTyped,
         driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
@@ -1272,6 +1274,7 @@ console.log(sendEmail,"send",hybdridatabooking)
       if (error.message ) {
           setError(true);
           setErrorMessage("Check your Network Connection");
+          setisAddbtnload(false)
           // console.log('Network error');
       } else if (error.response) {
           setError(true);
@@ -1348,7 +1351,8 @@ if (Object.keys(nochangedata).length === 0) {
         hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
         vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
-        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||"A/C",
+        // vehiclemodule: "A/C",
+        vehicleTyped: formData.vehicleTyped || selectedCustomerData.vehicleTyped || book.vehicleTyped,
         driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
@@ -1562,13 +1566,14 @@ if (Object.keys(nochangedata).length === 0) {
   //     }
   //   }
   // }
-  const handleRowClick = useCallback(
-    (params) => {
-      setSelectedCustomerDatas(params);
-      handleChange({ target: { name: "customer", value: params.customer } });
-    },
-    [handleChange]
-  );
+  // const handleRowClick = useCallback(
+  //   (params) => {
+  //     console.log(params,"callbacks")
+  //     setSelectedCustomerDatas(params);
+  //     handleChange({ target: { name: "customer", value: params.customer } });
+  //   },
+  //   [handleChange]
+  // );
   const handleRowClickdriver = (params) => {
     setSelectedCustomerdriver(params);
     setRate_name(params.rateType);
@@ -1755,6 +1760,9 @@ if (Object.keys(nochangedata).length === 0) {
     setDialogMessage(false)
   }
   //--------------------------------------------------------
+//   console.log(formData.transferreport ,selectedCustomerData.transferreport ,book.transferreport,"trans",transferreport)
+// console.log(formData.escort,selectedCustomerData.escort,book.escort,"transescooooooo",escort)
+// console.log(formData.paymenttype,selectedCustomerData.paymenttype,book.paymenttype,"transpayyyyyyyyyyyy")
 
   return {
     handleSelectAll, handlecheckbox, selectAll, deletefile,
@@ -1771,7 +1779,7 @@ if (Object.keys(nochangedata).length === 0) {
     book,
     handleClick,
     handleChange,
-    handleRowClick,
+    // handleRowClick,
     handleAdd,
     hidePopup,
     formData,

@@ -250,6 +250,11 @@ const useEmployee = () => {
                         bottom: { style: 'thin' },
                         right: { style: 'thin' },
                     };
+                    const isHeader = row.number === 1;
+                    worksheet.getCell(cellAddress).alignment = {
+                        horizontal: isHeader ? 'center' : 'left',
+                        vertical: 'middle',
+                    };
                 });
             });
     

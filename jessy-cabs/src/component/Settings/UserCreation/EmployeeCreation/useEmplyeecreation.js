@@ -117,6 +117,46 @@ const useEmplyeecreation = () => {
 
 
 
+    // const initialPermissionsData = [
+
+    //     { id: 0, name: 'BOOKING', read: false, new: false, modify: false, delete: false },
+    //     { id: 1, name: 'Booking', read: false, new: false, modify: false, delete: false },
+    //     { id: 2, name: 'Trip Status', read: false, new: false, modify: false, delete: false },
+    //     { id: 3, name: 'Trip sheet', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 4, name: 'BILLING', read: false, new: false, modify: false, delete: false },
+    //     { id: 5, name: 'Billing', read: false, new: false, modify: false, delete: false },
+    //     { id: 6, name: 'Transfer', read: false, new: false, modify: false, delete: false },
+    //     { id: 7, name: 'Covering Bill', read: false, new: false, modify: false, delete: false },
+    //     { id: 8, name: 'Reports', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 9, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
+    //     { id: 10, name: 'Rate Type', read: false, new: false, modify: false, delete: false },
+    //     { id: 11, name: 'Customer', read: false, new: false, modify: false, delete: false },
+    //     { id: 12, name: 'Supllier', read: false, new: false, modify: false, delete: false },
+    //     { id: 13, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
+    //     // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 14, name: 'SETTING', read: false, new: false, modify: false, delete: false },
+    //     { id: 15, name: 'User Creation', read: false, new: false, modify: false, delete: false },
+    //     { id: 16, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 17, name: 'INFO', read: false, new: false, modify: false, delete: false },
+    //     // { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
+    //     { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
+    //     { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
+    //     { id: 20, name: 'Employee', read: false, new: false, modify: false, delete: false },
+    //     { id: 21, name: 'Agreement', read: false, new: false, modify: false, delete: false },
+    //     { id: 22, name: 'Dashboard', read: false },
+    //     // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+    //     { id: 23, name: 'Map', read: false, new: false, modify: false, delete: false },
+    //     { id: 24, name: 'RealTime', read: false, new: false, modify: false, delete: false },
+    //     { id: 25, name: 'Vehicle', read: false, new: false, modify: false, delete: false },
+    //     { id: 26, name: 'Reminders', read: false, new: false, modify: false, delete: false },
+    //     { id: 27, name: 'History', read: false, new: false, modify: false, delete: false },
+    //     { id: 28, name: 'Records', read: false, new: false, modify: false, delete: false },
+    // ];
+
     const initialPermissionsData = [
 
         { id: 0, name: 'BOOKING', read: false, new: false, modify: false, delete: false },
@@ -144,7 +184,7 @@ const useEmplyeecreation = () => {
         { id: 17, name: 'INFO', read: false, new: false, modify: false, delete: false },
         // { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
         { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
-        { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
+        { id: 19, name: 'Log Details', read: false, new: false, modify: false, delete: false },
         { id: 20, name: 'Employee', read: false, new: false, modify: false, delete: false },
         { id: 21, name: 'Agreement', read: false, new: false, modify: false, delete: false },
         { id: 22, name: 'Dashboard', read: false },
@@ -790,6 +830,7 @@ const indexRanges = [
 
             await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, data);
             handleList()
+            setCredentialData();
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
@@ -1154,7 +1195,7 @@ const indexRanges = [
         // rolefielddropdown,setRoleFielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
         //ffor permission
-        deleteuserceationdata,setDeleteUsercreation,
+        deleteuserceationdata,setDeleteUsercreation,setCredentialData,
         permissionsData, handleSwitchChange, handleCheckboxChange, setReadState,setModifyState,setDeleteState,setNewState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
     };
 };

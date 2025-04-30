@@ -285,7 +285,7 @@ const useMonthlyWise = () => {
       // loop through all of the columns and set the alignment with width.
       worksheet.columns.forEach((column) => {
         column.width = column.header.length + 5;
-        column.alignment = { horizontal: 'center', vertical: 'middle' };
+        // column.alignment = { horizontal: 'center', vertical: 'middle' };
       });
 
       rows.forEach((singleData, index) => {
@@ -337,6 +337,13 @@ const useMonthlyWise = () => {
             left: { style: 'thin' },
             bottom: { style: 'thin' },
             right: { style: 'thin' },
+          };
+          
+          
+          const isHeader = row.number === 1;
+          worksheet.getCell(cellAddress).alignment = {
+              horizontal: isHeader ? 'center' : 'left',
+              vertical: 'middle',
           };
         });
       });

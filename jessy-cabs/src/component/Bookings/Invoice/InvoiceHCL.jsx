@@ -23,6 +23,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
   const closedata = tripSheetData.shedInDate || selectedCustomerData.shedInDate || selectedCustomerDatas.shedInDate || book.shedInDate
   const closedata2 = tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate
   const triplabel = tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid
+  const totaldaysvalue = dutiesdata === "Outstation" ? TotalDays : "-"
   // console.log(triplabel, "lllhcl")
 
 
@@ -36,10 +37,10 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
   function removeSeconds(time) {
     // Split the time string by colon (:)
     if (time !== "undefined") {
-      const timeParts = time.split(':');
+      const timeParts = time?.split(':');
 
       // Check if there are seconds (length 3), return hours:minutes
-      if (timeParts.length === 3) {
+      if (timeParts?.length === 3) {
         return `${timeParts[0]}:${timeParts[1]}`;
       }
 
@@ -244,7 +245,8 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                             {/* <td id='table-datas-hcl'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
                                             <td id='table-datas-hcl'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
                                             <td id='table-datas-hcl'><span >{totalhour}</span></td> */}
-                            <td id='table-datas-hcl'><span >{TotalDays}</span></td>
+                            {/* <td id='table-datas-hcl'><span >{TotalDays}</span></td> */}
+                            <td id='table-datas-hcl'><span >{totaldaysvalue}</span></td>
                             <td id='table-datas-hcl'><span >{Totaltimes}</span></td>
                             <td id='table-datas-hcl'><span >{Totalkmoutsation}</span></td>
                           </tr>
@@ -285,7 +287,8 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                             {/* <td id='table-datas-hcl'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
                                             <td id='table-datas-hcl'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime}</span></td>
                                             <td id='table-datas-hcl'><span >{totalhour}</span></td> */}
-                            <td id='table-datas-hcl'><span >{TotalDays}</span></td>
+                            {/* <td id='table-datas-hcl'><span >{TotalDays}</span></td> */}
+                            <td id='table-datas-hcl'><span >{totaldaysvalue}</span></td>
                             <td id='table-datas-hcl'><span >{Totaltimes}</span></td>
                             <td id='table-datas-hcl'><span >{Totalkm}</span></td>
                           </tr>

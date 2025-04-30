@@ -116,16 +116,16 @@ const deletestyle = {
   p: 4,
 };
 
-export const vehicaleinfos = [
-  {
-    Option: "A/C",
-    // optionvalue: "a/c",
-  },
-  {
-    Option: "Non A/C",
-    // optionvalue: "non_a/c",
-  },
-];
+// export const vehicaleinfos = [
+//   {
+//     Option: "A/C",
+//     // optionvalue: "a/c",
+//   },
+//   {
+//     Option: "Non A/C",
+//     // optionvalue: "non_a/c",
+//   },
+// ];
 export const GroupTypes = [
   {
     Option: "Luxzury",
@@ -444,7 +444,7 @@ const Vehicaleinfo = ({ stationName }) => {
                     }}
                   />
                 </div>
-                <div className="input radio">
+                {/* <div className="input radio">
                   <div className="icone">
                     <PiCarSimpleFill color="action" />
                   </div>
@@ -466,7 +466,7 @@ const Vehicaleinfo = ({ stationName }) => {
                       );
                     }}
                   />
-                </div>
+                </div> */}
                 <div className="input">
                   <div className="icone">
                     <EmailIcon color="action" />

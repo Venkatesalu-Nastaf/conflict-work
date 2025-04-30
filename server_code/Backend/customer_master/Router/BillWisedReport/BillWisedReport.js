@@ -16,16 +16,64 @@ router.get('/customerBilledDetails', (req, res) => {
     });
 
     const groupBillingPromise = new Promise((resolve, reject) => {
-        db.query("SELECT * FROM Group_billing WHERE Customer = ? AND Status='Billed' AND BillReportStatus  is null", [customer], (error, result) => {
-            if (error) {
-                return reject('Error fetching group billing details');
+        db.query(
+            "SELECT * FROM Group_billing WHERE Customer = ? AND Status='Billed' AND BillReportStatus IS NULL",
+            [customer],
+            async (error, result) => {
+                if (error) {
+                    return reject('Error fetching group billing details');
+                }
+    
+                try {
+                    const updatedResult = (
+                        await Promise.all(
+                          result.map(async ({ id, ...item }) => {
+                            const tripIds = item.Trip_id.split(',').map(id => id.trim());
+                      
+                            // Get all invoice numbers for the ReferenceNo
+                            const invoiceRows = await new Promise((res, rej) => {
+                              db.query(
+                                "SELECT Invoice_No FROM GroupBillinginvoice_no WHERE Referenceno = ?",
+                                [item.ReferenceNo],
+                                (err, rows) => (err ? rej(err) : res(rows))
+                              );
+                            });
+                      
+                            // Get amounts for all trip IDs
+                            const amountResult = await new Promise((res, rej) => {
+                              db.query(
+                                "SELECT tripid, totalcalcAmount AS totalAmount FROM tripsheet WHERE tripid IN (?)",
+                                [tripIds],
+                                (err, rows) => (err ? rej(err) : res(rows))
+                              );
+                            });
+                      
+                            // 🧠 Match tripIDs with invoice numbers one-to-one if lengths match
+                            const repeatedResults = [];
+                            for (let i = 0; i < amountResult.length; i++) {
+                              repeatedResults.push({
+                                ...item,
+                                Trip_id: amountResult[i].tripid.toString(),
+                                Amount: amountResult[i].totalAmount || 0,
+                                Invoice_no: invoiceRows[i] ? invoiceRows[i].Invoice_No : null,
+                              });
+                            }
+                      
+                            return repeatedResults;
+                          })
+                        )
+                      ).flat();
+                      
+                    console.log(updatedResult, 'Final Group Billing Result');
+                    resolve(updatedResult);
+                } catch (err) {
+                    console.error(err);
+                    reject('Error processing group billing result');
+                }
             }
-            const updatedResult = result.map(({ id, ...rest }) => rest);
-            resolve(updatedResult);
-            console.log(updatedResult, 'result groupbilling');
-        });
+        );
     });
-
+    
     const transferListPromise = new Promise((resolve, reject) => {
         db.query("SELECT * FROM Transfer_list WHERE Organization_name = ? AND Status='Billed' AND BillReportStatus is null", [customer], (error, result) => {
             if (error) {

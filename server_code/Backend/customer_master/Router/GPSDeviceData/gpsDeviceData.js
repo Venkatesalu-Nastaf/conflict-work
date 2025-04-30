@@ -241,11 +241,20 @@ router.post('/getTodayVehiclePoints', (req, res) => {
 
 const axios = require('axios');
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE'; // Replace with your API key
+// const GOOGLE_MAPS_API_KEY = 'AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE'; // Replace with your API key
+const GOOGLE_MAPS_API_KEY = 'AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk'; // Replace with your API key
+
+
 
 async function getAddressFromLatLng(lat, lng) {
     try {
         const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
+            // httpsAgent: agent,
+            // params: {
+            //   latlng: `${lat},${lng}`,
+            //   key: GOOGLE_MAPS_API_KEY
+            // },
+            // timeout: 500000
             params: {
                 latlng: `${lat},${lng}`,
                 key: GOOGLE_MAPS_API_KEY
@@ -253,8 +262,15 @@ async function getAddressFromLatLng(lat, lng) {
         });
 
         if (response.data.status === 'OK' && response.data.results.length > 0) {
+            console.log(response.data.status ,"formatteddddddddddddddddddddd",response.data.results.length)
+            console.log("formatteddddddddddddd",response.data.results[0],"formatteddddddddddd",);
+            console.log( response.data.results[0].formatted_address,"formattteddddddddddddddddddd");
             return response.data.results[0].formatted_address;
-        } else {
+        }
+        if (response.data.status === 'OVER_QUERY_LIMIT') {
+            console.warn("Reached Google Geocoding API rate limit.",response.data.status);
+            return 'Address not found';
+          } else {
             return 'Address not found';
         }
     } catch (error) {
@@ -263,6 +279,7 @@ async function getAddressFromLatLng(lat, lng) {
     }
 }
 
+
 router.get('/getLatLongByTripId', async (req, res) => {
     const { gpsTripId } = req.query;
     console.log(gpsTripId, "gpsTripId");
@@ -270,10 +287,15 @@ router.get('/getLatLongByTripId', async (req, res) => {
     if (!gpsTripId) {
         return res.status(400).json({ error: "gpsTripId is required" });
     }
-
+    const filterSqlCheckQuery = `SELECT * FROM gmapdata WHERE trip_type="start" AND tripid =?`;
     const sqlgmapdataQuery = `SELECT * FROM gmapdata WHERE tripid = ?`;
-    const sqlQueryCheckReached = `SELECT COUNT(*) AS reachedCount FROM VehicleAccessLocation WHERE Trip_id = ? AND Trip_Status = 'Reached'`;
-    // const sqlQueryAllStatuses = `
+    // const sqlQueryCheckReached = `SELECT COUNT(*) AS reachedCount FROM VehicleAccessLocation WHERE Trip_id = ? AND Trip_Status = 'Reached' `;
+    const sqlQueryCheckReached = `
+    SELECT COUNT(*) AS reachedCount 
+    FROM VehicleAccessLocation 
+    WHERE Trip_id = ? AND Trip_Status = 'Reached' AND gps_status IS NULL
+  `;
+      // const sqlQueryAllStatuses = `
     // SELECT * FROM VehicleAccessLocation 
     // WHERE Trip_id = ? 
     // AND Trip_Status IN ('Started', 'Reached', 'On_Going','waypoint','waypoint_Started','waypoint_Reached') 
@@ -314,85 +336,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         console.log("Database query error:", error);
                         return res.status(500).json({ error: "Internal Server Error" });
                     }
-                    // const fullWaypointCount = allStatusesResult.length - 2;
-                    // console.log(allStatusesResult.length, "alllllllllllllllllllllllllllllllllllllllll", fullWaypointCount);
-
-                //     const totalOnGoing = allStatusesResult
-                //     .map((row, index) => ({ ...row, originalIndex: index })) // Keep track of original index
-                //     .filter(row => row.Trip_Status === 'On_Going');
-                
-                // const waypointsCount = 8;
-                // let selectedWaypointsIndexes = [];
-                
-                // if (totalOnGoing.length > waypointsCount) {
-                //     // Calculate evenly spaced waypoints
-                //     const step = Math.floor(totalOnGoing.length / (waypointsCount + 1));
-                //     for (let i = 1; i <= waypointsCount; i++) {
-                //         selectedWaypointsIndexes.push(totalOnGoing[i * step].originalIndex);
-                //     }
-                // }
-
-                    // Process data before inserting
-                    // const insertValues = await Promise.all(allStatusesResult.map(async (row, index) => {
-                    //     let location_alpha = '';
-                    //     let trip_type = '';
-                    //     // console.log(row, 'rrrrrrrrrrrrrrrrrrr=================');
-
-                    //     // if (row.Trip_Status === 'Started') {
-                    //     //     location_alpha = 'A';
-                    //     //     trip_type = 'start';
-                    //     // } else if (row.Trip_Status === 'On_Going') {
-                    //     //     location_alpha = 'NULL';
-                    //     //     trip_type = 'On_Going';
-                    //     // }
-                    //     // else if (row.Trip_Status === 'waypoint') {
-                    //     //     location_alpha = 'B';
-                    //     //     trip_type = 'waypoint';
-                    //     // }
-                    //     // else if (row.Trip_Status === 'waypoint_Started ') {
-                    //     //     console.log('rrrrrrrrrrrrrrrrrrrrrrr', row.Trip_Status);
-
-                    //     //     location_alpha = 'B';
-                    //     //     trip_type = 'waypoint';
-                    //     // }
-                    //     // else if (row.Trip_Status === 'waypoint_Reached ') {
-                    //     //     console.log('rrrrrrrrrrrrrrrrrrrrrrr', row.Trip_Status);
-
-                    //     //     location_alpha = 'B';
-                    //     //     trip_type = 'waypoint';
-                    //     // }
-                    //     // else if (row.Trip_Status === 'Reached') {
-                    //     //     location_alpha = 'C';
-                    //     //     trip_type = 'end';
-                    //     // }
-
-                    //     if (row.Trip_Status === 'Started') {
-                    //         location_alpha = 'A';
-                    //         trip_type = 'start';
-                    //     } else if (row.Trip_Status === 'On_Going') {
-                    //         if (selectedWaypointsIndexes.includes(index)) {
-                    //             location_alpha = 'B';  // Mark as waypoint
-                    //             trip_type = 'waypoint';
-                    //         } else {
-                    //             location_alpha = 'NULL';
-                    //             trip_type = 'On_Going';
-                    //         }
-                    //     } else if (row.Trip_Status === 'waypoint') {
-                    //         location_alpha = 'B';
-                    //         trip_type = 'waypoint';
-                    //     } else if (row.Trip_Status === 'Reached') {
-                    //         location_alpha = 'C';
-                    //         trip_type = 'end';
-                    //     }
-
-                    //     const formattedTime = row.Tripstarttime ? row.Tripstarttime.substring(0, 5) : null;
-                    //     const address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc); // Get address
-
-                    //     return [
-                    //         row.Trip_id, location_alpha, row.Runing_Date, formattedTime,
-                    //         trip_type, address, row.Latitude_loc, row.Longtitude_loc
-                    //     ];
-                    // }));
+                    
                     const totalOnGoing = allStatusesResult
                     .map((row, index) => ({ ...row, originalIndex: index })) 
                     .filter(row => row.Trip_Status === 'On_Going');
@@ -400,13 +344,23 @@ router.get('/getLatLongByTripId', async (req, res) => {
                 const waypointsCount = 8;
                 let selectedWaypointsIndexes = [];
                 
-                if (totalOnGoing.length >= waypointsCount) {
-                    const step = Math.floor(totalOnGoing.length / waypointsCount);
+                // if (totalOnGoing.length >= waypointsCount) {
+                //     const step = Math.floor(totalOnGoing.length / waypointsCount);
                     
+                //     for (let i = 0; i < waypointsCount; i++) {
+                //         selectedWaypointsIndexes.push(totalOnGoing[i * step].originalIndex);
+                //     }
+                // }
+                if (totalOnGoing.length <= waypointsCount) {
+                    // If 8 or less, pick all their indexes
+                    selectedWaypointsIndexes = totalOnGoing.map(row => row.originalIndex);
+                  } else {
+                    // If more than 8, pick in steps
+                    const step = Math.floor(totalOnGoing.length / waypointsCount);
                     for (let i = 0; i < waypointsCount; i++) {
-                        selectedWaypointsIndexes.push(totalOnGoing[i * step].originalIndex);
+                      selectedWaypointsIndexes.push(totalOnGoing[i * step].originalIndex);
                     }
-                }
+                  }
                 
                 const insertValues = await Promise.all(allStatusesResult.map(async (row, index) => {
                     let location_alpha = '';
@@ -430,6 +384,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
                 
                     const formattedTime = row.Tripstarttime ? row.Tripstarttime.substring(0, 5) : null;
                     const address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                    // const address = await safeGetAddress(row.Latitude_loc, row.Longtitude_loc);
                 
                     return [
                         row.Trip_id, location_alpha, row.Runing_Date, formattedTime,
@@ -443,14 +398,38 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         INSERT INTO gmapdata (tripid, Location_Alpha, date, time, trip_type, place_name, Latitude, Longitude)
                         VALUES ?`;
 
-                    db.query(sqlInsertGmapdataQuery, [insertValues], (error, insertResult) => {
-                        if (error) {
-                            console.log("Database insert error:", error);
+                    // db.query(sqlInsertGmapdataQuery, [insertValues], (error, insertResult) => {
+                    //     if (error) {
+                    //         console.log("Database insert error:", error);
+                    //         return res.status(500).json({ error: "Internal Server Error" });
+                    //     }
+                    //     console.log("Inserted rows:", insertResult.affectedRows);
+                    //     res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
+                    // });
+              
+                    db.query(filterSqlCheckQuery, [gpsTripId], async (error3, checkStartResult) => {
+                        if (error3) {
+                            console.log("Error checking existing 'start' record:", error3);
                             return res.status(500).json({ error: "Internal Server Error" });
                         }
-                        console.log("Inserted rows:", insertResult.affectedRows);
-                        res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
+                    console.log(checkStartResult,"ccccccccccccccccccccccccccccccccccccs");
+                    
+                        if (checkStartResult.length > 0) {
+                            console.log("Start trip already exists in gmapdata.");
+                            return res.status(200).json({ message: "Start trip already inserted", existing: true });
+                        }
+                    
+                        // Proceed to insert the gmapdata (sqlInsertGmapdataQuery)
+                        db.query(sqlInsertGmapdataQuery, [insertValues], (error, insertResult) => {
+                            if (error) {
+                                console.log("Database insert error:", error);
+                                return res.status(500).json({ error: "Internal Server Error" });
+                            }
+                            console.log("Inserted rows:", insertResult.affectedRows);
+                            res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
+                        });
                     });
+                    
                 });
             
             } else {
@@ -545,5 +524,20 @@ router.get('/allLatLongDetailsByTripId', (req, res) => {
 //     });
 // });
 
+// suresh api 
+router.get('/gpstripidgetongoingdata/:startdatevalue',(req, res) => {
+    const { startdatevalue } = req.params;
+   
+    // console.log("tripiddddddddddddddddddd",startdatevalue);
+
+    const sqlQuery = "SELECT count(*) as countdata FROM tripsheet WHERE startdate = ? and apps  IN ('On_Going')";
+    db.query(sqlQuery, [startdatevalue], (error, result) => {
+        if (error) {
+          
+            return res.status(500).json({ error: "Database query error" });
+        }
+        return res.status(200).json(result);
+})
+})
 
 module.exports = router;

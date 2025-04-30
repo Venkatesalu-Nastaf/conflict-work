@@ -579,11 +579,13 @@ router.get('/customers/:customer', (req, res) => {
 
 router.get('/routedata/:tripid', (req, res) => {
   const tripid = req.params.tripid;
-  const tripType = ["start", "waypoint", "end"]; // Define allowed trip types
+  const tripType = ["start", "waypoint", "end"];
 
   db.query(
-    'SELECT * FROM gmapdata WHERE tripid = ? AND trip_type IN (?)',
-    [tripid, tripType], // Pass tripType array correctly
+    `SELECT * FROM gmapdata 
+     WHERE tripid = ? AND trip_type IN (?)
+     ORDER BY FIELD(trip_type, 'start', 'waypoint', 'end')`,
+    [tripid, tripType],
     (err, result) => {
       if (err) {
         return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });

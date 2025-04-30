@@ -25,6 +25,9 @@ const CopyEmailHtmlcontent = () => {
 
 
         return `
+         <p>Dear Sir/Madam,</p>
+                <p>Greetings from JESSY CABS PVT LTD !!!</p>
+                <p>Thank you for booking with us! Please find the allocated Cab/Chauffeur details below:</p>
        <table border="1" style="border-collapse: collapse; width: 100%;">
             <thead style="background-color: #9BB0C1; color: #FFFFFF;">
                 <tr>
@@ -68,6 +71,18 @@ const CopyEmailHtmlcontent = () => {
                        <td style="padding: 8px; color: #000;">${updatdata?.requestno}</td>
                     </tr>
                       ` : ''}
+                        <tr>
+                            <td style="padding: 8px;"><strong>Reporting Address:</strong></td>
+                            <td style="padding: 8px;">${updatdata?.Addresscutsomer}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Drop Address :</strong></td>
+                            <td style="padding: 8px;">${updatdata?.dropuseage}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;"><strong>Duty :</strong></td>
+                            <td style="padding: 8px;">${updatdata?.duty}</td>
+                        </tr>
                 <tr>
                     <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
                     <td style="padding: 8px;">${updatdata?.vehRegNo}</td>
@@ -80,6 +95,16 @@ const CopyEmailHtmlcontent = () => {
         </table>
 
         <p>The Vehicle and Driver details will be sent to you before the pick-up time. In case of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
+        
+               <br>
+                  <br>
+                   <p>
+                Warm Regards,<br><br>
+                 JESSY CABS PVT LTD | PAN INDIA SERVICES<br>
+                 Head Office : Flat No 2, II Floor, Swathi Complex, Nandanam Chennai - 600017<br>
+                24x7 Help Desk : booking@jessycabs.in / 04449105959 / 8754515959<br>
+              www.jessycabs.in
+              </p>
     `;
     }
 
@@ -142,6 +167,15 @@ const CopyEmailHtmlcontent = () => {
                 </table>
 
                 <p>In case of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
+                 <br>
+                  <br>
+                   <p>
+                Warm Regards,<br><br>
+                 JESSY CABS PVT LTD | PAN INDIA SERVICES<br>
+                 Head Office : Flat No 2, II Floor, Swathi Complex, Nandanam Chennai - 600017<br>
+                24x7 Help Desk : booking@jessycabs.in / 04449105959 / 8754515959<br>
+              www.jessycabs.in
+              </p>
     `;
     }
 

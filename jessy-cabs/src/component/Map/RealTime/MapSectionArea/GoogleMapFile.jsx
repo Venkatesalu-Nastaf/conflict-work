@@ -1,5 +1,5 @@
 import React,{useMemo,useState}from "react";
-import { GoogleMap, LoadScript, MarkerF,useJsApiLoader,InfoWindow} from "@react-google-maps/api";
+import { GoogleMap, LoadScript, MarkerF,useJsApiLoader,InfoWindow,InfoBoxF,OverlayView} from "@react-google-maps/api";
 import { MarkerClustererF } from "@react-google-maps/api";
 import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png"
 // import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png"
@@ -64,6 +64,7 @@ const GoogleMapFile = ({ vehicleCurrentLocation }) => {
  {(clusterer) =>
           
             vehicleCurrentLocation?.map((vehicle, index) => (
+              
               <MarkerF
                 key={index}
                 position={{
@@ -78,7 +79,10 @@ const GoogleMapFile = ({ vehicleCurrentLocation }) => {
                 //   lng: parseFloat(80.240515),
                   
                 // }}
-                title={vehicle?.Vehicle_No}
+                // tooltip={vehicle?.Vehicle_No}
+               
+                // title={vehicle?.Vehicle_No}
+             
                 
                 icon={{
                   url:caricon,
@@ -86,13 +90,58 @@ const GoogleMapFile = ({ vehicleCurrentLocation }) => {
                   scaledSize: new window.google.maps.Size(90, 90),
                   origin: new window.google.maps.Point(0, 0),
                   anchor: new window.google.maps.Point(45, 45),
+                  
                 }}
                  clusterer={clusterer}
                  onClick={() => setSelectedVehicle(vehicle)}
-              />
-            ))
+              
+                 
+              >
+                 
+      <InfoBoxF
+    position={{
+      lat: parseFloat(vehicle.Latitude_loc),
+      lng: parseFloat(vehicle.Longtitude_loc),
+    }}
+    options={{
+      
+      pixelOffset: new window.google.maps.Size(3,-7),
+      boxStyle: {
+        width: '150px',
+      },
+      closeBoxURL: ``,
+    }}
+    
+  >
+    <div style={{
+    width: '50px',
+    height: '20px',
+    backgroundColor: '#203254',
+    borderRadius: '6px',
+    boxShadow: '0px 2px 6px rgba(0,0,0,0.3)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '10px',
+    fontWeight: 'bold',
+    color: '#FFF',
+    textAlign: 'center',
+    overflow: 'hidden',
+    // padding: '2px',
+  }}>
+     {vehicle?.Vehicle_No.slice(-4)}
+    </div>
+  </InfoBoxF> 
+
+                 
+           
+            </MarkerF>
+
+              
+           ))
           }
        </MarkerClustererF>
+      
 
       {selectedVehicle && (
         <InfoWindow

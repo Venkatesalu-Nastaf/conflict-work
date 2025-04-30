@@ -63,7 +63,7 @@ const useVehicleinfo = () => {
         { field: "vehRegNo", headerName: "Vehicle Reg No", width: 130 },
         { field: "stations", headerName: "Stations", width: 170 },
         { field: "hiretypes", headerName: "Hire types", width: 170 },
-        { field: "vehType", headerName: "Vehicle Type", width: 130 },
+        // { field: "vehType", headerName: "Vehicle Type", width: 130 },
         { field: "fueltype", headerName: "Fuel Type", width: 130 },
         { field: "Groups", headerName: "Groups Type", width: 130 },
         { field: "owner", headerName: "Owner", width: 90 },
@@ -280,7 +280,7 @@ const useVehicleinfo = () => {
             // Loop through all of the columns and set alignment and width
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
-                column.alignment = { horizontal: 'center', vertical: 'middle' };
+                // column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
 
             // Add rows to worksheet
@@ -305,6 +305,11 @@ const useVehicleinfo = () => {
                         left: { style: 'thin' },
                         bottom: { style: 'thin' },
                         right: { style: 'thin' },
+                    };
+                    const isHeader = row.number === 1;
+                    worksheet.getCell(cellAddress).alignment = {
+                        horizontal: isHeader ? 'center' : 'left',
+                        vertical: 'middle',
                     };
                 });
             });
@@ -561,7 +566,7 @@ const useVehicleinfo = () => {
 
         vehicleName: '',
         hiretypes: '',
-        vehType: '',
+        // vehType: '',
         fueltype: '',
         Groups: '',
         doadate: dayjs(),
@@ -593,7 +598,7 @@ const useVehicleinfo = () => {
             ...prevBook,
             vehicleName: '',
             hiretypes: '',
-            vehType: '',
+            // vehType: '',
             fueltype: '',
             Groups: '',
             doadate: dayjs(),
@@ -891,11 +896,11 @@ const useVehicleinfo = () => {
             return;
         }
 
-        if (!book.vehType) {
-            setWarning(true);
-            setWarningMessage("Choose vehicletype");
-            return;
-        }
+        // if (!book.vehType) {
+        //     setWarning(true);
+        //     setWarningMessage("Choose vehicletype");
+        //     return;
+        // }
         if (!book.mobileNo) {
             setWarning(true);
             setWarningMessage("Enter MobileNo");

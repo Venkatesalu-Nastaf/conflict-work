@@ -28,7 +28,7 @@ router.post('/tripsheet-add', (req, res) => {
         hireTypes,
         department,
         vehRegNo,
-        vehType,
+        // vehType,
         Groups,
         driverName,
         mobileNo,
@@ -149,7 +149,7 @@ router.post('/tripsheet-add', (req, res) => {
         MessageText
 
     } = req.body
-  
+
     const addCustomerData = {
         tripid,
         bookingno,
@@ -169,7 +169,7 @@ router.post('/tripsheet-add', (req, res) => {
         hireTypes,
         department,
         vehRegNo,
-        vehType,
+        // vehType,
         Groups,
         driverName,
         mobileNo,
@@ -282,7 +282,7 @@ router.post('/tripsheet-add', (req, res) => {
         TotalTimeWithoutAddHours,
         Hybriddata,
         TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
-        Hcldatakmvalue,lockdatavalue,
+        Hcldatakmvalue, lockdatavalue,
         messageedited,
         MessageText
     }
@@ -584,7 +584,7 @@ router.delete('/tripsheet/:tripid', (req, res) => {
 //             closetime, 
 //             shedintime, 
 //             Tripid,
-            
+
 //             -- Latest (Max) date and time
 //             DATE_FORMAT(
 //                 GREATEST(
@@ -676,7 +676,7 @@ router.post('/getVehcileHistoryData', (req, res) => {
 
         // console.log("Query result:", result);
 
-        return res.status(200).json( result );
+        return res.status(200).json(result);
     });
 });
 
@@ -835,7 +835,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         hireTypes,
         department,
         vehRegNo,
-        vehType,
+        // vehType,
         Groups,
         driverName,
         mobileNo,
@@ -945,7 +945,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataAmount,
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount, TotalTimeWithoutAddHours, Hybriddata, TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
-        Hcldatakmvalue,lockdatavalue, messageedited,MessageText } = req.body
+        Hcldatakmvalue, lockdatavalue, messageedited, MessageText } = req.body
 
 
     const updatedCustomerData = {
@@ -967,7 +967,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         hireTypes,
         department,
         vehRegNo,
-        vehType,
+        // vehType,
         Groups,
         driverName,
         mobileNo,
@@ -1078,7 +1078,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         Vendor_BataTotalAmount,
         Vendor_FULLTotalAmount,
         TotalTimeWithoutAddHours, Hybriddata, TimeToggleData, VendorTimeToggle, HclMaxConflctdata,
-        Hcldatakmvalue,lockdatavalue, messageedited,MessageText
+        Hcldatakmvalue, lockdatavalue, messageedited, MessageText
     }
     // console.log(updatedCustomerData,"llll")
 
@@ -1394,33 +1394,33 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
                 if (data && data.toLowerCase() === "all" || arryData.includes("ALL")) {
                     // its for fetch by All
                     // await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" `, tripid, (err, result) => {
-                        if(datarole === "SuperAdmin" || datarole === "Assistant CFO"|| datarole === "Billing_Headoffice") {
-                            console.log(datarole,"inside")
+                    if (datarole === "SuperAdmin" || datarole === "Assistant CFO" || datarole === "Billing_Headoffice") {
+                        console.log(datarole, "inside")
                         await db.query(`SELECT * FROM tripsheet WHERE tripid = ?   `, tripid, (err, result) => {
-                        if (err) {
-                            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-                        }
-                        if (result.length === 0) {
+                            if (err) {
+                                return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                            }
+                            if (result.length === 0) {
 
-                            return res.status(404).json({ error:"Tripsheet not found" });
-                        }
-                        const bookingDetails = result[0]; // Assuming there is only one matching booking
-                        return res.status(200).json(bookingDetails);
-                    });
-                } else{
-                    console.log(datarole,"outnside")
-                    await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND  status != "Billed"  `, tripid, (err, result) => {
-                        if (err) {
-                            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-                        }
-                        if (result.length === 0) {
+                                return res.status(404).json({ error: "Tripsheet not found" });
+                            }
+                            const bookingDetails = result[0]; // Assuming there is only one matching booking
+                            return res.status(200).json(bookingDetails);
+                        });
+                    } else {
+                        console.log(datarole, "outnside")
+                        await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND  status != "Billed"  `, tripid, (err, result) => {
+                            if (err) {
+                                return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                            }
+                            if (result.length === 0) {
 
-                            return res.status(404).json({ error: 'Status Is Billed ' });
-                        }
-                        const bookingDetails = result[0]; // Assuming there is only one matching booking
-                        return res.status(200).json(bookingDetails);
-                    });
-                }
+                                return res.status(404).json({ error: 'Status Is Billed ' });
+                            }
+                            const bookingDetails = result[0]; // Assuming there is only one matching booking
+                            return res.status(200).json(bookingDetails);
+                        });
+                    }
                 }
                 else if (arryData) {
                     await db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND department IN (?)  `, [tripid, arryData], (err, result) => {
@@ -1433,33 +1433,33 @@ router.get('/tripsheet-enter/:tripid', async (req, res) => {
                             return res.status(404).json({ error: 'You Dont Have Accesss To This Tripsheet Based On Service Station' });
                         }
                         else if (result.length > 0) {
-                              if(datarole === "SuperAdmin" || datarole === "Assistant CFO"|| datarole === "Billing_Headoffice") {
-                            // db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
+                            if (datarole === "SuperAdmin" || datarole === "Assistant CFO" || datarole === "Billing_Headoffice") {
+                                // db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed" AND department IN (?)`, [tripid, arryData], (err, result) => {
                                 db.query(`SELECT * FROM tripsheet WHERE tripid = ?  AND department IN (?) `, [tripid, arryData], (err, result) => {
-                                if (err) {
-                                    return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-                                }
-                                if (result.length === 0) {
-                                    return res.status(404).json({ error: "Tripsheet not found" });
-                                }
-                                const bookingDetails = result[0];
-                                console.log(bookingDetails, "mmmm") // Assuming there is only one matching booking
-                                return res.status(200).json(bookingDetails);
-                            });
-                        }
-                        else{
-                            db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Billed"`, [tripid], (err, result) => {
-                                if (err) {
-                                    return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-                                }
-                                if (result.length === 0) {
-                                    return res.status(404).json({ error: 'status is billed' });
-                                }
-                                const bookingDetails = result[0];
-                                console.log(bookingDetails, "mmmm") // Assuming there is only one matching booking
-                                return res.status(200).json(bookingDetails);
-                            });
-                        }
+                                    if (err) {
+                                        return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                                    }
+                                    if (result.length === 0) {
+                                        return res.status(404).json({ error: "Tripsheet not found" });
+                                    }
+                                    const bookingDetails = result[0];
+                                    console.log(bookingDetails, "mmmm") // Assuming there is only one matching booking
+                                    return res.status(200).json(bookingDetails);
+                                });
+                            }
+                            else {
+                                db.query(`SELECT * FROM tripsheet WHERE tripid = ? AND status != "Billed"`, [tripid], (err, result) => {
+                                    if (err) {
+                                        return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+                                    }
+                                    if (result.length === 0) {
+                                        return res.status(404).json({ error: 'status is billed' });
+                                    }
+                                    const bookingDetails = result[0];
+                                    console.log(bookingDetails, "mmmm") // Assuming there is only one matching booking
+                                    return res.status(200).json(bookingDetails);
+                                });
+                            }
                         }
 
                     });
@@ -1702,7 +1702,7 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
 //send email from tripsheet page-----------------------------------
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
-        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, startdate, vehRegNo, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass, requestno } = req.body;
+        const { customeremail, guestname, guestmobileno, email, vehType, bookingno, starttime, Addresscutsomer, dropuseage, startdate, vehRegNo,vehicleNameee, driverName, mobileNo, status, servicestation, Sendmailauth, Mailauthpass, requestno,duty } = req.body;
         // const formattedFromDate = moment(startdate).format('YYYY-MM-DD');
         const formattedFromDate = moment(startdate).format('DD-MM-YYYY');
         console.log(formattedFromDate, "date")
@@ -1788,7 +1788,15 @@ router.post('/send-tripsheet-email', async (req, res) => {
                     </tbody>
                 </table>
                 <p>In case of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
-
+ <br>
+                  <br>
+                   <p>
+                Warm Regards,<br><br>
+                 JESSY CABS PVT LTD | PAN INDIA SERVICES<br>
+                 Head Office : Flat No 2, II Floor, Swathi Complex, Nandanam Chennai - 600017<br>
+                24x7 Help Desk : booking@jessycabs.in / 04449105959 / 8754515959<br>
+              www.jessycabs.in
+              </p>
         
           `,
             }
@@ -1803,6 +1811,9 @@ router.post('/send-tripsheet-email', async (req, res) => {
                 to: `${email},${customeremail}`,
                 subject: `JESSY CABS PVT LTD CAR DETAILS FOR ${guestname} - Tripsheet No.${bookingno}  `,
                 html: `
+                <p>Dear Sir/Madam,</p>
+                <p>Greetings from JESSY CABS PVT LTD </p>
+                <p>Thank you for booking with us! Please find the allocated Cab/Chauffeur details below:</p>
             <table border="1" bordercolor="#000000" style="border-collapse: collapse; width: 100%;">
                     <thead style="background-color: #9BB0C1; color: #FFFFFF;">
                         <tr>
@@ -1811,19 +1822,19 @@ router.post('/send-tripsheet-email', async (req, res) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 8px;"><strong>Trip No</strong></td>
+                            <td style="padding: 8px;"><strong>Trip No :</strong></td>
                             <td style="padding: 8px;">${bookingno}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong>Name of Guest</strong></td>
+                            <td style="padding: 8px;"><strong>Name of Guest :</strong></td>
                             <td style="padding: 8px;">${guestname}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong>Contact Number </strong></td>
+                            <td style="padding: 8px;"><strong>Contact Number :</strong></td>
                             <td style="padding: 8px;">${guestmobileno}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong>Location </strong></td>
+                            <td style="padding: 8px;"><strong>Location :</strong></td>
                             <td style="padding: 8px;">${servicestation}</td>
                         </tr>
                         <tr>
@@ -1831,24 +1842,37 @@ router.post('/send-tripsheet-email', async (req, res) => {
                             <td style="padding: 8px;">${formattedFromDate}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;"><strong> Time(24HR) </strong></td>
+                            <td style="padding: 8px;"><strong> Time(24HR) :</strong></td>
                             <td style="padding: 8px;">${starttime} Hrs</td>
                         </tr>
                        
                         ${requestno ? `
                             <tr>
-                             <td style="padding: 8px;"><strong>Request Id:</strong></td>
+                             <td style="padding: 8px;"><strong>Request Id :</strong></td>
                               <td style="padding: 8px; color: #000;">${requestno}</td>
                               </tr>
                                ` : ''}
                        
+                      
+                          <tr>
+                            <td style="padding: 8px;"><strong>Reporting Address :</strong></td>
+                            <td style="padding: 8px;">${Addresscutsomer}</td>
+                        </tr>
                         <tr>
-                        <td style="padding: 8px;"><strong>Car Sent</strong></td>
+                            <td style="padding: 8px;"><strong>Drop Address :</strong></td>
+                            <td style="padding: 8px;">${dropuseage}</td>
+                        </tr>
+                            <tr>
+                            <td style="padding: 8px;"><strong>Duty :</strong></td>
+                            <td style="padding: 8px;">${duty}</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 8px;"><strong>Type Of Car Required :</strong></td>
                         <td style="padding: 8px;color: #000"">${vehType}</td>
                     </tr>
                     <tr>
-                            <td style="padding: 8px;"><strong>Vehicle RegNo:</strong></td>
-                            <td style="padding: 8px;color: #000"">${vehRegNo}</td>
+                            <td style="padding: 8px;"><strong>Vehicle Details :</strong></td>
+                            <td style="padding: 8px;color: #000"">${vehRegNo} / ${vehicleNameee} </td>
                         </tr>
                         <tr>
                         <td style="padding: 8px;"><strong>Driver Name / Phone:</strong></td>
@@ -1857,7 +1881,15 @@ router.post('/send-tripsheet-email', async (req, res) => {
                     </tbody>
                 </table>
                 <p>The Vehicle and Driver details will be sent to you before the pick-up time. Incase of any further queries or clarifications, kindly contact our Help Desk. Our team will be more than happy to assist you. Wish you a pleasant journey.</p>
-        
+                  <br>
+                  <br>
+                   <p>
+                Warm Regards,<br><br>
+                 JESSY CABS PVT LTD | PAN INDIA SERVICES<br>
+                 Head Office : Flat No 2, II Floor, Swathi Complex, Nandanam Chennai - 600017<br>
+                24x7 Help Desk : booking@jessycabs.in / 04449105959 / 8754515959<br>
+              www.jessycabs.in
+              </p>
           `,
             }
             // Send greeting email to the customer
@@ -2327,8 +2359,8 @@ router.post('/gmappost-submitForm', (req, res) => {
                     console.log('Starting deletion and insertion process');
 
                     // First DELETE query: delete records matching latitude, longitude, and tripType
-                    const deleteQuery1 = "DELETE FROM gmapdata WHERE Latitude = ? AND Longitude = ? ";
-                    const deleteValues1 = [latitude, longitude];
+                    const deleteQuery1 = "DELETE FROM gmapdata WHERE Latitude = ? AND Longitude = ? AND tripid = ?";
+                    const deleteValues1 = [latitude, longitude,tripid];
 
                     db.query(deleteQuery1, deleteValues1, (err, deleteResults1) => {
                         if (err) {
@@ -2396,10 +2428,10 @@ router.post('/gmappost-submitForm', (req, res) => {
 router.get('/get-gmapdata/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     // db.query('SELECT * FROM gmapdata WHERE tripid = ? AND trip_type != "On_Going"', [tripid], (err, results) => {
-        db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
+    db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-        }        
+        }
         return res.status(200).json(results);
     });
 });
@@ -2418,39 +2450,78 @@ router.post('/deleteMapByTripid/:tripid', (req, res) => {
 
     // First delete query for mapimage
     const deleteQuery = `DELETE FROM mapimage WHERE tripid = ?`;
-    db.query(deleteQuery, [tripid], (error, result) => {
+    const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
+    const updateVehicleAccessLocationQuery = `UPDATE VehicleAccessLocation SET gps_status = 'Cleared' WHERE Trip_id = ?`;
+
+    db.query(deleteQuery, [tripid], (error, result1) => {
         if (error) {
             console.log(error, 'error');
             return res.status(500).json({ message: 'Error deleting from mapimage', error });
         }
 
         // Second delete query for gmapdata
-        const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
-        db.query(deleteMapDataQuery, [tripid], (error, result) => {
+        db.query(deleteMapDataQuery, [tripid], (error, result2) => {
             if (error) {
                 console.log(error, 'error');
                 return res.status(500).json({ message: 'Error deleting from gmapdata', error });
             }
 
-            return res.status(200).json({ message: 'Deletion successful', result });
+            // Now update VehicleAccessLocation
+            db.query(updateVehicleAccessLocationQuery, [tripid], (error, updateResult) => {
+                if (error) {
+                    console.log(error, 'error');
+                    return res.status(500).json({ message: 'Error updating gps_status', error });
+                }
+
+                return res.status(200).json({ message: 'Deletion and update successful', result: { mapimage: result1, gmapdata: result2, vehicleAccess: updateResult } });
+            });
         });
     });
 });
 
+// router.post('/deleteMapByTripid/:tripid', (req, res) => {
+//     const tripid = req.params.tripid;
+
+//     // First delete query for mapimage
+//     const deleteQuery = `DELETE FROM mapimage WHERE tripid = ?`;
+//     const updateVehicleAccessLocationQuery = `UPDATE VehicleAccessLocation set gps_status = 'Cleared' WHERE Trip_id = ?`;
+//     db.query(deleteQuery, [tripid], (error, result) => {
+//         if (error) {
+//             console.log(error, 'error');
+//             return res.status(500).json({ message: 'Error deleting from mapimage', error });
+//         }
+
+//         // Second delete query for gmapdata
+//         const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
+//         db.query(deleteMapDataQuery, [tripid], (error, result) => {
+//             if (error) {
+//                 console.log(error, 'error');
+//                 return res.status(500).json({ message: 'Error deleting from gmapdata', error });
+//             }
+//             console.log(result, "deleteed---------------------------");
+//             if (result.affectedRows > 0) {
+                
+//             }
+
+//             return res.status(200).json({ message: 'Deletion successful', result });
+//         });
+//     });
+// });
+
 
 router.post('/updateGPS-LOG/:tripid', (req, res) => {
     const tripid = req.params.tripid; // Correctly accessing the tripid parameter from the URL
-    const { time, date, trip_type } = req.body; // Extracting time and date from the request body
+    const { time, date, trip_type,id } = req.body; // Extracting time and date from the request body
 
     if (!tripid || !time || !date) {
         return res.status(400).json({ error: 'Missing required parameters' });
     }
 
     // SQL query to update the database
-    const query = 'UPDATE gmapdata SET time = ?, date = ? WHERE tripid = ? AND trip_type = ?';
+    const query = 'UPDATE gmapdata SET time = ?, date = ? WHERE tripid = ? AND trip_type = ? AND id = ?';
 
     // Execute the query with the provided parameters
-    db.query(query, [time, date, tripid, trip_type], (err, result) => {
+    db.query(query, [time, date, tripid, trip_type,id], (err, result) => {
         if (err) {
             console.error('Error updating GPS log:', err);
             return res.status(500).json({ error: 'Database error' });
@@ -2585,7 +2656,7 @@ router.delete('/dlete-mapLocationPoint/:payload', (req, res) => {
 
 function checkConditions(data, value) {
     let selectedObject = null;
-  console.log(data,"ffff",value)
+    console.log(data, "ffff", value)
     // Loop through the array
     for (let i = 0; i < data.length; i++) {
         if (value < data[i].UptoKMS) {
@@ -2599,10 +2670,117 @@ function checkConditions(data, value) {
 }
 
 
+// router.get(`/totalhrsuppiler-pack`, (req, res) => {
+
+//     // Extract dynamic inputs from query parameters
+
+//     const totalHours = req.query.totalHours;
+//     const ratetype = req.query.ratetype;
+//     // const vehicletype = req.query.vehicletype;
+//     const VehicleName = req.query.vehicleName;
+//     const duty = req.query.duty;
+//     const totkm = req.query.totkm;
+//     const OrganizationName = req.query.organizationname;
+//     const stations = req.query.stations;
+
+//     console.log(totalHours, "tt", ratetype, "rate", VehicleName, "name", duty, "duty", totkm, "totkmm", OrganizationName, "organnan", stations)
+
+
+//     if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !ratetype || !stations) {
+//         res.status(400).json({ error: 'Missing required parameters' });
+//         return;
+//     }
+
+//     const sql = `SELECT * 
+//                     FROM ratemanagement
+//                     WHERE duty = ?
+//                         AND VehicleName = ?
+//                         AND OrganizationName =?
+                  
+//                         AND stations = ?
+//                         AND ratetype = ?
+//                           AND (? < UptoHours)
+//                            ORDER BY UptoHours 
+//                            `
+
+
+
+//     const sql2 = `SELECT * FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? And ratetype = "Supplier" ORDER BY UptoHours desc LIMIT 1`
+
+//     // Execute the query with dynamic parameters 
+//     db.query(sql, [duty, VehicleName, OrganizationName, stations, ratetype, totalHours], (error, results) => {
+//         if (error) {
+//             return res.status(500).json({ error: "Internal Server Error" })
+//         }
+
+//         // Check if any rows were returned
+//         console.log(results, "resultsverfied")
+//         if (results.length === 0) {
+//             db.query(sql2, [duty, VehicleName, OrganizationName, stations], (error1, results2) => {
+//                 if (error1) {
+//                     return res.status(500).json({ error: "Internal Server Error" })
+//                 }
+//                 console.log(results2, "resultsverfied22222222222")
+//                 if (results2.length === 0) {
+//                     return res.status(404).json({ error: 'No data found' });
+//                 }
+//                 return res.json(results2[0]);
+//             })
+
+//         }
+//         if (results.length === 1) {
+
+//             return res.json(results[0]);
+//         }
+//         if (results.length > 1) {
+
+//             const resultsdata = results
+//             const updatedData = resultsdata.map((item) => {
+//                 if (item.UptoKMS === 0) {
+//                     return { ...item, UptoKMS: item.KMS };  // Example: Increase KMS by 10
+//                 }
+//                 return item;
+//             });
+//             //   console.log(updatedData, "updatedData")
+
+
+//             console.log(checkConditions(updatedData, totkm), "pp")
+//             const datacheck = checkConditions(updatedData, totkm)
+
+//             let selectedObject = results.find(obj => obj.id === datacheck["id"]);
+//             return res.json(selectedObject);
+//         }
+
+//     });
+// });
+function checkConditionsupplier(data, value) {
+    let selectedObject = null;
+    // console.log(data, "ffff", value)
+    // Loop through the array
+    for (let i = 0; i < data.length; i++) {
+        if(data[i].UptoKMS === 0){
+            selectedObject = data[i];
+            break;
+        }
+        else{
+            if (value < data[i].UptoKMS ) {
+                    selectedObject = data[i]; // Store the first matching object
+                    break; // Exit loop when first condition is met
+                }
+        } // if (value < data[i].UptoKMS) {
+        //     selectedObject = data[i]; // Store the first matching object
+        //     break; // Exit loop when first condition is met
+        // }
+       
+    }
+
+    // If no object satisfies the condition, return the last object
+    return selectedObject !== null ? selectedObject : data[data.length - 1];
+}
 router.get(`/totalhrsuppiler-pack`, (req, res) => {
 
     // Extract dynamic inputs from query parameters
-    
+
     const totalHours = req.query.totalHours;
     const ratetype = req.query.ratetype;
     // const vehicletype = req.query.vehicletype;
@@ -2631,13 +2809,13 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
                           AND (? < UptoHours)
                            ORDER BY UptoHours 
                            `
-                    
 
-                          
-   const sql2 = `SELECT * FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? And ratetype = "Supplier" ORDER BY UptoHours desc LIMIT 1`
+
+
+    const sql2 = `SELECT * FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? And ratetype = "Supplier" ORDER BY UptoHours desc LIMIT 1`
 
     // Execute the query with dynamic parameters 
-    db.query(sql, [duty, VehicleName, OrganizationName, stations,ratetype,totalHours], (error, results) => {
+    db.query(sql, [duty, VehicleName, OrganizationName, stations, ratetype, totalHours], (error, results) => {
         if (error) {
             return res.status(500).json({ error: "Internal Server Error" })
         }
@@ -2653,31 +2831,31 @@ router.get(`/totalhrsuppiler-pack`, (req, res) => {
                 if (results2.length === 0) {
                     return res.status(404).json({ error: 'No data found' });
                 }
-                return  res.json(results2[0]);
+                return res.json(results2[0]);
             })
-         
+
         }
-        if(results.length === 1){
-        
-           return res.json(results[0]);
+        if (results.length === 1) {
+
+            return res.json(results[0]);
         }
-        if(results.length > 1){
+        if (results.length > 1) {
 
-        const resultsdata = results
-        const updatedData = resultsdata.map((item) => {
-            if (item.UptoKMS === 0) {
-              return { ...item, UptoKMS:item.KMS };  // Example: Increase KMS by 10
-            }
-            return item;
-          });
-        //   console.log(updatedData, "updatedData")
+            const resultsdata = results
+            // const updatedData = resultsdata.map((item) => {
+            //     if (item.UptoKMS === 0) {
+            //         return { ...item, UptoKMS: item.KMS };  // Example: Increase KMS by 10
+            //     }
+            //     return item;
+            // });
+            //   console.log(updatedData, "updatedData")
 
-          
-        console.log(checkConditions(updatedData,totkm),"pp")
-       const datacheck =  checkConditions(updatedData,totkm)
 
-       let selectedObject = results.find(obj => obj.id === datacheck["id"] );
-      return  res.json(selectedObject);
+            console.log(checkConditionsupplier(resultsdata, totkm), "pp")
+            const datacheck = checkConditionsupplier(resultsdata, totkm)
+
+            let selectedObject = results.find(obj => obj.id === datacheck["id"]);
+            return res.json(selectedObject);
         }
 
     });
@@ -2699,7 +2877,7 @@ router.get(`/t4hr-pack`, (req, res) => {
 
     console.log(totalHours, VehicleName, duty, totkm, OrganizationName, stations, 'ratecuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
 
-  
+
 
     if (!totalHours || !VehicleName || !duty || !totkm || !OrganizationName || !stations) {
         res.status(400).json({ error: 'Missing required parameters' });
@@ -2717,13 +2895,13 @@ router.get(`/t4hr-pack`, (req, res) => {
           AND (? < UptoHours)
            ORDER BY UptoHours 
            `
-    
 
-          
-const sql2 = `SELECT * FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? And ratetype = "Customer" ORDER BY UptoHours desc LIMIT 1`
 
- 
-    db.query(sql, [duty, VehicleName, OrganizationName, stations,totalHours], (error, results) => {
+
+    const sql2 = `SELECT * FROM ratemanagement WHERE duty = ? AND VehicleName = ? AND OrganizationName =? AND stations = ? And ratetype = "Customer" ORDER BY UptoHours desc LIMIT 1`
+
+
+    db.query(sql, [duty, VehicleName, OrganizationName, stations, totalHours], (error, results) => {
         if (error) {
             return res.status(500).json({ error: "Internal Server Error" })
         }
@@ -2738,31 +2916,31 @@ const sql2 = `SELECT * FROM ratemanagement WHERE duty = ? AND VehicleName = ? AN
                 if (results2.length === 0) {
                     return res.status(404).json({ error: 'No data found' });
                 }
-                return  res.json(results2[0]);
+                return res.json(results2[0]);
             })
-         
+
         }
-        if(results.length === 1){
-        
-           return res.json(results[0]);
+        if (results.length === 1) {
+
+            return res.json(results[0]);
         }
-        if(results.length > 1){
+        if (results.length > 1) {
 
-        const resultsdata = results
-        const updatedData = resultsdata.map((item) => {
-            if (item.UptoKMS === 0) {
-              return { ...item, UptoKMS:item.KMS };  // Example: Increase KMS by 10
-            }
-            return item;
-          });
-        //   console.log(updatedData, "updatedData")
+            const resultsdata = results
+            const updatedData = resultsdata.map((item) => {
+                if (item.UptoKMS === 0) {
+                    return { ...item, UptoKMS: item.KMS };  // Example: Increase KMS by 10
+                }
+                return item;
+            });
+            //   console.log(updatedData, "updatedData")
 
-          
-        console.log(checkConditions(updatedData,totkm),"pp")
-       const datacheck =  checkConditions(updatedData,totkm)
 
-       let selectedObject = results.find(obj => obj.id === datacheck["id"] );
-      return  res.json(selectedObject);
+            console.log(checkConditions(updatedData, totkm), "pp")
+            const datacheck = checkConditions(updatedData, totkm)
+
+            let selectedObject = results.find(obj => obj.id === datacheck["id"]);
+            return res.json(selectedObject);
         }
 
     });
@@ -3113,7 +3291,7 @@ router.post("/uploadtollandparkinglink", (req, res) => {
     const { toll, parking, tripid } = req.body;
     const query = 'UPDATE tripsheet SET toll = ?, parking = ?, vendorparking = ?,vendortoll = ? WHERE tripid = ?';
 
-    db.query(query, [toll,parking,parking,toll,tripid], (err, results) => {
+    db.query(query, [toll, parking, parking, toll, tripid], (err, results) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' });
             return;

@@ -45,7 +45,7 @@ export const RealTime = ({ allVehicleList, vehicleCurrentLocation ,todayVehicle}
         <div className="main-content-realtime">
           <div className="main-content-form">
             <div style={{ position: "relative", height: "55px", width: "100%" }}>
-              <HeaderDetails />
+              <HeaderDetails todayVehicle={todayVehicle} />
             </div>
             <div style={{display:"flex"}}>
                        <VehicleSection allVehicleList={allVehicleList} vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} />

@@ -16,14 +16,16 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
   const tripidlable = tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid
   // const enddata =
   const Totalkm = Number(startkm) - Number(endkm)
+  const dutydata = tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty;
+  const totalDaysvalue = dutydata === "Outstation" ? `${TotalDays} days` : "-";
 
   function removeSeconds(time) {
     // Split the time string by colon (:)
     if (time !== "undefined") {
-      const timeParts = time.split(':');
+      const timeParts = time?.split(':');
 
       // Check if there are seconds (length 3), return hours:minutes
-      if (timeParts.length === 3) {
+      if (timeParts?.length === 3) {
         return `${timeParts[0]}:${timeParts[1]}`;
       }
 
@@ -38,7 +40,6 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
   };
 
   const targetRef = useRef();
-  // console.log(attachedImage,"att")
   return (
     <>
       <div className="invoice-wrapper" ref={targetRef}>
@@ -160,7 +161,8 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                     <tr>
                       <td id='table-datas'><span >Total</span></td>
                       {/* <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td> */}
-                      <td id='table-datas'><span >{TotalDays}</span>days</td>
+                      {/* <td id='table-datas'><span >{TotalDays}</span>days</td> */}
+                      <td id='table-datas'><span >{totalDaysvalue}</span></td>
                       {/* <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData}</span></td> */}
                       <td id='table-datas'><span >{Totaltimes}</span></td>
                       <td id='table-datas'><span >{Totalkm}</span></td>

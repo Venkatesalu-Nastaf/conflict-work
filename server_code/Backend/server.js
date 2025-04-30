@@ -276,6 +276,21 @@ app.get('/getmapimages/:tripid', (req, res) => {
   });
 });
 
+app.delete('/deleteMapImagesByTripId/:tripid', (req, res) => {
+  const { tripid } = req.params;
+
+  const query = `DELETE FROM mapimage WHERE tripid = ?`;
+
+  db.query(query, [tripid], (err, result) => {
+    if (err) {
+      console.log("Error in map delete:", err);
+      return res.status(500).json({ error: 'Database delete error' });
+    }
+
+    res.json({ message: 'Map images deleted successfully', affectedRows: result.affectedRows });
+  });
+});
+
 
 app.get('/getmapimagesverfiy/:tripid', (req, res) => {
   const { tripid } = req.params;
@@ -1043,6 +1058,47 @@ app.post("/signaturedatatimes/:tripid", (req, res) => {
   })
 })
 
+app.post("/dataclearsignaturedatatimes/:tripid", (req, res) => {
+  const tripid = req.params.tripid;
+  const {
+    status,
+    datesignature,
+    signtime,
+     } = req.body;
+
+
+
+  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, datesignature, signtime, status], (err, results) => {
+    if (err) {
+      // console.log(err,"errins")
+      return res.status(400).json(err)
+    }
+   
+      return res.status(200).json("data insert successfully")
+ 
+
+  })
+})
+app.post("/Acceptsignaturedatatimes/:tripid", (req, res) => {
+  const tripid = req.params.tripid;
+  const {
+    status,
+    datesignature,
+    signtime,
+    } = req.body;
+  
+
+  db.query("insert into Signaturetimedetails(tripid,logdatetime,startsigntime,Signstatus) value(?,?,?,?)", [tripid, datesignature, signtime, status], (err, results) => {
+    if (err) {
+      // console.log(err,"errins")
+      return res.status(400).json(err)
+    }
+ 
+      return res.status(200).json("data insert successfully")
+  
+
+  })
+})
 
 
 // app.get("/getFuelType/:fuelType", (req, res) => {

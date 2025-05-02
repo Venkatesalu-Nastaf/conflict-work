@@ -2425,16 +2425,41 @@ router.post('/gmappost-submitForm', (req, res) => {
 
 
 // Collect maplogdata for gmapdata table
+// router.get('/get-gmapdata/:tripid', (req, res) => {
+//     const tripid = req.params.tripid;
+//     // db.query('SELECT * FROM gmapdata WHERE tripid = ? AND trip_type != "On_Going"', [tripid], (err, results) => {
+//     db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+//         }
+//         return res.status(200).json(results);
+//     });
+// });
 router.get('/get-gmapdata/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    // db.query('SELECT * FROM gmapdata WHERE tripid = ? AND trip_type != "On_Going"', [tripid], (err, results) => {
-    db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
+    const onGoingSqlQuery = `SELECT COUNT(*) AS onGoingCount FROM gmapdata WHERE tripid = ? AND trip_type = "On_Going"`;
+    const AboveOnGoing500 = `SELECT * FROM gmapdata WHERE tripid = ? AND trip_type IN ("start","end","waypoint","wayLogpoint") ORDER BY date,time`;
+    const BelowOnGoing500 = `SELECT * FROM gmapdata WHERE tripid = ? AND trip_type IN ("start","end","waypoint","On_Going","wayLogpoint") ORDER BY date,time`;
+  
+    // Check On_Going count first
+    db.query(onGoingSqlQuery, [tripid], (error, result) => {
+      if (error) {
+        return res.status(500).json({ error: 'Failed to fetch On_Going count' });
+      }
+  
+      const onGoingCount = result[0].onGoingCount;
+      const finalQuery = onGoingCount >= 500 ? AboveOnGoing500 : BelowOnGoing500;
+  
+      // Run final query based on the count
+      db.query(finalQuery, [tripid], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+          return res.status(500).json({ error: 'Failed to fetch gmap data' });
         }
+  
         return res.status(200).json(results);
+      });
     });
-});
+  });
 router.get('/getAllGmapdata', (req, res) => {
     db.query('SELECT * FROM gmapdata', (err, results) => {
         if (err) {

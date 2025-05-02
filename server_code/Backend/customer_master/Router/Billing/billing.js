@@ -579,26 +579,22 @@ router.get('/customers/:customer', (req, res) => {
 
 router.get('/routedata/:tripid', (req, res) => {
   const tripid = req.params.tripid;
-  const tripType = ["start", "waypoint", "end"];
-
-  db.query(
-    `SELECT * FROM gmapdata 
-     WHERE tripid = ? AND trip_type IN (?)
-     ORDER BY FIELD(trip_type, 'start', 'waypoint', 'end')`,
-    [tripid, tripType],
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
-      }
-
-      if (result.length === 0) {
-        return res.status(404).json({ error: 'Route data not found' });
-      }
-
-      return res.status(200).json(result);
-    }
-  );
-});
+  // const tripType = ["start", "waypoint", "end"];
+const sqlQuery = `SELECT * FROM gmapdata WHERE tripid = ? AND trip_type IN ("start", "waypoint", "end")`;
+db.query(sqlQuery,[tripid],(err,result)=>{
+  if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+          }
+    console.log(result.length,"rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+    
+          if (result.length === 0) {
+            return res.status(404).json({ error: 'Route data not found' });
+          }
+    
+          return res.status(200).json(result);
+        
+})
+})
 
 
 router.get('/ParticularLists/:tripno', (req, res) => {

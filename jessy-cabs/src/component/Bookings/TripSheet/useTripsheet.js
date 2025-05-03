@@ -4611,15 +4611,41 @@ const useTripsheet = () => {
     // const [routeData, setRouteData] = useState('');
 
 
+    // const invoiceRouteData = async () => {
+    //     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    //     try {
+    //         if (tripid !== null && tripid !== "undefined" && tripid) {
+    //             const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);  /// pob004
+
+    //             if (response.status === 200) {
+    //                 const routeData = await response.json();
+    //                 setRouteData(routeData);
+    //             }
+    //             return;
+    //         }
+    //     } catch (error) {
+    //         console.log("Error", error)
+    //     }
+    // };
+
     const invoiceRouteData = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         try {
             if (tripid !== null && tripid !== "undefined" && tripid) {
-                const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);  /// pob004
-
+                const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);
+    
                 if (response.status === 200) {
                     const routeData = await response.json();
-                    setRouteData(routeData);
+    
+                    const sortedRouteData = [
+                        ...routeData.filter(item => item.trip_type === 'start'),
+                        ...routeData.filter(item => item.trip_type === 'waypoint'),
+                        ...routeData.filter(item => item.trip_type === 'end')
+                    ];
+    
+                    console.log(sortedRouteData, "sorted routedataaaaaaaaaaaaaaaaa");
+    
+                    setRouteData(sortedRouteData);
                 }
                 return;
             }

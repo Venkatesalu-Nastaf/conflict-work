@@ -316,7 +316,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
     // --------------------this zoom code image data----------------------------------------
     posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, Scale, onDrag, handleFullDeleteMapData,
-    mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide,setGMapImageUrl,bookingTripStatus
+    mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide,setGMapImageUrl,bookingTripStatus,handleTemporaryDelete,handleTemporaryDeleteMapDataClose,temporaryDeleteGmap,setTemporaryDeleteGmap,handleTemporaryDeleteMapDataOpen
     // this code zoom image data---------------------------------
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
@@ -3014,6 +3014,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       </div>
                                     </DialogContent>
                                     <DialogActions>
+                                  {/* <Button onClick={handleTemporaryDeleteMapDataOpen} variant='outlined'>Temporary Delete</Button> */}
                                       <Button variant='contained' onClick={() => handleMapDataDelete()}>Delete Full Log</Button>
                                       <div style={{ paddingRight: '15px' }}>
                                         <PopupState variant="popover" popupId="demo-popup-menu">
@@ -3038,6 +3039,28 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       </Button>
                                     </DialogActions>
                                     <Modal
+                                      open={temporaryDeleteGmap}
+                                      onClose={handleTemporaryDeleteMapDataClose}
+                                      aria-labelledby="modal-modal-title"
+                                      aria-describedby="modal-modal-description"
+                                    >
+                                      <Box sx={style3}>
+                                        <div style={{ display:'flex',flexDirection:'column',gap: 15 }}>
+                                          <div>
+                                            <Typography variant="body2" sx={{ color: "#333", fontWeight: 500,fontSize:20 }}>
+                                              Are you sure want to delete the log data?
+                                            </Typography>
+                                          </div>
+                                          <div>
+                                            <Button onClick={() => handleTemporaryDeleteMapDataClose()}>No</Button>
+                                            <Button onClick={() => handleTemporaryDelete()}>Yes</Button>
+                                          </div>
+                                        </div>
+                                      </Box>
+                                    </Modal>
+                                  </Dialog>
+                                </div>
+                                <Modal
                                       open={mapDataDeleteModal}
                                       onClose={handleDeleteMapDataClose}
                                       aria-labelledby="modal-modal-title"
@@ -3057,8 +3080,6 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                         </div>
                                       </Box>
                                     </Modal>
-                                  </Dialog>
-                                </div>
                                 <div className="in-feild" style={{ marginTop: '10px' }}>
                                   <div className="input">
                                     <Autocomplete
@@ -4897,8 +4918,10 @@ Please Click the link to close E-Tripsheet-`}
                         onInputChange={(event, value) => {
                           if (event !== null) {
                             setNoChangeData({ ...nochangedata, driverName: value });
+                            handleDriverChange(event, value, "driverName")
+                            
                           }
-                          handleDriverChange(event, value, "driverName")
+                          // handleDriverChange(event, value, "driverName")
                         }
 
                         }  // Handle manual input

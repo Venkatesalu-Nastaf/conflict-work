@@ -245,7 +245,7 @@ const axios = require('axios');
 const GOOGLE_MAPS_API_KEY = 'AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE';
 // const GOOGLE_MAPS_API_KEY = 'AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk'; // Replace with your API key
 
-
+let count = 0
 
 async function getAddressFromLatLng(lat, lng) {
     try {
@@ -263,9 +263,10 @@ async function getAddressFromLatLng(lat, lng) {
         });
 
         if (response.data.status === 'OK' && response.data.results.length > 0) {
-            console.log(response.data.status, "formatteddddddddddddddddddddd", response.data.results.length)
-            console.log("formatteddddddddddddd", response.data.results[0], "formatteddddddddddd",);
-            console.log(response.data.results[0].formatted_address, "formattteddddddddddddddddddd");
+            // console.log(response.data.status, "formatteddddddddddddddddddddd", response.data.results.length)
+            // console.log("formatteddddddddddddd", response.data.results[0], "formatteddddddddddd",);
+            // console.log(response.data.results[0].formatted_address, "formattteddddddddddddddddddd");
+            // console.log(count++,"pppppppppppppppppppppppppppppppppppp")
             return response.data.results[0].formatted_address;
         }
         if (response.data.status === 'OVER_QUERY_LIMIT') {
@@ -478,7 +479,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         const waypointsCount = 500;
                         let selectedWaypointsIndexes = [];
 
-                        if (totalOngoingLength > 0) {
+                        if (totalOngoingLength > 500) {
                             const firstIndex = totalOnGoing[0].originalIndex;
                             const lastIndex = totalOnGoing[totalOngoingLength - 1].originalIndex;
                             selectedWaypointsIndexes.push(firstIndex);
@@ -499,48 +500,77 @@ router.get('/getLatLongByTripId', async (req, res) => {
                             }
                         }
 
-                        const waypointLimit = 11;
+                        // const waypointLimit = 11;
+                        // let waypointLimitIndexes = [];
+
+                        // if (totalOngoingLength > 0) {
+                        //     const firstIndex = totalOnGoing[0].originalIndex;
+                        //     const lastIndex = totalOnGoing[totalOngoingLength - 1].originalIndex;
+                        //     waypointLimitIndexes.push(firstIndex);
+
+                        //     const middleCount = waypointLimit - 2;
+                        //     const stepLimit = totalOngoingLength / (middleCount + 1);  // keep as float to avoid floor early
+
+                        //     for (let i = 1; i <= middleCount; i++) {
+                        //         const pos = Math.round(i * stepLimit);
+                        //         if (pos >= totalOngoingLength) continue;  // avoid out of bounds
+
+                        //         const middleIndex = totalOnGoing[pos]?.originalIndex;
+                        //         if (
+                        //             middleIndex !== undefined &&
+                        //             !waypointLimitIndexes.includes(middleIndex)
+                        //         ) {
+                        //             waypointLimitIndexes.push(middleIndex);
+                        //         }
+                        //     }
+
+                        //     if (!waypointLimitIndexes.includes(lastIndex)) {
+                        //         waypointLimitIndexes.push(lastIndex);
+                        //     }
+
+                        //     // If somehow we still have less than 8, fill with next available points
+                        //     if (waypointLimitIndexes.length < waypointLimit) {
+                        //         for (let i = 0; i < totalOngoingLength; i++) {
+                        //             const extraIndex = totalOnGoing[i].originalIndex;
+                        //             if (!waypointLimitIndexes.includes(extraIndex)) {
+                        //                 waypointLimitIndexes.push(extraIndex);
+                        //             }
+                        //             if (waypointLimitIndexes.length === waypointLimit) break;
+                        //         }
+                        //     }
+                        // }
+
+                        const waypointLimit = 8;
                         let waypointLimitIndexes = [];
-
-                        if (totalOngoingLength > 0) {
-                            const firstIndex = totalOnGoing[0].originalIndex;
-                            const lastIndex = totalOnGoing[totalOngoingLength - 1].originalIndex;
-                            waypointLimitIndexes.push(firstIndex);
-
-                            const middleCount = waypointLimit - 2;
-                            const stepLimit = totalOngoingLength / (middleCount + 1);  // keep as float to avoid floor early
-
-                            for (let i = 1; i <= middleCount; i++) {
-                                const pos = Math.round(i * stepLimit);
-                                if (pos >= totalOngoingLength) continue;  // avoid out of bounds
-
-                                const middleIndex = totalOnGoing[pos]?.originalIndex;
-                                if (
-                                    middleIndex !== undefined &&
-                                    !waypointLimitIndexes.includes(middleIndex)
-                                ) {
-                                    waypointLimitIndexes.push(middleIndex);
+                        
+                        if (totalOngoingLength >= waypointLimit) {
+                            // Exact 8 points evenly spread
+                            const step = (totalOngoingLength - 1) / (waypointLimit - 1);
+                        
+                            for (let i = 0; i < waypointLimit; i++) {
+                                const pos = Math.round(i * step);
+                                console.log(step,"steppppppppp",pos);
+                                
+                                const index = totalOnGoing[pos]?.originalIndex;
+                                if (index !== undefined) {
+                                    waypointLimitIndexes.push(index);
                                 }
                             }
-
-                            if (!waypointLimitIndexes.includes(lastIndex)) {
-                                waypointLimitIndexes.push(lastIndex);
-                            }
-
-                            // If somehow we still have less than 8, fill with next available points
-                            if (waypointLimitIndexes.length < waypointLimit) {
-                                for (let i = 0; i < totalOngoingLength; i++) {
-                                    const extraIndex = totalOnGoing[i].originalIndex;
-                                    if (!waypointLimitIndexes.includes(extraIndex)) {
-                                        waypointLimitIndexes.push(extraIndex);
-                                    }
-                                    if (waypointLimitIndexes.length === waypointLimit) break;
-                                }
+                        } else {
+                            // If less than 8 points available, just add all available points
+                            for (let i = 0; i < totalOngoingLength; i++) {
+                                waypointLimitIndexes.push(totalOnGoing[i].originalIndex);
                             }
                         }
+                        
+
+// Now waypointLimitIndexes will always have up to 8 points (if possible)
+
 
                         console.log('selectedWaypointsIndexes:', selectedWaypointsIndexes);
                         console.log('waypointLimitIndexes:', waypointLimitIndexes);
+                        console.log(totalOngoingLength,"totalongoinggggggggggggggggggggggg");
+                        
 
 
 
@@ -573,51 +603,126 @@ router.get('/getLatLongByTripId', async (req, res) => {
 
 
                         // Now loop through all statuses to build insertValues
+                        // const insertValues = await Promise.all(allStatusesResult.map(async (row, index) => {
+                        //     let location_alpha = '';
+                        //     let trip_type = '';
+                        //     let address;
+                        //     if (index === 1 || index === 5844 || index === 836 || index === 1670 || index === 2505 || index === 3340 || index === 4175  || index === 5009) {
+                        //         console.log(`Index ${index} →`, row);
+                        //     }
+                                                    
+                        //     if (row.Trip_Status === 'Started') {
+                        //         location_alpha = 'A';
+                        //         trip_type = 'start';
+                        //         address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+
+                        //     } else if (row.Trip_Status === 'On_Going') {
+                        //         if (selectedWaypointsIndexes.includes(index) && totalOngoingLength > 500) {
+                        //             location_alpha = 'B';
+                        //             trip_type = 'wayLogpoint';
+                        //             address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                        //             // console.log(row,"rowwwwwwwwwwwwwkkkkkkkkkkkkkkkkkkkkkkkkkuuuuuuuuuuuu");
+                                    
+                        //         } 
+                        //         else if (totalOngoingLength < 500) {
+                        //             location_alpha = 'NULL';
+                        //             trip_type = 'On_Going';
+                        //             // console.log(row,"rowwwwwwwwwwwwwkkkkkkkkkkkkkkkkkkkkkkkkkgggggggggggg");
+                        //             address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                                    
+                        //         } else if (totalOngoingLength > 500) {
+                        //             location_alpha = 'NULL';
+                        //             trip_type = 'On_Going';
+                        //             console.log("rowwwwwwwwwwwwwkkkkkkkkkkkkkkkkkkkkkkkkkffffffffff");
+                        //             // address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                        //         }
+                        //         else if(row.Trip_Status === 'On_Going'){
+                        //              if (waypointLimitIndexes.includes(index)) {
+                                    
+                        //                 location_alpha = 'B';
+                        //                 trip_type = 'waypoint';
+                        //                 // console.log(row,"rowwwwwwwwwwwwwkkkkkkkkkkkkkkkkkkkkkkkkk");
+                                        
+                        //                 address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                        //             }
+                        //         }
+
+                        //     } else if (row.Trip_Status === 'Reached') {
+                        //         location_alpha = 'C';
+                        //         trip_type = 'end';
+                        //         address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                        //     }
+
+                        //     const formattedTime = row.Tripstarttime ? row.Tripstarttime.substring(0, 5) : null;
+
+                        //     return [
+                        //         row.Trip_id, location_alpha, row.Runing_Date, formattedTime,
+                        //         trip_type, address, row.Latitude_loc, row.Longtitude_loc
+                        //     ];
+                        // }));
+
                         const insertValues = await Promise.all(allStatusesResult.map(async (row, index) => {
                             let location_alpha = '';
                             let trip_type = '';
                             let address;
-
+                        
+                        
                             if (row.Trip_Status === 'Started') {
                                 location_alpha = 'A';
                                 trip_type = 'start';
                                 address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
-
-                            } else if (row.Trip_Status === 'On_Going') {
-                                if (selectedWaypointsIndexes.includes(index)) {
-                                    location_alpha = 'B';
-                                    trip_type = 'wayLogpoint';
-                                    address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
-                                } else if (waypointLimitIndexes.includes(index)) {
-                                    location_alpha = 'B';
-                                    trip_type = 'waypoint';
-                                    address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
-                                }
-                                else if (totalOngoingLength < 500) {
-                                    location_alpha = 'NULL';
-                                    trip_type = 'On_Going';
-                                    address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
-                                } else if (totalOngoingLength > 500) {
-                                    location_alpha = 'NULL';
-                                    trip_type = 'On_Going';
-                                    // address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
-                                }
-
+                        
                             } else if (row.Trip_Status === 'Reached') {
                                 location_alpha = 'C';
                                 trip_type = 'end';
                                 address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                        
+                            } else if (row.Trip_Status === 'On_Going') {
+                                if (totalOngoingLength > 500) {
+                                    if (selectedWaypointsIndexes.includes(index)) {
+                                        location_alpha = 'B';
+                                        trip_type = 'wayLogpoint';
+                                        address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                                    } 
+                                    if (waypointLimitIndexes.includes(index)) {
+                                        location_alpha = 'B';
+                                        trip_type = 'waypoint';
+                                        address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                                    } 
+                                    if (!selectedWaypointsIndexes.includes(index) && !waypointLimitIndexes.includes(index)) {
+                                        location_alpha = 'NULL';
+                                        trip_type = 'On_Going';
+                                        // address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                                    }
+                            
+                                }else if (totalOngoingLength < 500) {
+                                    
+                                    if (waypointLimitIndexes.includes(index)) {
+                                        console.log(waypointLimitIndexes,"ooo",waypointLimitIndexes.includes(index));
+                                        
+                                        location_alpha = 'B';
+                                        trip_type = 'waypoint';
+                                        address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                                    }
+                                    if(!waypointLimitIndexes.includes(index)){
+                                
+                                    location_alpha = 'NULL';
+                                    trip_type = 'On_Going';
+                                    address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                                    }
+                                }
+                                
                             }
-
+                            
+                        
                             const formattedTime = row.Tripstarttime ? row.Tripstarttime.substring(0, 5) : null;
-
+                        
                             return [
                                 row.Trip_id, location_alpha, row.Runing_Date, formattedTime,
                                 trip_type, address, row.Latitude_loc, row.Longtitude_loc
                             ];
                         }));
-
-
+                        
                         // console.log(insertValues.length, "insertvalues gmapdata",insertValues);
 
                         const sqlInsertGmapdataQuery = `
@@ -632,13 +737,13 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         //     console.log("Inserted rows:", insertResult.affectedRows);
                         //     res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
                         // });
-
+                         
                         db.query(filterSqlCheckQuery, [gpsTripId], async (error3, checkStartResult) => {
                             if (error3) {
                                 console.log("Error checking existing 'start' record:", error3);
                                 return res.status(500).json({ error: "Internal Server Error" });
                             }
-                            console.log(checkStartResult, "ccccccccccccccccccccccccccccccccccccs");
+                            // console.log(checkStartResult, "ccccccccccccccccccccccccccccccccccccs");
 
                             if (checkStartResult.length > 0) {
                                 console.log("Start trip already exists in gmapdata.");
@@ -651,6 +756,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
                                     console.log("Database insert error:", error);
                                     return res.status(500).json({ error: "Internal Server Error" });
                                 }
+                                
                                 console.log("Inserted rows:", insertResult.affectedRows);
                                 res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
                             });

@@ -2,7 +2,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import Button from "@mui/material/Button";
 
 const DeleteConfirmationDialog = ({ open, onClose, onConfirm }) => {
-  console.log("DeleteConfirmationDialog", open, onClose, onConfirm);
+  // console.log("DeleteConfirmationDialog", open, onClose, onConfirm);
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent>

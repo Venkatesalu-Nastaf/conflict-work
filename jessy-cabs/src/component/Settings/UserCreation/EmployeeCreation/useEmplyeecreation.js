@@ -388,9 +388,7 @@ const indexRanges = [
         
         setPermissionsData(prevData => {
         
-          const updatedData = [...prevData];
-     
-      
+          const updatedData = [...prevData];     
           indexRanges.forEach(range => {
             const readTrue = prevData.slice(range.start, range.end + 1).some(item => item.read === true || item.read === 1);
             const newTrue = prevData.slice(range.start, range.end + 1).some(item => item.new === true || item.new === 1);
@@ -405,7 +403,6 @@ const indexRanges = [
               delete: deleteTrue
             };
           });
-      
           return updatedData;
         });
       };
@@ -568,7 +565,7 @@ const indexRanges = [
                 const response = await fetch(`${apiUrl}/TemplateUser--Creation`);
                 if (response.status === 200) {
                     const userDataArray = await response.json();
-                    console.log("Fetched data:", userDataArray);
+                    // console.log("Fetched data:", userDataArray);
                     
                     if (userDataArray.length > 0) {
                         setTemplateMessageData(userDataArray[0].TemplateMessageData);
@@ -633,7 +630,7 @@ const indexRanges = [
     const handleChangeuniquecreation = (event) => {
         const { name, value } = event.target;
         const datacrendital = uniqueusercreationname(value);
-        console.log(datacrendital, "cred")
+        // console.log(datacrendital, "cred")
         setBook((prevBook) => ({
             ...prevBook,
             [name]: value,
@@ -670,7 +667,8 @@ const indexRanges = [
         const mobileno = book.mobileno
         const password = book.userpassword
         // const EmailApp_Password=book.EmailApp_Password
-
+        // console.log(book,"checking add values");
+        
 
 
         if (!password) {
@@ -736,11 +734,13 @@ const indexRanges = [
             const created_at = dayjs().format("YYYY-MM-DD")
             const data = { book, permissionsData, organistaionsendmail,templateMessageData, created_at }
             await axios.post(`${apiUrl}/usercreation-add`, data);
+            
             handleCancel();
             handleList()
             setSuccess(true);
             setSuccessMessage("Successfully Added");
             setCredentialData()
+        
 
         } catch (error) {
             setError(true);
@@ -765,9 +765,8 @@ const indexRanges = [
             const mobileno = book.mobileno
             const password = book.userpassword
             // const EmailApp_Password=book.EmailApp_Password
+            // console.log(book,"checking the edit values")
 
-
-            // console.log("NASTAF Technologies", branchName, "book", book)
 
             if (!password) {
                 setError(true);
@@ -836,8 +835,6 @@ const indexRanges = [
             handleCancel();
             // handleList()
 
-
-
         } catch {
             setError(true);
             setErrorMessage("Failed to Update ");
@@ -848,6 +845,7 @@ const indexRanges = [
     const handleDelete = async () => {
         try {
             await axios.delete(`${apiUrl}/usercreation-delete/${book.userid}`);
+            console.log(book.userid,"successfully delleted")
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
             handleCancel();
@@ -903,8 +901,7 @@ const indexRanges = [
             handleAdd();
             handleList();
         }
-
-       
+      
     };
 
 
@@ -951,7 +948,7 @@ const indexRanges = [
 
     const handleRowClickUser = async (params) => {
         setBook(params)
-        console.log("params-user", params)
+        // console.log("params-user", params)
 
         const user_permission = await permissiondata(params.userid);
         if (user_permission?.length > 0) {
@@ -977,7 +974,7 @@ const indexRanges = [
 
     const handleAutocompleteChangeStationName = (event, newValue, name) => {
 
-        console.log(newValue, "bill")
+        // console.log(newValue, "bill")
 
         setBook((prevBook) => ({
             ...prevBook,
@@ -1077,14 +1074,14 @@ const indexRanges = [
     };
 
     const permisiionrolefield = async(datas)=>{
-        console.log(datas,"resusedtatw")
+        // console.log(datas,"resusedtatw")
         if(datas){
         try{
             
     
             const response = await axios.get(`${apiUrl}/userrole-permissiongetroless/${datas}`)
             const responsedata = response.data;
-            console.log(responsedata,"resuseperrrr")
+            // console.log(responsedata,"resuseperrrr")
           
             setPermissionsData(responsedata)
             updatePermissionsStateforrole(responsedata)
@@ -1100,26 +1097,25 @@ const indexRanges = [
         }
     }
     else{
-        console.log(datas,"resuse esle")
+        // console.log(datas,"resuse esle")
         setPermissionsData(initialPermissionsData)
     }
            
-      
-    
+        
     }
     
     const handlerolepermissiondata = async (event,veghnodata) => {
           const seleteddata = veghnodata ? veghnodata.label :""
-          console.log(seleteddata,"resusesele")
-          
-        
-      
-    try{
+        //   console.log(seleteddata,"resusesele") 
+    try{    
+        if(!seleteddata ||typeof seleteddata !== 'string'){
+            // console.log("stop")
+            return;
+        }      
             const response = await axios.get(`${apiUrl}/getAllrolefieldunique/${seleteddata}`)
             const responsedata = response.data;
-            console.log(responsedata,"resuseponse")
             if(responsedata.length > 0){
-            console.log(responsedata.length,"resuses",responsedata[0].userRole_id)
+            // console.log(responsedata.length,"resuses",responsedata[0].userRole_id)
             setBook((prevBook) => ({
                 ...prevBook,
                 RoleUser:seleteddata,
@@ -1143,13 +1139,9 @@ const indexRanges = [
             // }
     }
     catch(err){
-      console.log(err,"resuseee")
-    }
-
-              
-                // return true;
-        
-        
+    //   console.log(err,"resuseee")
+    }             
+                return true;            
     }
 
    const handlenochangedatarole=(value)=>{
@@ -1159,10 +1151,6 @@ const indexRanges = [
     }));
    }
   
-
-
-
-
     return {
 
         selectedCustomerId, handleAutocompleteChangeStationName,
@@ -1195,7 +1183,8 @@ const indexRanges = [
         // rolefielddropdown,setRoleFielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
         //ffor permission
-        deleteuserceationdata,setDeleteUsercreation,setCredentialData,
+        deleteuserceationdata,setDeleteUsercreation,setCredentialData ,
+        
         permissionsData, handleSwitchChange, handleCheckboxChange, setReadState,setModifyState,setDeleteState,setNewState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
     };
 };

@@ -65,8 +65,12 @@ router.get('/organisationpdfdata', (req, res) => {
 
 router.put('/companyupdate/:id', (req, res) => {
     const id = req.params.id;
+    // console.log(id, "checking this value");
+    
     const updatedCustomerData = req.body;
 
+    // console.log(updatedCustomerData,"checking updation");
+    
     db.query('UPDATE organizationdetails SET ? WHERE id = ?', [updatedCustomerData, id], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to update data in MySQL" });

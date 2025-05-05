@@ -558,10 +558,8 @@ const indexRanges = [
 
 
     const permisiionroledataget = async(datas)=>{
-        console.log(datas,"resdtatw")
+        // console.log(datas,"resdtatw")
         if (datas) {
-            
-
             const response = await axios.get(`${apiUrl}/userrole-permissiongetroless/${datas}`)
             const responsedata = response.data;
             if (responsedata?.length >= 1) {
@@ -594,11 +592,12 @@ const indexRanges = [
     }
 
     const uniquevechicleRegno = async (veghnodata) => {
+        
         if (veghnodata) {
 
             const response = await axios.get(`${apiUrl}/getAllrolefieldunique/${veghnodata}`)
             const responsedata = response.data;
-            console.log(responsedata,"ress")
+            // console.log(responsedata,"ress")
             if (responsedata?.length >= 1) {
                 // console.log(responsedata,"veh")
                 permisiionroledataget(responsedata[0].userRole_id)
@@ -710,7 +709,7 @@ const indexRanges = [
     const handleRoleChange=(event,value)=>{
         const seleteddata = value ? value.label :""
     
-        console.log(value,"vv",seleteddata)
+        // console.log(value,"vv",seleteddata)
         uniquevechicleRegno(seleteddata)
           setRoleFielddropdown(seleteddata)
           setModalRoleField(seleteddata)
@@ -719,7 +718,7 @@ const indexRanges = [
     const handleRoleChange1=(event,value)=>{
         // const seleteddata = value ? value.label :value
         
-        console.log(value,"downvv22")
+        // console.log(value,"downvv22")
          uniquevechicleRegno(value)
           setRoleFielddropdown(value)
           setModalRoleField(value)
@@ -760,7 +759,7 @@ const indexRanges = [
             // setRows(rowsWithUniqueId);
             
             if(data.length > 0 ){
-            console.log(data,"data")
+            // console.log(data,"data")
             
             const names = data.map(res => res.userRole_name)
             setRoleFieldData(prevData => {

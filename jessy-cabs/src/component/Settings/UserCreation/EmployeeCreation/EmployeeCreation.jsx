@@ -109,6 +109,7 @@ const EmployeeCreation = ({ stationName }) => {
     permissionsData, handleSwitchChange, handleCheckboxChange, setEmptyrole,setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows,setCredentialData
   } = useEmplyeecreation();
 
+  // console.log(cerendentialdata,"checking the values")
   const {permissionsData1,setRoleFielddropdown,emptyroletype,setEmptyroletype,handleCheckboxChangealldata1,modalrolefield,error1,errormessage1,handleButtondeleteClickrole, handleEditrole,hidePopup1,handleAddrole, handleSwitchChange1,handleOpenModal,isModalOpen,successMessage1,success1, handleCloseModal,handleCheckboxChange1, readState1, newState1, modifyState1, deleteState1, handleSwitchforthatrow1, handleSwitchforallrows1,rolefield,rolefielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1}=useEmplyeecreationrole();
 
   useEffect(() => {
@@ -234,6 +235,7 @@ setSationNameforUser(updatedData);
                     // onChange={handleChange}
                     // variant="standard"
                     style={{ width: '100%' }}
+                    inputProps={{readOnly:true}}
                   />
                 </div>
                 <div className="input">
@@ -334,17 +336,19 @@ setSationNameforUser(updatedData);
                     isOptionEqualToValue={(option, value) => option === value}
                     disableCloseOnSelect
                     getOptionLabel={(option) => option}
-                    renderOption={(props, option, { selected }) => (
-                      <li {...props}>
-                        <Checkbox
-                          icon={icon}
-                          checkedIcon={checkedIcon}
-                          style={{ marginRight: 8 }}
-                          checked={selected}
-                        />
-                        {option}
-                      </li>
-                    )}
+                    renderOption={(props, option, { selected }) => {
+                      const { key, ...rest } = props;
+                      return (
+                        <li key={key} {...rest}>
+                          <Checkbox
+                            style={{ marginRight: 8 }}
+                            checked={selected}
+                          />
+                          {option}
+                        </li>
+                      );
+                    }}
+                    
                     // style={{ width: 170 }}
                     renderInput={(params) => (
                       <TextField {...params} label="Station Name" placeholder="Organization" style={{ width: '185px' }} />

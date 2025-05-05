@@ -2462,13 +2462,13 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                       <div style={{ position: 'relative', top: '-4px' }}>
                         <TextField
                           name="totaltime"
-                          // value={ calculateTotalTimes()}
-                          value={
-                            (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
-                              (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
-                              ? calculateTotalTimes()
-                              : ""
-                          }
+                          value={calculateTotalTimes()}
+                          // value={
+                          //   (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
+                          //     (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
+                          //     ? calculateTotalTimes()
+                          //     : ""
+                          // }
                           disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           // onChange={handleChange}
                           id="totaltime"

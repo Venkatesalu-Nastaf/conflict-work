@@ -4,6 +4,7 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png";
+import Runingicon from "../VehicleSection/VehicleInformationDrawer/Runingicon.png";
 import "./osmap.css"
 
 
@@ -11,6 +12,12 @@ import "./osmap.css"
 
 const customIcon = new L.Icon({
   iconUrl: caricon,
+  iconSize: [80, 80],
+  iconAnchor: [40, 80],
+  popupAnchor: [0, -50],
+});
+const Runingcar = new L.Icon({
+  iconUrl: Runingicon,
   iconSize: [80, 80],
   iconAnchor: [40, 80],
   popupAnchor: [0, -50],
@@ -114,7 +121,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 const OSMap = ({todayVehicle }) => {
   // console.log(vehicleCurrentLocation, vehicleCurrentLocation.length, "checkkkkkkkkkkkkk");
   // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), [todayVehicle]);
-
+// console.log(todayVehicle,"kk")
 
   return (
     // <div style={{ height: "100vh", width: "100vw" }}>
@@ -132,7 +139,7 @@ const OSMap = ({todayVehicle }) => {
             <Marker
               key={index}
               position={[parseFloat(vehicle.Latitude_loc), parseFloat(vehicle.Longtitude_loc)]}
-              icon={customIcon}
+              icon={vehicle.Trip_Status === "On_Going" ? Runingcar : customIcon }
             >
               
                 <Tooltip className="tooltip" direction="top"  offset={[0, -60]} opacity={1} permanent>

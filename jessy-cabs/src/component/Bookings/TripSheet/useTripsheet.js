@@ -2887,6 +2887,7 @@ const useTripsheet = () => {
         const closetimehybrid = removeSeconds(formData.closetime || selectedCustomerData.closetime || book.closetime)
 
         const hybriddata = hybridhclcustomer || hybridhclnavigate
+        // console.log(shedinTime,shedoutTime,additionalTimeValue,totalDays,duty,datatimetoggle,starttimehybrid,closetimehybrid,"lasttppppp")
 
 
 
@@ -2927,26 +2928,64 @@ const useTripsheet = () => {
 
                     // Calculate the difference in minutes
                     let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
-
-                    if (minuteDifference < 0) {
-                        minuteDifference += 24 * 60;
+                    if(shedoutHours <= shedinHours){
+                        if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
+                            const hours = Math.floor(minuteDifference / 60);
+                            const minutes = minuteDifference % 60;
+        
+        
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm")
+                                const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${minutes}m`;
+                            }
+                        }
+                        else if(shedoutHours < shedinHours){
+                            const hours = Math.floor(minuteDifference / 60);
+                            const minutes = minuteDifference % 60;
+        
+        
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm")
+                                const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${minutes}m`;
+                            }
+                        }
+                         else{
+                                return 0
+                            }
+                        }
+                        else{
+                            return 0
+                        }
+                        
                     }
+
+                    // if (minuteDifference < 0) {
+                    //     minuteDifference += 24 * 60;
+                    // }
 
 
                     // Convert the difference back to hours and minutes
-                    const hours = Math.floor(minuteDifference / 60);
-                    const minutes = minuteDifference % 60;
+                    // const hours = Math.floor(minuteDifference / 60);
+                    // const minutes = minuteDifference % 60;
 
 
-                    if (datatimetoggle === 0) {
-                        // console.log(`${hours}h ${minutes}m`,"datamm")
-                        const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                        return dataminutes
-                    }
-                    else {
-                        return `${hours}h ${minutes}m`;
-                    }
-                }
+                    // if (datatimetoggle === 0) {
+                    //     // console.log(`${hours}h ${minutes}m`,"datamm")
+                    //     const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                    //     return dataminutes
+                    // }
+                    // else {
+                    //     return `${hours}h ${minutes}m`;
+                    // }
+                // }
 
 
 
@@ -3140,10 +3179,11 @@ const useTripsheet = () => {
                         // Calculate the difference in minutes
                         let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
 
-                        if (minuteDifference < 0) {
-                            minuteDifference += 24 * 60;
-                        }
-
+                        // if (minuteDifference < 0) {
+                        //     minuteDifference += 24 * 60;
+                        // }
+                        if(shedoutHours <= shedinHours){
+                            if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
 
                         // Convert the difference back to hours and minutes
                         const hours = Math.floor(minuteDifference / 60);
@@ -3158,6 +3198,29 @@ const useTripsheet = () => {
                         else {
                             return `${hours}h ${minutes}m`;
                         }
+                    }
+                    else if(shedoutHours < shedinHours ){
+                        const hours = Math.floor(minuteDifference / 60);
+                        const minutes = minuteDifference % 60;
+
+
+                        if (datatimetoggle === 0) {
+                            // console.log(`${hours}h ${minutes}m`,"datamm")
+                            const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                            return dataminutes
+                        }
+                        else {
+                            return `${hours}h ${minutes}m`;
+                        }
+
+                    }
+                    else{
+                        return 0
+                    }
+                }
+                else{
+                    return 0
+                }
                     }
 
 
@@ -3375,14 +3438,9 @@ const useTripsheet = () => {
 
                     // Calculate the difference in minutes
                     let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
-
-                    if (minuteDifference < 0) {
-                        minuteDifference += 24 * 60;
-                    }
-
-
-                    // Convert the difference back to hours and minutes
-                    const hours = Math.floor(minuteDifference / 60);
+                    if(shedoutHours <= shedinHours){
+                        if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
+                            const hours = Math.floor(minuteDifference / 60);
                     const minutes = minuteDifference % 60;
 
 
@@ -3393,8 +3451,50 @@ const useTripsheet = () => {
                     }
                     else {
                         return `${hours}h ${minutes}m`;
+                    } 
+                        }
+                       else if(shedoutHours < shedinHours){
+                        const hours = Math.floor(minuteDifference / 60);
+                        const minutes = minuteDifference % 60;
+    
+    
+                        if (datatimetoggle === 0) {
+                            // console.log(`${hours}h ${minutes}m`,"datamm")
+                            const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                            return dataminutes
+                        }
+                        else {
+                            return `${hours}h ${minutes}m`;
+                        } 
+                       }
+                       else{
+                        return 0
+                       }
                     }
-                }
+                       else{
+                        return 0
+                       }
+                    }
+
+                    // if (minuteDifference < 0) {
+                    //     minuteDifference += 24 * 60;
+                    // }
+
+
+                    // Convert the difference back to hours and minutes
+                    // const hours = Math.floor(minuteDifference / 60);
+                    // const minutes = minuteDifference % 60;
+
+
+                    // if (datatimetoggle === 0) {
+                    //     // console.log(`${hours}h ${minutes}m`,"datamm")
+                    //     const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                    //     return dataminutes
+                    // }
+                    // else {
+                    //     return `${hours}h ${minutes}m`;
+                    // }
+                // }
 
 
 
@@ -3567,6 +3667,7 @@ const useTripsheet = () => {
                 }
 
             }
+            // console.log("lastmobnbbebebbeb")
             return ''
         }
 
@@ -3842,25 +3943,62 @@ const useTripsheet = () => {
                 // Calculate the difference in minutes
                 // let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
                 let minuteDifference = totalShedinMinutes - totalShedoutMinutes
-                if (minuteDifference < 0) {
-                    minuteDifference += 24 * 60;
+                if(shedoutHours <= shedinHours){
+                    if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
+                        console.log(shedinHours,shedinMinutes,)
+                        const hours = Math.floor(minuteDifference / 60);
+                        const minutes = minuteDifference % 60;
+                        // console.log(shedinHours,shedinMinutes,hours,minutes,"hhvend")
+                        if (datatimetoggle === 0) {
+                            // console.log(`${hours}h ${minutes}m`,"datamm")
+                            const dataminutes = minutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+                            return dataminutes
+                        }
+                        else {
+                            return `${hours}h ${minutes}m`;
+                    }
                 }
+                    else if(shedoutHours < shedinHours){
+                        const hours = Math.floor(minuteDifference / 60);
+                        const minutes = minuteDifference % 60;
+                        // console.log(shedinHours,shedinMinutes,hours,minutes,"hhvend2")
+                        if (datatimetoggle === 0) {
+                            // console.log(`${hours}h ${minutes}m`,"datamm")
+                            const dataminutes = minutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+                            return dataminutes
+                        }
+                        else {
+                            return `${hours}h ${minutes}m`;
+                    }
+                    }
+                    else{
+                        return '0'
+                    }
+                    }
+                    else{
+                        return '0'
+                    }
+                }
+                // if (minuteDifference < 0) {
+                //     minuteDifference += 24 * 60;
+                // }
 
                 // Convert the difference back to hours and minutes
-                const hours = Math.floor(minuteDifference / 60);
-                const minutes = minuteDifference % 60;
-                if (datatimetoggle === 0) {
-                    // console.log(`${hours}h ${minutes}m`,"datamm")
-                    const dataminutes = minutes >= 30 ? `${hours + 1}h` : `${hours}h`;
-                    return dataminutes
-                }
-                else {
-                    return `${hours}h ${minutes}m`;
-            }
+            //     const hours = Math.floor(minuteDifference / 60);
+            //     const minutes = minuteDifference % 60;
+            //     if (datatimetoggle === 0) {
+            //         // console.log(`${hours}h ${minutes}m`,"datamm")
+            //         const dataminutes = minutes >= 30 ? `${hours + 1}h` : `${hours}h`;
+            //         return dataminutes
+            //     }
+            //     else {
+            //         return `${hours}h ${minutes}m`;
+            // }
 
 
                 // return `${hours}h ${minutes}m`;
-            }
+            // }
+
 
 
 
@@ -3906,6 +4044,7 @@ const useTripsheet = () => {
                     const [hours, minutes] = RemainTotalCalculation?.toString().split('.').map(Number);
 
                     const formattedMinutes = parseInt(minutes, 10);
+                    //  console.log(hours,formattedMinutes,"hhvend")
                     if (datatimetoggle === 0) {
                         // console.log(`${hours}h ${minutes}m`,"datamm")
                         const dataminutes = formattedMinutes >= 30 ? `${hours + 1}h` : `${hours}h`;
@@ -6826,25 +6965,62 @@ const useTripsheet = () => {
 
                     // Calculate the difference in minutes
                     let minuteDifference = totalShedinMinutes - totalShedoutMinutes
-
-                    if (minuteDifference < 0) {
-                        minuteDifference += 24 * 60;
+                    if(shedoutHours <= shedinHours){
+                        if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
+                            const hours = Math.floor(minuteDifference / 60);
+                            const minutes = minuteDifference % 60;
+        
+        
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm")
+                                const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${minutes}m`;
+                            }
+                        }
+                        else if(shedoutHours < shedinHours){
+                            const hours = Math.floor(minuteDifference / 60);
+                            const minutes = minuteDifference % 60;
+        
+        
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm")
+                                const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${minutes}m`;
+                            }  
+                        }
+                        else{
+                      return 0
+                        }
                     }
+                    else{
+                        return 0
+                    }
+
+
+                    // if (minuteDifference < 0) {
+                    //     minuteDifference += 24 * 60;
+                    // }
 
 
                     // Convert the difference back to hours and minutes
-                    const hours = Math.floor(minuteDifference / 60);
-                    const minutes = minuteDifference % 60;
+                    // const hours = Math.floor(minuteDifference / 60);
+                    // const minutes = minuteDifference % 60;
 
 
-                    if (datatimetoggle === 0) {
-                        // console.log(`${hours}h ${minutes}m`,"datamm")
-                        const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                        return dataminutes
-                    }
-                    else {
-                        return `${hours}h ${minutes}m`;
-                    }
+                    // if (datatimetoggle === 0) {
+                    //     // console.log(`${hours}h ${minutes}m`,"datamm")
+                    //     const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                    //     return dataminutes
+                    // }
+                    // else {
+                    //     return `${hours}h ${minutes}m`;
+                    // }
                 }
 
 
@@ -7035,10 +7211,12 @@ const useTripsheet = () => {
 
                         // Calculate the difference in minutes
                         let minuteDifference = totalShedinMinutes - totalShedoutMinutes
+                        if(shedoutHours <= shedinHours){
+                            if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
 
-                        if (minuteDifference < 0) {
-                            minuteDifference += 24 * 60;
-                        }
+                        // if (minuteDifference < 0) {
+                        //     minuteDifference += 24 * 60;
+                        // }
 
 
                         // Convert the difference back to hours and minutes
@@ -7055,7 +7233,28 @@ const useTripsheet = () => {
                             return `${hours}h ${minutes}m`;
                         }
                     }
+                    else if(shedoutHours < shedinHours){
+                        const hours = Math.floor(minuteDifference / 60);
+                        const minutes = minuteDifference % 60;
 
+
+                        if (datatimetoggle === 0) {
+                            // console.log(`${hours}h ${minutes}m`,"datamm")
+                            const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                            return dataminutes
+                        }
+                        else {
+                            return `${hours}h ${minutes}m`;
+                        } 
+                    }
+                    else{
+                      return 0
+                    }
+                }
+                else{
+                    return 0
+                }
+            }
 
 
                     if (calculateTotalDay() === 2) {
@@ -7244,25 +7443,61 @@ const useTripsheet = () => {
 
                     // Calculate the difference in minutes
                     let minuteDifference = totalShedinMinutes - totalShedoutMinutes
-
-                    if (minuteDifference < 0) {
-                        minuteDifference += 24 * 60;
+                    if(shedoutHours <= shedinHours){
+                        if(shedoutHours ===  shedinHours && shedoutMinutes < shedinMinutes){
+                            const hours = Math.floor(minuteDifference / 60);
+                            const minutes = minuteDifference % 60;
+        
+        
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm")
+                                const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${minutes}m`;
+                            }
+                        }
+                        else if(shedoutHours <  shedinHours ){
+                            const hours = Math.floor(minuteDifference / 60);
+                            const minutes = minuteDifference % 60;
+        
+        
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm")
+                                const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${minutes}m`;
+                            }
+                        }
+                        else{
+                            return 0
+                        }
                     }
+                    else{
+                        return 0
+                    }
+
+                    // if (minuteDifference < 0) {
+                    //     minuteDifference += 24 * 60;
+                    // }
 
 
                     // Convert the difference back to hours and minutes
-                    const hours = Math.floor(minuteDifference / 60);
-                    const minutes = minuteDifference % 60;
+                    // const hours = Math.floor(minuteDifference / 60);
+                    // const minutes = minuteDifference % 60;
 
 
-                    if (datatimetoggle === 0) {
-                        // console.log(`${hours}h ${minutes}m`,"datamm")
-                        const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                        return dataminutes
-                    }
-                    else {
-                        return `${hours}h ${minutes}m`;
-                    }
+                    // if (datatimetoggle === 0) {
+                    //     // console.log(`${hours}h ${minutes}m`,"datamm")
+                    //     const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                    //     return dataminutes
+                    // }
+                    // else {
+                    //     return `${hours}h ${minutes}m`;
+                    // }
                 }
 
 

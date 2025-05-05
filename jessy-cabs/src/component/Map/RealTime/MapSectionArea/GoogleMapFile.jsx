@@ -42,10 +42,12 @@ const GoogleMapFile = ({ vehicleCurrentLocation }) => {
 
   // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), []);
   const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), []);
+  const libraries = ['places', 'geometry', 'drawing', 'visualization'];
     const { isLoaded } = useJsApiLoader({
        googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+       libraries,
      });
-     console.log(isLoaded,"lo")
+    //  console.log(isLoaded,"lo")
    
    
   return (

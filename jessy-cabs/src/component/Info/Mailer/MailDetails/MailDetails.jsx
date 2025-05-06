@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef,useContext,useCallback } from "react";
+import React, { useEffect, useState, useRef, useContext, useCallback } from "react";
 import "./MailDetails.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -61,16 +61,16 @@ const MailDetails = () => {
   const [datatrigger, setDataTrigger] = useState(false)
   const fileInputRef = useRef(null);
   const { permissions } = useContext(PermissionContext)
-  const Mailer_create=permissions[18]?.new ;
-  const Mailer_modify=permissions[18]?.modify ;
-  const Mailer_delete=permissions[18]?.delete ;
-  const Mailer_read = permissions[18]?.read ;
+  const Mailer_create = permissions[18]?.new;
+  const Mailer_modify = permissions[18]?.modify;
+  const Mailer_delete = permissions[18]?.delete;
+  const Mailer_read = permissions[18]?.read;
 
   const columns = [
     { field: "idno", headerName: "Sno", width: 50 },
     { field: "Templateid", headerName: "Templateid", width: 80 },
     { field: "TemplateName", headerName: "Template Name", width: 120 },
-    { field: "TemplateInfo", headerName: "Template Info", width: 120 },  
+    { field: "TemplateInfo", headerName: "Template Info", width: 120 },
     { field: "TemplateSubject", headerName: "Template Subject", width: 170 },
     {
       field: 'TemplateMessageData',
@@ -117,12 +117,12 @@ const MailDetails = () => {
   // useEffect(()=>{
 
   // })
-  
+
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
   };
- 
+
   useEffect(() => {
     if (error || success) {
       const timer = setTimeout(() => {
@@ -133,55 +133,55 @@ const MailDetails = () => {
   }, [error, success]);
 
 
-//   const handleList = useCallback(async () => {
-//     try {
-//         const response = await axios.get(`${apiurl}/templatedataall`)
-//         const data = response.data 
-//         const rowuniqueid = data.map((row, index) => ({
-//           ...row,
-//           idno: index + 1
-//         }))
+  //   const handleList = useCallback(async () => {
+  //     try {
+  //         const response = await axios.get(`${apiurl}/templatedataall`)
+  //         const data = response.data 
+  //         const rowuniqueid = data.map((row, index) => ({
+  //           ...row,
+  //           idno: index + 1
+  //         }))
 
-//         setTemplateData(rowuniqueid)
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }, [apiurl]); // Add any dependencies needed inside this array
+  //         setTemplateData(rowuniqueid)
+  //     } catch (err) {
+  //         console.log(err);
+  //     }
+  // }, [apiurl]); // Add any dependencies needed inside this array
 
-const handleList = useCallback(async () => {
-  setLoading(true);
-  setError(false); // Reset error state before making a new request
-  try {
+  const handleList = useCallback(async () => {
+    setLoading(true);
+    setError(false); // Reset error state before making a new request
+    try {
       const response = await axios.get(`${apiurl}/templatedataall`);
       const data = response.data;
-      
+
       const rowuniqueid = data.map((row, index) => ({
-          ...row,
-          idno: index + 1,
+        ...row,
+        idno: index + 1,
       }));
-      
+
       setTemplateData(rowuniqueid);
-      
+
       if (data.length > 0) {
-          setLoading(false);
+        setLoading(false);
       } else {
-          setLoading(false);
+        setLoading(false);
       }
-  } catch (err) {
+    } catch (err) {
       if (err.message === 'Network Error') {
-          setErrorMessage("Check network connection.");
+        setErrorMessage("Check network connection.");
       } else {
-          setErrorMessage("Failed to Show: " + (err.response?.data?.message || err.message));
+        setErrorMessage("Failed to Show: " + (err.response?.data?.message || err.message));
       }
       setError(true);
-  } finally {
+    } finally {
       setLoading(false);
-  }
-}, [apiurl]);
+    }
+  }, [apiurl]);
 
-useEffect(() => {
+  useEffect(() => {
     handleList();
-}, [handleList]);
+  }, [handleList]);
 
 
   function convertToPlain(html) {
@@ -259,17 +259,17 @@ useEffect(() => {
     navigate("/home/info/mailer/TemplateSelection");
   }
 
-  const handleClick =(namedata)=>{
-  
-    if(namedata === "list"){
+  const handleClick = (namedata) => {
+
+    if (namedata === "list") {
 
       handleList()
       setSearchname("")
     }
-    else{
+    else {
       handleTemplateCreation()
     }
-  
+
   }
 
   const Attachedimagedata = async (templateid) => {
@@ -368,7 +368,7 @@ useEffect(() => {
     fetchData();
   }, [apiurl, selecteddata, file,
     //  datatri gger
-    ]);
+  ]);
   const handleShowdata = async () => {
     try {
       const response = await fetch(
@@ -388,29 +388,29 @@ useEffect(() => {
         setError(true);
         setErrorMessage("no data found");
       }
-    } 
+    }
     // catch {
     //   setError(true);
     //   setErrorMessage("Failed to Retrive Data");
     // }
     catch (error) {
       // console.error("Error occurredddddd:", error);
-   
+
       // Check if there's no response, indicating a network error
-      if (error.message ) {
-          setError(true);
-          setErrorMessage("Check your Network Connection");
-          // console.log('Network error');
+      if (error.message) {
+        setError(true);
+        setErrorMessage("Check your Network Connection");
+        // console.log('Network error');
       } else if (error.response) {
-          setError(true);
-          // Handle other Axios errors (like 4xx or 5xx responses)
-          // setErrorMessage("Failed to Search: " + (error.response.data.message || error.message));
+        setError(true);
+        // Handle other Axios errors (like 4xx or 5xx responses)
+        // setErrorMessage("Failed to Search: " + (error.response.data.message || error.message));
       } else {
-          // Fallback for other errors
-          setError(true);
-          setErrorMessage("An unexpected error occurred: " + error.message);
+        // Fallback for other errors
+        setError(true);
+        setErrorMessage("An unexpected error occurred: " + error.message);
       }
-  }
+    }
   };
 
   return (
@@ -456,7 +456,7 @@ useEffect(() => {
                 </div>
                 <div className="input-field  input-feild-mailer mail-textarea1-btn">
                   <div className="input" >
-                    <Button variant="contained"  disabled={!Mailer_create} onClick={handlesendbulkemail} endIcon={<SendIcon />}>
+                    <Button variant="contained" disabled={!Mailer_create} onClick={handlesendbulkemail} endIcon={<SendIcon />}>
                       Send
                     </Button>
                   </div>
@@ -472,7 +472,7 @@ useEffect(() => {
                       <p>{successMessage}</p>
                     </div>
                   }
-                  
+
                   {error &&
                     <div className='alert-popup Error' >
                       <div className="popup-icon"> <ClearIcon /> </div>
@@ -509,7 +509,7 @@ useEffect(() => {
                           <Button variant="contained" onClick={() => handleShowdata()}>Search</Button>
                         </div>
                         <div className="input" >
-                          <Button  disabled={!Mailer_create} onClick={handleTemplateCreation} variant="contained">Create Template</Button>
+                          <Button disabled={!Mailer_create} onClick={handleTemplateCreation} variant="contained">Create Template</Button>
                         </div>
                       </div>
                     </div>
@@ -539,25 +539,25 @@ useEffect(() => {
                             },
                           }}
                         >
-                            {loading ? ( 
-                                <Box
-                                    sx={{
-                                        position: 'absolute', 
-                                        top: '50%',
-                                        left: '50%', 
-                                        transform: 'translate(-50%, -50%)', 
-                                    }}
-                                >
-                                    <CircularProgress />
-                                </Box>
-                            ) : (
+                          {loading ? (
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                              }}
+                            >
+                              <CircularProgress />
+                            </Box>
+                          ) : (
 
-                          <DataGrid
-                            rows={templatedata}
-                            columns={columns}
-                            onRowClick={handletableClick}
-                          />
-                            )}
+                            <DataGrid
+                              rows={templatedata}
+                              columns={columns}
+                              onRowClick={handletableClick}
+                            />
+                          )}
                         </Box>
                       </div>
                     </div>
@@ -567,17 +567,17 @@ useEffect(() => {
             </div>
           </div>
 
-          <div className="input-field full-width" style={{ marginLeft: '60px' }}>
-    <div className="inputs sms-format-keyword-input">
-        <span className="Title-Name" style={{ fontWeight: 600 }}>Key-Words</span>
-        <TextField
-            className="sms-box"
-            fullWidth
-            id="outlined-7"
-            multiline
-            sx={{ mt: 1, width: "100%" }}
-            rows={4}
-            defaultValue="1. USER CREATION : ${username} - Username , ${userpassword} - Password
+          <div className="input-field full-width" >
+            <div className="inputs sms-format-keyword-input">
+              <span className="Title-Name" style={{ fontWeight: 600 }}>Key-Words</span>
+              <TextField
+                className="sms-box"
+                fullWidth
+                id="outlined-7"
+                multiline
+                sx={{ mt: 1, width: "100%" }}
+                rows={4}
+                defaultValue="1. USER CREATION : ${username} - Username , ${userpassword} - Password
 2. DRIVER INFO : ${Drivername} - Driver Name , ${userid} - Driver UserID, ${UserName} - Driver Username , ${password} -Driver App Password
 3. AGREEMENT MAIL FOR CUSTOMER : ${user.customer} - Customer Name , ${subscriptionEnd.format} - Agreement End Date , ${previousDay.format} - Previous Date 
 4. AGREEMENT MAIL FOR OWNER : ${user.customer} - Customer Name , (${user.email}) - Customer Email ID , ${subscriptionEnd.format} - Agreement End Date
@@ -587,11 +587,11 @@ useEffect(() => {
 8. DRIVER INSURANCE DATE RENEWAL: ${driverName} - Driver Name , ${date} - Driver Insurance Date Renewal"
 
                 InputProps={{
-                readOnly: true,
-            }}
-        />
-    </div>
-</div>
+                  readOnly: true,
+                }}
+              />
+            </div>
+          </div>
 
 
           {/* <Box className='common-speed-dail'>
@@ -610,34 +610,34 @@ useEffect(() => {
             </StyledSpeedDial>
           </Box> */}
 
-<Box className="common-speed-dail">
-                    <StyledSpeedDial
-                        ariaLabel="SpeedDial playground example"
-                        icon={<SpeedDialIcon />}
-                        direction="left"
-                    >
+          <Box className="common-speed-dail">
+            <StyledSpeedDial
+              ariaLabel="SpeedDial playground example"
+              icon={<SpeedDialIcon />}
+              direction="left"
+            >
 
-                        {Mailer_read === 1 && (
-                            <SpeedDialAction
-                                key="list"
-                                icon={<ChecklistIcon />}
-                                tooltipTitle="List"
-                                onClick={()=>handleClick("list")}
-                            />
-                        )}
-                     
-                      
-                        {Mailer_create === 1 && (
-                            <SpeedDialAction
-                                key="Add"
-                                icon={<BookmarkAddedIcon />}
-                                tooltipTitle="Add"
-                                onClick={() =>handleClick("Add")}
-                            />
-                        )}
-                       year
-                    </StyledSpeedDial>
-                </Box>
+              {Mailer_read === 1 && (
+                <SpeedDialAction
+                  key="list"
+                  icon={<ChecklistIcon />}
+                  tooltipTitle="List"
+                  onClick={() => handleClick("list")}
+                />
+              )}
+
+
+              {Mailer_create === 1 && (
+                <SpeedDialAction
+                  key="Add"
+                  icon={<BookmarkAddedIcon />}
+                  tooltipTitle="Add"
+                  onClick={() => handleClick("Add")}
+                />
+              )}
+              year
+            </StyledSpeedDial>
+          </Box>
         </form>
       </div>
     </div>

@@ -247,6 +247,14 @@
     .AddBankContainer-BankAccount {
         width: 80%;
     }
+
+    .addedbanks-Details-BankAccount {
+        width: 80%;
+    }
+    
+    .bank-account-details-main{
+        overflow: auto;
+    }
 }
 
 @media screen and (min-width:450.99px) and (max-width:700px) {
@@ -256,6 +264,14 @@
 
     .total-account .amount-calculate {
         width: 90%;
+    }
+
+    .addedbanks-Details-BankAccount {
+        width: 90%;
+    }
+    
+    .bank-account-details-main{
+        overflow: auto;
     }
 }
 
@@ -284,4 +300,3 @@
     margin-top: 20px;
     /* padding-right: 10px; */
 }
-

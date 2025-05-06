@@ -14,17 +14,17 @@
     font-weight: 500;
 } */
 
-.form-container-PackageRateEntery .PackageRateEntery-form {
-    /* height: 100vh; */
-    /* height: fit-scontent; */
-    /* width: 100vw; */
-    /* overflow-x: hidden;
+/* .form-container-PackageRateEntery .PackageRateEntery-form {
+    height: 100vh;
+    height: fit-scontent;
+    width: 100vw;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    color: #000; */
-    /* background-color: var(--glass); */
-}
+    color: #000;
+    background-color: var(--glass);
+} */
 
 .form-container-PackageRateEntery {
     display: flex;
@@ -192,9 +192,9 @@
     }
 }
 
-.package-rate-entry-edit-division {
-    /* margin: 10px 0px 0px 10px; */
-}
+/* .package-rate-entry-edit-division {
+    margin: 10px 0px 0px 10px;
+} */
 
 .package-rate-entry-table {
     height: 400px;
@@ -209,4 +209,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.show-button{
+    margin-left: 10px;
+}
+
+@media only screen and (min-width:800px) and (max-width:1065px){
+
+    .show-button{
+        margin-left: 100px;
+    }
+
+    .stations{
+        margin-right: 100px;
+    }
+
 }

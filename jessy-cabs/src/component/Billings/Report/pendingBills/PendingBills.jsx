@@ -107,7 +107,7 @@ export const PendingBills = () => {
 
 
                 </div>
-                <div style={{ display: "flex", alignItems: 'center', gap: "2rem" }}>
+                <div className='bill-summary-container'>
 
                     <div className="Download-btn download-btn-pending">
                         <PopupState variant="popover" popupId="demo-popup-menu">

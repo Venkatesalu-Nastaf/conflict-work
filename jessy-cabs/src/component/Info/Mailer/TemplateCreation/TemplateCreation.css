@@ -98,7 +98,81 @@
     }
 }
 
+.ql-container.ql-snow {
+    border: none !important;
+}
+
+.mail-template-division {
+    background-color: #fff;
+}
+
+@media screen and (min-width: 769px) {
+    .side-bar-menu-close .mail-template-division {
+        width: 96vw;
+    }
+
+    .mail-template-division {
+        width: 98%;
+    }
+}
+
+.template-creation-main-div {
+    width: 100%;
+    height: 80vh;
+    overflow: auto;
+}
+
+.back-section-div {
+    cursor: pointer;
+}
+
+.template-creation-attachments {
+    cursor: pointer;
+    text-decoration: underline;
+    color: white;
+}
+
+.cancel-popup-icon-division {
+    display: flex;
+    justify-content: center;
+}
+
+.cancel-popup-icon {
+    color: #7c7c7c;
+    font-size: 40px;
+}
+
+#keep-mounted-modal-description {
+    text-align: center;
+}
+
+.cancel-popup-confirm-division {
+    display: flex;
+    justify-content: center;
+}
+
+.template-creation-document-main-division {
+    padding-left: 20px;
+}
+
+.template-creation-document-sub-division {
+    display: flex;
+    align-items: center;
+}
+
+.template-creation-document-text {
+    color: #000;
+    width: 260px;
+}
+
+@media screen and (max-width: 370px) {
+    .template-creation-document-text {
+        width: 230px;
+    }
+}
+
 @media only screen and (min-width:320px) and (max-width:369.99px) {
+
     .attachments {
         font-size: 10px !important;
     }
@@ -176,75 +250,109 @@
     }
 }
 
-.ql-container.ql-snow {
-    border: none !important;
+
+@media screen and (max-width:420px) {
+
+    .template-creation-main-container {
+        padding: 10px;
+    }
+
+    .word-head {
+        width: 90vw;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        /* padding: 5px; */
+    }
+
+    .right-header{
+        margin-left: 30px;
+    }
+
+    .back-input{
+        margin-right: 60px;
+    }
+
+    .quill-editor {
+        width: 95vw;
+        height: 50vh;
+    }
+
+    .quill-container {
+        position: relative;
+        max-height: 500px;
+        overflow: auto;
+    }
+
+    .quill-container .ql-toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: white;
+    }
+
+    .template-info {
+        margin-left: 0 !important;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
 }
 
-.mail-template-division {
-    background-color: #fff;
-}
+@media screen and (min-width:420px) and (max-width:520px) {
 
-@media screen and (min-width: 769px) {
-    .side-bar-menu-close .mail-template-division {
+    .template-creation-main-container {
+        padding: 10px;
+    }
+
+    .word-head {
+        width: 90vw;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .right-header{
+        margin-left: 30px;
+    }
+
+    .back-input{
+        margin-right: 60px;
+    }
+
+    .quill-editor {
         width: 96vw;
+        height: 50vh;
     }
 
-    .mail-template-division {
-        width: 98%;
+    .quill-container {
+        position: relative;
+        max-height: 500px;
+        overflow: auto;
     }
-}
 
-.template-creation-main-div {
-    width: 100%;
-    height: 80vh;
-    overflow: auto;
-}
-
-.back-section-div {
-    cursor: pointer;
-}
-
-.template-creation-attachments {
-    cursor: pointer;
-    text-decoration: underline;
-    color: white;
-}
-
-.cancel-popup-icon-division {
-    display: flex;
-    justify-content: center;
-}
-
-.cancel-popup-icon {
-    color: #7c7c7c;
-    font-size: 40px;
-}
-
-#keep-mounted-modal-description {
-    text-align: center;
-}
-
-.cancel-popup-confirm-division {
-    display: flex;
-    justify-content: center;
-}
-
-.template-creation-document-main-division {
-    padding-left: 20px;
-}
-
-.template-creation-document-sub-division {
-    display: flex;
-    align-items: center;
-}
-
-.template-creation-document-text {
-    color: #000;
-    width: 260px;
-}
-
-@media screen and (max-width: 370px) {
-    .template-creation-document-text {
-        width: 230px;
+    .quill-container .ql-toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: white;
     }
+
+    .template-info {
+        margin-left: 0 !important;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+}
+
+.template-info {
+    margin-left: 500px;
+    padding: 10px;
 }

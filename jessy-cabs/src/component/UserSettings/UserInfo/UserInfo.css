@@ -13,16 +13,16 @@
     font-weight: 500;
 } */
 
-.form-container-UserSettings .userinfo-form {
-    /* height: 70vh; */
-    /* width: 100vw; */
-    /* overflow-x: hidden;
+/* .form-container-UserSettings .userinfo-form {
+    height: 70vh;
+    width: 100vw;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    color: #000; */
-    /* background-color: var(--glass); */
-}
+    color: #000;
+    background-color: var(--glass);
+} */
 
 .form-container-UserSettings {
     display: flex;
@@ -157,6 +157,10 @@
         position: relative;
         left: 20px;
     }
+
+    .userInfo-inputs-feilds {
+        margin-top: 10px;
+    }
 }
 
 
@@ -193,6 +197,7 @@
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: space-around;
+    /* margin-top: 10px; */
 }
 
 @media screen and (min-width: 1446px) {

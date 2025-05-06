@@ -16,7 +16,7 @@ const TemplateSelection = () => {
   }
 
   return (
-    <>
+    <div className='template-selection-main-container'>
       <div className='template-selection-main'>
         <div className='template-selection-back-division' onClick={backToMailer}> <IoChevronBack /></div>
         <div className='d-flex'>
@@ -49,7 +49,7 @@ const TemplateSelection = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

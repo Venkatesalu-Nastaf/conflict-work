@@ -58,6 +58,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { BiSolidStoreAlt } from "react-icons/bi";
 import { FaCar } from "react-icons/fa";
 import { SiClockify } from "react-icons/si";
+import { IoBook } from "react-icons/io5";
 
 
 const MenuItem = ({
@@ -1197,7 +1198,7 @@ const Sidebar = () => {
                     <BsFillFuelPumpFill />
                   </span>
                   <span>
-                    Fuel Info
+                    Log Details
                   </span>
                 </p>
               </div> :<></>}
@@ -1270,6 +1271,16 @@ const Sidebar = () => {
                   </span>
                   <span>
                     Vehicle
+                  </span>
+                </p>
+              </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/History')}>
+                  <span>
+                    <IoBook />
+                  </span>
+                  <span>
+                    History
                   </span>
                 </p>
               </div>
@@ -1350,7 +1361,6 @@ const Sidebar = () => {
           </motion.div> : <></>}
           {settingsDropdownVisible && (
             <div className="settings-dropdown">
-              { userCreation ?
               <div className="settings-dropdown-links">
                 <p className="dropdown-icon" onClick={() => settingSubMenu('settings/usercreation')}>
                   <span>
@@ -1361,7 +1371,7 @@ const Sidebar = () => {
                     user Creation
                   </span>
                 </p>
-              </div> :
+              </div> 
 
               <div className="settings-dropdown-links">
                 <p className="dropdown-icon" onClick={() => settingSubMenu('settings/mainsetting')}>
@@ -1372,7 +1382,7 @@ const Sidebar = () => {
                     Main setting
                   </span>
                 </p>
-              </div>}
+              </div>
             </div>
           )}
 

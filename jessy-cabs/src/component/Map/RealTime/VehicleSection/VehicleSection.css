@@ -4,14 +4,17 @@
     justify-content: space-between;
     align-items: center;
 }
+
 @media screen and (max-width:650px) {
     .inputs-width {
         width: 100% !important;
     }
+
     .buttons-width {
         width: 100% !important;
     }
 }
+
 .inputs-width {
     width: 50%;
 }
@@ -72,13 +75,13 @@
 .vehicle-details {
     height: fit-content;
     overflow-y: auto;
-  }
-  
-  .vehicle-details::-webkit-scrollbar {
-    width: 12px;
-  }
+}
 
-  @media screen and (min-width:1000px) and (max-width:1176px) {
+.vehicle-details::-webkit-scrollbar {
+    width: 12px;
+}
+
+@media screen and (min-width:1000px) and (max-width:1176px) {
     .vehicle-inputs {
         display: flex;
         gap: 20px;
@@ -86,16 +89,18 @@
         align-items: center;
         /* flex-wrap: wrap; */
     }
+
     .inputs-width {
         width: 100% !important;
     }
+
     .buttons-width {
         width: 100% !important;
     }
-  }
+}
 
-  
-  
+
+
 
 
 
@@ -105,6 +110,7 @@
     gap: 20px;
     /* overflow: hidden; */
 }
+
 @media screen and (max-width:1000px) {
     .vehicle-info-content-info {
         width: 100% !important;
@@ -113,6 +119,10 @@
     .vehicle-info-content-map {
         width: 100% !important;
     }
+
+    /* .vehicle{
+        flex-wrap: wrap;
+    } */
 }
 
 .vehicle-info-content-info {
@@ -135,7 +145,8 @@
     gap: 10px;
     margin-top: 10px;
 }
-.overview-content-dropdown{
+
+.overview-content-dropdown {
     display: flex;
     gap: 10px;
     margin-top: 10px;
@@ -146,7 +157,7 @@
     display: flex;
     gap: 10px;
     margin-top: 10px;
-    border-bottom: 1px solid  gray;
+    border-bottom: 1px solid gray;
 }
 
 .directions-vehicle-info {
@@ -191,9 +202,89 @@
     justify-content: center;
 }
 
+.vehicle {
+    width: 100%;
+    height: 500px;
+    display: flex;
+}
 
+.vehicle-info {
+    width: 40%;
+    height: 500px;
+    overflow: scroll;
+}
 
+.g-map {
+    width: 70%;
+    height: 500px;
+}
 
+.select-tripid-label{
+    display: flex;
+    gap: 10px;
+}
 
+.play-speed{
+    text-align: center;
+    margin: 0 
+}
 
+@media screen and (max-width:500px) {
 
+    .vehicle {
+        width: 100%;
+        height: 500px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .vehicle-info {
+        width: 100% !important;
+        overflow: visible;
+        height: 450px;
+    }
+
+    .g-map {
+        width: 100% !important;
+    }
+
+    .playspeed{
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+    }
+
+    .playspeed-buttons{
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 5px;
+    }
+
+    .select-tripid-label{
+        flex-wrap: wrap;
+    }
+
+    .overview-content-head{
+        overflow: auto;
+        height: 50vh;
+    }
+
+    .Getdirection {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .playArrow{
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 0;
+    }
+
+    .play-speed{
+        font-size: 14px;
+    }
+
+    .speed-btn{
+        padding: 2px 8px !important;
+    }
+}

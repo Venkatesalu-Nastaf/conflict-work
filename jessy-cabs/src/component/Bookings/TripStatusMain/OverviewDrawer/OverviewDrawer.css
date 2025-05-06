@@ -38,3 +38,32 @@ padding: 10px;
     zoom: 77%;
   }
 }
+
+.table-top-buttons{
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 500px) {
+
+  .table-top-buttons{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .trip-status-table-container{
+    /* border: 1px solid black; */
+    width: 100%;
+    /* padding: 10px; */
+    margin: auto;
+  }
+
+  .overview-drawer{
+    overflow-x: hidden;
+  }
+
+}

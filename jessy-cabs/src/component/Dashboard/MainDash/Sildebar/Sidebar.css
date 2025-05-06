@@ -113,7 +113,7 @@
 @media only screen and (min-width:578px) and (max-width: 768.99px) {
   .sidebar {
     position: fixed;
-    z-index: 9;
+    z-index: 10000;
     background: var(--glass);
     width: 200px;
     padding-right: 1rem;
@@ -124,7 +124,7 @@
 @media only screen and (min-width:430px) and (max-width: 578.99px) {
   .sidebar {
     position: fixed;
-    z-index: 9;
+    z-index: 10000;
     background: var(--glass);
     width: 200px;
     padding-right: 1rem;
@@ -140,7 +140,7 @@
 
   .sidebar {
     position: fixed;
-    z-index: 9;
+    z-index: 10000;
     background: var(--glass);
     width: 200px;
     padding-right: 1rem;

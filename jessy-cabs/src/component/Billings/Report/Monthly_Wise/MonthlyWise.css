@@ -23,12 +23,18 @@
   border-radius: 10px;
   height: 400px;
   width: 99vw;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 420px) {
   .table-MonthlyWise {
-    width: 101vw;
+    width: 90vw;
+  }
+}
+
+@media screen and (min-width: 420px) and (max-width: 600px) {
+  .table-MonthlyWise {
+    width: 100vw;
   }
 }
 

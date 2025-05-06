@@ -18,6 +18,7 @@ import newWayPointMarker from './newPointMarker.png'
 import startMarkerIcon from "./StartMarkerIcon.png"
 import endMarkerIcon from "./endMarkerIcon.png";
 import wayPointMarker from "./wayPointMarker.png"
+import { ApiKey } from '../../../ApiKey/mapApiKey';
 const style2 = {
   position: 'absolute',
   top: '50%',
@@ -41,7 +42,6 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     waypoints: []
   });
   const mapRef = useRef(null);
-
   const [refresh, setRefresh] = useState(0);
   const [mapUpdate, setMapUpdate] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -127,7 +127,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   const [roadPoints, setRoadPoints] = useState([]);
 
   const getSnappedPoints = async (polywaypoints) => {
-    const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE";
+    // const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE";
     // const apiKey = "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk";
     const maxPointsPerRequest = 100;
     let snappedPoints = [];
@@ -144,7 +144,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
 
     for (const chunk of waypointChunks) {
       const path = chunk.map((point) => `${point.lat},${point.lng}`).join("|");
-      const url = `https://roads.googleapis.com/v1/snapToRoads?path=${path}&interpolate=true&key=${apiKey}`;
+      const url = `https://roads.googleapis.com/v1/snapToRoads?path=${path}&interpolate=true&key=${ApiKey}`;
       // const url = `https://roads.googleapis.com/v1/nearestRoads?path=${path}&interpolate=true&key=${apiKey}`;
 
 
@@ -809,7 +809,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
             const pathEncoded = encodeURIComponent(`enc:${routePolyline}`);
             const pathParam = `path=${pathEncoded}`;
             // const apiKey = "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk&libraries=places";
-            const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE&libraries=places";
+            // const apiKey = "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE&libraries=places";
 
 
             async function urlToBlob(url) {
@@ -817,7 +817,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
               return response.blob();
             }
 
-            const finalStaticMapUrl = `${staticMapUrl}&${markers.join("&")}&${pathParam}&key=${apiKey}`;
+            const finalStaticMapUrl = `${staticMapUrl}&${markers.join("&")}&${pathParam}&key=${ApiKey}`;
             const staticMapBlob = await urlToBlob(finalStaticMapUrl);
 
             const formDataUpload = new FormData();
@@ -1006,7 +1006,8 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
   };
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+    // googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+    googleMapsApiKey: ApiKey,
     // googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk",
   });
 
@@ -1132,6 +1133,7 @@ const EditMapCheckComponent = ({ tripid, starttime, startdate, closedate, closet
     ?.map((li) => parseFloat(li?.Latitude_loc));
 
   // console.log(fullGpsData, 'gggggggggggggggggggggggggggggggggggggggggggg');
+console.log(ApiKey,"apikeyyyyyyyyyyyyyyyyyyyyyyyyyy");
 
   return (
     <>

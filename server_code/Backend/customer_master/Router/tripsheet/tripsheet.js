@@ -2425,22 +2425,84 @@ router.post('/gmappost-submitForm', (req, res) => {
 
 
 // Collect maplogdata for gmapdata table
+// router.get('/get-gmapdata/:tripid', (req, res) => {
+//     const tripid = req.params.tripid;
+//     // db.query('SELECT * FROM gmapdata WHERE tripid = ? AND trip_type != "On_Going"', [tripid], (err, results) => {
+//     db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+//         }
+//         return res.status(200).json(results);
+//     });
+// });
 router.get('/get-gmapdata/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    // db.query('SELECT * FROM gmapdata WHERE tripid = ? AND trip_type != "On_Going"', [tripid], (err, results) => {
-    db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
+    const onGoingSqlQuery = `SELECT COUNT(*) AS onGoingCount FROM gmapdata WHERE tripid = ? AND trip_type IN ("waypoint","On_Going","wayLogpoint")`;
+    const AboveOnGoing500 = `SELECT * FROM gmapdata WHERE tripid = ? AND trip_type IN ("start","end","waypoint","wayLogpoint") ORDER BY date,time`;
+    const BelowOnGoing500 = `SELECT * FROM gmapdata WHERE tripid = ? AND trip_type IN ("start","end","waypoint","On_Going") ORDER BY date,time`;
+  
+    // Check On_Going count first
+    db.query(onGoingSqlQuery, [tripid], (error, result) => {
+      if (error) {
+        return res.status(500).json({ error: 'Failed to fetch On_Going count' });
+      }
+  
+      const onGoingCount = result[0].onGoingCount;
+      const finalQuery = onGoingCount >= 500 ? AboveOnGoing500 : BelowOnGoing500;
+  
+      // Run final query based on the count
+      db.query(finalQuery, [tripid], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+          return res.status(500).json({ error: 'Failed to fetch gmap data' });
         }
-        return res.status(200).json(results);
+  
+        // Convert 'wayLogpoint' to 'On_Going' in the response array
+        const updatedResults = results.map(item => {
+          if (item.trip_type === 'wayLogpoint') {
+            return { ...item, trip_type: 'On_Going' };
+          }
+          return item;
+        });
+  
+        console.log(updatedResults, "final processed result");
+        return res.status(200).json(updatedResults);
+      });
     });
-});
+  });
+  
 router.get('/getAllGmapdata', (req, res) => {
     db.query('SELECT * FROM gmapdata', (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
         }
         return res.status(200).json(results);
+    });
+});
+
+// temporary delete gmapdata address not found
+router.post('/TemporarydeleteMapByTripid/:tripid', (req, res) => {
+    const tripid = req.params.tripid;
+
+    // First delete query for mapimage
+    const deleteQuery = `DELETE FROM mapimage WHERE tripid = ?`;
+    const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
+
+    db.query(deleteQuery, [tripid], (error, result1) => {
+        if (error) {
+            console.log(error, 'error');
+            return res.status(500).json({ message: 'Error deleting from mapimage', error });
+        }
+
+        // Second delete query for gmapdata
+        db.query(deleteMapDataQuery, [tripid], (error, result2) => {
+            if (error) {
+                console.log(error, 'error');
+                return res.status(500).json({ message: 'Error deleting from gmapdata', error });
+            }
+
+            // Return success response after both deletions
+            return res.status(200).json({ message: 'Deletion successful', result: { mapimage: result1, gmapdata: result2 } });
+        });
     });
 });
 
@@ -3434,6 +3496,19 @@ router.post('/getParticularUserDetails', (req, res) => {
         return res.status(200).json(result);
     });
 });
+// delete temporary for gmapdata address not found data
+router.delete('/DeleteTemporarygmapdata', (req, res) => {
+    const { tripid } = req.body;
 
+    const deleteQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
+    db.query(deleteQuery, [tripid], (error, result) => {
+        if (error) {
+            console.log(error, "temporary-error");
+            return res.status(500).json({ message: "Error deleting data", error });
+        }
+
+        return res.status(200).json({ message: "Data deleted successfully" });
+    });
+});
 
 module.exports = router; 

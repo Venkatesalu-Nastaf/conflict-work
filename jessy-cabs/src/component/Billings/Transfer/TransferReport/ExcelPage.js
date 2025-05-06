@@ -315,7 +315,7 @@ const useExeclpage = () => {
                         singleData["originalExtraKM"] = singleData["extraKM"]; // Store original value
                         singleData["extraKM"] = 0;
                         singleData["extraHR"] = 0;
-                        singleData["ex_kmAmount"] = 0;
+                        // singleData["ex_kmAmount"] = 0;
                     }
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
@@ -330,7 +330,11 @@ const useExeclpage = () => {
                     // singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
                     // singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"])  : singleData["calcPackage"];
                     singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"] || singleData["originalExtraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"]) : singleData["calcPackage"];
-                    singleData["package_amount"] = singleData["duty"] === "Outstation" ? singleData["ex_kmAmount"] : singleData["package_amount"]
+                    singleData["outstationkmsamout"]=singleData["ex_kmAmount"] 
+                    singleData["package_amount"] = singleData["duty"] === "Outstation" ? singleData["outstationkmsamout"] : singleData["package_amount"]
+                    singleData["outstationkmsamout"]=0
+                    singleData["ex_kmAmount"] = singleData["duty"] === "Outstation" ? 0 : singleData["ex_kmAmount"]
+                 
                     // singleData["vechicletype"] = singleData["vehType"]
                     // singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]

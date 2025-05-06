@@ -16,7 +16,7 @@ import Box from "@mui/material/Box";
 import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import {  CircularProgress } from '@mui/material';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+// import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 dayjs.extend(isBetween);
 
@@ -42,8 +42,8 @@ const SMSReport = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
-  const [success, setSuccess] = useState(false);
-  const [successMessage, setSuccessMessage] = useState({});
+  // const [success] = useState(false);
+  // const [successMessage, setSuccessMessage] = useState({});
 
   const hidePopup = () => {
 
@@ -113,7 +113,7 @@ const SMSReport = () => {
         id: index + 1,
       }));
       setSmsReport(rowsWithUniqueId);
-      console.log('Data fetched');
+      // console.log('Data fetched');
     } catch (err) {
       if (err.message === 'Network Error') {
         setErrorMessage("Check network connection.");
@@ -437,6 +437,7 @@ const SMSReport = () => {
       rows={datafilter ? smsreport : filteredReport}
       columns={columns}
       pageSize={5}
+      
       autoHeight={false} // Ensure autoHeight is false
       sx={{
         height: '100%', // Take full height of the parent Box
@@ -458,13 +459,13 @@ const SMSReport = () => {
           }
         </div>
         <div className='alert-popup-main'>
-                  {success &&
+                  {/* {success &&
                     <div className='alert-popup Success' >
                       <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
                       <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
                       <p>{successMessage}</p>
                     </div>
-                  }
+                  } */}
                   {error &&
                     <div className='alert-popup Error' >
                       <div className="popup-icon"> <ClearIcon /> </div>

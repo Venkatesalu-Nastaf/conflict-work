@@ -349,7 +349,7 @@ router.get('/organisationdatafordriveremail', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Route data not found' });
         }
-        console.log(result, 'dsgvd')
+        // console.log(result, 'dsgvd')
         return res.status(200).json(result);
 
     });
@@ -359,7 +359,7 @@ router.get('/organisationdatafordriveremail', (req, res) => {
 router.post('/send-emaildriverdata', async (req, res) => {
   try {
       const { userid, Drivername, UserName, password, Sendmailauth, Mailauthpass, Email, templateMessageData } = req.body;
-      console.log("Received Template Data for Email:", templateMessageData);
+      // console.log("Received Template Data for Email:", templateMessageData);
       // console.log(Sendmailauth, Mailauthpass, "Maaaaaaaaaiiiiiilllllll")
       // Set up the mail transporter
       const transporter = nodemailer.createTransport({

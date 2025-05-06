@@ -468,7 +468,7 @@ router.get('/TemplateForAgreementMail', async (req, res) => {
           console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -480,7 +480,7 @@ router.get('/TemplateForAgreementOwnerMail', async (req, res) => {
           console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -854,8 +854,8 @@ router.get('/Customerdatasfetch', (req, res) => {
             console.log(err);
             return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
         }
-        console.log(result);
-        return res.status(200).json(result);
+        // console.log(result);
+        // return res.status(200).json(result);
     });
 });
 
@@ -863,17 +863,17 @@ router.put('/agreementedit/:id', (req, res) => {
 
     const email= req.params.id
     const updatedCustomerData = req.body;
-    console.log(email,"dddd",updatedCustomerData)
+    // console.log(email,"dddd",updatedCustomerData)
     db.query('UPDATE Aggrement SET ? WHERE id = ?', [updatedCustomerData,email], (err,  result) => {
         if (err) {
-            console.log(err,"agg")
+            // console.log(err,"agg")
             return res.status(500).json({ error: 'Failed to update data in MySQL' });
         }
-        console.log(result,"agg")
+        // console.log(result,"agg")
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Customer not found' });
         }
-        console.log(result,"agg")
+        // console.log(result,"agg")
         return res.status(200).json({ message: 'Data updated successfully' });
     });
 });

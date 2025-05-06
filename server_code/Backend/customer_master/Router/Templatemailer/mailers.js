@@ -131,12 +131,16 @@ router.delete('/templatedatadelete/:templateid', (req, res) => {
 })
 router.get('/gettemplateattachimage/:templateid', (req, res) => {
     const templateid = req.params.templateid
+    // console.log(templateid)
     db.query('select templateimage from Templateattachement where templateid=?', [templateid], (err, results) => {
         if (err) {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
+        // if (results.length === 0) {
+        //     return res.status(500).json({ error: "image not found" });
+        // }
         if (results.length === 0) {
-            return res.status(500).json({ error: "image not found" });
+            return res.status(400).json([]);
         }
         return res.status(200).json(results);
 
@@ -407,7 +411,7 @@ router.get('/smsreportdata', async (req, res) => {
                         ...response.data.Data,
                     };
                 } catch (apiError) {
-                    console.error(`Error fetching SMS status for MessageId ${data.SmsMessageid}:`, apiError.message);
+                    // console.error(`Error fetching SMS status for MessageId ${data.SmsMessageid}:`, apiError.message);
                     return {
                         ...data,
                         smsStatus: null,

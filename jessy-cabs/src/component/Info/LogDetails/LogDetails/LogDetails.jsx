@@ -92,9 +92,8 @@ const LogDetails = () => {
 
   const handlecolumnvalues = (data) => {
     const headers = Object.keys(data[0]);
-    console.log(headers, "hh")
+    // console.log(headers, "hh")
     const columns = headers.filter((key) => key !== "differences").map((key) => {
-
       let valueFormatter = null;
       let renderCell = null;
 
@@ -194,7 +193,7 @@ const LogDetails = () => {
         // Attach the valueFormatter if it's a date or time field
       };
     });
-    console.log(columns, "data")
+    // console.log(columns, "data")
 
     setSelectedColumns(columns);
   };
@@ -229,11 +228,11 @@ const LogDetails = () => {
       const response = await axios.get(`${apiurl}/bookinglogdetailsget`, {
         params: logDateDetails,
       });
-      const data = response.data;      
+      const data = response.data;
       if (data.length > 0) {
 
         const rowsWithUniqueId = data.map((row, index) => ({
-          id:row.id,
+          id: row.id,    
           username: row.username,
           ...row,
           // id5: index + 1,
@@ -287,6 +286,7 @@ const LogDetails = () => {
         // console.log(data,"databookwwwww")
         // setLogDetails(data)
         // handlecolumnvaluesnormal(data)
+          
         setLogDetails(dataWithKeyDifferences)
         handlecolumnvalues(dataWithKeyDifferences)
         // handlecolumnvalues(data)
@@ -359,7 +359,7 @@ const LogDetails = () => {
         params: logDateDetails,
       });
       const data = response.data;
-      console.log(data, "ff")
+      // console.log(data, "ff")
       if (data.length > 0) {
 
         // const rowsWithUniqueId = data.map((row, index) => ({
@@ -375,7 +375,7 @@ const LogDetails = () => {
 
         //  venkat code
         const rowsWithUniqueId = data.map((row, index) => ({
-          id:row.id,
+          id: row.id,
           username: row.username, // Move username to the top
           ...row, // Spread other properties
           tripsheet_date: row.tripsheet_date ? dayjs(row.tripsheet_date).format('DD-MM-YYYY') : '',
@@ -394,7 +394,7 @@ const LogDetails = () => {
 
         // Convert back to an ordered array
         const orderedLogs = Object.values(groupedByBookingNo).flat();
-        console.log(orderedLogs, "lll")
+        // console.log(orderedLogs, "lll")
 
 
 

@@ -33,7 +33,10 @@ router.delete('/employees/:empid', (req, res) => {
 // Update Customer Master details
 router.put('/employees/:empid', (req, res) => {
     const empid = req.params.empid;
+    // console.log(empid, "for checking");
+    
     const updatedCustomerData = req.body;
+    // console.log(updatedCustomerData," values of employess");
     db.query('UPDATE employees SET ? WHERE empid = ?', [updatedCustomerData, empid], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to update data in MySQL' });

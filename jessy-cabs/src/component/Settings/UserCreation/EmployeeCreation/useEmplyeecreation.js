@@ -845,7 +845,7 @@ const indexRanges = [
     const handleDelete = async () => {
         try {
             await axios.delete(`${apiUrl}/usercreation-delete/${book.userid}`);
-            console.log(book.userid,"successfully delleted")
+            // console.log(book.userid,"successfully delleted")
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
             handleCancel();

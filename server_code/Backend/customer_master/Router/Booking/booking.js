@@ -1076,7 +1076,8 @@ router.get('/booking-docPDFView/:bookingno', (req, res) => {
 router.get('/bookinglogdetailsget', (req, res) => {
     const { selectType, selectbookingId, fromDate, toDate, userName } = req.query;
 
-    console.log(selectType, selectbookingId, fromDate, toDate, userName, 'loggggg');
+    // console.log(selectType, selectbookingId, fromDate, toDate, userName, 'checking booking values');
+    // console.log(selectbookingId,"checking")
 
     const AllDataQuery = `
         SELECT * FROM BookingLogDetails 
@@ -1102,7 +1103,7 @@ router.get('/bookinglogdetailsget', (req, res) => {
             console.error(err, 'Database Error');
             return res.status(500).json({ error: 'Database query failed' });
         }
-        console.log(result,'log resultsss');
+        // console.log(result,'log resultsss');
         
         return res.json(result);
     });

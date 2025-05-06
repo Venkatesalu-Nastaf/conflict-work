@@ -116,7 +116,7 @@ const Employe = () => {
     deletefile,
     handlecheckbox,
     loading,
-    setLoading,deleteemployeedata,setDeleteEmployeedata,
+    setLoading, deleteemployeedata, setDeleteEmployeedata,
 
   } = useEmployee();
 
@@ -238,23 +238,23 @@ const Employe = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-  <div className="icone">
-    <TransgenderRoundedIcon color="action" />
-  </div>
-  <TextField
-    select
-    size="small"
-    id="gender"
-    className="full-width"
-    label="Gender"
-    name="gender"
-    value={selectedCustomerData?.gender || book.gender || ''}
-    onChange={handleChange}
-  >
-    <MenuItem value="Male">Male</MenuItem>
-    <MenuItem value="Female">Female</MenuItem>
-  </TextField>
-</div>
+                <div className="icone">
+                  <TransgenderRoundedIcon color="action" />
+                </div>
+                <TextField
+                  select
+                  size="small"
+                  id="gender"
+                  className="full-width"
+                  label="Gender"
+                  name="gender"
+                  value={selectedCustomerData?.gender || book.gender || ''}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="Male">Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                </TextField>
+              </div>
               <div className="input">
                 <div className="icone">
                   <BloodtypeIcon color="action" />
@@ -283,7 +283,7 @@ const Employe = () => {
                   onChange={handleChange}
                   placeholder="Address"
                 />
-             
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -377,23 +377,23 @@ const Employe = () => {
               </div>
 
               <div className="input">
-              <div className="icone">
-                                  <SiStatuspal color="action" />
-                                </div>
-  <TextField
-    select
-    size="small"
-    id="empsts"
-    className="full-width"
-    label="Employee Status"
-    name="empsts"
-    value={selectedCustomerData?.empsts|| book.empsts || ''}
-    onChange={handleChange}
-  >
-    <MenuItem value="Temporary">Temporary</MenuItem>
-    <MenuItem value="Permanent">Permanent</MenuItem>
-  </TextField>
-</div>
+                <div className="icone">
+                  <SiStatuspal color="action" />
+                </div>
+                <TextField
+                  select
+                  size="small"
+                  id="empsts"
+                  className="full-width"
+                  label="Employee Status"
+                  name="empsts"
+                  value={selectedCustomerData?.empsts || book.empsts || ''}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="Temporary">Temporary</MenuItem>
+                  <MenuItem value="Permanent">Permanent</MenuItem>
+                </TextField>
+              </div>
               <div className="input-licence">
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
@@ -428,11 +428,11 @@ const Employe = () => {
                   )}
                 </div>
 
-               
+
               </div>
 
-              
-            
+
+
 
 
               <div className="input">
@@ -444,7 +444,7 @@ const Employe = () => {
               </div>
             </div>
 
-         
+
           </div>
         </div>
         <div className='alert-popup-main'>
@@ -510,7 +510,7 @@ const Employe = () => {
                 onClick={(event) => handleClick(event, "List")}
               />
             )}
-            {Employee_modify === 1 && isEditMode &&(
+            {Employee_modify === 1 && isEditMode && (
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
@@ -527,11 +527,11 @@ const Employe = () => {
               // />
 
               <SpeedDialAction
-              key="delete"
-              icon={<DeleteIcon />}
-              tooltipTitle="Delete"
-           onClick={() => setDeleteEmployeedata(true)}
-            />
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={() => setDeleteEmployeedata(true)}
+              />
             )}
             {Employee_new === 1 && !isEditMode && (
               <SpeedDialAction
@@ -549,7 +549,7 @@ const Employe = () => {
             />
           </StyledSpeedDial>
         </Box>
-      
+
 
 
 
@@ -604,12 +604,12 @@ const Employe = () => {
 
           </div>
 
-       {deleteemployeedata &&   <DeleteConfirmationDialog
-                open={deleteemployeedata}
-                onClose={() => setDeleteEmployeedata(false)}
-                onConfirm={handleClick}
-              />
-              }
+          {deleteemployeedata && <DeleteConfirmationDialog
+            open={deleteemployeedata}
+            onClose={() => setDeleteEmployeedata(false)}
+            onConfirm={handleClick}
+          />
+          }
 
 
           <div className="table-bookingCopy-Employe ">
@@ -646,26 +646,26 @@ const Employe = () => {
                   },
                 }}
               >
-                 {loading ? ( 
-                                <Box
-                                    sx={{
-                                        position: 'absolute', 
-                                        top: '50%',
-                                        left: '50%', 
-                                        transform: 'translate(-50%, -50%)', 
-                                    }}
-                                >
-                                    <CircularProgress />
-                                </Box>
-                            ) : (
-                <DataGrid
-                  className="Scroll-Style"
-                  rows={rows}
-                  columns={columns}
-                  onRowClick={handleRowClick}
-                  pageSize={5}
-                />
-                            )}
+                {loading ? (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  <DataGrid
+                    className="Scroll-Style"
+                    rows={rows}
+                    columns={columns}
+                    onRowClick={handleRowClick}
+                    pageSize={5}
+                  />
+                )}
               </Box>
             </div>
             <Dialog open={dialogOpen} onClose={handleCloseDialog} >

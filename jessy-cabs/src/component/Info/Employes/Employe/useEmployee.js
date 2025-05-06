@@ -678,6 +678,7 @@ const useEmployee = () => {
         const { id, ...rest } = selectedCustomerData;
         const updatedCustomer = { ...rest };
         await axios.put(`${apiUrl}/employees/${selectedCustomer.empid}`, updatedCustomer);
+        // console.log(updatedCustomer,"checking employee details"); 
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();

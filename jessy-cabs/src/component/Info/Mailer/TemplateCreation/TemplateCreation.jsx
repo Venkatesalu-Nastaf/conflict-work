@@ -78,10 +78,16 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
         if (templateid) {
           const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`);
           const dataimage = response.data;
+          // console.log(dataimage,"checking")
           setImagedataedit(dataimage);
+        }
+        else{
+          setImageData([])
+          // console.log(setImageData([],"checking"))
         }
       } catch (err) {
         console.log(err);
+        setImageData([])
       }
     };
 

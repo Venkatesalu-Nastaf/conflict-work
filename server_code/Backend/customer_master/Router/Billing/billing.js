@@ -988,6 +988,8 @@ router.get('/tripsheet-keydown/:tripid', async (req, res) => {
 //--------------------------------------------
 router.get("/trpisheetlogdetailst", (req, res) => {
   const { selectType, selectbookingId, fromDate, toDate, userName } = req.query;
+  // console.log(req.query);
+  
 
   // SQL queries
   const sqlWithIdQuery = `

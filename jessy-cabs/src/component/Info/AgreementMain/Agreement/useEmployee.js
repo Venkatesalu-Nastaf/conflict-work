@@ -401,12 +401,12 @@ const useEmployee = () => {
 
     const handleAutocompleteChange = (event, value, name) => {
         const manualInput = typeof value === "string" ? value : value?.label || "";
-        console.log("Manual Input:", manualInput);
+        // console.log("Manual Input:", manualInput);
         if (name === "customer") {
           const selectedOrganization = organizationNames?.find(
             (option) => option.customer === manualInput
           );
-          console.log("Selected Organization:", selectedOrganization);
+        //   console.log("Selected Organization:", selectedOrganization);
           setBook((prevState) => ({
             ...prevState,
             customer: manualInput,
@@ -501,7 +501,7 @@ const useEmployee = () => {
     
     const handleRowClick =(params) => {
         const customerData = params.row;
-        console.log(customerData,"kkkkkkkkkkkkkkkkkkkkkkk")
+        // console.log(customerData,"kkkkkkkkkkkkkkkkkkkkkkk")
         setSelectedCustomerData(customerData); 
         // setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
@@ -728,10 +728,10 @@ const useEmployee = () => {
     
 
     const handleEdit = async() => {
-        console.log("edited")
+        // console.log("edited")
         // const selectedCustomer = rows.find((row) => row.email === email);
         const { id4,id,Agreement_Image, ...rest } = selectedCustomerData;
-        console.log(id4,"value",selectedCustomerData)
+        // console.log(id4,"value",selectedCustomerData)
         const updatedCustomer = { ...rest };
         await axios.put(`${apiUrl}/agreementedit/${id}`, updatedCustomer);
         setSuccess(true);
@@ -739,8 +739,7 @@ const useEmployee = () => {
         handleCancel();
         addPdf();   
         licenceSubmit(updatedCustomer.customer)
-        console.log(updatedCustomer.customer, 'ggggggggggggg');
-        
+        // console.log(updatedCustomer.customer, 'ggggggggggggg');
         setRows([]);
         handleList()
     };
@@ -923,7 +922,7 @@ const useEmployee = () => {
                 const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
                 if (response.status === 200) {
                     const userDataArray = await response.json();
-                      console.log(userDataArray,'userdata');
+                    //   console.log(userDataArray,'userdata');
                     if (userDataArray.length > 0) {
                         setOrganisationSendEmail(userDataArray[0])
                         // setDatatrigger(!datatrigger)

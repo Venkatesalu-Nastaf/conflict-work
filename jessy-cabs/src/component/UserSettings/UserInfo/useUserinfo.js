@@ -36,33 +36,34 @@ const useUserinfo = () => {
 
     const handleUpdate = async (userid) => {
         try {
+           
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            console.log(selectedCustomer, updatedCustomer, "user info");
+            // console.log(selectedCustomer, updatedCustomer, "user info");
 
             const response = await axios.put(`${apiUrl}/usercreationdataupdate/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
-            console.log(response, "user response error");
+            // console.log(response, "user response error");
 
             const dataresponse = response.data.affectedRows
-            console.log(dataresponse, "dataresp", updatedCustomer.username)
+            // console.log(dataresponse, "dataresp", updatedCustomer.username)
+            // console.log("response checking for ", userid)
+            // console.log(dataresponse,"checking all values");
+            
 
             if (dataresponse >= 1) {
-                console.log(dataresponse, "dataresp", updatedCustomer.username)
+                // console.log(dataresponse, "dataresp", updatedCustomer.username)
                 localStorage.removeItem("username")
                 localStorage.setItem("username", updatedCustomer.username)
                 SetDataTrigUser(updatedCustomer.username)
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 setEditMode((prevEditMode) => !prevEditMode);
-
-
-
             }
 
 
         }
         catch (err) {
-            console.log(err, "user error");
+            // console.log(err, "user error");
 
             setError(true);
             setErrorMessage("Data Not Update");

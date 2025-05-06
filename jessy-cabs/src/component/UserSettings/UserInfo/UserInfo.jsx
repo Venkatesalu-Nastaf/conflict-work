@@ -109,10 +109,12 @@ const UserSetting = () => {
   const handleClose = () => setOpen(false);
   const {setSelectedAvatar,selectedavtar} = useThemes();
 
+  // const userId=selectedCustomerData?.userid;
+
   const [userAvatarValue, setUserAvatarValue] = useState('');
 
   const avatarChangeValue = (value, avatarNumber) => {
-    console.log(value,"ggggggg")
+    // console.log(value,"ggggggg")
 
     setUserAvatarValue(value);
   }
@@ -124,6 +126,9 @@ const UserSetting = () => {
     const userid = localStorage.getItem('useridno');
     setSelectedAvatar(avatarValue)
     localStorage.removeItem("selectedProfileimageuser");
+   
+    // const removeItem= localStorage.getItem("selectedProfileimageuser")
+    // console.log(removeItem)
 
     await axios.post(`${apiUrl}/updateprofilename`, {
       userid: userid,
@@ -191,7 +196,8 @@ const UserSetting = () => {
                       onChange={handleChange}
                       // disabled={!editMode}
                       // disabled={Number(superpower) === 0}
-                      disabled={!editMode || superpower !== "SuperAdmin"}
+                      disabled={!editMode || superpower !== "SuperAdmin"} 
+                      inputProps={{readOnly:true}}          
                     />
                   </div>
                   <div className="input">

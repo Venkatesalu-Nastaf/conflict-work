@@ -102,8 +102,9 @@ const useOrganization = () => {
         try {
             
             const updatedCustomer = {...selectedCustomerData };
-            console.log(updatedCustomer, "SELECT ID")
+            // console.log(updatedCustomer, "SELECT ID")
             await axios.put(`${apiUrl}/companyupdate/${updatedCustomer.id}`, updatedCustomer);
+            // console.log(updatedCustomer,"checking updation")
             setLogoTrigger(true)
             setSuccess(true);
             setSuccessMessage("Successfully updated");

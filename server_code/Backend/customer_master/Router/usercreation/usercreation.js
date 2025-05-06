@@ -41,12 +41,12 @@ router.post('/usercreation-add', async (req, res) => {
   const { Sender_Email, Email_Password } = organistaionsendmail;
   const themesdata = "theme1";
 
-  console.log(templateMessageData, 'ghjk', `${templateMessageData}`);
-  console.log(Sender_Email, Email_Password, 'emilllllllllll');
+  // console.log(templateMessageData, 'ghjk', `${templateMessageData}`);
+  // console.log(Sender_Email, Email_Password, 'emilllllllllll');
 
-  console.log(username, stationname, designation, organizationname, employeeid, userpassword, active, email, mobileno,RoleUser,created_at,RoleUser);
+  // console.log(username, stationname, designation, organizationname, employeeid, userpassword, active, email, mobileno,RoleUser,created_at,RoleUser);
   const idString = stationname.join(',');
-  console.log(idString, "ff");
+  // console.log(idString, "ff");
   const datarole = RoleUser || "None" ;
 
   try {
@@ -196,6 +196,7 @@ router.delete('/usercreation-delete/:userid', (req, res) => {
         return res.status(404).json({ error: "User not found" });
       }
 
+        // console.log(userResult,"checking delete")
       // Send success response
       return res.status(200).json({ message: "Data deleted successfully" });
     });
@@ -252,7 +253,7 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
 
 router.get('/user-permissionget/:userid', (req, res) => {
   const userid = req.params.userid;
-  console.log("per userid ", userid)
+  // console.log("per userid ", userid)
 
   try {
     let query = 'SELECT * FROM user_permissions where user_id=?';
@@ -402,6 +403,7 @@ router.get("/getAllrolefield", (req, res) => {
 
 router.get("/getAllrolefieldunique/:rolename", (req, res) => {
   const rolename= req.params.rolename;
+  // console.log(rolename,"rolename checking")
   db.query("SELECT * FROM  Role_fielddata where  userRole_name = ? ",[rolename], (error, result) => {
     if (error) {
       console.log(error);
@@ -417,6 +419,7 @@ router.put("/usercreationdataupdate/:editid", (req, res) => {
 
   const { username, designation, employeeid, userpassword, email, mobileno } = updatedata;
 
+  // console.log(updatedata,"checking")
   db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,email=?,mobileno=? where userid=?", [username, designation, employeeid, userpassword, email, mobileno, editid], (err, results) => {
     // db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,EmailApp_Password=?,Sender_Mail=?,email=?,mobileno=? where userid=?", [username, designation, employeeid, userpassword, email, mobileno, editid], (err, results) => {
     if (err) {
@@ -507,7 +510,7 @@ try {
 
 router.get('/userrole-permissiongetroless/:userid', (req, res) => {
   const userid = req.params.userid;
-  console.log("per userid ", userid)
+  // console.log("per userid ", userid)
 
   try {
     let query = 'SELECT * FROM Rolefielduser_permissions where user_id=?';

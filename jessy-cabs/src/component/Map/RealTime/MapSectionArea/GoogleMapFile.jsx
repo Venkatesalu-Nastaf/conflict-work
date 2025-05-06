@@ -2,6 +2,7 @@ import React,{useMemo,useState}from "react";
 import { GoogleMap, LoadScript, MarkerF,useJsApiLoader,InfoWindow,InfoBoxF,OverlayView} from "@react-google-maps/api";
 import { MarkerClustererF } from "@react-google-maps/api";
 import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png"
+import { ApiKey } from "../../../ApiKey/mapApiKey";
 // import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png"
 // import smallcar from "../../../../assets/img/smallcar.jpg";
 // import
@@ -44,7 +45,8 @@ const GoogleMapFile = ({ vehicleCurrentLocation }) => {
   const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), []);
   const libraries = ['places', 'geometry', 'drawing', 'visualization'];
     const { isLoaded } = useJsApiLoader({
-       googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+      //  googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+      googleMapsApiKey: ApiKey,
        libraries,
      });
     //  console.log(isLoaded,"lo")

@@ -756,7 +756,8 @@ app.use('/images', express.static(attachedDirectory));
 // Example route to serve an image by its filename
 app.get('/get-attachedimage/:tripid', (req, res) => {
   const { tripid } = req.params;
-  const query = 'SELECT path FROM tripsheetupload WHERE tripid = ? ';
+  // const query = 'SELECT path FROM tripsheetupload WHERE tripid = ? ';
+  const query = 'SELECT path FROM tripsheetupload WHERE tripid = ? And documenttype Not IN ("StartingKm","ClosingKm") ';
   // const query = `SELECT path FROM tripsheetupload WHERE tripid = ? AND documenttype IN ('TripSheet', 'Parking', 'Toll', 'Permit', 'Sign')`;
   db.query(query, [tripid], (err, results) => {
     if (err) {

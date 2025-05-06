@@ -12,7 +12,7 @@ import StartMarkerIcon from '../../../../Bookings/TripSheet/NavigationMap/StartM
 import VehicleDetailsPopup from '../../../VehicleModal/VehicleDetailsPopup';
 // import { VehicleMapData } from "../vehicleMapContext/vehcileMapContext"
 import { VehicleMapData } from "../../../vehicleMapContext/vehcileMapContext"
-
+import { ApiKey } from "../../../../ApiKey/mapApiKey";
 
 
 // const GoogleMapDrawer = ()=>{
@@ -81,7 +81,8 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
   // const [showInfoBox, setShowInfoBox] = useState(false);
   // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), []);
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+    // googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+    googleMapsApiKey: ApiKey,
   });
   console.log(isLoaded, "lo")
 

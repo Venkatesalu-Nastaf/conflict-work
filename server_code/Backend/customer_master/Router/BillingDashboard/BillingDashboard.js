@@ -143,5 +143,29 @@ router.post('/getMonthWiseTotal', (req, res) => {
     });
 });
 
+// get tripsheet billed amount details in tripsheet table
+router.get('/BilledSuccessAmountTripsheetAPI',(req,res)=>{
+    const { selectedMonth, selectYear} = req.query;
+    const sqlBilledTripsheetQuery = `SELECT customer,startdate,totalcalcAmount FROM tripsheet WHERE MONTH(startdate) = ? AND YEAR(startdate) =? AND Bill_Amount_Update	= "Success"`;
+    db.query(sqlBilledTripsheetQuery,[selectedMonth,selectYear],(error,result)=>{
+        if(error){
+            console.log(error,"error");
+        }
+        return res.status(200).json(result);
+    })
+})
+
+// get Tripsheet all  billed amount details in tripsheet table
+router.get('/AllBilledSuccessAmountTripsheetAPI',(req,res)=>{
+    const {selectYear} = req.query;
+    const sqlBilledTripsheetQuery = `SELECT customer,startdate,totalcalcAmount,Balance_Amount FROM tripsheet WHERE YEAR(startdate) = ? AND Bill_Amount_Update	= "Success"`;
+    db.query(sqlBilledTripsheetQuery,[selectYear],(error,result)=>{
+        if(error){
+            console.log(error);
+            
+        }
+        return res.status(200).json(result);
+    })
+})
 
 module.exports = router;

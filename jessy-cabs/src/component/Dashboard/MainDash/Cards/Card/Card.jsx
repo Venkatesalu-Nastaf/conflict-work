@@ -356,18 +356,32 @@ const title = param.title
   const columns = getColumns();
 
   
+  // const rows = billData.map((item, index,) => ({
+  //   title:title,
+  //   id: index + 1,
+  //   sno: index + 1,
+  //   orgname: item.CustomerName || "N/A", 
+  //   // date: item.BillDate || "N/A", 
+  //   date: item.BillDate
+  //   ? dayjs(item.BillDate).format("DD/MM/YYYY") // Format as DD/MM/YYYY
+  //   : "N/A",
+  //   amount: item.TotalAmount || 0, 
+  //   collected: item.TotalCollected || 0, 
+  //   pending: item.TotalBalance || 0, 
+  // }));
+
   const rows = billData.map((item, index,) => ({
     title:title,
     id: index + 1,
     sno: index + 1,
-    orgname: item.CustomerName || "N/A", 
+    orgname: item.customer || "N/A", 
     // date: item.BillDate || "N/A", 
-    date: item.BillDate
-    ? dayjs(item.BillDate).format("DD/MM/YYYY") // Format as DD/MM/YYYY
+    date: item.startdate
+    ? dayjs(item.startdate).format("DD/MM/YYYY") // Format as DD/MM/YYYY
     : "N/A",
-    amount: item.TotalAmount || 0, 
-    collected: item.TotalCollected || 0, 
-    pending: item.TotalBalance || 0, 
+    amount: item.totalcalcAmount || 0, 
+    collected: item.totalcalcAmount || 0, 
+    pending: item.Balance_Amount || 0, 
   }));
 
   // Log the rows to verify structure

@@ -466,6 +466,36 @@ router.delete('/deleteBillWiseReport', (req, res) => {
         .then(results => res.status(200).json({ messages: results }))
         .catch(error => res.status(500).json(error));
 });
-
+// update tripsheet table for payment received
+router.post("/updateTripsheetForAmountReceived", (req, res) => {
+    const { Trip_id } = req.body;
+    console.log(Trip_id, "balance amount update Tripidd");
+  
+    if (!Trip_id || Trip_id.length === 0) {
+      return res.status(400).json({ message: "Trip_id is required." });
+    }
+  
+    const sqlUpdateTripsheetQuery = `
+      UPDATE tripsheet 
+      SET Bill_Amount_Update = 'Success', Balance_Amount = '0' 
+      WHERE tripid IN (?)
+    `;
+  
+    db.query(sqlUpdateTripsheetQuery, [Trip_id], (error, result) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error updating tripsheets." });
+      }
+  
+    //   console.log(result, "result-----------------");
+  
+      return res.status(200).json({
+        message: "Tripsheets updated successfully.",
+        affectedRows: result.affectedRows,
+      });
+    });
+  });
+  
+  
 
 module.exports = router;

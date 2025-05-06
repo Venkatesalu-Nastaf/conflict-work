@@ -12,6 +12,7 @@ const useBillWiseReceipt = () => {
   const [accountDetails, setAccountDetails] = useState([]);
   const [invoiceNo, setInvoiceNo] = useState([])
   const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedTripId,setSelectedTripId] = useState("")
   const [billWiseReport, setBillWiseReport] = useState({
     Date: dayjs(),
     CustomerName: "",
@@ -281,6 +282,7 @@ const useBillWiseReceipt = () => {
         console.log(selectionModel,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk------------",selectedData);
 
         setSelectedBillRow(selectedData);
+        
         setInvoiceNo(selectedInvoiceNo);
       } else {
         setSelectedRows([]);
@@ -295,8 +297,15 @@ const useBillWiseReceipt = () => {
 
       const selectedData = pendingBillRows.filter((row) => selectedIDs.has(row.id)); // Use `.has()` with Set
       const selectedInvoiceNo = selectedData.map(li => li.BillNo);
-      console.log(selectionModel,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk------------22222222222222222",selectedData);
-
+      const tripIds = selectedData
+      .map(row => row.Trip_id)              // get all Trip_id strings
+      .join(",")                            // join them into a single comma-separated string
+      .split(",")                           // split by comma
+      .map(id => id.trim())                 // clean up extra spaces if any
+      .filter(id => id);                    // remove any empty strings
+    
+    console.log(tripIds, "final Trip_id array check");
+    setSelectedTripId(tripIds)
       setSelectedBillRow(selectedData);
       setInvoiceNo(selectedInvoiceNo);
     }
@@ -377,7 +386,6 @@ const useBillWiseReceipt = () => {
             balance: balance,
           };
         });
-console.log(updatedRows,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk11111111111111111111");
 
         setRows(updatedRows);
         const totalAmount = updatedRows.reduce(
@@ -647,7 +655,6 @@ console.log(updatedRows,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk1111111111111111111
       };
 
       const BillNo = rows.map((li) => li.BillNo);
-console.log(formattedData,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkformatteddataaaaaaa",combinedData,invoiceNo);
 
       try {
         // Post the formatted data
@@ -664,6 +671,9 @@ console.log(formattedData,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkformatteddataaaaa
           collectedAmount: FullCollectedAmount || 0,
           bankname: combinedData.AccountDetails,
         });
+        await axios.post(`${apiUrl}/updateTripsheetForAmountReceived`,{
+          Trip_id : selectedTripId
+        })
         setSuccess(true);
         setSuccessMessage("Successfully Added");
 

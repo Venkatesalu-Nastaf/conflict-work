@@ -316,7 +316,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
     // --------------------this zoom code image data----------------------------------------
     posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, Scale, onDrag, handleFullDeleteMapData,
-    mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide,setGMapImageUrl,bookingTripStatus,handleTemporaryDelete,handleTemporaryDeleteMapDataClose,temporaryDeleteGmap,setTemporaryDeleteGmap,handleTemporaryDeleteMapDataOpen
+    mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl, bookingTripStatus, handleTemporaryDelete, handleTemporaryDeleteMapDataClose, temporaryDeleteGmap, setTemporaryDeleteGmap, handleTemporaryDeleteMapDataOpen
     // this code zoom image data---------------------------------
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
@@ -2005,9 +2005,9 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                               : selectedCustomerData?.shedOutDate
                                 ? dayjs(selectedCustomerData.shedOutDate)
                                 : null ||
-                                // book?.closedate ? dayjs(book?.closedate) : dayjs(book?.shedOutDate)
+                                  // book?.closedate ? dayjs(book?.closedate) : dayjs(book?.shedOutDate)
                                   book?.shedOutDate && bookingTripStatus[0]?.status === "pending" ? dayjs(book?.shedOutDate) : null ||
-                                  book?.closedate && bookingTripStatus[0]?.status !== "pending" ? dayjs(book?.closedate) : null
+                                    book?.closedate && bookingTripStatus[0]?.status !== "pending" ? dayjs(book?.closedate) : null
                           }
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -2109,29 +2109,29 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     </div>
                     <DemoItem>
                       {duty === "Outstation" ?
-                      <TextField
-                        name="totaldays"
-                        value={calculateTotalDay()}
-                        label="Total Days"
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
-                        size="small"
-                        type="number"
-                        id="totaldays"
-                        // variant="standard"
-                        autoComplete="password"
-                      /> :
-                      <TextField
-                      name="totaldays"
-                      value={"-"}
-                      label="Total Days"
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
-                      size="small"
-                      // type="number"
-                      id="totaldays"
-                      // variant="standard"
-                      autoComplete="password"
-                    /> 
-}
+                        <TextField
+                          name="totaldays"
+                          value={calculateTotalDay()}
+                          label="Total Days"
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                          size="small"
+                          type="number"
+                          id="totaldays"
+                          // variant="standard"
+                          autoComplete="password"
+                        /> :
+                        <TextField
+                          name="totaldays"
+                          value={"-"}
+                          label="Total Days"
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                          size="small"
+                          // type="number"
+                          id="totaldays"
+                          // variant="standard"
+                          autoComplete="password"
+                        />
+                      }
                     </DemoItem>
                   </div>}
 
@@ -2195,7 +2195,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                             if (!lockdata) {
                               setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                             }
-                           
+
                           }}
                         />
                       </div>
@@ -2382,21 +2382,21 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           //     // If the shed in time is invalid, display an error message but allow input
                           //     console.log("Invalid Shed In Time");
                           //   }
-                            //  else {
-                              // Valid input, you can handle any additional logic here
-                              // if (!lockdata && dayhcl === 0) {
-                              //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                              // }
-                              // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                              // }
-                              // if (lockdata && dayhcl === 0) {
-                              //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                              // }
-                              // if (lockdata && dayhcl === 1 && duty === "Outstation") {
-                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                              // }
-                            // }
+                          //  else {
+                          // Valid input, you can handle any additional logic here
+                          // if (!lockdata && dayhcl === 0) {
+                          //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          // }
+                          // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                          //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          // }
+                          // if (lockdata && dayhcl === 0) {
+                          //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          // }
+                          // if (lockdata && dayhcl === 1 && duty === "Outstation") {
+                          //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          // }
+                          // }
                           // } 
                           // else {
                           //   // If the day difference is more than 1, allow any time
@@ -2614,7 +2614,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                             // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
                             //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                             // }
-                            
+
                             // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                             //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                             // }
@@ -2712,7 +2712,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     <TextField
                       name="shedkm"
                       // value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
-                      value={shedKilometers.shedkm ||formData.shedkm || book.shedkm || selectedCustomerData.shedkm ||  ''}
+                      value={shedKilometers.shedkm || formData.shedkm || book.shedkm || selectedCustomerData.shedkm || ''}
                       onChange={(e) => {
                         const value = e.target.value;
                         if (value >= 0) {
@@ -2936,45 +2936,61 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           "--Tabs-gap": "0px",
                           borderRadius: "lg",
                           boxShadow: "sm",
-                          overflow: "auto",
+                          // overflow: "auto",
+                          overflow: "hidden",
                           border: `2px solid #ccc`,
                         })}
                       >
-                        <TabList
-                          className='tripsheet-tab'
+                        <Box
                           sx={{
-                            "--ListItem-radius": "0px",
-                            borderRadius: 0,
-                            [`& .${tabClasses.root}`]: {
-                              fontWeight: "lg",
-                              flex: 1,
-                              bgcolor: "background.body",
-                              position: "relative",
-                              [`&.${tabClasses.selected}`]: {
-                                color: "primary.500",
-                              },
-                              [`&.${tabClasses.selected}:before`]: {
-                                content: '""',
-                                display: "block",
-                                position: "absolute",
-                                bottom: -1,
-                                width: "100%",
-                                height: 2,
-                                bgcolor: "primary.400",
-                              },
-                              [`&.${tabClasses.focusVisible}`]: {
-                                outlineOffset: "-3px",
-                              },
-                            },
+                            width: '100%',
+                            overflowX: 'auto',
+                            whiteSpace: 'nowrap',
+                            overflowY: "hidden",
                           }}
                         >
-                          {/* {billing_read ? <Tab>Bill</Tab> : <> </>} */}
-                          {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <Tab>Bill</Tab> : <> </>}
-                          <Tab>GPS Attached</Tab>
-                          <Tab>Messages</Tab>
-                        </TabList>
+                          < TabList
+                            className='tripsheet-tab'
+                            sx={{
+                              "--ListItem-radius": "0px",
+                              borderRadius: 0,
+                              [`& .${tabClasses.root}`]: {
+                                fontWeight: "lg",
+                                flex: 1,
+                                bgcolor: "background.body",
+                                position: "relative",
+                                [`&.${tabClasses.selected}`]: {
+                                  color: "primary.500",
+                                },
+                                [`&.${tabClasses.selected}:before`]: {
+                                  content: '""',
+                                  display: "block",
+                                  position: "absolute",
+                                  bottom: -1,
+                                  width: "100%",
+                                  height: 2,
+                                  bgcolor: "primary.400",
+                                },
+                                [`&.${tabClasses.focusVisible}`]: {
+                                  outlineOffset: "-3px",
+                                },
+                              },
+                            }}
+                          >
+                            {/* {billing_read ? <Tab>Bill</Tab> : <> </>} */}
+                            {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <Tab>Bill</Tab> : <> </>}
+                            <Tab>GPS Attached</Tab>
+                            <Tab>Messages</Tab>
+                          </TabList>
+                        </Box>
                         {/* <TabPanel value={billing_read ? 1 : 0} sx={{ p: 2 }}> */}
-                        <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 1 : 0} sx={{ p: 2 }}>
+                        <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 1 : 0}
+                           sx={{
+                            p: 2,
+                            height: "400px",
+                            overflowY: "auto",
+                          }}
+                        >
                           <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
                             <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap" }}>
                               <div className='left-buttons'>
@@ -3014,7 +3030,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       </div>
                                     </DialogContent>
                                     <DialogActions>
-                                  {/* <Button onClick={handleTemporaryDeleteMapDataOpen} variant='outlined'>Temporary Delete</Button> */}
+                                      {/* <Button onClick={handleTemporaryDeleteMapDataOpen} variant='outlined'>Temporary Delete</Button> */}
                                       <Button variant='contained' onClick={() => handleMapDataDelete()}>Delete Full Log</Button>
                                       <div style={{ paddingRight: '15px' }}>
                                         <PopupState variant="popover" popupId="demo-popup-menu">
@@ -3045,9 +3061,9 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       aria-describedby="modal-modal-description"
                                     >
                                       <Box sx={style3}>
-                                        <div style={{ display:'flex',flexDirection:'column',gap: 15 }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
                                           <div>
-                                            <Typography variant="body2" sx={{ color: "#333", fontWeight: 500,fontSize:20 }}>
+                                            <Typography variant="body2" sx={{ color: "#333", fontWeight: 500, fontSize: 20 }}>
                                               Are you sure want to delete the log data?
                                             </Typography>
                                           </div>
@@ -3061,25 +3077,25 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                   </Dialog>
                                 </div>
                                 <Modal
-                                      open={mapDataDeleteModal}
-                                      onClose={handleDeleteMapDataClose}
-                                      aria-labelledby="modal-modal-title"
-                                      aria-describedby="modal-modal-description"
-                                    >
-                                      <Box sx={style3}>
-                                        <div style={{ display:'flex',flexDirection:'column',gap: 15 }}>
-                                          <div>
-                                            <Typography variant="body2" sx={{ color: "#333", fontWeight: 500,fontSize:20 }}>
-                                              Are you sure want to delete the log data?
-                                            </Typography>
-                                          </div>
-                                          <div>
-                                            <Button onClick={() => handleDeleteMapDataClose()}>No</Button>
-                                            <Button onClick={() => handleFullDeleteMapData()}>Yes</Button>
-                                          </div>
-                                        </div>
-                                      </Box>
-                                    </Modal>
+                                  open={mapDataDeleteModal}
+                                  onClose={handleDeleteMapDataClose}
+                                  aria-labelledby="modal-modal-title"
+                                  aria-describedby="modal-modal-description"
+                                >
+                                  <Box sx={style3}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+                                      <div>
+                                        <Typography variant="body2" sx={{ color: "#333", fontWeight: 500, fontSize: 20 }}>
+                                          Are you sure want to delete the log data?
+                                        </Typography>
+                                      </div>
+                                      <div>
+                                        <Button onClick={() => handleDeleteMapDataClose()}>No</Button>
+                                        <Button onClick={() => handleFullDeleteMapData()}>Yes</Button>
+                                      </div>
+                                    </div>
+                                  </Box>
+                                </Modal>
                                 <div className="in-feild" style={{ marginTop: '10px' }}>
                                   <div className="input">
                                     <Autocomplete
@@ -3419,7 +3435,13 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         </TabPanel>
                         {/* <TabPanel value={billing_read ? 2 : 1} sx={{ p: 2 }}> */}
 
-                        <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 2 : 1} sx={{ p: 2 }}>
+                        <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 2 : 1}
+                           sx={{
+                            p: 2,
+                            height: "400px",
+                            overflowY: "auto",
+                          }}
+                        >
                           <div className="Customer-Message-Slider">
                             <div className="input-field">
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -3479,7 +3501,13 @@ Please Click the link to close E-Tripsheet-`}
                         </TabPanel>
                         {/* {billing_read ? <TabPanel value={billing_read ? 0 : ""} sx={{ p: 2 }}> */}
                         {/* {superpower ? <TabPanel value={superpower === "" ? 0 : ""} sx={{ p: 2 }}> */}
-                        {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 0 : ""} sx={{ p: 2 }}>
+                        {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 0 : ""}
+                         sx={{
+                          p: 2,
+                          height: "400px",
+                          overflowY: "auto",
+                        }}
+                         >
                           <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }} className='bill-section'>
                             <div className="Customer-Customer-Bill-Slider bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
 
@@ -3606,27 +3634,27 @@ Please Click the link to close E-Tripsheet-`}
                                 <div className="input-g">
 
                                   {vendorinfo?.vendor_duty === "Outstation" ?
-                                  <TextField
-                                    name="vendortotaldays"
-                                    value={calculatevendorTotalDays()}
-                                    label="Total Days"
-                                    disabled={lockdata}
-                                    size="small"
-                                    type="number"
-                                    id="totaldays"
-                                    sx={{ width: "100%" }}
-                                  />
-                                  :
-                                  <TextField
-                                  name="vendortotaldays"
-                                  value={"-"}
-                                  label="Total Days"
-                                  disabled={lockdata}
-                                  size="small"
-                                  // type="number"
-                                  id="totaldays"
-                                  sx={{ width: "100%" }}
-                                />}
+                                    <TextField
+                                      name="vendortotaldays"
+                                      value={calculatevendorTotalDays()}
+                                      label="Total Days"
+                                      disabled={lockdata}
+                                      size="small"
+                                      type="number"
+                                      id="totaldays"
+                                      sx={{ width: "100%" }}
+                                    />
+                                    :
+                                    <TextField
+                                      name="vendortotaldays"
+                                      value={"-"}
+                                      label="Total Days"
+                                      disabled={lockdata}
+                                      size="small"
+                                      // type="number"
+                                      id="totaldays"
+                                      sx={{ width: "100%" }}
+                                    />}
                                 </div>
 
                               </div>
@@ -4919,7 +4947,7 @@ Please Click the link to close E-Tripsheet-`}
                           if (event !== null) {
                             setNoChangeData({ ...nochangedata, driverName: value });
                             handleDriverChange(event, value, "driverName")
-                            
+
                           }
                           // handleDriverChange(event, value, "driverName")
                         }
@@ -5112,29 +5140,29 @@ Please Click the link to close E-Tripsheet-`}
                         </div>
 
                         <div className="input-g">
-                        {vendorinfo?.vendor_duty === "Outstation" ? 
-                          <TextField
-                            name="vendortotaldays"
-                            value={calculatevendorTotalDays()}
-                            label="Total Days"
-                            disabled={lockdata}
-                            size="small"
-                            type="number"
-                            id="totaldays"
-                            sx={{ width: "100%" }}
-                          />
-                          :
-                          <TextField
-                          name="vendortotaldays"
-                          value={"-"}
-                          label="Total Days"
-                          disabled={lockdata}
-                          size="small"
-                          // type="number"
-                          id="totaldays"
-                          sx={{ width: "100%" }}
-                        />
-                        }
+                          {vendorinfo?.vendor_duty === "Outstation" ?
+                            <TextField
+                              name="vendortotaldays"
+                              value={calculatevendorTotalDays()}
+                              label="Total Days"
+                              disabled={lockdata}
+                              size="small"
+                              type="number"
+                              id="totaldays"
+                              sx={{ width: "100%" }}
+                            />
+                            :
+                            <TextField
+                              name="vendortotaldays"
+                              value={"-"}
+                              label="Total Days"
+                              disabled={lockdata}
+                              size="small"
+                              // type="number"
+                              id="totaldays"
+                              sx={{ width: "100%" }}
+                            />
+                          }
                         </div>
 
                       </div>
@@ -5396,7 +5424,7 @@ Please Click the link to close E-Tripsheet-`}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                <Box sx={style1}>
+                <Box className="modal-box">
                   <Box>
 
                     {/* <div className='closebuttonhover'>
@@ -5405,25 +5433,23 @@ Please Click the link to close E-Tripsheet-`}
                         </IconButton>
                       </div> */}
 
-                    <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                    <div className='editmap-header'>
 
 
-                      <div style={{ display: 'flex', gap: "20px", padding: '0px', flexWrap: "nowrap", }}>
+                      <div className='editmapheader-label'>
                         <label style={{ fontWeight: "600" }}>  Trip Id :<span>{tripid}</span> </label>
                         <label style={{ fontWeight: '600' }}>Start Date : <span>{dayjs(startdate).format("DD/MM/YYYY")}</span></label>
                         <label style={{ fontWeight: '600' }}>Close Date : <span>{dayjs(closedate).format("DD/MM/YYYY")}</span></label>
                         <label style={{ fontWeight: '600' }}>Start Time : <span>{removeSeconds(starttime)}</span></label>
                         <label style={{ fontWeight: '600' }}>Close Time : <span>{removeSeconds(endtime)}</span> </label>
-                        <label style={{ display: "flex", gap: '10px' }}>
-                          <span style={{ fontWeight: 'bold', height: "50px", display: "flex", flexWrap: 'nowrap', gap: "10px" }}>
-                            <span style={{ fontWeight: '600' }}>Remarks</span>
-                            <span> :</span>
+                        <label className='remarks-label'>
 
-                          </span>
+                          <span style={{ fontWeight: '600'}}>Remarks : </span>
 
-                          <span style={{ height: '50px', border: "1px solid #ccc", overflow: 'auto', width: "300px", padding: "5px" }}>{formData.remark || selectedCustomerData.remark || book.remark}</span>
+                          <span className='remark-label'>{formData.remark || selectedCustomerData.remark || book.remark}</span>
 
-                        </label>                        </div>
+                        </label>
+                      </div>
                       {/* <div style={{ width: '60%', display: "flex", justifyContent: "space-around", padding: '10px' }}>
                           <label style={{ display: "flex", gap: '10px' }}>
                             <span style={{ fontWeight: 'bold', height: "50px", display: "flex", flexWrap: 'nowrap', gap: "10px" }}>

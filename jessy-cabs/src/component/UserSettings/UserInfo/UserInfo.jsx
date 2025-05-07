@@ -66,12 +66,12 @@ const UserSetting = () => {
     handleClick,
     handleChange,
     hidePopup,
- 
+
     editMode,
     toggleEditMode,
     showPasswords,
     handleClickShowPasswords,
-   
+
     handleMouseDownPasswords,
     // showPassword,
     handleUpdate,
@@ -88,11 +88,19 @@ const UserSetting = () => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 500,
+    // width: 500,
+    width: {
+      xs: "80%",
+      sm: 400,
+      md: 500,
+    },
     bgcolor: 'background.paper',
     boxShadow: 24,
-    p: 4,
-    borderRadius: 2
+    // p: 4,
+    p: 3,
+    borderRadius: 2,
+    maxHeight: "90vh",
+    overflowY: "auto",
   };
 
   const avatars = [
@@ -107,7 +115,7 @@ const UserSetting = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const {setSelectedAvatar,selectedavtar} = useThemes();
+  const { setSelectedAvatar, selectedavtar } = useThemes();
 
   // const userId=selectedCustomerData?.userid;
 
@@ -120,13 +128,13 @@ const UserSetting = () => {
   }
   const superpower = localStorage.getItem("SuperAdmin")
 
-  
 
-  const avatarChange = async(avatarValue) => {
+
+  const avatarChange = async (avatarValue) => {
     const userid = localStorage.getItem('useridno');
     setSelectedAvatar(avatarValue)
     localStorage.removeItem("selectedProfileimageuser");
-   
+
     // const removeItem= localStorage.getItem("selectedProfileimageuser")
     // console.log(removeItem)
 
@@ -134,10 +142,10 @@ const UserSetting = () => {
       userid: userid,
       profile_image: avatarValue
     });
-  
+
     handleClose();
   }
-  
+
 
   return (
     <div className="userinfo-form main-content-form Scroll-Style-hide">
@@ -155,30 +163,30 @@ const UserSetting = () => {
                       className="user-info-user-avatar-edit-icon"
                       variant="outlined"
                       component="label"
-                      
+
                     >
                       <ModeEditIcon />
                     </IconButton>
-                    {(selectedavtar === null) ? ( 
+                    {(selectedavtar === null) ? (
                       <Avatar
                         sx={{ width: "18ch", height: "18ch" }}
                         alt="userimage"
                         // src={`${apiUrl}/public/user_profile/${selectedImage}`}
                         // src={userAvatar}
                         src={selectedavtar}
-                      /> 
-                     ) : (
+                      />
+                    ) : (
                       <div className="user-division-image">
 
                         <div className="user-selected-avatar-division">
-                          <img     src={selectedavtar}alt="" className="user-selected-avatar" />
+                          <img src={selectedavtar} alt="" className="user-selected-avatar" />
                         </div>
                       </div>
-                  )} 
+                    )}
 
                   </div>
                 </div>
-             
+
               </div>
               <div className="container-userinfo-right">
                 <div className=" userInfo-inputs-feilds input-field">
@@ -196,8 +204,8 @@ const UserSetting = () => {
                       onChange={handleChange}
                       // disabled={!editMode}
                       // disabled={Number(superpower) === 0}
-                      disabled={!editMode || superpower !== "SuperAdmin"} 
-                      inputProps={{readOnly:true}}          
+                      disabled={!editMode || superpower !== "SuperAdmin"}
+                      inputProps={{ readOnly: true }}
                     />
                   </div>
                   <div className="input">
@@ -237,7 +245,7 @@ const UserSetting = () => {
                       disabled={!editMode || superpower !== "SuperAdmin"}
                     />
                   </div>
-                 
+
                   <div className="input">
                     <div className="icone">
                       <SettingsPhoneIcon color="action" />

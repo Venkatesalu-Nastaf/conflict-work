@@ -59,6 +59,9 @@ import { BiSolidStoreAlt } from "react-icons/bi";
 import { FaCar } from "react-icons/fa";
 import { SiClockify } from "react-icons/si";
 import { IoBook } from "react-icons/io5";
+import HistoryIcon from '@mui/icons-material/History';
+import PersonIcon from '@mui/icons-material/Person';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 
 const MenuItem = ({
@@ -1195,7 +1198,7 @@ const Sidebar = () => {
               <div className="settings-dropdown-links">
                 <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/LogDetails')}>
                   <span>
-                    <BsFillFuelPumpFill />
+                    <HistoryIcon />
                   </span>
                   <span>
                     Log Details
@@ -1207,7 +1210,7 @@ const Sidebar = () => {
               <div className="settings-dropdown-links">
                 <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/employee')}>
                   <span>
-                    <BsFillFuelPumpFill />
+                    <PersonIcon />
                   </span>
                   <span>
                     Employee
@@ -1219,7 +1222,7 @@ const Sidebar = () => {
               <div className="settings-dropdown-links">
                 <p className="dropdown-icon" onClick={() => infoSubMenu("/home/info/agreement")}>
                   <span>
-                    <BsFillFuelPumpFill />
+                    <DescriptionIcon />
                   </span>
                   <span>
                   Aggrement

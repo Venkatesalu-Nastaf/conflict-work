@@ -296,7 +296,7 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
   };
 
   return (
-    <>
+    <div className='template-creation-main-container'>
       <div className='Scroll-Style-hide template-creation-main-div'>
         <div className='mail-template-division'>
           <div className='word-head'>
@@ -311,7 +311,7 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
                 </div>
               </div>
             </div>
-            <div className='template-info'style={{marginLeft:'500px',padding:'10px'}}>
+            <div className='template-info'>
                   <input type="text" className='template-name' style={{padding:'5px'}}name="TemplateInfo" value={templatedata.TemplateInfo || ''} onChange={handleChange} placeholder='Enter a template Info' />
                 </div>
             <div className='right-header'>
@@ -400,22 +400,26 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
               </div>
             </div>
           </div>
-          <ReactQuill
-            theme="snow"
-            value={templatedata.TemplateMessageData}
-            onChange={handleQuillChange}
-            className='quill-editor'
-            modules={{
-              toolbar: [
-                [{ 'header': '1' },{ 'header': '2' },{ 'font': [] }],
-                [{ 'size': [] }],
-                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                ['link', 'image', 'video'],
-                ['clean'],
-              ],
-            }}
-          />
+          
+          <div className="quill-container">
+            <ReactQuill
+              theme="snow"
+              value={templatedata.TemplateMessageData}
+              onChange={handleQuillChange}
+              className='quill-editor'
+              modules={{
+                toolbar: [
+                  [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                  [{ 'size': [] }],
+                  ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                  [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                  ['link', 'image', 'video'],
+                  ['clean'],
+                ],
+              }}
+            />
+          </div>
+
           {editmode ?
           
             <>
@@ -471,7 +475,7 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
               </div>
             )}
       </div>
-    </>
+    </div>
   );
 }
 

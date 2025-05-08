@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import Excel from 'exceljs';
@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../url";
 import 'jspdf-autotable'
-import { Organization ,stateToStations,allStations } from './Customerdata';
+import { Organization ,stateToStations } from './Customerdata';
 import { useData1 } from '../../Dashboard/Maindashboard/DataContext'
 
 // TABLE START
@@ -56,7 +56,7 @@ const useCustomer = () => {
     // const [cerendentialdataforstations,setCredentialDataforstations]=useState()
 
     //---------------------------------------
-    const { triggerCustomerAdd, setTriggerCustomerAdd } = useData1()
+    const { setTriggerCustomerAdd } = useData1()
     // const handleButtonClick = () => {
     //     setIsInputVisible(!isInputVisible);
     // };
@@ -175,7 +175,9 @@ const useCustomer = () => {
                 }
                 return formattedRow;
             });
-    
+
+            // console.log(formattedRows,"formattedrows");
+            
             const columns = headers.map(key => ({ key, header: key }));
             worksheet.columns = columns;
     
@@ -327,7 +329,7 @@ const useCustomer = () => {
     
         const body = formattedRows.map(row => Object.values(row));
     
-        console.log(formattedRows, 'data in customer pdf');
+        // console.log(formattedRows, 'data in customer pdf');
     
         let fontdata = 1;
         if (header.length <= 13) {
@@ -666,7 +668,7 @@ const useCustomer = () => {
         setSelectedStation(customerData?.servicestation || "");
          setSelectedState(customerData?.state || ""); 
         setIsEditMode(true);
-        console.log(customerData,'customer datatatat')
+        // console.log(customerData,'customer datatatat')
         setCredentialData(false)
     }
     //search with date
@@ -768,7 +770,7 @@ const useCustomer = () => {
                 ...row,
                 id: index + 1,
             }));
-            console.log(rowsWithUniqueId,"iiiii")
+            // console.log(rowsWithUniqueId,"iiiii")
             setRows(rowsWithUniqueId);
             if (data.length > 0) {
                 setLoading(false)
@@ -782,11 +784,12 @@ const useCustomer = () => {
             setLoading(false); // Set loading to false once the request is done, whether successful or not
         }
     }, [apiUrl]); // Add dependencies like apiUrl
-    console.log(rows,"row")
+    // console.log(rows,"row")
 
     useEffect(() => {
         handleList(); // Call the handleList function
     }, [handleList]);
+
     const handleAdd = async () => {
         // const hasEmptyFields = customerfieldSets.some(fieldSet =>
         //     !fieldSet.orderedby || !fieldSet.orderByEmail || !fieldSet.orderByMobileNo
@@ -850,7 +853,7 @@ const useCustomer = () => {
        
         try {
             setbtnLoading(true)
-            console.log(book, "booked",)
+            // console.log(book, "booked",)
             const response = await axios.post(`${apiUrl}/customers`, book);
             let datasets = [];
             if (dataordereddata.length > 0) {
@@ -968,9 +971,13 @@ const useCustomer = () => {
             if (dataordereddata.length > 0) {
                 datasets = addCustomerToObjects(dataordereddata, selectedCustomerData?.customer || book.customer);
             }
+            // console.log(updatedCustomer,"values");
+            
             await axios.put(`${apiUrl}/customers/${selectedCustomerData.customerId}`, updatedCustomer);
-    
+     
+
             if (datasets.length > 0) {
+                // console.log(datasets,"upd values");             
                 await axios.put(`${apiUrl}/updatecustomerorderdata`, datasets);
             }
     
@@ -1093,7 +1100,7 @@ const useCustomer = () => {
 
             else if (actionName === 'Delete') {
               const response1 =  await axios.delete(`${apiUrl}/customers/${selectedCustomerData.customerId}`);
-              console.log(response1,"res11")
+            //   console.log(response1,"res11")
               if (dataordereddata.length > 0) {
                await axios.delete(`${apiUrl}/deletecustomerorderdata/${selectedCustomerData.customer || book.customer}`);
               }

@@ -81,7 +81,7 @@ const VehicleAddData = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/getVehicleNamesList`);
-                console.log(response.data, "vehicles list");
+                // console.log(response.data, "vehicles list");
 
                 const vehiclesWithIds = response.data.map((vehicle, index) => ({
                     ...vehicle,
@@ -114,11 +114,11 @@ const VehicleAddData = () => {
 
         const vehicleName = editData?.VechicleNames;
         const id = editData?.dbid
-        console.log(vehicleName, "vehiclenameeeeeeeee", id);
+        // console.log(vehicleName, "vehiclenameeeeeeeee", id);
 
         try {
             const response = await axios.post(`${apiUrl}/updateVehicleNamesList`, { vehicleName, id });
-            console.log(response, "Vehicle name updated successfully");
+            // console.log(response, "Vehicle name updated successfully");
             setSuccess1(true)
             setSuccessMessage("Successfully updated")
             setVehicleListTrigger((prev) => !prev)
@@ -145,7 +145,7 @@ const VehicleAddData = () => {
             const response = await axios.post(`${apiUrl}/deleteVehicleNamesList`, {
                 id
             });
-            console.log(response.data, "deleted successfully");
+            // console.log(response.data, "deleted successfully");
             setSuccess1(true);
             setSuccessMessage("Vehicle deleted successfully");
             setVehicleListTrigger((prev) => !prev)

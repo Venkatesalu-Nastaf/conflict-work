@@ -313,6 +313,7 @@ const useVehicleinfo = () => {
                     };
                 });
             });
+            
 
             // Write the content using writeBuffer
             const buf = await workbook.xlsx.writeBuffer();
@@ -1026,6 +1027,7 @@ const useVehicleinfo = () => {
 
             const { id, vehicleId, ...restselectedcustomerdata } = selectedCustomerData
             await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`, restselectedcustomerdata);
+            // console.log(restselectedcustomerdata,"checking");      
             addFcCopy_copy(selectedCustomerData.vehicleId);
             addRcBook_copy(selectedCustomerData.vehicleId);
             addStatePermit_copy(selectedCustomerData.vehicleId);
@@ -1073,7 +1075,7 @@ const useVehicleinfo = () => {
                 const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
                 if (response.status === 200) {
                     const userDataArray = await response.json();
-                      console.log(userDataArray,'userdata');
+                    //   console.log(userDataArray,'userdata');
                     if (userDataArray.length > 0) {
                         setOrganisationSendEmail(userDataArray[0])
                         // setDatatrigger(!datatrigger)
@@ -1177,7 +1179,7 @@ const useVehicleinfo = () => {
                 templateMessageData
             };
     
-            console.log("Sending data:", dataToSend); // For debugging purposes
+            // console.log("Sending data:", dataToSend); // For debugging purposes
             // await axios.post(`${apiUrl}/send-emailagreementdata`, dataToSend);
             setSuccess(true);
             setSuccessMessage("Mail Sent Successfully");
@@ -1193,6 +1195,7 @@ const useVehicleinfo = () => {
         if (actionName === 'List') {
             const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
             const data = response.data;
+            console.log(data,"check");       
 
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
@@ -1218,6 +1221,7 @@ const useVehicleinfo = () => {
         else if (actionName === 'Delete') {
             try{
             await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`);
+            // console.log(selectedCustomerData?.vehicleId);      
             setSelectedCustomerData({});
             handleCancel();
             setRows([]);
@@ -1285,6 +1289,8 @@ const useVehicleinfo = () => {
         try {
             const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
             const data = response.data;
+            // console.log(data,"getting the values");
+            
             const rowsWithUniqueId = data.map((row, index) => ({
                 ...row,
                 id: index + 1,
@@ -1321,7 +1327,7 @@ const useVehicleinfo = () => {
         try {
             const response = await fetch(`${apiUrl}/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
             const data = await response.json();
-            console.log(data, "typedata")
+            // console.log(data, "typedata")
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
                     ...row,

@@ -631,7 +631,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   onRowClick={handleRowClick}
                   pageSize={5}
                   onRowSelectionModelChange={(newRowSelectionModel) => {
-                    console.log(newRowSelectionModel, "model")
+                    // console.log(newRowSelectionModel, "model")
                     setSelectedRowDelete(newRowSelectionModel)
 
 

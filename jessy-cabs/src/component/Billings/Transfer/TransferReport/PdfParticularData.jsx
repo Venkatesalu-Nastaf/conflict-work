@@ -461,7 +461,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
             <div className="clientThirdDiv">
               <div>
                 <p className="detailstext"><span className="labeltag">Log No</span><p className="colontag">:</p>{Tripidno}</p>
-                <p className="detailstext"><span className="labeltag">Date</span><p className="colontag">:</p>{tripsheetdate ? dayjs(tripsheetdate).format('DD/MM/YYYY') : ""}</p>
+                {/* <p className="detailstext"><span className="labeltag">Date</span><p className="colontag">:</p>{tripsheetdate ? dayjs(tripsheetdate).format('DD/MM/YYYY') : ""}</p> */}
+                <p className="detailstext"><span className="labeltag">Date</span><p className="colontag">:</p>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</p>
                 <p className="detailstext"><span className="labeltag">Duty Type  </span><p className="colontag">:</p><span className="clientName1">{duty}</span> </p>
                 <p className="detailstext"><span className="labeltag">Vehicle Type  </span><p className="colontag">:</p><span className="clientName1">{vehicletype}</span> </p>
                 <p className="detailstext"><span className="labeltag">Vehicle No  </span><p className="colontag ">:</p><span className="clientName1">{vehicleno}</span></p>

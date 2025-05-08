@@ -29,7 +29,7 @@ const useDrivercreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage,setWarningMessage] = useState({});
     const [templateMessageData, setTemplateMessageData] = useState('');
-    const [infoMessage, setInfoMessage] = useState({});
+    const [infoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [searchText, setSearchText] = useState("")
     const [fromDate, setFromDate] = useState(dayjs())
@@ -42,7 +42,7 @@ const useDrivercreation = () => {
     const [cerendentialdata,setCredentialData]=useState();
     const [cerendentialdata2,setCredentialData2]=useState();
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
-    const [datatrigger, setDatatrigger] = useState(false)
+    // const [ setDatatrigger] = useState(false)
     const [deletefile, setDeleteFile] = useState([])
     const [deletedriverdate,setDeleteDriverdata]=useState(false)
     // const [profileimage,setProfileimage]=useState('')
@@ -885,7 +885,7 @@ const handlePdfDownload = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleButtonClick = (params) => {
-        console.log(params, 'params');
+        // console.log(params, 'params');
         const { driverid } = params.row;
         if (!driverid) {
             setError(true);
@@ -952,7 +952,7 @@ useEffect(() => {
             const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
             if (response.status === 200) {
                 const userDataArray = await response.json();
-                  console.log(userDataArray,'userdata');
+                //   console.log(userDataArray,'userdata');
                 if (userDataArray.length > 0) {
                     setOrganisationSendEmail(userDataArray[0])
                     // setDatatrigger(!datatrigger)
@@ -982,7 +982,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
             templateMessageData
         };
 
-        console.log("Sending data:", dataToSend); // For debugging purposes
+        // console.log("Sending data:", dataToSend); // For debugging purposes
         await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
@@ -1037,7 +1037,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
             setisDbuttonLoading(true)
             const formData = new FormData();
             for (const key in book) {
-                console.log(key,book[key])
+                // console.log(key,book[key])
                 formData.append(key, book[key]);
               }
                
@@ -1171,6 +1171,8 @@ const handlecheckmaildriver = async (lastBookingno) => {
 
 
         await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,formData);
+        // console.log(formData,"updated the values");
+        
         // await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,updatedriver);
         setSuccess(true);
         setSuccessMessage('Successfully updated');
@@ -1243,6 +1245,8 @@ const handlecheckmaildriver = async (lastBookingno) => {
             else if (actionName === 'Delete') {
                 try{
                 await axios.delete(`${apiUrl}/drivercreation/${selectedCustomerData?.driverid || userid}`);
+                // console.log(selectedCustomerData?.driverid,"checking ");
+                
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage('Successfully Deleted');

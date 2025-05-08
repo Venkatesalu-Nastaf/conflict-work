@@ -393,7 +393,7 @@ const useRatype = () => {
         // Get headers from the first row
         const header = Object.keys(rows[0]);
         const idIndex = header.indexOf('id');
-        console.log(idIndex, "index");
+        // console.log(idIndex, "index");
     
         // Ensure 'id' is first in the header
         if (idIndex !== -1) {
@@ -438,7 +438,7 @@ const useRatype = () => {
         } else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-        console.log(fontdata, "font size");
+        // console.log(fontdata, "font size");
     
         // Generate the table in the PDF
         pdf.autoTable({
@@ -462,7 +462,7 @@ const useRatype = () => {
         });
     
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-        console.log(scaleFactor, "SCALE");
+        // console.log(scaleFactor, "SCALE");
     
         // Scale content
         pdf.scale(scaleFactor, scaleFactor);
@@ -538,7 +538,7 @@ const useRatype = () => {
     };
     const handleenterSearch = useCallback(async (e) => {
         if (e.key === "Enter") {
-            console.log("Search Text:", searchText);
+            // console.log("Search Text:", searchText);
 
             try {
                 // Fetching data from the server
@@ -551,7 +551,7 @@ const useRatype = () => {
                 }
 
                 const data = await response.json();
-                console.log("Fetched data:", data);  // Log the data to ensure it's correct
+                // console.log("Fetched data:", data);  // Log the data to ensure it's correct
 
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -660,7 +660,7 @@ const useRatype = () => {
                 starttime:starttime,
                 closetime:closetime
             }; 
-             console.log(updatedBook)
+            //  console.log(updatedBook)
 
             await axios.post(`${apiUrl}/ratetype`, updatedBook);
             handleCancel();
@@ -709,7 +709,7 @@ const useRatype = () => {
                     ...row,
                     id: index + 1,
                 }));
-                console.log(rowsWithUniqueId,"cust")
+                // console.log(rowsWithUniqueId,"cust")
                 // setRows(rowsWithUniqueId);
                 setRows(data.length > 0 ? rowsWithUniqueId : []);
                
@@ -754,6 +754,7 @@ const useRatype = () => {
             closetime: selectedCustomerData.closetime
         };
         await axios.put(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+        // console.log(updatedCustomer,"checking the frontend value ");     
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         setisRateButtonLoading(false)
@@ -796,7 +797,7 @@ const useRatype = () => {
 
             else if (actionName === 'Delete') {
                const data = await axios.delete(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
-               console.log(data,"responsedaata")
+            //    console.log(data,"responsedaata")
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");

@@ -293,7 +293,7 @@ const usePackagerateentry = () => {
         }]);
         // Extract relevant properties for commonData
         const { ratetype, OrganizationName, vehicleName, Validity, stations } = customerData;
-        console.log(customerData, "rateeeeeeeeeeeeeeee");
+        // console.log(customerData, "rateeeeeeeeeeeeeeee");
 
         setCommonData({
             ratetype,
@@ -306,7 +306,7 @@ const usePackagerateentry = () => {
 
         });
         setSelectedCustomerId(params.row.id);
-        console.log(params.row.id,"parmas");
+        // console.log(params.row.id,"parmas");
         setMultipleSelect(true)
         setIsEditMode(true);
     }, []);
@@ -547,7 +547,7 @@ const usePackagerateentry = () => {
 
             });
 
-            console.log(requestData, "Dataadd");
+            // console.log(requestData, "Dataadd");
 
             // await axios.post(`${apiUrl}/ratemanagement-add`, requestData);
             await axios.post(`${apiUrl}/ratemanagement-add`, requestData);
@@ -655,7 +655,7 @@ const usePackagerateentry = () => {
                     updatedData[field] = 0;
                 }
             });
-            console.log(updatedData, 'rateupdate');
+            // console.log(updatedData, 'rateupdate');
             await axios.put(`${apiUrl}/ratemanagement-edit/${selectedCustomerId}`, updatedData);
             setSuccess(true);
             setisbtnloading(false)
@@ -675,6 +675,8 @@ const usePackagerateentry = () => {
         try {
 
             await axios.delete(`${apiUrl}/ratemanagement/${selectedrowdelete}`);
+            // console.log(selectedrowdelete,"checking delete value");
+            
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
             handleCancel();

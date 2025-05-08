@@ -315,7 +315,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
     tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
     // --------------------this zoom code image data----------------------------------------
-    posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, Scale, onDrag, handleFullDeleteMapData,
+    posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, Scale, onDrag, handleFullDeleteMapData,tripIdRef,
     mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl, bookingTripStatus, handleTemporaryDelete, handleTemporaryDeleteMapDataClose, temporaryDeleteGmap, setTemporaryDeleteGmap, handleTemporaryDeleteMapDataOpen
     // this code zoom image data---------------------------------
   } = useTripsheet();
@@ -1193,7 +1193,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                       </span>
                     </>
                   )}
-                </div>
+                {/* </div> */}
 
                 {/* <div className="" style={{width:"200px"}}>
                   <FormControlLabel
@@ -1241,6 +1241,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                   />
                 </div>
 
+</div>
               </div>
               <div className='tripsheet-division1'>
                 <div className="input">
@@ -1259,6 +1260,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     onKeyDown={handleKeyDown}
                     autoComplete="password"
                     autoFocus
+                    inputRef={tripIdRef}
                   />
                 </div>
 

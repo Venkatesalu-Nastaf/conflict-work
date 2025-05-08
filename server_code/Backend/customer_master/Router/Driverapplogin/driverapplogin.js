@@ -49,7 +49,7 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
   else{
     profile_image = req.file.filename;
   }
-  console.log(profile_image)
+  // console.log(profile_image)
   const {
     drivername,
     username,
@@ -70,20 +70,20 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
 
   const formattedToDate = moment(joiningdate).format('YYYY-MM-DD');
   
-  console.log(drivername,
-    username,
-    stations,
-    Mobileno,
-    userpassword,
-    formattedToDate,
-    active,
-    address1,
-    licenseno,
-    licenseexpdate,
-    badgeno,
-    badgeexpdate,
-    aadharno,
-    Email,created_at)
+  // console.log(drivername,
+  //   username,
+  //   stations,
+  //   Mobileno,
+  //   userpassword,
+  //   formattedToDate,
+  //   active,
+  //   address1,
+  //   licenseno,
+  //   licenseexpdate,
+  //   badgeno,
+  //   badgeexpdate,
+  //   aadharno,
+  //   Email,created_at)
  
 
   const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,Profile_image,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
@@ -93,7 +93,7 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
       
           }
-          
+          // console.log(result,"add driver details")
           return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
@@ -124,10 +124,14 @@ router.get('/lastdrivergetid', (req, res) => {
 // delete user creation data
 router.delete('/drivercreation/:driverid', (req, res) => {
   const userid = req.params.driverid;
+  // console.log(userid,"delted id");
+  
   db.query('DELETE FROM drivercreation WHERE driverid = ?', userid, (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
     }
+    // console.log(result,"checking deleted result");
+    
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Customer not found" });
     }
@@ -153,6 +157,8 @@ router.delete('/drivercreation/:driverid', (req, res) => {
 
 router.put('/drivercreation/:driverid',uploadfile.single('Profile_image'), (req, res) => {
   const userid = req.params.driverid;
+  // console.log(userid,"checking driver details");
+  
   const updatedCustomerData = req.body;
   if (req.file) {
     console.log(req.file)
@@ -163,6 +169,8 @@ router.put('/drivercreation/:driverid',uploadfile.single('Profile_image'), (req,
     if (err) {
       return res.status(500).json({ error: "Failed to update data in MySQL" });
     }
+    // console.log(result,"updated details");
+    
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Customer not found" });
     }
@@ -336,7 +344,7 @@ router.get('/TemplateForDriverCreation', async (req, res) => {
           console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -396,7 +404,7 @@ router.post('/send-emaildriverdata', async (req, res) => {
       };
 
       await transporter.sendMail(mailOptions);
-      console.log('Email sent successfully');
+      // console.log('Email sent successfully');
       res.status(200).json({ message: 'Email sent successfully' });
   } catch (err) {
       console.error("Error sending email:", err);

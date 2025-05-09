@@ -66,7 +66,7 @@ const CoveringSubmit = ({ stationName,Statename, organizationNames }) => {
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
     const CoveringBill_read = permissions[7]?.read;
-    console.log(Statename,"name")
+    // console.log(Statename,"name")
 
     return (
         <div className="CoveringSubmit-form main-content-form Scroll-Style-hide">

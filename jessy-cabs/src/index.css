@@ -850,6 +850,7 @@ body {
   padding: 20px;
   color: #000;
   zoom: 90%;
+  /* width: 100%; */
 }
 
 @media screen and (min-width: 1300px) and (max-width: 1424.99px) {
@@ -948,6 +949,10 @@ body {
   .css-1tumjyn-MuiButtonBase-root-MuiButton-root{
     min-width: 0 !important;
     padding: 0 !important;
+  }
+
+  .css-15rd7m4{
+    left: 50% !important;
   }
 
 }

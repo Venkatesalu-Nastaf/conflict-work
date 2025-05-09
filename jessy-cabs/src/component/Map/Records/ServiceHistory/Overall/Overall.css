@@ -85,3 +85,14 @@
     
     }
 }
+
+@media screen and (max-width:500px){
+    
+    .overall-overall{
+        display: block;
+        padding: 10px;
+        width: 95%;
+        overflow-x: hidden;
+    }
+
+}

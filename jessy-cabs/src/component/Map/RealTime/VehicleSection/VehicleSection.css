@@ -136,6 +136,7 @@
 
 .overview-content-head {
     border: 1px solid #ccc;
+    width: 100%;
     /* padding: 20px; */
     /* overflow: scroll; */
 }

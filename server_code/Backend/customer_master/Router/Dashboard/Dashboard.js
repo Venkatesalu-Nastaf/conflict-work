@@ -387,4 +387,28 @@ router.get('/getAllBilledAmountTripApi', (req, res) => {
 })
 
 
+// vendor amount details filter by month and year
+router.get('/getvendorAmountDetails', (req, res) => {
+  const { selectedMonth, selectedYear } = req.query;
+
+  const sqlVendorAmountQuery = `
+SELECT * FROM tripsheet 
+WHERE MONTH(startdate) = ?
+  AND YEAR(startdate) = ?
+  AND Vendor_FULLTotalAmount IS NOT NULL
+  AND Vendor_FULLTotalAmount != 0
+  `; 
+
+  db.query(sqlVendorAmountQuery, [selectedMonth, selectedYear], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Database error");
+    } 
+    console.log(result,"vendorrrrrrrrrrresult",result.length);
+    
+    return res.status(200).json(result);
+  });
+});
+
+
 module.exports = router;

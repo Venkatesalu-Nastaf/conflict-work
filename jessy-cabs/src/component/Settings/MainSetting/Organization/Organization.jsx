@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import "./Organization.css";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
-import { TextField } from "@mui/material";
+import { TextField,MenuItem } from "@mui/material";
 
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -44,6 +44,14 @@ const Organization = ({ logoImage }) => {
         toggleEditMode,
         handleKeyDown,
         handleUpdate,
+        AddNewKey,
+        handleAddNewAPIKey,
+        handleApiKeyChange,
+        allApiKey,
+        updateKey,
+        handleUpdateChange,
+        handleUpdateApiKey,
+        selectedApikey
     } = useOrganization();
 
     useEffect(() => {
@@ -374,6 +382,56 @@ const Organization = ({ logoImage }) => {
                                             disabled={!editMode} />
                                     </div>
 
+                                </div>
+                                <div className="input organization-input">
+                                    <div style={{ display: 'grid', justifyContent: 'center' }}>
+                                        <label htmlFor="">Add New API KEY :</label>
+                                        <TextField
+                                            sx={{ width: "250px" }}
+                                            name="newApi"
+                                            className='address-field organisation-address-field Scroll-Style-hide'
+                                            value={AddNewKey}
+                                            onChange={handleApiKeyChange}
+                                            // label="BankDetails"
+                                            id="mapApi"
+                                            // multiline
+                                            // rows={5}
+                                            // autoComplete="password"
+                                            disabled={!editMode} />
+                                    </div>
+                                    <div>
+                                        {editMode ? 
+                                        <Button variant='contained' onClick={handleAddNewAPIKey}>
+                                            ADD
+                                        </Button> : ""}
+                                    </div>
+                                </div>
+                                <div className="input organization-input">
+                                    <div style={{ display: 'grid', justifyContent: 'center' }}>
+                                        <label htmlFor="mapApi">Map Api Key :</label>
+                                        <TextField
+                                            select
+                                            sx={{ width: "410px" }}
+                                            name="BankDetails"
+                                            className='address-field organisation-address-field Scroll-Style-hide'
+                                            value={selectedApikey}
+                                            onChange={handleUpdateChange}
+                                            id="mapApi"
+                                            disabled={!editMode}
+                                        >
+                                            {allApiKey.map((key, index) => (
+                                                <MenuItem key={index} value={key}>
+                                                    {key}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+                                    <div>
+                                        {editMode ?
+                                        <Button variant='contained' onClick={handleUpdateApiKey}>
+                                            Edit
+                                        </Button> : ""}
+                                    </div>
                                 </div>
                                 {/* <textarea /> */}
                             </div>

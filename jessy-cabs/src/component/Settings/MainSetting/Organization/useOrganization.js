@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useData } from '../../../Dashboard/MainDash/Sildebar/DataContext2';
 import { APIURL } from "../../../url";
 import imageToBase64 from '../../../../helper/imagetoBase64';
-
+import dayjs from "dayjs";
 
 const useOrganization = () => {
     const apiUrl = APIURL;
@@ -20,6 +20,11 @@ const useOrganization = () => {
     const { setLogoTrigger} = useData();
     const [dataclose, setDataclose] = useState(false)
 
+    // Apikey
+    const [AddNewKey,setAddNewKey] = useState("");
+    const [updateKey,setUpdateKey] = useState("");
+    const [allApiKey,setAllApiKey] = useState([]);
+    const [selectedApikey,setSelectedApikey] = useState('');
     //----------------------popup----
 
     const hidePopup = () => {
@@ -198,6 +203,80 @@ const useOrganization = () => {
 
     //--------------------------------------------
 
+    // Add New Api Key Function
+    const handleAddNewAPIKey = async () => {
+        try {
+          const response = await axios.post(`${apiUrl}/newApiKeyGoogleMap`, {
+            ApiKey: AddNewKey,
+          });
+          console.log(response.data, "Inserted API Key Successfully");
+          setAddNewKey('')
+        } catch (error) {
+          console.log(error, "error");
+        }
+      };
+
+    //   update Api key
+    const handleUpdateApiKey = async()=>{
+        const selected_date = dayjs().format("YYYY-MM-DD");
+        try{
+            const response = await axios.post(`${apiUrl}/selectedApiKeyUpdate`,{
+             ApiKey:updateKey,
+             selected_date:selected_date
+            })
+            console.log(response.data,"updateeeeeeeeee");
+            setEditMode((prevEditMode) => !prevEditMode);
+
+        }
+        catch(error){
+            console.log(error,"error");
+            
+        }
+    }
+      const handleApiKeyChange = (e)=>{
+          setAddNewKey(e.target.value)
+      }
+
+      const handleUpdateChange = (e) => {
+        setUpdateKey(e.target.value)
+        setSelectedApikey(e.target.value)
+
+      }
+
+    //   get all apikey  
+    useEffect(()=>{
+        const fetchdata = async() =>{
+          try{
+             const response = await axios.get(`${apiUrl}/getAllApiKeyData`);
+             console.log(response.data,"allapidataaaaaaaaaaaaaaaaa");
+             const allApiKey = response.data.map(li=>li.ApiKey);
+             setAllApiKey(allApiKey)
+          }
+          catch(error){
+            console.log(error);
+            
+          }
+        }
+        fetchdata()
+    },[apiUrl,AddNewKey])
+
+    // selected api key 
+    useEffect(()=>{
+        const fetchData = async()=>{
+            try{
+                const response = await axios.get(`${apiUrl}/selectedApiData`);
+                console.log(response.data,"selectedapiiiiiiiiiiiii");
+                const selectedApi = response.data.map(li=>li.ApiKey);
+                setSelectedApikey(selectedApi)
+            }
+            catch(err){
+                console.log(error);
+                
+            }
+        }
+        fetchData()
+    },[apiUrl,editMode])
+
     return {
         selectedCustomerData,
         error,
@@ -217,7 +296,15 @@ const useOrganization = () => {
         toggleEditMode,
         handleKeyDown,
         handleUpdate,
-        handleCancel
+        handleCancel,
+        AddNewKey,
+        handleAddNewAPIKey,
+        handleApiKeyChange,
+        allApiKey,
+        handleUpdateChange,
+        updateKey,
+        handleUpdateApiKey,
+        selectedApikey
     };
 };
 

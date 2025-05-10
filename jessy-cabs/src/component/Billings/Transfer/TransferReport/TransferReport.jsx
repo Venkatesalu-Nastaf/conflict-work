@@ -71,7 +71,7 @@ export const MISformat = [
   },
 ];
 
-const TransferReport = ({Statename }) => {
+const TransferReport = ({ Statename }) => {
 
   const {
     invoiceno,
@@ -141,6 +141,7 @@ const TransferReport = ({Statename }) => {
     // setServiceStation,
     isButtonloading,
     setisButtonLoading,
+    zipisloading
     // datastatetranfer,
   } = useTransferreport();
   const {
@@ -152,7 +153,7 @@ const TransferReport = ({Statename }) => {
   const [organizationsdetail1, setOrganisationDetail] = useState([]);
   const { logo } = useData();
   const [particularPdf, setParticularPdf] = useState([])
-  const [imageorganisation, setSelectedImageorganisation] = useState(null); 
+  const [imageorganisation, setSelectedImageorganisation] = useState(null);
   const [tripno, setTripno] = useState('')
   const { pdfPrint, setPdfPrint, billGenerate, setBillGenerate } = PdfData()
   const [billId, setBillId] = useState()
@@ -328,7 +329,7 @@ const TransferReport = ({Statename }) => {
 
   // const invoicenoCheck = invoiceno[0] === null || invoiceno[0] === undefined || invoiceno === "" || invoiceno[0] === "";
 
-  const invoicenoCheck =!invoiceno || invoiceno === "" || invoiceno[0] === undefined || invoiceno[0] === null ||invoiceno[0] === ""; 
+  const invoicenoCheck = !invoiceno || invoiceno === "" || invoiceno[0] === undefined || invoiceno[0] === null || invoiceno[0] === "";
 
   const handleDownloadPdf = async () => {
 
@@ -509,7 +510,7 @@ const TransferReport = ({Statename }) => {
     }
   };
 
-  const handleBothDownload = (misformat1, invoicedata1, invoiceDate1,customerData) => {    
+  const handleBothDownload = (misformat1, invoicedata1, invoiceDate1, customerData) => {
     if (!misformat) {
       setError(true)
       setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
@@ -520,7 +521,7 @@ const TransferReport = ({Statename }) => {
       setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
       return
     }
-    handleExcelDownload(misformat1, invoicedata1, invoiceDate1,customerData);
+    handleExcelDownload(misformat1, invoicedata1, invoiceDate1, customerData);
     handleDownloadPdf();
   };
   const tripheaderIndex = pdfzipdata?.map(li => li?.tripid)
@@ -609,30 +610,30 @@ const TransferReport = ({Statename }) => {
                   />
                 </div>
                 <div className="input input-transfer-report" >
-                                                    <div className="icone">
-                                                        <FontAwesomeIcon icon={faBuilding} size="xl" />
-                                                    </div>
-                                                    <Autocomplete
-                                                        fullWidth
-                                                        id="free-Statebill"
-                                                        freeSolo
-                                                        size="small"
-                                                        // value={datastatetranfer}
-                                                        value={servicestation}
-                                                        // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
-                                                        options={Statename.map((option) => ({
-                                                            label: option.state,
-                                                        }))}
-                                                        onChange={(event, value) => handleserviceInputChange(event, value)}
-                                                        renderInput={(params) => {
-                                                            return (
-                                                                <TextField {...params} label="State" inputRef={params.inputRef}
-                                                                value={servicestation}
-                                                                 />
-                                                            );
-                                                        }}
-                                                    />
-                                                    </div>
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faBuilding} size="xl" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    id="free-Statebill"
+                    freeSolo
+                    size="small"
+                    // value={datastatetranfer}
+                    value={servicestation}
+                    // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
+                    options={Statename.map((option) => ({
+                      label: option.state,
+                    }))}
+                    onChange={(event, value) => handleserviceInputChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="State" inputRef={params.inputRef}
+                          value={servicestation}
+                        />
+                      );
+                    }}
+                  />
+                </div>
                 <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
@@ -826,15 +827,15 @@ const TransferReport = ({Statename }) => {
                 </div> */}
 
                 <div className="input input-transfer-report">
-                      <FormControlLabel
-                        value="bookingmail"
-                        control={
-                          <Checkbox size="small" onChange={handleCheckboxChange} />
-                        }
-                        label="Booking Mail"
-                      />
+                  <FormControlLabel
+                    value="bookingmail"
+                    control={
+                      <Checkbox size="small" onChange={handleCheckboxChange} />
+                    }
+                    label="Booking Mail"
+                  />
                 </div>
-            
+
                 <div className="input input-transfer-report" >
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
@@ -874,7 +875,7 @@ const TransferReport = ({Statename }) => {
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={() => handleExcelDownload(misformat, invoicedata, invoiceDate, customerData)}>Excel</MenuItem>
                             <MenuItem onClick={() => handleDownloadPdf()}>PDF</MenuItem>
-                            <MenuItem onClick={() => handleBothDownload(misformat, invoicedata, invoiceDate,customerData)}>Both</MenuItem>
+                            <MenuItem onClick={() => handleBothDownload(misformat, invoicedata, invoiceDate, customerData)}>Both</MenuItem>
                           </Menu>
                         </React.Fragment>
                       )}
@@ -944,24 +945,28 @@ const TransferReport = ({Statename }) => {
         <div className="Download-btn">
           <div className="input-field">
             {/* {billedStatusCheck === "Billed" ? */}
-              <div className="input" >
-                <PopupState variant="popover" popupId="demo-popup-menu">
-                  {(popupState) => (
-                    <React.Fragment>
-                      <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+            <div className="input" >
+              <PopupState variant="popover" popupId="demo-popup-menu">
+                {(popupState) => (
+                  <React.Fragment>
+                    {/* <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                         Download ZIP
-                      </Button>
-                      <Menu {...bindMenu(popupState)}>
-                        {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                        <MenuItem onClick={() => handledatazipDownload(tripheaderIndex, misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel, customerData, stationData,bookingMail)}>  ZIP </MenuItem>
-                        {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
-                        {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
-                      </Menu>
-                    </React.Fragment>
-                  )}
-                </PopupState>
-              </div>
-              
+                      </Button> */}
+
+                    <LoadingButton loading={zipisloading} variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                      Download zip
+                    </LoadingButton>
+                    <Menu {...bindMenu(popupState)}>
+                      {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
+                      <MenuItem onClick={() => handledatazipDownload(tripheaderIndex, misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel, customerData, stationData, bookingMail)}>  ZIP </MenuItem>
+                      {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
+                      {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </PopupState>
+            </div>
+
             {/* <div className="input">
               <Button variant="outlined" onClick={() => handleRemove()} >Remove</Button>
             </div> */}

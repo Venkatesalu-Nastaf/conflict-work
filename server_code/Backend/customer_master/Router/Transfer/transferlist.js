@@ -1571,8 +1571,8 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
         signatures AS s ON ts.tripid = s.tripid
     LEFT JOIN 
         mapimage AS mi ON ts.tripid = mi.tripid
-    LEFT JOIN 
-        tripsheetupload AS us ON ts.tripid = us.tripid
+  LEFT JOIN 
+        tripsheetupload AS us ON ts.tripid = us.tripid AND us.documenttype NOT IN ('StartingKm', 'ClosingKm')
     LEFT JOIN 
         booking_doc AS tri ON ts.tripid = tri.booking_id
     WHERE 

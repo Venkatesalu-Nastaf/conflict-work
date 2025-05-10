@@ -3032,7 +3032,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       </div>
                                     </DialogContent>
                                     <DialogActions>
-                                      {/* <Button onClick={handleTemporaryDeleteMapDataOpen} variant='outlined'>Temporary Delete</Button> */}
+                                      <Button onClick={handleTemporaryDeleteMapDataOpen} variant='outlined'>Temporary Delete</Button>
                                       <Button variant='contained' onClick={() => handleMapDataDelete()}>Delete Full Log</Button>
                                       <div style={{ paddingRight: '15px' }}>
                                         <PopupState variant="popover" popupId="demo-popup-menu">

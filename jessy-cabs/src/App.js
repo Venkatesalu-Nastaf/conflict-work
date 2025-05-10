@@ -38,7 +38,7 @@ import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 // import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import StationCreation from "./component/Registration/StationCreation/StationCreation";
-import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapComponent";
+// import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapComponent";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 import TemplateSelection from "./component/Info/Mailer/TemplateSelection/TemplateSelection";
 import TemplateCreation from "./component/Info/Mailer/TemplateCreation/TemplateCreation";
@@ -858,7 +858,7 @@ function App() {
                 /> */}
               </Route>
             </Route>
-            <Route path="/navigationmap" element={<NavigationMap />} />
+            {/* <Route path="/navigationmap" element={<NavigationMap />} /> */}
             <Route path="/onlinelogin" element={<OnlineLoginForm />} />
             <Route path="/onlinebooking" element={<OnlineBooking />} />
             <Route

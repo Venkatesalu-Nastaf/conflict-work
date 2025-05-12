@@ -596,65 +596,116 @@ const useTransferreport = () => {
 //   // }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
 // }, [apiUrl,tripID]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      // console.log('loading in transperreposr')
-      try {
-        // const tripid = rowSelectionModel
-        // const encoded = localStorage.getItem("selectedcustomerdata");
-        // localStorage.setItem("selectedcustomer", encoded);
-        // const storedCustomer = localStorage.getItem("selectedcustomer");
-        // console.log(rowSelectionModel,'Transferreport response')
-        // const customer = decodeURIComponent(storedCustomer);
-        console.log(tripID,"exceltrip",rowSelectionModel);
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       // console.log('loading in transperreposr')
+//       try {
+//         // const tripid = rowSelectionModel
+//         // const encoded = localStorage.getItem("selectedcustomerdata");
+//         // localStorage.setItem("selectedcustomer", encoded);
+//         // const storedCustomer = localStorage.getItem("selectedcustomer");
+//         // console.log(rowSelectionModel,'Transferreport response')
+//         // const customer = decodeURIComponent(storedCustomer);
+//         console.log(tripID,"exceltrip",rowSelectionModel);
 
-        if (tripID.length >= 1) {
-          setZipIsloading(true)
+//         if (tripID.length >= 1) {
+//           setZipIsloading(true)
 
-          // const response = await fetch(
-          //   `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
-          //     customer
-          //   )}/${tripid}`
-          // );
+//           // const response = await fetch(
+//           //   `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
+//           //     customer
+//           //   )}/${tripid}`
+//           // );
 
-          const response = await axios.get(
-            `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
-              customer
-            )}/${tripID}`
-          );
+//           const response = await axios.get(
+//             `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
+//               customer
+//             )}/${tripID}`
+//           );
 
 
-          const tripData = response.data
-          console.log(tripData,"drexceltripppppppppppp");
+//           const tripData = response.data
+//           console.log(tripData,"drexceltripppppppppppp");
 
-          const flattenedTripData = tripData.flat();
-          // console.log(flattenedTripData,"flattenedTripData");
-          const uniqueData = flattenedTripData.filter((item, index, self) =>
-            index === self.findIndex((obj) => obj.tripid === item.tripid)
-          );
-          if(uniqueData?.length >= 1){
-         setZipIsloading(false)
+//           const flattenedTripData = tripData.flat();
+//           // console.log(flattenedTripData,"flattenedTripData");
+//           const uniqueData = flattenedTripData.filter((item, index, self) =>
+//             index === self.findIndex((obj) => obj.tripid === item.tripid)
+//           );
+//           if(uniqueData?.length >= 1){
+//          setZipIsloading(false)
+//           }
+//           console.log(uniqueData, "drflattenedTripDatauniqueData",uniqueData.length);
+//           setPdfzipdata(uniqueData)
+
+//           // setPdfzipdata(flattenedTripData)
+
+//           // console.log(flattenedTripData,"trip dtatas ")
+//           // setSuccess(true)
+//         }
+//         else {
+//           setZipIsloading(false)
+//           return
+//         }
+//       } catch (err) {
+//         setZipIsloading(false)
+//         console.log(err, 'error');
+//       }
+//     };
+//     fetchData();
+//   // }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
+// }, [apiUrl,tripID]);
+useEffect(() => {
+  const controller = new AbortController(); // <-- Create controller
+
+  const fetchData = async () => {
+    try {
+      console.log(tripID, "exceltrip", rowSelectionModel);
+
+      if (tripID.length >= 1) {
+        setZipIsloading(true);
+
+        const response = await axios.get(
+          `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(customer)}/${tripID}`,
+          {
+            signal: controller.signal, // <-- Attach controller signal
           }
-          console.log(uniqueData, "drflattenedTripDatauniqueData",uniqueData.length);
-          setPdfzipdata(uniqueData)
+        );
 
-          // setPdfzipdata(flattenedTripData)
+        const tripData = response.data;
+        console.log(tripData, "drexceltripppppppppppp");
 
-          // console.log(flattenedTripData,"trip dtatas ")
-          // setSuccess(true)
+        const flattenedTripData = tripData.flat();
+        const uniqueData = flattenedTripData.filter((item, index, self) =>
+          index === self.findIndex((obj) => obj.tripid === item.tripid)
+        );
+
+        if (uniqueData?.length >= 1) {
+          setZipIsloading(false);
         }
-        else {
-          setZipIsloading(false)
-          return
-        }
-      } catch (err) {
-        setZipIsloading(false)
+
+        console.log(uniqueData, "drflattenedTripDatauniqueData", uniqueData.length);
+        setPdfzipdata(uniqueData);
+      } else {
+        setZipIsloading(false);
+        return;
+      }
+    } catch (err) {
+      if (axios.isCancel(err) || err.name === 'CanceledError') {
+        console.log('Request canceled');
+      } else {
         console.log(err, 'error');
       }
-    };
-    fetchData();
-  // }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
-}, [apiUrl,tripID]);
+      setZipIsloading(false);
+    }
+  };
+
+  fetchData();
+
+  return () => {
+    controller.abort(); // <-- Cancel request on unmount
+  };
+}, [apiUrl, tripID]);
   const handleChange = (event) => {
     setInvoiceno(event.target.value)
   }

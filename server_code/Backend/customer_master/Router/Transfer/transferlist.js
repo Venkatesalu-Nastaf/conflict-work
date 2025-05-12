@@ -1538,75 +1538,163 @@ router.get('/gettransfer_listdatas', (req, res) => {
 
 
 
+// router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) => {
+//   const customer = req.params.customer;
+//   const tripids = req.params.tripid.split(',');
+
+//   const decodedCustomer = decodeURIComponent(customer);
+
+//   const promises = tripids.map(tripid => {
+//     return new Promise((resolve, reject) => {
+//       db.query(
+//         `
+//         SELECT 
+//         ts.*, 
+//         vi.fueltype AS fueltype, 
+//         vi.segement AS segment, 
+//         c.gstTax AS gstTax,
+//         c.address1 AS Customeraddress1,
+//         JSON_ARRAYAGG(JSON_OBJECT('imagees',tri.path)) AS bookattachedimage,
+//         JSON_ARRAYAGG(JSON_OBJECT('attachedimageurl', us.path)) AS Attachedimage,
+//         JSON_ARRAYAGG(JSON_OBJECT('trip_type', gd.trip_type, 'place_name', gd.place_name)) AS gmapdata,
+//         JSON_OBJECT('signature_path', s.signature_path) AS signature_data,
+//         JSON_OBJECT('map_path', mi.path) AS map_data
+//     FROM 
+//         tripsheet AS ts
+//     LEFT JOIN 
+//         vehicleinfo AS vi ON ts.vehRegNo = vi.vehRegNo
+//     LEFT JOIN 
+//         customers AS c ON ts.customer = c.customer
+//     LEFT JOIN 
+//         gmapdata AS gd ON ts.tripid = gd.tripid AND gd.trip_type IN ("start","waypoint","end")
+//     LEFT JOIN 
+//         signatures AS s ON ts.tripid = s.tripid
+//     LEFT JOIN 
+//         mapimage AS mi ON ts.tripid = mi.tripid
+//   LEFT JOIN 
+//         tripsheetupload AS us ON ts.tripid = us.tripid AND us.documenttype NOT IN ('StartingKm', 'ClosingKm')
+//     LEFT JOIN 
+//         booking_doc AS tri ON ts.tripid = tri.booking_id
+//     WHERE 
+//         ts.customer = ? AND ts.tripid = ?
+//     GROUP BY 
+//         ts.id,vi.fueltype,vi.segement,c.gstTax,c.address1,s.signature_path,mi.path
+    
+//         `,
+//         [decodedCustomer, tripid],
+//         (err, result) => {
+//           if (err) {
+//             console.log(err, 'error');
+
+//             reject(err);
+//           } else {
+//             // console.log(result,'pdfzippppppppppppppppppppp');
+
+//             resolve(result); // Assuming we expect only one result per tripid
+//           }
+//         }
+//       );
+//     });
+//   });
+
+//   Promise.all(promises)
+//     .then(results => {
+//       //  console.log(results,'pdfzippppppppppppppppppppp');
+//       return res.status(200).json(results);
+//     })
+//     .catch(error => {
+//       console.log(error)
+//       return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
+//     });
+// });
 router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) => {
   const customer = req.params.customer;
   const tripids = req.params.tripid.split(',');
-
   const decodedCustomer = decodeURIComponent(customer);
 
-  const promises = tripids.map(tripid => {
-    return new Promise((resolve, reject) => {
-      db.query(
-        `
-        SELECT 
-        ts.*, 
-        vi.fueltype AS fueltype, 
-        vi.segement AS segment, 
-        c.gstTax AS gstTax,
-        c.address1 AS Customeraddress1,
-        JSON_ARRAYAGG(JSON_OBJECT('imagees',tri.path)) AS bookattachedimage,
-        JSON_ARRAYAGG(JSON_OBJECT('attachedimageurl', us.path)) AS Attachedimage,
-        JSON_ARRAYAGG(JSON_OBJECT('trip_type', gd.trip_type, 'place_name', gd.place_name)) AS gmapdata,
-        JSON_OBJECT('signature_path', s.signature_path) AS signature_data,
-        JSON_OBJECT('map_path', mi.path) AS map_data
-    FROM 
-        tripsheet AS ts
-    LEFT JOIN 
-        vehicleinfo AS vi ON ts.vehRegNo = vi.vehRegNo
-    LEFT JOIN 
-        customers AS c ON ts.customer = c.customer
-    LEFT JOIN 
-        gmapdata AS gd ON ts.tripid = gd.tripid
-    LEFT JOIN 
-        signatures AS s ON ts.tripid = s.tripid
-    LEFT JOIN 
-        mapimage AS mi ON ts.tripid = mi.tripid
-  LEFT JOIN 
-        tripsheetupload AS us ON ts.tripid = us.tripid AND us.documenttype NOT IN ('StartingKm', 'ClosingKm')
-    LEFT JOIN 
-        booking_doc AS tri ON ts.tripid = tri.booking_id
-    WHERE 
-        ts.customer = ? AND ts.tripid = ?
-    GROUP BY 
-        ts.id,vi.fueltype,vi.segement,c.gstTax,c.address1,s.signature_path,mi.path
-    
-        `,
-        [decodedCustomer, tripid],
-        (err, result) => {
-          if (err) {
-            console.log(err, 'error');
+  let clientDisconnected = false;
 
-            reject(err);
-          } else {
-            // console.log(result,'pdfzippppppppppppppppppppp');
-
-            resolve(result); // Assuming we expect only one result per tripid
-          }
-        }
-      );
-    });
+  req.on('close', () => {
+    console.log('Client disconnected before request completed.');
+    clientDisconnected = true;
   });
 
-  Promise.all(promises)
-    .then(results => {
-      //  console.log(results,'pdfzippppppppppppppppppppp');
+  const results = [];
+
+  try {
+    for (const tripid of tripids) {
+      if (clientDisconnected) {
+        console.log('Aborting further DB calls after client disconnect.');
+        break;
+      }
+
+      const result = await new Promise((resolve, reject) => {
+        db.query(
+          `
+          SELECT 
+            ts.*, 
+            vi.fueltype AS fueltype, 
+            vi.segement AS segment, 
+            c.gstTax AS gstTax,
+            c.address1 AS Customeraddress1,
+            JSON_ARRAYAGG(JSON_OBJECT('imagees', tri.path)) AS bookattachedimage,
+            JSON_ARRAYAGG(JSON_OBJECT('attachedimageurl', us.path)) AS Attachedimage,
+            JSON_ARRAYAGG(JSON_OBJECT('trip_type', gd.trip_type, 'place_name', gd.place_name)) AS gmapdata,
+            JSON_OBJECT('signature_path', s.signature_path) AS signature_data,
+            JSON_OBJECT('map_path', mi.path) AS map_data
+          FROM 
+            tripsheet AS ts
+          LEFT JOIN 
+            vehicleinfo AS vi ON ts.vehRegNo = vi.vehRegNo
+          LEFT JOIN 
+            customers AS c ON ts.customer = c.customer
+          LEFT JOIN 
+            gmapdata AS gd ON ts.tripid = gd.tripid AND gd.trip_type IN ("start","waypoint","end")
+          LEFT JOIN 
+            signatures AS s ON ts.tripid = s.tripid
+          LEFT JOIN 
+            mapimage AS mi ON ts.tripid = mi.tripid
+          LEFT JOIN 
+            tripsheetupload AS us ON ts.tripid = us.tripid AND us.documenttype NOT IN ('StartingKm', 'ClosingKm')
+          LEFT JOIN 
+            booking_doc AS tri ON ts.tripid = tri.booking_id
+          WHERE 
+            ts.customer = ? AND ts.tripid = ?
+          GROUP BY 
+            ts.id, vi.fueltype, vi.segement, c.gstTax, c.address1, s.signature_path, mi.path
+          `,
+          [decodedCustomer, tripid],
+          (err, result) => {
+            if (clientDisconnected) {
+              console.log(`Skipping result for tripid ${tripid} due to disconnection`);
+              return resolve(null);
+            }
+            if (err) {
+              console.error(`Error retrieving data for tripid ${tripid}:`, err);
+              return reject(err);
+            }
+            resolve(result);
+          }
+        );
+      });
+
+      results.push(result);
+    }
+   console.log(results,"lll")
+    if (!clientDisconnected) {
+
       return res.status(200).json(results);
-    })
-    .catch(error => {
-      console.log(error)
-      return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
-    });
+    } else {
+      console.log('Not sending response — client already disconnected.');
+    }
+  } catch (error) {
+    console.error('Query processing failed:', error);
+    if (!clientDisconnected) {
+      return res.status(500).json({ error: 'Failed to retrieve tripsheet details' });
+    }
+  }
 });
+
 
 // to get particular Tripsheet details
 router.get('/togetSelectTripsheetDetails', (req, res) => {

@@ -450,15 +450,16 @@ WHERE YEAR(startdate) = ?
   });
 });
 
-// get start month to current month in this year
-router.get('/getFromToSelectedMonthProfit', (req, res) => {
-  // let { selectedMonth, selectedYear } = req.query;
+// get start month to current month in this year All
+router.get('/getAllSelectedMonthProfit', (req, res) => {
+  let {  selectedYear } = req.query;
 
   // if not passed, take current date values
   const currentDate = new Date();
 
-  const year = currentDate.getFullYear();
-  const monthLimit = currentDate.getMonth() + 1;
+  const compareyear = currentDate.getFullYear();
+  const year = parseInt(selectedYear)
+  const monthLimit =  compareyear === year ? currentDate.getMonth() + 1 : 12;
 
   console.log("Year:", year, "Selected Month:", monthLimit);
 
@@ -484,6 +485,44 @@ router.get('/getFromToSelectedMonthProfit', (req, res) => {
     }
 
     console.log(result, "profit result Jan to current month");
+    return res.status(200).json(result);
+  });
+});
+
+// get start month to current month selected year and selected month
+router.get('/getFromToSelectedMonthProfit', (req, res) => {
+  let { selectedMonth, selectedYear } = req.query;
+
+  if (!selectedMonth || !selectedYear) {
+    return res.status(400).send("selectedMonth and selectedYear are required");
+  }
+
+  const month = new Date(selectedMonth).getMonth() + 1;
+  const year = parseInt(selectedYear);
+
+  console.log("Selected Year:", year, "Selected Month:", month);
+
+  const sqlQuery = `
+    SELECT 
+      MONTH(startdate) AS month,
+      SUM(totalcalcAmount) AS totalCalcAmount,
+      SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END) AS totalVendorAmount,
+      (SUM(totalcalcAmount) - SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END)) AS profit
+    FROM tripsheet
+    WHERE YEAR(startdate) = ?
+      AND MONTH(startdate) = ?
+      AND Vendor_FULLTotalAmount IS NOT NULL
+      AND Vendor_FULLTotalAmount != 0
+    GROUP BY MONTH(startdate)
+  `;
+
+  db.query(sqlQuery, [year, month], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Database error");
+    }
+
+    console.log(result, "profit result for selected month");
     return res.status(200).json(result);
   });
 });

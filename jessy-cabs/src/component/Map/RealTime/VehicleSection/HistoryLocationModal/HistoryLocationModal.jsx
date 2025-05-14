@@ -18,6 +18,7 @@ import "./HistoryLocationModal.css"
 import { GoogleMap, MarkerF, InfoWindow, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
 // import { IconButton, Button } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
+import { ApiKey } from '../../../../ApiKey/mapApiKey';
 /* global google */
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -70,7 +71,7 @@ const HistoryLocationModal = () => {
    // Load the Google Maps script with your API key and necessary libraries
    const { isLoaded } = useLoadScript({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
+    googleMapsApiKey: ApiKey,
     libraries: ['places'], // Add any additional libraries you need
   });
 

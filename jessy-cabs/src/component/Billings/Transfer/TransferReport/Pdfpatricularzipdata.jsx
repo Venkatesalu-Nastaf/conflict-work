@@ -653,9 +653,12 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     // Convert the unique array back to a JSON string
     const uniqueJsonString = JSON.stringify(uniqueArray);
     const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-    const mapdata = Array.from(new Set(routemapdata?.filter(item => item.trip_type !== null && item.place_name)?.map(JSON.stringify)))?.map(JSON.parse);
+    // const mapdata = Array.from(new Set(routemapdata?.filter(item => item.trip_type !== null && item.place_name)?.map(JSON.stringify)))?.map(JSON.parse);
 
-
+     const mapdata = Array.from(new Set(routemapdata?.filter(item => item.trip_type !== null && item.place_name)?.map(JSON.stringify)))?.map(JSON.parse)?.sort((a, b) => {
+  const order = { start: 1, waypoint: 2, end: 3 };
+  return (order[a.trip_type] || 4) - (order[b.trip_type] || 4);
+});
     const { signature_path } = signatureimage
     const { map_path } = mapimage
     setAddress1(customeraddress1)

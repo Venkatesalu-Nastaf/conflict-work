@@ -387,4 +387,106 @@ router.get('/getAllBilledAmountTripApi', (req, res) => {
 })
 
 
+// vendor amount details filter by month and year
+router.get('/getvendorAmountDetails', (req, res) => {
+  const { selectedMonth, selectedYear } = req.query;
+
+  // const year = new Date(selectedMonth).getFullYear();
+  const month = new Date(selectedMonth).getMonth() + 1;
+   const year = parseInt(selectedYear)
+  console.log(selectedMonth, "selectedDate", "Year:", year, "Month:", month,selectedYear,typeof(year),year);
+
+  const sqlVendorAmountQuery = `
+    SELECT 
+      SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END) AS totalVendorAmount,
+      SUM(totalcalcAmount) AS totalCalcAmount,
+      (SUM(totalcalcAmount) - SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END)) AS profit
+    FROM tripsheet
+    WHERE MONTH(startdate) = ?
+      AND YEAR(startdate) = ?
+      AND Vendor_FULLTotalAmount IS NOT NULL
+      AND Vendor_FULLTotalAmount != 0
+  `;
+
+  db.query(sqlVendorAmountQuery, [month, year], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Database error");
+    }
+
+    console.log(result, "vendorrrrrrrrrrresult", result.length);
+    return res.status(200).json(result[0]);
+  });
+});
+
+
+
+// vendor all amount details filter by year
+
+router.get('/getVendorAmountAllDetails', (req, res) => {
+  const { selectedYear } = req.query;
+  console.log(selectedYear, "selectedYearrrr");
+
+  const sql = `
+  SELECT 
+  SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END) AS totalVendorAmount,
+  SUM(totalcalcAmount) AS totalCalcAmount,
+  (SUM(totalcalcAmount) - SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END)) AS profit
+FROM tripsheet
+WHERE YEAR(startdate) = ?
+  AND Vendor_FULLTotalAmount IS NOT NULL
+  AND Vendor_FULLTotalAmount != 0
+
+  `;
+
+  db.query(sql, [selectedYear], (error, result) => {
+    if (error) {
+      console.log(error, "error");
+      return res.status(500).json({ error });
+    }
+
+    console.log(result, "AllVendorResult");
+    return res.status(200).json(result[0]);
+  });
+});
+
+// get start month to current month in this year
+router.get('/getFromToSelectedMonthProfit', (req, res) => {
+  // let { selectedMonth, selectedYear } = req.query;
+
+  // if not passed, take current date values
+  const currentDate = new Date();
+
+  const year = currentDate.getFullYear();
+  const monthLimit = currentDate.getMonth() + 1;
+
+  console.log("Year:", year, "Selected Month:", monthLimit);
+
+  const sqlQuery = `
+    SELECT 
+      MONTH(startdate) AS month,
+      SUM(totalcalcAmount) AS totalCalcAmount,
+      SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END) AS totalVendorAmount,
+      (SUM(totalcalcAmount) - SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END)) AS profit
+    FROM tripsheet
+    WHERE YEAR(startdate) = ?
+      AND MONTH(startdate) BETWEEN 1 AND ?
+      AND Vendor_FULLTotalAmount IS NOT NULL
+      AND Vendor_FULLTotalAmount != 0
+    GROUP BY MONTH(startdate)
+    ORDER BY MONTH(startdate)
+  `;
+
+  db.query(sqlQuery, [year, monthLimit], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Database error");
+    }
+
+    console.log(result, "profit result Jan to current month");
+    return res.status(200).json(result);
+  });
+});
+
+
 module.exports = router;

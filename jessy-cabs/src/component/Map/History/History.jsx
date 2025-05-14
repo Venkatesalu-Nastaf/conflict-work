@@ -40,7 +40,7 @@ import { TimeLine } from './TimeLine/TimeLine';
 import HistoryStopages from './HistoryStopages/HistoryStopages';
 import HistorySpeedViolation from './HistorySpeedViolation/HistorySpeedViolation';
 import HistoryTripSites from './HistoryTripSites/HistoryTripSites';
-
+import { ApiKey } from '../../ApiKey/mapApiKey';
 
 
 const Historystates = [
@@ -184,7 +184,7 @@ const History = () => {
   // Load the Google Maps script with your API key and necessary libraries
   const { isLoaded } = useLoadScript({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk", // Your actual Google Maps API key
+    googleMapsApiKey: ApiKey, // Your actual Google Maps API key
     libraries: ['places'], // Add any additional libraries you need
   });
 

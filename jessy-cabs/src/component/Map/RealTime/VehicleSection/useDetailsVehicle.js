@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { chennaiCoordinates } from "../MapSection/mapData";
 import { VehicleMapData } from "../../vehicleMapContext/vehcileMapContext";
 import dayjs from "dayjs";
+import { ApiKey } from "../../../ApiKey/mapApiKey";
 
 const useDetailsVehicle = () => {
   const apiUrl = APIURL;
@@ -405,7 +406,6 @@ const useDetailsVehicle = () => {
   // }
 
   // get current Point Address
-  const API_KEY = "AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk";
   // const getAddress = async () => {
   //     try {
   //       const response = await axios.get(
@@ -428,7 +428,7 @@ const useDetailsVehicle = () => {
       console.log(currentPosition1,"cccccccccccc");
       if(currentPosition1!==undefined){
       const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentPosition1?.Lattitude_loc},${currentPosition1?.Longitude_loc}&key=${API_KEY}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentPosition1?.Lattitude_loc},${currentPosition1?.Longitude_loc}&key=${ApiKey}`
       );
 
       if (response.data.status === "OK") {

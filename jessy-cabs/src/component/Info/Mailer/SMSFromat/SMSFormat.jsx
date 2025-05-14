@@ -84,7 +84,7 @@ const SMSFormat = () => {
                             />
                         </div>
                     </div>
-                    <div className="input-field" style={{marginTop:"20px"}}>
+                    <div className="input-field" style={{ marginTop: "20px" }}>
                         <div className="input">
                             <Button startIcon={<FontAwesomeIcon icon={faUpload} size="lg" />} variant="contained">
                                 Update

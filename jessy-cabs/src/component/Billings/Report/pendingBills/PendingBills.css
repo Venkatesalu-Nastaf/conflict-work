@@ -17,11 +17,29 @@
 }
 
 @media screen and (max-width: 768px) {
-  .pending-bills-input-field{
+  .pending-bills-input-field {
     justify-content: center;
   }
 }
 
-.bill-btn-main .bill-btn{
+.bill-btn-main .bill-btn {
   white-space: nowrap;
+}
+
+.bill-summary-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media only screen and (max-width:500px){
+
+  .bill-summary-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
 }

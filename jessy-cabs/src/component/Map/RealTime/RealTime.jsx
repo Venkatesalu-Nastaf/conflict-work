@@ -31,7 +31,7 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export const RealTime = ({ allVehicleList, vehicleCurrentLocation ,todayVehicle}) => {
+export const RealTime = ({ allVehicleList, vehicleCurrentLocation, todayVehicle }) => {
   const [selectMap, setSelectMap] = useState("OSMap");
 
   // Handle Select Change
@@ -44,31 +44,31 @@ export const RealTime = ({ allVehicleList, vehicleCurrentLocation ,todayVehicle}
       <div className="form-container-realtime">
         <div className="main-content-realtime">
           <div className="main-content-form">
-            <div style={{ position: "relative", height: "55px", width: "100%" }}>
+            <div style={{ position: "relative", height: "55px", width: "100%"}}>
               <HeaderDetails todayVehicle={todayVehicle} />
             </div>
-            <div style={{display:"flex"}}>
-                       <VehicleSection allVehicleList={allVehicleList} vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} />
+            <div  className="realtime-map">
+              <VehicleSection allVehicleList={allVehicleList} vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} />
 
-            <div className="main-body-container">
-            {/* <VehicleSection allVehicleList={allVehicleList} /> */}
-              <Select
-                labelId="map-select-label"
-                id="map-select"
-                value={selectMap}
-                onChange={handleChange}
-                displayEmpty
-                style={{ marginBottom: "10px", width: "150px" }}
-              >
-                <MenuItem value="OSMap">OSMap</MenuItem>
-                <MenuItem value="GoogleMap">Google Map</MenuItem>
-              </Select>
+              <div className="main-body-container">
+                {/* <VehicleSection allVehicleList={allVehicleList} /> */}
+                <Select
+                  labelId="map-select-label"
+                  id="map-select"
+                  value={selectMap}
+                  onChange={handleChange}
+                  displayEmpty
+                  style={{ marginBottom: "10px", width: "150px" }}
+                >
+                  <MenuItem value="OSMap">OSMap</MenuItem>
+                  <MenuItem value="GoogleMap">Google Map</MenuItem>
+                </Select>
 
-              {selectMap === "OSMap" &&
-                <OSMap vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} /> }
+                {selectMap === "OSMap" &&
+                  <OSMap vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} />}
                 {selectMap === "GoogleMap" &&
-                <GoogleMapFile vehicleCurrentLocation={todayVehicle} />}
-            </div>
+                  <GoogleMapFile vehicleCurrentLocation={todayVehicle} />}
+              </div>
             </div>
           </div>
         </div>

@@ -73,7 +73,7 @@ const useStationCreation = () => {
     });
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
-        console.log(name, value, 'mainbranch7777', book?.state);
+        // console.log(name, value, 'mainbranch7777', book?.state);
 
         if (type === 'checkbox') {
             setBook((prevBook) => ({
@@ -118,16 +118,16 @@ const useStationCreation = () => {
 
     const uniquestation = async (Stationname) => {
         // console.log(customerdataname,"namee")
-        console.log(Stationname,'station');
+        // console.log(Stationname,'station');
         
         if (Stationname) {
 
             const response = await axios.get(`${apiUrl}/getcreduniquestationname/${Stationname}`)
             const responsedata = response.data;
-             console.log(responsedata,'unique station data')
+            //  console.log(responsedata,'unique station data')
 
             // console.log(response,"data")
-            console.log(responsedata?.length,"reeee")
+            // console.log(responsedata?.length,"reeee")
 
             if (responsedata?.length >= 1) {
                 setCredentialData(true)
@@ -672,6 +672,8 @@ const handleStationChange = async (event, value) => {
                 gstno: '',
                 created_at: dayjs(),
             });
+            // console.log(book,"checking station add");
+            
             setisStationtrigger(!isstationtrigger)
             setSelectedState(''); // Clear the selected state
             setSelectedStation('');
@@ -750,9 +752,9 @@ const handleStationChange = async (event, value) => {
     const handleEdit = async () => {
         try {
             const { id, ...restdata } = selectedCustomerData;
-            console.log(selectedCustomerData,'customer datas',restdata)
+            // console.log(selectedCustomerData,'customer datas',restdata)
             await axios.put(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`, restdata);
-            console.log(selectedCustomerData,'customer datas2',restdata)
+            // console.log(selectedCustomerData,'customer datas2',restdata)
             setisStationtrigger(!isstationtrigger)
             setSuccess(true);
             setSuccessMessage("Successfully updated");
@@ -788,17 +790,17 @@ const handleStationChange = async (event, value) => {
         const statename = selectedCustomerData?.state;
         if (statename && statename !== "") {
             const fetchData = async () => {
-                console.log(statename, 'state22');
+                // console.log(statename, 'state22');
                 try {
                     const response = await axios.get(`${apiUrl}/getAllStationDetails/${statename}`);
-                    console.log(response.data, 'mainbranch');
+                    // console.log(response.data, 'mainbranch');
                     setGetMainBranchDetails(response.data);
 
                     // Check if response data is empty
                     if (response.data && response.data.length > 0) {
                         const address = response.data[0]?.address;
                         const gst = response.data[0]?.gstno;
-                        console.log(address, 'mainbranchaddress');
+                        // console.log(address, 'mainbranchaddress');
 
                         setSelectedCustomerData(prevData => ({
                             ...prevData,
@@ -831,7 +833,7 @@ const handleStationChange = async (event, value) => {
             try {
                 const response = await axios.get(`${apiUrl}/stationcreation`);
                 const data = response.data;
-                console.log(data,'list of datas')
+                // console.log(data,'list of datas')
                 
 
                 if (data.length > 0) {
@@ -844,7 +846,7 @@ const handleStationChange = async (event, value) => {
                     setCredentialData(false)
                     if (stationUpdate) {
                         localStorage.setItem("stationValue", "stationupadted");
-                        console.log("Station updated and value set in localStorage.");
+                        // console.log("Station updated and value set in localStorage.");
                         
                       }
                     
@@ -919,6 +921,7 @@ const handleStationChange = async (event, value) => {
             else if (actionName === 'Delete') {
                 try{
                 await axios.delete(`${apiUrl}/stationcreation/${selectedCustomerData?.stationid}`);
+                // console.log(selectedCustomerData?.stationid,"deleted from frontend");               
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");

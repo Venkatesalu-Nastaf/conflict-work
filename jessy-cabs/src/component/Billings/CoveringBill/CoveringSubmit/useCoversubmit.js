@@ -282,7 +282,7 @@ const useCoversubmit = () => {
                         },
                     });
                 const data = response.data;
-                console.log(data, 'data');
+                // console.log(data, 'data');
 
                 setInvoiceColumn(true)
                 if (data.length > 0) {
@@ -335,7 +335,7 @@ const useCoversubmit = () => {
                         },
                     });
                 const data = response.data;
-                console.log(data, 'data');
+                // console.log(data, 'data');
 
                 setInvoiceColumn(true)
                 if (data.length > 0) {

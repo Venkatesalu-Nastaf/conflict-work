@@ -139,8 +139,9 @@ router.get('/gettemplateattachimage/:templateid', (req, res) => {
         // if (results.length === 0) {
         //     return res.status(500).json({ error: "image not found" });
         // }
+        // console.log(results,"templateeee")
         if (results.length === 0) {
-            return res.status(400).json([]);
+            return res.status(200).json([]);
         }
         return res.status(200).json(results);
 

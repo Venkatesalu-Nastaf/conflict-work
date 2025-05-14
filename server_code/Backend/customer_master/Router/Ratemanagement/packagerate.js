@@ -39,8 +39,8 @@ const db = require('../../../db');
 //         });
 // });
 router.post('/ratemanagement-add', async (req, res) => {
-    const bookDataArray = req.body; 
-    console.log(bookDataArray, "bookarray");
+    const bookDataArray = req.body;
+    // console.log(bookDataArray, "bookarray");
 
     // Validate input
     if (!Array.isArray(bookDataArray) || bookDataArray.length === 0) {
@@ -59,6 +59,8 @@ router.post('/ratemanagement-add', async (req, res) => {
                         else resolve(result);
                     });
                 });
+                // console.log(result,"checning the add details");
+
                 insertResults.push(result);
             } catch (error) {
                 console.error("Insert error:", error);
@@ -84,13 +86,16 @@ router.post('/ratemanagement-add', async (req, res) => {
 router.delete('/ratemanagement/:id', (req, res) => {
     const customerid = req.params.id;
     const data = customerid?.split(',').map(Number);
+  
     // console.log(data,"data",typeof(data))
     // console.log(req.params.id,"kk",typeof(req.params.id))
     // db.query('DELETE FROM ratemanagement1 WHERE id = ?', customerid, (err, result) => {
-        db.query('DELETE FROM ratemanagement WHERE id in (?)',[data], (err, result) => {
+    db.query('DELETE FROM ratemanagement WHERE id in (?)', [data], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to delete data from MySQL" });
         }
+        // console.log(result,"checking deleted result");
+        
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Customer not found" });
         }
@@ -101,11 +106,14 @@ router.delete('/ratemanagement/:id', (req, res) => {
 router.put('/ratemanagement-edit/:id', (req, res) => {
     const customerId = req.params.id;
     const updatedCustomerData = req.body;
+    // console.log(req.body,"updated values");
 
     db.query('UPDATE ratemanagement SET ? WHERE id = ?', [updatedCustomerData, customerId], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }
+        // console.log(result,"ccfghhjoi");
+
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Customer not found" });
         }
@@ -124,14 +132,14 @@ router.get('/ratemanagement', (req, res) => {
 
 
 router.get('/ratemanagementdatavalidityfromratetype/:customer/:ratetype', (req, res) => {
-    const  customer=req.params.customer;
-    const ratetype=req.params.ratetype;
-    console.log(customer,ratetype,"ffff")
-    db.query('SELECT starttime,closetime FROM ratetype where ratetype=? and ratename=?',[customer,ratetype],(err, results) => {
+    const customer = req.params.customer;
+    const ratetype = req.params.ratetype;
+    // console.log(customer,ratetype,"ffff")
+    db.query('SELECT starttime,closetime FROM ratetype where ratetype=? and ratename=?', [customer, ratetype], (err, results) => {
         if (err) {
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
         }
-        console.log(results,"ss")
+        // console.log(results,"ss")
         return res.status(200).json(results);
     });
 });
@@ -163,7 +171,7 @@ router.get('/ratemanagementdatavalidityfromratetype/:customer/:ratetype', (req, 
 
 router.get('/ratemanagement-show', (req, res) => {
     const { rateType, orgName, vehicleType, stations } = req.query;
-    console.log("data", rateType, orgName, vehicleType);
+    // console.log("data", rateType, orgName, vehicleType);
 
     let sql = 'SELECT * FROM ratemanagement WHERE 1=1';
     let params = [];
@@ -184,8 +192,8 @@ router.get('/ratemanagement-show', (req, res) => {
     }
 
     if (stations === 'All') {
-    
-        sql += ''; 
+
+        sql += '';
     } else if (stations) {
         // If specific stations are provided, filter by those stations
         sql += ' AND stations=?';

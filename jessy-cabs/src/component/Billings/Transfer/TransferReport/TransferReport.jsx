@@ -326,7 +326,9 @@ const TransferReport = ({Statename }) => {
     }
   }, [pdfBillList])
 
-  const invoicenoCheck = invoiceno[0] === null || invoiceno[0] === undefined || invoiceno === "" || invoiceno[0] === "";
+  // const invoicenoCheck = invoiceno[0] === null || invoiceno[0] === undefined || invoiceno === "" || invoiceno[0] === "";
+
+  const invoicenoCheck =!invoiceno || invoiceno === "" || invoiceno[0] === undefined || invoiceno[0] === null ||invoiceno[0] === ""; 
 
   const handleDownloadPdf = async () => {
 

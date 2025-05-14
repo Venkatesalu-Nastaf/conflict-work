@@ -3,7 +3,7 @@ import axios from 'axios';
 import dayjs from "dayjs";
 import ReactDOMServer from 'react-dom/server';
 import Coverpdf from './coverpdf/Coverpdf';
-import { saveAs } from 'file-saver';
+// import { saveAs } from 'file-saver';
 // import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 import { APIURL } from "../../../url";
 import { useLocation } from 'react-router-dom';
@@ -48,9 +48,9 @@ const useGroupbilling = () => {
     const [gstno, setGstno] = useState('')
     const [selectedRow, setSelectedRow] = useState([])
     const { setRefPdfPrint, setRefCustomer, setReferNo } = RefPdfData()
-    const [groupBillAmount, setGroupBillAmount] = useState(0)
+    // const [ groupBillAmount,setGroupBillAmount] = useState(0)
     const [trips, setTrips] = useState(0)
-    const [department, setDepartment] = useState('');
+    // const [department, setDepartment] = useState('');
     const [referInvoiceno, setReferINVOICENO] = useState('')
     const [groupAmount, setGroupAmount] = useState(0)
     const [stateDetails, setStateDetails] = useState([]);
@@ -250,6 +250,7 @@ const useGroupbilling = () => {
             return sum + netAmountValue;
         }, 0);
     }, []);
+
     const handleKeyDown = async (event) => {
         setGroupInvoice(true)
         if (event.key === 'Enter') {
@@ -257,7 +258,7 @@ const useGroupbilling = () => {
             try {
                 const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
                 const response2 = await axios.get(`${apiUrl}/GroupReferenceforinvoiceno/${invoiceno}`);
-                console.log(response2.data)
+                // console.log(response2.data,"response2 data")
                 const referncenoinvoiceno = response2.data
                 if (referncenoinvoiceno.length > 0) {
                     setRefernceInvoice_no(referncenoinvoiceno)
@@ -267,7 +268,7 @@ const useGroupbilling = () => {
                 }
                 const GroupReference = response.data;
                 if (GroupReference.length > 0) {
-                    console.log(GroupReference, 'GroupBill=====');
+                    // console.log(GroupReference, 'GroupBill=====');
                     setDisabelData(true)
 
                     setViewGroupBill(response.data)
@@ -275,7 +276,7 @@ const useGroupbilling = () => {
                     // const RefId = GroupReference.map((li) => li.Trip_id)
                     // setParticularId(RefId)
                     const RefId = GroupReference.map((li) => li.Trip_id.split(','));
-                    console.log(RefId, 'idddddddddd');
+                    // console.log(RefId, 'idddddddddd');
 
                     setParticularId(RefId.flat());
                     const RefInvoiceNo = GroupReference.map((li) => li.InvoiceNo)
@@ -516,7 +517,7 @@ const useGroupbilling = () => {
         const customerValue = encodeURIComponent(customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : ''));
         const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
         const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
-        console.log(fromDateValue, toDateValue, 'groupbill000');
+        // console.log(fromDateValue, toDateValue, 'groupbill000');
 
         // Determine which API to call based on servicestationValue
         // const apiEndpoint = servicestationValue !== "" ? `${apiUrl}/Group-Billing` : `${apiUrl}/allGroup-Billing`;
@@ -531,11 +532,11 @@ const useGroupbilling = () => {
 
             const response = await axios.get(apiEndpoint, { params });
             const data = response.data;
-            console.log(data, 'group44');
+            // console.log(data, 'group44');
             setRows(response.data);
 
             if (Array.isArray(data) && data.length > 0) {
-                console.log(data, 'group4455');
+                // console.log(data, 'group4455');
                 setRows(data);
                 const netAmountSum = calculateNetAmountSum(data);
                 setTotalValue(netAmountSum);
@@ -821,12 +822,12 @@ const useGroupbilling = () => {
         let amount = parseFloat(amount1) || 0;
         let percent = parseFloat(percent1) || 0;
         let tollamount = parseFloat(toll1) || 0;
-        console.log(amount, percent, tollamount, 'zipgstadddd')
+        // console.log(amount, percent, tollamount, 'zipgstadddd')
 
 
 
         const datapercent = amount + percent + tollamount;
-        console.log(datapercent, 'zipgstaddddpercent', Math.round(datapercent))
+        // console.log(datapercent, 'zipgstaddddpercent', Math.round(datapercent))
 
         return Math.round(datapercent);
     }
@@ -1153,17 +1154,17 @@ const useGroupbilling = () => {
     // };
 
     function totalamountgst(gst, total) {
-        console.log(gst, total, 'zipgst')
+        // console.log(gst, total, 'zipgst')
         let gsttax = (gst * total) / 100;
-        console.log(gsttax, 'zipgst')
+        // console.log(gsttax, 'zipgst')
         return gsttax.toFixed(2);
 
     }
 
     function addTollparkparking(toll, parking, permit) {
-        console.log(toll, parking, permit, 'zip');
+        // console.log(toll, parking, permit, 'zip');
         let tollparkparking = (Number(toll) || 0) + (Number(parking) || 0) + (Number(permit) || 0);
-        console.log(tollparkparking, 'ziptotal');
+        // console.log(tollparkparking, 'ziptotal');
         return tollparkparking;
     }
 
@@ -1386,9 +1387,17 @@ const useGroupbilling = () => {
 
 
     const customerMotherdatagroupstation = async (customer) => {
-        console.log(customer, "enetr")
+        // console.log(customer, "enetr")
+
+        if (!customer) {
+            // console.log("customer is null or undefined");
+            return;
+        }
+
         try {
             const resultresponse = await axios.get(`${apiUrl}/customerinvoicecreate/${customer}`)
+            // console.log(resultresponse,"resultresponse");
+            
             const datas = resultresponse.data;
             return datas
 
@@ -1400,6 +1409,7 @@ const useGroupbilling = () => {
     const handlecustomer = async (e) => {
         console.log(e, "ppp")
         setCustomer(e)
+      
         const data = await customerMotherdatagroupstation(e);
         setServiceStation(data)
 
@@ -1459,7 +1469,7 @@ const useGroupbilling = () => {
                 return selectedRow ? selectedRow.customer : null;
             })
             .filter((tripid) => tripid !== null);
-        console.log(PdfSelectedcustomer, 'pdf', invoiceno, PdfSelectedTrips);
+        // console.log(PdfSelectedcustomer, 'pdf', invoiceno, PdfSelectedTrips);
 
 
         setRowSelectionModel(PdfSelectedTrips);
@@ -1478,7 +1488,7 @@ const useGroupbilling = () => {
                 const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
                 const GroupReference = response.data;
                 const Amount = GroupReference.map((li) => li.Amount)
-                setGroupBillAmount(Amount)
+                // setGroupBillAmount(Amount)
                 const Trips = GroupReference.map((li) => li.Trips)
                 const tripcount = parseInt(Trips)
                 setTrips(tripcount)
@@ -1576,7 +1586,7 @@ const useGroupbilling = () => {
             try {
                 if(invoiceno!==""){
                 const response = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`);
-                console.log(response.data, 'groupresp');
+                // console.log(response.data, 'groupresp');
                 setGroupBillingData(response.data)
                 }
             }
@@ -1605,7 +1615,7 @@ const useGroupbilling = () => {
         const total = rows.reduce((sum, li) => sum + li.totalcalcAmount, 0);
         const selectedTotal = rowSelectedValues.reduce((sum, value) => sum + value, 0);
         const Amount = total - selectedTotal;
-        console.log(amounts, totalAmount, Amount, 'remove-----', selectedTotal, total);
+        // console.log(amounts, totalAmount, Amount, 'remove-----', selectedTotal, total);
 
         const TripCount = trips - rowSelectionModel.length;
         const Tripcounts = TripCount.toString();
@@ -1614,9 +1624,9 @@ const useGroupbilling = () => {
             Amount: Amount,
             Trip_id: tripIds
         };
-        console.log(trips, rowSelectionModel.length, TripCount, typeof (TripCount), 'remove33');
+        // console.log(trips, rowSelectionModel.length, TripCount, typeof (TripCount), 'remove33');
 
-        console.log(groupUpdateList, 'removegroup');
+        // console.log(groupUpdateList, 'removegroup');
 
 
         try {
@@ -1624,19 +1634,26 @@ const useGroupbilling = () => {
                 tripids: tripIds,
                 status: 'Closed',
             });
-            console.log(response, 'response');
+            // console.log(response, 'response');
 
             const updatelist = await axios.put(`${apiUrl}/statusupdate`, groupUpdateList);
-            console.log(updatelist, 'uplist');
+            // console.log(updatelist, 'uplist');
+
+            // if (!invoiceno) {
+            //     // console.log("Invoice number is missing. Cannot fetch group list.");
+            //     return;
+            // }            
 
             const Details = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`);
+            // console.log(Details,"details");
+            
             const result = Details.data;
             const tripno = result?.map(li => li.Trip_id);
             const groupid = result?.map(li => li.id);
 
             if (tripno[0] === "") {
                 const getresponse = await axios.delete(`${apiUrl}/deleteGroup/${groupid}`);
-                console.log(getresponse, 'Removed Successfully');
+                // console.log(getresponse, 'Removed Successfully');
             }
             setSuccess(true)
             setSuccessMessage("Successfully Removed")
@@ -1670,7 +1687,7 @@ const useGroupbilling = () => {
     const handlegroupData = async () => {
         const presentIds = selectedRow.filter(id => particularId.includes(id.toString()));
         const stateNamce = await customerMotherdatagroupstation(customer || selectedCustomerDatas?.customer);
-        console.log(presentIds, 'present');
+        // console.log(presentIds, 'present');
         if (presentIds.length > 0) {
             setError(true)
             setisSaveload(false)
@@ -1682,7 +1699,7 @@ const useGroupbilling = () => {
 
         if (invoiceno === "") {
             const TripsCount = rowSelectionModel.length;
-            console.log(TripsCount, typeof (TripsCount), 'TripsCount');
+            // console.log(TripsCount, typeof (TripsCount), 'TripsCount');
 
             let TotalAmount = 0; // Change from const to let
             rowSelectedValues?.forEach((li) => {
@@ -1719,7 +1736,7 @@ const useGroupbilling = () => {
                     // station: department,
 
                 };
-                console.log(groupbillList, 'group========');
+                // console.log(groupbillList, 'group========');
 
                 await axios.post(`${apiUrl}/GroupBillingList`, groupbillList);
                 setSuccess(true)
@@ -1754,17 +1771,17 @@ const useGroupbilling = () => {
         }
         else {
             const TripsCount = rowSelectionModel.length;
-            console.log(trips, 'tripssss', TripsCount, rows.length);
+            // console.log(trips, 'tripssss', TripsCount, rows.length);
 
             let TotalAmount = 0; // Change from const to let
             rowSelectedValues?.forEach((li) => {
                 TotalAmount += li;
             });
-            console.log(rowSelectedValues, 'rowselected values', groupAmount);
+            // console.log(rowSelectedValues, 'rowselected values', groupAmount);
 
             const selectedTotal = rowSelectedValues?.reduce((sum, value) => sum + value, 0);
             const groupTotal = (groupAmount || []).reduce((sum, value) => sum + value, 0);
-            console.log('groupbill22s', groupAmount, selectedTotal, 'tot', groupTotal + selectedTotal, 'TotalAmount', TotalAmount);
+            // console.log('groupbill22s', groupAmount, selectedTotal, 'tot', groupTotal + selectedTotal, 'TotalAmount', TotalAmount);
 
             // const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
             // const ToDate = dayjs(toDate).format('YYYY-MM-DD')
@@ -1772,7 +1789,7 @@ const useGroupbilling = () => {
             const FromDate = dayjs(refPdfData[0]?.startdate).format('DD-MM-YYYY')
             const ToDate = dayjs(refPdfData[refPdfData.length - 1]?.startdate).format('DD-MM-YYYY')
             const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
-            console.log(fromDate, ToDate, InvoiceDate, TripsCount, TotalAmount, 'usegroup');
+            // console.log(fromDate, ToDate, InvoiceDate, TripsCount, TotalAmount, 'usegroup');
 
             if (rowSelectionModel.length === 0) {
                 setError(true);
@@ -1790,7 +1807,7 @@ const useGroupbilling = () => {
 
                 // Step 2: Add the selectedRow array to tripIdArray, then flatten it
                 tripIdArray = [...tripIdArray, ...selectedRow.map(String)].flat();
-                console.log(tripIdArray);
+                // console.log(tripIdArray);
                 const groupbillList = {
                     status: "Billed",
                     InvoiceDate: InvoiceDate,
@@ -1804,7 +1821,7 @@ const useGroupbilling = () => {
                     ReferenceNo: invoiceno
                 };
 
-                console.log(groupbillList, 'groupbill', groupBillingData, Trips, selectedRow, tripid, tripIdArray);
+                // console.log(groupbillList, 'groupbill', groupBillingData, Trips, selectedRow, tripid, tripIdArray);
                 await axios.post(`${apiUrl}/updateGroupBilling`, groupbillList)
                 setSuccess(true)
                 setisSaveload(false)
@@ -1831,7 +1848,7 @@ const useGroupbilling = () => {
             setErrorMessage("Already INVOICE Generated");
             return;
         }
-        console.log(selectedRow, "ROWTRIPD")
+        // console.log(selectedRow, "ROWTRIPD")
         try {
             setisBillload(true)
             const InvoiceDate1 = dayjs(Billingdate).format('YYYY-MM-DD')
@@ -1845,7 +1862,7 @@ const useGroupbilling = () => {
 
             };
             const response = await axios.post(`${apiUrl}/billgeneratecoveringbill`, groupinvoiceList)
-            console.log(response)
+            // console.log(response)
             setSuccess(true)
             setisBillload(false)
             setSuccessMessage("Successfully Added")

@@ -7,7 +7,7 @@ const moment = require('moment');
 router.post('/customers', (req, res) => {
   const customerData = req.body;
   // const customerData = req.body;
-  console.log("customerData", customerData)
+  // console.log("customerData", customerData)
   // Convert billingGroup array to a comma-separated string
   // if (customerData.billingGroup && Array.isArray(customerData.billingGroup)) {
   //   customerData.billingGroup = customerData.billingGroup.join(', ');
@@ -17,7 +17,7 @@ router.post('/customers', (req, res) => {
       console.log("err", err);
       return res.status(404).json({ message: "there is issu checking customer " })
     }
-    console.log("result", result)
+    // console.log("result", result)
     if (result.length > 0) {
       return res.status(200).json({ message: "Customer Name Exist..", success: false })
     } else {
@@ -26,6 +26,8 @@ router.post('/customers', (req, res) => {
           console.log(err)
           return res.status(500).json({ error: 'Failed to insert data into MySQL' });
         }
+        // console.log(result,"checking add");
+        
         return res.status(201).json({ message: 'Data inserted successfully', success: true });
       });
     }
@@ -36,11 +38,13 @@ router.post('/customers', (req, res) => {
 // Delete Customer Master data
 router.delete('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
+  
   db.query('DELETE FROM customers WHERE customerId = ?', customerId, (err, result) => {
     if (err) {
       console.log(err, "oo")
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }
+    
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Customer not found' });
     }
@@ -61,6 +65,7 @@ router.get('/customers', (req, res) => {
 router.put('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   const updatedCustomerData = req.body;
+  
   // if (updatedCustomerData.billingGroup && Array.isArray(updatedCustomerData.billingGroup)) {
   //   updatedCustomerData.billingGroup = updatedCustomerData.billingGroup.join(', ');
   // }
@@ -68,6 +73,8 @@ router.put('/customers/:customerId', (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to update data in MySQL' });
     }
+    // console.log(result,"updated resultt");
+    
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Customer not found' });
     }
@@ -187,7 +194,7 @@ GROUP BY
       console.log(err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
-    console.log(results, "kk")
+    // console.log(results, "kk")
     return res.status(200).json(results);
   });
 });
@@ -257,6 +264,7 @@ router.post('/customerorderdbydata', (req, res) => {
         if (err) {
           reject(err);
         } else {
+          // console.log(result,"checking");       
           resolve(result);
         }
       });
@@ -288,6 +296,8 @@ router.get('/getcustomerorderdata/:customerdata', (req, res) => {
 
 router.put('/updatecustomerorderdata', (req, res) => {
   const customerdata = req.body;
+  // console.log(customerdata,"checking upd");
+  
 
   if (!Array.isArray(customerdata)) {
     return res.status(400).json({ error: "Request body must be an array" });
@@ -305,6 +315,8 @@ router.put('/updatecustomerorderdata', (req, res) => {
             if (err) {
               reject(err);
             } else {
+              // console.log(result,"updated");
+             
               resolve(result);
             }
           }
@@ -340,11 +352,17 @@ router.put('/updatecustomerorderdata', (req, res) => {
 router.delete("/deletecustomerorderdatasdata/:id", (req, res) => {
   const deleteid = req.params.id;
 
+  console.log(deleteid,"deleteid");
+  
+
   db.query("delete from customerOrderdata where id=?", [deleteid], (err, results) => {
     if (err) {
       console.log("ordercustomer", err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
+
+    console.log(results,"delete res");
+    
 
     return res.status(200).json("data delete succesfuully")
   })
@@ -363,6 +381,7 @@ router.get('/ratemanagmentCustomerdata', (req, res) => {
 
 router.delete("/deletecustomerorderdata/:customer", (req, res) => {
   const customer = req.params.customer;
+  
   db.query("delete from customerOrderdata where customer=?", [customer], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });

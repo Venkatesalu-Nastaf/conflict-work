@@ -105,6 +105,7 @@ const useTripsheet = () => {
         Hcldatakmvalue: 0,
         HclMaxConflctdata: 0
     });
+    const tripIdRef=useRef(null);
     const [temporaryDeleteGmap,setTemporaryDeleteGmap] = useState(false);
     // book data
     const bookData = {
@@ -1038,6 +1039,9 @@ const useTripsheet = () => {
 
     const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
+    const handleEditClickfocus = ()=>{
+        tripIdRef.current?.focus();
+    }
     const handleCancel = () => {
         setBook({ ...bookData, travelsname: "" }); // Ensure travelsname is empty
         setSelectedCustomerDatas({});
@@ -1107,6 +1111,7 @@ const useTripsheet = () => {
         // localStorage.removeItem('selectedTripid');
         setFuelAdvancedamountHide(null)
         setDeleteTripsheetData(false)
+        handleEditClickfocus()
     };
     const handlecheck = async () => {
         const statusdata = formData.status || book.status || selectedCustomerData.status;
@@ -9113,7 +9118,7 @@ const handleTemporaryDelete = async () => {
         outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, handleAutocompleteChangecustomer, orderByDropDown, speeddailacesss, speeddailacesssedit,
         tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
         // this zoom image code state-----------------
-        posX, posY, zoom, handleZoomIn, handleZoomOut, startDrag, stopDrag, handleScrollZoom, isDragging, onDrag, handleFullDeleteMapData,
+        posX, posY, zoom, handleZoomIn, handleZoomOut, startDrag, stopDrag, handleScrollZoom, isDragging, onDrag, handleFullDeleteMapData,tripIdRef,
         mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl,bookingTripStatus,handleTemporaryDelete,temporaryDeleteGmap,setTemporaryDeleteGmap,handleTemporaryDeleteMapDataClose,handleTemporaryDeleteMapDataOpen
         // this zoom image code state-----------------
 

@@ -70,7 +70,7 @@ router.get('/userdataforuserinfo/:userid', (req, res) => {
             return res.status(404).json({ error: 'Route data not found' });
         }
         const routeData = result;
-        console.log(result,"rtyuio");
+        // console.log(result,"rtyuio");
         
         return res.status(200).json(routeData);
     });

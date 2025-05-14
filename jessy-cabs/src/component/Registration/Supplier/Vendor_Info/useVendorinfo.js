@@ -206,22 +206,56 @@ const useVendorinfo = () => {
         });
 
         // Add borders to cells
-        worksheet.eachRow({ includeEmpty: false }, (row) => {
-            row.eachCell({ includeEmpty: false }, (cell) => {
-                cell.border = {
-                    top: { style: 'thin' },
-                    left: { style: 'thin' },
-                    bottom: { style: 'thin' },
-                    right: { style: 'thin' },
-                };
-                const isHeader = row.number === 1;
-                worksheet.getCell(cell).alignment = {
-                    horizontal: isHeader ? 'center' : 'left',
-                    vertical: 'middle',
-                };
-            });
-        });
+        // worksheet.eachRow({ includeEmpty: false }, (row) => {
+        //     row.eachCell({ includeEmpty: false }, (cell) => {
+        //         cell.border = {
+        //             top: { style: 'thin' },
+        //             left: { style: 'thin' },
+        //             bottom: { style: 'thin' },
+        //             right: { style: 'thin' },
+        //         };
+        //         const isHeader = row.number === 1;
+        //         worksheet.getCell(cell).alignment = {
+        //             horizontal: isHeader ? 'center' : 'left',
+        //             vertical: 'middle',
+        //         };
+        //     });
+        // });
 
+      //   worksheet.eachRow({ includeEmpty: false }, (row) => {
+      //     row.eachCell({ includeEmpty: false }, (cell) => {
+      //         cell.border = {
+      //             top: { style: 'thin' },
+      //             left: { style: 'thin' },
+      //             bottom: { style: 'thin' },
+      //             right: { style: 'thin' },
+      //         };
+      //         const isHeader = row.number === 1;
+      //         cell.alignment = {
+      //             horizontal: isHeader ? 'center' : 'left',
+      //             vertical: 'middle',
+      //         };
+      //     });
+      // });
+
+      worksheet.eachRow({ includeEmpty: false }, (row) => {
+        const currentCell = row._cells;
+        currentCell.forEach((singleCell) => {
+            const cellAddress = singleCell._address;
+            worksheet.getCell(cellAddress).border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' },
+            };
+            const isHeader = row.number === 1;
+            worksheet.getCell(cellAddress).alignment = {
+                horizontal: isHeader ? 'center' : 'left',
+                vertical: 'middle',
+            };
+        });
+    });
+      
         // Write workbook to buffer and download
         const buf = await workbook.xlsx.writeBuffer();
         saveAs(new Blob([buf]), `${fileName}.xlsx`);
@@ -780,6 +814,8 @@ const useVendorinfo = () => {
     try {
      
       await axios.post(`${apiUrl}/accountinfo`, book);
+      // console.log(book,"checking");
+      
       handleCancel();
       // setRows([]);
       setSuccess(true);
@@ -834,6 +870,8 @@ const useVendorinfo = () => {
       const { id, ...restselectedcustomer } = selectedCustomerData
       const updatedCustomer = { ...restselectedcustomer };
       await axios.put(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`, updatedCustomer);
+      // console.log(updatedCustomer,"editing");
+      
       setSuccess(true);
       setSuccessMessage("Successfully updated");
       setisAButtonLoading(false)
@@ -902,6 +940,7 @@ const useVendorinfo = () => {
     try {
         const response = await axios.get(`${apiUrl}/accountinfo`);
         const data = response.data;
+        // console.log(data,"getting the values");       
         const rowsWithUniqueId = data.map((row, index) => ({
             ...row,
             id: index + 1,
@@ -981,6 +1020,7 @@ const useVendorinfo = () => {
       else if (actionName === 'Delete') {
         try{
         await axios.delete(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`);
+        // console.log(selectedCustomerData.accountNo,"delete");   
         setSelectedCustomerData(null);
         setSuccess(true);
         setSuccessMessage("Successfully Deleted");

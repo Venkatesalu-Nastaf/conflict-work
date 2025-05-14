@@ -8,6 +8,7 @@ const path = require('path');
 const cron = require('node-cron');
 
 
+
 router.use(express.static('customer_master'));
 
 // vehicle_info database:-
@@ -40,6 +41,8 @@ router.get('/vechileinfogetdata', (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
+    // console.log(result,"checking the get result");
+    
     if (result.length === 0) {
       return res.status(404).json({ error: 'vehicleid not found' });
     }
@@ -68,13 +71,15 @@ router.get('/vechiclenameinfo', (req, res) => {
 });
 router.post('/vehicleinfo', (req, res) => {
   const bookData = req.body;
+  console.log(bookData,"values");
+  
 
   db.query('INSERT INTO vehicleinfo SET ?', bookData, (err, result) => {
     if (err) {
       console.log(err)
       return res.status(500).json({ error: "Failed to insert data" });
     }
-    console.log(result)
+    // console.log(result,"checking add vehicle details")
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
@@ -82,10 +87,13 @@ router.post('/vehicleinfo', (req, res) => {
 // Delete Customer Master data
 router.delete('/vehicleinfo/:vehicleId', (req, res) => {
   const vehicleId = req.params.vehicleId;
+  // console.log(vehicleId, "checking the id")
   db.query('DELETE FROM vehicleinfo WHERE vehicleId = ?', vehicleId, (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }
+    // console.log(result, "checking");
+   
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Customer not found' });
     }
@@ -96,12 +104,17 @@ router.delete('/vehicleinfo/:vehicleId', (req, res) => {
 // Update Customer Master details
 router.put('/vehicleinfo/:vehicleId', (req, res) => {
   const vehicleId = req.params.vehicleId;
+  // console.log(vehicleId,"iddd");
+  
   const updatedCustomerData = req.body;
+  // console.log(updatedCustomerData,"checking upd");
+  
 
   db.query('UPDATE vehicleinfo SET ? WHERE vehicleId = ?', [updatedCustomerData, vehicleId], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to update data in MySQL' });
     }
+    // console.log(result, "updated values");   
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Customer not found' });
     }
@@ -357,7 +370,7 @@ cron.schedule("00 09 * * *", () => {
 
 router.get('/searchvehicleinfo', (req, res) => {
   const { searchText, fromDate, toDate } = req.query;
-  console.log(searchText, fromDate, toDate, "dateeeee");
+  // console.log(searchText, fromDate, toDate, "dateeeee");
 
   let query = 'SELECT * FROM vehicleinfo WHERE 1=1';
   let params = [];
@@ -613,15 +626,15 @@ router.get('/uniquevechregnodata/:vehregno',(req,res)=>{
 
 router.post("/getvehciledatauniquevehilcle",(req,res)=>{
   const {vechiclevalue,created_at}=req.body;
-  console.log(vechiclevalue,created_at,"vehhh")
+  // console.log(vechiclevalue,created_at,"vehhh")
   db.query("insert into VehicleName(VechicleNames,created_at) values(?,?)",[vechiclevalue,created_at],(err,result)=>{
     if (err) {
       return res.status(500).json({message: 'Failed to retrieve to data'});
       // return res.status(500).json({error:err});
-    }
-   
+    }  
+    // console.log(result,"checking the add vehicle");
+    
     return res.status(200).json({message:"inserted succesfully"});
-
   })
 })
 

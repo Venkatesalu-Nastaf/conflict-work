@@ -341,7 +341,7 @@ export const BillWiseReceipt = () => {
                         onRowSelectionModelChange={(newRowSelectionModel) => {
                           handleRowSelection(newRowSelectionModel);
                         }}
-                      />;
+                      />
                     </Box>
                   </div>
                 </div>

@@ -1137,7 +1137,7 @@ console.log(ApiKey,"apikeyyyyyyyyyyyyyyyyyyyyyyyyyy");
 
   return (
     <>
-      <div >
+      <div className='editmap-container'>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           {/* <LoadScript googleMapsApiKey="AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk"> */}
           <PlacesAutocomplete
@@ -1166,6 +1166,7 @@ console.log(ApiKey,"apikeyyyyyyyyyyyyyyyyyyyyyyyyyy");
             )}
           </PlacesAutocomplete>
           <GoogleMap
+           className="google-map"
             mapContainerStyle={mapStyles}
             zoom={5}
             center={center}
@@ -1421,7 +1422,7 @@ console.log(ApiKey,"apikeyyyyyyyyyyyyyyyyyyyyyyyyyy");
             </Modal>
           )}
           {/* </LoadScript> */}
-          <div style={{ position: "relative" }}>
+          <div className='buttons-container'>
             <div className="buttons-div">
 
               {(fullGpsData.length !== polyLineWaypoints.length || startLat !== startLatVerify[0] || endLatVerify[0] !== endLat) && (
@@ -1430,24 +1431,24 @@ console.log(ApiKey,"apikeyyyyyyyyyyyyyyyyyyyyyyyyyy");
               {fullGpsData.length !== polyLineWaypoints.length || (startLat !== startLatVerify[0] || endLatVerify[0] !== endLat) ? <button onClick={() => handleMapCapture()} className="Capture-View" >Capture View</button> :
                 <button onClick={() => handleNoEditCapture()} className="Capture-View" >Capture View</button>}
             </div>
-            <div style={{ position: "absolute", top: "3px", left: "40%" }}>
-              {success ? <p style={{ display: "flex", justifyContent: "center", color: '#347928', fontSize: "22px", fontWeight: 600 }}>Successfully Captured....</p> :
+            <div className='error-msg'>
+              {success ? <p className="success-msg" >Successfully Captured....</p> :
                 ""}
             </div>
-            <div style={{ position: "absolute", top: "3px", left: "40%" }}>
-              {error ? <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>Please Draw The Route....</p> :
+            <div className='error-msg'>
+              {error ? <p className="error-textmsg">Please Draw The Route....</p> :
                 ""}
             </div>
-            <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+            <div className='error-msg'>
               {(errorMessage && (startLat === "" || startLat === undefined)) ? (
-                <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>
+                <p className="error-textmsg">
                   Mark Your StartPoint
                 </p>
               ) : null}
             </div>
-            <div style={{ position: "absolute", top: "3px", left: "40%" }}>
+            <div className='error-msg'>
               {(errorMessage && (startLat !== "" && startLat !== undefined) && (endLat === "" || endLat === undefined)) ? (
-                <p style={{ display: "flex", justifyContent: "center", color: 'red', fontSize: "22px", fontWeight: 600 }}>
+                <p className="error-textmsg">
                   Mark Your EndPoint
                 </p>
               ) : null}

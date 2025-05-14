@@ -49,7 +49,7 @@ router.get('/getVehicleNamesList', (req, res) => {
 
 router.post('/updateVehicleNamesList', (req, res) => {
   const { vehicleName, id } = req.body;
-  console.log(vehicleName, "vehiclenameeeeeeee", id);
+  // console.log(vehicleName, "vehiclenameeeeeeee", id);
 
   const sqlQuery = "UPDATE VehicleName SET VechicleNames = ? WHERE id = ?";
 
@@ -57,6 +57,7 @@ router.post('/updateVehicleNamesList', (req, res) => {
     if (error) {
       console.log(error, "error");
     }
+    // console.log(result,"checking updation"); 
     res.status(200).json({ message: 'Status updated successfully' });
   })
 })
@@ -71,6 +72,8 @@ router.post('/deleteVehicleNamesList', (req, res) => {
       console.error(error, "error");
       return res.status(500).json({ error: "Database query failed" });
     }
+    // console.log(result, "checking deleted result");
+    
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "No record found to delete" });
     }

@@ -84,6 +84,8 @@ const useTransferdataentry = () => {
     const [loading, setLoading] = useState(false)
     const [matchTripID, setMatchTripID] = useState('')
     const [oldBillDate,setOldBillDate] = useState("");
+    const [oldFromDate,setOldFromDate] = useState("");
+    const [oldToDate,setOldToDate] = useState("");
     const [stateenter,setStateEnter] = useState("");
 
     // loading //
@@ -347,6 +349,8 @@ const useTransferdataentry = () => {
         setEndDate(updatedFormData.EndDate);
         setBillingdate(updatedFormData.Billdate);
         setOldBillDate(updatedFormData.Billdate);
+        setOldFromDate(updatedFormData.FromDate);
+        setOldToDate(updatedFormData.EndDate);
         setServiceStation(updatedFormData.Stations);
         setTotalValue(parseInt(updatedFormData.Amount));
         setBillingPage(updatedFormData?.billingsheet)
@@ -1703,6 +1707,7 @@ const useTransferdataentry = () => {
 
     const handleAddGroup = async () => {
         const presentIds = rowSelectionModel?.filter(id => matchTripID.includes(id.toString()));
+// console.log(oldFromDate,"oooooooooooooooo",oldToDate,fromDate,toDate);
 
         if (billedRowSelect?.length >= 1) {
             setError(true)
@@ -1717,7 +1722,7 @@ const useTransferdataentry = () => {
         }
 
 
-        if (rowSelectionModel.length === 0 && Billingdate === oldBillDate) {
+        if (rowSelectionModel.length === 0 && Billingdate === oldBillDate && oldFromDate === fromDate && oldToDate === toDate) {
             setError(true);
             setErrorMessage("Please select the Row");
             return;
@@ -1813,6 +1818,7 @@ const useTransferdataentry = () => {
                     throw new Error("Rows data is empty");
                 }
                 setisbtnloading(true)
+                console.log(validTrips, 'Valid Trips for posting',validTrips.length);
 
                 const fromdate = rows[0]?.startdate;
                 // const stationsName = rows[0]?.department;
@@ -1846,7 +1852,7 @@ const useTransferdataentry = () => {
                 setMisGroupTripId(validTrips.map(trip => trip.tripid));
 
                 // Log the valid trips and transfer list for debugging
-                console.log(validTrips, 'Valid Trips for posting');
+                console.log(validTrips, 'Valid Trips for posting',validTrips.length);
 
 
                 // console.log(tripDetails, 'Selected Trip IDs and Amounts');                 
@@ -1889,7 +1895,7 @@ const useTransferdataentry = () => {
         else if (groupId !== "") {
             // updateTransferListTrip'
                         
-            if (rowSelectionModel.length === 0 && Billingdate === oldBillDate ) {
+            if (rowSelectionModel.length === 0 && Billingdate === oldBillDate && oldFromDate === fromDate && oldToDate === toDate ) {
             
                 setError(true);
                 setErrorMessage("Please select the Row or Change the Billing Date");
@@ -1949,8 +1955,11 @@ const useTransferdataentry = () => {
                 const tripIds = filteredRows.map(item => String(item.tripid));
                 const tripidArray = tripid?.split(',');
 
-                const combinedTripIds = [...tripIds, ...tripidArray];
+                // const combinedTripIds = [...tripIds, ...tripidArray];
+                const combinedTripIds = [...tripIds, ...tripidArray].filter(id => id !== ''); 
 
+                console.log(combinedTripIds,"tripidcounttttttttttttttt",tripIds,tripidArray);
+                
                 if (invalidRow.length > 0) {
                     setError(true);
                     setisbtnloading(false)
@@ -1982,6 +1991,7 @@ const useTransferdataentry = () => {
                 const totalamount = fullTotalAmount.toString()
                 const tripscount = TotalTrips.toString()
                 const statusUpdate = invoiceno ? "Billed" : "notbilled"
+                        console.log(fromDate,"ffffffffffffffffffffffffff",todate);
 
                 const transferlist = {
                     Billdate: billDate,
@@ -2146,9 +2156,13 @@ const useTransferdataentry = () => {
                     console.log(response.data, "repondedata", transferTripId)
                     setMatchTripID(transferTripId)
                     const BillDate = response.data[0]?.Billdate;
+                    const fromdate = response.data[0]?.FromDate;
+                    const enddate = response.data[0]?.EndDate;
                     const fromDate1 = dayjs(response.data[0].FromDate).format('YYYY-MM-DD');
                     const toDate = dayjs(response.data[0].EndDate).format('YYYY-MM-DD');
                     setOldBillDate(BillDate)
+                    setOldFromDate(fromdate)
+                    setOldToDate(enddate)
                     setFromDate(fromDate1);
                     setToDate(toDate);
 

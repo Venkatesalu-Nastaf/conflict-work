@@ -109,7 +109,7 @@ export const allStations = [
   "Chamarajanagar", "Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere",
   "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu",
   "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara",
-  "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir", "Bengaluru",
+  "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir","Bangalore",
 
   // Tamil Nadu
   "Abiramam", "Adirampattinam", "Aduthurai", "Alagapuram", "Alandur", "Alanganallur", "Alangayam", "Alwa Tirunagari", "Ambasamudram",
@@ -647,7 +647,7 @@ export const stateToStations = {
       "Chamarajanagar", "Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere",
       "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu",
       "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara",
-      "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir", "Bengaluru",
+      "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir","Bangalore",
     ],
   "Kerala":
     [

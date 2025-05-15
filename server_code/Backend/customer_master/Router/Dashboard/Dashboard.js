@@ -452,13 +452,13 @@ WHERE YEAR(startdate) = ?
 
 // get start month to current month in this year All
 router.get('/getAllSelectedMonthProfit', (req, res) => {
-  let {  selectedYear } = req.query;
+  let {  selectedProfitYear } = req.query;
 
   // if not passed, take current date values
   const currentDate = new Date();
 
   const compareyear = currentDate.getFullYear();
-  const year = parseInt(selectedYear)
+  const year = parseInt(selectedProfitYear)
   const monthLimit =  compareyear === year ? currentDate.getMonth() + 1 : 12;
 
   console.log("Year:", year, "Selected Month:", monthLimit);
@@ -491,14 +491,14 @@ router.get('/getAllSelectedMonthProfit', (req, res) => {
 
 // get start month to current month selected year and selected month
 router.get('/getFromToSelectedMonthProfit', (req, res) => {
-  let { selectedMonth, selectedYear } = req.query;
+  let { selectedProfitMonth, selectedProfitYear } = req.query;
 
-  if (!selectedMonth || !selectedYear) {
+  if (!selectedProfitMonth || !selectedProfitYear) {
     return res.status(400).send("selectedMonth and selectedYear are required");
   }
 
-  const month = new Date(selectedMonth).getMonth() + 1;
-  const year = parseInt(selectedYear);
+  const month = new Date(selectedProfitMonth).getMonth() + 1;
+  const year = parseInt(selectedProfitYear);
 
   console.log("Selected Year:", year, "Selected Month:", month);
 

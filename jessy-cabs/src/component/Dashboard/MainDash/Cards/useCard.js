@@ -21,6 +21,11 @@ const useCard = () => {
   const location = useLocation()
   const currentYear = new Date().getFullYear();
 
+  // for getting yearly reports for various months usin from and to
+   const [fromYear, setFromYear] = useState("");
+    const [toYear, setToYear] = useState("");
+    const [reportData, setReportData] = useState([]);
+
 
   // console.log(value,'valuecard')
 
@@ -381,6 +386,27 @@ useEffect(() => {
   };
 
 
+  useEffect(()=>{
+    const fetchReports=async()=>{
+      try{
+        const response=await axios.get(`${apiUrl}/getAllCurrentAndPreviousYearReports`,{
+          params:{
+            fromSelectedYear:fromYear,
+            toSelectedYear:toYear,
+          },
+        });
+        setReportData(response.data);
+      }catch(error){
+        console.error("error fetching reports:",error);
+      
+      }
+    };
+    if(fromYear<=toYear){
+      fetchReports();
+    }
+  },[fromYear,toYear,apiUrl])
+
+
 
   return {
     billAmount,
@@ -397,6 +423,11 @@ useEffect(() => {
     setProfitdata,
     // all,
     // setAll,
+    reportData,
+    fromYear,
+    toYear,
+    setFromYear,
+    setToYear
 
 
   }

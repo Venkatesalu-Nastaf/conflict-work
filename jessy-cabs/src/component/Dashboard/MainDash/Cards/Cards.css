@@ -12,6 +12,47 @@
 .parentContainer {
   width: 100%;
 }
+.card-filter-data
+{
+  display: flex;
+  flex-direction:row;
+   gap: 10px;
+  align-items: center;
+  padding: 12px;
+  max-width: 400px;
+}
+
+.card-filter-data .from,
+.card-filter-data .to {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
+
+.card-filter-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 4px;
+}
+
+.card-filter-data select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.card-filter-data select:focus {
+  border-color: #4a90e2;
+}
+#year
+{
+  font-weight: bold;
+}
 
 @media screen and (min-width:769px) and (max-width: 815px) {
   .cards-container {

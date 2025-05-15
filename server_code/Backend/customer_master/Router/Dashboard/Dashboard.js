@@ -393,8 +393,8 @@ router.get('/getvendorAmountDetails', (req, res) => {
 
   // const year = new Date(selectedMonth).getFullYear();
   const month = new Date(selectedMonth).getMonth() + 1;
-   const year = parseInt(selectedYear)
-  console.log(selectedMonth, "selectedDate", "Year:", year, "Month:", month,selectedYear,typeof(year),year);
+  const year = parseInt(selectedYear)
+  console.log(selectedMonth, "selectedDate", "Year:", year, "Month:", month, selectedYear, typeof (year), year);
 
   const sqlVendorAmountQuery = `
     SELECT 
@@ -452,14 +452,14 @@ WHERE YEAR(startdate) = ?
 
 // get start month to current month in this year All
 router.get('/getAllSelectedMonthProfit', (req, res) => {
-  let {  selectedYear } = req.query;
+  let { selectedYear } = req.query;
 
   // if not passed, take current date values
   const currentDate = new Date();
 
   const compareyear = currentDate.getFullYear();
   const year = parseInt(selectedYear)
-  const monthLimit =  compareyear === year ? currentDate.getMonth() + 1 : 12;
+  const monthLimit = compareyear === year ? currentDate.getMonth() + 1 : 12;
 
   console.log("Year:", year, "Selected Month:", monthLimit);
 
@@ -524,6 +524,43 @@ router.get('/getFromToSelectedMonthProfit', (req, res) => {
 
     console.log(result, "profit result for selected month");
     return res.status(200).json(result);
+  });
+});
+
+// get profit details to get from to end selected  year
+router.get('/getAllCurrentAndPreviousYearReports', (req, res) => {
+  let { fromSelectedYear, toSelectedYear } = req.query;
+
+  let yearsList = '';
+  for (let year = fromSelectedYear; year <= toSelectedYear; year++) {
+    yearsList += `SELECT ${year} AS year UNION ALL `;
+  }
+  yearsList = yearsList.slice(0, -11);
+  console.log(yearsList, "yearlist");
+
+
+  const sqlQuery = `
+    SELECT 
+      y.year,
+      IFNULL(SUM(t.totalcalcAmount), 0) AS totalCalcAmount,
+      IFNULL(SUM(CASE WHEN t.Vendor_FULLTotalAmount > 0 THEN t.Vendor_FULLTotalAmount ELSE 0 END), 0) AS totalVendorAmount,
+      (IFNULL(SUM(t.totalcalcAmount), 0) - IFNULL(SUM(CASE WHEN t.Vendor_FULLTotalAmount > 0 THEN t.Vendor_FULLTotalAmount ELSE 0 END), 0)) AS profit
+    FROM (
+      ${yearsList}
+    ) y
+    LEFT JOIN tripsheet t ON YEAR(t.startdate) = y.year
+      AND t.Vendor_FULLTotalAmount IS NOT NULL
+      AND t.Vendor_FULLTotalAmount != 0
+    GROUP BY y.year
+    ORDER BY y.year
+  `;
+
+  db.query(sqlQuery, (err, results) => {
+    if (err) {
+      console.error("Error fetching year totals:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    res.json(results);
   });
 });
 

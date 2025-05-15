@@ -106,15 +106,18 @@ const useExeclpage = () => {
         { key: "calcPackage", header: "Package", width: 150 },
         { key: "VendorName", header: "Vendor Name", width: 150 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
-        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
-        // { key: "vehType", header: "Vehicle Make", width: 180 },
-        { key: "vehicleName", header: "Vehicle Make", width: 180 },
+        // { key: "vehicleName2", header: "Vehicle Name", width: 120 },
+     
+        // { key: "vehicleName", header: "Vehicle Make", width: 180 },
+          { key: "vehicleName2", header: "Vehicle Make", width: 120 },
+     
+        { key: "vehicleName", header: "Billing vehtype (as per agreement)", width: 180 },
         // { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
         // { key: "vehicleName", header: "Vehicle Make", width: 180 },
         { key: "segement", header: "vehicle Segment", width: 180 },
         { key: "fueltype", header: "Fuel Used", width: 120 },
         // { key: "tripsheetdate", header: "Date", width: 120 },
-        { key: "sheoutDatetrip", header: "Date", width: 120 },
+        { key: "starthcldate", header: "Date", width: 120 },
         // { key: "employeeno", header: "User Name", width: 150 },
         { key: "guestname", header: "User Name", width: 150 },
         { key: "Gender", header: "Gender", width: 100 },
@@ -140,7 +143,8 @@ const useExeclpage = () => {
         { key: "shedin2", header: "Total Km", width: 120 },
         { key: "TOTALtollandpark", header: "DND/Toll/Parking Amount", width: 200 },
         { key: "totalcalcAmount", header: "Total Amount", width: 150 },
-        { key: "shedInDate", header: "End Date", width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "") },
+        // { key: "shedInDate", header: "End Date", width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "") },
+           { key: "shedindatehcl", header: "End Date", width: 200,},
         { key: "opsremark", header: "Ops Remarks", width: 150 }
 
     ]
@@ -499,7 +503,11 @@ const useExeclpage = () => {
                     // singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
                     singleData2["sheoutDatetrip"] = singleData2["shedOutDate"] ? dayjs(singleData2["shedOutDate"]).format("DD/MM/YYYY") : ""
+                    singleData2 ["startDatehcl"] =singleData2["startdate"] ? dayjs(singleData2["startdate"]).format("DD/MM/YYYY") : ""
+                      singleData2 ["closeDatehcl"] =singleData2["closedate"] ? dayjs(singleData2["closedate"]).format("DD/MM/YYYY") : ""
+                      singleData2["starthcldate"]=singleData2["duty"] === "Outstation" ?  singleData2["sheoutDatetrip"] :  singleData2 ["startDatehcl"]
                     singleData2["shedInDate"] = singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD/MM/YYYY") : ""
+                    singleData2["shedindatehcl"]=singleData2["duty"] === "Outstation" ?   singleData2["shedInDate"] :   singleData2 ["closeDatehcl"]
                     singleData2["tripsheetdate"] = singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY") : ""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
                     singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]) : "00.00"
@@ -789,6 +797,11 @@ const useExeclpage = () => {
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
                     singleData["sheoutDatetrip"] = singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY") : ""
+                          singleData["startDatehcl"] =singleData["startdate"] ? dayjs(singleData["startdate"]).format("DD/MM/YYYY") : ""
+                      singleData["closeDatehcl"] =singleData["closedate"] ? dayjs(singleData["closedate"]).format("DD/MM/YYYY") : ""
+                      singleData["starthcldate"]=singleData["duty"] === "Outstation" ?  singleData["sheoutDatetrip"] :  singleData["startDatehcl"]
+                    singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                    singleData["shedindatehcl"]=singleData["duty"] === "Outstation" ?   singleData["shedInDate"] :   singleData["closeDatehcl"]
                     singleData["tripsheetdate"] = singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY") : ""
                     singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : ""

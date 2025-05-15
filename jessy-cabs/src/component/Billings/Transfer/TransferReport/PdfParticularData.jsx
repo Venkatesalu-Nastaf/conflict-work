@@ -315,11 +315,11 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
           const routeData = await response.json();
           setRouteData(routeData);
         }
-        else {
-          setRouteData("")
-          const timer = setTimeout(fetchData, 2000);
-          return () => clearTimeout(timer);
-        }
+        // else {
+        //   setRouteData("")
+        //   const timer = setTimeout(fetchData, 2000);
+        //   return () => clearTimeout(timer);
+        // }
       }
       catch (err) {
         console.log(err, 'error');
@@ -391,7 +391,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
 
   const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripStartKm || 0)
   //  const HclTotalKms = customerData[0]?.hybrid === 1 ? 
-  console.log(customerData, 'hybrid', particularPdf);
+  // console.log(customerData, 'hybrid', particularPdf);
+  //   console.log(triptotaldays,"kkffffffffffffffffffffffffffffffffffffffffff")
   // console.log(bookmailiamge,"bookmailiamge")
 
   return (
@@ -587,9 +588,10 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                       </tr>
 
                       <tr>
+                      
                         <td style={{ padding: "7px" }}>Total </td>
                         {/* <td style={{ padding: "7px" }}>{triptotaldays}</td> */}
-                        <td style={{ padding: "7px" }}>{duty === "Outstation"   ? {triptotaldays} : <>{'-'}</>}</td>
+                        <td style={{ padding: "7px" }}>{duty === "Outstation"  ? <>{triptotaldays} </>: <>{'-'}</>}</td>
                         <td style={{ padding: "7px" }}>{triptotaltime}</td>
                         <td style={{ padding: "7px" }}>{triptotalkms}</td>
                       </tr>

@@ -32,17 +32,9 @@
   flex: 1 1 300px;
   max-width: 500px;
   width: 100%;
- 
-}
-.profitvendor-data
-{
-   margin-top: 95px;
+ margin-top: 30px;
 }
 
-.profitall-data
-{
-   margin-top: 30px;
-}
 
 .barchart-data,
 .vendor-diagram {

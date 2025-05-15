@@ -11,8 +11,11 @@ const useCard = () => {
   const [totalCollectedSum, setTotalCollectedSum] = useState(0);
   const [totalBalanceSum, setTotalBalanceSum] = useState(0);
   const [selectedMonth2, setSelectedMonth2] = useState(getCurrentMonth());
+  const[all,setAll]=useState("All")
+  const[vendordata,setVendorData]=useState({});
+  const[profitdata,setProfitdata]=useState([]);
   const [billData, setBillData] = useState([]);
-  const { selectedMonths, selectedYear, setSelectedYear } = PdfData();
+  const { selectedMonths, selectedYear,selectedProfitMonths,selectedProfitYear } = PdfData();
   // const {value} = ReportContext();
   const { value } = useContext(ReportContext);
   const location = useLocation()
@@ -202,6 +205,8 @@ const useCard = () => {
   }, [apiUrl, selectedMonths, selectedYear]); 
 
 
+
+
   // useEffect(() => {
   //   // console.log(selectedMonth2,'selecttttttttttttt',selectedMonths);
 
@@ -252,6 +257,85 @@ const useCard = () => {
   //   // }
 
   // };
+    useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let data = [];
+        
+        if (selectedMonths !== "All") {
+          const response = await axios.get(`${apiUrl}/getvendorAmountDetails`, {
+            params: {
+              selectedMonth: selectedMonths,
+              selectedYear: selectedYear
+            }
+          });
+          console.log(response.data, "vendor amount details------");
+          data = response.data;
+        } else if (selectedMonths === "All") {
+          const response = await axios.get(`${apiUrl}/getVendorAmountAllDetails`, {
+            params: {
+              selectedYear: selectedYear
+            }
+          });
+          console.log(response.data, "Fetched All vendor amounts----------------");
+          data = response.data;
+        }
+        
+        // Update the vendor data state
+        setVendorData(data);
+        
+      } catch (error) {
+        console.log(error, "unable to get");
+      }
+    };
+    
+    fetchData();
+  }, [apiUrl, selectedMonths, selectedYear]);
+
+useEffect(() => {
+  const fetchProfitData = async () => {
+    try {
+      let data = [];
+      
+      if (selectedProfitMonths !== "All") {
+        const response = await axios.get(`${apiUrl}/getFromToSelectedMonthProfit`, {
+          params: {
+            selectedProfitMonth: selectedProfitMonths,
+            selectedProfitYear: selectedProfitYear
+          }
+        });
+        console.log(response.data, "Profit data for selected month------");
+        data = response.data;
+      } else if (selectedProfitMonths === "All") {
+        const response = await axios.get(`${apiUrl}/getAllSelectedMonthProfit`, {
+          params: {
+            selectedProfitYear: selectedProfitYear
+          }
+        });
+        console.log(response.data, "Fetched All profit data----------------");
+        data = response.data;
+      }
+
+      const processedData=data.map(item=>({
+        ...item,
+        profit:Math.max(0,item.profit)
+      }));
+      
+      // Update the profit data state
+      setProfitdata(processedData);
+      
+    } catch (error) {
+      console.error('Error fetching profit data:', error);
+    }
+  };
+
+  fetchProfitData();
+}, [apiUrl, selectedProfitMonths, selectedYear]);
+                      
+
+
+
+
   const handleButtonClickCard = (params) => {
     // const data = params.row;
     // localStorage.setItem("selectedtripsheetid", data.Trip_id);
@@ -307,6 +391,12 @@ const useCard = () => {
     billData,
     setBillData,
     handleButtonClickCard,
+    vendordata,
+    profitdata,
+    setProfitdata,
+    all,
+    setAll,
+
 
   }
 }

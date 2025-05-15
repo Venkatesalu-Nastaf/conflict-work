@@ -29,7 +29,7 @@ const Cards = () => {
   const lastMonthTotalAmount = backendmonth?.lastMonth?.totalAmount || 0;
   const lastMonthTotalPaid = backendmonth?.lastMonth?.totalPaid || 0;
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
-  const { totalAmountSum, selectedMonth2, setSelectedMonth2 ,vendordata,profitdata,all,setAll} = useCard();
+  const { totalAmountSum, selectedMonth2, setSelectedMonth2 ,vendordata,profitdata} = useCard();
   const { selectedMonths, setSelectedMonths, selectedYear, setSelectedYear,selectedProfitMonths,selectedProfitYear,setSelectedProfitMonths,setSelectedProfitYear } = PdfData();
 
   const TotalNumber = (number) => {
@@ -287,7 +287,7 @@ const formattedProfitData = profitdata.map(item => ({
 
 // Set title dynamically
 const title = selectedMonth2 === "All"
-  ? "Annual Profit Report (Month-wise)"
+  ? "Annual Profit Report"
   : "Monthly Report";
 
 const xKey = "month";
@@ -301,20 +301,20 @@ const xKey = "month";
                 {name:"profit",value:vendordata.profit}
               ];
 
-   const handleProfitMonthChange = (event) => {
-    console.log(event.target.value, 'selectmonth');
+  //  const handleProfitMonthChange = (event) => {
+  //   console.log(event.target.value, 'selectmonth');
 
-    setAll(event.target.value);
-    setSelectedProfitMonths(event.target.value)
-    // setSelectedmonth(event.target.value)
-    // fetchDataFromBackend(event.target.value)
-    // fetchMonthlyDataFromBackend(event.target.value)
+  //   setAll(event.target.value);
+  //   setSelectedProfitMonths(event.target.value)
+  //   // setSelectedmonth(event.target.value)
+  //   // fetchDataFromBackend(event.target.value)
+  //   // fetchMonthlyDataFromBackend(event.target.value)
 
-  };
+  // };
   
-    const handleProfitYearChange = (event) => {
-    setSelectedProfitYear(event.target.value);
-  };
+  //   const handleProfitYearChange = (event) => {
+  //   setSelectedProfitYear(event.target.value);
+  // };
     
   return (
     <div className="cards-container">
@@ -388,8 +388,8 @@ const xKey = "month";
       </div>
   <div className="chart-container">
       <div className='profit-data'>
-          <div className="card-filter">
-        <div>
+          {/* <div className="card-filter"> */}
+        {/* <div>
           <label className="card-filter-label" htmlFor="month">Select Month</label>
           <select id="month" name="month" value="All" onChange={handleProfitMonthChange} style={{width:"150px"}}>
             <option value="All">All</option>
@@ -406,8 +406,8 @@ const xKey = "month";
             <option value="11">November</option>
             <option value="12">December</option>
           </select>
-        </div>
-        <div style={{width:'20px'}}>
+        </div> */}
+        {/* <div style={{width:'20px'}}>
           <label className="card-filter-label" htmlFor="year">Year</label>
 
           <select id="year" name="year" value={selectedYear} onChange={handleProfitYearChange} style={{width:"100px"}}>
@@ -416,9 +416,9 @@ const xKey = "month";
               <option key={year} value={year}>{year}</option>
             ))}
           </select>
-        </div>
-      </div>
-     
+        </div> */}
+      {/* </div>
+      */}
 
       <ProfitData data={formattedProfitData} xKey={xKey} title={title} charttype="bar" />
 

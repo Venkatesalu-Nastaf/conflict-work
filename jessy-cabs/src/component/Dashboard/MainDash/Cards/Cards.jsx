@@ -8,10 +8,19 @@ import useCard from "./useCard";
 import { APIURL } from "../../../url";
 import { BiPaste } from "react-icons/bi";
 import Updates from "../RightSide/Updates/Updates";
-//import numbro from 'numbro';
+import numbro from 'numbro';
 import { PdfData } from "../../../Billings/Transfer/TransferReport/PdfContext";
 import { YearData } from "./yearData";
+import ProfitData from '../Charts/../Charts/../Charts/../Charts/ProfitData';
+import {PieChart,Pie,Cell,Tooltip,ResponsiveContainer,} from 'recharts';
+import "../Charts/../Charts/../Charts/../Charts/ProfitData.css";
+import "../Charts/../Charts/../Charts/../Charts/ProfitCharts.css"
+
 const apiUrl = APIURL;
+
+const COLORS = ['#8884d8', '#82ca9d','#556B2F'];
+
+ 
 
 const Cards = () => {
 
@@ -20,8 +29,8 @@ const Cards = () => {
   const lastMonthTotalAmount = backendmonth?.lastMonth?.totalAmount || 0;
   const lastMonthTotalPaid = backendmonth?.lastMonth?.totalPaid || 0;
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
-  const { totalAmountSum, selectedMonth2, setSelectedMonth2 } = useCard();
-  const { selectedMonths, setSelectedMonths, selectedYear, setSelectedYear } = PdfData();
+  const { totalAmountSum, selectedMonth2, setSelectedMonth2 ,vendordata,profitdata,all,setAll} = useCard();
+  const { selectedMonths, setSelectedMonths, selectedYear, setSelectedYear,selectedProfitMonths,selectedProfitYear,setSelectedProfitMonths,setSelectedProfitYear } = PdfData();
 
   const TotalNumber = (number) => {
     if (!number || isNaN(number)) {
@@ -261,6 +270,52 @@ const Cards = () => {
   const handleYearChange = (event) => {
     setSelectedYear(event.target.value);
   };
+
+const getMonthName = (monthNumber) => {
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  return monthNames[monthNumber - 1] || monthNumber;
+};
+
+
+const formattedProfitData = profitdata.map(item => ({
+  ...item,
+  month: getMonthName(item.month) 
+}));
+
+// Set title dynamically
+const title = selectedMonth2 === "All"
+  ? "Annual Profit Report (Month-wise)"
+  : "Monthly Report";
+
+const xKey = "month";
+
+
+  console.log(vendordata,"vvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+  console.log(profitdata,"KKKKKKKK");
+    const pieData = [
+                { name: 'Vendor', value:vendordata.totalVendorAmount },
+                { name: 'Customer', value:vendordata.totalCalcAmount },
+                {name:"profit",value:vendordata.profit}
+              ];
+
+   const handleProfitMonthChange = (event) => {
+    console.log(event.target.value, 'selectmonth');
+
+    setAll(event.target.value);
+    setSelectedProfitMonths(event.target.value)
+    // setSelectedmonth(event.target.value)
+    // fetchDataFromBackend(event.target.value)
+    // fetchMonthlyDataFromBackend(event.target.value)
+
+  };
+  
+    const handleProfitYearChange = (event) => {
+    setSelectedProfitYear(event.target.value);
+  };
+    
   return (
     <div className="cards-container">
       <div className="card-filter">
@@ -324,10 +379,82 @@ const Cards = () => {
             </div>
           ))}
         </div>
+
+
+
         {/* <div>
           <Updates />
         </div> */}
       </div>
+  <div className="chart-container">
+      <div className='profit-data'>
+          <div className="card-filter">
+        <div>
+          <label className="card-filter-label" htmlFor="month">Select Month</label>
+          <select id="month" name="month" value="All" onChange={handleProfitMonthChange} style={{width:"150px"}}>
+            <option value="All">All</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </div>
+        <div style={{width:'20px'}}>
+          <label className="card-filter-label" htmlFor="year">Year</label>
+
+          <select id="year" name="year" value={selectedYear} onChange={handleProfitYearChange} style={{width:"100px"}}>
+            <option >{selectedYear}</option>
+            {YearData?.map((year) => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+     
+
+      <ProfitData data={formattedProfitData} xKey={xKey} title={title} charttype="bar" />
+
+    
+      </div>
+
+
+     <div className='profitvendor-data'>
+ 
+
+                <div className='vendor-diagram'>
+                
+                  <ResponsiveContainer width="100%" height={272}>
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={90}
+                        label={(entry)=>entry.name}
+                      >
+                        {pieData.map((entry, i) => (
+                          <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+           
+
+
+</div>
+</div>
     </div>
   );
 };

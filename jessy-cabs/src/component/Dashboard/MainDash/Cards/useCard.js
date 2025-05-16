@@ -298,7 +298,7 @@ useEffect(() => {
       let data = [];
       
       if (selectedMonths !== "All") {
-        const response = await axios.get(`${apiUrl}/getFromToSelectedMonthProfit`, {
+        const response = await axios.get(`${apiUrl}/getAllSelectedMonthProfit`, {
           params: {
             selectedMonth: selectedMonths,
             selectedYear: selectedYear
@@ -309,6 +309,7 @@ useEffect(() => {
       } else if (selectedMonths === "All") {
         const response = await axios.get(`${apiUrl}/getAllSelectedMonthProfit`, {
           params: {
+              selectedMonth: selectedMonths,
             selectedYear: selectedYear
           }
         });

@@ -576,7 +576,8 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                                   className='image-hcl'
                                  
                                 /> */}
-                                <img src={`${file}?t=${new Date().getTime()}`} alt={`image_${index}`} className='image-hcl' />
+                                {/* <img src={`${file}?t=${new Date().getTime()}`} alt={`image_${index}`} className='image-hcl' /> */}
+                                  <img src={`${file}`} alt={`image_${index}`} className='image-hcl' />
 
                               </div>
 

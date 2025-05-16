@@ -333,7 +333,8 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                                 // marginBottom: "20px",
                               }}
                             /> */}
-                            <img src={`${file}?t=${new Date().getTime()}`} alt={`image_${index}`} className='image-non-hcl' />
+                            {/* <img src={`${file}?t=${new Date().getTime()}`} alt={`image_${index}`} className='image-non-hcl' /> */}
+                             <img src={`${file}`} alt={`image_${index}`} className='image-non-hcl' />
 
                           </div>
 

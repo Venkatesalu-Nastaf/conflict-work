@@ -626,6 +626,12 @@ app.post('/login', (req, res) => {
     if (result.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials. Please check your username and userpassword.' });
     }
+    const user = result[0];
+    console.log(user.active);
+    
+    if(user.active !== 'yes' ){
+      return res.status(403).json({error:"Account is inactive"})
+    }
     // console.log(process.env.JSON_SECERETKEY)
     // const secretKey = process.env.JSON_SECERETKEY
     // const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
@@ -634,7 +640,7 @@ app.post('/login', (req, res) => {
 
     // const secretKey="NASTAF_APPLICATION_DATAKEY@123"
 
-    return res.status(200).json({ message: 'Login successful', user: result[0] });
+    return res.status(200).json({ message: 'Login successful', user: user });
 
     // return res.status(200).json({ message: 'Login successful', user: result[0] });
   });

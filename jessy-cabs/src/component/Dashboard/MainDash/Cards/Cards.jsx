@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Cards.css";
 // import { CardsData } from "./Cards-Data.js";
 import Card from "./Card/Card";
@@ -26,10 +26,11 @@ const Cards = () => {
 
   const [backendmonth, setBackendmonth] = useState([])
   const [billinggraph, setBillingGraph] = useState([])
+  const[formattedProfitDatas,setFormattedProfitDatas]=useState()
   const lastMonthTotalAmount = backendmonth?.lastMonth?.totalAmount || 0;
   const lastMonthTotalPaid = backendmonth?.lastMonth?.totalPaid || 0;
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
-  const { totalAmountSum, selectedMonth2, setSelectedMonth2 ,vendordata,profitdata} = useCard();
+  const { totalAmountSum, selectedMonth2, setSelectedMonth2 ,vendordata,profitdata,reportData,fromYear,toYear,setFromYear,setToYear} = useCard();
   const { selectedMonths, setSelectedMonths, selectedYear, setSelectedYear,selectedProfitMonths,selectedProfitYear,setSelectedProfitMonths,setSelectedProfitYear } = PdfData();
 
   const TotalNumber = (number) => {
@@ -271,50 +272,99 @@ const Cards = () => {
     setSelectedYear(event.target.value);
   };
 
+useEffect(() => {
+  const formatted = reportData.map(item => ({
+    year: item.year,
+    profit: item.profit,
+  
+  }));
+  setFormattedProfitDatas(formatted);
+}, [reportData]);
+
 const getMonthName = (monthNumber) => {
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
   ];
   return monthNames[monthNumber - 1] || monthNumber;
 };
 
-
-const formattedProfitData = profitdata.map(item => ({
+// Format profitdata to include readable month name
+const formattedData = profitdata.map(item => ({
   ...item,
-  month: getMonthName(item.month) 
+  month: getMonthName(item.month)
 }));
 
-// Set title dynamically
-const title = selectedMonth2 === "All"
-  ? "Annual Profit Report"
-  : "Monthly Report";
+// Set title, axis key, and data dynamically
+let title = "";
+let xKey = "";
+let data = [];
 
-const xKey = "month";
+const isAllMonths = selectedMonth2.toLowerCase() === "all";
+const isYearRangeSelected = fromYear !== "" && toYear !== "";
+
+// Logic for what to show in the bar chart
+if (!isAllMonths && !isYearRangeSelected) {
+  // Case: Specific month selected, no year range
+  title = "Annual Profit Report";
+  xKey = "month";
+  data = formattedData;
+} else if (isAllMonths && isYearRangeSelected) {
+  // Case: All months + year range selected
+  title = `Annual Profit Report (${fromYear} - ${toYear})`;
+  xKey = "year";
+  data = formattedProfitDatas.filter(item =>
+    parseInt(item.year) >= parseInt(fromYear) &&
+    parseInt(item.year) <= parseInt(toYear)
+  );
+} 
+ else if (!isAllMonths && isYearRangeSelected) {
+  // Case: All months + year range selected
+  title = `Annual Profit Report (${fromYear} - ${toYear})`;
+  xKey = "year";
+  data = formattedProfitDatas.filter(item =>
+    parseInt(item.year) >= parseInt(fromYear) &&
+    parseInt(item.year) <= parseInt(toYear)
+  );
+} 
+else if (isAllMonths) {
+  // Case: All months selected but no year range
+  title = "Annual Profit Report";
+  xKey = "month";
+  data = formattedData;
+}else {
+  // Default/fallback: either all months or year range partially selected
+  title = "Annual Profit Report";
+  xKey = "month";
+  data = formattedData;
+}
+
+
+
+
+
 
 
   console.log(vendordata,"vvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
   console.log(profitdata,"KKKKKKKK");
+  console.log(reportData,"llllllllllllll");
     const pieData = [
                 { name: 'Vendor', value:vendordata.totalVendorAmount },
                 { name: 'Customer', value:vendordata.totalCalcAmount },
                 {name:"profit",value:vendordata.profit}
               ];
 
-  //  const handleProfitMonthChange = (event) => {
-  //   console.log(event.target.value, 'selectmonth');
+   const handlefromYearChange = (event) => {
+    console.log(event.target.value, 'selectmonth');
 
-  //   setAll(event.target.value);
-  //   setSelectedProfitMonths(event.target.value)
-  //   // setSelectedmonth(event.target.value)
-  //   // fetchDataFromBackend(event.target.value)
-  //   // fetchMonthlyDataFromBackend(event.target.value)
+    setFromYear(event.target.value);
+   
 
-  // };
+  };
   
-  //   const handleProfitYearChange = (event) => {
-  //   setSelectedProfitYear(event.target.value);
-  // };
+    const handletoYearChange = (event) => {
+    setToYear(event.target.value);
+  };
     
   return (
     <div className="cards-container">
@@ -388,50 +438,38 @@ const xKey = "month";
       </div>
   <div className="chart-container">
       <div className='profit-data'>
-          {/* <div className="card-filter"> */}
-        {/* <div>
-          <label className="card-filter-label" htmlFor="month">Select Month</label>
-          <select id="month" name="month" value="All" onChange={handleProfitMonthChange} style={{width:"150px"}}>
-            <option value="All">All</option>
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6">June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-          </select>
-        </div> */}
-        {/* <div style={{width:'20px'}}>
-          <label className="card-filter-label" htmlFor="year">Year</label>
-
-          <select id="year" name="year" value={selectedYear} onChange={handleProfitYearChange} style={{width:"100px"}}>
-            <option >{selectedYear}</option>
-            {YearData?.map((year) => (
-              <option key={year} value={year}>{year}</option>
-            ))}
-          </select>
-        </div> */}
-      {/* </div>
-      */}
-
-      <ProfitData data={formattedProfitData} xKey={xKey} title={title} charttype="bar" />
-
-    
-      </div>
-
-
-     <div className='profitvendor-data'>
- 
-
-                <div className='vendor-diagram'>
+      <div className="card-filter-data">
+  <div className="from">
+    <label className="card-filter-label">From</label>
+    <select 
+      value={fromYear} 
+      onChange={handlefromYearChange}
+      style={{ width: "100px" }}
+    >
+      {YearData?.map((year) => (
+        <option key={year} value={year}>{year}</option>
+      ))}
+    </select>
+  </div>
+  <div className="to">
+    <label className="card-filter-label">To</label>
+    <select 
+      value={toYear} 
+      onChange={handletoYearChange} 
+      style={{ width: "100px" }}
+    >
+      {YearData?.map((year) => (
+        <option key={year} value={year}>{year}</option>
+      ))}
+    </select>
+  </div>
+</div>
+<ProfitData data={data} xKey={xKey} title={title} charttype="bar" />
+ </div>
+ <div className='profitvendor-data'>
+   <div className='vendor-diagram'>
                 
-                  <ResponsiveContainer width="100%" height={272}>
+                  <ResponsiveContainer width="100%" height={260}>
                     <PieChart>
                       <Pie
                         data={pieData}

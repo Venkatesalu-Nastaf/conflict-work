@@ -23,47 +23,47 @@ router.get('/customerBilledDetails', (req, res) => {
                 if (error) {
                     return reject('Error fetching group billing details');
                 }
-    
+
                 try {
                     const updatedResult = (
                         await Promise.all(
-                          result.map(async ({ id, ...item }) => {
-                            const tripIds = item.Trip_id.split(',').map(id => id.trim());
-                      
-                            // Get all invoice numbers for the ReferenceNo
-                            const invoiceRows = await new Promise((res, rej) => {
-                              db.query(
-                                "SELECT Invoice_No FROM GroupBillinginvoice_no WHERE Referenceno = ?",
-                                [item.ReferenceNo],
-                                (err, rows) => (err ? rej(err) : res(rows))
-                              );
-                            });
-                      
-                            // Get amounts for all trip IDs
-                            const amountResult = await new Promise((res, rej) => {
-                              db.query(
-                                "SELECT tripid, totalcalcAmount AS totalAmount FROM tripsheet WHERE tripid IN (?)",
-                                [tripIds],
-                                (err, rows) => (err ? rej(err) : res(rows))
-                              );
-                            });
-                      
-                            // 🧠 Match tripIDs with invoice numbers one-to-one if lengths match
-                            const repeatedResults = [];
-                            for (let i = 0; i < amountResult.length; i++) {
-                              repeatedResults.push({
-                                ...item,
-                                Trip_id: amountResult[i].tripid.toString(),
-                                Amount: amountResult[i].totalAmount || 0,
-                                Invoice_no: invoiceRows[i] ? invoiceRows[i].Invoice_No : null,
-                              });
-                            }
-                      
-                            return repeatedResults;
-                          })
+                            result.map(async ({ id, ...item }) => {
+                                const tripIds = item.Trip_id.split(',').map(id => id.trim());
+
+                                // Get all invoice numbers for the ReferenceNo
+                                const invoiceRows = await new Promise((res, rej) => {
+                                    db.query(
+                                        "SELECT Invoice_No FROM GroupBillinginvoice_no WHERE Referenceno = ?",
+                                        [item.ReferenceNo],
+                                        (err, rows) => (err ? rej(err) : res(rows))
+                                    );
+                                });
+
+                                // Get amounts for all trip IDs
+                                const amountResult = await new Promise((res, rej) => {
+                                    db.query(
+                                        "SELECT tripid, totalcalcAmount AS totalAmount FROM tripsheet WHERE tripid IN (?)",
+                                        [tripIds],
+                                        (err, rows) => (err ? rej(err) : res(rows))
+                                    );
+                                });
+
+                                // 🧠 Match tripIDs with invoice numbers one-to-one if lengths match
+                                const repeatedResults = [];
+                                for (let i = 0; i < amountResult.length; i++) {
+                                    repeatedResults.push({
+                                        ...item,
+                                        Trip_id: amountResult[i].tripid.toString(),
+                                        Amount: amountResult[i].totalAmount || 0,
+                                        Invoice_no: invoiceRows[i] ? invoiceRows[i].Invoice_No : null,
+                                    });
+                                }
+
+                                return repeatedResults;
+                            })
                         )
-                      ).flat();
-                      
+                    ).flat();
+
                     console.log(updatedResult, 'Final Group Billing Result');
                     resolve(updatedResult);
                 } catch (err) {
@@ -73,7 +73,7 @@ router.get('/customerBilledDetails', (req, res) => {
             }
         );
     });
-    
+
     const transferListPromise = new Promise((resolve, reject) => {
         db.query("SELECT * FROM Transfer_list WHERE Organization_name = ? AND Status='Billed' AND BillReportStatus is null", [customer], (error, result) => {
             if (error) {
@@ -156,7 +156,7 @@ router.post('/addBillAmountReceived', (req, res) => {
 //             db.query(updateTransferTable, [intInvoiceNos], (error, result) => {
 //                 if (error) {
 //                     console.log(error,'errorr');
-                    
+
 //                     return reject(error);
 //                 }
 //                 resolve(result);
@@ -352,9 +352,9 @@ router.post('/getBalanceAmount', (req, res) => {
 router.put('/updateBalanceAmount', async (req, res) => {
     const { uniqueVoucherId, finalTotalColletedAmount,
         finalTotalBalanceAmount, finalTdsPlusCollected } = req.body;
-        console.log( uniqueVoucherId, finalTotalColletedAmount,
-            finalTotalBalanceAmount, finalTdsPlusCollected);
-        
+    console.log(uniqueVoucherId, finalTotalColletedAmount,
+        finalTotalBalanceAmount, finalTdsPlusCollected);
+
     const updateQuery = `
         UPDATE BillWiseReceipt
         SET Collected = ?, TotalBalance = ?,TotalCollected = ?
@@ -470,32 +470,92 @@ router.delete('/deleteBillWiseReport', (req, res) => {
 router.post("/updateTripsheetForAmountReceived", (req, res) => {
     const { Trip_id } = req.body;
     console.log(Trip_id, "balance amount update Tripidd");
-  
+
     if (!Trip_id || Trip_id.length === 0) {
-      return res.status(400).json({ message: "Trip_id is required." });
+        return res.status(400).json({ message: "Trip_id is required." });
     }
-  
+
     const sqlUpdateTripsheetQuery = `
       UPDATE tripsheet 
       SET Bill_Amount_Update = 'Success', Balance_Amount = '0' 
       WHERE tripid IN (?)
     `;
-  
+
     db.query(sqlUpdateTripsheetQuery, [Trip_id], (error, result) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Error updating tripsheets." });
-      }
-  
-    //   console.log(result, "result-----------------");
-  
-      return res.status(200).json({
-        message: "Tripsheets updated successfully.",
-        affectedRows: result.affectedRows,
-      });
+        if (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Error updating tripsheets." });
+        }
+
+        //   console.log(result, "result-----------------");
+
+        return res.status(200).json({
+            message: "Tripsheets updated successfully.",
+            affectedRows: result.affectedRows,
+        });
     });
-  });
-  
-  
+});
+
+//   get GST Percentage in customer table |
+router.get('/getGSTTaxByCustomerAPI', (req, res) => {
+    const { customerName, groupIds } = req.query;
+    const groupIdArray = groupIds.split(','); // assuming comma-separated groupIds like "123,456"
+
+    const sqlQuery = `SELECT gstTax FROM customers WHERE customer = ?`;
+    const sqlTripsheetQuery = `
+  SELECT 
+    GroupTripId, 
+    SUM(IFNULL(parking, 0)) AS parking, 
+    SUM(IFNULL(permit, 0)) AS permit, 
+    SUM(IFNULL(toll, 0)) AS toll, 
+    SUM(IFNULL(totalcalcAmount, 0)) AS totalcalcAmount,
+    (SUM(IFNULL(totalcalcAmount, 0)) - (SUM(IFNULL(parking, 0)) + SUM(IFNULL(permit, 0)) + SUM(IFNULL(toll, 0)))) AS netAmount
+  FROM 
+    tripsheet 
+  WHERE 
+    GroupTripId IN (?)
+  GROUP BY 
+    GroupTripId
+`;
+
+
+    db.query(sqlQuery, [customerName], (error, customerResult) => {
+        if (error) {
+            console.error(error);
+            return res.status(500).json({ error: 'Failed to fetch GST Tax' });
+        }
+
+        const gstTax = customerResult[0]?.gstTax || 0;
+
+        db.query(sqlTripsheetQuery, [groupIdArray], (tripError, tripResults) => {
+            if (tripError) {
+                console.error(tripError);
+                return res.status(500).json({ error: 'Failed to fetch trip sheet data' });
+            }
+            console.log(tripResults, "newgroup")
+            // Map through tripResults to compute netAmount per trip
+            //   const computedTrips = tripResults.map(item => {
+            //     const netAmount = (parseInt(item.totalcalcAmount) || 0) - ((parseInt(item.parking) || 0) + (parseInt(item.permit) || 0) + (parseInt(item.toll) || 0));
+            //     return {
+            //       GroupTripId: item.GroupTripId,
+            //       totalcalcAmount: item.totalcalcAmount,
+            //       toll: item.toll,
+            //       parking: item.parking,
+            //       permit: item.permit,
+            //       netAmount: netAmount
+            //     };
+            //   });
+            //     console.log(computedTrips,"cccccccccccccccccccccccc",gstTax);
+
+            // Final combined response
+            return res.status(200).json({
+                gstTax: gstTax,
+                tripAmounts: tripResults
+            });
+        });
+    });
+});
+
+
 
 module.exports = router;

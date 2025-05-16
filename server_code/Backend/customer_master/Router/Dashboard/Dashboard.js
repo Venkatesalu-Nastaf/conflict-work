@@ -531,13 +531,21 @@ router.get('/getFromToSelectedMonthProfit', (req, res) => {
 router.get('/getAllCurrentAndPreviousYearReports', (req, res) => {
   let { fromSelectedYear, toSelectedYear } = req.query;
 
-  let yearsList = '';
-  for (let year = fromSelectedYear; year <= toSelectedYear; year++) {
-    yearsList += `SELECT ${year} AS year UNION ALL `;
-  }
-  yearsList = yearsList.slice(0, -11);
-  console.log(yearsList, "yearlist");
+  fromSelectedYear = parseInt(fromSelectedYear);
+  toSelectedYear = parseInt(toSelectedYear);
 
+  if (isNaN(fromSelectedYear) || isNaN(toSelectedYear) || fromSelectedYear > toSelectedYear) {
+    return res.status(400).json({ error: 'Invalid year range' });
+  }
+
+  const yearQueries = [];
+  for (let year = fromSelectedYear; year <= toSelectedYear; year++) {
+    yearQueries.push(`SELECT ${year} AS year`);
+  }
+
+  const yearsList = yearQueries.join(' UNION ALL ');
+
+  console.log(yearsList, "yearlist");
 
   const sqlQuery = `
     SELECT 

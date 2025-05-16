@@ -95,6 +95,8 @@ const useTransferdataentry = () => {
 
     //    Add and Edit Boolean 
     const [addEditTrigger, setAddEditTrigger] = useState(false)
+    const [removeModalBox,setRemoveModalBox] = useState(false)
+    const [billGenerateBox,setBillGenerateBox] = useState(false);
 
     // Combined Rows for Grouptripid
     const [combinedRows, setCombinedRows] = useState([]);
@@ -692,6 +694,7 @@ const useTransferdataentry = () => {
             const response = await axios.put(`${apiUrl}/statusChangeTransfer/${groupId}/${servicestation}`);
             const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
             const responseinvoice = await axios.get(`${apiUrl}/Transferlistgetinvoicenolast/${groupId}`);
+            setBillGenerateBox(false)
             const invoicenodata = responseinvoice.data;
             const invoicenovalue = invoicenodata[0].Invoice_no
             console.log(response, Tripresponse, 'check response');
@@ -1046,6 +1049,7 @@ const useTransferdataentry = () => {
                 setMatchTripID('')
                 setCombinedRows(updatedRows)
                   setSuccess(true)
+                  setRemoveModalBox(false)
             setSuccessMessage("Successfully Removed")
 
             }
@@ -2366,6 +2370,33 @@ const useTransferdataentry = () => {
 
     // }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, apiUrl]);
 
+    const handleRemoveModalClose = ()=>{
+        setRemoveModalBox(false)
+    }
+
+    const handleRemoveModalOpen = ()=>{
+        if(rowSelectionModel.length === 0){
+            setError(true)
+            setErrorMessage("Please Select The Row")
+        }
+        else{
+        setRemoveModalBox(true)
+        }
+    }
+
+    const handleBillGenerateBox = ()=>{
+        if(rowSelectionModel.length === 0){
+                setError(true)
+            setErrorMessage("Please Select The Row")
+        }
+        else{
+        setBillGenerateBox(true)
+        }
+    }
+    const handleBillGenerateBoxClose = ()=>{
+        setBillGenerateBox(false)
+    }
+
     return {
         rows,
         error,
@@ -2420,7 +2451,8 @@ const useTransferdataentry = () => {
         setInfo,
         addEditTrigger, setAddEditTrigger,
         infoMessage, setINFOMessage, handlecustomer, isbtnloading, setisbtnloading, iseditloading, setiseditloading, isbillloading, setisbillloading,
-        combinedRows, setCombinedRows,setBillingdate,stateenter
+        combinedRows, setCombinedRows,setBillingdate,stateenter,removeModalBox,setRemoveModalBox,
+        handleRemoveModalClose,handleRemoveModalOpen,billGenerateBox,handleBillGenerateBox,handleBillGenerateBoxClose
 
     };
 };

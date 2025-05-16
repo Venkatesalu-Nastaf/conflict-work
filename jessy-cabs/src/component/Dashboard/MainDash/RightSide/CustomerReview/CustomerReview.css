@@ -9,6 +9,10 @@
     font-size: 13px;
 }
 
+.tt-div{
+    overflow-x: scroll !important;
+}
+
 .apexcharts-tooltip.apexcharts-theme-light {
     color: #000;
 }

@@ -8,7 +8,7 @@ const ProfitData = ({ data, xKey, title }) => {
   return (
     <div className='barchart-data'>
       <h2 style={{ textAlign: 'center',color:"black" }}>{title || "Profit Summary"}</h2>
-      <ResponsiveContainer width="100%" height={200}>
+      <ResponsiveContainer width="100%" height={180}>
         <BarChart data={data}>
           <XAxis dataKey={xKey}  />
           <YAxis  />

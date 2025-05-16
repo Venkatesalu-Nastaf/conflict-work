@@ -12,6 +12,7 @@ const columns = [
     { field: "shedOutDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'), },
     { field: "customer", header: "Customer Name", width: 150 },
     { field: "travelsname", headerName: "Vendor Name", width: 130 },
+    {field: "vehRegNo", headerName:"Vehicle Number",width:130},
     { field: "vendor_vehicle", headerName: "Vehicle", width: 90 },
     { field: "duty", headerName: "Duty", width: 160 },
     { field: "vendorshedoutkm", headerName: "Start-kMS", width: 130 },
@@ -284,6 +285,7 @@ const handleExcelDownload = async () => {
                 column.width = Math.max(currentColumnWidth, cellLength + 5);
             });
         });
+        console.log(rows,"rowssssssssexcel");
         
         const totalKms = rows.reduce((sum, row) => sum + parseInt(row.vendortotalkm || 0, 10), 0);
                 const totalpermit = rows.reduce((sum, row) => sum + parseInt(row.vpermettovendor || 0, 10), 0);

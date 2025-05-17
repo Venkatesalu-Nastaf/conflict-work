@@ -192,6 +192,7 @@ const useBillWiseReceipt = () => {
   //   };
   // };
   const handlePendingBills = async () => {
+    let gstTax;
     if (billWiseReport.CustomerName === "") {
       setError(true);
       setErrorMessage("Please Enter Customer");
@@ -204,7 +205,8 @@ const useBillWiseReceipt = () => {
       const response = await axios.get(`${apiUrl}/customerBilledDetails`, {
         params: { customer: billWiseReport.CustomerName },
       });
-      console.log(response, 'pending response');
+   
+      // const groupid = groupres.map(li=>li.)
       setBalanceAmount(false);
 
       const {
@@ -213,14 +215,57 @@ const useBillWiseReceipt = () => {
         transferListBilling = [],
       } = response.data;
 
+      const groupIddata = (data)=>{
+          return data.map((item) => ({
+          BillNo: item.Invoice_No || item.ReferenceNo || item.Grouptrip_id,
+        }));
+      }
+      const processInd = groupIddata(individualBilling);
+      const processGrp = groupIddata(groupBilling)
+      const processTransfer = groupIddata(transferListBilling);
+
+      const combinedGroupId = [
+        ...processInd,
+        ...processGrp,
+        ...processTransfer
+      ]
+     const groupIds = combinedGroupId.map(item => item.BillNo).join(',');
+
+const response1 = await axios.get(`${apiUrl}/getGSTTaxByCustomerAPI`, {
+  params: {
+    customerName: billWiseReport.CustomerName,
+    groupIds: groupIds
+  }
+});
+const groupres = response1.data.tripAmounts;
+       gstTax = response1.data.gstTax;
+
       const processBillingData = (data) => {
         return data.map((item) => ({
           BillNo: item.Invoice_No || item.ReferenceNo || item.Grouptrip_id,
           BillDate: item.Bill_Date || item.InvoiceDate || item.Billdate,
-          Amount: item.Amount,
+          Amount:  item.Amount,
           ...item,
         }));
       };
+//       const processBillingData = (data) => {
+//   return data.map((item) => {
+//     const billNo = item.Invoice_No || item.ReferenceNo || item.Grouptrip_id;
+
+//     // Find matching trip amount by GroupTripId
+//     const matchingTrip = groupres.tripAmounts.find(
+//       (trip) => trip.GroupTripId === billNo
+//     );
+
+//     return {
+//       BillNo: billNo,
+//       BillDate: item.Bill_Date || item.InvoiceDate || item.Billdate,
+//       Amount: item.Amount,
+//       netAmount: matchingTrip ? matchingTrip.netAmount : 0, // add netAmount if matched
+//       ...item,
+//     };
+//   });
+// };
 
       const processedIndividualBilling = processBillingData(individualBilling);
       const processedGroupBilling = processBillingData(groupBilling);
@@ -231,15 +276,52 @@ const useBillWiseReceipt = () => {
         ...processedGroupBilling,
         ...processedTransferList,
       ];
+combinedPendingBill?.forEach(pendingBill => {
+  const matchingGroup = groupres.find(group => group.GroupTripId?.toString() === pendingBill?.BillNo?.toString());
+
+  if (matchingGroup) {
+    pendingBill.netAmount = matchingGroup.netAmount;
+    pendingBill.toll = matchingGroup.toll;
+    pendingBill.parking = matchingGroup.parking;
+    pendingBill.permit = matchingGroup.permit
+  }
+});
+
+
 
       const invoice = combinedPendingBill.map((li) => li.BillNo);
       setInvoiceNo(invoice);
-      const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => ({
-        id: index + 1, // Assign a unique ID based on the array index
-        sno: index + 1, // Sequential SNO
-        ...item, // Include all other properties from the original item
-      }));
-      console.log(combinedPendingBillWithSnoAndId,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+      // const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => ({
+      //   id: index + 1, // Assign a unique ID based on the array index
+      //   sno: index + 1, // Sequential SNO
+      //   Amount : gstTax > 0 ? (parseInt(item.Amount) * gstTax /100) : item.Amount,
+      //   ...item, // Include all other properties from the original item
+      // }));
+
+ const gst = gstTax / 2;
+ console.log(combinedPendingBill, "updated combinedPendingBill",gst);
+
+const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => {
+  const amount = parseInt(item.netAmount) || 0;
+  const permit = parseInt(item.permit) || 0;
+  const parking = parseInt(item.parking) || 0;
+  const toll = parseInt(item.toll) || 0;
+
+  const cgstAmount = gstTax > 0 ? (amount * gst / 100) : 0;
+  const sgstAmount = gstTax > 0 ? (amount * gst / 100) : 0;
+  const totalGST = cgstAmount + sgstAmount + amount + permit + parking + toll;
+
+  return {
+    ...item,
+    id: index + 1,
+    sno: index + 1,
+    Amount: Math.round(totalGST),
+  };
+});
+
+
+
+      console.log(combinedPendingBillWithSnoAndId,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",combinedPendingBill);
       
       if (combinedPendingBillWithSnoAndId.length === 0) {
         setError(true);

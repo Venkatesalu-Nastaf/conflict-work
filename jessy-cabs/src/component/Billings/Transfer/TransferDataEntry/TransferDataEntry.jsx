@@ -1,4 +1,4 @@
-import React, {useContext } from 'react';
+import React, { useContext } from 'react';
 import "./TransferDataEntry.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -9,7 +9,7 @@ import { Menu, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import PopupState, {bindMenu } from 'material-ui-popup-state';
+import PopupState, { bindMenu } from 'material-ui-popup-state';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { Autocomplete } from "@mui/material";
 import { PermissionContext } from '../../../context/permissionContext';
@@ -27,8 +27,22 @@ import { Box } from '@mui/material';
 // import Skeleton from '@mui/material/Skeleton';
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Typography } from '@mui/material';
+import Modal from '@mui/material/Modal';
 
-const TransferDataEntry = ({organizationNames,Statename }) => {
+const style3 = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  // border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+const TransferDataEntry = ({ organizationNames, Statename }) => {
   const {
     rows,
     error,
@@ -81,11 +95,13 @@ const TransferDataEntry = ({organizationNames,Statename }) => {
     // setINFOMessage,
     handlecustomer, isbtnloading,
     //  setisbtnloading, iseditloading, setiseditloading, 
-     isbillloading,
-      // setisbillloading,
+    isbillloading,
+    // setisbillloading,
     addEditTrigger,
     //  setAddEditTrigger, 
-     setBillingdate,stateenter
+    setBillingdate, stateenter,
+    removeModalBox,handleRemoveModalClose,handleRemoveModalOpen,
+    billGenerateBox,handleBillGenerateBox,handleBillGenerateBoxClose
     //  groupstation
     // ... (other state variables and functions)
   } = useTransferdataentry();
@@ -137,7 +153,7 @@ const TransferDataEntry = ({organizationNames,Statename }) => {
                       autoComplete='off'
                     />
                   </div>
-{/* {console.log(Billingdate,"bill")} */}
+                  {/* {console.log(Billingdate,"bill")} */}
                   <div className='input'>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -212,7 +228,7 @@ const TransferDataEntry = ({organizationNames,Statename }) => {
 
                       onChange={(event, value) => handlecustomer(value)}
 
-                      
+
                       renderInput={(params) => {
                         return (
                           <TextField {...params} label="Organization" name='customer' inputRef={params.inputRef} />
@@ -286,9 +302,9 @@ const TransferDataEntry = ({organizationNames,Statename }) => {
                       }}
                     /> */}
 
-                   {invoiceno ? <>
+                    {invoiceno ? <>
 
-                    {/* <TextField
+                      {/* <TextField
                       size="small"
                       id="freet-station"
                       className='full-width'
@@ -299,39 +315,39 @@ const TransferDataEntry = ({organizationNames,Statename }) => {
 
                       autoComplete='off'
                     /> */}
-                    {/* {console.log(servicestation,"state",stateenter)} */}
+                      {/* {console.log(servicestation,"state",stateenter)} */}
 
-                                            <Autocomplete
-                                                            fullWidth
-                                                            id="free-Stations"
-                                                            freeSolo
-                                                            size="small"
-                                                            value={servicestation || stateenter}
-                                                            // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
-                                                            options={Statename.map((option) => ({
-                                                                label: option.state,
-                                                            }))}
-                                                            onChange={(event, value) => handleserviceInputChange(event, value)}
-                                                            renderInput={(params) => {
-                                                                return (
-                                                                    <TextField {...params} label="State" inputRef={params.inputRef}  value={servicestation || stateenter} />
-                                                                );
-                                                            }}
-                                                        /> 
-                                                        </>:
+                      <Autocomplete
+                        fullWidth
+                        id="free-Stations"
+                        freeSolo
+                        size="small"
+                        value={servicestation || stateenter}
+                        // options={[{ label: "All" }, ...stationName.map((option) => ({ label: option.Stationname }))]} 
+                        options={Statename.map((option) => ({
+                          label: option.state,
+                        }))}
+                        onChange={(event, value) => handleserviceInputChange(event, value)}
+                        renderInput={(params) => {
+                          return (
+                            <TextField {...params} label="State" inputRef={params.inputRef} value={servicestation || stateenter} />
+                          );
+                        }}
+                      />
+                    </> :
 
-                         <TextField
-                      size="small"
-                      id="freet-station"
-                      className='full-width'
+                      <TextField
+                        size="small"
+                        id="freet-station"
+                        className='full-width'
 
-                      label="State"
-                      name='station'
-                      value={servicestation || ""}
+                        label="State"
+                        name='station'
+                        value={servicestation || ""}
 
-                      autoComplete='off'
-                    />
-                                                          }
+                        autoComplete='off'
+                      />
+                    }
                   </div>
 
                   <div className="input">
@@ -406,7 +422,7 @@ const TransferDataEntry = ({organizationNames,Statename }) => {
                   {invoiceno ? <></> :
                     <div className="input">
                       {/* <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button> */}
-                      <LoadingButton loading={isbillloading} variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</LoadingButton>
+                      <LoadingButton loading={isbillloading} variant="outlined" disabled={!Transfer_new} onClick={handleBillGenerateBox} >Bill Generate</LoadingButton>
                     </div>
                   }
                   {groupId && customer && !addEditTrigger ? <div className="input">
@@ -444,7 +460,7 @@ const TransferDataEntry = ({organizationNames,Statename }) => {
               {/* <Button variant="contained" disabled={!Transfer_new} onClick={handleAddOrganization} >Add To List</Button> */}
             </div>
             <div className="total-inputs">
-              <Button variant="outlined" disabled={!Transfer_delete} onClick={handleRemove} >Remove Selected</Button>
+              <Button variant="outlined" disabled={!Transfer_delete} onClick={handleRemoveModalOpen} >Remove Selected</Button>
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Total Kms:</label>
@@ -520,6 +536,47 @@ const TransferDataEntry = ({organizationNames,Statename }) => {
                 disableRowSelectionOnClick
               />
             </Box> */}
+            <Modal
+              open={removeModalBox}
+              onClose={handleRemoveModalClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style3}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+                  <div>
+                    <Typography variant="body2" sx={{ color: "#333", fontWeight: 500, fontSize: 20 }}>
+                      Are you sure want to Remove the data?
+                    </Typography>
+                  </div>
+                  <div>
+                    <Button onClick={() => handleRemoveModalClose()}>No</Button>
+                    <Button onClick={() => handleRemove()}>Yes</Button>
+                  </div>
+                </div>
+              </Box>
+            </Modal>
+
+                 <Modal
+              open={billGenerateBox}
+              onClose={handleBillGenerateBoxClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style3}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+                  <div>
+                    <Typography variant="body2" sx={{ color: "#333", fontWeight: 500, fontSize: 20 }}>
+                      Are you sure want to Bill Generate?
+                    </Typography>
+                  </div>
+                  <div>
+                    <Button onClick={() => handleBillGenerateBoxClose()}>No</Button>
+                    <Button onClick={() => handleClickGenerateBill()}>Yes</Button>
+                  </div>
+                </div>
+              </Box>
+            </Modal>
             <Box
               sx={{
                 height: 400, // Adjust this value to fit your needs

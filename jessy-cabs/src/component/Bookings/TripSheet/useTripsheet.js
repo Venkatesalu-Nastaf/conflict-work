@@ -100,6 +100,7 @@ const useTripsheet = () => {
     const [outStationHide, setOutStationHide] = useState(false);
     const [enterTrigger, setEnterTrigger] = useState(null)
     const [attachedImageEtrip, setAttachImageETrip] = useState('')
+    const [signaturetrigger,setSignatureTrigger]=useState(false)
     // const [conflicthcldatavalue, setConflictHCLDataValue] = useState([])
     const [conflicthcldatavalue, setConflictHCLDataValue] = useState({
         Hcldatakmvalue: 0,
@@ -385,7 +386,7 @@ const useTripsheet = () => {
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
     const [signimageUrl1, setSignImageUrl1] = useState('');
-    const [attachedImage, setAttachedImage] = useState('');
+    // const [attachedImage, setAttachedImage] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
 
     // const [isentertripID,setisenterTripid] = useState(false)
@@ -444,6 +445,7 @@ const useTripsheet = () => {
     const [fueldataamountdis, setFuelDataAmountDis] = useState(false)
     const [fueladvancedamounthide, setFuelAdvancedamountHide] = useState(null)
     const [deletetripasheetdata, setDeleteTripsheetData] = useState(false);
+      const [bookiddata,setbookiddata]=useState('')
     // -------------------this zoom imgae in attachfile----------
     const [zoom, setZoom] = useState(1);
     const [posX, setPosX] = useState(0);
@@ -584,8 +586,16 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            const { tripid } = selectedMapRow;
+            if(!tripid){
+                console.log("qaaaatripid")
+                return
+            }
+
             try {
                 const { tripid } = selectedMapRow;
+                // console.log(tripid,"qawwewdee")
+                
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
                 const data = response.data;
                 const sortedData = rearrangeTripData(data)
@@ -675,6 +685,7 @@ const useTripsheet = () => {
 
     // map1
     const handleTripmapClick = async () => {
+        console.log("testtripmapclcik")
         try {
             const tripid = selectedRow?.tripid || book?.tripid || selectedCustomerData?.tripid || formData?.tripid;
             if (!tripid) {
@@ -722,6 +733,7 @@ const useTripsheet = () => {
             // }
             // setMapimgPopupOpen(true);
         } catch {
+
         }
     };
     // console.log(mapimageUrls1,"urls")
@@ -974,7 +986,8 @@ const useTripsheet = () => {
             // setIsEditMode(true);
 
             setIsEditMode(false);
-            setMessageEditedBeforetrip(messagedatatrip)
+            setMessageEditedBeforetrip(messagedatatrip);
+            setbookiddata(params.get('tripid'))
         }
         else if (formData['dispatchcheck'] === 'true' && formData['status'] !== 'pending') {
             // setIsEditMode(false);
@@ -983,7 +996,7 @@ const useTripsheet = () => {
             setDriverSMS(false)
             setIsEditMode(true);
             setMessageEditedBeforetrip(messagedatatrip)
-            getSignatureImageverify();
+            // getSignatureImageverify();
             handleTripmapverify();
             checksignatureandmap();
             fuelAdvnacedisabled();
@@ -1064,7 +1077,7 @@ const useTripsheet = () => {
         setVendorbilldata({});
         // setIsHybridCustomer(false)
         // ===---------------
-        setAttachedImage("")
+        // setAttachedImage("")
         setAttachImageETrip("")
         setGMapImageUrl("")
         setRouteData('')
@@ -1113,6 +1126,7 @@ const useTripsheet = () => {
         setDeleteTripsheetData(false)
         handleEditClickfocus()
     };
+
     const handlecheck = async () => {
         const statusdata = formData.status || book.status || selectedCustomerData.status;
         if (sendEmail) {
@@ -1123,9 +1137,11 @@ const useTripsheet = () => {
                         guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
                         guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
                         email: formValues.email || selectedCustomerData.email || book.email || formData.email,
-                        driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
-                        vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
-                        mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
+                        // driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+                         driverName :  selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
+                        // vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
+                          vehRegNo:  selectedCustomerData.vehRegNo || formData.vehRegNo || selectedCustomerDatas.vehRegNo  || formValues.vehRegNo || book.vehRegNo,
+                        mobileNo:selectedCustomerData.mobileNo ||  formData.mobileNo || selectedCustomerDatas.mobileNo  || formValues.mobileNo || book.mobileNo || '',
                         vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
                         vehicleNameee: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
                         requestno: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
@@ -1175,9 +1191,9 @@ const useTripsheet = () => {
         else {
             // localStorage.setItem('selectedTripid', tripid);
             getMapImaage();
-            getSignatureImage();
+            // getSignatureImage();
             invoiceRouteData();
-            getAttachedImage();
+            // getAttachedImage();
             getAttachedImageforEtripsheet()
             setPopupOpen(true);
 
@@ -1336,16 +1352,21 @@ const useTripsheet = () => {
     const tripID1 = useMemo(() => {
         return book.tripid || selectedCustomerData.tripid || formData.tripid;
     }, [book.tripid || selectedCustomerData.tripid || formData.tripid]);
-
+    // const tri = book.tripid || selectedCustomerData.tripid || formData.tripid;
+//   const d = book.tripid || selectedCustomerData.tripid || formData.tripid;
     useEffect(() => {
         // Only make the API call if tripID1 is defined (not null or undefined)
+        // const d = book.tripid || selectedCustomerData.tripid || formData.tripid;
+        
         if (tripID1) {
+            // console.log(tripID1,"qaidataenterrr")
             const fetchData = async () => {
                 try {
                     const response = await axios.get(`${apiUrl}/Checkstatusandappsclosed/${tripID1}`);
                     const data = response.data;
 
                     setCheckStatusApp(data)
+                    // console.log(data,"qaweeeep.k")
 
                     // Further processing of the data
                 } catch (err) {
@@ -1355,7 +1376,7 @@ const useTripsheet = () => {
 
             fetchData(); // Trigger the async function to fetch data
         }
-    }, [tripID1, apiUrl]);
+    }, [apiUrl,enterTrigger,isEditMode]);
 
     const getCurrentTime = () => {
         const now = new Date();
@@ -1508,7 +1529,7 @@ const useTripsheet = () => {
     // console.log(mapimageUrls1, "urls", typeof (mapimageUrls1), mapimageUrls)
     const checksignatureandmap = async () => {
         const userstatusdata = userstatuspermission
-        console.log(signimageUrl1, "sign", mapimageUrls1, userstatuspermission)
+        console.log(signimageUrl1, "condition1checksign", mapimageUrls1, userstatuspermission)
         //   const userstatusdata = userstatuspermission
 
         if (tripID1 && userstatusdata.length > 0) {
@@ -1635,13 +1656,14 @@ const useTripsheet = () => {
         try {
             setisEditload(true)
             try {
-                await getSignatureImage()
+                // await getSignatureImage()
                 await hybridatahcldatakm()
 
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 // const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || book.tripsheetdate || dayjs();
-                const dattasign = signimageUrl ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
+                // const dattasign = signimageUrl ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
+                 const dattasign = signimageUrl1 ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
                 const updatedCustomer = {
                     ...book,
                     ...selectedCustomer,
@@ -1660,13 +1682,17 @@ const useTripsheet = () => {
                     closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
                     additionaltime: additionalTime.additionaltime || book.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime,
                     tripsheetdate: selectedBookingDate,
-                    hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
-                    vehRegNo: selectedCustomerDatas.vehRegNo || formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo || '',
+                    // hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
+                    hireTypes: selectedCustomerData.hireTypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
+                    // vehRegNo: selectedCustomerDatas.vehRegNo || formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo || '',
+                    vehRegNo: selectedCustomerData.vehRegNo  || formData.vehRegNo || formValues.vehRegNo || book.vehRegNo || '',
                     // driverName: selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
                     driverName:selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
-                    mobileNo: selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo,
+                    // mobileNo: selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo,
+                    mobileNo:selectedCustomerData.mobileNo || formData.mobileNo || formValues.mobileNo || book.mobileNo,
                     shedkm: shedKilometers.shedkm || book.shedkm || formData.shedkm || selectedCustomerData.shedkm,
-                    vehicleName2: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
+                    // vehicleName2: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
+                    vehicleName2:selectedCustomerData.vehicleName2 ||formData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
                     orderbyemail: formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail,
                     totaldays: parseInt(calculateTotalDay() || 0) || 0,
                     totalkm1: calculateTotalKilometers(),
@@ -1815,83 +1841,20 @@ const useTripsheet = () => {
         }
     };
 
-    // const handleConfirm = async () => {
-    //     try {
-    //         try {
-    //             const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
-    //             const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
-    //             const updatedCustomer = {
-    //                 ...book,
-    //                 ...selectedCustomer,
-    //                 ...vehilcedetails,
-    //                 ...selectedCustomerData,
-    //                 ...formData,
-    //                 starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
-    //                 closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
-    //                 reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
-    //                 shedintime: shedintime || book.shedintime || selectedCustomerData.shedintime || formData.shedintime,
-    //                 starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
-    //                 closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
-    //                 additionaltime: additionalTime.additionaltime,
-    //                 tripsheetdate: selectedBookingDate,
-    //                 vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
-    //                 vehType: VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '',
-    //                 driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
-    //                 mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
-    //                 shedkm: shedKilometers.shedkm,
-    //                 vehicleName2: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
-    //                 totalkm1: calculateTotalKilometers(),
-    //                 totaltime: calculateTotalTimes(),
-    //                 TotalTimeWithoutAddHours: calculatewithoutadditonalhour(),
-    //                 netamount: calculateTotalAmount(),
-    //                 exkm: packageDetails[0]?.extraKMS,
-    //                 exHrs: packageDetails[0]?.extraHours,
-    //                 night: packageDetails[0]?.NHalt,
-    //                 amount: packageDetails[0]?.Rate,
-    //                 exkm1: packageDetails[0]?.extraKMS,
-    //                 exHrs1: packageDetails[0]?.extraHours,
-    //                 night1: packageDetails[0]?.NHalt,
-    //                 amount5: packageDetails[0]?.Rate,
-    //                 amount1: calculateExkmAmount(),
-    //                 amount2: calculateExHrsAmount(),
-    //                 amount3: calculateNightAmount(),
-    //                 amount4: calculatedriverconvienceAmount(),
-    //                 package: packageDetails[0]?.package,
-    //                 pack: packageDetails[0]?.package,
-    //                 minhrs: packageDetails[0]?.Hours,
-    //                 minkm: packageDetails[0]?.KMS,
-    //             };
-    //             for (const key in updatedCustomer) {
-    //                 if (key === '0') {
-    //                     delete updatedCustomer[key];
-    //                 }
-    //             }
-    //             await axios.put(`${apiUrl}/tripsheet-confirm/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
-    //             handleCancel();
-    //             setShedKilometers("")
-    //             setAdditionalTime("")
+  
 
-    //             setRow([]);
-    //             setRows([]);
-    //             setSuccess(true);
-    //             setSuccessMessage("Successfully updated");
-    //         } catch {
-    //             setError(true);
-    //             setErrorMessage("Check your Network Connection");
-    //         }
-    //     } catch {
-    //         setError(true);
-    //         setErrorMessage("Check your Network Connection");
-    //     }
-    // };
-
+                //    console.log("qavehRegNo",selectedCustomerData.vehRegNo,formData.vehRegNo,selectedCustomerDatas.vehRegNo,formValues.vehRegNo,book.vehRegNo)
+                     
+                //        console.log("qavehicleNameee:", selectedCustomerData.vehicleName2,formValues.vehicleName2,packageData.vehicleName2, book.vehicleName2)
 
 
     const handleAdd = async () => {
 
         const customer = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer;
         const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
-        const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
+        // const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
+        // const mobileNo = selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo;
+        const driverName =  selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         const mobileNo = selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo;
         const Email = formData.email || selectedCustomerData.email || formValues.email || book.email;
         // const vehType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
@@ -1993,10 +1956,13 @@ const useTripsheet = () => {
                 driverName: driverName,
                 request: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
                 vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
-                vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
+                // vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
+                vehRegNo: selectedCustomerData.vehRegNo ||formData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                 Groups: selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups,
-                hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
-                mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo,
+                // hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
+                hireTypes: selectedCustomerData.hireTypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
+                mobileNo:  selectedCustomerData.mobileNo ||formData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo,
+                // mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo,
                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
                 escort, minHour, minKM, transferreport,
                 // -------vendordata-------------------------------------------------
@@ -3841,6 +3807,7 @@ const useTripsheet = () => {
 
             if (manualInput) {
                 const selectedVehicle = vechiledata?.find(option => option?.vehRegNo === manualInput);
+                console.log(selectedVehicle,"driverselectveh")
 
                 setBook(prevState => ({
                     ...prevState,
@@ -4511,6 +4478,7 @@ const useTripsheet = () => {
             localStorage.removeItem("pointscount")
             const tripid = event.target.value;
             const loginUserName = await localStorage.getItem("username")
+             
 
 
             try {
@@ -4561,6 +4529,7 @@ const useTripsheet = () => {
                             setdriverBeta_amount(bookingDetails.driverBeta_amount);
                             setTotalcalcAmount(bookingDetails.totalcalcAmount);
                             setGroupTripId(bookingDetails.GroupTripId)
+                            console.log(bookingDetails.Hybriddata,"hclbook")
                             setHybridHclCustomer(bookingDetails.Hybriddata);
                             setTimeToggle(bookingDetails.TimeToggleData)
                             setTimeToggleVendor(bookingDetails.VendorTimeToggle)
@@ -4589,8 +4558,9 @@ const useTripsheet = () => {
                             // setLockData(true)
                             setLockDatavendorBill(true)
                             setLockDatacustomerBill(true)
+                        
                             localStorage.setItem('selectedTripid', tripid);
-                            getSignatureImageverify();
+                            // getSignatureImageverify();
                             handleTripmapverify();
                             checksignatureandmap();
                             fuelAdvnacedisabled();
@@ -4609,9 +4579,9 @@ const useTripsheet = () => {
 
 
                 getMapImaage();
-                getSignatureImage();
+                // getSignatureImage();
                 invoiceRouteData();
-                getAttachedImage();
+                // getAttachedImage();
                 getAttachedImageforEtripsheet()
 
             } catch (error) {
@@ -4654,6 +4624,7 @@ const useTripsheet = () => {
         const keys = Object.keys(params);
         keys.forEach(key => {
             const value = params[key];
+            console.log(key ,value,"driverrow")
             if (key !== "rateType") {
                 handleChange({ target: { name: key, value: value } });
             }
@@ -4676,7 +4647,8 @@ const useTripsheet = () => {
             try {
                 const dataToSend = {
                     tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
-                    driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+                    // driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+                     driverName :  selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
                     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
@@ -4818,32 +4790,67 @@ const useTripsheet = () => {
         document.body.removeChild(link);
     };
 
+// console.log(formData.tripid,"ffff",selectedCustomerData.tripid,"ssss", book.tripid,"newwwwwwwwwwtripis")
 
-    const getSignatureImage = async () => {
+// const tripID1sign = useMemo(() => {
+//         return book.tripid || selectedCustomerData.tripid || formData.tripid;
+//     }, [selectedCustomerData.tripid]);
+    // const getSignatureImage = async () => {
+    //     console.log("newwoooooooooooooooooooooooooolddddddd")
+    //     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    //     try {
+    //         if (tripid !== null && tripid && tripid !== "undefined") {
+    //             const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004  
+    //             if (response.status === 200) {
+    //                 const imageUrl = URL.createObjectURL(await response.blob());
+    //                 setSignImageUrl(imageUrl);
+    //                 // setSuccess(true)
+    //                 // setSuccessMessage('Signature Added Sucessfully')
+
+    //             }
+    //         }
+    //     } catch (err) {
+    //         console.log(err, 'newerror');
+    //         setWarning(true);
+    //         setWarningMessage("Failed to fetch signature image. Please try again.");
+
+    //     }
+    // };
+
+
+    // const getSignatureImageverify = useCallback(async () => {
+    //     console.log("newwwollllladddeddddddusememo")
+    //     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    //     checksignatureandmap()
+    //     try {
+    //         if (tripid !== null && tripid && tripid !== "undefined") {
+    //             const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
+    //             // console.log(response,"ddddddddddddddddddddddddd")
+    //             if (response.status === 200) {
+    //                 const imageUrl = URL.createObjectURL(await response.blob());
+    //                 // console.log("addeddatyyyyyyyyyyyyyyyyyyyyyyy")
+    //                 setSignImageUrl1(imageUrl);
+
+    //                 // setSuccess(true)
+    //                 // setSuccessMessage('Signature Added Sucessfully')
+
+    //             }
+    //         }
+    //     } catch (err) {
+    //         console.log(err, 'newerror');
+    //         setWarning(true);
+    //         setWarningMessage("Failed to fetch signature image. Please try again.");
+
+    //     }
+
+        
+    // // }, [formData, book, isEditMode, signimageUrl1, userstatuspermission])
+    // },[tripID1sign])
+
+       const getSignatureImageverify = async () => {
+       
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-        try {
-            if (tripid !== null && tripid && tripid !== "undefined") {
-                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004  
-                if (response.status === 200) {
-                    const imageUrl = URL.createObjectURL(await response.blob());
-                    setSignImageUrl(imageUrl);
-                    // setSuccess(true)
-                    // setSuccessMessage('Signature Added Sucessfully')
-
-                }
-            }
-        } catch (err) {
-            console.log(err, 'error');
-            setWarning(true);
-            setWarningMessage("Failed to fetch signature image. Please try again.");
-
-        }
-    };
-
-
-    const getSignatureImageverify = useCallback(async () => {
-        // console.log("adddedddddd")
-        const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+         console.log("signver",tripid)
         checksignatureandmap()
         try {
             if (tripid !== null && tripid && tripid !== "undefined") {
@@ -4860,12 +4867,15 @@ const useTripsheet = () => {
                 }
             }
         } catch (err) {
-            console.log(err, 'error');
+            console.log(err, 'newerror');
             setWarning(true);
             setWarningMessage("Failed to fetch signature image. Please try again.");
 
         }
-    }, [formData, book, isEditMode, signimageUrl1, userstatuspermission])
+
+        
+    // }, [formData, book, isEditMode, signimageUrl1, userstatuspermission])
+    }
 
 
 
@@ -4882,10 +4892,10 @@ const useTripsheet = () => {
             try {
                 await axios.post(`${APIURL}/api/uploadsignaturedata/${tripiddata}/${datadate}`, formData);
                 // await axios.post(`http://localhost:7000/signatureimagesavedriver/${datadate}`,formData)
-                getSignatureImage()
+                // getSignatureImage()
                 getSignatureImageverify()
                 checksignatureandmap()
-                setSignImageUrl(imageUrl);
+                // setSignImageUrl(imageUrl);
                 setSuccess(true)
                 setSuccessMessage('Signature Added Sucessfully')
                 setNoChangeData((prevData) => ({
@@ -4917,7 +4927,8 @@ const useTripsheet = () => {
             const responsedata = await axios.delete(`${apiUrl}/api/signatureimagedelete/${tripiddata}`)
             setSignaturepopup(false);
             setSignImageUrl('')
-            getSignatureImage()
+            setSignImageUrl1('')
+            // getSignatureImage()
             getSignatureImageverify()
             setNoChangeData((prevData) => ({
                 ...prevData,
@@ -4933,13 +4944,17 @@ const useTripsheet = () => {
 
 
     const getMapImaage = async () => {
+        console.log("testgmapurldata")
         try {
             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+            console.log(tripid,"gmapdata")
             if (tripid !== null && tripid && tripid !== "undefined") {
                 const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
+                console.log(response,"gmapdataresponse")
                 if (response.status === 200) {
                     const responseData = await response.blob();
                     const imageUrl = URL.createObjectURL(responseData);
+                    console.log(imageUrl,"gmapdataurl")
                     setGMapImageUrl(imageUrl);
                 }
             }
@@ -4948,26 +4963,26 @@ const useTripsheet = () => {
             console.log("Error", error)
         }
     };
+// console.log(GmapimageUrl,mapimageUrls,"hellourls")
 
 
 
+    // const getAttachedImage = async () => {
+    //     try {
+    //         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
 
-    const getAttachedImage = async () => {
-        try {
-            const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-
-            if (tripid !== null && tripid && tripid !== "undefined") {
-                const response = await fetch(`${apiUrl}/get-attachedimage/${tripid}`);
-                if (response.status === 200) {
-                    const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
-                    setAttachedImage(attachedImageUrls);
-                }
-            }
-        } catch (error) {
-            console.log("Error", error)
-        }
-    };
+    //         if (tripid !== null && tripid && tripid !== "undefined") {
+    //             const response = await fetch(`${apiUrl}/get-attachedimage/${tripid}`);
+    //             if (response.status === 200) {
+    //                 const data = await response.json();
+    //                 const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
+    //                 setAttachedImage(attachedImageUrls);
+    //             }
+    //         }
+    //     } catch (error) {
+    //         // console.log("Error", error)
+    //     }
+    // };
     const getAttachedImageforEtripsheet = async () => {
         try {
             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
@@ -6357,10 +6372,10 @@ const useTripsheet = () => {
         // if(!isentertripID){
         //     return
         // }
-        handleTripmapverify()
+        // handleTripmapverify()
         // await getSignatureImage()
-        getSignatureImageverify()
-        getSignatureImage()
+        // getSignatureImageverify()
+        // getSignatureImage()
 
 
         // console.log(overetripsheetoutstation ,overetripsheetstatus,"over")
@@ -6877,14 +6892,17 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = formData?.tripid || selectedCustomerData?.tripid || book?.tripid;
+            const tripid = formData?.tripid || selectedCustomerData?.tripid || book?.tripid || tripID1;
+            // console.log(tripid,"qa1tripgmspdatata")
 
             if (!tripid) {
+                //   console.log(tripid,"qa1tripgmspdatatanotriipf")
                 console.warn("TripID is missing, skipping API call");
                 return;
             }
 
             try {
+                // console.log(tripid,"qa1tripgmspenetrrrrrrrr")
                 const response = await axios.get(`${apiUrl}/getGmapdataByTripId/${encodeURIComponent(tripid)}`);
                 setManualTripID(response.data);
             }
@@ -6894,7 +6912,8 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [manualMarkTrigger, formData.tripid, selectedCustomerData.tripid, book.tripid, mapButtonTrigger, mapimgpopupOpen]);
+    // }, [manualMarkTrigger, formData.tripid, selectedCustomerData.tripid, book.tripid, mapButtonTrigger, mapimgpopupOpen]);
+     }, [apiUrl,enterTrigger,manualMarkTrigger,isEditMode,mapimgpopupOpen,mapButtonTrigger]);
 
     const handleDeleteMap = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
@@ -7800,6 +7819,7 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            console.log("eduenterqwwwwwwwwwwwwvenkatcode",loginusername)
             try {
                 const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
                     username: loginusername,
@@ -7807,6 +7827,11 @@ const useTripsheet = () => {
                 const data = response.data;
                 const station = data?.map(li => li.stationname.split(",")).flat();
                 setUserStatus(station);
+
+                
+                console.log(station, "eduqqqqqqqqqqqqqqqdisuseraww")
+                setUserStatusPermission(station)
+                EditButtonHide(station)
 
                 console.log("Debugging Inputs:");
                 console.log("statusCheck:", statusCheck);
@@ -7823,7 +7848,7 @@ const useTripsheet = () => {
                 //     (station.includes("Chennai") || station.includes("All"))
                 // )
                 // check outstation and hide booking details in tripsheet
-                if (!station.includes("Chennai") && !station.includes("All")) {
+                if (!station.includes("Chennai") && !station.includes("All") && !isEditMode) {
                     console.log(superAdminAccess, "superAdminAccesssssssssssssssssss", station, !station.includes("Chennai"));
                     console.log("outstationnnnnnnnnnnnnnnnnnnnnnnnnnn");
 
@@ -7965,19 +7990,25 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [enterTrigger, book]);
+    // }, [enterTrigger]);
+      }, [manualMarkTrigger]);
+    // console.log(userstatuspermission,"qquserprrrrrehxjxjxkjxkekwskwslwkslwsl")
+    
 
     // Edit Button Hide
 
     const statuschecking = selectedStatus;
     // console.log(statuschecking,'status checking',selectedCustomerData.status,book.status,selectedStatus);
-    const EditButtonHide = async () => {
-        try {
-            const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
-                username: loginusername,
-            });
-            const data = response.data;
-            const station = data?.map(li => li.stationname.split(",")).flat();
+    const EditButtonHide = async (station) => {
+            console.log("educhecktwwvenkatcodeediitittt",loginusername)
+            
+        // try {
+        //     const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
+        //         username: loginusername,
+        //     });
+            // const data = response.data;
+            // const station = data?.map(li => li.stationname.split(",")).flat();
+
             if (statuschecking === "Closed" && ((station.includes('Chennai') || station.includes('All')))) {
                 SetEditButtonStatusCheck(true)
             }
@@ -7993,37 +8024,42 @@ const useTripsheet = () => {
             else if (statuschecking === "Opened") {
                 SetEditButtonStatusCheck(false)
             }
-        }
-        catch (err) {
-            console.log(err, "error");
+        // }
+        // catch (err) {
+        //     console.log(err, "error");
 
-        }
+        // }
     }
-    useEffect(() => {
-        EditButtonHide()
-    }, [statuschecking])
+    // useEffect(() => {
+        
+    //     EditButtonHide()
+    //  }, [apiUrl])
+    // }, [statuschecking])
+//  useEffect(() => {
+//         EditButtonHide()
+//     }, [selectedStatus])
+
+    // useEffect(() => {
+    //     const fetchDatastatus = async () => {
+    //         console.log("qqmyyyyyyvenkatcode")
+    //         try {
+    //             const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
+    //                 username: loginusername,
+    //             });
+    //             const data = response.data;
+    //             const station = data?.map(li => li.stationname.split(",")).flat();
+    //             console.log(station, "qqqqqqqqqqqqdisuserawwqqqqqqqqqqqqqqqqqqqqq")
+    //             // setUserStatusPermission(station)
 
 
-    useEffect(() => {
-        const fetchDatastatus = async () => {
-            try {
-                const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
-                    username: loginusername,
-                });
-                const data = response.data;
-                const station = data?.map(li => li.stationname.split(",")).flat();
-                console.log(station, "disuseraww")
-                setUserStatusPermission(station)
 
-
-
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
-        fetchDatastatus()
-    }, [loginusername, isEditMode])
+    //         }
+    //         catch (err) {
+    //             console.log(err)
+    //         }
+    //     }
+    //     fetchDatastatus()
+    // }, [loginusername, isEditMode])
 
 
     // const statuschecking = selectedStatus;
@@ -8247,6 +8283,7 @@ const useTripsheet = () => {
             return
         }
     }
+   
 
     //    const advancefuel = vendorinfo.fuelamount
 
@@ -8412,16 +8449,19 @@ const useTripsheet = () => {
     //     }
     //     fetchData()
     // }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues])
+    
     useEffect(() => {
         const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || "";
         const dateCheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate || "";
-
+        // console.log(vehicleNo,dateCheck,"qavrrrtrrrrrr")
         if (!vehicleNo || !dateCheck) {
-            console.warn("Missing vehicleNo or dateCheck. Skipping API call.");
+            //    console.log(vehicleNo,dateCheck,"qavrnotvalidrrtrrrrrr")
+            // console.warn("Missing vehicleNo or dateCheck. Skipping API call.");
             return;
         }
 
         const fetchData = async () => {
+            //    console.log(vehicleNo,dateCheck,"qaventerrrrrr")
             try {
                 const response = await axios.post(`${apiUrl}/getVehcileHistoryData`, { vehicleNo, dateCheck });
                 const mainDatas = response.data;
@@ -8466,7 +8506,8 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues]);
+         }, [apiUrl,book?.shedOutDate,selectedCustomerData.shedOutDate,selectedCustomerData.vehRegNo]);
+    // }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues]);
 
     const handleMessagetrip = () => {
         setDialogMessage(true)
@@ -8485,10 +8526,11 @@ const useTripsheet = () => {
         const initialize = async () => {
             try {
                 // console.log("count1")
+                // console.log("newwwcallintla")
                 await checksignatureandmap();
-                await getSignatureImageverify();
+                // await getSignatureImageverify();
                 await handleTripmapverify();
-                await checksignatureandmap();
+                // await checksignatureandmap();
                 fuelAdvnacedisabled();
             } catch (error) {
                 console.error("Initialization failed:", error);
@@ -8497,6 +8539,10 @@ const useTripsheet = () => {
 
         initialize();
     }, [isAddload, status1, userstatuspermission]);
+      useEffect(() => {
+        // console.log("signveruseeffect")
+        getSignatureImageverify();
+    }, [apiUrl,isEditMode,manualMarkTrigger]);
 
     //   getting lat and long from vehcileAccessLocation tables  (gpsdevicedata.js file)
     const gpsTripId = formData.tripid || selectedCustomerData.tripid || book.tripid;
@@ -8505,61 +8551,90 @@ const useTripsheet = () => {
     useEffect(() => {
         const fetchData = async () => {
             // console.log(gpsTripId,"gpsTripIdddd2222222222");
+             const gpsTripId1 = formData.tripid || selectedCustomerData.tripid || book.tripid || tripID1;
+            // console.log(gpsTripId,"qa1gaagetlatlongg",gpsTripId1)
+            if(!gpsTripId1){
+                // console.log("qa1gpsenetrgetlatlong")
+                return
+            }
 
             try {
+                //   console.log("qa1gpsenetrgetlatlongeeeeeeeeeeeee")
                 const response = await axios.get(`${apiUrl}/getLatLongByTripId`, {
                     params: { gpsTripId }
                 });
 
-                console.log(response.data, "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]-------------------------");
+                // console.log(response.data, "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]-------------------------");
                 setTripGpsData(response.data)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
 
-        if (gpsTripId) {
+        //   if (gpsTripId) {
+        //     fetchData();
+        // }
+        // if (gpsTripId) {
             fetchData();
-        }
-    }, [apiUrl, enterTrigger]);
+        // }
+        // }, [apiUrl, enterTrigger]);
+    }, [apiUrl, enterTrigger,isEditMode]);
+
     useEffect(() => {
         const fetchData = async () => {
             // console.log(gpsTripId,"gpsTripIdddd33333333333333");
+             const gpsTripId2 = formData.tripid || selectedCustomerData.tripid || book.tripid || tripID1;
+            // console.log("qa2gaagetlatlongg",gpsTripId2)
+            if(!gpsTripId2){
+                // console.log("qa2errorgpsenetrgetlatlong")
+                return
+            }
             try {
+                //    console.log("qa2enterdgpsenetrgetlatlong")
                 const response = await axios.get(`${apiUrl}/appLatLongDetailsByTripId`, {
                     params: { gpsTripId }
                 });
 
-                console.log(response.data, "fullgpsdataaaaaaaa");
+                // console.log(response.data, "fullgpsdataaaaaaaa");
                 setFullGpsData(response.data)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
 
-        if (gpsTripId) {
+        // if (gpsTripId) {
             fetchData();
-        }
-    }, [apiUrl, gpsTripId]);
+        // }
+    // }, [apiUrl, gpsTripId]);
+    }, [apiUrl, enterTrigger,isEditMode]);
     // allLatLongDetailsByTripId
     useEffect(() => {
         const fetchData = async () => {
+
+               const gpsTripId3 = formData.tripid || selectedCustomerData.tripid || book.tripid || tripID1;
+            // console.log("qa3gaagetlatlongg",gpsTripId3)
+            if(!gpsTripId3){
+                // console.log("qa3errorgpsenetrgetlatlong")
+                return
+            }
             try {
+                //  console.log("qa3errorgpsenetrgetlatlongenterrrrrrrrrrrrr")
                 const response = await axios.get(`${apiUrl}/allLatLongDetailsByTripId`, {
                     params: { gpsTripId }
                 });
 
-                console.log(response.data, "fullgpsdataaaaaaaa");
+                // console.log(response.data, "fullgpsdataaaaaaaa");
                 setAllGpsData(response.data)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
 
-        if (gpsTripId) {
+        // if (gpsTripId) {
             fetchData();
-        }
-    }, [apiUrl, gpsTripId, enterTrigger]);
+        // }
+    // }, [apiUrl, gpsTripId, enterTrigger]);
+     }, [apiUrl,enterTrigger,isEditMode]);
 
 
     const handleExcelDownloadtrip = async (rowdataar) => {
@@ -8856,7 +8931,7 @@ const useTripsheet = () => {
 
     const handleFullDeleteMapData = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-        console.log(tripid, "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+        // console.log(tripid, "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
         if (row.length > 0) {
 
             try {
@@ -8884,16 +8959,19 @@ const useTripsheet = () => {
 
     const handleRefresh = async () => {
 
-        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid || tripID1;
         // const tripid2 = formData?.tripid || selectedCustomerData?.tripid || book?.tripid;
         // console.log(tripid,"xop")
-        // console.log(gpsTripId,"xoppppppppppppppppp",tripID1)
+        // console.log(gpsTripId,tripid,"qa5xoppppppppppppppppp",tripID1)
         // const bookingno = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
         try {
             if (!tripid) {
+                // console.log(gpsTripId,tripid,"qa5notvalid")
                 // setRows([])
+                // console
                 return
             } else {
+                //   console.log(tripid,"qa5enterrrrrrrrrrrrrnotvalid")
                 const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}/${tripid}`);
                 const data = response.data;
 
@@ -8928,20 +9006,28 @@ const useTripsheet = () => {
         } catch {
         }
     };
-    useEffect(() => {
+ 
+  
+      useEffect(() => {
         handleRefresh()
-    }, [gpsTripId])
-
+      }, [apiUrl,enterTrigger,isEditMode,location]);
+ 
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
-            console.log(tripid, "tripiddddddddddddddddppppppppppppp");
+            const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid || tripID1;
+            // console.log(tripid, "qa33tripiddddddddddddddddppppppppppppp",book.tripid,selectedCustomerData.tripid,formData.tripid,tripID1,messageditedbeforetrip,"booooo",bookiddata);
+            if(!tripid){
+                //   console.log(tripid, "qa33notvalidtripid");
+                return 
+            }
             try {
                 if (tripid !== undefined && tripid !== null && tripid !== "") {
+                    //  console.log(tripid, "qa33tripidpeneter");
                     const response = await axios.get(`${apiUrl}/getBookingStatusByTripId`, {
                         params: { tripid }
                     });
-                    console.log(response.data, "statuscheckingggggggggggggggggggggggggg");
+                    // console.log(response.data, "statuscheckingggggggggggggggggggggggggg");
+
                     setBookingTripStatus(response.data)
                 }
             }
@@ -8952,7 +9038,9 @@ const useTripsheet = () => {
             }
         }
         fetchData();
-    }, [book, location]);
+    // }, [book.tripid, location]);
+    //  }, [book.tripid, location]);
+       }, [apiUrl,enterTrigger,isEditMode,location,bookiddata]);
 // /DeleteTemporarygmapdata'
 
 const handleTemporaryDeleteMapDataClose = ()=>{
@@ -9049,7 +9137,7 @@ const handleTemporaryDelete = async () => {
         handleETripsheetClick,
         handlePopupClose,
         tripSheetData,
-        attachedImage,
+        // attachedImage,
         routeData,
         signimageUrl,
         GmapimageUrl,
@@ -9083,7 +9171,7 @@ const handleTemporaryDelete = async () => {
         selectedRow,
         imageUrl,
         selectedStatus,
-        setSelectedStatus,
+        // setSelectedStatus,
         link,
         isSignatureSubmitted,
         //  checkCloseKM,
@@ -9095,7 +9183,8 @@ const handleTemporaryDelete = async () => {
         //  handleConfirm,
         setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails, maplogcolumns, setError,
         setErrorMessage,
-        handleimagedelete, signaturepopup, siganturediaglogclose, handlesignaturemageDownload, signatureupload, setSignatureupload, setSignaturepopup, handleFileChangesignature, getSignatureImage, handlesignaturemageDelete, setSign, setLink,
+        // getSignatureImage,
+        handleimagedelete, signaturepopup, siganturediaglogclose, handlesignaturemageDownload, signatureupload, setSignatureupload, setSignaturepopup, handleFileChangesignature,getSignatureImageverify, handlesignaturemageDelete, setSign, setLink,
         handleVendorcalc, calculatevendorTotalDays, vendorinfo, setVendorinfodata, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
         // calcvendordata,
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
@@ -9106,7 +9195,7 @@ const handleTemporaryDelete = async () => {
         nightTotalCount, setNightTotalCount,
         nightTotalAmount, setNightTotalAmount,
         maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
-        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
+        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl,signimageUrl1, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
         handleEditMap,
         handleDeleteMap, copydatalink, setCopyDataLink,
         // conflictenddate, 

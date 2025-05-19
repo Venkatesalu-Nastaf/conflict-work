@@ -351,7 +351,8 @@ else if (isAllMonths) {
     const pieData = [
                 { name: 'Vendor', value:vendordata.totalVendorAmount },
                 { name: 'Customer', value:vendordata.totalCalcAmount },
-                {name:"profit",value:vendordata.profit}
+                { name: 'profit', value: vendordata.profit < 0 ? 0 : vendordata.profit }
+
               ];
 
    const handlefromYearChange = (event) => {

@@ -7,7 +7,8 @@ import { saveAs } from 'file-saver';
 import { APIURL } from "../../url";
 import 'jspdf-autotable'
 import { Organization ,stateToStations } from './Customerdata';
-import { useData1 } from '../../Dashboard/Maindashboard/DataContext'
+import { useData1 } from '../../Dashboard/Maindashboard/DataContext';
+import encryption  from '../../dataEncrypt';
 
 // TABLE START
 const columns = [
@@ -613,7 +614,8 @@ const useCustomer = () => {
     const getcustomerdata = async (customerdata) => {
         const datacustomer = customerdata
         try {
-            const response = await axios.get(`${apiUrl}/getcustomerorderdata/${datacustomer}`)
+            const encryptCustomer = encryption(datacustomer)
+            const response = await axios.get(`${apiUrl}/getcustomerorderdata/${encryptCustomer}`)
             const data = response.data
             if (data.length > 0) {
                 setCustomerFieldSets(data)
@@ -672,9 +674,12 @@ const useCustomer = () => {
         setCredentialData(false)
     }
     //search with date
+    
     const handleSearch = async () => {
         try {
-            const response = await fetch(`${apiUrl}/searchCustomer?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+            const encryptSearch =searchText? encryption(searchText) : '';
+            // console.log(encryptSearch,"cheking");    
+            const response = await fetch(`${apiUrl}/searchCustomer?searchText=${encryptSearch}&fromDate=${fromDate}&toDate=${toDate}`);
             const data = await response.json();
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
@@ -716,9 +721,13 @@ const useCustomer = () => {
     };
 
     const handleenterSearch = useCallback(async (e) => {
+        if(searchText === "")return;
         if (e.key === "Enter") {
             try {
-                const response = await fetch(`${apiUrl}/searchCustomer?searchText=${encodeURIComponent(searchText)}`);
+                const encryptSearch = encryption(searchText);
+                // console.log(encryptSearch,"searching");
+                     
+                const response = await fetch(`${apiUrl}/searchCustomer?searchText=${encodeURIComponent(encryptSearch)}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

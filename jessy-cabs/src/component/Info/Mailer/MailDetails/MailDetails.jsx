@@ -25,6 +25,7 @@ import axios from 'axios'
 import * as XLSX from 'xlsx';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import encryption from "../../../dataEncrypt";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -274,7 +275,11 @@ const MailDetails = () => {
 
   const Attachedimagedata = async (templateid) => {
     try {
-      const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`)
+      const encryptId =templateid? encryption(templateid) :'';
+      // console.log(encryptId,"Iddd"); 
+      // console.log(encryptId,"mail");
+      
+      const response = await axios.get(`${apiurl}/gettemplateattachimage/${encryptId}`)
       const Temp = response.data
       if (Temp.length > 0) {
         setTemplateimage(Temp)
@@ -321,14 +326,13 @@ const MailDetails = () => {
 
 
       const response = await axios.post(`${apiurl}/send-emailtemplate`, datatosend)
-      console.log(response)
+      // console.log(response)
       setData({})
       setFile(null)
       fileInputRef.current.value = '';
       setSelectedData([])
       setSuccess(true)
       setSuccessMessage("Mail Sent Successfully")
-
 
     }
     catch (err) {
@@ -371,8 +375,9 @@ const MailDetails = () => {
   ]);
   const handleShowdata = async () => {
     try {
+      const encryptSearch = encryption(searchname)
       const response = await fetch(
-        `${apiurl}/tabletemplateseatch?searchText=${searchname}`
+        `${apiurl}/tabletemplateseatch?searchText=${encryptSearch}`
       );
       const data = await response.json();
       if (data.length > 0) {

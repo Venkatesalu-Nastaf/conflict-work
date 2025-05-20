@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
 const moment = require('moment');
+const decryption = require('../dataDecrypt');
 
 // Add Customer Master database
 router.post('/customers', (req, res) => {
@@ -14,7 +15,7 @@ router.post('/customers', (req, res) => {
   // }
   db.query("select * from customers where LOWER(customer) = LOWER(?)", [customerData.customer], (err, result) => {
     if (err) {
-      console.log("err", err);
+      // console.log("err", err);
       return res.status(404).json({ message: "there is issu checking customer " })
     }
     // console.log("result", result)
@@ -23,7 +24,7 @@ router.post('/customers', (req, res) => {
     } else {
       db.query('INSERT INTO customers SET ?', customerData, (err, result) => {
         if (err) {
-          console.log(err)
+          // console.log(err)
           return res.status(500).json({ error: 'Failed to insert data into MySQL' });
         }
         // console.log(result,"checking add");
@@ -41,7 +42,7 @@ router.delete('/customers/:customerId', (req, res) => {
   
   db.query('DELETE FROM customers WHERE customerId = ?', customerId, (err, result) => {
     if (err) {
-      console.log(err, "oo")
+      // console.log(err, "oo")
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }
     
@@ -83,12 +84,17 @@ router.put('/customers/:customerId', (req, res) => {
 });
 
 router.get('/searchCustomer', (req, res) => {
-  const { searchText, fromDate, toDate } = req.query; // Extract searchText, fromDate, and toDate from the query
+  const { searchText, fromDate, toDate } = req.query; 
+  // Extract searchText, fromDate, and toDate from the query
+  const decryptSearch = decryption(searchText);
+  // console.log(decryptSearch,"che king");
+  
+  
   let query = 'SELECT * FROM customers WHERE 1=1'; // Base query
   let params = [];
 
   // Filter by search text
-  if (searchText) {
+  if (decryptSearch) {
     const columnsToSearch = [
       'name',
       'customer',
@@ -110,7 +116,7 @@ router.get('/searchCustomer', (req, res) => {
     // Construct the SQL 'LIKE' conditions for the searchText
     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
     query += ` AND (${likeConditions})`;
-    params = columnsToSearch.map(() => `${searchText}%`);
+    params = columnsToSearch.map(() => `${decryptSearch}%`);
   }
 
   // Filter by date range if fromDate and toDate are provided
@@ -124,7 +130,7 @@ router.get('/searchCustomer', (req, res) => {
   // Execute the query using your database connection
   db.query(query, params, (err, results) => {
     if (err) {
-      console.error(err);
+      // console.error(err);
       return res.status(500).send('Error retrieving data');
     }
 
@@ -137,11 +143,12 @@ router.get('/customeraddress/:customername', (req, res) => {
   const customername = req.params.customername;
   db.query('select address1,gstnumber,state,billingGroup,customer from customers where customer = ?', [customername], (err, result) => {
     if (err) {
-      console.log(err, 'cust eror');
+      // console.log(err, 'cust eror');
 
       return res.status(500).json({ error: 'Failed to get data in MySQL' });
     }
-    console.log(result, 'customer result');
+    // console.log(result, 'customer result');
+
 
     return res.status(200).json(result)
   })
@@ -191,7 +198,7 @@ GROUP BY
 
   db.query(query, (err, results) => {
     if (err) {
-      console.log(err)
+      // console.log(err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
     // console.log(results, "kk")
@@ -230,7 +237,7 @@ router.get('/gstdetails/:customer', (req, res) => {
     if (err) {
       console.log(err, 'error');
     }
-    console.log(result, 'Results')
+    // console.log(result, 'Results')
     return res.status(200).json(result);
 
 
@@ -277,15 +284,20 @@ router.post('/customerorderdbydata', (req, res) => {
       return res.status(200).json({ message: "Data inserted successfully" });
     })
     .catch(err => {
-      console.error(err);
+      // console.error(err);
       return res.status(500).json({ error: "Failed to insert data into MySQL" });
     });
 })
 
 router.get('/getcustomerorderdata/:customerdata', (req, res) => {
 
-  const customer = req.params.customerdata
-  db.query("select * from  customerOrderdata where customer= ?", [customer], (err, result) => {
+  const customer = req.params.customerdata;
+  // console.log(customer,"checking");
+  
+  const decryptCustomer = decryption(customer);
+  // console.log(decryptCustomer,"decryption value");
+  
+  db.query("select * from  customerOrderdata where customer= ?", [decryptCustomer], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
@@ -344,7 +356,7 @@ router.put('/updatecustomerorderdata', (req, res) => {
       return res.status(200).json({ message: "Data processed successfully" });
     })
     .catch(err => {
-      console.log(err);
+      // console.log(err);
       return res.status(500).json({ error: "Failed to process data into MySQL" });
     });
 });
@@ -352,16 +364,16 @@ router.put('/updatecustomerorderdata', (req, res) => {
 router.delete("/deletecustomerorderdatasdata/:id", (req, res) => {
   const deleteid = req.params.id;
 
-  console.log(deleteid,"deleteid");
+  // console.log(deleteid,"deleteid");
   
 
   db.query("delete from customerOrderdata where id=?", [deleteid], (err, results) => {
     if (err) {
-      console.log("ordercustomer", err)
+      // console.log("ordercustomer", err)
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
 
-    console.log(results,"delete res");
+    // console.log(results,"delete res");
     
 
     return res.status(200).json("data delete succesfuully")
@@ -399,8 +411,14 @@ router.post("/monthlyWiseBillingDataReport", (req, res) => {
   const { customerType, fromDate, toDate } = req.body;
   const formattedFromDate = moment(fromDate).format("YYYY-MM-DD");
   const formattedToDate = moment(toDate).format("YYYY-MM-DD");
+  // console.log(req.body,"checking the values");
+  
+// console.log(formattedFromDate,"from date");
+// console.log(formattedToDate,"todate");
 
-  console.log(formattedFromDate, "formatted Dates", formattedToDate, customerType);
+
+
+  // console.log(formattedFromDate, "formatted Dates", formattedToDate, customerType);
 
   // Prepare query and params based on customerType
   const customerSqlQuery = customerType === "All"
@@ -412,9 +430,11 @@ router.post("/monthlyWiseBillingDataReport", (req, res) => {
   // Step 1: Fetch customers based on customerType
   db.query(customerSqlQuery, queryParams, (err, customers) => {
     if (err) {
-      console.log(err, "error");
+      // console.log(err, "error");
       return res.status(500).json({ error: "Database error in customer query" });
     }
+    //  console.log(customers,"checking the monthly wise values");
+    //  console.log(customers,"result");
 
     if (customers.length === 0) {
       return res.json({
@@ -437,7 +457,7 @@ router.post("/monthlyWiseBillingDataReport", (req, res) => {
 
     db.query(customerDetailsQuery, [customerNames], (err, customerDetails) => {
       if (err) {
-        console.log(err, "error");
+        // console.log(err, "error");
         return res.status(500).json({ error: "Database error in customer details query" });
       }
 
@@ -467,7 +487,7 @@ router.post("/monthlyWiseBillingDataReport", (req, res) => {
 
       db.query(transferListQuery, [formattedFromDate, formattedToDate, customerNames], (err, transferData) => {
         if (err) {
-          console.log(err, "error");
+          // console.log(err, "error");
           return res.status(500).json({ error: "Database error in transfer list query" });
         }
 
@@ -479,7 +499,7 @@ router.post("/monthlyWiseBillingDataReport", (req, res) => {
 
         db.query(GroupBillingQuery, [formattedFromDate, formattedToDate, customerNames], (err, groupData) => {
           if (err) {
-            console.log(err, "error");
+            // console.log(err, "error");
             return res.status(500).json({ error: "Database error in group billing query" });
           }
 
@@ -491,7 +511,7 @@ router.post("/monthlyWiseBillingDataReport", (req, res) => {
 
           db.query(IndividualBillingQuery, [formattedFromDate, formattedToDate, customerNames], (err, individualData) => {
             if (err) {
-              console.log(err, "errorindi");
+              // console.log(err, "errorindi");
               return res.status(500).json({ error: "Database error in individual billing query" });
             }
 
@@ -509,11 +529,17 @@ router.post("/monthlyWiseBillingDataReport", (req, res) => {
 });
 
 
-
+//doubt
 router.get("/Monthilywisedatatrip", (req, res) => {
   const { customer, fromDate, toDate } = req.query;
+  // console.log(req.query, "checking full values");
+  
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+  // console.log(formattedFromDate,"from date");
+
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+  // console.log(formattedToDate,"todate");
+  
 
 
   let query = 'SELECT * FROM customers';
@@ -572,7 +598,7 @@ router.get("/Monthilywisedatatrip", (req, res) => {
           address: customerDetail ? customerDetail.address1 : null,
         };
       });
-
+    
       return res.status(200).json(combinedResults)
     })
   })
@@ -603,12 +629,12 @@ router.get('/montlywisedataall', (req, res) => {
 
 router.get("/getuniqueCustomerdata/:customer", (req, res) => {
   const customer = req.params.customer;
-  console.log(customer, "params")
+  // console.log(customer, "params")
   db.query("select customer from customers where customer=?", [customer], (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }
-    console.log(results.length)
+    // console.log(results.length)
     return res.status(200).json(results);
 
   })

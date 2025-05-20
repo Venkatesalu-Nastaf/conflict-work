@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, {useContext } from "react";
 import "./Employe.css";
 import "jspdf-autotable";
 import dayjs from "dayjs";
@@ -18,7 +18,6 @@ import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DeleteConfirmationDialog from "../../../DeleteData/DeleteData";
-
 // ICONS
 import useEmployee from "./useEmployee";
 import { SiStatuspal } from "react-icons/si";
@@ -75,9 +74,9 @@ const Employe = () => {
   const apiUrl = APIURL;
   const {
     selectedCustomerData,
-    selectedCustomerId,
+    // selectedCustomerId,
     rows,
-    actionName,
+    // actionName,
     error,
     success,
     info,
@@ -116,7 +115,8 @@ const Employe = () => {
     deletefile,
     handlecheckbox,
     loading,
-    setLoading, deleteemployeedata, setDeleteEmployeedata,
+    setLoading,
+    deleteemployeedata, setDeleteEmployeedata,
 
   } = useEmployee();
 

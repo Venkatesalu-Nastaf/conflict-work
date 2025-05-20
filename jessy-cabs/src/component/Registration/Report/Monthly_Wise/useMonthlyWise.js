@@ -65,7 +65,7 @@ const useMonthlyWise = () => {
               toDate.toISOString())}&customer=${encodeURIComponent(customertypedata)}`
           );
           const data = response.data;
-          console.log(data)
+          console.log(data,"checking")
     
           if (data.length > 0) {
             const rowsWithUniqueId = data.map((row, index) => ({

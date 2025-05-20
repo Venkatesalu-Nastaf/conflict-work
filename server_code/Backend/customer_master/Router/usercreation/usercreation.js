@@ -6,6 +6,8 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors'); // Import the cors middleware
 const nodemailer = require('nodemailer');
+const decryption = require('../dataDecrypt');
+
 
 router.use(cors());
 router.use(express.static('customer_master'));
@@ -27,7 +29,7 @@ router.get('/TemplateUser--Creation', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "UserCreation"'
   db.query(query, (err, results) => {
     if (err) {
-      console.log(err, 'errorrrr')
+      // console.log(err, 'errorrrr')
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
     // console.log(results,"reesss")
@@ -98,7 +100,7 @@ router.post('/usercreation-add', async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -178,6 +180,7 @@ router.post('/usercreation-add', async (req, res) => {
 router.delete('/usercreation-delete/:userid', (req, res) => {
 
   const userid = req.params.userid;
+// console.log(userid, "Deleted id ");
 
   // Delete from user_permissions table
   db.query('DELETE FROM user_permissions WHERE user_id = ?', userid, (err, permissionResult) => {
@@ -244,7 +247,7 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
 
     res.status(200).json({ message: 'Permissions saved successfully' });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -254,14 +257,18 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
 router.get('/user-permissionget/:userid', (req, res) => {
   const userid = req.params.userid;
   // console.log("per userid ", userid)
-
+  const decryptId = decryption(userid)
+  // console.log(decryptId,"original id");
+  
   try {
     let query = 'SELECT * FROM user_permissions where user_id=?';
 
-    db.query(query, [userid], (err, results) => {
+    db.query(query, [decryptId], (err, results) => {
       if (err) {
         return res.status(500).json({ error: 'Failed to fetch permission from MySQL' });
       }
+      // console.log(results,"check");
+  
       return res.status(200).json(results);
     });
 
@@ -416,6 +423,8 @@ router.get("/getAllrolefieldunique/:rolename", (req, res) => {
 router.put("/usercreationdataupdate/:editid", (req, res) => {
   const editid = req.params.editid
   const updatedata = req.body
+  // console.log(updatedata,"checking");
+  
 
   const { username, designation, employeeid, userpassword, email, mobileno } = updatedata;
 
@@ -423,11 +432,12 @@ router.put("/usercreationdataupdate/:editid", (req, res) => {
   db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,email=?,mobileno=? where userid=?", [username, designation, employeeid, userpassword, email, mobileno, editid], (err, results) => {
     // db.query("update usercreation set username=?,designation=?,employeeid=?,userpassword=?,EmailApp_Password=?,Sender_Mail=?,email=?,mobileno=? where userid=?", [username, designation, employeeid, userpassword, email, mobileno, editid], (err, results) => {
     if (err) {
-      console.log(err,'user error');
+      // console.log(err,'user error');
       
       return res.status(500).json({ Message: "Error updating data", err });
     }
-
+    // console.log(results ,"updatation");
+   
     return res.status(200).json(results)
   })
 
@@ -439,7 +449,7 @@ router.post('/userroledata-addfield', async (req, res) => {
   const {rolefielddropdown1, permissionsData1,created_at } = req.body;
 
 
-console.log(permissionsData1,"daats")
+// console.log(permissionsData1,"daats")
 
   try {
     await db.query(`INSERT INTO  Role_fielddata (userRole_name) VALUES (?)`, [rolefielddropdown1]);
@@ -463,7 +473,7 @@ console.log(permissionsData1,"daats")
     });
 
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -473,7 +483,7 @@ router.put('/userroledatacreation-edit/:userid', async (req, res) => {
   const {userid}=req.params
 
   const { rolename, permissionsData1 ,created_at} = req.body;
-  console.log(rolename,permissionsData1,created_at)
+  // console.log(rolename,permissionsData1,created_at)
 
 try {
     // Clear existing permissions for the user
@@ -500,7 +510,7 @@ try {
 
     res.status(200).json({ message: 'Permissions saved successfully' });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });

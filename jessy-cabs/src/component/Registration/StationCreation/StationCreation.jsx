@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import "./StationCreation.css";
 import Box from "@mui/material/Box";
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -9,7 +9,7 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { Autocomplete, TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
-import { UnderGroup, states, Customertype, Select, stateToStations, allStations } from "../Customer/Customerdata";
+import { allStations } from "../Customer/Customerdata";
 import { CircularProgress } from '@mui/material';
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -95,13 +95,19 @@ const StationCreation = () => {
     hidePopup,
     isEditMode,
     handleEdit, cerendentialdata,
-    handleChangeuniquestation,
+    // handleChangeuniquestation,
     getMainBrachDetails,
     loading,
-    setLoading,
-    getStateFromStation,
-    handleStationChange, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStateChange, isDisabled, setisDisabled,
-    handleStationAddData, stationDatas,open,setOpen,handleSubmiStation,handlestationOnChange,setDeleteStationData,deletestationdata
+    // setLoading,
+    // getStateFromStation,
+    handleStationChange, selectedStation,
+    //  setSelectedStation,
+     selectedState,
+      // setSelectedState,
+      handleStateChange, isDisabled, 
+    //  setisDisabled,
+    // handleStationAddData, 
+    stationDatas,open,setOpen,handleSubmiStation,handlestationOnChange,setDeleteStationData,deletestationdata
   } = useStationCreation();
 
   useEffect(() => {

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 import dayjs from 'dayjs';
+import encryption from '../../../dataEncrypt';
 // import EmployeeCreation from './EmployeeCreation';
 // import { faMobilePhone } from '@fortawesome/free-solid-svg-icons';
 
@@ -609,11 +610,18 @@ const indexRanges = [
     // }, [apiUrl]);
 
 
+    //encrypt the url;
+ 
     const uniqueusercreationname = async (usernname) => {
      
         if (usernname) {
-
-            const response = await axios.get(`${apiUrl}/getuniqueusercreationdata/${usernname}`)
+            const encryptedUsername = encryption(usernname)
+            // console.log(encryptedUsername,"checking"); 
+            
+            const fullUrl = `${apiUrl}/getuniqueusercreationdata/${encryptedUsername}`
+            // console.log(fullUrl,"checking the url");       
+            const response = await axios.get(fullUrl)
+         
             const responsedata = response.data;
 
             if (responsedata?.length >= 1) {
@@ -642,18 +650,20 @@ const indexRanges = [
 
     // show list
     const handleList = useCallback(async () => {
+        // console.log("hiiicsal")
         try {
             const response = await axios.get(`${apiUrl}/usercreation`);
             const data = response.data;
-
+            // console.log(data , "checking the values ");
+            
             setRows(data);
             // return data;
         } catch {
         }
     }, [apiUrl])
-    useEffect(() => {
-        handleList();
-    }, [handleList]);
+    // useEffect(() => {
+    //     handleList();
+    // }, [handleList]);
 
 
     const handleAdd = async () => {
@@ -668,9 +678,7 @@ const indexRanges = [
         const password = book.userpassword
         // const EmailApp_Password=book.EmailApp_Password
         // console.log(book,"checking add values");
-        
-
-
+    
         if (!password) {
             setWarning(true);
             setWarningMessage("Fill password");
@@ -825,8 +833,7 @@ const indexRanges = [
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...book, };
             const data = { updatedCustomer: updatedCustomer, permissionsData }
-
-
+            // console.log(book.active);
             await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, data);
             handleList()
             setCredentialData();
@@ -848,6 +855,7 @@ const indexRanges = [
             // console.log(book.userid,"successfully delleted")
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
+            await handleList();
             handleCancel();
 
         }
@@ -927,9 +935,11 @@ const indexRanges = [
 
     const permissiondata = async (userId) => {
         const userid = userId;
-        if (userid) {
+        const encryptId = encryption(userid)
+        // console.log(encryptId,"checking the id");    
+        if (encryptId) {
             try {
-                const response = await axios.get(`${apiUrl}/user-permissionget/${userid}`);
+                const response = await axios.get(`${apiUrl}/user-permissionget/${encryptId}`);
                 const permissiondata = response?.data;
                 if (permissiondata.length > 0) {
                     return permissiondata;
@@ -1143,7 +1153,6 @@ const indexRanges = [
     }             
                 return true;            
     }
-
    const handlenochangedatarole=(value)=>{
     setBook((prevBook) => ({
         ...prevBook,
@@ -1183,7 +1192,8 @@ const indexRanges = [
         // rolefielddropdown,setRoleFielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
         //ffor permission
-        deleteuserceationdata,setDeleteUsercreation,setCredentialData ,
+        // deleteuserceationdata,setDeleteUsercreation,
+        setCredentialData ,
         
         permissionsData, handleSwitchChange, handleCheckboxChange, setReadState,setModifyState,setDeleteState,setNewState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
     };

@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../../../db');
 const multer = require('multer');
 const path = require('path');
+const decryption = require('../dataDecrypt');
 router.use(express.static('customer_master'));
 
 // add driver master database
@@ -123,8 +124,9 @@ router.post('/driver-licencepdf/:id', uploadfileLicence.single("file"), async (r
 //pdf view -
 router.get('/pdf-view/:id', (req, res) => {
   const id = req.params.id
+  const decryptId = decryption(id)
   const sql = 'select * from driver_proof where driverid=?';
-  db.query(sql, [id], (err, result) => {
+  db.query(sql, [decryptId], (err, result) => {
     if (err) return res.json({ Message: "error" })
     return res.json(result);
   })

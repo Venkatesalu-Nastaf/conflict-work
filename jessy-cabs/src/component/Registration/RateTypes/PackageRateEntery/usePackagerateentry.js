@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
+import encryption from '../../../dataEncrypt';
 
 // Table START
 const columns = [
@@ -97,7 +98,9 @@ const usePackagerateentry = () => {
         if (!commonData.ratetype || !commonData.OrganizationName) {
             return null;
         }
-        return `${apiUrl}/ratemanagementdatavalidityfromratetype/${commonData.ratetype}/${commonData.OrganizationName}`;
+        const encodeRatetype = encryption(commonData.ratetype);
+        const encodeOraganization = encryption(commonData.OrganizationName);
+        return `${apiUrl}/ratemanagementdatavalidityfromratetype/${encodeRatetype}/${encodeOraganization}`;
     }, [apiUrl, commonData.ratetype, commonData.OrganizationName]);
     useEffect(() => {
         if (!memoizedUrl) {
@@ -122,8 +125,9 @@ const usePackagerateentry = () => {
                 return
             }
 
+            const encryptData = encryption(data)
             try {
-                const response = await axios.get(`${apiUrl}/ratetypevendor/${commonData.ratetype}`);
+                const response = await axios.get(`${apiUrl}/ratetypevendor/${encryptData}`);
                 const data = response.data
                 setRatename(data.map(row => row.ratename))
             }
@@ -582,7 +586,12 @@ const usePackagerateentry = () => {
             const vehicleType = commonData?.vehicleName || '';
             const stations = commonData?.stations || '';
             const payload = { rateType, orgName, vehicleType, stations }
-            const response = await axios.get(`${apiUrl}/ratemanagement-show`, { params: payload });
+
+            // console.log(vehicleType,"checking"); 
+            const encryptPayload = encryption(JSON.stringify(payload))  
+            // console.log(encryptPayload,"checki");        
+           const response = await axios.get(`${apiUrl}/ratemanagement-show?q=${encryptPayload}`);
+
             const data = response.data;
             if (data.length > 0) {
                 setRows(data);

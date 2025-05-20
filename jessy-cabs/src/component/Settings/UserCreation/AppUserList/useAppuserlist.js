@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { APIURL } from "../../../url";
+import encryption from '../../../dataEncrypt';
 
 // TABLE START
 const columns = [
@@ -67,7 +68,8 @@ const useAppuserlist = () => {
     }, [info]);
 
     const handleListButtonClick = () => {
-        fetch(`${apiUrl}/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
+        const encryptApp = encryption(apps)
+        fetch(`${apiUrl}/tripsheet_driver_details?apps=${encodeURIComponent(encryptApp)}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.length > 0) {

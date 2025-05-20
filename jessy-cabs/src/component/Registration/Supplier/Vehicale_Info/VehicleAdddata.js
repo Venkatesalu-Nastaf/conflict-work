@@ -117,7 +117,7 @@ const VehicleAddData = () => {
         // console.log(vehicleName, "vehiclenameeeeeeeee", id);
 
         try {
-            const response = await axios.post(`${apiUrl}/updateVehicleNamesList`, { vehicleName, id });
+            await axios.post(`${apiUrl}/updateVehicleNamesList`, { vehicleName, id });
             // console.log(response, "Vehicle name updated successfully");
             setSuccess1(true)
             setSuccessMessage("Successfully updated")
@@ -142,7 +142,7 @@ const VehicleAddData = () => {
         }
     
         try {
-            const response = await axios.post(`${apiUrl}/deleteVehicleNamesList`, {
+             await axios.post(`${apiUrl}/deleteVehicleNamesList`, {
                 id
             });
             // console.log(response.data, "deleted successfully");

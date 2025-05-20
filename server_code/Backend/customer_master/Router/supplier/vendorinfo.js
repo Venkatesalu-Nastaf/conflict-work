@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const moment = require('moment'); // or import dayjs from 'dayjs';
 const db = require('../../../db');
+const decryption = require('../dataDecrypt');
 
 // Supplier Master Database:
 // Add account_info database
@@ -11,7 +12,7 @@ router.post('/accountinfo', (req, res) => {
     // console.log(bookData, "kk");
     db.query('INSERT INTO accountinfo SET ?', bookData, (err, result) => {
         if (err) {
-            console.log(err);
+            // console.log(err);
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
         // console.log(result);
@@ -43,7 +44,7 @@ router.put('/accountinfo/:accountNo', (req, res) => {
     // console.log(accountNo, updatedCustomerData,"editing values");
     db.query('UPDATE accountinfo SET ? WHERE accountNo = ?', [updatedCustomerData, accountNo], (err, result) => {
         if (err) {
-            console.log(err);
+            // console.log(err);
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }
         if (result.affectedRows === 0) {
@@ -56,11 +57,16 @@ router.put('/accountinfo/:accountNo', (req, res) => {
 // Search vehicle info
 router.get('/searchAccountinginfo', (req, res) => {
     const { searchText, fromDate, toDate } = req.query; // Extract searchText, fromDate, and toDate from the query
+
+    // console.log(searchText,"encrypt");
+
+    const decryptSearch = decryption(searchText);
+    
     let query = 'SELECT * FROM accountinfo WHERE 1=1'; // Base query
     let params = [];
 
     // Filter by search text
-    if (searchText) {
+    if (decryptSearch) {
         const columnsToSearch = [
             'Accdate',
             'travelsname',
@@ -78,15 +84,15 @@ router.get('/searchAccountinginfo', (req, res) => {
             'TimeToggle'
         ];
 
-        if (searchText.length === 4 && /^\d{4}$/.test(searchText)) {
+        if (decryptSearch.length === 4 && /^\d{4}$/.test(decryptSearch)) {
             // If searchText is 4 digits, search for vehRegno ending with those 4 digits
             query += ' AND vehRegno LIKE ?';
-            params.push(`%${searchText}`);
+            params.push(`%${decryptSearch}`);
         } else {
             // Otherwise, search across all columns
             const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
             query += ` AND (${likeConditions})`;
-            params = [...params, ...columnsToSearch.map(() => `${searchText}%`)];
+            params = [...params, ...columnsToSearch.map(() => `${decryptSearch}%`)];
         }
     }
 
@@ -101,10 +107,10 @@ router.get('/searchAccountinginfo', (req, res) => {
     // Execute the query
     db.query(query, params, (err, result) => {
         if (err) {
-            console.log(err);
+            // console.log(err);
             return res.status(500).json({ error: "Database query failed" });
         }
-        console.log(result, 'resultData'); // Debugging
+        // console.log(result, 'resultData'); // Debugging
         return res.json(result);
     });
 });
@@ -176,12 +182,14 @@ router.get('/accountinfodatavehcile', (req, res) => {
 // Get unique account travel data by travels name
 router.get('/getuniqueacccounttaveldata/:travelsname', (req, res) => {
     const customer = req.params.travelsname;
-    console.log(customer, "params");
-    db.query('SELECT travelsname FROM accountinfo WHERE travelsname = ?', [customer], (err, results) => {
+    // console.log(customer, "params");
+    const decryptTravels = decryption(customer)
+    // console.log(decryptTravels,"cvbnm");
+    db.query('SELECT travelsname FROM accountinfo WHERE travelsname = ?', [decryptTravels], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
         }
-        console.log(results.length);
+        // console.log(results.length);
         return res.status(200).json(results);
     });
 });

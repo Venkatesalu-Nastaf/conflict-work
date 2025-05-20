@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     pageBreakInside: 'avoid',
     overflow: 'hidden',
     border: '2px solid rgb(0, 0, 0)',
-
+    paddingBottom: 4,
   },
   heading: {
     // border: '2px solid rgb(255, 0, 0)',
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
 
   section: {
     marginTop: 10,
-
   },
   tableRow: {
     flexDirection: 'row',
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
   },
   tableheading: {
     fontSize: '11px',
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderLeft: '1px solid #000',
     borderBottom: '1px solid #000',
     width: '17.33%', // Set the width of each cell to 33.33% for equal distribution
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
   },
   tableheadingAmount: {
     fontSize: '11px',
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderRight: '1px solid #000',
     borderBottom: '1px solid #000',
     width: '17.33%', // Set the width of each cell to 33.33% for equal distribution
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
   tableheadsno: {
     fontSize: '11px',
 
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderLeft: '1px solid #000',
     borderBottom: '1px solid #000',
     width: '9.33%', // Set the width of each cell to 33.33% for equal distribution
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
   tableheadingparticular: {
     width: '66%',
     fontSize: '11px',
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderRight: '1px solid #000',
     borderLeft: '1px solid #000',
     borderBottom: '1px solid #000',
@@ -141,15 +140,19 @@ const styles = StyleSheet.create({
     fontSize: '11px',
     borderRight: '1px solid #000000',
     wordWrap: 'break-word',
+    
   },
   tablecellparticularInside: {
     width: '90%',
     // backgroundColor:"red",
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    height:'70px',
+    // padding:"5px",
+    overflow:'hidden',
   },
   tableheadingpermit: {
     width: '16%',
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderRight: '1px solid #000',
     borderBottom: '1px solid #000',
     padding: 5,
@@ -190,7 +193,7 @@ const styles = StyleSheet.create({
   },
   tablevalue: {
     flexDirection: 'column',
-    borderBottom: '1px solid #000000',
+    // borderBottom: '1px solid #000000',
     // borderRight: '1px solid #000000',
     borderLeft: '1px solid #000000',
   },
@@ -211,7 +214,7 @@ const styles = StyleSheet.create({
   },
   tableheadtripno: {
     fontSize: '11px',
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderLeft: '1px solid #000',
     borderBottom: '1px solid #000',
     width: '12.33%', // Set the width of each cell to 33.33% for equal distribution
@@ -287,8 +290,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     gap: '5px',
 
-  }
+  },
 
+  borderBottom : {
+    borderBottom: '1px solid #000000',
+  }
 
 });
 
@@ -576,7 +582,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
                 <View style={styles.section}>
                   <View>
-                    <View style={styles.tableRow}>
+                    <View style={styles.borderBottom} fixed/>
+                    <View style={styles.tableRow} >
 
                       <View style={styles.tableheadsno}><Text>S No</Text></View>
                       <View style={styles.tableheading}><Text>Trip Date</Text></View>
@@ -599,13 +606,13 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                               <Text style={{ fontSize: 9 }}>{item.tripid}</Text>
                             </View>
                             <View style={styles.tablecellparticular}>
-                              <View style={styles.tablecellparticularInside} >
+                              <View style={styles.tablecellparticularInside}  >
                                 <Text style={{ fontSize: 9 }}>{item.guestname}</Text>
                                 {/* <Text style={{ fontSize: 10 }}>
                                 {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
                                 / {item.vehicleName2}
                               </Text> */}
-                              <View style={{flexDirection:'column',marginTop:'3px'}}>
+                              <View style={{flexDirection:'column'}}>
 
                               <View style={{width:'100%',}}>
                               {item?.duty === "Outstation" ?
@@ -695,6 +702,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                         </View>
                       ))}
                     </View>
+                     <View style={styles.borderBottom} fixed/>
                   </View>
                 </View>
               </View>
@@ -900,8 +908,6 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
             </View>
 
           </View>
-
-
         </Page>
       </PDFDocument>
     </>

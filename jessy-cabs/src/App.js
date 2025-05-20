@@ -67,7 +67,11 @@ import { PendingBills } from "./component/Billings/Report/pendingBills/PendingBi
 // import Agreement from "./component/Info/AgreementMain/Agreement/Agreement";
 import AgreementMain from "./component/Info/AgreementMain/AgreementMain";
 // import LogSheets from "./component/Billings/LogDetails/Logsheets";
+import { VendorReports } from "./component/Billings/VendorReports/VendorReports";
 
+import { PaymentVendor } from "./component/payment/Vendor/PaymentVendor"
+import { PaymentCustomer } from "./component/payment/Customer/PaymentCustomer";
+import Payment from "./component/payment/Payment";
 
 function App() {
   const apiUrl = APIURL;
@@ -135,6 +139,11 @@ function App() {
   const Billing_Transfer = permissions[6]?.read
   const Billing_CoveringBill = permissions[7]?.read
   const Billing_Reports = permissions[8]?.read
+  const Billing_VendorReports = permissions[8]?.read
+
+  const PAYMENT = permissions[8]?.read;
+  const Payment_Vendor = permissions[8]?.read;
+  const Payment_Customer = permissions[8]?.read
 
 
   const REGISTER = permissions[9]?.read
@@ -181,6 +190,7 @@ function App() {
 
   const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
   const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read || permissions[8]?.read
+  const Payment_permission = permissions[8]?.read || permissions[8]?.read || permissions[8]?.read
   const Register_page_permission = permissions[9]?.read || permissions[10]?.read || permissions[11]?.read || permissions[12]?.read || permissions[13]?.read;
   const Setting_page_permission = permissions[14]?.read || permissions[15]?.read || permissions[16]?.read
 
@@ -626,7 +636,7 @@ function App() {
     // interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
-  }, [apiUrl, menuItem,menuselect]);
+  }, [apiUrl, menuItem, menuselect]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -693,9 +703,14 @@ function App() {
 
                 (booking_page_permission ? (bookingdata ? <Navigate to="/home/bookings/booking" /> : TripStatus ? <Navigate to="/home/bookings/tripstatus" /> : TriSheet ? <Navigate to="/home/bookings/tripsheet" /> : <></>) :
                   (
-                    Billing_permission ? (BILLING_BillingMain ? <Navigate to="/home/billing/billing" /> : Billing_Transfer ? <Navigate to="/home/billing/transfer" /> : Billing_CoveringBill ? <Navigate to="/home/billing/coveringbill" /> : Billing_Reports ? <Navigate to="/home/billing/reports" /> : <></>) :
+                    Billing_permission ? (BILLING_BillingMain ? <Navigate to="/home/billing/billing" /> : Billing_Transfer ? <Navigate to="/home/billing/transfer" /> : Billing_CoveringBill ? <Navigate to="/home/billing/coveringbill" /> : Billing_Reports ? <Navigate to="/home/billing/reports" /> : Billing_VendorReports ? <Navigate to="/home/billing/Vendorreports" /> : <></>) :
+                    Payment_permission ? (Payment_Vendor ? <Navigate to= "/home/payment/vendor" /> : Payment_Customer ? <Navigate to= "/home/payment/customer" /> : <></>) :
                       (
-                        Register_page_permission ? (R_RATEtype ? <Navigate to="/home/registration/ratetype" /> : R_Customer ? <Navigate to="/home/registration/customer" /> : R_Supllier ? <Navigate to="/home/registration/supplier" /> : R_Station ? <Navigate to="/home/registration/stationcreation" /> : <></>) : (Setting_page_permission ? (userCreation1 ? <Navigate to="/home/settings/usercreation" /> : Main_Setting ? <Navigate to="/home/settings/mainsetting" /> : <></>) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (INFO_MAILER ? <Navigate to="/home/info/mailer" /> : INFO_FuelInfo ? <Navigate to="/home/info/LogDetails" /> : INFO_Employee ? <Navigate to="/home/info/employee" /> : <></>) : (<Navigate to="/home/usersettings/usersetting" />))
+                        Register_page_permission ? (R_RATEtype ? <Navigate to="/home/registration/ratetype" /> : R_Customer ? <Navigate to="/home/registration/customer" /> : R_Supllier ? <Navigate to="/home/registration/supplier" /> : R_Station ? <Navigate to="/home/registration/stationcreation" /> : <></>) : 
+                        (
+                          Setting_page_permission ? (userCreation1 ? <Navigate to="/home/settings/usercreation" /> : Main_Setting ? <Navigate to="/home/settings/mainsetting" /> : <></>) :
+                           Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : 
+                           Info_page_permission ? (INFO_MAILER ? <Navigate to="/home/info/mailer" /> : INFO_FuelInfo ? <Navigate to="/home/info/LogDetails" /> : INFO_Employee ? <Navigate to="/home/info/employee" /> : <></>) : (<Navigate to="/home/usersettings/usersetting" />))
                       )
                   )
                 )
@@ -751,7 +766,16 @@ function App() {
               </Route>
 
 
-
+              <Route path="/home/payment" element={PAYMENT !== 0 ? <Payment /> : <NoPermission />}>
+                <Route
+                  path="/home/payment/vendor"
+                  element={Payment_Vendor !== 0 && Payment_Vendor !== undefined ? (<PaymentVendor stationName={stationName} customerData={customerData} />) : (<NoPermission />)}
+                />
+                <Route
+                  path="/home/payment/customer"
+                  element={Payment_Customer !== 0 && Payment_Customer !== undefined ? (<PaymentCustomer stationName={stationName} customerData={customerData} logoImage={logo} />) : (<NoPermission />)}
+                />
+              </Route>
 
 
 
@@ -822,8 +846,11 @@ function App() {
                   element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)}
                 />
                 <Route path="/home/billing/reports" element={Billing_Reports !== 0 && Billing_Reports !== undefined ? (<Reports stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
+                <Route
+                  path="/home/billing/VendorReports"
+                  element={Billing_VendorReports !== 0 && Billing_VendorReports !== undefined ? (<VendorReports stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
                 {/* <Route path="/home/billing/LogDetails" element={Billing_Reports !== 0 && Billing_Reports !== undefined ? (<LogSheets stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} /> */}
-                </Route>
+              </Route>
 
               <Route path="/home/billing/reports/Pendingbills" element={<PendingBills />}></Route>
               <Route path="/home/accounts" element={<Accounts />}>

@@ -816,6 +816,7 @@ const handlePdfDownload = () => {
             setWarningMessage("Enter the Travelsname")
             return
         }
+                    console.log(fromDate,"ffffff222222222222222",toDate,travelsname);
         try {
             const response = await axios.get(
                 `${apiUrl}/VehicleStatement-bookings?Travelsname=${encodeURIComponent(
@@ -824,6 +825,7 @@ const handlePdfDownload = () => {
                     toDate.toISOString()
                 )}`
             );
+            
             const data = response.data;
             console.log(data)
             if (data.length > 0) {

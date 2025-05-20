@@ -11,6 +11,7 @@ import { PDFDocument } from 'pdf-lib';
 
 import PdfzipParticularData from './Pdfpatricularzipdata'
 import { APIURL } from "../../../url";
+import axios from "axios";
 
 
 
@@ -593,7 +594,6 @@ const useExeclpage = () => {
 
     const handledatazipDownload = async (tripheaderIndex, misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel, customerData, stationData, bookingMail) => {
         console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation, " console for datas")
-
         const data = invoice;
         const customername = customer;
         const workbook = new Excel.Workbook();
@@ -969,7 +969,7 @@ console.log(invoice,"invoiceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 const chunkSize = 100;
 function splitIntoChunks(array, chunkSize) {
   const result = [];
-  for (let i = 0; i < array.length; i += chunkSize) {
+  for (let i = 0; i < invoice.length; i += chunkSize) {
     result.push(array.slice(i, i + chunkSize));
   }
   return result;
@@ -977,14 +977,15 @@ function splitIntoChunks(array, chunkSize) {
 
 // Split invoices into batches of 100
 const invoiceBatches = splitIntoChunks(invoice, chunkSize);
-
+let batchCount;
 // Process each batch one by one
 for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
-  const zip = new JSZip();   // << create new zip for each batch
+//   const zip = new JSZip();   // << create new zip for each batch
   const pdffolder = zip.folder("pdffolder");  // << create new pdffolder inside this zip
-  const misfolder = zip.folder("misfolder");  // << optionally create your misfolder here too
+//   const misfolder = zip.folder("misfolder");  // << optionally create your misfolder here too
 
   const batchInvoices = invoiceBatches[batchIndex];
+  batchCount = invoiceBatches[batchIndex];
 
   const pdfPromises = batchInvoices.map(async (pdfData, index) => {
     const blob = await pdf(
@@ -1009,7 +1010,7 @@ for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
       if (data.attachedimageurl) {
         const ext = data.attachedimageurl.split('.').pop();
         if (ext === "pdf") {
-          const response = await fetch(`${apiurl}/images/${data.attachedimageurl}`);
+          const response = await axios.get(`${apiurl}/images/${data.attachedimageurl}`);
           const pdfBytes = await response.arrayBuffer();
           const pdfDocument = await PDFDocument.load(pdfBytes);
           pdfDocuments.push(pdfDocument);
@@ -1022,7 +1023,7 @@ for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
         if (data.imagees) {
           const ext = data.imagees.split('.').pop();
           if (ext === "pdf") {
-            const response = await fetch(`${apiurl}/images/${data.imagees}`);
+            const response = await axios.get(`${apiurl}/images/${data.imagees}`);
             const pdfBytes = await response.arrayBuffer();
             const pdfDocument = await PDFDocument.load(pdfBytes);
             pdfDocuments.push(pdfDocument);
@@ -1047,9 +1048,12 @@ for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
 
   await Promise.all(pdfPromises);
 
-  const zipContent = await zip.generateAsync({ type: 'blob' });
-  saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} Batch ${batchIndex + 1}.zip`);
+//   saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} Batch ${batchIndex + 1}.zip`);
+//   saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} Batch ${batchIndex}.zip`);
 }
+  const zipContent = await zip.generateAsync({ type: 'blob' });
+
+  saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")}.zip`);
 
 
 

@@ -6,6 +6,7 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const axios = require('axios');
+const decryption = require('../dataDecrypt');
 
 
 router.use(express.static('customer_master'));
@@ -23,6 +24,7 @@ const storage = multer.diskStorage({
 const uploadattachement = multer({ storage: storage });
 router.post('/templateattachmentimage/:templateid', uploadattachement.array('imagestemplate'), (req, res) => {
     const templateid = req.params.templateid
+    // console.log(templateid,"post image");    
     const imagedata = req.files
     if (!imagedata || imagedata.length === 0) {
         return res.status(500).json("No images provided ");
@@ -108,12 +110,6 @@ router.put('/templatedataypdate/:templateid', (req, res) => {
 })
 
 
-
-
-
-
-
-
 router.delete('/templatedatadelete/:templateid', (req, res) => {
     const templateid = req.params.templateid;
     // console.log(templateid)
@@ -130,9 +126,13 @@ router.delete('/templatedatadelete/:templateid', (req, res) => {
 
 })
 router.get('/gettemplateattachimage/:templateid', (req, res) => {
-    const templateid = req.params.templateid
-    // console.log(templateid)
-    db.query('select templateimage from Templateattachement where templateid=?', [templateid], (err, results) => {
+    const templateid = req.params.templateid;
+
+    // console.log(templateid,"temp")
+    const decryptId = decryption(templateid)
+    // console.log(decryptId,"Dec");
+    
+    db.query('select templateimage from Templateattachement where templateid=?', [decryptId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
@@ -201,6 +201,7 @@ router.post('/send-emailtemplate', async (req, res) => {
 
             const signatureDirectoryRelative = path.join('Backend', 'customer_master', 'public', 'Templateimage');
 
+            
             // Get the complete absolute path
             const signatureDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', signatureDirectoryRelative);
 
@@ -312,7 +313,7 @@ router.delete('/templatedeleteimageedata/:templateid', (req, res) => {
                         try {
                             // Delete the file
                             fs.unlinkSync(oldImagePathDirectoryAbsolute);
-                            console.log('File deleted successfully:', oldFileName);
+                            // console.log('File deleted successfully:', oldFileName);
                         } catch (error) {
                             console.error('Error deleting file:', error);
                         }
@@ -352,7 +353,7 @@ router.delete('/templatesingledataimage/:templateid/:templateimage', (req, res) 
                 try {
                     // Delete the file
                     fs.unlinkSync(oldImagePathDirectoryAbsolute);
-                    console.log('File deleted successfully:', templateimage);
+                    // console.log('File deleted successfully:', templateimage);
                 } catch (error) {
                     console.error('Error deleting file:', error);
                 }
@@ -366,9 +367,10 @@ router.delete('/templatesingledataimage/:templateid/:templateimage', (req, res) 
 
 router.get('/tabletemplateseatch', (req, res) => {
     const { searchText } = req.query;
+    const decryptSearch = decryption(searchText);
     let query = 'SELECT * FROM TemplateMessage WHERE 1=1';
     let params = [];
-    if (searchText) {
+    if (decryptSearch) {
         const columnsToSearch = [
             'Templateid',
             'TemplateName',
@@ -379,7 +381,7 @@ router.get('/tabletemplateseatch', (req, res) => {
         const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
         query += ` AND (${likeConditions})`;
-        params = columnsToSearch.map(() => `${searchText}%`);
+        params = columnsToSearch.map(() => `${decryptSearch}%`);
     }
     db.query(query, params, (err, result) => {
         if (err) {

@@ -1,7 +1,6 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 import { APIURL } from "../../url";
-
 
 const apiUrl = APIURL;
 

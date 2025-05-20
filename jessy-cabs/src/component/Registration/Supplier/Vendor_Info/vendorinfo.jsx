@@ -617,8 +617,8 @@ const Vendorinfo = ({ stationName }) => {
             <div className="container-left">
               <div className="">
                 <div className="input-field vehicle-info-search-input-field">
-                  {console.log(searchText,"vbnm")
-                  }
+                  {/* {console.log(searchText,"vbnm")
+                  } */}
                   <div className="input">
                     <div className="icone">
                       <AiOutlineFileSearch color="action" />

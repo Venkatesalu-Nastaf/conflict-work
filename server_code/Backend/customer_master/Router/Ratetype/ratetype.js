@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
+const decryption = require('../dataDecrypt')
 
 // Add Ratetype database
 // router.post('/ratetype', (req, res) => {
@@ -93,10 +94,14 @@ router.get('/ratetype', (req, res) => {
 router.get('/searchRatetype', (req, res) => {
   const { searchText } = req.query; // Get the searchText from the query params
   // console.log(searchText, "search")
+  // console.log(searchText,"search");
+  const decryptSearch = decryption(searchText)
+  // console.log(decryptSearch,"decryption");
+  
   let query = 'SELECT * FROM ratetype WHERE 1=1'; // Ensure you query from the correct table
   let params = [];
 
-  if (searchText) {
+  if (decryptSearch) {
     const columnsToSearch = [
       'driverid',
       'ratetype',
@@ -110,7 +115,7 @@ router.get('/searchRatetype', (req, res) => {
     query += ` AND (${likeConditions})`;
 
     // Add searchText to params for each column
-    params = columnsToSearch.map(() => `${searchText}%`);
+    params = columnsToSearch.map(() => `${decryptSearch}%`);
   }
 // console.log(query,params, "fhjf");
 
@@ -130,7 +135,8 @@ router.get('/searchRatetype', (req, res) => {
 
 router.get('/ratetypevendor/:ratetype', (req, res) => {
   const ratetype=req.params.ratetype;
-  db.query('SELECT ratename FROM ratetype where ratetype=?',[ratetype],(err, results) => {
+  const decryptRatetype = decryption(ratetype)
+  db.query('SELECT ratename FROM ratetype where ratetype=?',[decryptRatetype],(err, results) => {
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
@@ -141,14 +147,16 @@ router.get('/getcustomeruniqueratetype/:ratetype/:ratename',(req,res)=>{
   const ratetype=req.params.ratetype;
   const ratename=req.params.ratename;
   // console.log(ratetype,ratename,"jjjj")
-    
+  const decryptRatetype = decryption(ratetype);
+  const decryptName = decryption(ratename)
+  // console.log(decryptName,"name");
   
 
-  db.query("select ratename from ratetype where ratetype=? and ratename=?",[ratetype,ratename],(err,results)=>{
+  db.query("select ratename from ratetype where ratetype=? and ratename=?",[decryptRatetype,decryptName],(err,results)=>{
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(results)
+    // console.log(results)
     return res.status(200).json(results);
   })
 })

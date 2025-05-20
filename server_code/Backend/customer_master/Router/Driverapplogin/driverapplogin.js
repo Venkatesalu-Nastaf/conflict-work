@@ -5,6 +5,7 @@ const moment = require('moment');
 const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const decryption = require('../dataDecrypt');
 router.use(express.static('customer_master'));
 // user creation database
 // add user creation database
@@ -271,11 +272,20 @@ router.get('/drivercreation', (req, res) => {
 router.get('/searchfordriver', (req, res) => {
   const { searchText, fromDate, toDate } = req.query;
   // console.log(searchText,"ss",fromDate, toDate)
+  console.log(req.query,"check");
+  let decryptText = null;
+
+  if(searchText && searchText.trim() !== ""){
+     decryptText = decryption(searchText)
+  }
+  // const decryptText = decryption(searchText);
+  // console.log(decryptText,"jj");
+ 
   let query = 'SELECT * FROM drivercreation WHERE 1=1';
   let params = [];
 
 
-  if (searchText) {
+  if (decryptText) {
     const columnsToSearch = [
       'drivername',
       'driverid',
@@ -292,7 +302,7 @@ router.get('/searchfordriver', (req, res) => {
     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
     query += ` AND (${likeConditions})`;
-    params = columnsToSearch.map(() => `${searchText}%`);
+    params = columnsToSearch.map(() => `%${decryptText}%`);
   }
 
   // if (fromDate && moment(fromDate, 'YYYY/MM/DD', true).isValid() && toDate && moment(toDate, 'YYYY/MM/DD', true).isValid())
@@ -318,21 +328,30 @@ router.get('/searchfordriver', (req, res) => {
 
 router.get("/getcreduniquedrivername/:drivername",(req,res)=>{
   const drivername=req.params.drivername;
-  db.query("select drivername from drivercreation  where drivername=?",[drivername],(err,results)=>{
+  // console.log(drivername,"xcvbnm");
+  
+  const decryptDriver = decryption(drivername);
+  // console.log(decryptDriver,"sdfghjkl");
+  
+  db.query("select drivername from drivercreation  where drivername=?",[decryptDriver],(err,results)=>{
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(results)
+    // console.log(results)
     return res.status(200).json(results);
   })
 })
 router.get("/getcreduniqueusername/:username",(req,res)=>{
   const username=req.params.username;
-  db.query("select username from drivercreation  where username=?",[username],(err,results)=>{
+
+  // console.log(username);
+  const decryptName = decryption(username)
+  // console.log(decryptName,"checking");
+  db.query("select username from drivercreation  where username=?",[decryptName],(err,results)=>{
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(results)
+    // console.log(results)
     return res.status(200).json(results);
   })
 })
@@ -341,7 +360,7 @@ router.get('/TemplateForDriverCreation', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "DriverInfo"';
   db.query(query, (err, results) => {
       if (err) {
-          console.log('Database error:', err);
+          // console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
       // console.log('Database results:', results);

@@ -6,6 +6,7 @@ const multer = require('multer');
 const nodemailer = require('nodemailer');
 const path = require('path');
 const cron = require('node-cron');
+const decryption = require('../dataDecrypt');
 
 
 
@@ -71,12 +72,12 @@ router.get('/vechiclenameinfo', (req, res) => {
 });
 router.post('/vehicleinfo', (req, res) => {
   const bookData = req.body;
-  console.log(bookData,"values");
+  // console.log(bookData,"values");
   
 
   db.query('INSERT INTO vehicleinfo SET ?', bookData, (err, result) => {
     if (err) {
-      console.log(err)
+      // console.log(err)
       return res.status(500).json({ error: "Failed to insert data" });
     }
     // console.log(result,"checking add vehicle details")
@@ -126,10 +127,10 @@ router.get('/TemplateforFCdate', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "FCdate"';
   db.query(query, (err, results) => {
       if (err) {
-          console.log('Database error:', err);
+          // console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -138,10 +139,10 @@ router.get('/Templateforstatepermitdate', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "StatePermitDate"';
   db.query(query, (err, results) => {
       if (err) {
-          console.log('Database error:', err);
+          // console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -149,10 +150,10 @@ router.get('/Templatefornationalpermitdate', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "NationalPermitDate"';
   db.query(query, (err, results) => {
       if (err) {
-          console.log('Database error:', err);
+          // console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -160,10 +161,10 @@ router.get('/Templateforinsuranceduedate', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "InsuranceDueDate"';
   db.query(query, (err, results) => {
       if (err) {
-          console.log('Database error:', err);
+          // console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -371,11 +372,13 @@ cron.schedule("00 09 * * *", () => {
 router.get('/searchvehicleinfo', (req, res) => {
   const { searchText, fromDate, toDate } = req.query;
   // console.log(searchText, fromDate, toDate, "dateeeee");
-
+  const decryptText = decryption(searchText);
+  // console.log(decryptText,"cvghjk");
+  
   let query = 'SELECT * FROM vehicleinfo WHERE 1=1';
   let params = [];
 
-  if (searchText) {
+  if (decryptText) {
     const columnsToSearch = [
       'vehicleId',
       'vehicleName',
@@ -406,14 +409,14 @@ router.get('/searchvehicleinfo', (req, res) => {
     ];
 
     // If searchText is exactly 4 digits, search for vehRegNo ending with those digits
-    if (searchText.length === 4 && /^\d{4}$/.test(searchText)) {
+    if (decryptText.length === 4 && /^\d{4}$/.test(decryptText)) {
       query += ' AND vehRegNo LIKE ?';
-      params.push(`%${searchText}`);
+      params.push(`%${decryptText}`);
     } else {
       // Otherwise, search across all columns
       const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
       query += ` AND (${likeConditions})`;
-      params = columnsToSearch.map(() => `${searchText}%`);
+      params = columnsToSearch.map(() => `${decryptText}%`);
     }
   }
 
@@ -603,9 +606,9 @@ router.post('/fcCopy-pdf/:vehicleId', setFcCopy_uploadfile.single("file"), async
 //-----------------fetch ---------------
 router.get('/vehicle-docView/:vechicleId', (req, res) => {
   const id = req.params.vechicleId
-
+  const decryptId = decryption(id)
   const sql = 'select * from vehicle_documents where vehicleId=?';
-  db.query(sql, [id], (err, result) => {
+  db.query(sql, [decryptId], (err, result) => {
     if (err) return res.json({ Message: "error" })
     return res.json(result);
   })
@@ -613,11 +616,15 @@ router.get('/vehicle-docView/:vechicleId', (req, res) => {
 
 router.get('/uniquevechregnodata/:vehregno',(req,res)=>{
   const vehregno=req.params.vehregno;
-  db.query("select vehRegNo from vehicleinfo where vehRegNo=?",[vehregno],(err,results)=>{
+  // console.log(vehregno,"checing");
+  const decryptVegh = decryption(vehregno);
+  // console.log(decryptVegh,"veghreg");
+  
+  db.query("select vehRegNo from vehicleinfo where vehRegNo=?",[decryptVegh],(err,results)=>{
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(results)
+    // console.log(results)
     return res.status(200).json(results);
   })
 })

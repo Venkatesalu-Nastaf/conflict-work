@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
+const decryption = require('../dataDecrypt');
 
 
 
@@ -63,7 +64,7 @@ router.post('/ratemanagement-add', async (req, res) => {
 
                 insertResults.push(result);
             } catch (error) {
-                console.error("Insert error:", error);
+                // console.error("Insert error:", error);
                 insertErrors.push({ data: bookData, error: error.message });
             }
         }
@@ -76,7 +77,7 @@ router.post('/ratemanagement-add', async (req, res) => {
         });
 
     } catch (err) {
-        console.error("Unexpected server error:", err);
+        // console.error("Unexpected server error:", err);
         return res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -134,8 +135,11 @@ router.get('/ratemanagement', (req, res) => {
 router.get('/ratemanagementdatavalidityfromratetype/:customer/:ratetype', (req, res) => {
     const customer = req.params.customer;
     const ratetype = req.params.ratetype;
+
+    const decryptCustomer = decryption(customer);
+    const decryptRatetype = decryption(ratetype)
     // console.log(customer,ratetype,"ffff")
-    db.query('SELECT starttime,closetime FROM ratetype where ratetype=? and ratename=?', [customer, ratetype], (err, results) => {
+    db.query('SELECT starttime,closetime FROM ratetype where ratetype=? and ratename=?', [decryptCustomer, decryptRatetype], (err, results) => {
         if (err) {
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
         }
@@ -170,9 +174,18 @@ router.get('/ratemanagementdatavalidityfromratetype/:customer/:ratetype', (req, 
 //     }
 
 router.get('/ratemanagement-show', (req, res) => {
-    const { rateType, orgName, vehicleType, stations } = req.query;
+    // const { rateType, orgName, vehicleType, stations } = req.query;
     // console.log("data", rateType, orgName, vehicleType);
-
+    const {q} = req.query;
+    const decryptQuery = decryption(q)
+    // console.log(q,"check");
+     
+    if(!decryptQuery){
+        return res.status(400).json({error: "Invalid or missing data"})
+    }
+    const { rateType, orgName, vehicleType, stations } = JSON.parse(decryptQuery)
+    // console.log(rateType, orgName, vehicleType, stations,"cvbnm");
+    
     let sql = 'SELECT * FROM ratemanagement WHERE 1=1';
     let params = [];
 
@@ -186,18 +199,28 @@ router.get('/ratemanagement-show', (req, res) => {
         params.push(orgName);
     }
 
-    if (vehicleType) {
-        sql += ' AND vehicleName=?';
+    if (vehicleType.length > 0) {
+
+        sql += ' AND vehicleName in (?)';
+        // console.log(vehicleType,"vehicletype");
+        
         params.push(vehicleType);
     }
+    //  if (vehicleType) {
+    //     const vehicles = Array.isArray(vehicleType) ? vehicleType : [vehicleType];
+    //     sql += ` AND vehicleName IN (${vehicles.map(() => '?').join(',')})`;
+    //     params.push(...vehicles);
+    //     console.log(vehicles,"checking");  
+    // }
 
     if (stations === 'All') {
 
         sql += '';
-    } else if (stations) {
+    } else if (stations.length > 0) {
         // If specific stations are provided, filter by those stations
-        sql += ' AND stations=?';
+        sql += ' AND stations in (?)';
         params.push(stations);
+        // console.log(stations,"checking");       
     }
     db.query(sql, params, (err, results) => {
         if (err) {

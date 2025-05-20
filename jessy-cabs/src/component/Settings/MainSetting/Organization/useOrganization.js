@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 const useOrganization = () => {
     const apiUrl = APIURL;
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const [originalData, setOriginalData] = useState(null);
     // const [rows] = useState([]);
     const [editMode, setEditMode] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -151,6 +152,7 @@ const useOrganization = () => {
 
                     if (userDataArray.length > 0) {
                         setSelectedCustomerData(userDataArray[0]);
+                        setBook(userDataArray[0])
                         setDataclose(false)
                     } else {
                         // setErrorMessage('User data not found.');
@@ -166,6 +168,12 @@ const useOrganization = () => {
 
 
     const toggleEditMode = () => {
+        if(!editMode){
+           setOriginalData({...selectedCustomerData})
+        }else{
+            setSelectedCustomerData({...originalData})
+            setAddNewKey("");
+        }
         setEditMode((prevEditMode) => !prevEditMode);
     };
 
@@ -248,7 +256,7 @@ const useOrganization = () => {
         const fetchdata = async() =>{
           try{
              const response = await axios.get(`${apiUrl}/getAllApiKeyData`);
-             console.log(response.data,"allapidataaaaaaaaaaaaaaaaa");
+            //  console.log(response.data,"allapidataaaaaaaaaaaaaaaaa");
              const allApiKey = response.data.map(li=>li.ApiKey);
              setAllApiKey(allApiKey)
           }
@@ -258,20 +266,20 @@ const useOrganization = () => {
           }
         }
         fetchdata()
-    },[apiUrl,AddNewKey])
-
+    // },[apiUrl,AddNewKey])
+     },[apiUrl])
+     
     // selected api key 
     useEffect(()=>{
         const fetchData = async()=>{
             try{
                 const response = await axios.get(`${apiUrl}/selectedApiData`);
-                console.log(response.data,"selectedapiiiiiiiiiiiii");
+                // console.log(response.data,"selectedapiiiiiiiiiiiii");
                 const selectedApi = response.data.map(li=>li.ApiKey);
                 setSelectedApikey(selectedApi)
             }
             catch(err){
                 console.log(error);
-                
             }
         }
         fetchData()

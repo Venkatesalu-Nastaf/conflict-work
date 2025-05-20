@@ -1,12 +1,13 @@
 
 
-import { useState, useEffect, useCallback,useMemo } from 'react';
+import { useState, useEffect, useCallback} from 'react';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
+import encryption from '../../../dataEncrypt';
 
 const useVendorinfo = () => {
   const apiUrl = APIURL;
@@ -25,12 +26,12 @@ const useVendorinfo = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage, setWarningMessage] = useState({});
-  const [infoMessage, setInfoMessage] = useState({});
+  const [infoMessage] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [suppilerrate, setSupplierRatetpe] = useState([])
   const [vechiledata, setVehicleData] = useState([]);
   const [cerendentialdata, setCredentialData] = useState()
-  const [cerendentialdataforstations, setCredentialDataforstations] = useState()
+  // const [cerendentialdataforstations, setCredentialDataforstations] = useState()
 
   const [loading, setLoading] = useState(false)
   const [isAButtonLoading,setisAButtonLoading] = useState(false);
@@ -260,7 +261,7 @@ const useVendorinfo = () => {
         const buf = await workbook.xlsx.writeBuffer();
         saveAs(new Blob([buf]), `${fileName}.xlsx`);
     } catch (error) {
-        console.error('<<<ERROR>>>', error);
+        // console.error('<<<ERROR>>>', error);
         console.error('Something Went Wrong', error.message);
     } finally {
         // Remove worksheet instance
@@ -562,8 +563,9 @@ const useVendorinfo = () => {
 
   //search funtion
   const handleSearch = async () => {
+    const encryptSearch = searchText ? encryption(searchText) : '';
     try {
-      const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+      const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${encryptSearch}&fromDate=${fromDate}&toDate=${toDate}`);
       const data = await response.json();
       if (data.length > 0) {
         const rowsWithUniqueId = data.map((row, index) => ({
@@ -606,10 +608,13 @@ const useVendorinfo = () => {
 
 
   const handleenterSearch = useCallback(async (e) => {
+    if(searchText === "") return;
     if (e.key === "Enter") {
       
       try {
-        const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${searchText}`);
+        const encryptSearch = encryption(searchText);
+       
+        const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${encryptSearch}`);
         const data = await response.json();
 
         if (data.length > 0) {
@@ -698,12 +703,11 @@ const useVendorinfo = () => {
     setCredentialData(false)
   }, []);
 
-
   const uniquetravellname = async (traveldataname) => {
     
     if (traveldataname) {
-
-      const response = await axios.get(`${apiUrl}/getuniqueacccounttaveldata/${traveldataname}`)
+      const encryptTravels = encryption(traveldataname)
+      const response = await axios.get(`${apiUrl}/getuniqueacccounttaveldata/${encryptTravels}`)
       const responsedata = response.data;
 
 

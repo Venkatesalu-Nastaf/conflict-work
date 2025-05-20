@@ -52,7 +52,7 @@ import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import { PiCarSimpleFill } from "react-icons/pi";
+// import { PiCarSimpleFill } from "react-icons/pi";
 import { BsFillFuelPumpFill } from "react-icons/bs";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -100,22 +100,21 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-const deletestyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 300,
-  height: 100,
-  bgcolor: 'background.paper',
-  // border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-
+// const deletestyle = {
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   position: 'absolute',
+//   top: '50%',
+//   left: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   width: 300,
+//   height: 100,
+//   bgcolor: 'background.paper',
+//   // border: '2px solid #000',
+//   boxShadow: 24,
+//   p: 4,
+// };
 // export const vehicaleinfos = [
 //   {
 //     Option: "A/C",
@@ -197,7 +196,7 @@ const Vehicaleinfo = ({ stationName }) => {
     errorMessage,
     warningMessage,
     infoMessage,
-    handleRowClick,
+    // handleRowClick,
     handleRowClick1,
     book,
     handleClick,
@@ -239,7 +238,9 @@ const Vehicaleinfo = ({ stationName }) => {
     handleSelectAll,
     handleDocumentDownload,
     drivername,
-    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
+    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch,
+    //  rows1,
+     handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
     loading, isVButonLoading,setDeletevehciledata,deletevehciledata
   } = useVehicleinfo();
   const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1,
@@ -294,15 +295,15 @@ const Vehicaleinfo = ({ stationName }) => {
 
   ];
 
-  const handleView = (row) => {
-    console.log('View row:', row);
-    // Add your view logic here
-  };
+  // const handleView = (row) => {
+  //   console.log('View row:', row);
+  //   // Add your view logic here
+  // };
 
-  const handleDelete = (row) => {
-    console.log('Delete row:', row);
-    // Add your delete logic here
-  };
+  // const handleDelete = (row) => {
+  //   console.log('Delete row:', row);
+  //   // Add your delete logic here
+  // };
   useEffect(() => {
     const fetchgetvehicleNames = async () => {
       try {
@@ -1323,7 +1324,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 key="list"
                 icon={<ChecklistIcon />}
                 tooltipTitle="List"
-                onClick={() => handleClick("List")}
+                onClick={(event) => handleClick(event,"List")}
               />
             )}
             {Supllier_modify === 1 && isEditMode && (
@@ -1331,7 +1332,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 key="edit"
                 icon={<ModeEditIcon />}
                 tooltipTitle="Edit"
-                onClick={() => handleClick("Edit")}
+                onClick={(event) => handleClick(event,"Edit")}
               />
             )}
             {Supllier_delete === 1 && isEditMode && (
@@ -1362,14 +1363,14 @@ const Vehicaleinfo = ({ stationName }) => {
                 key="Add"
                 icon={<BookmarkAddedIcon />}
                 tooltipTitle="Add"
-                onClick={() => handleClick("Add")}
+                onClick={(event) => handleClick(event,"Add")}
               />
             )}
             <SpeedDialAction
               key="Cancel"
               icon={<CancelPresentationIcon />}
               tooltipTitle="Cancel"
-              onClick={() => handleClick("Cancel")}
+              onClick={(event) => handleClick(event,"Cancel")}
             />
           </StyledSpeedDial>
         </Box>

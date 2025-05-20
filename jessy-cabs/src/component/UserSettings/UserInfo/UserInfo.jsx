@@ -60,6 +60,8 @@ const UserSetting = () => {
     warning,
     successMessage,
     errorMessage,
+    setError,
+    setErrorMessage,
     warningMessage,
     infoMessage,
     book,
@@ -131,21 +133,30 @@ const UserSetting = () => {
 
 
   const avatarChange = async (avatarValue) => {
-    const userid = localStorage.getItem('useridno');
-    setSelectedAvatar(avatarValue)
-    localStorage.removeItem("selectedProfileimageuser");
+    const previousAvatar = selectedavtar;
+    try {
+       
+      const userid = localStorage.getItem('useridno');
+      setSelectedAvatar(avatarValue)
+      localStorage.removeItem("selectedProfileimageuser");
+    
+      // const removeItem= localStorage.getItem("selectedProfileimageuser")
+      // console.log(removeItem)
 
-    // const removeItem= localStorage.getItem("selectedProfileimageuser")
-    // console.log(removeItem)
+      await axios.post(`${apiUrl}/updateprofilename`, {
+        userid: userid,
+        profile_image: avatarValue
+      });
 
-    await axios.post(`${apiUrl}/updateprofilename`, {
-      userid: userid,
-      profile_image: avatarValue
-    });
-
-    handleClose();
+      handleClose();
+    } catch (err) {
+      setError(true)
+      setErrorMessage("Profile can not uploaded");
+      setUserAvatarValue(previousAvatar);
+      setSelectedAvatar(previousAvatar);
+      handleClose();
+    }
   }
-
 
   return (
     <div className="userinfo-form main-content-form Scroll-Style-hide">
@@ -218,9 +229,10 @@ const UserSetting = () => {
                       label="Role"
                       name="designation"
                       autoComplete="new-password"
-                      value={
-                        selectedCustomerData?.designation || book.designation
-                      }
+                      // value={
+                      //   selectedCustomerData?.designation || book.designation || " "
+                      // }
+                      value={book.designation || ""}
                       onChange={handleChange}
                       // disabled={!editMode}
                       // disabled={!editMode || Number(superpower) === 0}
@@ -237,7 +249,8 @@ const UserSetting = () => {
                       label="UserName"
                       name="username"
                       autoComplete="new-password"
-                      value={selectedCustomerData?.username || book.username}
+                      // value={selectedCustomerData?.username || book.username}
+                      value={book.username || ""}
                       onChange={handleChange}
                       autoFocus
                       // disabled={!editMode}
@@ -257,7 +270,8 @@ const UserSetting = () => {
                       label="Mobile"
                       name="mobileno"
                       autoComplete="new-password"
-                      value={selectedCustomerData?.mobileno || book.mobileno}
+                      // value={selectedCustomerData?.mobileno || book.mobileno}
+                      value={book.mobileno || ""}
                       onChange={handleChange}
                       autoFocus
                       disabled={!editMode}
@@ -274,7 +288,8 @@ const UserSetting = () => {
                       label="Email"
                       name="email"
                       autoComplete="new-password"
-                      value={selectedCustomerData?.email || book.email}
+                      // value={selectedCustomerData?.email || book.email}
+                      value={book.email || ""}
                       onChange={handleChange}
                       autoFocus
                       disabled={!editMode}
@@ -291,10 +306,11 @@ const UserSetting = () => {
                       <InputLabel htmlFor="password">Password</InputLabel>
                       <Input
                         name="userpassword"
-                        value={
-                          selectedCustomerData?.userpassword ||
-                          book.userpassword
-                        }
+                        // value={
+                        //   selectedCustomerData?.userpassword ||
+                        //   book.userpassword
+                        // }
+                        value={book.userpassword || ""}
                         onChange={handleChange}
                         id="password"
                         type={showPasswords ? "text" : "password"}
@@ -367,7 +383,10 @@ const UserSetting = () => {
                       </Button>
                     </div>
                     <div className="input">
-                      <Button variant="contained" onClick={handleUpdate}>
+                      {/* <Button variant="contained" onClick={handleUpdate}>
+                        Save
+                      </Button> */}
+                      <Button variant="contained" onClick={() => { handleUpdate(selectedCustomerData.userid) }}>
                         Save
                       </Button>
                     </div>

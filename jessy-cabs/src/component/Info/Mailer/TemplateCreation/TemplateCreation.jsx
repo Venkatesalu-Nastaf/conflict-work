@@ -17,6 +17,7 @@ import { useLocation } from "react-router-dom";
 import { IoCloseSharp } from "react-icons/io5";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { PermissionContext } from '../../../context/permissionContext';
+import encryption from '../../../dataEncrypt';
 
 
 
@@ -35,8 +36,8 @@ const TemplateCreation = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
-  const [warning,setWarning] = useState(false);
-  const [warningMessage, setWarningMessage] = useState({});
+  const [warning] = useState(false);
+  const [warningMessage] = useState({});
   const [editmode, setEditmode] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -76,7 +77,9 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
     const attacheimagedataedit = async (templateid) => {
       try {
         if (templateid) {
-          const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`);
+          const encryptId = encryption(templateid)
+          // console.log(encryptId ,"temp");  
+          const response = await axios.get(`${apiurl}/gettemplateattachimage/${encryptId}`);
           const dataimage = response.data;
           // console.log(dataimage,"checking")
           setImagedataedit(dataimage);
@@ -235,7 +238,8 @@ const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
 
       if (filedata) {
         await axios.post(`${apiurl}/templateattachmentimage/${templatedata.Templateid}`, formDataeditToSend)
-
+          //  console.log(Templateid);
+           
       }
       // navigate("/home/info/mailer");
       setSuccess(true);

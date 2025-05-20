@@ -12,7 +12,11 @@ router.use(express.static('customer_master'));
 // TO Delete
 router.delete('/image-delete/:filename', (req, res) => {
     const sql = "delete from rigister_employee_doc where fileName=?";
+
     const fileName = req.params.filename;
+
+    // console.log(fileName,"backend");
+    
     const oldFileName = req.params.filename;
     if (oldFileName) {
         const oldImagePath = path.join("./customer_master/public/employee_doc", oldFileName);
@@ -23,7 +27,8 @@ router.delete('/image-delete/:filename', (req, res) => {
     }
     db.query(sql, [fileName], (err, result) => {
         if (err) return res.json({ Message: "Error inside serevre" });
-        return res.json(result);
+        // console.log(result ,"deleted values ");    
+        return res.json(result);     
     })
 })
 

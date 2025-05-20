@@ -37,13 +37,13 @@ const usePaymentdetails = () => {
   const [infoMessage] = useState({});
 
 
-  const convertToCSV = (data) => {
-    const header = columns.map((column) => column.headerName).join(",");
-    const rows = data.map((row) =>
-      columns.map((column) => row[column.field]).join(",")
-    );
-    return [header, ...rows].join("\n");
-  };
+  // const convertToCSV = (data) => {
+  //   const header = columns.map((column) => column.headerName).join(",");
+  //   const rows = data.map((row) =>
+  //     columns.map((column) => row[column.field]).join(",")
+  //   );
+  //   return [header, ...rows].join("\n");
+  // };
   // const handleExcelDownload = () => {
   //   const csvData = convertToCSV(rows);
   //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
@@ -109,7 +109,7 @@ const handleExcelDownload = async () => {
 
         // Add rows of data
         formattedRows.forEach((singleData) => {
-            const row = worksheet.addRow(singleData);
+            // const row = worksheet.addRow(singleData);
             worksheet.columns.forEach((column) => {
                 const cellValue = singleData[column.key] || '';
                 const cellLength = cellValue.toString().length;
@@ -118,19 +118,35 @@ const handleExcelDownload = async () => {
             });
 
             // Apply borders for each cell
-            row.eachCell((cell) => {
-                cell.border = {
+            // row.eachCell((cell) => {
+            //     cell.border = {
+            //         top: { style: 'thin' },
+            //         left: { style: 'thin' },
+            //         bottom: { style: 'thin' },
+            //         right: { style: 'thin' },
+            //     };
+            //     const isHeader = row.number === 1;
+            //     worksheet.getCell(cell).alignment = {
+            //         horizontal: isHeader ? 'center' : 'left',
+            //         vertical: 'middle',
+            //     };
+            // });
+             worksheet.eachRow({ includeEmpty: false }, (row) => {
+            row._cells.forEach((singleCell) => {
+                const cellAddress = singleCell._address;
+                worksheet.getCell(cellAddress).border = {
                     top: { style: 'thin' },
                     left: { style: 'thin' },
                     bottom: { style: 'thin' },
                     right: { style: 'thin' },
                 };
                 const isHeader = row.number === 1;
-                worksheet.getCell(cell).alignment = {
+                worksheet.getCell(cellAddress).alignment = {
                     horizontal: isHeader ? 'center' : 'left',
                     vertical: 'middle',
                 };
             });
+        });
         });
 
         // Write to buffer and save the file
@@ -198,7 +214,7 @@ const handlePdfDownload = () => {
 
   ]);
 
-  console.log(rows, 'datss of roew inndualbilling');
+  // console.log(rows, 'datss of roew inndualbilling');
   
   pdf.autoTable({
     head: [
@@ -320,7 +336,7 @@ const handlePdfDownload = () => {
 
   const handleKeyDown = useCallback(async (e) => {
     if (e.key === "Enter") {
-      console.log(billingno, "billll");
+      // console.log(billingno, "billll");
 
       try {
         const response = await fetch(`${apiUrl}/getBillnoFromIndividualBill?billingno=${encodeURIComponent(billingno)}`);

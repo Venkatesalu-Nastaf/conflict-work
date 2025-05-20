@@ -29,12 +29,12 @@ import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 const LogDetails = () => {
   const apiurl = APIURL
   const [logdetails, setLogDetails] = useState([])
-  const [selecteddata, setSelectedData] = useState('')
-  const [selectbooking, setSelectedBooking] = useState()
+  // const [selecteddata, setSelectedData] = useState('')
+  // const [selectbooking, setSelectedBooking] = useState()
   const [selectcolumns, setSelectedColumns] = useState([{}])
   const [error, setError] = useState(false);
   const [info, setInfo] = useState(false);
-  const [infoMessage, setInfoMessage] = useState('')
+  const [infoMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warning, setWarning] = useState(false)
@@ -518,14 +518,14 @@ const LogDetails = () => {
         setWarningMessage("Enter Id")
         return
       }
-      console.log(event.target.value, "valueee")
+      // console.log(event.target.value, "valueee")
 
       try {
         const response = await axios.get(`${apiurl}/handlelogdetails/${event.target.value}/${logDateDetails?.selectType}`);
         // const response = await axios.get(
         //   `${apiUrl}/booking/${event.target.value}`,{ params: { loginUserName } } );
         const bookingDetails = response.data;
-        console.log(bookingDetails, "mmmmmmmmmmmmmmmmmmm")
+        // console.log(bookingDetails, "mmmmmmmmmmmmmmmmmmm")
         if (bookingDetails.length > 0) {
 
           const rowsWithUniqueId = bookingDetails.map((row, index) => ({
@@ -548,7 +548,6 @@ const LogDetails = () => {
 
           }));
           const checkingdata = logDateDetails.selectType === "Booking" ? rowsWithUniqueId1 : rowsWithUniqueId
-
           // const dataWithKeyDifferences = bookingDetails.map((currentItem, index) => {
           //   if (index === 0) {
           //     // No previous item to compare; no differences
@@ -568,7 +567,7 @@ const LogDetails = () => {
 
           const dataWithKeyDifferences = checkingdata
             .map((currentItem, index) => {
-              console.log(index, "immm")
+              // console.log(index, "immm")
               if (index === 0) {
                 // No previous item to compare; no differences
                 // return { ...currentItem, differences: {} };
@@ -578,10 +577,10 @@ const LogDetails = () => {
                 }, {});
                 return { ...currentItem, differences };
               }
-              console.log(index, "booo", index - 1)
+              // console.log(index, "booo", index - 1)
               const prevItem = checkingdata[index - 1];
               const differences = {};
-              console.log(prevItem, "prev")
+              // console.log(prevItem, "prev")
               // Compare each key
               Object.keys(currentItem).forEach((key) => {
                 differences[key] = currentItem[key] !== prevItem[key];
@@ -595,7 +594,7 @@ const LogDetails = () => {
           //   return Object.values(item.differences).some((isDifferent) => isDifferent);
           // });
 
-          console.log(dataWithKeyDifferences, "lplplk");
+          // console.log(dataWithKeyDifferences, "lplplk");
 
           //  const dataaa =  compareIndices(bookingDetails)
           //  console.log(dataaa,"daa")

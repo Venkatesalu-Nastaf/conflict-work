@@ -219,12 +219,12 @@ router.get('/searchAgreementpage', (req, res) => {
         'address',
         'gstno'
     ];
-    console.log(columnsToSearch, "columns")
+    // console.log(columnsToSearch, "columns")
     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
     query += ` AND (${likeConditions})`;
 
     // Add searchText to params for each column
-    params = columnsToSearch.map(() =>` ${searchText}%`);
+    params = columnsToSearch.map(() =>`%${searchText}%`);
   }
 
   // console.log("SQL Query:", query);

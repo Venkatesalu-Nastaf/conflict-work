@@ -197,10 +197,14 @@ const useEmployee = () => {
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("Employee Details", 10, 10);
-        const header = Object.keys(rows[0]);
-
+        // const header = Object.keys(rows[0]);
         // Extracting body
-        const body = rows.map(row => Object.values(row));
+        // const body = rows.map(row => Object.values(row));
+
+
+        const selectedFields = ["id4", "customer", "fromdate", "todate", "mobileno","address","gstno"]
+        const header = selectedFields;
+        const body = rows.map(row =>selectedFields.map(field =>row[field]))
 
         let fontdata = 1;
         if (header.length <= 13) {
@@ -370,9 +374,11 @@ const useEmployee = () => {
     };
 
     const handleenterSearch = useCallback(async (e) => {
+       
+      if(searchText === '') return;
+        
         if (e.key === "Enter") {
-            console.log("Search Text:", searchText);
-
+            // console.log("Search Text:", searchText);
             try {
                 // Fetching data from the server
                 const response = await fetch(`${apiUrl}/searchAgreementpage?searchText=${encodeURIComponent(searchText)}`);
@@ -882,7 +888,8 @@ const useEmployee = () => {
         }
 
         else if (actionName === 'Delete') {
-            const { id, ...rest } = selectedCustomerData; // Use only 'id' for delete
+            // const { id, ...rest } = selectedCustomerData; // Use only 'id' for delete
+            const { id } =selectedCustomerData;
             // console.log(id, "value", selectedCustomerData);
 
             try {
@@ -906,44 +913,15 @@ const useEmployee = () => {
                 }
             }
         }
-        else if (actionName === 'Edit') {
+        else if (actionName === 'Add') {
+            handleAdd()
+         
 
-            // const { id4, id, ...rest } = selectedCustomerData;
-            // // console.log(id4,"value",selectedCustomerData)
-            // const updatedCustomer = { ...rest };
-            // await axios.put(`${apiUrl}/agreementedit/${id}`, updatedCustomer);
-            // setSuccess(true);
-            // setSuccessMessage("Successfully updated");
-            // handleCancel();
-            // addPdf();
-            // setRows([]);
-            // handleList()
-            const { id4, id, Agreement_Image, ...rest } = selectedCustomerData;
 
-            const updatedCustomer = { ...rest };
-            try {
-                await axios.put(`${apiUrl}/agreementedit/${id}`, updatedCustomer);
-
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
-                addPdf();
-                // licenceSubmit(updatedCustomer.customer)
-                // console.log(updatedCustomer.customer, 'ggggggggggggg');
-                setRows([]);
-                handleList()
-            } catch (error) {
-                // console.error("Error occurred:", error);
-
-                if (error.response) {
-                    setError(true);
-                    setErrorMessage(error.response.data.message || "Failed to add data");
-                } else {
-                    setError(true);
-                    setErrorMessage("Check your Network Connection");
-                }
-            }
         }
+        else if (actionName === 'Edit'){
+            handleEdit()
+         }
         //  catch {
         //     setError(true);
         //     setErrorMessage("Check your Network Connection");
@@ -1239,7 +1217,7 @@ const useEmployee = () => {
         handleClick,
         handleChange,
         setSelectedCustomerData,
-        selectedCustomerData,
+        // selectedCustomerData,
         setBook,
         handleRowClick,
         handleAdd,

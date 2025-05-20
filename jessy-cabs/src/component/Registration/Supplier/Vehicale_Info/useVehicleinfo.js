@@ -6,6 +6,7 @@ import { saveAs } from 'file-saver';
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
+import encryption from '../../../dataEncrypt';
 
 const useVehicleinfo = () => {
     const apiUrl = APIURL;
@@ -115,11 +116,11 @@ const useVehicleinfo = () => {
         }
         setSelectAll(prevState => !prevState);
     };
-
     //to see pdf
     const [allFile, setAllFile] = useState([]);
     const showPdf = (showID) => {
-        axios.get(`${apiUrl}/vehicle-docView/${showID}`)
+        const encryptId = encryption(showID)
+        axios.get(`${apiUrl}/vehicle-docView/${encryptId}`)
             .then(res => {
                 if (res.data.length > 0) {
                     setAllFile(res.data);
@@ -629,6 +630,7 @@ const useVehicleinfo = () => {
         setSelectedCustomerData({});
         setIsEditMode(false);
         setDeletevehciledata(false)
+        handleList();
     };
 
     const handleAutocompleteChange = (event, value, name) => {
@@ -681,8 +683,9 @@ const useVehicleinfo = () => {
 
     const uniquevechicleRegno = async (veghnodata) => {
         if (veghnodata) {
-
-            const response = await axios.get(`${apiUrl}/uniquevechregnodata/${veghnodata}`)
+            const encrypData = encryption(veghnodata);
+            // console.log(encrypData,"checking");     
+            const response = await axios.get(`${apiUrl}/uniquevechregnodata/${encrypData}`)
             const responsedata = response.data;
             if (responsedata?.length >= 1) {
 
@@ -1193,23 +1196,24 @@ const useVehicleinfo = () => {
     const handleClick = async (event,actionName) => {
         // try{
         if (actionName === 'List') {
-            const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
-            const data = response.data;
-            console.log(data,"check");       
+            // const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
+            // const data = response.data;
+            // console.log(data,"check");       
 
-            if (data.length > 0) {
-                const rowsWithUniqueId = data.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-                setRows(rowsWithUniqueId);
-                setSuccess(true);
-                setSuccessMessage('Successfully listed');
-            } else {
-                setRows([]);
-                setError(true);
-                setErrorMessage('No data found');
-            }
+            // if (data.length > 0) {
+            //     const rowsWithUniqueId = data.map((row, index) => ({
+            //         ...row,
+            //         id: index + 1,
+            //     }));
+            //     setRows(rowsWithUniqueId);
+            //     setSuccess(true);
+            //     setSuccessMessage('Successfully listed');
+            // } else {
+            //     setRows([]);
+            //     setError(true);
+            //     setErrorMessage('No data found');
+            // }
+            handleList();
 
         }
         else if (actionName === 'Cancel') {
@@ -1325,7 +1329,9 @@ const useVehicleinfo = () => {
     //search funtion
     const handleSearch = async () => {
         try {
-            const response = await fetch(`${apiUrl}/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+            const encryptSearchText = searchText ? encryption(searchText) : '';
+            // console.log(encryptSearchText,"searching");      
+            const response = await fetch(`${apiUrl}/searchvehicleinfo?searchText=${encryptSearchText}&fromDate=${fromDate}&toDate=${toDate}`);
             const data = await response.json();
             // console.log(data, "typedata")
             if (data.length > 0) {
@@ -1368,11 +1374,16 @@ const useVehicleinfo = () => {
     };
 
     const handleenterSearch = async (e) => {
+        if(searchText === "") return;
         if (e.key === "Enter") {
 
             try {
+
+                const encryptText = encryption(searchText);
+                // console.log(encryptText,"searchinggg");
+                
                 const response = await fetch(
-                    `${apiUrl}/searchvehicleinfo?searchText=${searchText}`
+                    `${apiUrl}/searchvehicleinfo?searchText=${encryptText}`
                 );
                 const data = await response.json();
 

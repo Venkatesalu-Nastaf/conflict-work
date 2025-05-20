@@ -8,6 +8,8 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
+import encryption from '../../../dataEncrypt';
+
 
 const useEmployee = () => {
     const apiUrl = APIURL;
@@ -28,7 +30,7 @@ const useEmployee = () => {
     const [searchText, setSearchText] = useState('');
     const [isEditMode, setIsEditMode] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [deleteemployeedata,setDeleteEmployeedata] = useState(false)
+    const [deleteemployeedata, setDeleteEmployeedata] = useState(false)
 
     const [loading, setLoading] = useState(false);
 
@@ -42,7 +44,7 @@ const useEmployee = () => {
         setDeleteFile([])
         showPdf(empid);
     };
-
+    
     // TABLE STRAT
     const columns = [
         { field: "id", headerName: "Sno", width: 50 },
@@ -67,28 +69,28 @@ const useEmployee = () => {
             headerName: "Employee Status",
             width: 130,
             renderCell: (params) => {
-              return (
-                <span
-                  style={{
-                    display: "inline-block",
-                    padding: "5px 10px",
-                    borderRadius: "5px",
-                    backgroundColor: params.value === "Temporary" ? "#FFCDD2" : params.value === "Permanent" ? "#C8E6C9" : "#E0E0E0",
-                    color: params.value === "Temporary" ? "red" : params.value === "Permanent" ? "green" : "black",
-                    fontWeight: "bold",
-                    fontSize: "15px",
-                    textAlign: "center",
-                    minWidth: "80px",
-                  }}
-                >
-                  {params.value}
-                </span>
-              );
+                return (
+                    <span
+                        style={{
+                            display: "inline-block",
+                            padding: "5px 10px",
+                            borderRadius: "5px",
+                            backgroundColor: params.value === "Temporary" ? "#FFCDD2" : params.value === "Permanent" ? "#C8E6C9" : "#E0E0E0",
+                            color: params.value === "Temporary" ? "red" : params.value === "Permanent" ? "green" : "black",
+                            fontWeight: "bold",
+                            fontSize: "15px",
+                            textAlign: "center",
+                            minWidth: "80px",
+                        }}
+                    >
+                        {params.value}
+                    </span>
+                );
             },
-          },
+        },
         { field: "empid", headerName: "Employe ID", width: 140 },
         { field: "empname", headerName: "Name", width: 130 },
-       
+
         { field: "empemailid", headerName: "Email", width: 130 },
         { field: "empmobile", headerName: "Mobile", width: 130 },
         { field: "jobroll", headerName: "Job Roll", width: 130 },
@@ -99,9 +101,9 @@ const useEmployee = () => {
         { field: "uanid", headerName: "UAN ID", width: 140 },
         { field: "esino", headerName: "ESI NO", width: 140 },
         { field: "fixedsalary", headerName: "Net Salary", width: 130 },
-        
-          
-          
+
+
+
         { field: "licenceno", headerName: "Driving Licence No", width: 140 },
     ];
     // TABLE END
@@ -196,13 +198,13 @@ const useEmployee = () => {
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
-    
+
         try {
             const fileName = "Employeedetails";
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
             const columnsExcel = headers.map(key => ({ key, header: key }));
-    
+
             worksheet.columns = columnsExcel;
             worksheet.getRow(1).font = { bold: true };
             worksheet.getRow(1).eachCell((cell, colNumber) => {
@@ -212,38 +214,38 @@ const useEmployee = () => {
                     fgColor: { argb: '9BB0C1' }
                 };
             });
-    
+
             worksheet.getRow(1).height = 30;
             worksheet.columns.forEach((column) => {
                 column.width = column.header.length + 5;
                 column.alignment = { horizontal: 'center', vertical: 'middle' };
             });
-    
+
             rows.forEach((singleData) => {
                 const transformDate = (dateStr) => {
                     return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : "";
                 };
-    
+
                 const transformedData = { ...singleData };
                 transformedData.joiningdate = transformDate(singleData.joiningdate);
-    
+
                 worksheet.addRow(transformedData);
-    
+
                 worksheet.columns.forEach((column) => {
                     const cellValue = transformedData[column.key] || '';
                     const cellLength = cellValue.toString().length;
                     const currentColumnWidth = column.width || 0;
-    
+
                     column.width = Math.max(currentColumnWidth, cellLength + 5);
                 });
             });
-    
+
             worksheet.eachRow({ includeEmpty: false }, (row) => {
                 const currentCell = row._cells;
-    
+
                 currentCell.forEach((singleCell) => {
                     const cellAddress = singleCell._address;
-    
+
                     worksheet.getCell(cellAddress).border = {
                         top: { style: 'thin' },
                         left: { style: 'thin' },
@@ -257,9 +259,9 @@ const useEmployee = () => {
                     };
                 });
             });
-    
+
             const buf = await workbook.xlsx.writeBuffer();
-    
+
             saveAs(new Blob([buf]), `${fileName}.xlsx`);
         } catch (error) {
             console.error('<<<ERROR>>>', error);
@@ -268,7 +270,7 @@ const useEmployee = () => {
             workbook.removeWorksheet(workSheetName);
         }
     };
-    
+
     // const handlePdfDownload = () => {
     //     const pdf = new jsPDF({
     //         orientation: "landscape",
@@ -359,16 +361,16 @@ const useEmployee = () => {
             unit: "mm",
             format: "tabloid"
         });
-    
+
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("Employee Details", 10, 10);
         const header = Object.keys(rows[0]);
-    
+
         const formatDate = (dateStr) => {
             return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : ""; // Formatting date if exists
         };
-    
+
         const transformedRows = rows.map(row => {
             const transformedRow = { ...row };
             if (transformedRow.joiningdate) {
@@ -376,9 +378,9 @@ const useEmployee = () => {
             }
             return transformedRow;
         });
-    
+
         const body = transformedRows.map(row => Object.values(row));
-    
+
         let fontdata = 1;
         if (header.length <= 13) {
             fontdata = 16;
@@ -399,7 +401,7 @@ const useEmployee = () => {
         } else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-    
+
         pdf.autoTable({
             head: [header],
             body: body,
@@ -419,14 +421,14 @@ const useEmployee = () => {
             },
             columnWidth: 'auto'
         });
-    
+
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
         pdf.scale(scaleFactor, scaleFactor);
-    
+
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'EmployeeReports.pdf');
     };
-    
+
 
 
     const hidePopup = () => {
@@ -455,7 +457,7 @@ const useEmployee = () => {
         jobroll: '',
         joiningdate: '',
         gender: '',
-        empsts:'',
+        empsts: '',
         bloodgroup: '',
         address1: '',
         aadharcard: '',
@@ -523,6 +525,7 @@ const useEmployee = () => {
             uanid: '',
             esino: '',
             licenceno: '',
+
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
@@ -581,7 +584,7 @@ const useEmployee = () => {
     // const handleList = useCallback(async () => {
     //     setLoading(true)
     //     try {
-           
+
     //         const response = await axios.get(`${apiUrl}/employees`);
     //         const data = response.data
     //         const rowsWithUniqueId = data.map((row, index) => ({
@@ -606,15 +609,17 @@ const useEmployee = () => {
         setError(false); // Reset error state before each request
         try {
             const response = await axios.get(`${apiUrl}/employees`);
+
             const data = response.data;
-            
+            // console.log(data, "all datas ");
+
             const rowsWithUniqueId = data.map((row, index) => ({
                 ...row,
                 id: index + 1,
             }));
-            
+
             setRows(rowsWithUniqueId);
-            
+
         } catch (err) {
             if (err.message === 'Network Error') {
                 setErrorMessage("Check network connection.");
@@ -626,8 +631,8 @@ const useEmployee = () => {
             setLoading(false); // Ensure loading is false in all cases
         }
     }, [apiUrl]);
-    
-    
+
+
     useEffect(() => {
         handleList();
     }, [handleList]);
@@ -648,16 +653,16 @@ const useEmployee = () => {
             setSuccess(true);
             setSuccessMessage("Successfully Added");
             handleList();
-        } 
+        }
         // catch {
         //     setError(true);
         //     setErrorMessage("Failed to ADD Employee Data");
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
@@ -673,26 +678,47 @@ const useEmployee = () => {
         }
     };
 
+    // const handleEdit = async (userid) => {
+    //     const selectedCustomer = rows.find((row) => row.empid === empid);
+    //     const { id, ...rest } = selectedCustomerData;
+    //     const updatedCustomer = { ...rest };
+    //     await axios.put(`${apiUrl}/employees/${selectedCustomer.empid}`, updatedCustomer);
+    //     // console.log(updatedCustomer,"checking employee details"); 
+    //     setSuccess(true);
+    //     setSuccessMessage("Successfully updated");
+    //     handleCancel();
+    //     addPdf();
+    //     setRows([]);
+    //     handleList()
+    // };
     const handleEdit = async (userid) => {
-        const selectedCustomer = rows.find((row) => row.empid === empid);
-        const { id, ...rest } = selectedCustomerData;
-        const updatedCustomer = { ...rest };
-        await axios.put(`${apiUrl}/employees/${selectedCustomer.empid}`, updatedCustomer);
-        // console.log(updatedCustomer,"checking employee details"); 
-        setSuccess(true);
-        setSuccessMessage("Successfully updated");
-        handleCancel();
-        addPdf();
-        setRows([]);
-        handleList()
-    };
+        try {
+            const selectedCustomer = rows.find((row) => row.empid === empid);
+            const { id, ...rest } = selectedCustomerData;
+            const updatedCustomer = { ...rest };
+            await axios.put(`${apiUrl}/employees/${selectedCustomer.empid}`, updatedCustomer);
+            // console.log(updatedCustomer,"checking employee details"); 
+        
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            addPdf();
+            setRows([]);
+            handleList();
+        } catch (error) {
+            console.log(error, "failed");
+
+        }
+    }
+
+
 
 
     const handleClick = async (event, actionName, empid) => {
         event.preventDefault();
-        
-            if (actionName === 'List') {
-                try {
+
+        if (actionName === 'List') {
+            try {
                 const response = await axios.get(`${apiUrl}/employees`);
                 const data = response.data;
                 if (data.length > 0) {
@@ -708,56 +734,49 @@ const useEmployee = () => {
                     setError(true);
                     setErrorMessage("No data found");
                 }
-                }
-                catch {
-                    setError(true);
-                    setErrorMessage("Failed to Retrive Data");
-                }
             }
-
-            else if (actionName === 'Cancel') {
-                handleCancel();
-                setRows([]);
+            catch {
+                setError(true);
+                setErrorMessage("Failed to Retrive Data");
             }
+        } else if (actionName === 'Add') {
+         handleAdd()
 
-            else if (actionName === 'Delete') {
-                try{
+        }
+        else if (actionName === 'Cancel') {
+            handleCancel();
+            setRows([]);
+            handleList();
+        }
+
+        else if (actionName === 'Delete') {
+            try {
                 await axios.delete(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`);
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
-                setRows([]);
-                }
-                catch(err){
-                    setError(true);
-                    setErrorMessage("Failed to Delete Employee Data");
-                }
-            }
-
-            else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.empid === empid);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
-                addPdf();
+                handleList();
                 setRows([]);
             }
+            catch (err) {
+                setError(true);
+                setErrorMessage("Failed to Delete Employee Data");
+            }
+        }
 
-        
-        //  catch {
-        //     setError(true);
-        //     setErrorMessage("Check your Network Connection");
-        // }
+        else if (actionName === 'Edit') {
+            handleEdit()
+
     };
-
-  
+}
 
     const handleShowAll = async () => {
         try {
-            const response = await fetch(`${apiUrl}/table-for-employee?searchText=${searchText}`);
+            const encryptSearch = encryption(searchText);
+            // console.log(encryptSearch, "checking the search");
+
+            const response = await fetch(`${apiUrl}/table-for-employee?searchText=${encryptSearch}`);
             const data = await response.json();
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
@@ -772,16 +791,16 @@ const useEmployee = () => {
                 setError(true);
                 setErrorMessage("no data found")
             }
-        } 
+        }
         // catch {
         //     setError(true);
         //     setErrorMessage("Failed to Retrieve Data")
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
@@ -872,6 +891,9 @@ const useEmployee = () => {
         axios.delete(`${apiUrl}/image-delete/` + imagedata)
             .then(res => {
                 console.log("deleted")
+                console.log(imagedata, "delete image");
+                setFile(null);
+                handleList();
             })
             .catch(err => console.log(err))
         setDialogdeleteOpen(false);
@@ -922,7 +944,7 @@ const useEmployee = () => {
         setErrorMessage,
         deletefile,
         loading,
-        setLoading,deleteemployeedata,setDeleteEmployeedata,
+        setLoading, deleteemployeedata, setDeleteEmployeedata,
     };
 };
 

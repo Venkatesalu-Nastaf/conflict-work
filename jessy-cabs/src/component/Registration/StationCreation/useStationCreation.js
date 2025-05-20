@@ -3,8 +3,9 @@ import { useState, useEffect, useCallback ,useMemo} from 'react';
 import axios from 'axios';
 import { APIURL } from "../../url";
 import dayjs from 'dayjs';
-import { stateToStations,allStations } from "../Customer/Customerdata";
+import { stateToStations } from "../Customer/Customerdata";
 import { useData } from '../../Dashboard/MainDash/Sildebar/DataContext2';
+import encryption from '../../dataEncrypt';
 
 const useStationCreation = () => {
     const apiUrl = APIURL;
@@ -792,13 +793,15 @@ const handleStationChange = async (event, value) => {
             const fetchData = async () => {
                 // console.log(statename, 'state22');
                 try {
-                    const response = await axios.get(`${apiUrl}/getAllStationDetails/${statename}`);
+                    const encryptState = encryption(statename)
+                    // console.log(encryptState,"xcvbnm");          
+                    const response = await axios.get(`${apiUrl}/getAllStationDetails/${encryptState}`);
                     // console.log(response.data, 'mainbranch');
                     setGetMainBranchDetails(response.data);
 
                     // Check if response data is empty
                     if (response.data && response.data.length > 0) {
-                        const address = response.data[0]?.address;
+                        // const address = response.data[0]?.address;
                         const gst = response.data[0]?.gstno;
                         // console.log(address, 'mainbranchaddress');
 
@@ -916,6 +919,7 @@ const handleStationChange = async (event, value) => {
             else if (actionName === 'Cancel') {
                 handleCancel();
                 setRows([]);
+            
             }
 
             else if (actionName === 'Delete') {
@@ -976,7 +980,7 @@ const handleStationChange = async (event, value) => {
         hidePopup,
         isEditMode,
         handleEdit,
-        cerendentialdata,
+        // cerendentialdata,
         handleChangeuniquestation,
         getMainBrachDetails,
         loading,

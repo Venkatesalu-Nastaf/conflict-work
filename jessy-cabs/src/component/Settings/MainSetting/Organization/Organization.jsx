@@ -182,9 +182,22 @@ const Organization = ({ logoImage }) => {
                                         </div>
                                     </div>
                                     <div className="user-photo-edit">
-                                        <IconButton color="primary" disabled={!MainSetting_modify} onClick={toggleEditMode} size='small' variant="outlined" component="label">
+                                        {/* <IconButton color="primary" disabled={!MainSetting_modify} onClick={toggleEditMode} size='small' variant="outlined" component="label">
                                             <ModeEditIcon />
-                                        </IconButton>
+                                        </IconButton> */}
+                                         <IconButton color="primary" disabled={!MainSetting_modify} 
+                                         onClick={()=>{
+                                            if(editMode){
+                                                handleUpdate();
+                                            }else{
+                                                toggleEditMode();
+                                            }
+                                         }}
+                                         size='small' variant="outlined" component="label"
+                                         >
+                                            <ModeEditIcon />
+                                         </IconButton>
+
                                     </div>
 
                                     <div className='alert-popup-main'>

@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../../../db');
 const multer = require('multer');
 const path = require('path');
+const decryption = require('../dataDecrypt')
 
 
 // Add Customer Master database
@@ -33,10 +34,13 @@ router.delete('/employees/:empid', (req, res) => {
 // Update Customer Master details
 router.put('/employees/:empid', (req, res) => {
     const empid = req.params.empid;
+
     // console.log(empid, "for checking");
     
     const updatedCustomerData = req.body;
+
     // console.log(updatedCustomerData," values of employess");
+    
     db.query('UPDATE employees SET ? WHERE empid = ?', [updatedCustomerData, empid], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to update data in MySQL' });
@@ -44,6 +48,8 @@ router.put('/employees/:empid', (req, res) => {
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Customer not found' });
         }
+        // console.log(result, "values");
+       
         return res.status(200).json({ message: 'Data updated successfully' });
     });
 });
@@ -60,9 +66,16 @@ router.get('/employees', (req, res) => {
 
 //for user profile information
 router.get('/userdataforuserinfo/:userid', (req, res) => {
-    const userid = req.params.userid;
+    // const userid = req.params.userid;
+    const encryptId = req.params.userid;
 
-    db.query('SELECT * FROM usercreation WHERE userid = ?', userid, (err, result) => {
+    // console.log(encryptId,"id encryption");
+    
+    const decryptId = decryption(encryptId)
+    // console.log(decryptId,"checking");
+    
+  
+    db.query('SELECT * FROM usercreation WHERE userid = ?', decryptId, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
         }
@@ -71,17 +84,24 @@ router.get('/userdataforuserinfo/:userid', (req, res) => {
         }
         const routeData = result;
         // console.log(result,"rtyuio");
-        
+     
         return res.status(200).json(routeData);
     });
 });
 
 router.get('/table-for-employee', (req, res) => {
-    const { searchText } = req.query;
+    const {searchText } = req.query;
+
+    // console.log(searchText,"backend");
+
+    const decryptSearch = decryption(searchText)
+
+    // console.log(decryptSearch,"decrypt value");
+    
     let query = 'SELECT * FROM employees WHERE 1=1';
     let params = [];
 
-    if (searchText) {
+    if (decryptSearch) {
         const columnsToSearch = [
             'empid',
             'empname',
@@ -104,7 +124,7 @@ router.get('/table-for-employee', (req, res) => {
         const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
         query += ` AND (${likeConditions})`;
-        params = columnsToSearch.map(() => `%${searchText}%`);
+        params = columnsToSearch.map(() => `%${decryptSearch}%`);
     }
 
     db.query(query, params, (err, result) => {
@@ -134,12 +154,23 @@ const employee_storage = multer.diskStorage({
 const employee_uploadfile = multer({ storage: employee_storage });
 
 router.post('/employee-pdf/:id', employee_uploadfile.single("file"), async (req, res) => {
+
     const emp_id = req.params.id;
+
+    // console.log(emp_id,"checking the id ");
+    
     const fileName = req.file.filename;
+    // console.log(fileName,"filename");
+
     const fileType = req.file.mimetype;
-    const sql = `insert into rigister_employee_doc(emp_id,fileName,file_type)values(${emp_id},'${fileName}','${fileType}')`;
-    db.query(sql, (err, result) => {
+    // console.log(fileType ,"fileType");
+  
+    const sql = "INSERT INTO rigister_employee_doc (emp_id,fileName,file_type) VALUES (?,?,?)";
+
+    db.query(sql,[emp_id, fileName, fileType],(err, result) => {
         if (err) return res.json({ Message: "Error" });
+        // console.log(result,"full result");
+
         return res.json({ Status: "success" });
     })
 })
@@ -157,15 +188,26 @@ router.get('/employee-docView/:id', (req, res) => {
 //--------------------------------------------------------------------------------------
 
 router.get("/getuniqueusercreationdata/:Username",(req,res)=>{
-    const username=req.params.Username;
+    // const username=req.params.Username;
+    const encryptedUsername = req.params.Username;
+
+    // console.log(encryptedUsername,"encryptname");
+   
+    const username = decryption(encryptedUsername);
+
+    // console.log(username,"decrypt username");
+    
+    if(!username){
+        return res.status(400).json({error:"Failed to decrypt the username"})
+    }
     // console.log(username,"params")
     db.query("select username from  usercreation where username=?",[username],(err,results)=>{
       if (err) {
         return res.status(500).json({ error: 'Failed to delete data from MySQL' });
       }
-      console.log(results.length)
+    //    console.log(results,"checking the username");
+       
       return res.status(200).json(results);
-  
     })
   })
 

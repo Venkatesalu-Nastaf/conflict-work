@@ -453,7 +453,7 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
     // `;
     const query = `
         SELECT 
-             ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hiretypes,ai.vehRegNo,ai.driverName,
+             ai.travelsname,ai.travelsemail,ai.rateType,vehicleInfo as hireTypes,ai.vehRegNo,ai.driverName,
             vi.Groups, vi.vehicleName As vehicleName2,
             dc.Mobileno As mobileNo
         FROM accountinfo ai

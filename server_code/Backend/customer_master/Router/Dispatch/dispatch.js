@@ -603,6 +603,8 @@ router.get('/VehicleStatement-bookings', (req, res) => {
   const { Travelsname, fromDate, toDate } = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+  console.log(Travelsname,fromDate,toDate,"checkingvendorrrrrrrrrrrrrrrrrrrr");
+  
   // db.query("select *,Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) As totalvendoramount from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)",
   db.query(`select *,COALESCE(NULLIF(advancepaidtovendor, ''), 0) AS totalvendoramount,
           COALESCE(NULLIF(fuelamount, ''), 0) AS totalfuelamount,
@@ -614,7 +616,7 @@ router.get('/VehicleStatement-bookings', (req, res) => {
  + COALESCE(NULLIF(vendortoll, ''), 0) 
  + COALESCE(NULLIF(vendorparking, ''), 0) 
  + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandtotal
-    from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)`,
+    from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`,
     [Travelsname,formattedFromDate,formattedToDate], (err, results) => {
       if (err) {
         return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });

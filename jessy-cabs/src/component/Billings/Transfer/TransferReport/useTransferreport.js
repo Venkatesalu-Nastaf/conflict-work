@@ -656,36 +656,56 @@ const useTransferreport = () => {
 //   // }, [apiUrl, rowSelectionModel, pdfzipdata, rows]);
 // }, [apiUrl,tripID]);
 useEffect(() => {
+  function splitIntoChunks(array, chunkSize) {
+    const result = [];
+    
+    for (let i = 0; i < array.length; i += chunkSize) {
+      result.push(array.slice(i, i + chunkSize));
+    }
+    return result;
+  }
+let a = []
   const controller = new AbortController(); // <-- Create controller
-
   const fetchData = async () => {
     try {
-      console.log(tripID, "exceltrip", rowSelectionModel);
-
       if (tripID.length >= 1) {
         setZipIsloading(true);
 
-        const response = await axios.get(
-          `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(customer)}/${tripID}`,
-          {
+        const chunkedTripIDs = splitIntoChunks(tripID, 500);
+        let allTripData = [];
+console.log(chunkedTripIDs,"cccccccccccccccccc");
+a.push(chunkedTripIDs)
+console.log(a.length,"aaaaaaaaaaaaaaaaaaaaaaaaa",a);
+
+
+
+        for (const chunk of a) {
+          const response = await axios.get(
+            `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(customer)}/${encodeURIComponent(JSON.stringify(chunk))}`,
+             {
             signal: controller.signal, // <-- Attach controller signal
           }
+          );
+
+          const tripData = response.data;
+          console.log(tripData,"kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+          
+          allTripData = allTripData.concat(tripData.flat());
+        }
+
+        // Remove duplicates by tripid from allTripData
+        const uniqueData = allTripData.filter(
+          (item, index, self) =>
+            index === self.findIndex((obj) => obj.tripid === item.tripid)
         );
 
-        const tripData = response.data;
-        console.log(tripData, "drexceltripppppppppppp");
-
-        const flattenedTripData = tripData.flat();
-        const uniqueData = flattenedTripData.filter((item, index, self) =>
-          index === self.findIndex((obj) => obj.tripid === item.tripid)
-        );
-
-        if (uniqueData?.length >= 1) {
+        if (uniqueData.length >= 1) {
           setZipIsloading(false);
         }
 
-        console.log(uniqueData, "drflattenedTripDatauniqueData", uniqueData.length);
-        setPdfzipdata(uniqueData);
+        console.log(uniqueData, "final uniqueData", uniqueData.length,allTripData,"ssssss",tripData);
+        setPdfzipdata(allTripData);
+
       } else {
         setZipIsloading(false);
         return;
@@ -701,11 +721,11 @@ useEffect(() => {
   };
 
   fetchData();
-
-  return () => {
+    return () => {
     controller.abort(); // <-- Cancel request on unmount
   };
 }, [apiUrl, tripID]);
+
   const handleChange = (event) => {
     setInvoiceno(event.target.value)
   }

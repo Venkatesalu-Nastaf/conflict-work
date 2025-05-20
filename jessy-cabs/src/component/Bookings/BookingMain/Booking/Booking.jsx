@@ -2,7 +2,6 @@ import React, { useContext, useRef, useState,useMemo } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
-import Textarea from '@mui/joy/Textarea';
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
@@ -27,8 +26,7 @@ import {
   FormControl,
   Checkbox,
 } from "@mui/material";
-// import Box from "@mui/material/Box";
-// import TabList from "@mui/joy/TabList";
+
 import Modal from '@mui/material/Modal';
 
 // ICONS
@@ -71,7 +69,6 @@ import { APIURL } from "../../../url";
 // speed dial 
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import MessageIcon from '@mui/icons-material/Message';
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
@@ -82,7 +79,6 @@ import Select from '@mui/material/Select';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Document, Page, pdfjs } from 'react-pdf';
 import DeleteConfirmationDialog from "../../../DeleteData/DeleteData";
-// import { textAlign } from "html2canvas/dist/types/css/property-descriptors/text-align";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
@@ -165,7 +161,7 @@ const Booking = ({ stationName, customerData }) => {
     vehileName,
     selectedCustomerdriver, setNoChangeData, nochangedata,
     handleSelectAll, handlecheckbox, selectAll, deletefile, handleButtonClickwithouttripid, dialogOpentrail, handleCloseDialogtrail, handlecheckbox1, selectetImg, deletefiledata,
-    handleimagedeletewithouttripid, handleChangetext, messagedited,messageditedbefore,setDeleteBookingData,deletebookingdata,
+    handleimagedeletewithouttripid, handleChangetext,messageditedbefore,setDeleteBookingData,deletebookingdata,
     handletravelsAutocompleteChange, accountinfodata, CopyEmail, setCopyEmail, setWarningMessage, setWarning, warningMessage, warning, handleMessageData, handleCloseMessage, dialogmessage,
     // handleBookEscortChange,handleAirportTransferChange,
     //  transferreport, 
@@ -184,7 +180,7 @@ const Booking = ({ stationName, customerData }) => {
   const Booking_new = permissions[1]?.new;
   const Booking_modify = permissions[1]?.modify;
   const Booking_delete = permissions[1]?.delete;
-  const [numPages, setNumPages] = useState(null);
+  // const [numPages, setNumPages] = useState(null);
   const shedOutTimeRef = useRef(null);
   const reportTimeRef = useRef(null);
 
@@ -193,11 +189,35 @@ const Booking = ({ stationName, customerData }) => {
     reportTime: ""
   });
 
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
+  // function onDocumentLoadSuccess1({ numPages }) {
+  //   console.log(numPages,"num")
+  //   setNumPages(numPages);
 
-  }
+  // }
+  const [pdfPageCounts, setPdfPageCounts] = useState({});
+    const [pdfErrors, setPdfErrors] = useState([]);
 
+
+const onDocumentLoadSuccess = (index, { numPages }) => {
+  // console.log(index,numPages,"num")
+  setPdfPageCounts(prev => ({
+    ...prev,
+    [index]: numPages
+  }));
+   setPdfErrors((prev) => ({
+      ...prev,
+      [index]: null,
+    }));
+};
+
+const onLoadError = (index, error) => {
+    console.log(`Error loading PDF at index ${index}:`, error);
+    setPdfErrors((prev) => ({
+      ...prev,
+      [index]: "Failed to load PDF file.",
+    }));
+  };
+// console.log(pdfErrors,"err")
   // varibale setting for
   const starttimeVar = formData.starttime || selectedCustomerData.starttime || book.starttime
   let reportTimeVar = formData.reporttime || selectedCustomerData.reporttime || book.reporttime
@@ -290,12 +310,22 @@ const Booking = ({ stationName, customerData }) => {
       setWarningMessage("Check Your Trip Status")
     }
   }
-  // console.log(prevHours,"timeeeeeeee+++++++++++");
+
   const superAdminAccess = localStorage.getItem("SuperAdmin")
   const datahidecustomerdetails = superAdminAccess === "SuperAdmin" ? true : false;
   const message = useMemo(() => {
     return formData.MessageText ||selectedCustomerData.MessageText ||book.MessageText
   }, [formData.MessageText, selectedCustomerData.MessageText, book.MessageText]);
+
+  //  const onLoadError = (error) => {
+  //   // setError('Failed to load the PDF document.');
+  //   console.error('PDF load errorLO:', error);
+  // };
+
+  // const onSourceError = (error) => {
+  //   // setError('Invalid PDF source.');
+  //   console.error('PDF source errorS:', error);
+  // };
 
   return (
     <div className="booking-form main-content-form Scroll-Style-hide">
@@ -1317,12 +1347,7 @@ const Booking = ({ stationName, customerData }) => {
               />
             )}
             {Booking_delete === 1 && isEditMode && (
-              // <SpeedDialAction
-              //   key="delete"
-              //   icon={<DeleteIcon />}
-              //   tooltipTitle="Delete"
-              //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
-              // />
+           
 
               <SpeedDialAction
               key="delete"
@@ -1649,10 +1674,10 @@ const Booking = ({ stationName, customerData }) => {
                       <td colSpan={6}>No data available.</td>
                     </tr>
                   ) : (
-                    rowdriver?.map((row) => (
+                    rowdriver?.map((row,index) => (
                       <tr
                         id="update-row"
-                        key={row.id}
+                        key={row.id || index}
                         onClick={() => handleRowClickdriver(row)}
                       >
                         <td>{row.driverName}</td>
@@ -1820,24 +1845,44 @@ const Booking = ({ stationName, customerData }) => {
                       //   key={img.path}  // Use key to prevent re-rendering
                       // />
 
-                      <Document
-                        file={`${apiUrl}/images/${img.path}`}
+                      // <Document
+                      //   file={`${apiUrl}/images/${img.path}`}
 
-                        onLoadSuccess={onDocumentLoadSuccess}
-                        style={{
+                      //   onLoadSuccess={onDocumentLoadSuccess1}
+                      //   style={{
+                      //     width: "595px", // A4 width
+                      //     height: "auto",
+                      //     margin: "auto",
+                      //   }}
+                      // >
+                     <Document
+           file={`${apiUrl}/images/${img.path}`}
+          onLoadSuccess={(pdf) => onDocumentLoadSuccess(index, pdf)}
+          // onLoadError={(err) => console.error("PDF load error:", err)}
+          onLoadError={(err) => onLoadError(index, err)}
+           style={{
                           width: "595px", // A4 width
                           height: "auto",
                           margin: "auto",
                         }}
                       >
-                        {Array.from(new Array(numPages), (el, pageIndex) => (
+        
+                        {/* {Array.from(new Array(numPages), (el, pageIndex) => (
+                          
                           <Page
                             key={`page_${pageIndex + 1}`}
                             pageNumber={pageIndex + 1}
                             scale={1}
 
                           />
-                        ))}
+                        ))} */}
+                          {Array.from({ length: pdfPageCounts[index] || 0 }, (_, pageIndex) => (
+            <Page
+              key={`page_${index + 1}_${pageIndex + 1}`}
+              pageNumber={pageIndex + 1}
+              scale={1}
+            />
+          ))}
                       </Document>
                     )}
                     <Checkbox checked={deletefile.includes(img.path)} onClick={() => handlecheckbox(img.path)} />
@@ -1893,9 +1938,12 @@ const Booking = ({ stationName, customerData }) => {
                       </>
                       :
                       <>
-                        <Document
+                
+                        {/* <Document
                           file={img}
                           onLoadSuccess={onDocumentLoadSuccess}
+                             onLoadError={onLoadError}
+          onSourceError={onSourceError}
                           style={{
                             width: "595px", // A4 width
                             height: "auto",
@@ -1916,7 +1964,27 @@ const Booking = ({ stationName, customerData }) => {
                             // }}
                             />
                           ))}
-                        </Document>
+                        </Document> */}
+
+                         <Document
+          file={img}
+          onLoadSuccess={(pdf) => onDocumentLoadSuccess(index, pdf)}
+          // onLoadError={(err) => console.error("PDF load error:", err)}
+          onLoadError={(err) => onLoadError(index, err)}
+           style={{
+                            width: "595px", // A4 width
+                            height: "auto",
+                            margin: "auto",
+                          }}
+        >
+          {Array.from({ length: pdfPageCounts[index] || 0 }, (_, pageIndex) => (
+            <Page
+              key={`page_${index + 1}_${pageIndex + 1}`}
+              pageNumber={pageIndex + 1}
+              scale={1}
+            />
+          ))}
+        </Document>
                       </>
                     }
 

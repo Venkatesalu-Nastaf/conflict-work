@@ -7,7 +7,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
-import encryption from '../../../dataEncrypt';
+// import encryption from '../../../dataEncrypt';
 // import { toDate } from 'validator';
 
 const useEmployee = () => {

@@ -11,6 +11,7 @@ import { PDFDocument } from 'pdf-lib';
 
 import PdfzipParticularData from './Pdfpatricularzipdata'
 import { APIURL } from "../../../url";
+import axios from "axios";
 
 
 
@@ -593,7 +594,6 @@ const useExeclpage = () => {
 
     const handledatazipDownload = async (tripheaderIndex, misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel, customerData, stationData, bookingMail) => {
         console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation, " console for datas")
-
         const data = invoice;
         const customername = customer;
         const workbook = new Excel.Workbook();
@@ -877,172 +877,360 @@ const useExeclpage = () => {
 
             }
 
+console.log(invoice,"invoiceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+//  const pdffolder = zip.folder("pdffolder");
+// const chunkSize = 100;
+// function splitIntoChunks(array, chunkSize) {
+//   const result = [];
+//   for (let i = 0; i < array.length; i += chunkSize) {
+//     result.push(array.slice(i, i + chunkSize));
+//   }
+//   return result;
+// }
 
-            //  let dataimagebook=[]
-            const pdffolder = zip.folder("pdffolder");
-            const pdfPromises = invoice?.map(async (pdfData, index) => {
-                //   console.log(pdfData,"modedata")
-                //  dataimagebook=pdfData.bookattachedimage
+// // Split invoices into batches of 100
+// const invoiceBatches = splitIntoChunks(invoice, chunkSize);
+
+// // Process each batch one by one
+// for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
+// //   const zip = new JSZip();
+// //   const pdffolder = zip.folder("pdffolder");
+//   const batchInvoices = invoiceBatches[batchIndex];
+
+//   const pdfPromises = batchInvoices.map(async (pdfData, index) => {
+//     const blob = await pdf(
+//       <PdfzipParticularData
+//         particularPdf={[pdfData]}
+//         organisationdetail={organizationsdetail1}
+//         imagename={imageorganisation}
+//         customerData={customerData}
+//         stationData={stationData}
+//       />
+//     ).toBlob();
+
+//     const pdfBytes = await blob.arrayBuffer();
+//     const reactPDFDocument = await PDFDocument.load(pdfBytes);
+
+//     const datalink1 = JSON.parse(pdfData.Attachedimage || '[]');
+//     const datalink = JSON.parse(pdfData.bookattachedimage || '[]');
+
+//     const pdfDocuments = [];
+
+//     // Fetch attached PDFs from Attachedimage
+//     for (const data of datalink1) {
+//       if (data.attachedimageurl) {
+//         const ext = data.attachedimageurl.split('.').pop();
+//         if (ext === "pdf") {
+//           const response = await fetch(`${apiurl}/images/${data.attachedimageurl}`);
+//           const pdfBytes = await response.arrayBuffer();
+//           const pdfDocument = await PDFDocument.load(pdfBytes);
+//           pdfDocuments.push(pdfDocument);
+//         }
+//       }
+//     }
+
+//     // Optionally handle bookingMail PDFs
+//     if (bookingMail) {
+//       for (const data of datalink) {
+//         if (data.imagees) {
+//           const ext = data.imagees.split('.').pop();
+//           if (ext === "pdf") {
+//             const response = await fetch(`${apiurl}/images/${data.imagees}`);
+//             const pdfBytes = await response.arrayBuffer();
+//             const pdfDocument = await PDFDocument.load(pdfBytes);
+//             pdfDocuments.push(pdfDocument);
+//           }
+//         }
+//       }
+//     }
+
+//     // Merge PDFs
+//     const mergedPDFDocument = await PDFDocument.create();
+//     const reactPages = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
+//     reactPages.forEach(page => mergedPDFDocument.addPage(page));
+
+//     for (const pdfDocument of pdfDocuments) {
+//       const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
+//       pages.forEach(page => mergedPDFDocument.addPage(page));
+//     }
+
+//     const mergedPDFBytes = await mergedPDFDocument.save();
+//     const fileName = `PDF_${tripheaderIndex[index + batchIndex * chunkSize]}.pdf`;
+//     pdffolder.file(fileName, mergedPDFBytes);
+//   });
+
+//   await Promise.all(pdfPromises);
+
+//   // Download zip for this batch
+//   const zipContent = await zip.generateAsync({ type: 'blob' });
+//   saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} Batch ${batchIndex + 1}.zip`);
+// }
+
+const chunkSize = 100;
+function splitIntoChunks(array, chunkSize) {
+  const result = [];
+  for (let i = 0; i < invoice.length; i += chunkSize) {
+    result.push(array.slice(i, i + chunkSize));
+  }
+  return result;
+}
+
+// Split invoices into batches of 100
+const invoiceBatches = splitIntoChunks(invoice, chunkSize);
+let batchCount;
+// Process each batch one by one
+for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
+//   const zip = new JSZip();   // << create new zip for each batch
+  const pdffolder = zip.folder("pdffolder");  // << create new pdffolder inside this zip
+//   const misfolder = zip.folder("misfolder");  // << optionally create your misfolder here too
+
+  const batchInvoices = invoiceBatches[batchIndex];
+  batchCount = invoiceBatches[batchIndex];
+
+  const pdfPromises = batchInvoices.map(async (pdfData, index) => {
+    const blob = await pdf(
+      <PdfzipParticularData
+        particularPdf={[pdfData]}
+        organisationdetail={organizationsdetail1}
+        imagename={imageorganisation}
+        customerData={customerData}
+        stationData={stationData}
+      />
+    ).toBlob();
+
+    const pdfBytes = await blob.arrayBuffer();
+    const reactPDFDocument = await PDFDocument.load(pdfBytes);
+
+    const datalink1 = JSON.parse(pdfData.Attachedimage || '[]');
+    const datalink = JSON.parse(pdfData.bookattachedimage || '[]');
+
+    const pdfDocuments = [];
+
+    for (const data of datalink1) {
+      if (data.attachedimageurl) {
+        const ext = data.attachedimageurl.split('.').pop();
+        if (ext === "pdf") {
+          const response = await axios.get(`${apiurl}/images/${data.attachedimageurl}`);
+          const pdfBytes = await response.arrayBuffer();
+          const pdfDocument = await PDFDocument.load(pdfBytes);
+          pdfDocuments.push(pdfDocument);
+        }
+      }
+    }
+
+    if (bookingMail) {
+      for (const data of datalink) {
+        if (data.imagees) {
+          const ext = data.imagees.split('.').pop();
+          if (ext === "pdf") {
+            const response = await axios.get(`${apiurl}/images/${data.imagees}`);
+            const pdfBytes = await response.arrayBuffer();
+            const pdfDocument = await PDFDocument.load(pdfBytes);
+            pdfDocuments.push(pdfDocument);
+          }
+        }
+      }
+    }
+
+    const mergedPDFDocument = await PDFDocument.create();
+    const reactPages = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
+    reactPages.forEach(page => mergedPDFDocument.addPage(page));
+
+    for (const pdfDocument of pdfDocuments) {
+      const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
+      pages.forEach(page => mergedPDFDocument.addPage(page));
+    }
+
+    const mergedPDFBytes = await mergedPDFDocument.save();
+    const fileName = `PDF_${tripheaderIndex[index + batchIndex * chunkSize]}.pdf`;
+    pdffolder.file(fileName, mergedPDFBytes);
+  });
+
+  await Promise.all(pdfPromises);
+
+//   saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} Batch ${batchIndex + 1}.zip`);
+//   saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} Batch ${batchIndex}.zip`);
+}
+  const zipContent = await zip.generateAsync({ type: 'blob' });
+
+  saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")}.zip`);
 
 
-                const blob = await pdf(
-                    <PdfzipParticularData
 
-                        particularPdf={[pdfData]}
-                        organisationdetail={organizationsdetail1}
-                        imagename={imageorganisation}
-                        customerData={customerData}
-                        stationData={stationData}
+//             //  let dataimagebook=[]
+//             const pdffolder = zip.folder("pdffolder");
+//             function splitIntoChunks(array, chunkSize) {
+//   const result = [];
+//   for (let i = 0; i < array.length; i += chunkSize) {
+//     result.push(array.slice(i, i + chunkSize));
+//   }
+//   return result;
+// }
+// const invoiceBatches = splitIntoChunks(invoice, 100);
 
-                    />
-                ).toBlob();
-
-                const pdfBytes = await blob.arrayBuffer();
-                // dont delete this code
-                const reactPDFDocument = await PDFDocument.load(pdfBytes);
-
-                // const data = await JSON.parse(pdfData.bookattachedimage)
-                // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
-                // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-                // const datalink = JSON.parse(uniqueJsonStringbook)
-
-                const data1 = await JSON.parse(pdfData.Attachedimage)
-                const uniqueArraybook1 = Array.from(new Set(data1?.map(JSON.stringify)))?.map(JSON.parse);
-                const uniqueJsonStringbook1 = JSON.stringify(uniqueArraybook1);
-                const datalink1 = JSON.parse(uniqueJsonStringbook1)
-
-                const data = await JSON.parse(pdfData.bookattachedimage)
-                const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
-                const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-                const datalink = JSON.parse(uniqueJsonStringbook)
+//             const pdfPromises = invoice?.map(async (pdfData, index) => {
+//                 //   console.log(pdfData,"modedata")
+//                 //  dataimagebook=pdfData.bookattachedimage
 
 
+//                 const blob = await pdf(
+//                     <PdfzipParticularData
 
-                // return datalink
+//                         particularPdf={[pdfData]}
+//                         organisationdetail={organizationsdetail1}
+//                         imagename={imageorganisation}
+//                         customerData={customerData}
+//                         stationData={stationData}
 
+//                     />
+//                 ).toBlob();
 
-                // console.log(pdfPromises1,"pmisddd")
+//                 const pdfBytes = await blob.arrayBuffer();
+//                 // dont delete this code
+//                 const reactPDFDocument = await PDFDocument.load(pdfBytes);
 
-                // const pdfDocuments = [];
-                // for (const data of datalink) {
-                //     if (data.imagees !== null) {
-                //         const data2 = data.imagees.split('.').pop()
-                //         console.log(data2, "datalonk22")
-                //         if (data2 === "pdf") {
+//                 // const data = await JSON.parse(pdfData.bookattachedimage)
+//                 // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+//                 // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+//                 // const datalink = JSON.parse(uniqueJsonStringbook)
 
-                //             const filePath = `${apiurl}/images/${data.imagees}`;
-                //             console.log(filePath, "datalinkpdfpath")
+//                 const data1 = await JSON.parse(pdfData.Attachedimage)
+//                 const uniqueArraybook1 = Array.from(new Set(data1?.map(JSON.stringify)))?.map(JSON.parse);
+//                 const uniqueJsonStringbook1 = JSON.stringify(uniqueArraybook1);
+//                 const datalink1 = JSON.parse(uniqueJsonStringbook1)
 
-                //             // Fetch the PDF file
-                //             const response = await fetch(filePath);
-                //             const pdfBytes = await response.arrayBuffer();
-
-                //             // Load the PDF document
-                //             const pdfDocument = await PDFDocument.load(pdfBytes);
-                //             console.log(pdfDocument)
-
-                //             // Add the PDF document to the array
-                //             pdfDocuments.push(pdfDocument);
-                //         }
-                //     }
-                // }
-
-                const pdfDocuments = [];
-
-                for (const data of datalink1) {
-                    if (data.attachedimageurl !== null) {
-                        const data2 = data.attachedimageurl.split('.').pop()
-                        console.log(data2, "datalonk22ATT")
-                        if (data2 === "pdf") {
-
-                            const filePath = `${apiurl}/images/${data.attachedimageurl}`;
-                            console.log(filePath, "datalinkpdfpath")
-
-                            // Fetch the PDF file
-                            const response = await fetch(filePath);
-                            const pdfBytes = await response.arrayBuffer();
-
-                            // Load the PDF document
-                            const pdfDocument = await PDFDocument.load(pdfBytes);
-                            console.log(pdfDocument)
-
-                            // Add the PDF document to the array
-                            pdfDocuments.push(pdfDocument);
-                        }
-                    }
-                }
-                if (bookingMail) {
-                    console.log(bookingMail, "jhgfffffff")
-                    for (const data of datalink) {
-                        if (data.imagees !== null) {
-                            const data2 = data.imagees.split('.').pop()
-                            console.log(data2, "datalonk22")
-                            if (data2 === "pdf") {
-
-                                const filePath = `${apiurl}/images/${data.imagees}`;
-                                console.log(filePath, "datalinkpdfpath")
-
-                                // Fetch the PDF file
-                                const response = await fetch(filePath);
-                                const pdfBytes = await response.arrayBuffer();
-
-                                // Load the PDF document
-                                const pdfDocument = await PDFDocument.load(pdfBytes);
-                                console.log(pdfDocument)
-
-                                // Add the PDF document to the array
-                                pdfDocuments.push(pdfDocument);
-                            }
-                        }
-                    }
-                }
-
-
-                const mergedPDFDocument = await PDFDocument.create();
-                // console.log(mergedPDFDocument)
-
-                // // Add pages from React PDF
-                const [firstReactPage, ...restReactPages] = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
-                mergedPDFDocument.addPage(firstReactPage);
-                for (const page of restReactPages) {
-                    mergedPDFDocument.addPage(page);
-                }
-
-                // Add pages from external PDF
+//                 const data = await JSON.parse(pdfData.bookattachedimage)
+//                 const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+//                 const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+//                 const datalink = JSON.parse(uniqueJsonStringbook)
 
 
 
-                // Add pages from each PDF document to the merged PDF document
-                for (const pdfDocument of pdfDocuments) {
-                    // console.log(pdfDocument,"doc")
-                    const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
-                    for (const page of pages) {
-                        // console.log(page,"docpage")
-                        mergedPDFDocument.addPage(page);
-                    }
-                }
-                // const externalPages = await mergedPDFDocument.copyPages(externalPDFDocument, externalPDFDocument.getPageIndices());
-                // for (const page of externalPages) {
-                //     mergedPDFDocument.addPage(page);
-                // }
+//                 // return datalink
 
-                const mergedPDFBytes = await mergedPDFDocument.save();
-                //   const fileName = `PDF_${index + 1}.pdf`; 
-                const fileName = `PDF_${tripheaderIndex[index]}.pdf`;
-                // const fileName = invoice?.map(li => `PDF_${li.tripid}.pdf`)
-                // console.log(blob,"pdfblob")
-                // zip.file(fileName, blob);
-                pdffolder.file(fileName, mergedPDFBytes);
 
-                // Return the filename for tracking
-            });
+//                 // console.log(pdfPromises1,"pmisddd")
 
-            // Wait for all promises to resolve
-            await Promise.all(pdfPromises);
+//                 // const pdfDocuments = [];
+//                 // for (const data of datalink) {
+//                 //     if (data.imagees !== null) {
+//                 //         const data2 = data.imagees.split('.').pop()
+//                 //         console.log(data2, "datalonk22")
+//                 //         if (data2 === "pdf") {
 
-            const zipContent = await zip.generateAsync({ type: 'blob' });
-            // Download the ZIP file
-            saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format(" MMMM D")}.zip`);
+//                 //             const filePath = `${apiurl}/images/${data.imagees}`;
+//                 //             console.log(filePath, "datalinkpdfpath")
+
+//                 //             // Fetch the PDF file
+//                 //             const response = await fetch(filePath);
+//                 //             const pdfBytes = await response.arrayBuffer();
+
+//                 //             // Load the PDF document
+//                 //             const pdfDocument = await PDFDocument.load(pdfBytes);
+//                 //             console.log(pdfDocument)
+
+//                 //             // Add the PDF document to the array
+//                 //             pdfDocuments.push(pdfDocument);
+//                 //         }
+//                 //     }
+//                 // }
+
+//                 const pdfDocuments = [];
+
+//                 for (const data of datalink1) {
+//                     if (data.attachedimageurl !== null) {
+//                         const data2 = data.attachedimageurl.split('.').pop()
+//                         console.log(data2, "datalonk22ATT")
+//                         if (data2 === "pdf") {
+
+//                             const filePath = `${apiurl}/images/${data.attachedimageurl}`;
+//                             console.log(filePath, "datalinkpdfpath")
+
+//                             // Fetch the PDF file
+//                             const response = await fetch(filePath);
+//                             const pdfBytes = await response.arrayBuffer();
+
+//                             // Load the PDF document
+//                             const pdfDocument = await PDFDocument.load(pdfBytes);
+//                             console.log(pdfDocument)
+
+//                             // Add the PDF document to the array
+//                             pdfDocuments.push(pdfDocument);
+//                         }
+//                     }
+//                 }
+//                 if (bookingMail) {
+//                     console.log(bookingMail, "jhgfffffff")
+//                     for (const data of datalink) {
+//                         if (data.imagees !== null) {
+//                             const data2 = data.imagees.split('.').pop()
+//                             console.log(data2, "datalonk22")
+//                             if (data2 === "pdf") {
+
+//                                 const filePath = `${apiurl}/images/${data.imagees}`;
+//                                 console.log(filePath, "datalinkpdfpath")
+
+//                                 // Fetch the PDF file
+//                                 const response = await fetch(filePath);
+//                                 const pdfBytes = await response.arrayBuffer();
+
+//                                 // Load the PDF document
+//                                 const pdfDocument = await PDFDocument.load(pdfBytes);
+//                                 console.log(pdfDocument)
+
+//                                 // Add the PDF document to the array
+//                                 pdfDocuments.push(pdfDocument);
+//                             }
+//                         }
+//                     }
+//                 }
+
+
+//                 const mergedPDFDocument = await PDFDocument.create();
+//                 // console.log(mergedPDFDocument)
+
+//                 // // Add pages from React PDF
+//                 const [firstReactPage, ...restReactPages] = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
+//                 mergedPDFDocument.addPage(firstReactPage);
+//                 for (const page of restReactPages) {
+//                     mergedPDFDocument.addPage(page);
+//                 }
+
+//                 // Add pages from external PDF
+
+
+
+//                 // Add pages from each PDF document to the merged PDF document
+//                 for (const pdfDocument of pdfDocuments) {
+//                     // console.log(pdfDocument,"doc")
+//                     const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
+//                     for (const page of pages) {
+//                         // console.log(page,"docpage")
+//                         mergedPDFDocument.addPage(page);
+//                     }
+//                 }
+//                 // const externalPages = await mergedPDFDocument.copyPages(externalPDFDocument, externalPDFDocument.getPageIndices());
+//                 // for (const page of externalPages) {
+//                 //     mergedPDFDocument.addPage(page);
+//                 // }
+
+//                 const mergedPDFBytes = await mergedPDFDocument.save();
+//                 //   const fileName = `PDF_${index + 1}.pdf`; 
+//                 const fileName = `PDF_${tripheaderIndex[index]}.pdf`;
+//                 // const fileName = invoice?.map(li => `PDF_${li.tripid}.pdf`)
+//                 // console.log(blob,"pdfblob")
+//                 // zip.file(fileName, blob);
+//                 pdffolder.file(fileName, mergedPDFBytes);
+
+//                 // Return the filename for tracking
+//             });
+
+//             // Wait for all promises to resolve
+//             await Promise.all(pdfPromises);
+
+//             const zipContent = await zip.generateAsync({ type: 'blob' });
+//             // Download the ZIP file
+//             saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format(" MMMM D")}.zip`);
         }
         catch (error) {
             console.error('<<<ERROR>>>', error);

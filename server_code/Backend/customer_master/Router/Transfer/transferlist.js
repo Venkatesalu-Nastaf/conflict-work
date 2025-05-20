@@ -1609,9 +1609,40 @@ router.get('/gettransfer_listdatas', (req, res) => {
 // });
 router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) => {
   const customer = req.params.customer;
-  const tripids = req.params.tripid.split(',');
+  // const tripids = req.params.tripid.split(',');
   const decodedCustomer = decodeURIComponent(customer);
+  // console.log(tripids,"tripidsssssssssssssssss");
+  const tripidsRaw = req.params.tripid.split(',').filter(item => item !== "");
 
+  console.log(tripidsRaw,"splittttttttttttttttttttttttttttttttt");
+  console.log(req.params.tripid,"paramsssssssssssssssssssssssssssssssss");
+  
+  const raw = req.params.tripid;
+// const tripids = raw.replace(/^\["|"\]$/g, '')  // remove leading [" and trailing "]
+//                    .split(',')
+//                    .filter(id => id.trim() !== '');  // clean empty strings
+
+const tripids = raw
+  .replace(/[\[\]"]/g, "") // remove brackets and double quotes
+  .split(",")
+  .filter(Boolean);        // remove empty strings if any
+
+console.log(tripids,"cleannnnnnnnnnnnnnnnnnnnnnnnnnn",tripids.length);
+
+// const tripids = tripidsRaw
+//   .map((id, index) => {
+//     if (index === 0) return id.replace(/^\["?/, '');           // remove starting [" or ["
+//     if (index === tripidsRaw.length - 1) return id.replace(/"?\]"?$/, ''); // remove ending "]
+//     return id;
+//   })
+//   .filter(id => id)  // remove empty strings if any
+//   .flatMap(id => id.split(',')) // split any joined ids like "1962,1963,1985" into separate items
+//   .filter(id => id.trim() !== '');  // remove any accidental empty strings after split
+
+console.log(tripids, "✅ cleanedTripIds ✅");
+
+  console.log(tripids,"aaaaaaaaaaaaaaaaaaaaaaaaa",tripids.length);
+  
   let clientDisconnected = false;
 
   req.on('close', () => {
@@ -1680,7 +1711,7 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
 
       results.push(result);
     }
-   console.log(results,"lll")
+  //  console.log(results,"lll")
     if (!clientDisconnected) {
 
       return res.status(200).json(results);

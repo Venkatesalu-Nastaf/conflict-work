@@ -15,12 +15,12 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
 
   const targetRef = useRef();
   const { setPdfPrint } = PdfData()
-  const [numPages, setNumPages] = useState(null);
+  // const [numPages, setNumPages] = useState(null);
 
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
+  // function onDocumentLoadSuccess({ numPages }) {
+  //   setNumPages(numPages);
 
-  }
+  // }
 
   const [orgname, setOrgname] = useState('')
   const [orgaddress1, setOrgaddress1] = useState('')
@@ -75,6 +75,29 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
   const apiUrl = APIURL;
   const organisationimage = imagename
   const organisationdetails = organisationdetail
+   const [pdfPageCounts, setPdfPageCounts] = useState({});
+      const [pdfErrors, setPdfErrors] = useState([]);
+  
+  
+  const onDocumentLoadSuccess = (index, { numPages }) => {
+    // console.log(index,numPages,"num")
+    setPdfPageCounts(prev => ({
+      ...prev,
+      [index]: numPages
+    }));
+     setPdfErrors((prev) => ({
+        ...prev,
+        [index]: null,
+      }));
+  };
+  
+  const onLoadError = (index, error) => {
+      console.log(`Error loading PDF at index ${index}:`, error);
+      setPdfErrors((prev) => ({
+        ...prev,
+        [index]: "Failed to load PDF file.",
+      }));
+    };
 
   useEffect(() => {
     let addressone = ''
@@ -702,7 +725,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                                   }}  >
 
                                   <div className='upload-pdf-particular' >
-                                    <Document
+                                    {/* <Document
                                       file={file}
                                       onLoadSuccess={onDocumentLoadSuccess}
                                       style={{
@@ -724,7 +747,39 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                                           }}
                                         />
                                       ))}
-                                    </Document>
+                                    </Document> */}
+                                    
+                                                             <Document
+                                                               file={file}
+                                      // onLoadSuccess={onDocumentLoadSuccess}
+                                      style={{
+                                        margin: "auto",
+                                        width: "100%",
+                                        padding: "30px"
+                                      }}
+                                              // file={img}
+                                              onLoadSuccess={(pdf) => onDocumentLoadSuccess(index, pdf)}
+                                              // onLoadError={(err) => console.error("PDF load error:", err)}
+                                              onLoadError={(err) => onLoadError(index, err)}
+                                        
+                                            >
+                                              {Array.from({ length: pdfPageCounts[index] || 0 }, (_, pageIndex) => (
+                                                <Page
+                                                  key={`page_${index + 1}_${pageIndex + 1}`}
+                                                  pageNumber={pageIndex + 1}
+                                                  scale={0.7}
+
+                                                   
+                                          // Adjust scale to fit the page to the desired size
+                                          style={{
+                                            // display: "block",
+                                            width: "100%", // Let the width adjust automatically
+                                            // margin: "20px auto", // Add spacing for better display
+                                            border: "2px solid red",
+                                          }}
+                                                />
+                                              ))}
+                                            </Document>
                                   </div>
                                 </li>
                                 : ''}

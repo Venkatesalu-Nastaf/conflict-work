@@ -4,22 +4,23 @@
 }
 
 .Table {
-  padding: 16px;
-  width: 700px;
-  max-width:700px;
+  padding: 10px;
+  width: 650px;
+  max-width:650px;
   margin: 0 auto;
-  height: 470px;
+  height: 305px;
   background-color: #fdfdfd;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-left: 10px;
+  margin-left: 50px;
   box-sizing: border-box;
+  margin-top: -20px;
 }
 
 .Table .MuiPaper-root {
-  height: 350px;
-  width: 680px;
-  max-width: 680px;
+  height: 215px;
+  width: 630px;
+  max-width: 630px;
   padding-bottom: 16px;
   overflow-x: auto;
 }
@@ -113,8 +114,7 @@
   gap: 8px;
   margin-top: 10px;
 }
-
-.MuiDialog-paper {
+.dialog-box-TripDetails {
   border-radius: 16px !important;
   padding: 24px !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
@@ -122,7 +122,7 @@
   overflow-y: auto !important;
   width: 90vw !important;
   max-width: 850px !important;
-}
+} 
 
 .Scroll-Style-Slim {
   max-height: 70vh;
@@ -184,6 +184,13 @@
 .graph-yesterday-button:hover {
   background-color: #0f6cd1;
 }
+.button-header
+{
+   display: flex;
+    justify-Content: space-between;
+     flex-Wrap: wrap;
+      align-Items: center;
+    }
 @media screen and (min-width: 320px) and (max-width:425px) {
   .Table {
     width: 95%;
@@ -229,6 +236,47 @@
     padding: 8px;
   }
 
+  .dashboard-date-popup {
+  position: absolute;
+  top: 10px;
+  left:0px;
+  
+}
+
+.dashboard-date-popup-close {
+  cursor: pointer;
+  text-align: right;
+  font-weight: bold;
+  color: #999;
+  user-select: none;
+  align-self: flex-end;
+}
+
+.dashboard-date-popup-main-division {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-date-popup-search-division {
+  display: flex;
+  justify-content: flex-end;
+}
+.button-header
+{
+   display: flex;
+ flex-direction: column;
+ margin-top: 10px;
+     
+  }
+
+    .button-container {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-top: 10px;
+}
+
 }
 
 @media screen and (min-width: 425.1px) and (max-width:768px) {
@@ -258,7 +306,7 @@
   }
 
   .button-container {
-    flex-direction: column;
+    flex-direction:row;
     gap: 6px;
   }
 
@@ -268,6 +316,39 @@
     padding: 4px 8px;
     font-size: 12px;
   }
+   .dashboard-date-popup {
+    width: 95vw;
+    max-width: 280px;
+    bottom: 6px;
+    padding: 8px;
+  }
+
+  .dashboard-date-popup {
+  position: absolute;
+  top: 10px;
+  left:0px;
+  
+}
+
+.dashboard-date-popup-close {
+  cursor: pointer;
+  text-align: right;
+  font-weight: bold;
+  color: #999;
+  user-select: none;
+  align-self: flex-end;
+}
+
+.dashboard-date-popup-main-division {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-date-popup-search-division {
+  display: flex;
+  justify-content: flex-end;
+}
 
   .dashboard-date-popup {
     width: 95vw;
@@ -305,7 +386,7 @@
   }
 
   .button-container {
-    flex-direction: column;
+    flex-direction: row;
     gap: 6px;
   }
 
@@ -324,7 +405,7 @@
   }
 
 }
-@media screen and (min-width: 900.1px) and (max-width: 1200px) {
+/* @media screen and (min-width: 900.1px) and (max-width: 1200px) {
   .Table {
     width: 95%;
     max-width: 95%;
@@ -398,7 +479,7 @@
     width: 320px;
     padding: 16px;
   }
-}
+} */
 @media screen and (max-width: 768px) {
   .dashboard-date-popup {
     position: fixed;
@@ -429,4 +510,103 @@
     margin-bottom: 8px;
   }
 }
+@media screen and (min-width:1200px) and (max-width:1300px)
+{
+  .Table {
+    width: 5500PX;
+    max-width: 550PX;
+    margin-left: 5px;
+   padding: 6px 6px;  /* reduce padding */
+    border-radius: 8px;
+    height: 305px;
+    box-sizing: border-box;
+  }
+
+  .Table .MuiPaper-root {
+    height: 220px;
+  width: 525px;
+  max-width: 525;
+  padding-bottom: 16px;
+  overflow-x: auto;
+  }
+
+  .Table thead th,
+  .Table tbody td {
+    font-size: 12px;
+    padding: 3px 6px !important; /* smaller padding */
+  }
+
+  .button-container {
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .graph-all-button,
+  .graph-weekly-button,
+  .graph-yesterday-button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .dashboard-date-popup {
+    width: 95vw;
+    max-width: 280px;
+    bottom: 6px;
+    padding: 8px;
+  }
+  .dialog-box-TripDetails {
+  border-radius: 16px !important;
+  padding: 24px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  max-height: 85vh !important;
+  overflow-y: auto !important;
+  width: 90vw !important;
+  max-width: 850px !important;
+} 
+
+.Scroll-Style-Slim {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.dashboard-date-popup {
+  position: absolute;
+  top: 80px;
+  left: 250px;
+  background-color: #fff;
+  border: 1px solid black;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: fit-content;
+}
+
+.dashboard-date-popup-close {
+  cursor: pointer;
+  text-align: right;
+  font-weight: bold;
+  color: #999;
+  user-select: none;
+  align-self: flex-end;
+}
+
+.dashboard-date-popup-main-division {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-date-popup-search-division {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+}
+
 

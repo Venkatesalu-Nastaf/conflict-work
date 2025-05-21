@@ -41,7 +41,7 @@ const CustomerReview = ({ station }) => {
         width: calculateChartWidth(),
       }}
     >
-     <ResponsiveContainer width="100%" height={300}>
+     <ResponsiveContainer width="100%" height={200}>
   <BarChart
     data={chartData}
     margin={{ top: 20, right: 20, left: 10, bottom: 50 }} // Added bottom margin
@@ -50,7 +50,7 @@ const CustomerReview = ({ station }) => {
       dataKey="name"
       stroke="#333"
       width={10}
-      height={10}
+      height={5}
       interval={0} // Show all labels
       tick={{
         fontSize: 10,

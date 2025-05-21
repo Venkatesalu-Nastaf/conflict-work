@@ -225,7 +225,7 @@ const closeDateFunction = () => {
 
   return (
     <div className="Table">
-      <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", alignItems: "center" }}>
+      <div className="button-header">
         <h1 className="live-driver-status-heading">Live Driver Status</h1>
         <div className="button-container date-button-container">
           <button
@@ -345,13 +345,7 @@ const closeDateFunction = () => {
   onClose={handlePopupClose}
   fullWidth={true}
   maxWidth="md"
-  sx={{
-    '& .MuiDialog-paper': {
-      width: '800px',
-      maxWidth: '800px',
-      marginLeft: '100px', // Add this line
-    },
-  }}
+  
   className="dialog-box-TripDetails"
 >
   <div className="dialog-close-btn">

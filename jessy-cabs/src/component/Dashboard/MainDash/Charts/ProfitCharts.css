@@ -37,14 +37,14 @@
 .profit-data
 {
    margin-top: 20px;
-    margin-left: 120px;
+    margin-left: 100px;
      max-width: 600px;
 }
 .profitvendor-data
 {
   margin-top: 77px;
-  margin-left: -10px;
-   max-width: 400px;
+  margin-left: -50px;
+   max-width: 350px;
 }
 
 
@@ -166,4 +166,29 @@
  max-width: 400px;
 }
 
+}
+
+@media screen and (min-width:1200px) and (max-width:1300px)
+{
+  .profit-data,
+.profitvendor-data {
+  text-align: start;
+  margin-bottom: 20px;
+  flex: 1 1 300px;
+ 
+  /* margin-top: 150px; */
+
+}
+.profit-data
+{
+   margin-top: 20px;
+    margin-left: 100px;
+     max-width: 400px;
+}
+.profitvendor-data
+{
+  margin-top: 77px;
+  margin-left: 5px;
+   max-width: 250px;
+}
 }

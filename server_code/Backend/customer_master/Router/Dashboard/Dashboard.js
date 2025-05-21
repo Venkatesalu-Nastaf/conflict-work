@@ -414,8 +414,12 @@ router.get('/getvendorAmountDetails', (req, res) => {
       return res.status(500).send("Database error");
     }
 
-    console.log(result, "vendorrrrrrrrrrresult", result.length);
-    return res.status(200).json(result[0]);
+            const updatedResult = result.map(item => ({
+    ...item,
+    profit: item.profit < 0 ? 0 : item.profit
+  }));
+      console.log(updatedResult, "vendorrrrrrrrrrresult", updatedResult.length);
+    return res.status(200).json(updatedResult[0]);
   });
 });
 
@@ -445,8 +449,13 @@ WHERE YEAR(startdate) = ?
       return res.status(500).json({ error });
     }
 
-    console.log(result, "AllVendorResult");
-    return res.status(200).json(result[0]);
+        const updatedResult = result.map(item => ({
+    ...item,
+    profit: item.profit < 0 ? 0 : item.profit
+  }));
+      console.log(updatedResult, "AllVendorResult");
+
+    return res.status(200).json(updatedResult[0]);
   });
 });
 
@@ -484,8 +493,13 @@ router.get('/getAllSelectedMonthProfit', (req, res) => {
       return res.status(500).send("Database error");
     }
 
-    console.log(result, "profit result Jan to current month");
-    return res.status(200).json(result);
+         const updatedResult = result.map(item => ({
+    ...item,
+    profit: item.profit < 0 ? 0 : item.profit
+  }));
+  console.log(updatedResult,"result");
+  
+    return res.status(200).json(updatedResult);
   });
 });
 
@@ -522,8 +536,13 @@ router.get('/getFromToSelectedMonthProfit', (req, res) => {
       return res.status(500).send("Database error");
     }
 
-    console.log(result, "profit result for selected month");
-    return res.status(200).json(result);
+      const updatedResult = result.map(item => ({
+    ...item,
+    profit: item.profit < 0 ? 0 : item.profit
+  }));
+
+  console.log(updatedResult, "profit result for selected month");
+    return res.status(200).json(updatedResult);
   });
 });
 
@@ -568,7 +587,11 @@ router.get('/getAllCurrentAndPreviousYearReports', (req, res) => {
       console.error("Error fetching year totals:", err);
       return res.status(500).json({ error: "Internal server error" });
     }
-    res.json(results);
+         const updatedResult = results.map(item => ({
+    ...item,
+    profit: item.profit < 0 ? 0 : item.profit
+  }));
+    res.json(updatedResult);
   });
 });
 

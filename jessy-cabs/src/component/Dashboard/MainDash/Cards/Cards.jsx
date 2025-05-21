@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import "./Cards.css";
 // import { CardsData } from "./Cards-Data.js";
@@ -14,7 +13,10 @@ import { YearData } from "./yearData";
 import ProfitData from '../Charts/../Charts/../Charts/../Charts/ProfitData';
 import {PieChart,Pie,Cell,Tooltip,ResponsiveContainer,} from 'recharts';
 import "../Charts/../Charts/../Charts/../Charts/ProfitData.css";
-import "../Charts/../Charts/../Charts/../Charts/ProfitCharts.css"
+import "../Charts/../Charts/../Charts/../Charts/ProfitCharts.css";
+import { FiLogOut } from 'react-icons/fi';
+import { FaUserFriends, FaCheckCircle, FaAward } from 'react-icons/fa';
+
 
 const apiUrl = APIURL;
 
@@ -26,12 +28,16 @@ const Cards = () => {
 
   const [backendmonth, setBackendmonth] = useState([])
   const [billinggraph, setBillingGraph] = useState([])
-  const[formattedProfitDatas,setFormattedProfitDatas]=useState()
+  const[formattedProfitDatas,setFormattedProfitDatas]=useState([])
   const lastMonthTotalAmount = backendmonth?.lastMonth?.totalAmount || 0;
   const lastMonthTotalPaid = backendmonth?.lastMonth?.totalPaid || 0;
   const lastMonthTotalPending = backendmonth?.lastMonth?.totalPending || 0;
   const { totalAmountSum, selectedMonth2, setSelectedMonth2 ,vendordata,profitdata,reportData,fromYear,toYear,setFromYear,setToYear} = useCard();
-  const { selectedMonths, setSelectedMonths, selectedYear, setSelectedYear,selectedProfitMonths,selectedProfitYear,setSelectedProfitMonths,setSelectedProfitYear } = PdfData();
+  const { selectedMonths, setSelectedMonths, selectedYear, setSelectedYear,setReportData } = PdfData();
+  const [chartData, setChartData] = useState([]);
+const [xKey, setXKey] = useState("month");
+const [title, setTitle] = useState("");
+const [yearRange,setYearRange]=useState(false);
 
   const TotalNumber = (number) => {
     if (!number || isNaN(number)) {
@@ -190,6 +196,7 @@ const Cards = () => {
 
     setSelectedMonth2(event.target.value);
     setSelectedMonths(event.target.value)
+    setYearRange(false)
     // setSelectedmonth(event.target.value)
     // fetchDataFromBackend(event.target.value)
     // fetchMonthlyDataFromBackend(event.target.value)
@@ -216,43 +223,47 @@ const Cards = () => {
   );
 
   const cardData = [
-    {
-      title: "Billing",
-      color: {
-        backGround: "linear-gradient(rgb(33, 152, 171) 35%, rgb(143, 228, 241) 92%)",
-        boxShadow: "0px 0px 0px 0px #e0c6f5",
-      },
-      barValue: "",
-      value: lastMonthTotalAmount.toLocaleString(),
-      png: FaRupeeSign,
-      series: [{ name: "Sales", data: salesData.map(data => data.value), categories: salesData.map(data => data.date) }],
-      totalamount: TotalValueAmount || 0
+{
+    title: "Billing",
+    color: {
+      backGround: "linear-gradient(135deg,  #f5a690 0%,  #e0e0e0 50%, #f5a690 100%)", // soft blue to bright blue-purple
+      boxShadow: "0px 4px 15px rgba(220, 141, 87, 0.5)",
+     color: "#6B4226",
     },
-    {
-      title: "Recived",
-      color: {
-        backGround: "linear-gradient(rgb(226, 165, 90) 35%, rgb(236, 194, 142) 92%)",
-        boxShadow: "0px 0px 0px 0px #FDC0C7",
-      },
-      barValue: totalPaidPercentageChange,
-      value: lastMonthTotalPaid.toLocaleString(),
-      png: FaRegMoneyBillAlt,
-      series: [{ name: "Revenue", data: revenueData.map(data => data.value), categories: revenueData.map(data => data.date) }],
-      totalamount: CollectedValueAmout || 0
+    barValue: "",
+    value: lastMonthTotalAmount.toLocaleString(),
+    png: FaRupeeSign,
+    series: [{ name: "Sales", data: salesData.map(data => data.value), categories: salesData.map(data => data.date) }],
+    totalamount: TotalValueAmount || 0
+  },
+  {
+    title: "Recived",
+    color: {
+      backGround: "linear-gradient(135deg, #a29fd6 0%, #e0e0e0 50%, #a29fd6 100%)",
+      boxShadow: "0px 4px 15px rgba(78, 29, 122, 0.5)",
+     color: "#6e496d", 
     },
-    {
-      title: "Pending",
-      color: {
-        backGround: "linear-gradient(rgb(55, 55, 81) 35%, rgb(123 123 147) 92%)",
-        boxShadow: "0px 0px 0px 0px #F9D59B",
-      },
-      barValue: totalPendingPercentageChange,
-      value: lastMonthTotalPending.toLocaleString(),
-      png: BiPaste,
-      series: [{ name: "Pending", data: pendingData.map(data => data.value), categories: pendingData.map(data => data.date) }],
-      totalamount: PendingValueAmount || 0
+    barValue: totalPaidPercentageChange,
+    value: lastMonthTotalPaid.toLocaleString(),
+    png: FaRegMoneyBillAlt,
+    series: [{ name: "Revenue", data: revenueData.map(data => data.value), categories: revenueData.map(data => data.date) }],
+    totalamount: CollectedValueAmout || 0
+  },
+  {
+    title: "Pending",
+    color: {
+      backGround: "linear-gradient(135deg,  #56cfe1 0%, #e0e0e0 50%, #56cfe1 100%)", // soft pink to pale peach
+      boxShadow: "0px 4px 15px rgba(62, 160, 165, 0.5)",
+      color: "teal",
     },
-  ];
+    barValue: totalPendingPercentageChange,
+    value: lastMonthTotalPending.toLocaleString(),
+    png: BiPaste,
+    series: [{ name: "Pending", data: pendingData.map(data => data.value), categories: pendingData.map(data => data.date) }],
+    totalamount: PendingValueAmount || 0
+  },
+];
+
 
   // useEffect(() => {
   //   const fetchData2 = async () => {
@@ -270,122 +281,107 @@ const Cards = () => {
   // }, [selectedMonth2]);
   const handleYearChange = (event) => {
     setSelectedYear(event.target.value);
+    setYearRange(false)
   };
 
 useEffect(() => {
-  const formatted = reportData.map(item => ({
-    year: item.year,
-    profit: item.profit,
-  
-  }));
-  setFormattedProfitDatas(formatted);
+  if (Array.isArray(reportData)) {
+    const formatted = reportData.map(item => ({
+      year: item.year,
+      profit: item.profit,
+    }));
+    setFormattedProfitDatas(formatted);
+  }
 }, [reportData]);
 
+// Helper function
 const getMonthName = (monthNumber) => {
-  const monthNames = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-  ];
-  return monthNames[monthNumber - 1] || monthNumber;
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return monthNames[monthNumber - 1] || "";
 };
 
-// Format profitdata to include readable month name
-const formattedData = profitdata.map(item => ({
-  ...item,
-  month: getMonthName(item.month)
-}));
+const allMonths=Array.from({length:12},(_,i)=>({
+  monthNumber:i+1,
+  month:getMonthName(i+1),
+  profit:0,
+}))
 
-// Set title, axis key, and data dynamically
-let title = "";
-let xKey = "";
-let data = [];
+// Recalculate chart data whenever selection changes
+useEffect(() => {
+  const isAllMonths = selectedMonth2.toLowerCase() === "all";
+  const isYearRangeSelected = fromYear !== "" && toYear !== "";
 
-const isAllMonths = selectedMonth2.toLowerCase() === "all";
-const isYearRangeSelected = fromYear !== "" && toYear !== "";
+  // Format profitdata to include readable month names
+   const formattedData = allMonths.map(monthData => {
+    const existing = profitdata.find(item => item.month === monthData.monthNumber);
+    return existing
+      ? {
+          ...monthData,
+          profit: existing.profit,
+        }
+      : monthData;
+  });
 
-// Logic for what to show in the bar chart
-if (!isAllMonths && !isYearRangeSelected) {
-  // Case: Specific month selected, no year range
-  title = "Annual Profit Report";
-  xKey = "month";
-  data = formattedData;
-} else if (isAllMonths && isYearRangeSelected) {
-  // Case: All months + year range selected
-  title = `Annual Profit Report (${fromYear} - ${toYear})`;
-  xKey = "year";
-  data = formattedProfitDatas.filter(item =>
+  let updatedData = [];
+  let updatedXKey = "";
+  let updatedTitle = "";
+
+if (yearRange) {
+  updatedTitle = `Annual Profit Report (${fromYear} - ${toYear})`;
+  updatedXKey = "year";
+  updatedData = formattedProfitDatas.filter(item =>
     parseInt(item.year) >= parseInt(fromYear) &&
     parseInt(item.year) <= parseInt(toYear)
   );
 } 
- else if (!isAllMonths && isYearRangeSelected) {
-  // Case: All months + year range selected
-  title = `Annual Profit Report (${fromYear} - ${toYear})`;
-  xKey = "year";
-  data = formattedProfitDatas.filter(item =>
-    parseInt(item.year) >= parseInt(fromYear) &&
-    parseInt(item.year) <= parseInt(toYear)
-  );
-} 
-else if (isAllMonths) {
-  // Case: All months selected but no year range
-  title = "Annual Profit Report";
-  xKey = "month";
-  data = formattedData;
-}else {
-  // Default/fallback: either all months or year range partially selected
-  title = "Annual Profit Report";
-  xKey = "month";
-  data = formattedData;
+else {
+  setYearRange(false)
+  updatedTitle = "Monthly Profit Report";
+  updatedXKey = "month";
+  updatedData = formattedData;
 }
 
 
-
-
-
-
+  setChartData(updatedData);
+  setTitle(updatedTitle);
+  setXKey(updatedXKey);
+}, [selectedMonth2, fromYear, toYear, profitdata, formattedProfitDatas,profitdata]);
 
   console.log(vendordata,"vvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
   console.log(profitdata,"KKKKKKKK");
   console.log(reportData,"llllllllllllll");
-    const pieData = [
-                { name: 'Vendor', value:vendordata.totalVendorAmount },
-                { name: 'Customer', value:vendordata.totalCalcAmount },
-                { name: 'profit', value: vendordata.profit < 0 ? 0 : vendordata.profit }
+  const pieData = [
+  { name: 'Vendor', value: vendordata.totalVendorAmount },
+  { name: 'Customer', value: vendordata.totalCalcAmount },
+  { name: 'profit', value: vendordata.profit < 0 ? 0 : vendordata.profit }
+];
 
-              ];
 
    const handlefromYearChange = (event) => {
     console.log(event.target.value, 'selectmonth');
 
     setFromYear(event.target.value);
+    setYearRange(true)
    
 
   };
   
     const handletoYearChange = (event) => {
     setToYear(event.target.value);
+    setYearRange(true)
   };
+
+ 
+
     
   return (
+    <>
     <div className="cards-container">
+
       <div className="card-filter">
-        <div>
+        <div className="label">
           <label className="card-filter-label" htmlFor="month">Select Month</label>
-          {/* <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange}>
-          <option value="0">January</option>
-          <option value="1">February</option>
-          <option value="2">March</option>
-          <option value="3">April</option>
-          <option value="4">May</option>
-          <option value="5">June</option>
-          <option value="6">July</option>
-          <option value="7">August</option>
-          <option value="8">September</option>
-          <option value="9">October</option>
-          <option value="10">November</option>
-          <option value="11">December</option>
-        </select> */}
+          
           <select id="month" name="month" value={selectedMonth2} onChange={handleMonthChange} style={{width:"150px"}}>
             <option value="All">All</option>
             <option value="1">January</option>
@@ -414,7 +410,7 @@ else if (isAllMonths) {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
+      
         <div className="Cards" >
           {cardData.map((card, index) => (
             <div className="parentContainer cards-dashboard" key={index} >
@@ -436,7 +432,6 @@ else if (isAllMonths) {
         {/* <div>
           <Updates />
         </div> */}
-      </div>
   <div className="chart-container">
       <div className='profit-data'>
       <div className="card-filter-data">
@@ -465,7 +460,8 @@ else if (isAllMonths) {
     </select>
   </div>
 </div>
-<ProfitData data={data} xKey={xKey} title={title} charttype="bar" />
+<ProfitData data={chartData} xKey={xKey} title={title} charttype="bar" />
+
  </div>
  <div className='profitvendor-data'>
    <div className='vendor-diagram'>
@@ -495,6 +491,7 @@ else if (isAllMonths) {
 </div>
 </div>
     </div>
+    </>
   );
 };
 

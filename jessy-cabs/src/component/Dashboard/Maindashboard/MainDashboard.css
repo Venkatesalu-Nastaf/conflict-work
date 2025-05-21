@@ -135,6 +135,18 @@
   transition: all 0.3s ease;
 }
 
+.open-dialog
+{
+  width: 550px;
+  align-items: center;
+  margin: auto;
+}
+.custom-dialog-backdrop {
+  backdrop-filter: blur(10px);
+  background-color:rgba(16, 16, 16, 0.9);
+}
+
+
 @media (max-width: 1219px) {
   .glass {
     display: grid;
@@ -262,7 +274,7 @@
 
 .cards-container .card-filter {
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: row;
   align-items: flex-start;
   margin: 20px;
 }

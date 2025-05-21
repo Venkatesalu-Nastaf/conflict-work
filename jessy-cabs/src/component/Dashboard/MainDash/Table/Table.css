@@ -1,121 +1,432 @@
-.MuiTableRow-root>* {
-  padding: 10px;
+
+.MuiTableRow-root > * {
+  padding: 6px 10px !important;
 }
 
 .Table {
-  padding: 12px 10px;
+  padding: 16px;
+  width: 700px;
+  max-width:700px;
+  margin: 0 auto;
+  height: 470px;
+  background-color: #fdfdfd;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-left: 10px;
+  box-sizing: border-box;
 }
 
 .Table .MuiPaper-root {
-  height: 320px;
-  padding-bottom: 10px;
+  height: 350px;
+  width: 680px;
+  max-width: 680px;
+  padding-bottom: 16px;
+  overflow-x: auto;
+}
+
+.Table th,
+.Table td {
+  padding: 6px 10px !important;
+  line-height: 1.4 !important;
+  font-size: 15px;
 }
 
 .Table thead th {
   top: 0;
-  background-color: #797777;
+  height: 40px !important;
+  background-color: #444;
   color: #fff;
   position: sticky;
+  z-index: 2;
+}
+
+.total-table::-webkit-scrollbar {
+  display: none;
 }
 
 .Table tbody tr {
-  overflow: scroll;
+  height: 48px !important;
+  background-color: #fff;
   border-radius: 10px;
-  border: 1px sold gray;
-  box-Shadow: 0px 13px 20px 0px #80808029;
-}
-
-.Table td,
-th {
-  border: none !important;
-}
-
-.Table:first-child {
-  border-radius: 0.7rem !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 8px;
 }
 
 .status {
-  padding: 8px;
-  border-radius: 9px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
 }
 
 .Details {
-  color: #00b5ff !important;
-}
-
-@media screen and (min-width:769px) and (max-width: 804px) {
-  .Table {
-    width: 95% !important;
-  }
-}
-
-@media screen and (min-width:804.99px) and (max-width: 840px) {
-  .Table {
-    width: 96% !important;
-  }
-}
-
-@media screen and (min-width:841px) and (max-width: 881px) {
-  .Table {
-    width: 96% !important;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .Table {
-    width: 97%;
-    margin-top: 2rem;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .Table {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 95%;
-  }
+  color: #168bff !important;
 }
 
 .dialog-close-btn {
   position: absolute;
-  right: 0;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+ 
+}
+
+.dialog-close-btn .MuiIconButton-root {
+  color: red;
+  transition: color 0.2s ease;
+}
+
+.dialog-close-btn .MuiIconButton-root:hover {
+  color: #d32f2f;
 }
 
 .driverdetails-table-head {
-  background-color: rgb(255, 255, 255) !important;
-  color: rgba(0, 0, 0, 0.87) !important;
+  background-color: #fff !important;
+  color: #333 !important;
   font-size: 15px !important;
-  z-index: 2;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   text-align: center !important;
 }
 
 .driverdetails-table-header {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 8px;
 }
 
 .driver-name {
-  background-color: transparent;
   color: #168bff !important;
   text-align: center !important;
   font-weight: 700 !important;
 }
 
 .driver-trip-id,
-.driver-trip-date {
-  color: #9f9fa8 !important;
-  text-align: center !important;
-}
-
+.driver-trip-date,
 .driver-tripstatus,
 .driver-details {
+  color: #666 !important;
   text-align: center !important;
 }
-
 
 .button-container {
   display: flex;
-  gap: 2px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
 }
+
+.MuiDialog-paper {
+  border-radius: 16px !important;
+  padding: 24px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  max-height: 85vh !important;
+  overflow-y: auto !important;
+  width: 90vw !important;
+  max-width: 850px !important;
+}
+
+.Scroll-Style-Slim {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.dashboard-date-popup {
+  position: absolute;
+  top: 360px;
+  left: 250px;
+  background-color: #fff;
+  border: 1px solid black;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: fit-content;
+}
+
+.dashboard-date-popup-close {
+  cursor: pointer;
+  text-align: right;
+  font-weight: bold;
+  color: #999;
+  user-select: none;
+  align-self: flex-end;
+}
+
+.dashboard-date-popup-main-division {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-date-popup-search-division {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.graph-all-button,
+.graph-weekly-button,
+.graph-yesterday-button {
+  background-color: #168bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.graph-all-button:hover,
+.graph-weekly-button:hover,
+.graph-yesterday-button:hover {
+  background-color: #0f6cd1;
+}
+@media screen and (min-width: 320px) and (max-width:425px) {
+  .Table {
+    width: 95%;
+    max-width: 95%;
+    margin-left: 5px;
+    margin-right: 0;
+    padding: 6px 6px;  /* reduce padding */
+    border-radius: 8px;
+    height: 450px;
+    box-sizing: border-box;
+  }
+
+  .Table .MuiPaper-root {
+    height: 300px;
+  width: 100%;
+  max-width: 100%;
+  padding-bottom: 16px;
+  overflow-x: auto;
+  }
+
+  .Table thead th,
+  .Table tbody td {
+    font-size: 12px;
+    padding: 3px 6px !important; /* smaller padding */
+  }
+
+  .button-container {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .graph-all-button,
+  .graph-weekly-button,
+  .graph-yesterday-button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .dashboard-date-popup {
+    width: 95vw;
+    max-width: 280px;
+    bottom: 6px;
+    padding: 8px;
+  }
+
+}
+
+@media screen and (min-width: 425.1px) and (max-width:768px) {
+ .Table {
+    width: 95%;
+    max-width: 95%;
+    margin-left: 5px;
+    margin-right: 10px;
+    padding: 6px 6px;  /* reduce padding */
+    border-radius: 8px;
+    height: 450px;
+    box-sizing: border-box;
+  }
+
+  .Table .MuiPaper-root {
+    height: 300px;
+  width: 100%;
+  max-width: 100%;
+  padding-bottom: 16px;
+  overflow-x: auto;
+  }
+
+  .Table thead th,
+  .Table tbody td {
+    font-size: 12px;
+    padding: 3px 6px !important; /* smaller padding */
+  }
+
+  .button-container {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .graph-all-button,
+  .graph-weekly-button,
+  .graph-yesterday-button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .dashboard-date-popup {
+    width: 95vw;
+    max-width: 280px;
+    bottom: 6px;
+    padding: 8px;
+  }
+
+}
+
+@media screen and (min-width: 768.1px) and (max-width:900px) {
+ .Table {
+    width: 90%;
+    max-width: 90%;
+    margin-left: 5px;
+    margin-right: 10px;
+    padding: 6px 6px;  /* reduce padding */
+    border-radius: 8px;
+    height: 450px;
+    box-sizing: border-box;
+  }
+
+  .Table .MuiPaper-root {
+    height: 300px;
+  width: 90%;
+  max-width: 90%;
+  padding-bottom: 16px;
+  overflow-x: auto;
+  }
+
+  .Table thead th,
+  .Table tbody td {
+    font-size: 12px;
+    padding: 3px 6px !important; /* smaller padding */
+  }
+
+  .button-container {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .graph-all-button,
+  .graph-weekly-button,
+  .graph-yesterday-button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .dashboard-date-popup {
+    width: 95vw;
+    max-width: 280px;
+    bottom: 6px;
+    padding: 8px;
+  }
+
+}
+@media screen and (min-width: 900.1px) and (max-width: 1200px) {
+  .Table {
+    width: 95%;
+    max-width: 95%;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    height: 460px;
+  }
+
+  .Table .MuiPaper-root {
+    height: 320px;
+    width: 95%;
+    max-width: 95%;
+    padding-bottom: 16px;
+    overflow-x: auto;
+  }
+
+  .Table thead th,
+  .Table tbody td {
+    font-size: 13px;
+    padding: 5px 8px !important;
+  }
+
+  .graph-all-button,
+  .graph-weekly-button,
+  .graph-yesterday-button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .dashboard-date-popup {
+    width: 300px;
+    padding: 10px;
+  }
+}
+
+@media screen and (min-width: 1200.1px) {
+  .Table {
+    width: 80%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 16px;
+    border-radius: 16px;
+    height: 470px;
+  }
+
+  .Table .MuiPaper-root {
+    height: 350px;
+    width: 100%;
+    max-width: 980px;
+    padding-bottom: 16px;
+    overflow-x: auto;
+  }
+
+  .Table thead th,
+  .Table tbody td {
+    font-size: 15px;
+    padding: 6px 10px !important;
+  }
+
+  .graph-all-button,
+  .graph-weekly-button,
+  .graph-yesterday-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .dashboard-date-popup {
+    width: 320px;
+    padding: 16px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .dashboard-date-popup {
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90vw;
+    max-width: 320px;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    max-height: 80vh;
+  }
+
+  .dashboard-date-popup-main-division {
+    gap: 8px;
+  }
+
+  .dashboard-date-popup-search-division {
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .dashboard-date-popup-close {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+}
+

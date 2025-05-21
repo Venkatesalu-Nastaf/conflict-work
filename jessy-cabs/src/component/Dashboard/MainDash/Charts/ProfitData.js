@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer
@@ -11,14 +12,15 @@ const ProfitData = ({ data, xKey, title }) => {
       <ResponsiveContainer width="100%" height={180}>
         <BarChart data={data}>
           <XAxis dataKey={xKey}  />
-          <YAxis  />
+          <YAxis width={40}   stroke="#333" 
+  tick={{ fontSize: 10 }} />
           <Tooltip
             contentStyle={{ backgroundColor: 'black', borderColor: 'green', color: 'white' }}
             labelStyle={{ color: 'white' }}
             itemStyle={{ color: 'white' }}
           />
           <Legend wrapperStyle={{ color: 'white' }} />
-          <Bar dataKey="profit" fill="teal" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="profit" fill="rgb(83, 164, 177)" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

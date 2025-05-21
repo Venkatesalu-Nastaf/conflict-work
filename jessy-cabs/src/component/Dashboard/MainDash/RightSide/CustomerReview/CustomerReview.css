@@ -1,170 +1,188 @@
-.CustomerReview {
-    /* width: 85%; */
-    background: rgba(255, 255, 255, 0.957);
-    border-radius: 3px;
-    padding: 1rem;
-    gap: 1rem;
-    display: flex;
-    flex-direction: column;
-    font-size: 13px;
+.tt-div {
+  overflow-x: auto;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  margin-top: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+  box-sizing: border-box;
+
 }
 
-.tt-div{
-    overflow-x: scroll !important;
+.tt-div::-webkit-scrollbar {
+  display: none;
 }
 
-.apexcharts-tooltip.apexcharts-theme-light {
-    color: #000;
-}
-
+.apexcharts-tooltip.apexcharts-theme-light,
 .apexcharts-menu.apexcharts-menu-open {
-    color: #000;
+  color: #000;
 }
 
 .graph-all-button,
 .graph-weekly-button,
 .graph-yesterday-button {
-    background-color: #a8aaa7;
-    color: #fff;
-    padding: 5px 10px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
+  background-color: #a8aaa7;
+  color: #fff;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid #a8aaa7;
 }
 
 .graph-all-button {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-right: 1px dotted #fff;
-    border-top: 2px solid #a8aaa7;
-    border-left: 2px solid #a8aaa7;
-    border-bottom: 2px solid #a8aaa7;
-    /* border-bottom: 2px solid #0491fb; */
-}
-
-.graph-all-button:hover {
-    transform: scale(1.1);
-}
-
-.graph-weekly-button {
-    border: 2px solid #a8aaa7;
-    border-right: 1px dotted #fff;
-
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-right: 1px dotted #fff;
 }
 
 .graph-yesterday-button {
-    border: 2px solid #a8aaa7;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
-.graph-weekly-button:hover {
-    transform: scale(1.1);
-}
-
+.graph-all-button:hover,
+.graph-weekly-button:hover,
 .graph-yesterday-button:hover {
-    transform: scale(1.1);
+  transform: scale(1.05);
+  background-color: #8e908d;
 }
 
-@media only screen and (min-width:1219px) {
-    .weekly-chart {
-        /* width: 86% !important; */
-    }
+.CustomerReview {
+  margin: 20px auto 0 auto;
+  padding: 1rem;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  width: 650px;
+  height: 470px;
+  box-sizing: border-box;
+  margin-top: -20px;
+  margin-left: 40px;
 }
-
-@media only screen and (max-width:768px) {
-    .weekly-chart {
-        width: 87% !important;
-    }
-}
-
-@media only screen and (min-width:855px) and (max-width:888px) {
-    .weekly-chart {
-        /* width: 360px; */
-    }
-}
-
-@media only screen and (min-width:888.99px) and (max-width:960px) {
-    .weekly-chart {
-        /* width: 385px; */
-    }
-
-    .RightSide {
-        flex-direction: column;
-    }
-}
-
-@media only screen and (min-width:960.99px) and (max-width:1020px) {
-    .weekly-chart {
-        /* width: 260px; */
-    }
-}
-
-@media only screen and (min-width:1021px) and (max-width:1102.99px) {
-    .weekly-chart {
-        /* width: 320px; */
-    }
-}
-
-@media only screen and (min-width:1103px) and (max-width:1218px) {
-    .weekly-chart {
-        /* width: 350px; */
-    }
-}
-
-
-@media only screen and (min-width:769px) and (max-width: 800px) {
-    .weekly-chart {
-        /* width: 285px !important; */
-    }
-}
-
-@media screen and (min-width:801px) and (max-width: 855px) {
-    .weekly-chart {
-        /* width: 300px !important; */
-    }
-}
-
-.date-button-container {
-    position: relative;
-}
-
-.dashboard-date-popup {
-    width: 100%;
-    background-color: #fff;
-    padding: 5px 0px 25px 0px;
-    margin-top: 20px;
-    position: absolute;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    z-index: 12;
-    display: grid;
-    justify-content: center;
-}
-
-.dashboard-date-popup-close {
-    text-align: right;
-    font-size: 20px;
-    padding-right: 10px;
-    cursor: pointer;
-}
-
-.dashboard-date-popup-main-division {
-    display: flex;
-    padding: 15px;
-    gap: 10px;
-}
-
-.dashboard-date-popup-search-division {
-    display: flex;
-    height: fit-content;
-    justify-content: center;
-}
-
 
 .area-text-chart {
-    letter-spacing: .5px;
-    font-size: 20px;
-    color: #000;
-    margin-top: 2px;
-    margin-bottom: 2px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+  max-width: 500px;
+  margin-top: 60px;
+  color: rgb(207, 134, 207);
 }
+
+
+
+
+
+
+@media screen and (min-width: 320px)  and (max-width:425px){
+  .CustomerReview {
+    width: 95%;
+    max-width: 400px;      
+    padding: 0.75rem;     
+    height: auto;
+    margin-top: 20px;
+    box-sizing: border-box;
+    margin-left: 5px;
+  }
+
+  .tt-div {
+    padding: 0.4rem;       /* reduce padding */
+    font-size: 12px;       /* smaller font */
+    margin-top: 10px;
+  }
+
+  .area-text-chart {
+    font-size: 14px;       /* smaller font */
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: start;     /* left-align for better reading */
+  }
+
+  .graph-all-button,
+  .graph-weekly-button,
+  .graph-yesterday-button {
+    font-size: 11px;       /* smaller buttons font */
+    padding: 4px 10px;     /* smaller buttons padding */
+    border-width: 1.5px;   /* thinner border */
+  }
+}
+
+@media screen and (min-width: 425.1px)  and (max-width:768px){
+  .CustomerReview {
+    width: 95%;
+    max-width: 95%;      
+    padding: 0.75rem;     
+    height: auto;
+    margin-top: 20px;
+    box-sizing: border-box;
+    margin-left: 5px;
+  }
+
+  .tt-div {
+    padding: 0.4rem;       
+    font-size: 12px;     
+    margin-top: 10px;
+  }
+
+  .area-text-chart {
+    font-size: 14px;
+    width: 100%;      
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: start;    
+  }
+
+  .graph-all-button,
+  .graph-weekly-button,
+  .graph-yesterday-button {
+    font-size: 11px;       
+    padding: 4px 10px;    
+    border-width: 1.5px;  
+  }
+}
+
+
+@media screen and (min-width: 768.1px)  and (max-width:1024px){
+  .CustomerReview {
+    width: 100%;
+    max-width: 100%;      
+    padding: 0.75rem;     
+    height: auto;
+    margin-top: 20px;
+    box-sizing: border-box;
+    margin-left: 5px;
+  }
+
+  .tt-div {
+    padding: 0.4rem;       /* reduce padding */
+    font-size: 12px;       /* smaller font */
+    margin-top: 10px;
+  }
+
+  .area-text-chart {
+    font-size: 14px;       /* smaller font */
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: start;     /* left-align for better reading */
+  }
+
+  .graph-all-button,
+  .graph-weekly-button,
+  .graph-yesterday-button {
+    font-size: 11px;       /* smaller buttons font */
+    padding: 4px 10px;     /* smaller buttons padding */
+    border-width: 1.5px;   /* thinner border */
+  }
+}
+

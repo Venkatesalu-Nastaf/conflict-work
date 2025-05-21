@@ -30,17 +30,21 @@
   text-align: start;
   margin-bottom: 20px;
   flex: 1 1 300px;
-  max-width: 400px;
-  width: 100%;
+ 
+  /* margin-top: 150px; */
 
 }
 .profit-data
 {
    margin-top: 20px;
+    margin-left: 120px;
+     max-width: 600px;
 }
 .profitvendor-data
 {
   margin-top: 77px;
+  margin-left: -10px;
+   max-width: 400px;
 }
 
 
@@ -62,50 +66,104 @@
   margin-top: 20px;
 }
 
-@media screen and (max-width: 769px) {
-    .chart-container {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 20px;
-    
-      
-    }
-  
+@media screen and (min-width:320px) and (max-width:425px)
+{
+
+  .chart-container {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 70px;
+  justify-content: center;
+  margin-top: 300px;
+  position: relative;
+  left: -17px !important;
+}
+  .profit-data
+{
+   margin-top: 40px;
+   margin-left: 0;
+   
+}
+.profitvendor-data
+{
+  margin-top: -40px;
+  margin-left: 0;
+ 
+}
     .profit-data,
     .profitvendor-data {
-      margin: 2px auto;
-      width: 100%;
-      margin-top: 30px;
+    
+      width:100%;
+    
     }
-  
-    .barchart-data,
+    .barchart-data
     .vendor-diagram {
-      width: 82%;
+      width: 100px;
       height: auto;
       margin: 10px ;
     }
-  }
-  
+}
 
-@media screen and (min-width: 769.1px) and (max-width: 1024px) {
-    .chart-container {
-        flex-direction:row;
-        align-items: flex-start;
-        gap: 20px;
-        
-      }
+@media screen and (min-width:425.1px) and (max-width:768px)
+{
+
+  .chart-container {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 70px;
+  justify-content: center;
+  margin-top: 300px;
+  position: relative;
+  left: -17px !important;
+}
+  .profit-data
+{
+   margin-top: 40px;
+   margin-left: 0;
+   
+}
+.profitvendor-data
+{
+  margin-top: -40px;
+  margin-left: 0;
+ 
+}
+    .profit-data,
+    .profitvendor-data {
     
-      .profit-data,
-      .profitvendor-data {
-        margin: 2px auto;
-        width: 100%;
-      }
+      width:100%;
     
-      .barchart-data,
-      .vendor-diagram {
-        width: 82%;
-        height: auto;
-        margin: 10px ;
-      }
     }
+    .barchart-data
+    .vendor-diagram {
+      width: 100px;
+      height: auto;
+      margin: 10px ;
+    }
+}
+@media screen and (min-width:768.1px) and (max-width:1024px)
+{
 
+
+.profit-data,
+.profitvendor-data {
+  text-align: start;
+  margin-bottom: 20px;
+  flex: 1 1 300px;
+ 
+  /* margin-top: 150px; */
+
+}
+.profit-data
+{
+   margin-top: 280px;
+    margin-left: 10px;
+     max-width: 600px;
+}
+.profitvendor-data
+{
+  margin-top: 5px;
+ max-width: 400px;
+}
+
+}

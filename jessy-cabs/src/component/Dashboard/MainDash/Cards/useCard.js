@@ -15,15 +15,14 @@ const useCard = () => {
   const[vendordata,setVendorData]=useState({});
   const[profitdata,setProfitdata]=useState([]);
   const [billData, setBillData] = useState([]);
-  const { selectedMonths, selectedYear,selectedProfitMonths,selectedProfitYear } = PdfData();
+  const { selectedMonths, selectedYear,fromYear,setFromYear,toYear,setToYear } = PdfData();
   // const {value} = ReportContext();
   const { value } = useContext(ReportContext);
   const location = useLocation()
   const currentYear = new Date().getFullYear();
 
   // for getting yearly reports for various months usin from and to
-   const [fromYear, setFromYear] = useState("");
-    const [toYear, setToYear] = useState("");
+  
     const [reportData, setReportData] = useState([]);
 
 
@@ -424,6 +423,7 @@ useEffect(() => {
     // all,
     // setAll,
     reportData,
+    setReportData,
     fromYear,
     toYear,
     setFromYear,

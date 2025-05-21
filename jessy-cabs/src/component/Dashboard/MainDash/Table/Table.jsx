@@ -284,7 +284,7 @@ const closeDateFunction = () => {
         component={Paper}
         style={{ boxShadow: "0px 13px 20px 0px #80808029" }}
       >
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table  aria-label="simple table">
           <TableHead>
             <TableRow className="driverdetails-table-header">
               <TableCell align="left" className="driverdetails-table-head">Driver Name</TableCell>
@@ -296,7 +296,7 @@ const closeDateFunction = () => {
               <TableCell align="left" className="driverdetails-table-head">View</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody style={{ color: "white" }}>
+          <TableBody  className="tablebody" >
             {( filteredData &&
               filteredData.length > 0 ? (
                 filteredData.slice().reverse().map((trip) => (
@@ -304,13 +304,20 @@ const closeDateFunction = () => {
                     key={trip.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row" className="driver-name">{trip.driverName ? trip.driverName : 'Not Assigned'}</TableCell>
-                    <TableCell align="left" className="driver-trip-id">TS{trip.tripid}</TableCell>
-                    <TableCell align="left" className="driver-trip-id">{trip.department}</TableCell>
+                    <TableCell component="th" scope="row" className="driver-name" sx={{borderBottom:'none'}} >
+  {trip.driverName 
+    ? trip.driverName.length > 10 
+      ? `${trip.driverName.slice(0, 10)}..` 
+      : trip.driverName 
+    : 'Not Assigned'}
+</TableCell>
+
+                    <TableCell align="left" className="driver-trip-id" sx={{borderBottom:'none'}} >TS{trip.tripid}</TableCell>
+                    <TableCell align="left" className="driver-trip-id" sx={{borderBottom:'none'}} >{trip.department}</TableCell>
                     {/* <TableCell align="left">{trip.startdate}</TableCell> */}
-                    <TableCell align="left" className="driver-trip-date">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
-                    <TableCell className="driver-tripstatus"><span className="status" style={makeStyle(trip.apps)}>{trip.apps ? trip.apps : "Not Mentioned"}</span></TableCell>
-                    <TableCell className="Details driver-details">
+                    <TableCell align="left" className="driver-trip-date" sx={{borderBottom:'none'}} >{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
+                    <TableCell className="driver-tripstatus" sx={{borderBottom:'none'}} ><span className="status" style={makeStyle(trip.apps)}>{trip.apps ? trip.apps : "Not Mentioned"}</span></TableCell>
+                    <TableCell className="Details driver-details"sx={{borderBottom:'none'}} >
                       <div >
                       <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>
                       </div>
@@ -333,30 +340,32 @@ const closeDateFunction = () => {
 
 
 
-      <Dialog
-        open={popupOpen}
-        onClose={handlePopupClose}
-        fullWidth={true}
-        maxWidth="md" // This can be set to 'xs', 'sm', 'md', 'lg', or 'xl'
-        sx={{
-          '& .MuiDialog-paper': {
-            width: '800px', // Adjust this value to increase the width
-            maxWidth: '800px', // Ensure the width is strictly set to 800px
-          },
-        }}
-        className="dialog-box-TripDetails"
-      >
-        <div className="dialog-close-btn">
-          <DialogActions>
-            <IconButton onClick={handlePopupClose} aria-label="close">
-              <HighlightOffIcon />
-            </IconButton>
-          </DialogActions>
-        </div>
-        <DialogContent className="Scroll-Style-Slim">
-          {selectedTrip && <Tripdetails tripData={selectedTrip} />}
-        </DialogContent>
-      </Dialog>
+    <Dialog
+  open={popupOpen}
+  onClose={handlePopupClose}
+  fullWidth={true}
+  maxWidth="md"
+  sx={{
+    '& .MuiDialog-paper': {
+      width: '800px',
+      maxWidth: '800px',
+      marginLeft: '100px', // Add this line
+    },
+  }}
+  className="dialog-box-TripDetails"
+>
+  <div className="dialog-close-btn">
+    <DialogActions>
+      <IconButton onClick={handlePopupClose} aria-label="close">
+        <HighlightOffIcon />
+      </IconButton>
+    </DialogActions>
+  </div>
+  <DialogContent className="Scroll-Style-Slim">
+    {selectedTrip && <Tripdetails tripData={selectedTrip} />}
+  </DialogContent>
+</Dialog>
+
 
 
     </div>

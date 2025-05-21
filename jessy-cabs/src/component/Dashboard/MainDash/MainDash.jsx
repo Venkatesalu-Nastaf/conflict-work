@@ -31,8 +31,8 @@ const MainDash = ({stationName}) => {
         <div className="main-dash-main-section">
           <div className="MainDash">
             <Cards />
+            </div>
             <Table />
-          </div>
           <RightSide  stationName={stationName} />
         </div>
       ) : (
@@ -51,9 +51,11 @@ const MainDash = ({stationName}) => {
             <div className="first-div">
               <div className={`left-div ${expanded ? "extendedwidth" : ""}`}>
                 <Cards />
-                <Table  stationName={stationName}/>
-              </div>
+                </div>
+                
+              
               <div className="right-div">
+                 <Table  stationName={stationName}/>
                 <RightSide  stationName={stationName} />
               </div>
             </div>

@@ -105,10 +105,10 @@ import InvoiceHCL from '../Invoice/InvoiceHCL';
 import { APIURL } from '../../url';
 import axios from "axios";
 import CopyEmailHtmlcontent from './CopyEmailcontent';
-import {
-  vehicaleinfos
-} from "../../Bookings/BookingMain/Booking/Booking";
-import { PiCarSimpleFill } from 'react-icons/pi';
+// import {
+//   vehicaleinfos
+// } from "../../Bookings/BookingMain/Booking/Booking";
+// import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 import { WhatsappShareButton } from 'react-share';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -162,21 +162,21 @@ const style = {
   p: 4,
 };
 
-const style1 = {
-  position: 'absolute',
-  top: '50%',
-  // height: '80%',
-  height: 'fit-content',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  // width: 1300,
-  width: "90%",
-  bgcolor: 'background.paper',
-  // bgcolor: 'yellow',
-  // border: '1px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+// const style1 = {
+//   position: 'absolute',
+//   top: '50%',
+//   // height: '80%',
+//   height: 'fit-content',
+//   left: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   // width: 1300,
+//   width: "90%",
+//   bgcolor: 'background.paper',
+//   // bgcolor: 'yellow',
+//   // border: '1px solid #000',
+//   boxShadow: 24,
+//   p: 4,
+// };
 const style3 = {
   position: 'absolute',
   top: '50%',
@@ -227,7 +227,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     handleKeyDown,
     handleDateChange,
     handleAutocompleteChange,
-    setFormValues,
+    // setFormValues,
     packageData,
     smsguest,
     sendEmail,
@@ -243,7 +243,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     setBook,
     setFormData,
     setSelectedCustomerData,
-    selectedStatus,
+    // selectedStatus,
     // setSelectedStatus, 
     setCloseTime,
     organizationdata,
@@ -284,7 +284,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     calcPackage, extraHR, extraKM, package_amount,
     extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount,
-    driverBeta_amount, setdriverBeta, setdriverbeta_Count, setdriverBeta_amount,
+    driverBeta_amount, setdriverBeta, setdriverbeta_Count,
+    // setdriverBeta_amount,
     totalcalcAmount, escort, handleEscortChange,
     open, handleClose, handleTransferChange, transferreport,
     signaturepopup, setSignaturepopup, siganturediaglogclose,
@@ -302,27 +303,43 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     calculateTotalDay,
     calculateTotalTimes,
     handleClickOpen,
-    setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
+    setSelectedMapRow, CopyEmail, setCopyEmail, 
+    // conflictkm, 
+    lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
     handleDeleteMap, copydatalink, setCopyDataLink, speeddailacesssedit, speeddailacesss, checksignatureandmap, getSignatureImageverify,
     //  conflictenddate,
-    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess, oldStatusCheck,
-    setSuccessMessage, handleChangetexttrip, handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip, messageditedtrip, messageditedbeforetrip,
+    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer,
+    //  setSuccess, 
+     oldStatusCheck,
+    // setSuccessMessage, 
+    handleChangetexttrip, handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip,
+    //  messageditedtrip,
+      messageditedbeforetrip,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, Permissiondeleteroles,
+    hybridhclnavigate, isAddload,
+    //  setisAddload,
+      isEditload, 
+      // setisEditload,
+       hideField, temporaryStatus, emptyState, editButtonStatusCheck,
+        // conflictCompareDatas,
+        // outStationHide,
+        //  Scale,
+         Permissiondeleteroles,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer, fueldataamountdis, setFuelAdvancedamountHide,
-    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
+    setError, setErrorMessage,openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
     tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
     // --------------------this zoom code image data----------------------------------------
-    posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, Scale, onDrag, handleFullDeleteMapData,tripIdRef,
-    mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl, bookingTripStatus, handleTemporaryDelete, handleTemporaryDeleteMapDataClose, temporaryDeleteGmap, setTemporaryDeleteGmap, handleTemporaryDeleteMapDataOpen
+    posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, onDrag, handleFullDeleteMapData,tripIdRef,
+    mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl, bookingTripStatus, handleTemporaryDelete, handleTemporaryDeleteMapDataClose, temporaryDeleteGmap,
+    //  setTemporaryDeleteGmap, handleTemporaryDeleteMapDataOpen
     // this code zoom image data---------------------------------
   } = useTripsheet();
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
-  console.log(dayhcl,"hclhclllllllllll",hybridhclcustomer,"nnnnn",hybridhclnavigate)
+  // console.log(dayhcl,"hclhclllllllllll",hybridhclcustomer,"nnnnn",hybridhclnavigate)
   const apiurl = APIURL
   // Permission ------------ayyan
 
@@ -351,9 +368,9 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   const superpower = localStorage.getItem("SuperAdmin")
   const Tripsheet_new = permissions[3]?.new;
   const Tripsheet_modify = permissions[3]?.modify;
-  const Tripsheet_delete = permissions[3]?.delete;
+  // const Tripsheet_delete = permissions[3]?.delete;
 
-  const billing_read = permissions[4]?.read;
+  // const billing_read = permissions[4]?.read;
 
   // varibles for validation 
 
@@ -472,7 +489,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
         setWarning(false);
         // setSuccessMessage("Signature loaded successfully!");
 
-        console.log("success")
+        // console.log("success")
       } else {
         setSignImageUrl(""); // Clear state
         if (fileInputRefdata.current) {
@@ -480,7 +497,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
           setSignatureupload(false);
           checksignatureandmap();
           getSignatureImageverify()
-          console.log("successno")
+          // console.log("successno")
           // setSuccessMessage("Please upload a signature image.");
         } else {
           console.error("File input ref is not available");
@@ -800,10 +817,10 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
     const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
     const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
-    const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-    const shedintime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime || '';
-    const shedintimeformat = shedintime.replace(":", ".");
-    const finalshedincalc = parseFloat(shedintimeformat).toFixed(2);
+    // const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+    // const shedintime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime || '';
+    // const shedintimeformat = shedintime.replace(":", ".");
+    // const finalshedincalc = parseFloat(shedintimeformat).toFixed(2);
     const shedoutTimeFormat = reportTime?.replace(":", ".")
     const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
     const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';
@@ -841,15 +858,15 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
       !parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
       !parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time))
 
-    const maximumTimeNotAllowed = (
-      maxTimeData?.tripid !== undefined &&
-      tripid !== parseInt(maxTimeData?.tripid) &&
-      finalshedoutdate.getDate() === finalMindate.getDate() &&
-      finalshedoutdate.getMonth() === finalMindate.getMonth() &&
-      finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
-      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
-      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
-    )
+    // const maximumTimeNotAllowed = (
+    //   maxTimeData?.tripid !== undefined &&
+    //   tripid !== parseInt(maxTimeData?.tripid) &&
+    //   finalshedoutdate.getDate() === finalMindate.getDate() &&
+    //   finalshedoutdate.getMonth() === finalMindate.getMonth() &&
+    //   finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
+    //   parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
+    //   parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
+    // )
 
 
 
@@ -898,23 +915,23 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
       parseFloat(minTimeData?.tripid) !== tripid &&
       shedInTimeData?.length > 0 &&
       shedindate !== "" &&
-      finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
+      finalMaximumShedInDate.getDate() === finalshedoutdate.getDate() &&
       finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
       finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
       parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
       parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time)
     );
-    const maxminTime = (
-      parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
-      parseFloat(minTimeData?.tripid) !== tripid &&
-      shedInTimeData?.length > 0 &&
-      shedindate !== "" &&
-      finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
-      finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
-      finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
-      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
-      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time)
-    );
+    // const maxminTime = (
+    //   parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
+    //   parseFloat(minTimeData?.tripid) !== tripid &&
+    //   shedInTimeData?.length > 0 &&
+    //   shedindate !== "" &&
+    //   finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
+    //   finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
+    //   finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
+    //   parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
+    //   parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time)
+    // );
 
     return shedInDateChecking || shedInDateLessTime
 
@@ -928,7 +945,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
   const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
   const tripShedInDate = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format('YYYY-MM-DD')
-  const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
+  // const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
   const tripshedoutdate = dayjs(formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate).format('YYYY-MM-DD')
   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
   const formatTime = (timeString) => {
@@ -1011,7 +1028,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
   const signaturedisabled = signimageUrl === "" && temporaryStatus ? true : false
 
-  const shedoutDisabled = temporaryStatus ? hideField : hideField;
+  // const shedoutDisabled = temporaryStatus ? hideField : hideField;
   const shedoutkm = formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout
     const conflictModalKmBox = (tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && enterTrigger !== null && shedoutkm !== null && shedoutkm !== "")
   // const conflictModalKmBox = (tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && shedoutkm !== null && shedoutkm !== "")
@@ -1020,7 +1037,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   // status for conflict message
   useEffect(() => {
     let timeout;
-    console.log(conflictModalbox, "conflictttttttttttt")
+    // console.log(conflictModalbox, "conflictttttttttttt")
     if (conflictModalbox && emptyState !== true) {
       timeout = setTimeout(() => {
         setError(true);
@@ -2206,7 +2223,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           onChange={(event) => {
                             let value = event.target.value;
                             const [hours, minutes] = value.split(':');
-                            const correctedValue = `${hours}:${minutes}`;
+                            // const correctedValue = `${hours}:${minutes}`;
 
                             setPrevHours((prevState) => ({
                               ...prevState,
@@ -4706,6 +4723,7 @@ Please Click the link to close E-Tripsheet-`}
                       </Button>
                     </DialogActions>
                   </Dialog>
+                  {/* {console.log(editButtonStatusCheck,"checknew")} */}
                   <div className="input-tripsheet-btns">
                     {isEditMode ? (<>
                       {/* <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button> */}
@@ -5617,7 +5635,7 @@ Please Click the link to close E-Tripsheet-`}
             </div>
           </div>
 
-          {open == false &&
+          {open === false &&
             <div className='alert-popup-main'>
               {error &&
                 <div className='alert-popup Error' >

@@ -84,7 +84,7 @@ const useTripsheet = () => {
     const [DriverSMS, setDriverSMS] = useState(true);
     const [sendEmail, setSendEmail] = useState(true);
     const [organizationdata, setorganizationData] = useState('');
-    const [triggerdata, setTriggerData] = useState(true)
+    // const [triggerdata, setTriggerData] = useState(true)
     const [signaturepopup, setSignaturepopup] = useState(false)
     const [signatureupload, setSignatureupload] = useState(false)
     // const [isHybridCustomer, setIsHybridCustomer] = useState(false)
@@ -100,7 +100,7 @@ const useTripsheet = () => {
     const [outStationHide, setOutStationHide] = useState(false);
     const [enterTrigger, setEnterTrigger] = useState(null)
     const [attachedImageEtrip, setAttachImageETrip] = useState('')
-    const [signaturetrigger,setSignatureTrigger]=useState(false)
+    // const [signaturetrigger,setSignatureTrigger]=useState(false)
     // const [conflicthcldatavalue, setConflictHCLDataValue] = useState([])
     const [conflicthcldatavalue, setConflictHCLDataValue] = useState({
         Hcldatakmvalue: 0,
@@ -372,6 +372,7 @@ const useTripsheet = () => {
     const [lockdatavendorbill, setLockDatavendorBill] = useState(true)
     const [lockdatacustomerbill, setLockDatacustomerBill] = useState(true)
     const [manualMarkTrigger, setManualMarkTrigger] = useState(false)
+      const [testMarkTrigger, setTestManualMarkTrigger] = useState(false)
     const [hybridhclcustomer, setHybridHclCustomer] = useState('')
     const [hybridhclnavigate, setHybridHclNavigate] = useState('')
     const [timetogglenavigate, setTimeToggleNaviagate] = useState('')
@@ -380,8 +381,8 @@ const useTripsheet = () => {
     // Hide some field for tripsheet
     const [hideField, setHideField] = useState(null)
     const [editButtonStatusCheck, SetEditButtonStatusCheck] = useState(false)
-    const [conflictCompareDatas, setConflictCompareDatas] = useState(null)
-    const [conflictMinimumTimeDatas, setConflictMinimumTimeDatas] = useState(null)
+    // const [conflictCompareDatas, setConflictCompareDatas] = useState(null)
+    // const [conflictMinimumTimeDatas, setConflictMinimumTimeDatas] = useState(null)
 
     // for invoice page
     const [signimageUrl, setSignImageUrl] = useState('');
@@ -965,7 +966,7 @@ const useTripsheet = () => {
                 formData[key] = value;
             }
         });
-        console.log(formData, 'formdataaa');
+        // console.log(formData, 'formdataaa');
 
         const formvendorinfo = {};
         const parameterKeys1 = [
@@ -996,6 +997,7 @@ const useTripsheet = () => {
             setDriverSMS(false)
             setIsEditMode(true);
             setMessageEditedBeforetrip(messagedatatrip)
+            setTestManualMarkTrigger((prev) => !prev)
             // getSignatureImageverify();
             handleTripmapverify();
             checksignatureandmap();
@@ -1011,7 +1013,7 @@ const useTripsheet = () => {
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
         formData['apps'] = appsValue;
-        console.log(formData, 'formdataaa');
+        // console.log(formData, 'formdataaa');
 
         setTripSheetData(formData);
         setBook(formData);
@@ -1050,7 +1052,7 @@ const useTripsheet = () => {
         setFormData(initialFormData);
     }, []);
 
-    const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    // const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
     const handleEditClickfocus = ()=>{
         tripIdRef.current?.focus();
@@ -1529,7 +1531,7 @@ const useTripsheet = () => {
     // console.log(mapimageUrls1, "urls", typeof (mapimageUrls1), mapimageUrls)
     const checksignatureandmap = async () => {
         const userstatusdata = userstatuspermission
-        console.log(signimageUrl1, "condition1checksign", mapimageUrls1, userstatuspermission)
+        // console.log(signimageUrl1, "condition1checksign", mapimageUrls1, userstatuspermission)
         //   const userstatusdata = userstatuspermission
 
         if (tripID1 && userstatusdata.length > 0) {
@@ -1539,13 +1541,13 @@ const useTripsheet = () => {
 
                     // if (!signimageUrl1 && !mapimageUrls1 && mapimageUrls1 === "") {
                     if (!signimageUrl1 && mapimageUrls1.length === 0) {
-                        console.log("condition1check1")
+                        // console.log("condition1check1")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the signature and Map")
                         // return 
                     }
                     else if (!signimageUrl1) {
-                        console.log("condition1check2")
+                        // console.log("condition1check2")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the signature")
                         // setError(true);
@@ -1554,7 +1556,7 @@ const useTripsheet = () => {
                     }
                     // else if (!mapimageUrls1 && mapimageUrls1 === "") {
                     else if (mapimageUrls1.length === 0) {
-                        console.log("condition1check3")
+                        // console.log("condition1check3")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the map image")
                         // setError(true);
@@ -1562,7 +1564,7 @@ const useTripsheet = () => {
                         // return 
                     }
                     else {
-                        console.log("condition1check4")
+                        // console.log("condition1check4")
                         setCheckSignandMapVerify(false)
                         // return 
                     }
@@ -1570,7 +1572,7 @@ const useTripsheet = () => {
                 } else {
                     // if(dayhcl1 === 0 && status1 === "Closed"){
                     if (!signimageUrl1 && status1 === "Closed") {
-                        console.log("condition1check5")
+                        // console.log("condition1check5")
                         setCheckSignandMapVerify(true)
                         setCheckSignMapMessage("Please upload the signature")
                         // setError(true);
@@ -1580,7 +1582,7 @@ const useTripsheet = () => {
                     // }
                     else {
                         // console.log("withoyttripid")
-                        console.log("condition1check6")
+                        // console.log("condition1check6")
                         setCheckSignandMapVerify(false)
                         // return 
                     }
@@ -1591,13 +1593,13 @@ const useTripsheet = () => {
             }
 
             else {
-                console.log("condition1check7")
+                // console.log("condition1check7")
                 setCheckSignandMapVerify(false);
                 // return 
             }
         }
         else {
-            console.log("condition1check8")
+            // console.log("condition1check8")
             setCheckSignandMapVerify(false);
             // return 
         }
@@ -1612,7 +1614,7 @@ const useTripsheet = () => {
     // console.log(checksignandMapverify, "userStatusdata", typeof (checksignandMapverify))
 
     const handleEdit = async () => {
-        const closetimecheck = closetime || book.closetime || formData.closetime || selectedCustomerData.closetime;
+        // const closetimecheck = closetime || book.closetime || formData.closetime || selectedCustomerData.closetime;
         // const dutytype = formData.duty || selectedCustomerData.duty || book.duty;
         // handleTripmapClick()
         handleTripmapverify()
@@ -1775,8 +1777,8 @@ const useTripsheet = () => {
                     totalkm: calculateTotalKilometers(),
                     drivername: driverName,
                 };
-                console.log(VehcileHistory, "editVehicleHistory");
-                console.log(updatedCustomer, "updated customerrrrrrrrrrr", closetimecheck);
+                // console.log(VehcileHistory, "editVehicleHistory");
+                // console.log(updatedCustomer, "updated customerrrrrrrrrrr", closetimecheck);
 
                 const tripsheetlogtripid = selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid;
 
@@ -2162,27 +2164,27 @@ const useTripsheet = () => {
         const selectedOption = value ? value.label : '';
         setBook((prevBook) => ({
             ...prevBook,
-            ["travelsname"]: selectedOption,
+            "travelsname": selectedOption,
         }));
         setSelectedCustomerData((prevData) => ({
             ...prevData,
-            ["travelsname"]: selectedOption,
+            "travelsname": selectedOption,
         }));
         setSelectedCustomerDatas((prevData) => ({
             ...prevData,
-            ["travelsname"]: selectedOption,
+            "travelsname": selectedOption,
         }));
         setFormValues((prevValues) => ({
             ...prevValues,
-            ["travelsname"]: selectedOption,
+            "travelsname": selectedOption,
         }));
         setTripSheetData((prevValues) => ({
             ...prevValues,
-            ["travelsname"]: selectedOption,
+            "travelsname": selectedOption,
         }));
         setNoChangeData((prevValues) => ({
             ...prevValues,
-            ["travelsname"]: selectedOption,
+            "travelsname": selectedOption,
         }));
         travelsdatafetch(selectedOption)
 
@@ -3107,8 +3109,8 @@ const useTripsheet = () => {
                     }
                     if (newdecimalPart < 60) {
 
-                        const RemainTotalCalculation = LongTripHours + Number(formattedHours);
-                        const a = RemainTotalCalculation.toFixed(2)
+                        // const RemainTotalCalculation = LongTripHours + Number(formattedHours);
+                        // const a = RemainTotalCalculation.toFixed(2)
                         // console.log(a);
                         const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
@@ -3343,8 +3345,8 @@ const useTripsheet = () => {
                         }
                         if (newdecimalPart < 60) {
 
-                            const RemainTotalCalculation = LongTripHours + Number(formattedHours);
-                            const a = RemainTotalCalculation.toFixed(2)
+                            // const RemainTotalCalculation = LongTripHours + Number(formattedHours);
+                            // const a = RemainTotalCalculation.toFixed(2)
                             // console.log(a);
                             const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
@@ -3807,7 +3809,7 @@ const useTripsheet = () => {
 
             if (manualInput) {
                 const selectedVehicle = vechiledata?.find(option => option?.vehRegNo === manualInput);
-                console.log(selectedVehicle,"driverselectveh")
+                // console.log(selectedVehicle,"driverselectveh")
 
                 setBook(prevState => ({
                     ...prevState,
@@ -3911,7 +3913,7 @@ const useTripsheet = () => {
                 const totalShedoutMinutes = (shedoutHours * 60) + shedoutMinutes;
                 const totalShedinMinutes = (shedinHours * 60) + shedinMinutes;
                 // const combinedTotal = (additionalHours * 60) + Number(formattedMinutes);
-                const a = Number(shedoutMinutes) + Number(shedinMinutes);
+                // const a = Number(shedoutMinutes) + Number(shedinMinutes);
                 // Calculate the difference in minutes
                 // let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
                 let minuteDifference = totalShedinMinutes - totalShedoutMinutes
@@ -4142,8 +4144,8 @@ const useTripsheet = () => {
                 }
                 if (newdecimalPart < 60) {
 
-                    const RemainTotalCalculation = LongTripHours + Number(formattedHours);
-                    const a = RemainTotalCalculation.toFixed(2)
+                    // const RemainTotalCalculation = LongTripHours + Number(formattedHours);
+                    // // const a = RemainTotalCalculation.toFixed(2)
 
                     const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
@@ -4529,11 +4531,13 @@ const useTripsheet = () => {
                             setdriverBeta_amount(bookingDetails.driverBeta_amount);
                             setTotalcalcAmount(bookingDetails.totalcalcAmount);
                             setGroupTripId(bookingDetails.GroupTripId)
-                            console.log(bookingDetails.Hybriddata,"hclbook")
+                            // console.log(bookingDetails.Hybriddata,"hclbook")
                             setHybridHclCustomer(bookingDetails.Hybriddata);
                             setTimeToggle(bookingDetails.TimeToggleData)
                             setTimeToggleVendor(bookingDetails.VendorTimeToggle)
                             setEnterTrigger((prev) => !prev)
+                            //  setManualMarkTrigger((prev) => !prev)
+                             setTestManualMarkTrigger((prev) => !prev)
                             setMaplogimgPopupOpen(false)
                             setMessageEditedBeforetrip(bookingDetails?.messageedited)
                             setMessageEditedtrip(bookingDetails?.messageedited)
@@ -4624,7 +4628,7 @@ const useTripsheet = () => {
         const keys = Object.keys(params);
         keys.forEach(key => {
             const value = params[key];
-            console.log(key ,value,"driverrow")
+            // console.log(key ,value,"driverrow")
             if (key !== "rateType") {
                 handleChange({ target: { name: key, value: value } });
             }
@@ -4765,7 +4769,7 @@ const useTripsheet = () => {
                         ...routeData.filter(item => item.trip_type === 'end')
                     ];
     
-                    console.log(sortedRouteData, "sorted routedataaaaaaaaaaaaaaaaa");
+                    // console.log(sortedRouteData, "sorted routedataaaaaaaaaaaaaaaaa");
     
                     setRouteData(sortedRouteData);
                 }
@@ -4850,7 +4854,7 @@ const useTripsheet = () => {
        const getSignatureImageverify = async () => {
        
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-         console.log("signver",tripid)
+        //  console.log("signver",tripid)
         checksignatureandmap()
         try {
             if (tripid !== null && tripid && tripid !== "undefined") {
@@ -4924,7 +4928,7 @@ const useTripsheet = () => {
         const tripiddata = formData.tripid || selectedCustomerData.tripid || book.tripid
         try {
 
-            const responsedata = await axios.delete(`${apiUrl}/api/signatureimagedelete/${tripiddata}`)
+            await axios.delete(`${apiUrl}/api/signatureimagedelete/${tripiddata}`)
             setSignaturepopup(false);
             setSignImageUrl('')
             setSignImageUrl1('')
@@ -4944,17 +4948,17 @@ const useTripsheet = () => {
 
 
     const getMapImaage = async () => {
-        console.log("testgmapurldata")
+        // console.log("testgmapurldata")
         try {
             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-            console.log(tripid,"gmapdata")
+            // console.log(tripid,"gmapdata")
             if (tripid !== null && tripid && tripid !== "undefined") {
                 const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
-                console.log(response,"gmapdataresponse")
+                // console.log(response,"gmapdataresponse")
                 if (response.status === 200) {
                     const responseData = await response.blob();
                     const imageUrl = URL.createObjectURL(responseData);
-                    console.log(imageUrl,"gmapdataurl")
+                    // console.log(imageUrl,"gmapdataurl")
                     setGMapImageUrl(imageUrl);
                 }
             }
@@ -5368,7 +5372,7 @@ const useTripsheet = () => {
         const extraHR11 = extraHR111 || 0
         const datatimetoggle = timeToggle || timetogglenavigate
 
-        console.log(extraHR11, "houwwwwwwwwwwwwwww", typeof (extraHR11), ex_hrAmount11, datatimetoggle)
+        // console.log(extraHR11, "houwwwwwwwwwwwwwww", typeof (extraHR11), ex_hrAmount11, datatimetoggle)
 
 
         if (datatimetoggle === 1) {
@@ -5392,7 +5396,7 @@ const useTripsheet = () => {
                 // console.log(etrxamin,"hou3customer",onehrdata,etrxamin)
                 const totalamountwithmin = onehrdata + etrxamin
                 // console.log(totalamountwithmin,"hou4customer")
-                const totalamounthrmin = Math.round(totalamountwithmin)
+                // const totalamounthrmin = Math.round(totalamountwithmin)
                 // console.log(totalamounthrmin,"hou5")
                 // console.log(onehrdata, "houoooomnedd", result, etrxamin, totalamountwithmin, totalamounthrmin)
                 return totalamountwithmin
@@ -5400,7 +5404,7 @@ const useTripsheet = () => {
                 // console.log(onehrdata,"ooooomnedd",result,etrxamin,totalamountwithmin,totalamounthrmin)
             }
             else {
-                console.log(extraHR11, "enetroooooooooo")
+                // console.log(extraHR11, "enetroooooooooo")
                 return 0
             }
         }
@@ -5419,7 +5423,7 @@ const useTripsheet = () => {
         const extraClac = () => {
             // let extraAbout_hr = Number(extraHR) * Number(extrahr_amount);
             const daghr = datatimeminutescahrges(extraHR, extrahr_amount)
-            console.log(daghr, "hou")
+            // console.log(daghr, "hou")
 
             // const extarhour = Math.round(extraAbout_hr)
             const extarhour = Math.round(daghr)
@@ -5452,7 +5456,7 @@ const useTripsheet = () => {
 
     const vendordatatimeminutescahrges = (vendorhr, vendorhramount) => {
 
-        console.log(vendorhr, "venkkkkkkkhrrrven", typeof (vendorhr))
+        // console.log(vendorhr, "venkkkkkkkhrrrven", typeof (vendorhr))
         const datatimetoggle = timeTogglevendor || timetogglevendornavigate
         if (datatimetoggle === 1) {
             if (vendorhr !== 0) {
@@ -5464,13 +5468,13 @@ const useTripsheet = () => {
                 const onehrdata = Number(hrdavendor) * Number(vendorhramount)
                 // const result = Math.round((vendorhramount / 60) * 10) / 10;
                 const result = ((vendorhramount / 60) * 10) / 10;
-                console.log(result, "clatimeeeee")
+                // console.log(result, "clatimeeeee")
                 const etrxamin = result.toFixed(2) * Number(midaFormatted)
                 const totalamountwithmin = onehrdata + etrxamin
                 // console.log(totalamountwithmin,"venextradd")
                 const totalamounthrmin = Math.round(totalamountwithmin)
                 // console.log(totalamounthrmin)
-                console.log(onehrdata, "ooooomneddvendor", result, etrxamin, totalamountwithmin, totalamounthrmin)
+                // console.log(onehrdata, "ooooomneddvendor", result, etrxamin, totalamountwithmin, totalamounthrmin)
                 return totalamounthrmin
 
             }
@@ -5490,7 +5494,7 @@ const useTripsheet = () => {
         const VendorextraClac = () => {
             // let extraAbout_hr = Math.round(Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) * Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours))
             const extravendorhr = Number(vendorbilldata?.Vendor_ExtraHours || vendorpassvalue.Vendor_ExtraHours) || 0
-            console.log(extravendorhr, typeof (extravendorhr), "extratratimechanges")
+            // console.log(extravendorhr, typeof (extravendorhr), "extratratimechanges")
             const extraTotslhramount = Number(vendorbilldata?.Vendor_ExtraAmountHours || vendorpassvalue.Vendor_ExtraAmountHours || 0)
             const vendorTotalfullamount = vendordatatimeminutescahrges(extravendorhr, extraTotslhramount)
             // setVendorExtrahrTotaldataAmount(extraAbout_hr)
@@ -5746,14 +5750,14 @@ const useTripsheet = () => {
 
         if (supplierdata) {
 
-            console.log(supplierdata, "enetervendortryy")
+            // console.log(supplierdata, "enetervendortryy")
             const response = await axios.get(`${apiUrl}/Accountinfosupplierdata/${supplierdata}`)
             const data = response.data
             if (data.length > 0) {
-                console.log(data.length, data, "enetetsuppliervendortryy")
+                // console.log(data.length, data, "enetetsuppliervendortryy")
                 const res = data[0].rateType;
                 // const res = response.data[0]
-                console.log(res, "enetervendortryy")
+                // console.log(res, "enetervendortryy")
                 return res
             }
 
@@ -5786,7 +5790,7 @@ const useTripsheet = () => {
             // vendorstations = await fetchdatasupplierraratenamestations();
             vendorstations = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department;
 
-            console.log(vendortotkm, "vendorkm", vendortothr, "vendortohr", vendorduty, "vendorduty", vendorvehicleNames, "vechilenames", vendorratetype, "vendorratetype", vendorstations, "vendorstations")
+            // console.log(vendortotkm, "vendorkm", vendortothr, "vendortohr", vendorduty, "vendorduty", vendorvehicleNames, "vechilenames", vendorratetype, "vendorratetype", vendorstations, "vendorstations")
 
             if (!vendortotkm || !vendortothr || !vendorduty || !vendorvehicleNames || !vendorratetype || !vendorstations) {
                 setError(true);
@@ -5803,7 +5807,7 @@ const useTripsheet = () => {
             // const consvertedTotalHour = parseFloat(vendortotalHours.toFixed(2))
 
             const consvertedTotalHour = vendortotalHours
-            console.log(consvertedTotalHour, "totalfffffffffffffh")
+            // console.log(consvertedTotalHour, "totalfffffffffffffh")
 
             const response = await axios.get(`${apiUrl}/totalhrsuppiler-pack`, {
                 params: {
@@ -5818,7 +5822,7 @@ const useTripsheet = () => {
                 }
             });
             vendordata = response.data;
-            console.log(vendordata, "vendorrrrrrrr")
+            // console.log(vendordata, "vendorrrrrrrr")
 
 
             const packages = vendordata.package;
@@ -5848,13 +5852,13 @@ const useTripsheet = () => {
                 // const matches = calculatevendorTotalTime().match(/(\d+)h\s*(\d+)m/);
                 const matches = consvertedTotalHour
                 if (matches) {
-                    console.log(matches, "mmaaa")
+                    // console.log(matches, "mmaaa")
 
                     let time = matches - Hours.toFixed(2);
                     // const convertedTime = Number(time.toFixed(2))
                     const convertedTime = time.toFixed(2)
 
-                    console.log(convertedTime, "totalextra",)
+                    // console.log(convertedTime, "totalextra",)
                     dataextrahous = convertedTime
                 }
 
@@ -5868,7 +5872,7 @@ const useTripsheet = () => {
             if (vendortotkm > KMS && vendorduty !== "Outstation") {
 
                 let KM = (Number(vendortotkm) - Number(KMS))
-                console.log(Number(vendortotkm), Number(KMS), "kmmmmmmmmmmmmmmmmm", KM)
+                // console.log(Number(vendortotkm), Number(KMS), "kmmmmmmmmmmmmmmmmm", KM)
                 let kmfixed = Number(KM.toFixed(2))
 
                 // dataextrakms = KM
@@ -6072,7 +6076,7 @@ const useTripsheet = () => {
 
     // console.log(userStatus,"sssss")
     useEffect(() => {
-        const a = calculateTotalDay()
+        // const a = calculateTotalDay()
 
         const newAmount = Math.round(nightCount * nightBta);
         const betaAmount = Math.round(Number(driverBeta) * driverbeta_Count);
@@ -6084,7 +6088,7 @@ const useTripsheet = () => {
 
     // calc function
 
-    let data, totkm, tothr, totalHours, duty, vehicleNames, organizationname, totalamount, CustomerStatioms;
+    let data, totkm, tothr, totalHours, duty, vehicleNames, organizationname, CustomerStatioms;
     const handleCalc = async () => {
 
         try {
@@ -6098,7 +6102,7 @@ const useTripsheet = () => {
             // organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
             organizationname = await fetchdatacustomeraratename();
             CustomerStatioms = selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department;
-            console.log(totkm, "tokm", tothr, "tohr", duty, "duty", vehicleNames, "vehcilenames", organizationname, "organisationname")
+            // console.log(totkm, "tokm", tothr, "tohr", duty, "duty", vehicleNames, "vehcilenames", organizationname, "organisationname")
             // console.log(organizationname, "ratetype")
 
 
@@ -6197,7 +6201,7 @@ const useTripsheet = () => {
             } else {
                 setExtraHR(0)
             }
-            console.log("total km", totkm)
+            // console.log("total km", totkm)
             // if (totkm > KMS) {
             //     let KM = (Number(totkm) - Number(KMS))
             //     setExtraKM(KM);
@@ -6211,7 +6215,7 @@ const useTripsheet = () => {
                 setExtraKM(cuctomerkm);
             }
             else if (duty === "Outstation") {
-                console.log("duty", duty)
+                // console.log("duty", duty)
                 // let km = (Number(totkm) <= Number(KMS)) ? Number(KMS) * Number(totaldays) : Number(totkm)
                 // let cuctomerkm2 = Number(km.toFixed(2))
                 // let km = (Number(totkm) <= Number(KMS)) ?  Number(totkm) *  Number(totaldays): Number(totkm)
@@ -6231,7 +6235,7 @@ const useTripsheet = () => {
                 //     // setExtraKM(cuctomerkm2)
                 // }
                 if (Number(totaldays) === 1) {
-                    console.log("duty", duty)
+                    // console.log("duty", duty)
                     let km11 = (Number(totkm) <= Number(KMS)) ? Number(KMS) : Number(totkm)
                     let cuctomerkm21 = Number(km11.toFixed(2))
                     setExtraKM(cuctomerkm21)
@@ -6575,7 +6579,7 @@ const useTripsheet = () => {
         const fetchData = async () => {
             if (!vehicleRegisterNo) return
             const data = await axios.get(`${apiUrl}/get-CancelTripDatanewdatatry/${vehicleRegisterNo}`)
-            console.log(data, "op")
+            // console.log(data, "op")
             const hcldata = await axios.get(`${apiUrl}/get-CancelTripDataforHcl/${vehicleRegisterNo}`)
             const hclkmdatas = hcldata.data;
             const mapdata = data && Array.isArray(data.data) && data.data.map(transformFun1)
@@ -6685,7 +6689,7 @@ const useTripsheet = () => {
 
     const generateAndCopyLinkdata = async () => {
         const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
-        console.log(appsstatus, "sttt")
+        // console.log(appsstatus, "sttt")
 
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         if (!tripid) {
@@ -6818,35 +6822,35 @@ const useTripsheet = () => {
         // checksignatureandmap();
         if (manualTripID.length > 0) {
             // setEditMap(!EditMap);
-            const editTrigger = "editMode"
+            // const editTrigger = "editMode"
             // Get the trip, time, and date details
             const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-            const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
-            const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || formData.closetime;
-            const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
-            const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
+            // const starttime = book.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || formData.starttime;
+            // const endtime = book.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || formData.closetime;
+            // const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
+            // const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
 
             // Get latitude and longitude arrays from 'row'
-            const latitude = row.map(li => li.Latitude);
-            const longitude = row.map(li => li.Longitude);
-            const startingTrips = row.filter(trip => trip.trip_type === "start");
-            const endingTrips = row.filter(trip => trip.trip_type === "end");
-            const wayTrips = row.filter(trip => trip.trip_type === "waypoint")
-            const startingDate = startingTrips.length > 0 ? startingTrips[0].date : '';
-            const endingDate = endingTrips.length > 0 ? endingTrips[0].date : '';
-            const startingTime = startingTrips.length > 0 ? startingTrips[0].time : '';
-            const endingTime = endingTrips.length > 0 ? endingTrips[0].time : '';
-            const startPlaceName = startingTrips.length > 0 ? startingTrips[0].place_name : '';
-            const endPlaceName = endingTrips.length > 0 ? endingTrips[0].place_name : '';
-            const wayPlaceName = wayTrips?.map(li => li.place_name)
-            const wayDate = wayTrips?.map(li => li.date);
-            const wayTime = wayTrips?.map(li => li.time);
-            const startLatitude = startingTrips.length > 0 ? startingTrips[0].Latitude : '';
-            const endLatitude = endingTrips.length > 0 ? endingTrips[0].Latitude : '';
-            const startLongitude = startingTrips.length > 0 ? startingTrips[0].Longitude : '';
-            const endLongitude = endingTrips.length > 0 ? endingTrips[0].Longitude : '';
-            const wayLatitude = wayTrips?.map(li => li.Latitude)
-            const wayLongitude = wayTrips?.map(li => li.Longitude)
+            // const latitude = row.map(li => li.Latitude);
+            // const longitude = row.map(li => li.Longitude);
+            // const startingTrips = row.filter(trip => trip.trip_type === "start");
+            // const endingTrips = row.filter(trip => trip.trip_type === "end");
+            // const wayTrips = row.filter(trip => trip.trip_type === "waypoint")
+            // const startingDate = startingTrips.length > 0 ? startingTrips[0].date : '';
+            // const endingDate = endingTrips.length > 0 ? endingTrips[0].date : '';
+            // const startingTime = startingTrips.length > 0 ? startingTrips[0].time : '';
+            // const endingTime = endingTrips.length > 0 ? endingTrips[0].time : '';
+            // const startPlaceName = startingTrips.length > 0 ? startingTrips[0].place_name : '';
+            // const endPlaceName = endingTrips.length > 0 ? endingTrips[0].place_name : '';
+            // const wayPlaceName = wayTrips?.map(li => li.place_name)
+            // const wayDate = wayTrips?.map(li => li.date);
+            // const wayTime = wayTrips?.map(li => li.time);
+            // const startLatitude = startingTrips.length > 0 ? startingTrips[0].Latitude : '';
+            // const endLatitude = endingTrips.length > 0 ? endingTrips[0].Latitude : '';
+            // const startLongitude = startingTrips.length > 0 ? startingTrips[0].Longitude : '';
+            // const endLongitude = endingTrips.length > 0 ? endingTrips[0].Longitude : '';
+            // const wayLatitude = wayTrips?.map(li => li.Latitude)
+            // const wayLongitude = wayTrips?.map(li => li.Longitude)
 
 
 
@@ -6859,9 +6863,9 @@ const useTripsheet = () => {
                 localStorage.setItem('selectedTripid', tripid);
 
                 // Serialize latitude and longitude arrays for the URL
-                const serializedLatitude = encodeURIComponent(JSON.stringify(latitude));
-                const serializedLongitude = encodeURIComponent(JSON.stringify(longitude));
-                const serializedRow = encodeURIComponent(JSON.stringify(row)); // Serialize the row array
+                // const serializedLatitude = encodeURIComponent(JSON.stringify(latitude));
+                // const serializedLongitude = encodeURIComponent(JSON.stringify(longitude));
+                // const serializedRow = encodeURIComponent(JSON.stringify(row)); // Serialize the row array
 
 
                 // Open new tab with serialized latitude and longitude arrays
@@ -6897,7 +6901,7 @@ const useTripsheet = () => {
 
             if (!tripid) {
                 //   console.log(tripid,"qa1tripgmspdatatanotriipf")
-                console.warn("TripID is missing, skipping API call");
+                // console.warn("TripID is missing, skipping API call");
                 return;
             }
 
@@ -7193,8 +7197,8 @@ const useTripsheet = () => {
                     }
                     if (newdecimalPart < 60) {
 
-                        const RemainTotalCalculation = LongTripHours + Number(formattedHours);
-                        const a = RemainTotalCalculation.toFixed(2)
+                        // const RemainTotalCalculation = LongTripHours + Number(formattedHours);
+                        // const a = RemainTotalCalculation.toFixed(2)
                         // console.log(a);
                         const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
@@ -7425,8 +7429,8 @@ const useTripsheet = () => {
                         }
                         if (newdecimalPart < 60) {
 
-                            const RemainTotalCalculation = LongTripHours + Number(formattedHours);
-                            const a = RemainTotalCalculation.toFixed(2)
+                            // const RemainTotalCalculation = LongTripHours + Number(formattedHours);
+                            // const a = RemainTotalCalculation.toFixed(2)
                             // console.log(a);
                             const [hours, minutes] = formattedTotal?.toString().split('.').map(Number);
 
@@ -7717,7 +7721,7 @@ const useTripsheet = () => {
     const formattedCurrentTime = CurrentTime?.replace(":", ".")
     const formattedReportTime = formattedTime?.replace(":", ".");
 
-    const convertReportTime = parseFloat(formattedReportTime || 0)
+    // const convertReportTime = parseFloat(formattedReportTime || 0)
     const timeParts = formattedReportTime?.split(".") || ["0", "0"]; // Default to ["0", "0"] if undefined
     let hours1 = parseInt(timeParts[0] || 0, 10); // Parse hours as an integer
     let minutes1 = parseInt(timeParts[1] || 0, 10); // Parse minutes as an integer
@@ -7766,6 +7770,7 @@ const useTripsheet = () => {
 
         const finalreportTimecalc = parseFloat(bonusReportTime).toFixed(2);
         const finalCurrentTimecalc = parseFloat(finalCurrentTime).toFixed(2)
+        // console.log(finalCurrentTime,"greater than ")
         // Log the types and values of the variables
         // console.log(formattedTripReportDate, "report time", typeof (formattedTripReportDate));
 
@@ -7777,36 +7782,36 @@ const useTripsheet = () => {
         const MidNightReportTime = parseFloat(formattedReportTime).toFixed(2);
 
         if (currentDateObj < formattedDateObj) {
-            console.log('-----------111111');
+            // console.log('-----------111111');
 
-            console.log("CurrentDate is less than formattedTripReportDate");
+            // console.log("CurrentDate is less than formattedTripReportDate");
             setHideField(false);
         } else if (currentDateObj > formattedDateObj) {
-            console.log('-----------1111112222');
+            // console.log('-----------1111112222');
 
             setHideField(true);
-            console.log("CurrentDate is greater than formattedTripReportDate");
+            // console.log("CurrentDate is greater than formattedTripReportDate");
         } else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(finalreportTimecalc) > parseFloat(finalCurrentTimecalc)) {
-            console.log('-----------1111113333');
+            // console.log('-----------1111113333');
 
             setHideField(false);
-            console.log("Both dates are equal allowed");
+            // console.log("Both dates are equal allowed");
         }
         else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(finalreportTimecalc) === parseFloat(finalCurrentTimecalc)) {
-            console.log('-----------1111113333');
+            // console.log('-----------1111113333');
 
             setHideField(true);
-            console.log("Both dates are equal allowed");
+            // console.log("Both dates are equal allowed");
         }
         else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(finalreportTimecalc) < parseFloat(finalCurrentTimecalc).toFixed(2) && parseFloat(MidNightReportTime) < 23.30) {
-            console.log('-----------111111444444');
+            // console.log('-----------111111444444');
 
             setHideField(true);
-            console.log("Both dates are equal not allowed");
+            // console.log("Both dates are equal not allowed");
         }
         else if (currentDateObj.getDate() === formattedDateObj.getDate() && parseFloat(MidNightReportTime) >= 23.30) {
             setHideField(false);
-            console.log("midnight 23.30 time is affected");
+            // console.log("midnight 23.30 time is affected");
         }
     }, [enterTrigger, book, finalCurrentTime]);
 
@@ -7819,7 +7824,7 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log("eduenterqwwwwwwwwwwwwvenkatcode",loginusername)
+            // console.log("checkneweduenterqwwwwwwwwwwwwvenkatcodedepemd",oldStatusCheck,loginusername)
             try {
                 const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
                     username: loginusername,
@@ -7829,14 +7834,14 @@ const useTripsheet = () => {
                 setUserStatus(station);
 
                 
-                console.log(station, "eduqqqqqqqqqqqqqqqdisuseraww")
+                // console.log(station, "eduqqqqqqqqqqqqqqqdisuseraww")
                 setUserStatusPermission(station)
                 EditButtonHide(station)
 
-                console.log("Debugging Inputs:");
-                console.log("statusCheck:", statusCheck);
-                console.log("condititonstation:", station);
-                console.log("superAdminAccess:", superAdminAccess);
+                // console.log("Debugging Inputs:");
+                // console.log("statusCheck:", statusCheck);
+                // console.log("condititonstation:", station);
+                // console.log("superAdminAccess:", superAdminAccess);
 
                 // Normalize station data for consistency
                 // const normalizedStation = station.map(s => s.trim().toLowerCase());
@@ -7849,8 +7854,8 @@ const useTripsheet = () => {
                 // )
                 // check outstation and hide booking details in tripsheet
                 if (!station.includes("Chennai") && !station.includes("All") && !isEditMode) {
-                    console.log(superAdminAccess, "superAdminAccesssssssssssssssssss", station, !station.includes("Chennai"));
-                    console.log("outstationnnnnnnnnnnnnnnnnnnnnnnnnnn");
+                    // console.log(superAdminAccess, "superAdminAccesssssssssssssssssss", station, !station.includes("Chennai"));
+                    // console.log("outstationnnnnnnnnnnnnnnnnnnnnnnnnnn");
 
                     setOutStationDispatchHide(true);
                     return;
@@ -7861,7 +7866,7 @@ const useTripsheet = () => {
                     (superAdminAccess !== "SuperAdmin") &&
                     (station.includes("Chennai") || station.includes("All"))
                 ) {
-                    console.log("Condition 1: Temporary Closed with All or Chennai");
+                    // console.log("Condition 1: Temporary Closed with All or Chennai");
                     setTemporaryStatus(false);
                     setEmptyState(false)
                     return;
@@ -7890,7 +7895,7 @@ const useTripsheet = () => {
                 //     (!station.includes("Chennai") || !station.includes("All"))
                 // ) 
                 {
-                    console.log("Condition 2: Temporary Closed without All or Chennai");
+                    // console.log("Condition 2: Temporary Closed without All or Chennai");
                     setTemporaryStatus(true);
                     setEmptyState(false);
                     setHideField(true)
@@ -7901,7 +7906,7 @@ const useTripsheet = () => {
                     (oldStatusCheck === "Closed") &&
                     (station.includes("Chennai") || station.includes("All"))
                 ) {
-                    console.log("Condition 4: Closed with Chennai or All");
+                    // console.log("Condition 4: Closed with Chennai or All");
                     setTemporaryStatus(true);
                     setHideField(true);
                     setEmptyState(false)
@@ -7937,7 +7942,7 @@ const useTripsheet = () => {
 
                 // Condition 3: No Chennai or All in Station
                 if (!station.includes("Chennai") && !station.includes("All")) {
-                    console.log("Condition 3: No Chennai or All in Station");
+                    // console.log("Condition 3: No Chennai or All in Station");
                     setOutStationHide(true);
                     return;
                 }
@@ -7955,7 +7960,7 @@ const useTripsheet = () => {
                     superAdminAccess !== "SuperAdmin" &&
                     (!station.includes("Chennai") && !station.includes("All"))
                 ) {
-                    console.log("Condition 5: Closed without Chennai or All and superAdminAccess 0");
+                    // console.log("Condition 5: Closed without Chennai or All and superAdminAccess 0");
                     setTemporaryStatus(true);
                     setEmptyState(true);
                     setHideField(true);
@@ -7971,7 +7976,7 @@ const useTripsheet = () => {
                     (statusCheck === "Closed" || statusCheck === "Billed") &&
                     (superAdminAccess !== "SuperAdmin")
                 ) {
-                    console.log("Condition 6: Closed or Billed and superAdminAccess is 0");
+                    // console.log("Condition 6: Closed or Billed and superAdminAccess is 0");
                     setEmptyState(true);
                     setHideField(true)
                     return;
@@ -7979,7 +7984,7 @@ const useTripsheet = () => {
 
                 // Condition 7: Not Closed
                 if (oldStatusCheck !== "Closed") {
-                    console.log("Condition 7: Not Closed");
+                    // console.log("Condition 7: Not Closed");
                     setEmptyState(false);
                     setTemporaryStatus(false);
                     return;
@@ -7990,8 +7995,8 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    // }, [enterTrigger]);
-      }, [manualMarkTrigger]);
+    }, [testMarkTrigger]);
+    //   }, [manualMarkTrigger]);
     // console.log(userstatuspermission,"qquserprrrrrehxjxjxkjxkekwskwslwkslwsl")
     
 
@@ -8000,7 +8005,7 @@ const useTripsheet = () => {
     const statuschecking = selectedStatus;
     // console.log(statuschecking,'status checking',selectedCustomerData.status,book.status,selectedStatus);
     const EditButtonHide = async (station) => {
-            console.log("educhecktwwvenkatcodeediitittt",loginusername)
+            // console.log("checkneweduchecktwwvenkatcodeediitittt",statuschecking)
             
         // try {
         //     const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
@@ -8300,18 +8305,18 @@ const useTripsheet = () => {
             if (advancefuel && fueladvancedamounthide === null) {
 
                 if ((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')))) {
-                    console.log("discondition1")
+                    // console.log("discondition1")
                     setFuelDataAmountDis(true)
 
                     return
                 }
                 else if ((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')))) {
                     setFuelDataAmountDis(true)
-                    console.log("discondition2")
+                    // console.log("discondition2")
                     return
                 }
                 else {
-                    console.log("discondition3")
+                    // console.log("discondition3")
                     setFuelDataAmountDis(true)
                     return
                 }
@@ -8320,22 +8325,22 @@ const useTripsheet = () => {
             }
             else {
                 if ((oldStatusCheck === "Temporary Closed" || oldStatusCheck === "Opened") && ((userstation.includes('Chennai') || userstation.includes('All')))) {
-                    console.log("discondition4")
+                    // console.log("discondition4")
                     setFuelDataAmountDis(false)
                     return
                 }
                 else if ((oldStatusCheck === "Opened") && ((!userstation.includes('Chennai') || !userstation.includes('All')))) {
-                    console.log("discondition5")
+                    // console.log("discondition5")
                     setFuelDataAmountDis(false)
                     return
                 }
                 else if ((oldStatusCheck === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess !== "Billing_Headoffice" && superAdminAccess !== "Assistant CFO")) {
-                    console.log("discondition6")
+                    // console.log("discondition6")
                     setFuelDataAmountDis(true)
                     return
                 }
                 else if ((oldStatusCheck === "Temporary Closed") && ((!userstation.includes('Chennai') || !userstation.includes('All'))) && (superAdminAccess === "Billing_Headoffice" && superAdminAccess === "Assistant CFO")) {
-                    console.log("discondition7")
+                    // console.log("discondition7")
                     setFuelDataAmountDis(false)
                     return
                 }
@@ -8344,7 +8349,7 @@ const useTripsheet = () => {
             }
         }
         else {
-            console.log("discondition8")
+            // console.log("discondition8")
             setFuelDataAmountDis(false)
             return
         }
@@ -8666,7 +8671,7 @@ const useTripsheet = () => {
                     header: headerName,
                 }))
 
-            console.log(columns1, "hnplopppp", rowdataar)
+            // console.log(columns1, "hnplopppp", rowdataar)
             worksheet.columns = columns1;
             worksheet.getRow(1).font = { bold: true };
             worksheet.getRow(1).eachCell((cell) => {
@@ -8692,7 +8697,7 @@ const useTripsheet = () => {
                 ids: index + 1
             }));
 
-            console.log(updatedData, "hnupppppdate");
+            // console.log(updatedData, "hnupppppdate");
 
             // Add rows of data
             updatedData.forEach((singleData, index) => {
@@ -8768,7 +8773,7 @@ const useTripsheet = () => {
         // const header = maplogcolumnsexcel
         // .filter((row) => row.field !== "date") // Exclude rows with field "edit" or "actions"
         // .map((row) => row.headerName); 
-        console.log(header, "shnplpdff")
+        // console.log(header, "shnplpdff")
 
 
         const rowValues = row.map((row, index) => { // Declare index here
@@ -8935,8 +8940,8 @@ const useTripsheet = () => {
         if (row.length > 0) {
 
             try {
-                const respone = await axios.post(`${apiUrl}/deleteMapByTripid/${tripid}`)
-                console.log(respone.data);
+                await axios.post(`${apiUrl}/deleteMapByTripid/${tripid}`)
+                // console.log(respone.data);
                 setManualTripID([])
                 setSuccess(true)
                 setSuccessMessage("Successfully Deleted")
@@ -9199,11 +9204,14 @@ const handleTemporaryDelete = async () => {
         handleEditMap,
         handleDeleteMap, copydatalink, setCopyDataLink,
         // conflictenddate, 
-        groupTripId, setGroupTripId, mapPopUp, setMapPopUp, oldStatusCheck, getSignatureImageverify, checksignatureandmap,
+        groupTripId, setGroupTripId, mapPopUp, setMapPopUp, oldStatusCheck, checksignatureandmap,
         manualTripID, setEditMap, editMap, calculatewithoutadditonalhour, hybridhclcustomer, timeToggle, HclKMCalculation, hybridhclnavigate,
         isAddload, setisAddload, isEditload, setisEditload, handleChangetexttrip, handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip, messageditedtrip, messageditedbeforetrip,
-        hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, userStatus, conflictMinimumTimeDatas,
-        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, setError, setErrorMessage, Permissiondeleteroles, fueldataamountdis, setFuelAdvancedamountHide,
+        hideField, temporaryStatus, emptyState, editButtonStatusCheck,
+        //  conflictCompareDatas, 
+         userStatus,
+        //   conflictMinimumTimeDatas,
+        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,Permissiondeleteroles, fueldataamountdis, setFuelAdvancedamountHide,
         outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, handleAutocompleteChangecustomer, orderByDropDown, speeddailacesss, speeddailacesssedit,
         tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
         // this zoom image code state-----------------

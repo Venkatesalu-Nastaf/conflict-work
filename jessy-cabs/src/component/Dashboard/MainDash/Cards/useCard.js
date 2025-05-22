@@ -321,13 +321,10 @@ useEffect(() => {
         data = response.data;
       }
 
-      const processedData=data.map(item=>({
-        ...item,
-        profit:Math.max(0,item.profit)
-      }));
+      
       
       // Update the profit data state
-      setProfitdata(processedData);
+      setProfitdata(data);
       
     } catch (error) {
       console.error('Error fetching profit data:', error);

@@ -353,7 +353,7 @@ else {
   const pieData = [
   { name: 'Vendor', value: vendordata.totalVendorAmount },
   { name: 'Customer', value: vendordata.totalCalcAmount },
-  { name: 'profit', value: vendordata.profit < 0 ? 0 : vendordata.profit }
+  { name: 'profit', value: vendordata.profit }
 ];
 
 
@@ -466,24 +466,39 @@ else {
  <div className='profitvendor-data'>
    <div className='vendor-diagram'>
                 
-                  <ResponsiveContainer width="100%" height={260}>
-                    <PieChart>
-                      <Pie
-                        data={pieData}
-                        dataKey="value"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={90}
-                        label={(entry)=>entry.name}
-                      >
-                        {pieData.map((entry, i) => (
-                          <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
+                <ResponsiveContainer width="100%" height={260}>
+  <PieChart>
+    <Pie
+      data={
+        pieData && pieData.length > 0 && pieData.some(item => item.value > 0)
+          ? pieData
+          : [{ name: "No Data", value: 1 }]
+      }
+      dataKey="value"
+      nameKey="name"
+      cx="50%"
+      cy="50%"
+      outerRadius={90}
+      label={(entry) => entry.name}
+    >
+      {(pieData && pieData.length > 0 && pieData.some(item => item.value > 0)
+        ? pieData
+        : [{ name: "No Data", value: 1 }]
+      ).map((entry, i) => (
+        <Cell
+          key={`cell-${i}`}
+          fill={
+            pieData && pieData.length > 0 && pieData.some(item => item.value > 0)
+              ? COLORS[i % COLORS.length]
+              : "gray"
+          }
+        />
+      ))}
+    </Pie>
+    <Tooltip />
+  </PieChart>
+</ResponsiveContainer>
+
                 </div>
            
 

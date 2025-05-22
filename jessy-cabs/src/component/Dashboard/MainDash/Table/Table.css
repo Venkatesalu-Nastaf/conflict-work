@@ -265,7 +265,7 @@
 .button-header
 {
    display: flex;
- flex-direction: column;
+ flex-direction: row;
  margin-top: 10px;
      
   }
@@ -483,7 +483,7 @@
 @media screen and (max-width: 768px) {
   .dashboard-date-popup {
     position: fixed;
-    top: auto;
+    top: 300px;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
@@ -493,7 +493,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
-    max-height: 80vh;
+    max-height:300px;
   }
 
   .dashboard-date-popup-main-division {

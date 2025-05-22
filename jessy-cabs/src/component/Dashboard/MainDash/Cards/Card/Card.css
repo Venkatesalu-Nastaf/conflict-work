@@ -100,6 +100,8 @@
     position: relative;
     left:10px ;
   }
+  
+
 }
 
 /* For small screens: mobile (≤768px) */
@@ -134,9 +136,9 @@
   }
 
   .ExpandedCard {
-    top: 6rem;
-    left: 5%;
-    width: 90%;
+    top: 30px;
+    left: 2%;
+    width: 290px;
     height: auto;
     padding: 1rem;
     gap: 16px;

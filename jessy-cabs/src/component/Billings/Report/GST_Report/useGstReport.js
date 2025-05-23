@@ -735,23 +735,45 @@ const useGstReport = () => {
             console.log(response.data, 'gstreportdata');
             const { combinedResults, allTripDetails, tripsheetResults } = response.data;
 
-            const tollCalculationAmount = Object.values(
-                tripsheetResults.reduce((acc, trip) => {
-                    const groupId = trip.groupid;
-                    const toll = parseFloat(trip.toll) || 0; // Convert toll to number (handle empty string)
+            // const tollCalculationAmount = Object.values(
+            //     tripsheetResults.reduce((acc, trip) => {
+            //         const groupId = trip.groupid;
+            //         const toll = parseFloat(trip.toll) || 0; // Convert toll to number (handle empty string)
+            //         // const toll = (parseFloat(trip.toll) + parseFloat(trip.parking) + parseFloat(trip.permit)) || 0; // Convert toll to number (handle empty string)
+            //         const permit = parseFloat(trip.permit) || 0;
+            //         const parking = parseFloat(trip.parking) || 0;
+            //         if (!acc[groupId]) {
+            //             acc[groupId] = {
+            //                 groupid: groupId,
+            //                 totalToll: 0, // Initialize total toll
+            //             };
+            //         }
 
-                    if (!acc[groupId]) {
-                        acc[groupId] = {
-                            groupid: groupId,
-                            totalToll: 0, // Initialize total toll
-                        };
-                    }
+            //         acc[groupId].totalToll += toll; // Sum the toll amounts
+            //         return acc;
+            //     }, {})
+            // );
 
-                    acc[groupId].totalToll += toll; // Sum the toll amounts
-                    return acc;
-                }, {})
-            );
+const tollCalculationAmount = Object.values(
+  tripsheetResults.reduce((acc, trip) => {
+    const groupId = trip.groupid;
+    const toll = parseFloat(trip.toll) || 0;
+    const permit = parseFloat(trip.permit) || 0;
+    const parking = parseFloat(trip.parking) || 0;
 
+    const total = toll + parking + permit;
+
+    if (!acc[groupId]) {
+      acc[groupId] = {
+        groupid: groupId,
+        totalToll: 0,
+      };
+    }
+
+    acc[groupId].totalToll += total;
+    return acc;
+  }, {})
+);
 
 
 

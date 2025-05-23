@@ -80,54 +80,69 @@ const useMonthlyWise = () => {
         toDate: toDate
       })
       console.log(response.data, "monthlyresponsedata");
-      const { customerDetails, transferList, individualBilling, groupBilling } = response.data;
-
-      // Create a map to store total amounts for each organization
-      const amountMap = new Map();
-
-      // Helper function to accumulate amounts
-      const accumulateAmount = (data) => {
-        data.forEach(({ Organization_name, Amount }) => {
-          if (Organization_name) {
-            amountMap.set(Organization_name, (amountMap.get(Organization_name) || 0) + parseInt(Amount));
-          }
-        });
-      };
-
-      // Aggregate amounts from all billing sources
-      accumulateAmount(transferList);
-      accumulateAmount(individualBilling);
-      accumulateAmount(groupBilling);
-
-      // Filter and merge customer details
-      const mergedCustomerDetails = customerDetails
-        .map(({ customerType, customer, orderByEmail, address }) => ({
-          customerType,
-          customer,
-          orderByEmail,
-          address: address,
-          totalAmount: amountMap.get(customer) || 0, // Assign total amount if available
-        }))
-        .filter(({ totalAmount }) => totalAmount > 0); // Return only matched customers
-
-      console.log(mergedCustomerDetails, "Final Merged Customer Details");
-    
-
-      if (mergedCustomerDetails.length > 0) {
-        const rowsWithUniqueId = mergedCustomerDetails.map((row, index) => ({
+      // const { customerDetails, transferList, individualBilling, groupBilling } = response.data;
+      const customerDetails  = response.data;
+      if(customerDetails.length > 0){
+              const rowsWithUniqueId = customerDetails.map((row, index) => ({
           ...row,
           id: index + 1,
         }));
-        setRows(rowsWithUniqueId)
-        // setRows([])
-        setSuccess(true);
+               setSuccess(true);
         setSuccessMessage("successfully listed")
+        setRows(rowsWithUniqueId)
       }
-      else {
-        setRows([]);
+      else{
+                setRows([]);
         setError(true);
         setErrorMessage("no data found")
       }
+      // setRows(customerDetails)
+      // Create a map to store total amounts for each organization
+      // const amountMap = new Map();
+
+      // // Helper function to accumulate amounts
+      // const accumulateAmount = (data) => {
+      //   data.forEach(({ Organization_name, Amount }) => {
+      //     if (Organization_name) {
+      //       amountMap.set(Organization_name, (amountMap.get(Organization_name) || 0) + parseInt(Amount));
+      //     }
+      //   });
+      // };
+
+      // // Aggregate amounts from all billing sources
+      // accumulateAmount(transferList);
+      // accumulateAmount(individualBilling);
+      // accumulateAmount(groupBilling);
+
+      // // Filter and merge customer details
+      // const mergedCustomerDetails = customerDetails
+      //   .map(({ customerType, customer, orderByEmail, address }) => ({
+      //     customerType,
+      //     customer,
+      //     orderByEmail,
+      //     address: address,
+      //     totalAmount: amountMap.get(customer) || 0, // Assign total amount if available
+      //   }))
+      //   .filter(({ totalAmount }) => totalAmount > 0); // Return only matched customers
+
+      // console.log(mergedCustomerDetails, "Final Merged Customer Details");
+    
+
+      // if (mergedCustomerDetails.length > 0) {
+      //   const rowsWithUniqueId = mergedCustomerDetails.map((row, index) => ({
+      //     ...row,
+      //     id: index + 1,
+      //   }));
+      //   setRows(rowsWithUniqueId)
+      //   // setRows([])
+      //   setSuccess(true);
+      //   setSuccessMessage("successfully listed")
+      // }
+      // else {
+      //   setRows([]);
+      //   setError(true);
+      //   setErrorMessage("no data found")
+      // }
     }
     // catch {
     //   setRows([]);

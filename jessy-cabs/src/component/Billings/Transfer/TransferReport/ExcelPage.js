@@ -1000,9 +1000,20 @@ for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
 
     const pdfBytes = await blob.arrayBuffer();
     const reactPDFDocument = await PDFDocument.load(pdfBytes);
+       const data1 = await JSON.parse(pdfData.Attachedimage)
+                const uniqueArraybook1 = Array.from(new Set(data1?.map(JSON.stringify)))?.map(JSON.parse);
+                const uniqueJsonStringbook1 = JSON.stringify(uniqueArraybook1);
+                // const datalink1 = JSON.parse(uniqueJsonStringbook1)
 
-    const datalink1 = JSON.parse(pdfData.Attachedimage || '[]');
-    const datalink = JSON.parse(pdfData.bookattachedimage || '[]');
+                const data = await JSON.parse(pdfData.bookattachedimage)
+                const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+                const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+                // const datalink = JSON.parse(uniqueJsonStringbook)
+
+    // const datalink1 = JSON.parse(pdfData.Attachedimage || '[]');
+    // const datalink = JSON.parse(pdfData.bookattachedimage || '[]');
+     const datalink1 = JSON.parse(uniqueJsonStringbook1 || '[]');
+    const datalink = JSON.parse(uniqueJsonStringbook || '[]');
 
     const pdfDocuments = [];
 
@@ -1010,27 +1021,86 @@ for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
       if (data.attachedimageurl) {
         const ext = data.attachedimageurl.split('.').pop();
         if (ext === "pdf") {
-          const response = await axios.get(`${apiurl}/images/${data.attachedimageurl}`);
-          const pdfBytes = await response.arrayBuffer();
-          const pdfDocument = await PDFDocument.load(pdfBytes);
-          pdfDocuments.push(pdfDocument);
+        //   const response = await axios.get(`${apiurl}/images/${data.attachedimageurl}`);
+        //   const pdfBytes = await response.arrayBuffer();
+        //   const pdfDocument = await PDFDocument.load(pdfBytes);
+        //   pdfDocuments.push(pdfDocument);
+          try {
+        //  const response = await axios.get(`${apiurl}/images/${data.attachedimageurl}`);
+           const response = await axios.get(`${apiurl}/images/${data.attachedimageurl}`, {
+            responseType: 'arraybuffer'
+          });
+
+          if (response.status === 200) {
+        //  const pdfBytes = await response.arrayBuffer();
+        //     const pdfDocument = await PDFDocument.load(pdfBytes);
+        //     pdfDocuments.push(pdfDocument);
+                const pdfBytes = response.data; // <-- response.data is already arrayBuffer
+            const pdfDocument = await PDFDocument.load(pdfBytes);
+            pdfDocuments.push(pdfDocument);
+          } else {
+            console.log(`Attachimage Failed to fetch PDF for TripID: ${pdfData.tripid} — Status: ${response.status}`);
+          }
+
+        } catch (error) {
+          console.log(`Attachimage Error fetching PDF for TripID: TripID: ${pdfData.tripid}`, error);
+        }
         }
       }
     }
 
-    if (bookingMail) {
-      for (const data of datalink) {
-        if (data.imagees) {
-          const ext = data.imagees.split('.').pop();
-          if (ext === "pdf") {
-            const response = await axios.get(`${apiurl}/images/${data.imagees}`);
-            const pdfBytes = await response.arrayBuffer();
+    // if (bookingMail) {
+    //   for (const data of datalink) {
+    //     if (data.imagees) {
+    //       const ext = data.imagees.split('.').pop();
+    //       if (ext === "pdf") {
+    //         // const response = await axios.get(`${apiurl}/images/${data.imagees}`);
+    //         // const pdfBytes = await response.arrayBuffer();
+    //         // const pdfDocument = await PDFDocument.load(pdfBytes);
+    //         // pdfDocuments.push(pdfDocument);
+    //          try {
+    //       const response = await axios.get(`${apiurl}/images/${data.imagees}`);
+
+    //       if (response.status === 200) {
+    //      const pdfBytes = await response.arrayBuffer();
+    //         const pdfDocument = await PDFDocument.load(pdfBytes);
+    //         pdfDocuments.push(pdfDocument);
+    //       } else {
+    //         console.log(`bookingImageErrorFailed to fetch PDF for TripID: ${pdfData.tripid} — Status: ${response.status}`);
+    //       }
+
+    //     } catch (error) {
+    //       console.log(`bookingImageError fetching PDF for TripID: TripID: ${pdfData.tripid}`, error);
+    //     }
+    //       }
+    //     }
+    //   }
+    // }
+if (bookingMail) {
+  for (const data of datalink) {
+    if (data.imagees) {
+      const ext = data.imagees.split('.').pop();
+      if (ext === "pdf") {
+        try {
+          const response = await axios.get(`${apiurl}/images/${data.imagees}`, {
+            responseType: 'arraybuffer'
+          });
+
+          if (response.status === 200) {
+            const pdfBytes = response.data; // <-- response.data is already arrayBuffer
             const pdfDocument = await PDFDocument.load(pdfBytes);
             pdfDocuments.push(pdfDocument);
+          } else {
+            console.error(`bookingImageError: Failed to fetch PDF for TripID: ${data.TripID} — Status: ${response.status}`);
           }
+
+        } catch (error) {
+          console.error(`bookingImageError fetching PDF for TripID: ${data.TripID}`, error);
         }
       }
     }
+  }
+}
 
     const mergedPDFDocument = await PDFDocument.create();
     const reactPages = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
@@ -1053,7 +1123,7 @@ for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
 }
   const zipContent = await zip.generateAsync({ type: 'blob' });
 
-  saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")}.zip`);
+  saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} .zip`);
 
 
 
@@ -1233,8 +1303,8 @@ for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
 //             saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format(" MMMM D")}.zip`);
         }
         catch (error) {
-            console.error('<<<ERROR>>>', error);
-            console.error('Something Went Wrong', error.message);
+            console.log('<<<ERROR>>>', error);
+            console.log('Something Went Wrong', error.message);
         } finally {
             // Clean up resources
             workbook.removeWorksheet(workSheetName);

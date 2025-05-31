@@ -75,29 +75,29 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
   const apiUrl = APIURL;
   const organisationimage = imagename
   const organisationdetails = organisationdetail
-   const [pdfPageCounts, setPdfPageCounts] = useState({});
-      const [pdfErrors, setPdfErrors] = useState([]);
-  
-  
+  const [pdfPageCounts, setPdfPageCounts] = useState({});
+  const [pdfErrors, setPdfErrors] = useState([]);
+
+
   const onDocumentLoadSuccess = (index, { numPages }) => {
     // console.log(index,numPages,"num")
     setPdfPageCounts(prev => ({
       ...prev,
       [index]: numPages
     }));
-     setPdfErrors((prev) => ({
-        ...prev,
-        [index]: null,
-      }));
+    setPdfErrors((prev) => ({
+      ...prev,
+      [index]: null,
+    }));
   };
-  
+
   const onLoadError = (index, error) => {
-      console.log(`Error loading PDF at index ${index}:`, error);
-      setPdfErrors((prev) => ({
-        ...prev,
-        [index]: "Failed to load PDF file.",
-      }));
-    };
+    console.log(`Error loading PDF at index ${index}:`, error);
+    setPdfErrors((prev) => ({
+      ...prev,
+      [index]: "Failed to load PDF file.",
+    }));
+  };
 
   useEffect(() => {
     let addressone = ''
@@ -439,7 +439,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
             </div>
             <div className="imagediv-pdf-particular">
               {/* <img src={`${apiUrl}/public/org_logo/${organisationimage}`} className="image" alt="organisationimage"/> */}
-              <img src={logo} className="image-pdf-particular" alt="organisationimage" />
+              <img src={logo} className="image-pdf-particular-logo" alt="organisationimage" />
               {/* <h2 className="organisationtext-pdf-particular"> GST : {organisationdetails[0].gstnumber}</h2> */}
             </div>
 
@@ -451,7 +451,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
             </div>
 
 
-            <h2 className="organisationtext-pdf-particular org-gst"> GST : {stationData[0]?.gstno}</h2>
+            <h2 className="organisationtext-pdf-particular org-gst-logo"> GST : {stationData[0]?.gstno}</h2>
 
           </div>
 
@@ -460,21 +460,21 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
 
               <p className="detailstext">
                 <span className="labeltag">Client Name </span>
-                <p className="colontag">:</p> 
+                <p className="colontag">:</p>
                 <span className="clientName">{customer}</span>
-                
-                </p>
+
+              </p>
 
 
 
-              <p className="detailstext" style={{height:"100px"}}><span className="labeltag" >Address </span><p className="colontag">:</p><span className="clientName">{customerData[0]?.address1} </span></p>
+              <p className="detailstext" style={{ height: "100px" }}><span className="labeltag" >Address </span><p className="colontag">:</p><span className="clientName">{customerData[0]?.address1} </span></p>
               <p className="detailstext"><span className="labeltag">Category </span><p className="colontag">:</p><span className="clientName">{category}</span></p>
               <p className="detailstext"> <span className="labeltag">Fuel Type </span><p className="colontag">:</p><span className="clientName">{fuel}</span></p>
               <p className="detailstext" > <span className="labeltag">Emp.No </span><p className="colontag">:</p><span className="clientName">{empno}</span></p>
               <p className="detailstext"><span className="labeltag">Emp.Name </span ><p className="colontag">:</p><span className="clientName"> {guestname}</span></p>
-              <p className="detailstext" style={{height:"100px"}}><span className="labeltag">Report Add</span><p className="colontag">:</p><span className="clientName">{address1}</span></p>
+              <p className="detailstext" style={{ height: "100px" }}><span className="labeltag">Report Add</span><p className="colontag">:</p><span className="clientName">{address1}</span></p>
               <p className="detailstext" ><span className="labeltag">Client Mobile</span><p className="colontag">:</p><span className="clientName">{customermobile}</span></p>
-              <p className="detailstext" style={{height:"100px"}}><span className="labeltag">Drop Address</span><p className="colontag">:</p><span className="clientNamedrop">{dropaddress}</span> </p>
+              <p className="detailstext" style={{ height: "100px" }}><span className="labeltag">Drop Address</span><p className="colontag">:</p><span className="clientNamedrop">{dropaddress}</span> </p>
             </div>
             <div className="clientSecondDiv">
               <p className="detailstext"><span className="labeltagsecond">Escort Route </span><p className="colontag">:</p><span >{escort}</span> </p>
@@ -585,7 +585,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                       <tr>
                         <td>Total </td>
                         {/* <td>{triptotaldays}</td> */}
-                          <td>{duty === "Outstation"   ? {triptotaldays} : <>{'-'}</>}</td>
+                        <td>{duty === "Outstation" ? { triptotaldays } : <>{'-'}</>}</td>
                         <td>{triptotaltime}</td>
                         {customerData[0]?.hybrid === 1 && duty !== "Outstation" ? <td> {hclKm}</td> : <td>{triptotalkms}</td>}
                       </tr>
@@ -611,10 +611,10 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                       </tr>
 
                       <tr>
-                      
+
                         <td style={{ padding: "7px" }}>Total </td>
                         {/* <td style={{ padding: "7px" }}>{triptotaldays}</td> */}
-                        <td style={{ padding: "7px" }}>{duty === "Outstation"  ? <>{triptotaldays} </>: <>{'-'}</>}</td>
+                        <td style={{ padding: "7px" }}>{duty === "Outstation" ? <>{triptotaldays} </> : <>{'-'}</>}</td>
                         <td style={{ padding: "7px" }}>{triptotaltime}</td>
                         <td style={{ padding: "7px" }}>{triptotalkms}</td>
                       </tr>
@@ -639,7 +639,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
               <p style={{ margin: "0px" }}>Total Fastag/Toll: {totaltoll ? totaltoll : 0}</p>
             </div>
             <div className="total-map-sum-pdf-particular">
-              <div style={{ width: "49%",height:"250px" }}>
+              <div style={{ width: "25%", height: "150px" }}>
                 {GmapimageUrl !== '' ? <img className="mapimage" src={GmapimageUrl} alt='' style={{ width: '100%', height: '100%' }} /> : <div></div>}
               </div>
               {/* <div className="parkingdiv">
@@ -648,7 +648,9 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                 <p>Total Fastag/Toll: {totaltoll ? totaltoll : 0}</p>
               </div> */}
 
-              <div style={{ width: "49%" }}>
+
+
+              <div style={{ width: "73%" }}>
                 {routeData.length > 0 && (
                   <div className="tripsheet-RouteSummary-pdf-particular">
                     <h2 style={{ margin: "0px", textAlign: "center" }}>Route Summary</h2>
@@ -748,28 +750,28 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                                         />
                                       ))}
                                     </Document> */}
-                                    
-                                                             <Document
-                                                               file={file}
+
+                                    <Document
+                                      file={file}
                                       // onLoadSuccess={onDocumentLoadSuccess}
                                       style={{
                                         margin: "auto",
                                         width: "100%",
                                         padding: "30px"
                                       }}
-                                              // file={img}
-                                              onLoadSuccess={(pdf) => onDocumentLoadSuccess(index, pdf)}
-                                              // onLoadError={(err) => console.error("PDF load error:", err)}
-                                              onLoadError={(err) => onLoadError(index, err)}
-                                        
-                                            >
-                                              {Array.from({ length: pdfPageCounts[index] || 0 }, (_, pageIndex) => (
-                                                <Page
-                                                  key={`page_${index + 1}_${pageIndex + 1}`}
-                                                  pageNumber={pageIndex + 1}
-                                                  scale={0.7}
+                                      // file={img}
+                                      onLoadSuccess={(pdf) => onDocumentLoadSuccess(index, pdf)}
+                                      // onLoadError={(err) => console.error("PDF load error:", err)}
+                                      onLoadError={(err) => onLoadError(index, err)}
 
-                                                   
+                                    >
+                                      {Array.from({ length: pdfPageCounts[index] || 0 }, (_, pageIndex) => (
+                                        <Page
+                                          key={`page_${index + 1}_${pageIndex + 1}`}
+                                          pageNumber={pageIndex + 1}
+                                          scale={0.7}
+
+
                                           // Adjust scale to fit the page to the desired size
                                           style={{
                                             // display: "block",
@@ -777,9 +779,9 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                                             // margin: "20px auto", // Add spacing for better display
                                             border: "2px solid red",
                                           }}
-                                                />
-                                              ))}
-                                            </Document>
+                                        />
+                                      ))}
+                                    </Document>
                                   </div>
                                 </li>
                                 : ''}
@@ -841,6 +843,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
                         })}
                   </ol>
                 </div>
+
               </>
             ) : (
               <></>

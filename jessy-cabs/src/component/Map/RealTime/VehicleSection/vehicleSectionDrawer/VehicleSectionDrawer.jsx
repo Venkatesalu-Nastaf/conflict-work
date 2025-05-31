@@ -127,21 +127,61 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
     }, [filterDate, apiUrl, selectedTripid, vehNo]);
 
     // console.log(filterDate, "filterdateeeeeeeeeeeeee");
+    //  useEffect(() => {
+    //     const fetchData = async () => {
+    //         //   const vehicleNo = vehicleListData?.map((li) => li.vehRegNo);
+
+    //         // Ensure filterDate is always a valid date
+    //         console.log("closeddate")
+    //         // const selectedDate = filterDate ? filterDate : dayjs().format("YYYY-MM-DD");
+
+    //         //   console.log(vehicleNo,"Vehicle Numbers");
+
+    //         try {
+    //             // if (selectedDate !== "" || selectedDate !== null) {
+    //             if (filterDate) {
+    //                 console.log(filterDate, "enetr")
+    //                 const response = await axios.post(`${apiUrl}/getAlladddateandtripid`, {
+    //                     selectedDate: filterDate,
+    //                     vehicleNumber: vehNo
+    //                 });
+
+    //                 const result = response.data;
+    //                 console.log(result, "GPS Datatripid");
+    //                 settripdown(result)
+
+    //             }
+    //             else {
+    //                 return
+    //             }
+
+    //         } catch (err) {
+    //             console.error(err, "Error fetching GPS data");
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [filterDate, apiUrl, vehNo]);
+    
     useEffect(() => {
         const fetchData = async () => {
             //   const vehicleNo = vehicleListData?.map((li) => li.vehRegNo);
 
             // Ensure filterDate is always a valid date
-            console.log("closeddate")
+            // console.log("closeddate")
             // const selectedDate = filterDate ? filterDate : dayjs().format("YYYY-MM-DD");
 
             //   console.log(vehicleNo,"Vehicle Numbers");
 
             try {
                 // if (selectedDate !== "" || selectedDate !== null) {
+                const hybrid = localStorage.getItem("SuperAdmin")
+                // console.log(hybrid,"Hybridvalueeee");
+                
+                
                 if (filterDate) {
                     console.log(filterDate, "enetr")
-                    const response = await axios.post(`${apiUrl}/getAlladddateandtripid`, {
+                    const response = await axios.post(`${apiUrl}/getAlladddateandtripid/${hybrid}`, {
                         selectedDate: filterDate,
                         vehicleNumber: vehNo
                     });

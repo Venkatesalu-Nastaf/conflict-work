@@ -28,7 +28,7 @@ const useEmplyeecreationrole = () => {
     // const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
-      const [rolefiledsdata,setRoleFieldData] =useState(["SuperAdmin","Assistant CFO","Booking Head","Billing_Headoffice"])
+      const [rolefiledsdata,setRoleFieldData] =useState(["SuperAdmin","Assistant CFO","Booking Head","Billing_Headoffice","Hybrid_Customer"])
     const [rolefield,setRoleField]=useState('')
     const [rolefielddropdown,setRoleFielddropdown]=useState()
      const [isModalOpen, setModalOpen] = useState(false);

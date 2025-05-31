@@ -152,6 +152,7 @@ const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) 
       );
     })
     : [];
+  const hybrid = localStorage.getItem("SuperAdmin")
   return (
     <>
       <div className='vehicle-section'>
@@ -174,45 +175,30 @@ const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) 
               />
             )}
 
-            {selectedOption === 'Location' && (
-              <TextField
-                select
-                variant="outlined"
-                label="Search for Locations"
-                placeholder="Search for Locations..."
-                value={dropdownValue}
-                onChange={handleDropdownChange}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{ display: 'flex', justifyContent: 'center', margin: '10px 0px 10px 0px', height: "50px" }}
+
+          </div>
+          {hybrid === "Hybrid_Customer" ? (
+            <>
+            </>
+          ) : (
+            <div className='buttons-width'>
+              <ToggleButtonGroup
+                value={selectedOption}
+                exclusive
+                onChange={handleToggleChange}
+                aria-label="text alignment"
+                sx={{ display: 'flex', justifyContent: 'center', margin: '20px' }}
               >
-                <MenuItem value="car">Car</MenuItem>
-                <MenuItem value="bike">Bike</MenuItem>
-                <MenuItem value="truck">Truck</MenuItem>
-              </TextField>
-            )}
-          </div>
-          <div className='buttons-width'>
-            <ToggleButtonGroup
-              value={selectedOption}
-              exclusive
-              onChange={handleToggleChange}
-              aria-label="text alignment"
-              sx={{ display: 'flex', justifyContent: 'center', margin: '20px' }}
-            >
-              <ToggleButton value="Vehicle" aria-label="Vehicle" sx={{ margin: '0px', borderTopLeftRadius: "10px", borderBottomLeftRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "13px", fontWeight: "500", color: "#0078d4 !important" }}>
-                Vehicle
-              </ToggleButton>
-              <ToggleButton value="Location" aria-label="Location" sx={{ margin: '0px', borderTopRightRadius: "10px", borderBottomRightRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "13px", fontWeight: "500", color: "#0078d4 !important" }}>
-                Location
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </div>
+                <ToggleButton value="Vehicle" aria-label="Vehicle" sx={{ margin: '0px', borderTopLeftRadius: "10px", borderBottomLeftRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "13px", fontWeight: "500", color: "#0078d4 !important" }}>
+                  Vehicle
+                </ToggleButton>
+                <ToggleButton value="Location" aria-label="Location" sx={{ margin: '0px', borderTopRightRadius: "10px", borderBottomRightRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "13px", fontWeight: "500", color: "#0078d4 !important" }}>
+                  Location
+                </ToggleButton>
+
+              </ToggleButtonGroup>
+            </div>
+          )}
         </div>
         {selectedOption === 'Vehicle' && (
 
@@ -259,12 +245,17 @@ const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) 
                       </div>
                     </div>
                   </div>
-                  <div className='last-row-buttons' style={{ marginBottom: "10px" }} >
-                    <button className='bottom-buttons' onClick={handleOpenHistoryDrawer}>History</button>
-                    <button className='bottom-buttons' onClick={handleOpendetailsDrawer}>Details</button>
-                    <button className='bottom-buttons' onClick={handleClickOpenAddTag}>Add Tag</button>
-                    <button className='bottom-buttons' onClick={handleOpenhistoryLocation}>History Location</button>
-                  </div>
+
+                  {hybrid === "Hybrid_Customer" ? (
+                    <></>
+                  ) : (
+                    <div className='last-row-buttons' style={{ marginBottom: "10px" }} >
+                      <button className='bottom-buttons' onClick={handleOpenHistoryDrawer}>History</button>
+                      <button className='bottom-buttons' onClick={handleOpendetailsDrawer}>Details</button>
+                      <button className='bottom-buttons' onClick={handleClickOpenAddTag}>Add Tag</button>
+                      <button className='bottom-buttons' onClick={handleOpenhistoryLocation}>History Location</button>
+                    </div>
+                  )}
                 </>
               ))
 

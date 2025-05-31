@@ -102,12 +102,17 @@ const useTripsheet = () => {
     const [attachedImageEtrip, setAttachImageETrip] = useState('')
     // const [signaturetrigger,setSignatureTrigger]=useState(false)
     // const [conflicthcldatavalue, setConflictHCLDataValue] = useState([])
+
+    const [loading, setLoading] = useState(false)
+    const [mapLoading, setMapLoading] = useState(false);
+    const [routeLoading, setRouteLoading] = useState(false);
+
     const [conflicthcldatavalue, setConflictHCLDataValue] = useState({
         Hcldatakmvalue: 0,
         HclMaxConflctdata: 0
     });
-    const tripIdRef=useRef(null);
-    const [temporaryDeleteGmap,setTemporaryDeleteGmap] = useState(false);
+    const tripIdRef = useRef(null);
+    const [temporaryDeleteGmap, setTemporaryDeleteGmap] = useState(false);
     // book data
     const bookData = {
         tripid: '',
@@ -372,7 +377,7 @@ const useTripsheet = () => {
     const [lockdatavendorbill, setLockDatavendorBill] = useState(true)
     const [lockdatacustomerbill, setLockDatacustomerBill] = useState(true)
     const [manualMarkTrigger, setManualMarkTrigger] = useState(false)
-      const [testMarkTrigger, setTestManualMarkTrigger] = useState(false)
+    const [testMarkTrigger, setTestManualMarkTrigger] = useState(false)
     const [hybridhclcustomer, setHybridHclCustomer] = useState('')
     const [hybridhclnavigate, setHybridHclNavigate] = useState('')
     const [timetogglenavigate, setTimeToggleNaviagate] = useState('')
@@ -400,7 +405,7 @@ const useTripsheet = () => {
     const [outStationDispatchHide, setOutStationDispatchHide] = useState(false);
 
     // status check in booking
-    const [bookingTripStatus,setBookingTripStatus] = useState('');
+    const [bookingTripStatus, setBookingTripStatus] = useState('');
 
     const [routeData, setRouteData] = useState('');
     const [tripSheetData, setTripSheetData] = useState({
@@ -446,7 +451,7 @@ const useTripsheet = () => {
     const [fueldataamountdis, setFuelDataAmountDis] = useState(false)
     const [fueladvancedamounthide, setFuelAdvancedamountHide] = useState(null)
     const [deletetripasheetdata, setDeleteTripsheetData] = useState(false);
-      const [bookiddata,setbookiddata]=useState('')
+    const [bookiddata, setbookiddata] = useState('')
     // -------------------this zoom imgae in attachfile----------
     const [zoom, setZoom] = useState(1);
     const [posX, setPosX] = useState(0);
@@ -588,7 +593,7 @@ const useTripsheet = () => {
     useEffect(() => {
         const fetchData = async () => {
             const { tripid } = selectedMapRow;
-            if(!tripid){
+            if (!tripid) {
                 console.log("qaaaatripid")
                 return
             }
@@ -596,7 +601,7 @@ const useTripsheet = () => {
             try {
                 const { tripid } = selectedMapRow;
                 // console.log(tripid,"qawwewdee")
-                
+
                 const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
                 const data = response.data;
                 const sortedData = rearrangeTripData(data)
@@ -1054,7 +1059,7 @@ const useTripsheet = () => {
 
     // const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     const statusCheck = formData.status || selectedCustomerData.status || book.status;
-    const handleEditClickfocus = ()=>{
+    const handleEditClickfocus = () => {
         tripIdRef.current?.focus();
     }
     const handleCancel = () => {
@@ -1140,10 +1145,10 @@ const useTripsheet = () => {
                         guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
                         email: formValues.email || selectedCustomerData.email || book.email || formData.email,
                         // driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
-                         driverName :  selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
+                        driverName: selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
                         // vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
-                          vehRegNo:  selectedCustomerData.vehRegNo || formData.vehRegNo || selectedCustomerDatas.vehRegNo  || formValues.vehRegNo || book.vehRegNo,
-                        mobileNo:selectedCustomerData.mobileNo ||  formData.mobileNo || selectedCustomerDatas.mobileNo  || formValues.mobileNo || book.mobileNo || '',
+                        vehRegNo: selectedCustomerData.vehRegNo || formData.vehRegNo || selectedCustomerDatas.vehRegNo || formValues.vehRegNo || book.vehRegNo,
+                        mobileNo: selectedCustomerData.mobileNo || formData.mobileNo || selectedCustomerDatas.mobileNo || formValues.mobileNo || book.mobileNo || '',
                         vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
                         vehicleNameee: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
                         requestno: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
@@ -1355,11 +1360,11 @@ const useTripsheet = () => {
         return book.tripid || selectedCustomerData.tripid || formData.tripid;
     }, [book.tripid || selectedCustomerData.tripid || formData.tripid]);
     // const tri = book.tripid || selectedCustomerData.tripid || formData.tripid;
-//   const d = book.tripid || selectedCustomerData.tripid || formData.tripid;
+    //   const d = book.tripid || selectedCustomerData.tripid || formData.tripid;
     useEffect(() => {
         // Only make the API call if tripID1 is defined (not null or undefined)
         // const d = book.tripid || selectedCustomerData.tripid || formData.tripid;
-        
+
         if (tripID1) {
             // console.log(tripID1,"qaidataenterrr")
             const fetchData = async () => {
@@ -1378,7 +1383,7 @@ const useTripsheet = () => {
 
             fetchData(); // Trigger the async function to fetch data
         }
-    }, [apiUrl,enterTrigger,isEditMode]);
+    }, [apiUrl, enterTrigger, isEditMode]);
 
     const getCurrentTime = () => {
         const now = new Date();
@@ -1665,7 +1670,7 @@ const useTripsheet = () => {
                 // const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || book.tripsheetdate || dayjs();
                 // const dattasign = signimageUrl ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
-                 const dattasign = signimageUrl1 ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
+                const dattasign = signimageUrl1 ? "Closed" : book.apps || formData.apps || selectedCustomerData.apps
                 const updatedCustomer = {
                     ...book,
                     ...selectedCustomer,
@@ -1687,14 +1692,14 @@ const useTripsheet = () => {
                     // hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
                     hireTypes: selectedCustomerData.hireTypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
                     // vehRegNo: selectedCustomerDatas.vehRegNo || formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo || '',
-                    vehRegNo: selectedCustomerData.vehRegNo  || formData.vehRegNo || formValues.vehRegNo || book.vehRegNo || '',
+                    vehRegNo: selectedCustomerData.vehRegNo || formData.vehRegNo || formValues.vehRegNo || book.vehRegNo || '',
                     // driverName: selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
-                    driverName:selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
+                    driverName: selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
                     // mobileNo: selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo,
-                    mobileNo:selectedCustomerData.mobileNo || formData.mobileNo || formValues.mobileNo || book.mobileNo,
+                    mobileNo: selectedCustomerData.mobileNo || formData.mobileNo || formValues.mobileNo || book.mobileNo,
                     shedkm: shedKilometers.shedkm || book.shedkm || formData.shedkm || selectedCustomerData.shedkm,
                     // vehicleName2: selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
-                    vehicleName2:selectedCustomerData.vehicleName2 ||formData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
+                    vehicleName2: selectedCustomerData.vehicleName2 || formData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2,
                     orderbyemail: formData.orderbyemail || selectedCustomerDatas.orderbyemail || selectedCustomerData.orderbyemail || formValues.orderbyemail || book.orderbyemail,
                     totaldays: parseInt(calculateTotalDay() || 0) || 0,
                     totalkm1: calculateTotalKilometers(),
@@ -1843,11 +1848,11 @@ const useTripsheet = () => {
         }
     };
 
-  
 
-                //    console.log("qavehRegNo",selectedCustomerData.vehRegNo,formData.vehRegNo,selectedCustomerDatas.vehRegNo,formValues.vehRegNo,book.vehRegNo)
-                     
-                //        console.log("qavehicleNameee:", selectedCustomerData.vehicleName2,formValues.vehicleName2,packageData.vehicleName2, book.vehicleName2)
+
+    //    console.log("qavehRegNo",selectedCustomerData.vehRegNo,formData.vehRegNo,selectedCustomerDatas.vehRegNo,formValues.vehRegNo,book.vehRegNo)
+
+    //        console.log("qavehicleNameee:", selectedCustomerData.vehicleName2,formValues.vehicleName2,packageData.vehicleName2, book.vehicleName2)
 
 
     const handleAdd = async () => {
@@ -1856,7 +1861,7 @@ const useTripsheet = () => {
         const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
         // const driverName = selectedCustomerDatas?.driverName || selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         // const mobileNo = selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo;
-        const driverName =  selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
+        const driverName = selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
         const mobileNo = selectedCustomerDatas?.mobileNo || formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo;
         const Email = formData.email || selectedCustomerData.email || formValues.email || book.email;
         // const vehType = selectedCustomerDatas.vehType || formData.vehType || selectedCustomerData.vehType || book.vehType;
@@ -1959,11 +1964,11 @@ const useTripsheet = () => {
                 request: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
                 vehicleName: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
                 // vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
-                vehRegNo: selectedCustomerData.vehRegNo ||formData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
+                vehRegNo: selectedCustomerData.vehRegNo || formData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
                 Groups: selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups,
                 // hireTypes: selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
                 hireTypes: selectedCustomerData.hireTypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
-                mobileNo:  selectedCustomerData.mobileNo ||formData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo,
+                mobileNo: selectedCustomerData.mobileNo || formData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo,
                 // mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo,
                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
                 escort, minHour, minKM, transferreport,
@@ -2901,12 +2906,12 @@ const useTripsheet = () => {
 
                     // Calculate the difference in minutes
                     let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
-                    if(shedoutHours <= shedinHours){
-                        if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
+                    if (shedoutHours <= shedinHours) {
+                        if (shedoutHours === shedinHours && shedoutMinutes < shedinMinutes) {
                             const hours = Math.floor(minuteDifference / 60);
                             const minutes = minuteDifference % 60;
-        
-        
+
+
                             if (datatimetoggle === 0) {
                                 // console.log(`${hours}h ${minutes}m`,"datamm")
                                 const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
@@ -2916,11 +2921,11 @@ const useTripsheet = () => {
                                 return `${hours}h ${minutes}m`;
                             }
                         }
-                        else if(shedoutHours < shedinHours){
+                        else if (shedoutHours < shedinHours) {
                             const hours = Math.floor(minuteDifference / 60);
                             const minutes = minuteDifference % 60;
-        
-        
+
+
                             if (datatimetoggle === 0) {
                                 // console.log(`${hours}h ${minutes}m`,"datamm")
                                 const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
@@ -2930,34 +2935,34 @@ const useTripsheet = () => {
                                 return `${hours}h ${minutes}m`;
                             }
                         }
-                         else{
-                                return 0
-                            }
-                        }
-                        else{
+                        else {
                             return 0
                         }
-                        
+                    }
+                    else {
+                        return 0
                     }
 
-                    // if (minuteDifference < 0) {
-                    //     minuteDifference += 24 * 60;
-                    // }
+                }
+
+                // if (minuteDifference < 0) {
+                //     minuteDifference += 24 * 60;
+                // }
 
 
-                    // Convert the difference back to hours and minutes
-                    // const hours = Math.floor(minuteDifference / 60);
-                    // const minutes = minuteDifference % 60;
+                // Convert the difference back to hours and minutes
+                // const hours = Math.floor(minuteDifference / 60);
+                // const minutes = minuteDifference % 60;
 
 
-                    // if (datatimetoggle === 0) {
-                    //     // console.log(`${hours}h ${minutes}m`,"datamm")
-                    //     const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                    //     return dataminutes
-                    // }
-                    // else {
-                    //     return `${hours}h ${minutes}m`;
-                    // }
+                // if (datatimetoggle === 0) {
+                //     // console.log(`${hours}h ${minutes}m`,"datamm")
+                //     const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                //     return dataminutes
+                // }
+                // else {
+                //     return `${hours}h ${minutes}m`;
+                // }
                 // }
 
 
@@ -3155,45 +3160,45 @@ const useTripsheet = () => {
                         // if (minuteDifference < 0) {
                         //     minuteDifference += 24 * 60;
                         // }
-                        if(shedoutHours <= shedinHours){
-                            if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
+                        if (shedoutHours <= shedinHours) {
+                            if (shedoutHours === shedinHours && shedoutMinutes < shedinMinutes) {
 
-                        // Convert the difference back to hours and minutes
-                        const hours = Math.floor(minuteDifference / 60);
-                        const minutes = minuteDifference % 60;
+                                // Convert the difference back to hours and minutes
+                                const hours = Math.floor(minuteDifference / 60);
+                                const minutes = minuteDifference % 60;
 
 
-                        if (datatimetoggle === 0) {
-                            // console.log(`${hours}h ${minutes}m`,"datamm")
-                            const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                            return dataminutes
+                                if (datatimetoggle === 0) {
+                                    // console.log(`${hours}h ${minutes}m`,"datamm")
+                                    const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                    return dataminutes
+                                }
+                                else {
+                                    return `${hours}h ${minutes}m`;
+                                }
+                            }
+                            else if (shedoutHours < shedinHours) {
+                                const hours = Math.floor(minuteDifference / 60);
+                                const minutes = minuteDifference % 60;
+
+
+                                if (datatimetoggle === 0) {
+                                    // console.log(`${hours}h ${minutes}m`,"datamm")
+                                    const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                    return dataminutes
+                                }
+                                else {
+                                    return `${hours}h ${minutes}m`;
+                                }
+
+                            }
+                            else {
+                                return 0
+                            }
                         }
                         else {
-                            return `${hours}h ${minutes}m`;
+                            return 0
                         }
-                    }
-                    else if(shedoutHours < shedinHours ){
-                        const hours = Math.floor(minuteDifference / 60);
-                        const minutes = minuteDifference % 60;
-
-
-                        if (datatimetoggle === 0) {
-                            // console.log(`${hours}h ${minutes}m`,"datamm")
-                            const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                            return dataminutes
-                        }
-                        else {
-                            return `${hours}h ${minutes}m`;
-                        }
-
-                    }
-                    else{
-                        return 0
-                    }
-                }
-                else{
-                    return 0
-                }
                     }
 
 
@@ -3411,62 +3416,62 @@ const useTripsheet = () => {
 
                     // Calculate the difference in minutes
                     let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
-                    if(shedoutHours <= shedinHours){
-                        if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
+                    if (shedoutHours <= shedinHours) {
+                        if (shedoutHours === shedinHours && shedoutMinutes < shedinMinutes) {
                             const hours = Math.floor(minuteDifference / 60);
-                    const minutes = minuteDifference % 60;
+                            const minutes = minuteDifference % 60;
 
 
-                    if (datatimetoggle === 0) {
-                        // console.log(`${hours}h ${minutes}m`,"datamm")
-                        const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                        return dataminutes
-                    }
-                    else {
-                        return `${hours}h ${minutes}m`;
-                    } 
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm")
+                                const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${minutes}m`;
+                            }
                         }
-                       else if(shedoutHours < shedinHours){
-                        const hours = Math.floor(minuteDifference / 60);
-                        const minutes = minuteDifference % 60;
-    
-    
-                        if (datatimetoggle === 0) {
-                            // console.log(`${hours}h ${minutes}m`,"datamm")
-                            const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                            return dataminutes
+                        else if (shedoutHours < shedinHours) {
+                            const hours = Math.floor(minuteDifference / 60);
+                            const minutes = minuteDifference % 60;
+
+
+                            if (datatimetoggle === 0) {
+                                // console.log(`${hours}h ${minutes}m`,"datamm")
+                                const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                return dataminutes
+                            }
+                            else {
+                                return `${hours}h ${minutes}m`;
+                            }
                         }
                         else {
-                            return `${hours}h ${minutes}m`;
-                        } 
-                       }
-                       else{
-                        return 0
-                       }
+                            return 0
+                        }
                     }
-                       else{
+                    else {
                         return 0
-                       }
                     }
+                }
 
-                    // if (minuteDifference < 0) {
-                    //     minuteDifference += 24 * 60;
-                    // }
-
-
-                    // Convert the difference back to hours and minutes
-                    // const hours = Math.floor(minuteDifference / 60);
-                    // const minutes = minuteDifference % 60;
+                // if (minuteDifference < 0) {
+                //     minuteDifference += 24 * 60;
+                // }
 
 
-                    // if (datatimetoggle === 0) {
-                    //     // console.log(`${hours}h ${minutes}m`,"datamm")
-                    //     const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                    //     return dataminutes
-                    // }
-                    // else {
-                    //     return `${hours}h ${minutes}m`;
-                    // }
+                // Convert the difference back to hours and minutes
+                // const hours = Math.floor(minuteDifference / 60);
+                // const minutes = minuteDifference % 60;
+
+
+                // if (datatimetoggle === 0) {
+                //     // console.log(`${hours}h ${minutes}m`,"datamm")
+                //     const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                //     return dataminutes
+                // }
+                // else {
+                //     return `${hours}h ${minutes}m`;
+                // }
                 // }
 
 
@@ -3917,9 +3922,9 @@ const useTripsheet = () => {
                 // Calculate the difference in minutes
                 // let minuteDifference = totalShedinMinutes - totalShedoutMinutes + combinedTotal;
                 let minuteDifference = totalShedinMinutes - totalShedoutMinutes
-                if(shedoutHours <= shedinHours){
-                    if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
-                        console.log(shedinHours,shedinMinutes,)
+                if (shedoutHours <= shedinHours) {
+                    if (shedoutHours === shedinHours && shedoutMinutes < shedinMinutes) {
+                        console.log(shedinHours, shedinMinutes,)
                         const hours = Math.floor(minuteDifference / 60);
                         const minutes = minuteDifference % 60;
                         // console.log(shedinHours,shedinMinutes,hours,minutes,"hhvend")
@@ -3930,9 +3935,9 @@ const useTripsheet = () => {
                         }
                         else {
                             return `${hours}h ${minutes}m`;
+                        }
                     }
-                }
-                    else if(shedoutHours < shedinHours){
+                    else if (shedoutHours < shedinHours) {
                         const hours = Math.floor(minuteDifference / 60);
                         const minutes = minuteDifference % 60;
                         // console.log(shedinHours,shedinMinutes,hours,minutes,"hhvend2")
@@ -3943,21 +3948,21 @@ const useTripsheet = () => {
                         }
                         else {
                             return `${hours}h ${minutes}m`;
+                        }
                     }
-                    }
-                    else{
-                        return '0'
-                    }
-                    }
-                    else{
+                    else {
                         return '0'
                     }
                 }
-                // if (minuteDifference < 0) {
-                //     minuteDifference += 24 * 60;
-                // }
+                else {
+                    return '0'
+                }
+            }
+            // if (minuteDifference < 0) {
+            //     minuteDifference += 24 * 60;
+            // }
 
-                // Convert the difference back to hours and minutes
+            // Convert the difference back to hours and minutes
             //     const hours = Math.floor(minuteDifference / 60);
             //     const minutes = minuteDifference % 60;
             //     if (datatimetoggle === 0) {
@@ -3970,7 +3975,7 @@ const useTripsheet = () => {
             // }
 
 
-                // return `${hours}h ${minutes}m`;
+            // return `${hours}h ${minutes}m`;
             // }
 
 
@@ -4480,7 +4485,7 @@ const useTripsheet = () => {
             localStorage.removeItem("pointscount")
             const tripid = event.target.value;
             const loginUserName = await localStorage.getItem("username")
-             
+
 
 
             try {
@@ -4537,7 +4542,7 @@ const useTripsheet = () => {
                             setTimeToggleVendor(bookingDetails.VendorTimeToggle)
                             setEnterTrigger((prev) => !prev)
                             //  setManualMarkTrigger((prev) => !prev)
-                             setTestManualMarkTrigger((prev) => !prev)
+                            setTestManualMarkTrigger((prev) => !prev)
                             setMaplogimgPopupOpen(false)
                             setMessageEditedBeforetrip(bookingDetails?.messageedited)
                             setMessageEditedtrip(bookingDetails?.messageedited)
@@ -4562,7 +4567,7 @@ const useTripsheet = () => {
                             // setLockData(true)
                             setLockDatavendorBill(true)
                             setLockDatacustomerBill(true)
-                        
+
                             localStorage.setItem('selectedTripid', tripid);
                             // getSignatureImageverify();
                             handleTripmapverify();
@@ -4652,7 +4657,7 @@ const useTripsheet = () => {
                 const dataToSend = {
                     tripid: formData.tripid || selectedCustomerData.tripid || book.tripid,
                     // driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
-                     driverName :  selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
+                    driverName: selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName,
                     // driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
                     mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
@@ -4744,7 +4749,7 @@ const useTripsheet = () => {
     //             if (response.status === 200) {
     //                 const routeData = await response.json();
     //                 console.log(routeData,"routedataaaaaaaaaaaaaaaaaaaaaaaa");
-                    
+
     //                 setRouteData(routeData);
     //             }
     //             return;
@@ -4755,23 +4760,30 @@ const useTripsheet = () => {
     // };
 
     const invoiceRouteData = async () => {
+
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+        setRouteLoading(true)
         try {
             if (tripid !== null && tripid !== "undefined" && tripid) {
                 const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);
-    
+
                 if (response.status === 200) {
                     const routeData = await response.json();
-    
+
                     const sortedRouteData = [
                         ...routeData.filter(item => item.trip_type === 'start'),
                         ...routeData.filter(item => item.trip_type === 'waypoint'),
                         ...routeData.filter(item => item.trip_type === 'end')
                     ];
-    
+
                     // console.log(sortedRouteData, "sorted routedataaaaaaaaaaaaaaaaa");
-    
+
                     setRouteData(sortedRouteData);
+                    setRouteLoading(false);
+
+                }
+                else{
+                    setRouteLoading(false)
                 }
                 return;
             }
@@ -4779,7 +4791,7 @@ const useTripsheet = () => {
             console.log("Error", error)
         }
     };
-    
+
 
     const siganturediaglogclose = () => {
         setSignaturepopup(false)
@@ -4794,11 +4806,11 @@ const useTripsheet = () => {
         document.body.removeChild(link);
     };
 
-// console.log(formData.tripid,"ffff",selectedCustomerData.tripid,"ssss", book.tripid,"newwwwwwwwwwtripis")
+    // console.log(formData.tripid,"ffff",selectedCustomerData.tripid,"ssss", book.tripid,"newwwwwwwwwwtripis")
 
-// const tripID1sign = useMemo(() => {
-//         return book.tripid || selectedCustomerData.tripid || formData.tripid;
-//     }, [selectedCustomerData.tripid]);
+    // const tripID1sign = useMemo(() => {
+    //         return book.tripid || selectedCustomerData.tripid || formData.tripid;
+    //     }, [selectedCustomerData.tripid]);
     // const getSignatureImage = async () => {
     //     console.log("newwoooooooooooooooooooooooooolddddddd")
     //     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
@@ -4847,28 +4859,41 @@ const useTripsheet = () => {
 
     //     }
 
-        
+
     // // }, [formData, book, isEditMode, signimageUrl1, userstatuspermission])
     // },[tripID1sign])
 
-       const getSignatureImageverify = async () => {
-       
+    const getSignatureImageverify = async () => {
+
+         setLoading(true)
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         //  console.log("signver",tripid)
         checksignatureandmap()
+       
         try {
+
+            console.log(tripid, "tripidsdfghjk");
+
             if (tripid !== null && tripid && tripid !== "undefined") {
+
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
-                // console.log(response,"ddddddddddddddddddddddddd")
+                console.log(response, "ddddddddddddddddddddddddd")
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
-                    // console.log("addeddatyyyyyyyyyyyyyyyyyyyyyyy")
-                    setSignImageUrl1(imageUrl);
+                    console.log("addeddatyyyyyyyyyyyyyyyyyyyyyyy")
+                        setSignImageUrl1(imageUrl);
+
+                        setLoading(false)
+                  
+                    // setSignImageUrl1(imageUrl);
 
                     // setSuccess(true)
                     // setSuccessMessage('Signature Added Sucessfully')
-
                 }
+                else{
+                    setLoading(false)
+                }
+
             }
         } catch (err) {
             console.log(err, 'newerror');
@@ -4876,9 +4901,8 @@ const useTripsheet = () => {
             setWarningMessage("Failed to fetch signature image. Please try again.");
 
         }
-
-        
-    // }, [formData, book, isEditMode, signimageUrl1, userstatuspermission])
+        //  setLoading(false)
+        // }, [formData, book, isEditMode, signimageUrl1, userstatuspermission])
     }
 
 
@@ -4949,6 +4973,7 @@ const useTripsheet = () => {
 
     const getMapImaage = async () => {
         // console.log("testgmapurldata")
+        setMapLoading(true);
         try {
             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
             // console.log(tripid,"gmapdata")
@@ -4960,6 +4985,10 @@ const useTripsheet = () => {
                     const imageUrl = URL.createObjectURL(responseData);
                     // console.log(imageUrl,"gmapdataurl")
                     setGMapImageUrl(imageUrl);
+                    setMapLoading(false);
+                }
+                else{
+                    setMapLoading(false)
                 }
             }
             return '';
@@ -4967,7 +4996,7 @@ const useTripsheet = () => {
             console.log("Error", error)
         }
     };
-// console.log(GmapimageUrl,mapimageUrls,"hellourls")
+    // console.log(GmapimageUrl,mapimageUrls,"hellourls")
 
 
 
@@ -4988,6 +5017,7 @@ const useTripsheet = () => {
     //     }
     // };
     const getAttachedImageforEtripsheet = async () => {
+     
         try {
             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
 
@@ -5002,6 +5032,7 @@ const useTripsheet = () => {
         } catch (error) {
             console.log("Error", error)
         }
+      
     };
 
     // ----------------------------------------
@@ -6916,8 +6947,8 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    // }, [manualMarkTrigger, formData.tripid, selectedCustomerData.tripid, book.tripid, mapButtonTrigger, mapimgpopupOpen]);
-     }, [apiUrl,enterTrigger,manualMarkTrigger,isEditMode,mapimgpopupOpen,mapButtonTrigger]);
+        // }, [manualMarkTrigger, formData.tripid, selectedCustomerData.tripid, book.tripid, mapButtonTrigger, mapimgpopupOpen]);
+    }, [apiUrl, enterTrigger, manualMarkTrigger, isEditMode, mapimgpopupOpen, mapButtonTrigger]);
 
     const handleDeleteMap = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
@@ -6993,12 +7024,12 @@ const useTripsheet = () => {
 
                     // Calculate the difference in minutes
                     let minuteDifference = totalShedinMinutes - totalShedoutMinutes
-                    if(shedoutHours <= shedinHours){
-                        if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
+                    if (shedoutHours <= shedinHours) {
+                        if (shedoutHours === shedinHours && shedoutMinutes < shedinMinutes) {
                             const hours = Math.floor(minuteDifference / 60);
                             const minutes = minuteDifference % 60;
-        
-        
+
+
                             if (datatimetoggle === 0) {
                                 // console.log(`${hours}h ${minutes}m`,"datamm")
                                 const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
@@ -7008,11 +7039,11 @@ const useTripsheet = () => {
                                 return `${hours}h ${minutes}m`;
                             }
                         }
-                        else if(shedoutHours < shedinHours){
+                        else if (shedoutHours < shedinHours) {
                             const hours = Math.floor(minuteDifference / 60);
                             const minutes = minuteDifference % 60;
-        
-        
+
+
                             if (datatimetoggle === 0) {
                                 // console.log(`${hours}h ${minutes}m`,"datamm")
                                 const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
@@ -7020,13 +7051,13 @@ const useTripsheet = () => {
                             }
                             else {
                                 return `${hours}h ${minutes}m`;
-                            }  
+                            }
                         }
-                        else{
-                      return 0
+                        else {
+                            return 0
                         }
                     }
-                    else{
+                    else {
                         return 0
                     }
 
@@ -7239,50 +7270,50 @@ const useTripsheet = () => {
 
                         // Calculate the difference in minutes
                         let minuteDifference = totalShedinMinutes - totalShedoutMinutes
-                        if(shedoutHours <= shedinHours){
-                            if(shedoutHours === shedinHours && shedoutMinutes < shedinMinutes){
+                        if (shedoutHours <= shedinHours) {
+                            if (shedoutHours === shedinHours && shedoutMinutes < shedinMinutes) {
 
-                        // if (minuteDifference < 0) {
-                        //     minuteDifference += 24 * 60;
-                        // }
-
-
-                        // Convert the difference back to hours and minutes
-                        const hours = Math.floor(minuteDifference / 60);
-                        const minutes = minuteDifference % 60;
+                                // if (minuteDifference < 0) {
+                                //     minuteDifference += 24 * 60;
+                                // }
 
 
-                        if (datatimetoggle === 0) {
-                            // console.log(`${hours}h ${minutes}m`,"datamm")
-                            const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                            return dataminutes
+                                // Convert the difference back to hours and minutes
+                                const hours = Math.floor(minuteDifference / 60);
+                                const minutes = minuteDifference % 60;
+
+
+                                if (datatimetoggle === 0) {
+                                    // console.log(`${hours}h ${minutes}m`,"datamm")
+                                    const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                    return dataminutes
+                                }
+                                else {
+                                    return `${hours}h ${minutes}m`;
+                                }
+                            }
+                            else if (shedoutHours < shedinHours) {
+                                const hours = Math.floor(minuteDifference / 60);
+                                const minutes = minuteDifference % 60;
+
+
+                                if (datatimetoggle === 0) {
+                                    // console.log(`${hours}h ${minutes}m`,"datamm")
+                                    const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
+                                    return dataminutes
+                                }
+                                else {
+                                    return `${hours}h ${minutes}m`;
+                                }
+                            }
+                            else {
+                                return 0
+                            }
                         }
                         else {
-                            return `${hours}h ${minutes}m`;
+                            return 0
                         }
                     }
-                    else if(shedoutHours < shedinHours){
-                        const hours = Math.floor(minuteDifference / 60);
-                        const minutes = minuteDifference % 60;
-
-
-                        if (datatimetoggle === 0) {
-                            // console.log(`${hours}h ${minutes}m`,"datamm")
-                            const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
-                            return dataminutes
-                        }
-                        else {
-                            return `${hours}h ${minutes}m`;
-                        } 
-                    }
-                    else{
-                      return 0
-                    }
-                }
-                else{
-                    return 0
-                }
-            }
 
 
                     if (calculateTotalDay() === 2) {
@@ -7471,12 +7502,12 @@ const useTripsheet = () => {
 
                     // Calculate the difference in minutes
                     let minuteDifference = totalShedinMinutes - totalShedoutMinutes
-                    if(shedoutHours <= shedinHours){
-                        if(shedoutHours ===  shedinHours && shedoutMinutes < shedinMinutes){
+                    if (shedoutHours <= shedinHours) {
+                        if (shedoutHours === shedinHours && shedoutMinutes < shedinMinutes) {
                             const hours = Math.floor(minuteDifference / 60);
                             const minutes = minuteDifference % 60;
-        
-        
+
+
                             if (datatimetoggle === 0) {
                                 // console.log(`${hours}h ${minutes}m`,"datamm")
                                 const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
@@ -7486,11 +7517,11 @@ const useTripsheet = () => {
                                 return `${hours}h ${minutes}m`;
                             }
                         }
-                        else if(shedoutHours <  shedinHours ){
+                        else if (shedoutHours < shedinHours) {
                             const hours = Math.floor(minuteDifference / 60);
                             const minutes = minuteDifference % 60;
-        
-        
+
+
                             if (datatimetoggle === 0) {
                                 // console.log(`${hours}h ${minutes}m`,"datamm")
                                 const dataminutes = minutes >= 30 ? `${hours + 1}h ` : `${hours}h `;
@@ -7500,11 +7531,11 @@ const useTripsheet = () => {
                                 return `${hours}h ${minutes}m`;
                             }
                         }
-                        else{
+                        else {
                             return 0
                         }
                     }
-                    else{
+                    else {
                         return 0
                     }
 
@@ -7833,7 +7864,7 @@ const useTripsheet = () => {
                 const station = data?.map(li => li.stationname.split(",")).flat();
                 setUserStatus(station);
 
-                
+
                 // console.log(station, "eduqqqqqqqqqqqqqqqdisuseraww")
                 setUserStatusPermission(station)
                 EditButtonHide(station)
@@ -7998,37 +8029,37 @@ const useTripsheet = () => {
     }, [testMarkTrigger]);
     //   }, [manualMarkTrigger]);
     // console.log(userstatuspermission,"qquserprrrrrehxjxjxkjxkekwskwslwkslwsl")
-    
+
 
     // Edit Button Hide
 
     const statuschecking = selectedStatus;
     // console.log(statuschecking,'status checking',selectedCustomerData.status,book.status,selectedStatus);
     const EditButtonHide = async (station) => {
-            // console.log("checkneweduchecktwwvenkatcodeediitittt",statuschecking)
-            
+        // console.log("checkneweduchecktwwvenkatcodeediitittt",statuschecking)
+
         // try {
         //     const response = await axios.post(`${apiUrl}/getParticularUserDetails`, {
         //         username: loginusername,
         //     });
-            // const data = response.data;
-            // const station = data?.map(li => li.stationname.split(",")).flat();
+        // const data = response.data;
+        // const station = data?.map(li => li.stationname.split(",")).flat();
 
-            if (statuschecking === "Closed" && ((station.includes('Chennai') || station.includes('All')))) {
-                SetEditButtonStatusCheck(true)
-            }
-            else if (statuschecking === "Temporary Closed" && ((station.includes('Chennai') || station.includes('All')))) {
-                SetEditButtonStatusCheck(false)
-            }
-            else if (statuschecking === "Temporary Closed" && ((!station.includes('Chennai') || !station.includes('All'))) && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO")) {
-                SetEditButtonStatusCheck(false)
-            }
-            else if (statuschecking === "Temporary Closed" || statuschecking === "Closed" || statuschecking === "Billed") {
-                SetEditButtonStatusCheck(true)
-            }
-            else if (statuschecking === "Opened") {
-                SetEditButtonStatusCheck(false)
-            }
+        if (statuschecking === "Closed" && ((station.includes('Chennai') || station.includes('All')))) {
+            SetEditButtonStatusCheck(true)
+        }
+        else if (statuschecking === "Temporary Closed" && ((station.includes('Chennai') || station.includes('All')))) {
+            SetEditButtonStatusCheck(false)
+        }
+        else if (statuschecking === "Temporary Closed" && ((!station.includes('Chennai') || !station.includes('All'))) && (superAdminAccess === "Billing_Headoffice" || superAdminAccess === "Assistant CFO")) {
+            SetEditButtonStatusCheck(false)
+        }
+        else if (statuschecking === "Temporary Closed" || statuschecking === "Closed" || statuschecking === "Billed") {
+            SetEditButtonStatusCheck(true)
+        }
+        else if (statuschecking === "Opened") {
+            SetEditButtonStatusCheck(false)
+        }
         // }
         // catch (err) {
         //     console.log(err, "error");
@@ -8036,13 +8067,13 @@ const useTripsheet = () => {
         // }
     }
     // useEffect(() => {
-        
+
     //     EditButtonHide()
     //  }, [apiUrl])
     // }, [statuschecking])
-//  useEffect(() => {
-//         EditButtonHide()
-//     }, [selectedStatus])
+    //  useEffect(() => {
+    //         EditButtonHide()
+    //     }, [selectedStatus])
 
     // useEffect(() => {
     //     const fetchDatastatus = async () => {
@@ -8288,7 +8319,7 @@ const useTripsheet = () => {
             return
         }
     }
-   
+
 
     //    const advancefuel = vendorinfo.fuelamount
 
@@ -8454,7 +8485,7 @@ const useTripsheet = () => {
     //     }
     //     fetchData()
     // }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues])
-    
+
     useEffect(() => {
         const vehicleNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || "";
         const dateCheck = formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate || "";
@@ -8511,7 +8542,7 @@ const useTripsheet = () => {
         };
 
         fetchData();
-         }, [apiUrl,book?.shedOutDate,selectedCustomerData.shedOutDate,selectedCustomerData.vehRegNo]);
+    }, [apiUrl, book?.shedOutDate, selectedCustomerData.shedOutDate, selectedCustomerData.vehRegNo]);
     // }, [apiUrl, formData, selectedCustomerData, selectedCustomerDatas, book, formValues]);
 
     const handleMessagetrip = () => {
@@ -8544,10 +8575,10 @@ const useTripsheet = () => {
 
         initialize();
     }, [isAddload, status1, userstatuspermission]);
-      useEffect(() => {
+    useEffect(() => {
         // console.log("signveruseeffect")
         getSignatureImageverify();
-    }, [apiUrl,isEditMode,manualMarkTrigger]);
+    }, [apiUrl, isEditMode, manualMarkTrigger]);
 
     //   getting lat and long from vehcileAccessLocation tables  (gpsdevicedata.js file)
     const gpsTripId = formData.tripid || selectedCustomerData.tripid || book.tripid;
@@ -8556,9 +8587,9 @@ const useTripsheet = () => {
     useEffect(() => {
         const fetchData = async () => {
             // console.log(gpsTripId,"gpsTripIdddd2222222222");
-             const gpsTripId1 = formData.tripid || selectedCustomerData.tripid || book.tripid || tripID1;
+            const gpsTripId1 = formData.tripid || selectedCustomerData.tripid || book.tripid || tripID1;
             // console.log(gpsTripId,"qa1gaagetlatlongg",gpsTripId1)
-            if(!gpsTripId1){
+            if (!gpsTripId1) {
                 // console.log("qa1gpsenetrgetlatlong")
                 return
             }
@@ -8580,17 +8611,17 @@ const useTripsheet = () => {
         //     fetchData();
         // }
         // if (gpsTripId) {
-            fetchData();
+        fetchData();
         // }
         // }, [apiUrl, enterTrigger]);
-    }, [apiUrl, enterTrigger,isEditMode]);
+    }, [apiUrl, enterTrigger, isEditMode]);
 
     useEffect(() => {
         const fetchData = async () => {
             // console.log(gpsTripId,"gpsTripIdddd33333333333333");
-             const gpsTripId2 = formData.tripid || selectedCustomerData.tripid || book.tripid || tripID1;
+            const gpsTripId2 = formData.tripid || selectedCustomerData.tripid || book.tripid || tripID1;
             // console.log("qa2gaagetlatlongg",gpsTripId2)
-            if(!gpsTripId2){
+            if (!gpsTripId2) {
                 // console.log("qa2errorgpsenetrgetlatlong")
                 return
             }
@@ -8608,17 +8639,17 @@ const useTripsheet = () => {
         };
 
         // if (gpsTripId) {
-            fetchData();
+        fetchData();
         // }
-    // }, [apiUrl, gpsTripId]);
-    }, [apiUrl, enterTrigger,isEditMode]);
+        // }, [apiUrl, gpsTripId]);
+    }, [apiUrl, enterTrigger, isEditMode]);
     // allLatLongDetailsByTripId
     useEffect(() => {
         const fetchData = async () => {
 
-               const gpsTripId3 = formData.tripid || selectedCustomerData.tripid || book.tripid || tripID1;
+            const gpsTripId3 = formData.tripid || selectedCustomerData.tripid || book.tripid || tripID1;
             // console.log("qa3gaagetlatlongg",gpsTripId3)
-            if(!gpsTripId3){
+            if (!gpsTripId3) {
                 // console.log("qa3errorgpsenetrgetlatlong")
                 return
             }
@@ -8636,10 +8667,10 @@ const useTripsheet = () => {
         };
 
         // if (gpsTripId) {
-            fetchData();
+        fetchData();
         // }
-    // }, [apiUrl, gpsTripId, enterTrigger]);
-     }, [apiUrl,enterTrigger,isEditMode]);
+        // }, [apiUrl, gpsTripId, enterTrigger]);
+    }, [apiUrl, enterTrigger, isEditMode]);
 
 
     const handleExcelDownloadtrip = async (rowdataar) => {
@@ -9011,19 +9042,19 @@ const useTripsheet = () => {
         } catch {
         }
     };
- 
-  
-      useEffect(() => {
+
+
+    useEffect(() => {
         handleRefresh()
-      }, [apiUrl,enterTrigger,isEditMode,location]);
- 
+    }, [apiUrl, enterTrigger, isEditMode, location]);
+
     useEffect(() => {
         const fetchData = async () => {
             const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid || tripID1;
             // console.log(tripid, "qa33tripiddddddddddddddddppppppppppppp",book.tripid,selectedCustomerData.tripid,formData.tripid,tripID1,messageditedbeforetrip,"booooo",bookiddata);
-            if(!tripid){
+            if (!tripid) {
                 //   console.log(tripid, "qa33notvalidtripid");
-                return 
+                return
             }
             try {
                 if (tripid !== undefined && tripid !== null && tripid !== "") {
@@ -9043,34 +9074,34 @@ const useTripsheet = () => {
             }
         }
         fetchData();
-    // }, [book.tripid, location]);
-    //  }, [book.tripid, location]);
-       }, [apiUrl,enterTrigger,isEditMode,location,bookiddata]);
-// /DeleteTemporarygmapdata'
+        // }, [book.tripid, location]);
+        //  }, [book.tripid, location]);
+    }, [apiUrl, enterTrigger, isEditMode, location, bookiddata]);
+    // /DeleteTemporarygmapdata'
 
-const handleTemporaryDeleteMapDataClose = ()=>{
-   setTemporaryDeleteGmap(false)
-}
-const handleTemporaryDeleteMapDataOpen = ()=>{
-    setTemporaryDeleteGmap(true)
-}
-const handleTemporaryDelete = async () => {
-    const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
-    try {
-      const response = await axios.delete(`${apiUrl}/DeleteTemporarygmapdata`, {
-        data: { tripid }
-      });
-      handleTemporaryDeleteMap()
-      console.log(response.data);  // optionally log the success message
-      setTemporaryDeleteGmap(false)
-      setMaplogimgPopupOpen(false)
-      setSuccess(true)
-      setSuccessMessage("Successfully Deleted")
-    } catch (err) {
-      console.log(err, "error-temporary");
+    const handleTemporaryDeleteMapDataClose = () => {
+        setTemporaryDeleteGmap(false)
     }
-  };
-  
+    const handleTemporaryDeleteMapDataOpen = () => {
+        setTemporaryDeleteGmap(true)
+    }
+    const handleTemporaryDelete = async () => {
+        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+        try {
+            const response = await axios.delete(`${apiUrl}/DeleteTemporarygmapdata`, {
+                data: { tripid }
+            });
+            handleTemporaryDeleteMap()
+            console.log(response.data);  // optionally log the success message
+            setTemporaryDeleteGmap(false)
+            setMaplogimgPopupOpen(false)
+            setSuccess(true)
+            setSuccessMessage("Successfully Deleted")
+        } catch (err) {
+            console.log(err, "error-temporary");
+        }
+    };
+
 
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount,
@@ -9189,7 +9220,7 @@ const handleTemporaryDelete = async () => {
         setNightBeta, setNightCount, calcCheck, handleTransferChange, transferreport, handleKeyEnterDriverDetails, maplogcolumns, setError,
         setErrorMessage,
         // getSignatureImage,
-        handleimagedelete, signaturepopup, siganturediaglogclose, handlesignaturemageDownload, signatureupload, setSignatureupload, setSignaturepopup, handleFileChangesignature,getSignatureImageverify, handlesignaturemageDelete, setSign, setLink,
+        handleimagedelete, signaturepopup, siganturediaglogclose, handlesignaturemageDownload, signatureupload, setSignatureupload, setSignaturepopup, handleFileChangesignature, getSignatureImageverify, handlesignaturemageDelete, setSign, setLink,
         handleVendorcalc, calculatevendorTotalDays, vendorinfo, setVendorinfodata, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
         // calcvendordata,
         vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
@@ -9200,7 +9231,7 @@ const handleTemporaryDelete = async () => {
         nightTotalCount, setNightTotalCount,
         nightTotalAmount, setNightTotalAmount,
         maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount,
-        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl,signimageUrl1, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
+        signaturelinkcopy, columnssignature, rowsignature, setWarning, setWarningMessage, setSignImageUrl, signimageUrl1, signaturelinkwhatsapp, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill, handleRefreshsign,
         handleEditMap,
         handleDeleteMap, copydatalink, setCopyDataLink,
         // conflictenddate, 
@@ -9209,15 +9240,20 @@ const handleTemporaryDelete = async () => {
         isAddload, setisAddload, isEditload, setisEditload, handleChangetexttrip, handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip, messageditedtrip, messageditedbeforetrip,
         hideField, temporaryStatus, emptyState, editButtonStatusCheck,
         //  conflictCompareDatas, 
-         userStatus,
+        userStatus,
         //   conflictMinimumTimeDatas,
-        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict,Permissiondeleteroles, fueldataamountdis, setFuelAdvancedamountHide,
+        minTimeData, maxTimeData, shedInTimeData, conflictLoad, setConflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, Permissiondeleteroles, fueldataamountdis, setFuelAdvancedamountHide,
         outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, handleAutocompleteChangecustomer, orderByDropDown, speeddailacesss, speeddailacesssedit,
         tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
         // this zoom image code state-----------------
-        posX, posY, zoom, handleZoomIn, handleZoomOut, startDrag, stopDrag, handleScrollZoom, isDragging, onDrag, handleFullDeleteMapData,tripIdRef,
-        mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl,bookingTripStatus,handleTemporaryDelete,temporaryDeleteGmap,setTemporaryDeleteGmap,handleTemporaryDeleteMapDataClose,handleTemporaryDeleteMapDataOpen
+        posX, posY, zoom, handleZoomIn, handleZoomOut, startDrag, stopDrag, handleScrollZoom, isDragging, onDrag, handleFullDeleteMapData, tripIdRef,
+        mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl, bookingTripStatus, handleTemporaryDelete, temporaryDeleteGmap, setTemporaryDeleteGmap, handleTemporaryDeleteMapDataClose, handleTemporaryDeleteMapDataOpen,
+
+
         // this zoom image code state-----------------
+
+        loading, setLoading,mapLoading,setMapLoading,routeLoading,setRouteLoading
+
 
     };
 };

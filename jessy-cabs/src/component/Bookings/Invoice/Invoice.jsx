@@ -5,9 +5,9 @@ import generatePDF from 'react-to-pdf';
 import dayjs from 'dayjs';
 import { Document, Page } from 'react-pdf';
 import { GoDotFill } from "react-icons/go";
+import useTripsheet from '../TripSheet/useTripsheet';
 
-const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, Totaltimes, totalkm, TotalDays }) => {
-
+const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, Totaltimes, totalkm, TotalDays, loading, mapLoading, routeLoading }) => {
 
   const startkm = tripSheetData.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin || book.shedin
   const endkm = tripSheetData.shedout || selectedCustomerData.shedout || selectedCustomerDatas.shedout || book.shedout
@@ -179,21 +179,25 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                   <p id='line'>------------------</p>
                 </div>
                 <div className="guest-sign">
-                  {signimageUrl !== "" ?
-                    <div>
-                      <img className='dialogboximg' src={signimageUrl} alt=" " />
-                      <p className='guest-sign-text' >Guest Signature</p>
-
-                    </div>
-                    :
-                    <div>
-                      <div className='dialogboximg' ></div>
-                      <p className='guest-sign-text' >Guest Signature</p>
-
-                    </div>
-
-                  }
+                  {loading ? (
+                    <>
+                      <div className='loading-spin-signature'></div>
+                      <p className='guest-sign-text'>Guest Signature</p></>
+                  ) : (
+                    signimageUrl !== "" ? (
+                      <div>
+                        <img className='dialogboximg' src={signimageUrl} alt="Guest Signature" />
+                        <p className='guest-sign-text'>Guest Signature</p>
+                      </div>
+                    ) : (
+                      <div>
+                        <div className='dialogboximg'></div>
+                        <p className='guest-sign-text'>Guest Signature</p>
+                      </div>
+                    )
+                  )}
                 </div>
+
               </div>
             </div>
           </div>
@@ -209,8 +213,10 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             <div className='tripsheet-location-img'>
 
               {/* <img src={GmapimageUrl} alt='mapimage' /> */}
-              {GmapimageUrl !== "" ?
-                <img src={GmapimageUrl} alt='mapimage' style={{ width: "100%", height: "100%" }} /> : <></>}
+              {mapLoading ?
+                (<div className='loading-spin'></div>) :
+                (GmapimageUrl !== "" ?
+                  <img src={GmapimageUrl} alt='mapimage' style={{ width: "100%", height: "100%" }} /> : <></>)}
             </div>
             {/* <div className="tripsheet-RouteSummary">
             <h2>Route Summary</h2>
@@ -221,19 +227,24 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             </ol>
           </div> */}
             <div className="tripsheet-RouteSummary-normal">
-              {routeData.length > 0 && (
-                <div >
-                  <h2 style={{ margin: "0px", textAlign: "center", fontSize: "17px", fontWeight: '600' }}>Route Summary</h2>
 
-                  {routeData.map((data, index) => (
-                    <li key={index} className='li-route-summary'>
-                      {/* <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p> */}
-                      <p style={{ margin: '0px' }}><span style={{ marginRight: '5px' }}><GoDotFill /></span> <strong>{data.trip_type}</strong>: {data.place_name}</p>
-                    </li>
-                  ))}
+              {routeLoading ?
 
-                </div>
-              )}
+                (<div className='loading-spin-route'></div>) :
+
+                (routeData.length > 0 && (
+                  <div >
+                    <h2 style={{ margin: "0px", textAlign: "center", fontSize: "17px", fontWeight: '600' }}>Route Summary</h2>
+
+                    {routeData.map((data, index) => (
+                      <li key={index} className='li-routesummary'>
+                        {/* <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p> */}
+                        <p style={{ margin: '0px' }}><span style={{ marginRight: '5px' }}><GoDotFill /></span> <strong>{data.trip_type}</strong>: {data.place_name}</p>
+                      </li>
+                    ))}
+                  </div>
+                ))
+              }
             </div>
 
           </div>
@@ -334,7 +345,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                               }}
                             /> */}
                             {/* <img src={`${file}?t=${new Date().getTime()}`} alt={`image_${index}`} className='image-non-hcl' /> */}
-                             <img src={`${file}`} alt={`image_${index}`} className='image-non-hcl' />
+                            <img src={`${file}`} alt={`image_${index}`} className='image-non-hcl' />
 
                           </div>
 

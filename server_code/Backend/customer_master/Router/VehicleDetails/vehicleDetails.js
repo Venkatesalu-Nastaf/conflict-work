@@ -4,21 +4,123 @@ const db = require('../../../db');
 const multer = require('multer');
 const path = require('path');
 
+
 router.get('/getAllVehicleDetailsList', (req, res) => {
   const vehicleQuery = "SELECT * FROM vehicleinfo";
 
   db.query(vehicleQuery, (error, result) => {
     if (error) {
-      console.error("Error fetching vehicle details:", error);
+      console.log("mooError fetching vehicle details:", error);
       return res.status(500).json({
         error: "Failed to fetch vehicle details",
         details: error.message
       });
     }
+    // console.log(result, "result vehicles all");
 
     return res.status(200).json(result);
+
   });
 });
+
+router.get('/getVehicle-Hcl-Customers/:todayDate/:hybrid', (req, res) => {
+
+  const todayDate = req.params.todayDate;
+  const hybrid = req.params.hybrid;
+
+  console.log(todayDate, "date hcl");
+  console.log(hybrid, "hybrid checking");
+
+
+  const vehicleQuery = "SELECT * FROM vehicleinfo";
+
+
+  const tripQuery = ` SELECT DISTINCT TS.vehRegNo, TS.driverName, TS.vehicleName
+                     FROM tripsheet TS
+                     WHERE TS.tripid IN(
+                     SELECT TS.tripid
+                    FROM tripsheet TS
+                    LEFT JOIN VehicleAccessLocation VA ON TS.tripid = VA.Trip_id
+                    WHERE VA.Runing_Date = ? AND TS.Hybriddata = 1
+                    GROUP BY VA.Vehicle_No, VA.Trip_id
+                    )`;
+
+
+  if (hybrid === "Hybrid_Customer") {
+    db.query(tripQuery, [todayDate], (err, tripResult) => {
+
+      if (err) {
+        // console.log(err, "moott")
+        return res.status(500).json(err)
+      }
+      if(tripResult.length > 0){
+
+      
+      const uniqueResult = [];
+
+      const seenVehRegNo = [];
+
+      tripResult.forEach(item => {
+
+        if (!seenVehRegNo.includes(item.vehRegNo)) {
+          seenVehRegNo.push(item.vehRegNo);
+          uniqueResult.push(item);
+        }
+      });
+      // console.log(uniqueResult, "result of this uniqueResult");
+      return res.status(200).json(uniqueResult);
+    }
+    else{
+      // console.log(tripResult ,"tripresult");
+      
+        return res.status(200).json(tripResult);
+    }
+
+    });
+  } else {
+
+    db.query(vehicleQuery, (err, vehicleResult) => {
+
+      if (err) {
+        // console.log(err, "moottbb")
+        return res.status(500).json(err)
+      }
+
+      // console.log(vehicleResult, "vehicle resultttt");
+
+      return res.status(200).json(vehicleResult)
+    })
+
+  }
+
+});
+// router.get('/gethybridvalue', (req, res) => {
+
+//   // const today = new Date().toISOString().split('T')[0];
+//   const fixdate = "2025-03-18"
+
+//   // const selectQuery = `SELECT Vehicle_No, Trip_id from VehicleAccessLocation WHERE Runing_Date=?`;
+
+//   const selectQuery = `
+//   SELECT TS.tripid
+//   FROM tripsheet TS
+//   INNER JOIN VehicleAccessLocation VA ON TS.tripid = VA.Trip_id
+//   WHERE VA.Runing_Date = ? and TS.Hybriddata = 1
+//   GROUP BY VA.Trip_id`
+//     ;
+
+//   db.query(selectQuery, [fixdate], (err, result) => {
+//     if (err) {
+//       console.log(err, "errr");
+
+//       return res.status(500).json({ error: "Database" })
+//     }
+//     console.log(result, "resulttttt");
+
+//     return res.status(200).json(result);
+//   });
+
+// });
 
 router.get('/getVehicleParticularInfo', (req, res) => {
   const { vehicleSearchDetails } = req.query; // Use req.query for GET requests
@@ -73,7 +175,7 @@ router.post('/deleteVehicleNamesList', (req, res) => {
       return res.status(500).json({ error: "Database query failed" });
     }
     // console.log(result, "checking deleted result");
-    
+
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "No record found to delete" });
     }

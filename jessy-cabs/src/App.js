@@ -72,6 +72,7 @@ import { VendorReports } from "./component/Billings/VendorReports/VendorReports"
 import { PaymentVendor } from "./component/payment/Vendor/PaymentVendor"
 import { PaymentCustomer } from "./component/payment/Customer/PaymentCustomer";
 import Payment from "./component/payment/Payment";
+import dayjs from "dayjs";
 
 function App() {
   const apiUrl = APIURL;
@@ -569,29 +570,78 @@ function App() {
   const [todayVehicle, setTodayVehicle] = useState(null);
   const menuItem = localStorage.getItem('activeMenuItem');
   const menuselect = localStorage.getItem("menuitemselected");
+  
+
+  // const hybrid = localStorage.getItem("SuperAdmin");
+  //  useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/getAllVehicleDetailsList`);
+  //       console.log(menuItem, "API Response:", response.data);
+
+  //       if (Array.isArray(response.data)) {
+  //         setAllVehcileData(response.data); // Ensure it's an array before setting state
+  //       } else {
+  //         console.warn("Unexpected API response:", response.data);
+  //         setAllVehcileData([]); // Fallback to empty array
+  //       }
+  //     } catch (err) {
+  //       console.log(err, "error");
+  //       setAllVehcileData([]); // Reset state on error
+  //     }
+
+  //   };
+
+  //   fetchData();
+  // }, [apiUrl]);
+const hybrid = localStorage.getItem("SuperAdmin");
 
   useEffect(() => {
+    // let interval;
     const fetchData = async () => {
+// const hybrid = localStorage.getItem("SuperAdmin");
+      
+      // console.log(hybrid,"checking the hybrid values no enter");
+        // console.log("checknoenter",menuItem)
+        
       try {
-        const response = await axios.get(`${apiUrl}/getAllVehicleDetailsList`);
-        console.log(menuItem, "API Response:", response.data);
+        if (hybrid !== null) {
+          // console.log("checkkenetrhydridqueyyyyy",menuItem)
 
-        if (Array.isArray(response.data)) {
-          setAllVehcileData(response.data); // Ensure it's an array before setting state
-        } else {
-          console.warn("Unexpected API response:", response.data);
-          setAllVehcileData([]); // Fallback to empty array
+          const todayDate = dayjs(new Date()).format('YYYY-MM-DD')
+          // const response = await axios.get(`${apiUrl}/getAllVehicleDetailsList`);
+          const response = await axios.get(`${apiUrl}/getVehicle-Hcl-Customers/${todayDate}/${hybrid}`,)
+
+          // setAllVehcileData(response.data); // Ensure it's an array before setting state
+          // console.log(response.data,"checkvalues for hybrid checking");
+          if (Array.isArray(response.data)) {
+            setAllVehcileData(response.data); // Ensure it's an array before setting state
+          } else {
+            console.warn("Unexpected API response:", response.data);
+            setAllVehcileData([]); // Fallback to empty array
+          }
         }
+
       } catch (err) {
         console.log(err, "error");
         setAllVehcileData([]); // Reset state on error
       }
 
     };
+    
+    if ((menuselect === "Map page")){
+      console.log(hybrid,"checkhybrid data enter");
+      
+      fetchData(); 
+    }
+//  if (hybrid){
+      
+//       fetchData(); 
+//     }
 
-    fetchData();
-  }, [apiUrl]);
+  }, [apiUrl,menuselect,hybrid]);
 
+  
   //  get allVehicleCurrentLocation
   useEffect(() => {
     const fetchData = async () => {
@@ -611,20 +661,53 @@ function App() {
   }, [apiUrl, menuItem])
 
   // getTodayVehiclePoints
+
+
+  //  useEffect(() => {
+  //   let interval;
+
+  //   const fetchData = async () => {
+  //     try {
+  //       // console.log(menuItem,"gps00",menuselect)
+  //       if (menuItem === "RealTime" || menuselect === "Map page") {
+  //         // console.log(menuItem,menuselect,"gps00enter")
+  //         const response = await axios.post(`${apiUrl}/getTodayVehiclePoints`);
+  //         // console.log(response.data, "todayalllllvehicleeeee");
+  //         setTodayVehicle(response.data);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching vehicle data:", err);
+  //     }
+  //   };
+  //   if (menuItem === "RealTime" || menuselect === "Map page") {
+  //     fetchData();
+  //     interval = setInterval(fetchData, 5000);
+  //   }
+  //   // fetchData();
+
+  //   // interval = setInterval(fetchData, 5000);
+
+  //   return () => clearInterval(interval);
+  // }, [apiUrl, menuItem, menuselect]);
+
   useEffect(() => {
     let interval;
 
     const fetchData = async () => {
       try {
         // console.log(menuItem,"gps00",menuselect)
-        if (menuItem === "RealTime" || menuselect === "Map page") {
+        const hybrid = localStorage.getItem("SuperAdmin");
+        // console.log(hybrid,"SuperAdminnnn");
+        
+        if (menuItem === "RealTime" || menuselect === "Map page" ) {
           // console.log(menuItem,menuselect,"gps00enter")
-          const response = await axios.post(`${apiUrl}/getTodayVehiclePoints`);
-          // console.log(response.data, "todayalllllvehicleeeee");
+          const response = await axios.post(`${apiUrl}/getTodayVehiclePoints`,{ hybrid });
+
+          // console.log(response.data, "checking the values for hybrid");
           setTodayVehicle(response.data);
         }
       } catch (err) {
-        console.error("Error fetching vehicle data:", err);
+        console.error("Error fetching vehicle data for hybrid:", err);
       }
     };
     if (menuItem === "RealTime" || menuselect === "Map page") {
@@ -705,13 +788,13 @@ function App() {
                   (
                     Billing_permission ? (BILLING_BillingMain ? <Navigate to="/home/billing/billing" /> : Billing_Transfer ? <Navigate to="/home/billing/transfer" /> : Billing_CoveringBill ? <Navigate to="/home/billing/coveringbill" /> : Billing_Reports ? <Navigate to="/home/billing/reports" /> : Billing_VendorReports ? <Navigate to="/home/billing/Vendorreports" /> : <></>) :
                     Payment_permission ? (Payment_Vendor ? <Navigate to= "/home/payment/vendor" /> : Payment_Customer ? <Navigate to= "/home/payment/customer" /> : <></>) :
-                      (
-                        Register_page_permission ? (R_RATEtype ? <Navigate to="/home/registration/ratetype" /> : R_Customer ? <Navigate to="/home/registration/customer" /> : R_Supllier ? <Navigate to="/home/registration/supplier" /> : R_Station ? <Navigate to="/home/registration/stationcreation" /> : <></>) : 
                         (
-                          Setting_page_permission ? (userCreation1 ? <Navigate to="/home/settings/usercreation" /> : Main_Setting ? <Navigate to="/home/settings/mainsetting" /> : <></>) :
-                           Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : 
-                           Info_page_permission ? (INFO_MAILER ? <Navigate to="/home/info/mailer" /> : INFO_FuelInfo ? <Navigate to="/home/info/LogDetails" /> : INFO_Employee ? <Navigate to="/home/info/employee" /> : <></>) : (<Navigate to="/home/usersettings/usersetting" />))
-                      )
+                          Register_page_permission ? (R_RATEtype ? <Navigate to="/home/registration/ratetype" /> : R_Customer ? <Navigate to="/home/registration/customer" /> : R_Supllier ? <Navigate to="/home/registration/supplier" /> : R_Station ? <Navigate to="/home/registration/stationcreation" /> : <></>) :
+                            (
+                              Setting_page_permission ? (userCreation1 ? <Navigate to="/home/settings/usercreation" /> : Main_Setting ? <Navigate to="/home/settings/mainsetting" /> : <></>) :
+                                Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) :
+                                  Info_page_permission ? (INFO_MAILER ? <Navigate to="/home/info/mailer" /> : INFO_FuelInfo ? <Navigate to="/home/info/LogDetails" /> : INFO_Employee ? <Navigate to="/home/info/employee" /> : <></>) : (<Navigate to="/home/usersettings/usersetting" />))
+                        )
                   )
                 )
 

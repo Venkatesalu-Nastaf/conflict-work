@@ -124,28 +124,101 @@ router.post('/particularGpsRecords', (req, res) => {
     });
 });
 
-router.post('/getAlladddateandtripid', (req, res) => {
+// router.post('/getAlladddateandtripid', (req, res) => {
+
+//     const { selectedDate, vehicleNumber } = req.body;
+//     const formattedStartDate = moment(selectedDate).format('YYYY-MM-DD');
+
+//     console.log("Today's Date:alllladtaaa", vehicleNumber, formattedStartDate);
+//     const sqlQuery = `SELECT Distinct Trip_id FROM VehicleAccessLocation WHERE Runing_Date =?  AND Vehicle_No = ?  AND Trip_Status  IN ('Reached')   `;
+//     db.query(sqlQuery, [formattedStartDate, vehicleNumber], (error, result) => {
+//         if (error) {
+//             console.log(error, "error");
+//         }
+//         console.log(result, "Today vehicle lists....");
+//         if (result.length > 0) {
+//             const formattedResult = result.map(row => ({
+//                 Trip_id: String(row.Trip_id) // Convert to string
+//             }));
+//             return res.status(200).json(formattedResult);
+//         }
+
+//         res.status(200).json(result);
+//     })
+// })
+
+router.post('/getAlladddateandtripid/:hybrid', (req, res) => {
+
+    const hybrid = req.params.hybrid;
+    // console.log(hybrid, "hybrid");
 
     const { selectedDate, vehicleNumber } = req.body;
     const formattedStartDate = moment(selectedDate).format('YYYY-MM-DD');
+    // console.log(selectedDate,"selectded date");
+    
 
-    console.log("Today's Date:alllladtaaa", vehicleNumber, formattedStartDate);
+    // console.log("pljToday's Date:alllladtaaa", vehicleNumber, formattedStartDate);
+    const sqlHybridQuery = `SELECT DISTINCT  V.Trip_id FROM
+                            VehicleAccessLocation V LEFT JOIN 
+                            tripsheet T ON T.tripid = V.Trip_id WHERE V.Runing_Date =?
+                            AND V.Vehicle_NO=? AND V.Trip_Status = 'Reached' AND T.Hybriddata = 1`;
+
     const sqlQuery = `SELECT Distinct Trip_id FROM VehicleAccessLocation WHERE Runing_Date =?  AND Vehicle_No = ?  AND Trip_Status  IN ('Reached')   `;
-    db.query(sqlQuery, [formattedStartDate, vehicleNumber], (error, result) => {
-        if (error) {
-            console.log(error, "error");
-        }
-        console.log(result, "Today vehicle lists....");
-        if (result.length > 0) {
-            const formattedResult = result.map(row => ({
-                Trip_id: String(row.Trip_id) // Convert to string
-            }));
-            return res.status(200).json(formattedResult);
-        }
 
-        res.status(200).json(result);
-    })
-})
+
+    if (hybrid === "Hybrid_Customer") {
+
+        db.query(sqlHybridQuery, [formattedStartDate, vehicleNumber], (err, results) => {
+            if (err) {
+                // console.log(err, "errrrrrrrrr");
+
+                return res.status(500).json({ error: "Database Error" })
+            }
+             
+              if (results) {
+                if (results.length > 0) {
+                    const formattedResult = results.map(row => ({
+                        Trip_id: String(row.Trip_id) 
+                    }));
+                    // console.log(formattedResult)
+                    // console.log(results,"filtertrip");
+                    
+                   return res.status(200).json(formattedResult)
+                }
+            }
+            else{
+
+            
+            // console.log(results,"tripiddd");
+            
+             return res.status(200).json(results);
+            }
+        })
+    }
+    else {
+        db.query(sqlQuery, [formattedStartDate, vehicleNumber], (error, result) => {
+            if (error) {
+                console.log(error, "error");
+            }
+            // console.log(result, "pljToday vehicle lists....");
+            if (result) {
+                if (result.length > 0) {
+                    const formattedResult = result.map(row => ({
+                        Trip_id: String(row.Trip_id) // Convert to string
+                    }));
+                    // console.log(formattedResult, "plj")
+                    return res.status(200).json(formattedResult);
+                }
+            }else{
+
+            
+
+            res.status(200).json(result);
+            }
+        });
+    }
+
+});
 
 router.post('/gettripbasedmapdetails', (req, res) => {
     //   console.log(req.body,"ccccccccccc")
@@ -206,15 +279,51 @@ router.post('/getAllVehicleCurrentLocation', (req, res) => {
     })
 })
 
+// router.post('/getTodayVehiclePoints', (req, res) => {
+//     const today = new Date();
+//     const todayDate = today.toLocaleDateString('en-CA');
+//     const formattedStartDate = moment(todayDate).format('YYYY-MM-DD');
+//     console.log("Today's Date:", formattedStartDate, todayDate);
+
+
+//     // Query to get the full row with the latest created_at timestamp for each Vehicle_No
+//     const sqlQuery = `
+//         SELECT v.*
+//         FROM VehicleAccessLocation v
+//         INNER JOIN (
+//             SELECT Vehicle_No, MAX(created_at) AS max_time
+//             FROM VehicleAccessLocation
+//             WHERE Runing_Date = ?
+//             GROUP BY Vehicle_No
+//         ) latest 
+//         ON v.Vehicle_No = latest.Vehicle_No 
+//         AND v.created_at = latest.max_time
+//         WHERE v.Runing_Date = ?;
+//     `;
+
+//     db.query(sqlQuery, [formattedStartDate, formattedStartDate], (error, result) => {
+//         if (error) {
+//             console.log(error, "error");
+//             return res.status(500).json({ error: "Database query error" });
+//         }
+
+//         res.status(200).json(result);
+//     });
+// });
 router.post('/getTodayVehiclePoints', (req, res) => {
     const today = new Date();
     const todayDate = today.toLocaleDateString('en-CA');
     const formattedStartDate = moment(todayDate).format('YYYY-MM-DD');
-    console.log("Today's Date:", formattedStartDate, todayDate);
+    // console.log("Today's Dateee:", formattedStartDate, todayDate);
 
+    const hybrid = req.body.hybrid;
+    // console.log(hybrid, "hybrid getTodayVehiclePointss");
+    
+    // const formattedStartDate = '2025-03-18';
+    // console.log("Hardcoded Test Date:", formattedStartDate);
 
     // Query to get the full row with the latest created_at timestamp for each Vehicle_No
-    const sqlQuery = `
+    const sqlQueryAll = `
         SELECT v.*
         FROM VehicleAccessLocation v
         INNER JOIN (
@@ -227,15 +336,47 @@ router.post('/getTodayVehiclePoints', (req, res) => {
         AND v.created_at = latest.max_time
         WHERE v.Runing_Date = ?;
     `;
+    const sqlQuery = `
+                            SELECT v.*
+                            FROM VehicleAccessLocation v
+                            INNER JOIN (
+                                SELECT Vehicle_No, MAX(created_at) AS max_time
+                                FROM VehicleAccessLocation
+                                WHERE Runing_Date = ?
+                                GROUP BY Vehicle_No
+                            ) latest 
+                            ON v.Vehicle_No = latest.Vehicle_No 
+                            AND v.created_at = latest.max_time
+                            INNER JOIN tripsheet t
+                            ON v.trip_id = t.tripid
+                            WHERE v.Runing_Date = ?
+                            AND t.Hybriddata = 1;
+                        `;
+    if (hybrid === "Hybrid_Customer") {
+        db.query(sqlQuery, [formattedStartDate, formattedStartDate], (error, result) => {
+            if (error) {
+                // console.log(error, "error for hybriddatasssss");
+                return res.status(500).json({ error: "Database query error" });
+            }
+            // console.log(result, "valuess for backend hybrid");
 
-    db.query(sqlQuery, [formattedStartDate, formattedStartDate], (error, result) => {
-        if (error) {
-            console.log(error, "error");
-            return res.status(500).json({ error: "Database query error" });
-        }
 
-        res.status(200).json(result);
-    });
+            res.status(200).json(result);
+        });
+    } else {
+        db.query(sqlQueryAll, [formattedStartDate, formattedStartDate], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: "Database Error" })
+            }
+            else {
+                // console.log(results,"Non hybrid");
+                
+                return res.status(200).json(results)
+            }
+        })
+
+    }
+
 });
 
 
@@ -540,15 +681,15 @@ router.get('/getLatLongByTripId', async (req, res) => {
 
                         const waypointLimit = 8;
                         let waypointLimitIndexes = [];
-                        
+
                         if (totalOngoingLength >= waypointLimit) {
                             // Exact 8 points evenly spread
                             const step = (totalOngoingLength - 1) / (waypointLimit - 1);
-                        
+
                             for (let i = 0; i < waypointLimit; i++) {
                                 const pos = Math.round(i * step);
-                                console.log(step,"steppppppppp",pos);
-                                
+                                console.log(step, "steppppppppp", pos);
+
                                 const index = totalOnGoing[pos]?.originalIndex;
                                 if (index !== undefined) {
                                     waypointLimitIndexes.push(index);
@@ -560,15 +701,15 @@ router.get('/getLatLongByTripId', async (req, res) => {
                                 waypointLimitIndexes.push(totalOnGoing[i].originalIndex);
                             }
                         }
-                        
 
-// Now waypointLimitIndexes will always have up to 8 points (if possible)
+
+                        // Now waypointLimitIndexes will always have up to 8 points (if possible)
 
 
                         console.log('selectedWaypointsIndexes:', selectedWaypointsIndexes);
                         console.log('waypointLimitIndexes:', waypointLimitIndexes);
-                        console.log(totalOngoingLength,"totalongoinggggggggggggggggggggggg");
-                        
+                        console.log(totalOngoingLength, "totalongoinggggggggggggggggggggggg");
+
 
 
 
@@ -608,7 +749,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         //     if (index === 1 || index === 5844 || index === 836 || index === 1670 || index === 2505 || index === 3340 || index === 4175  || index === 5009) {
                         //         console.log(`Index ${index} →`, row);
                         //     }
-                                                    
+
                         //     if (row.Trip_Status === 'Started') {
                         //         location_alpha = 'A';
                         //         trip_type = 'start';
@@ -620,14 +761,14 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         //             trip_type = 'wayLogpoint';
                         //             address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
                         //             // console.log(row,"rowwwwwwwwwwwwwkkkkkkkkkkkkkkkkkkkkkkkkkuuuuuuuuuuuu");
-                                    
+
                         //         } 
                         //         else if (totalOngoingLength < 500) {
                         //             location_alpha = 'NULL';
                         //             trip_type = 'On_Going';
                         //             // console.log(row,"rowwwwwwwwwwwwwkkkkkkkkkkkkkkkkkkkkkkkkkgggggggggggg");
                         //             address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
-                                    
+
                         //         } else if (totalOngoingLength > 500) {
                         //             location_alpha = 'NULL';
                         //             trip_type = 'On_Going';
@@ -636,11 +777,11 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         //         }
                         //         else if(row.Trip_Status === 'On_Going'){
                         //              if (waypointLimitIndexes.includes(index)) {
-                                    
+
                         //                 location_alpha = 'B';
                         //                 trip_type = 'waypoint';
                         //                 // console.log(row,"rowwwwwwwwwwwwwkkkkkkkkkkkkkkkkkkkkkkkkk");
-                                        
+
                         //                 address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
                         //             }
                         //         }
@@ -663,64 +804,64 @@ router.get('/getLatLongByTripId', async (req, res) => {
                             let location_alpha = '';
                             let trip_type = '';
                             let address;
-                        
-                        
+
+
                             if (row.Trip_Status === 'Started') {
                                 location_alpha = 'A';
                                 trip_type = 'start';
                                 address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
-                        
+
                             } else if (row.Trip_Status === 'Reached') {
                                 location_alpha = 'C';
                                 trip_type = 'end';
                                 address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
-                        
+
                             } else if (row.Trip_Status === 'On_Going') {
                                 if (totalOngoingLength > 500) {
                                     if (selectedWaypointsIndexes.includes(index)) {
                                         location_alpha = 'B';
                                         trip_type = 'wayLogpoint';
                                         address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
-                                    } 
+                                    }
                                     if (waypointLimitIndexes.includes(index)) {
                                         location_alpha = 'B';
                                         trip_type = 'waypoint';
                                         address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
-                                    } 
+                                    }
                                     if (!selectedWaypointsIndexes.includes(index) && !waypointLimitIndexes.includes(index)) {
                                         location_alpha = 'NULL';
                                         trip_type = 'On_Going';
                                         // address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
                                     }
-                            
-                                }else if (totalOngoingLength < 500) {
-                                    
+
+                                } else if (totalOngoingLength < 500) {
+
                                     if (waypointLimitIndexes.includes(index)) {
-                                        console.log(waypointLimitIndexes,"ooo",waypointLimitIndexes.includes(index));
-                                        
+                                        console.log(waypointLimitIndexes, "ooo", waypointLimitIndexes.includes(index));
+
                                         location_alpha = 'B';
                                         trip_type = 'waypoint';
                                         address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
                                     }
-                                    if(!waypointLimitIndexes.includes(index)){
-                                
-                                    location_alpha = 'NULL';
-                                    trip_type = 'On_Going';
-                                    address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
+                                    if (!waypointLimitIndexes.includes(index)) {
+
+                                        location_alpha = 'NULL';
+                                        trip_type = 'On_Going';
+                                        address = await getAddressFromLatLng(row.Latitude_loc, row.Longtitude_loc);
                                     }
                                 }
-                                
+
                             }
-                            
-                        
+
+
                             const formattedTime = row.Tripstarttime ? row.Tripstarttime.substring(0, 5) : null;
-                        
+
                             return [
                                 row.Trip_id, location_alpha, row.Runing_Date, formattedTime,
                                 trip_type, address, row.Latitude_loc, row.Longtitude_loc
                             ];
                         }));
-                        
+
                         // console.log(insertValues.length, "insertvalues gmapdata",insertValues);
 
                         const sqlInsertGmapdataQuery = `
@@ -735,7 +876,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
                         //     console.log("Inserted rows:", insertResult.affectedRows);
                         //     res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
                         // });
-                         
+
                         db.query(filterSqlCheckQuery, [gpsTripId], async (error3, checkStartResult) => {
                             if (error3) {
                                 console.log("Error checking existing 'start' record:", error3);
@@ -754,7 +895,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
                                     console.log("Database insert error:", error);
                                     return res.status(500).json({ error: "Internal Server Error" });
                                 }
-                                
+
                                 console.log("Inserted rows:", insertResult.affectedRows);
                                 res.status(200).json({ message: "Data inserted successfully", insertedRows: insertResult.affectedRows });
                             });

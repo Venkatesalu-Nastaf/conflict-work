@@ -37,7 +37,7 @@ const useCoversubmit = () => {
     const [servicestation, setServiceStation] = useState("");
     const [successMessage, setSuccessMessage] = useState({});
     const [warning, setWarning] = useState(false);
-    const [invoiceColumn, setInvoiceColumn] = useState(false)
+    // const [invoiceColumn, setInvoiceColumn] = useState(false)
     const [warningMessage] = useState({});
 
 
@@ -182,7 +182,7 @@ const useCoversubmit = () => {
     //     saveAs(pdfBlob, 'Cover.pdf');
     // };
     const handlePdfDownload = () => {
-        rows.forEach((row) => {
+      
             const pdf = new jsPDF();
             pdf.setFontSize(12);
             pdf.setFont('helvetica', 'normal');
@@ -200,7 +200,7 @@ const useCoversubmit = () => {
             //     row['Amount']
             // ]];
 
-            const tableData = [[
+         const tableData = rows.map((row) => [
                 row['id'],
                 row['Status'],
                 // row['InvoiceNo'],
@@ -211,7 +211,7 @@ const useCoversubmit = () => {
                 row['ToDate'] ? dayjs(row['ToDate']).format('DD-MM-YYYY') : 'N/A',
                 row['Trips'],
                 row['Amount']
-            ]];
+            ]);
 
             pdf.autoTable({
                 head: [['Sno', 'Status', 'ReferenceNo', 'Date', 'Customer', 'FromDate', 'ToDate', 'Trips', 'Amount']],
@@ -220,8 +220,8 @@ const useCoversubmit = () => {
             });
 
             const pdfBlob = pdf.output('blob');
-            saveAs(pdfBlob, `${row['ReferenceNo']}.pdf`);
-        });
+            saveAs(pdfBlob, `covering submit.pdf`);
+        
     };
 
     // POP UP---------------------------------
@@ -284,7 +284,7 @@ const useCoversubmit = () => {
                 const data = response.data;
                 // console.log(data, 'data');
 
-                setInvoiceColumn(true)
+                // setInvoiceColumn(true)
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,
@@ -337,7 +337,7 @@ const useCoversubmit = () => {
                 const data = response.data;
                 // console.log(data, 'data');
 
-                setInvoiceColumn(true)
+                // setInvoiceColumn(true)
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,

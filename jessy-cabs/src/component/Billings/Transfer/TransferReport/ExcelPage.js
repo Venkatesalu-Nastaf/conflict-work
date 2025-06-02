@@ -90,7 +90,9 @@ const useExeclpage = () => {
         { key: "toll", header: "Toll", width: 100 },
         { key: "TOTALtollandpark", header: "DND/Toll/Parking Amount", width: 200 },
         { key: "totalcalcAmount1", header: "Amount With All Taxes", width: 200 },
-        { key: "shedInDate", header: "End Date", width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "") },
+        // { key: "shedInDate", header: "End Date", width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "") },
+        { key: "shedInDateold", header: "End Date", width: 200},
+        
 
 
 
@@ -347,7 +349,8 @@ const useExeclpage = () => {
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
 
 
-                    singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                    // singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                     singleData["shedInDateold"] = singleData["shedintold"] ? dayjs(singleData["shedintold"]).format("DD/MM/YYYY") : ""
                     singleData["sheoutDatetrip"] = singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY") : ""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : "00:00"
                     singleData["starttime1"] = removeSeconds(singleData["starttime1"])
@@ -592,8 +595,8 @@ const useExeclpage = () => {
     }
 
 
-    const handledatazipDownload = async (tripheaderIndex, misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel, customerData, stationData, bookingMail) => {
-        console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation, " console for datas")
+    const handledatazipDownload = async (tripheaderIndex, misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation,customerData, stationData, bookingMail) => {
+        console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel","mo", imageorganisation, " console for datas")
         const data = invoice;
         const customername = customer;
         const workbook = new Excel.Workbook();
@@ -602,11 +605,11 @@ const useExeclpage = () => {
 
         try {
             const zip = new JSZip();
-            if (rowSelectionModel.length === 0) {
-                setError1(true)
-                setErrorMessage1(" SELECT DATA ")
-                return
-            }
+            // if (rowSelectionModel.length === 0) {
+            //     setError1(true)
+            //     setErrorMessage1(" SELECT DATA ")
+            //     return
+            // }
 
             if (!misformat) {
                 setError1(true)
@@ -667,7 +670,8 @@ const useExeclpage = () => {
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
                     singleData["tripsheetdate"] = singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY") : ""
-                    singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                    // singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                      singleData["shedInDateold"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
                     singleData["sheoutDatetrip"] = singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY") : ""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : ""
                     singleData["starttime1"] = removeSeconds(singleData["starttime"])

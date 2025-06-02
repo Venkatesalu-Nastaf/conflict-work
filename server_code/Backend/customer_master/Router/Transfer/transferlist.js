@@ -221,6 +221,8 @@ router.get('/newtripsheetcustomertripid/:customer/:tripid', async (req, res) => 
           obj.totalkmdata = obj.totalkm1;
           obj.gstTax = customerdetails ? customerdetails.gsttax : 'unknown'
           obj.CustomerAddress1 = customerdetails ? customerdetails.Customeraddress1 : 'unknown';
+          obj.shedintold = obj.shedInDate
+
 
         });
         // console.log(result,"re")
@@ -1894,7 +1896,7 @@ router.get('/customerdatamothergroup/:customers', (req, res) => {
 
 router.post('/gettingCustomerList', (req, res) => {
   const { fromDate, toDate } = req.body;
-
+// console.log(fromDate,toDate,"kkk")
   if (!fromDate || !toDate) {
     return res.status(400).json({ error: 'Missing fromDate or toDate' });
   }
@@ -1909,7 +1911,7 @@ router.post('/gettingCustomerList', (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to fetch data', details: err });
     }
-    console.log(result, "orggggggggggg");
+    // console.log(result, "orggggggggggg");
 
     return res.status(200).json(result);
   });
@@ -1918,7 +1920,7 @@ router.post('/gettingCustomerList', (req, res) => {
 // getting multiple customer gst details
 router.post('/multipleCustomerGSTDetails', (req, res) => {
   const { customer } = req.body;
-  console.log(customer, 'params customer');
+  // console.log(customer, 'params customer');
 
   if (!Array.isArray(customer) || customer.length === 0) {
     return res.status(400).json({ error: 'Invalid customer input' });
@@ -1928,7 +1930,7 @@ router.post('/multipleCustomerGSTDetails', (req, res) => {
 
   db.query(customerQuery, [customer], (err, customerResults) => {
     if (err) {
-      console.error(err, 'error');
+      // console.error(err, 'error');
       return res.status(500).json({ error: 'Database error while fetching customers' });
     }
 
@@ -1958,7 +1960,7 @@ router.post('/multipleCustomerGSTDetails', (req, res) => {
 
         db.query(stationQuery, [state, stationName], (err, stationResult) => {
           if (err) {
-            console.error(err, 'error');
+            // console.error(err, 'error');
             return reject({ error: 'Database error while fetching stations' });
           }
 
@@ -1983,7 +1985,7 @@ router.post('/multipleCustomerGSTDetails', (req, res) => {
       const groupBilling = customer.billingGroup;
       const state = customer.state;
       const stationName = customer.servicestation;
-      console.log(groupBilling, "Processing customer:", state, stationName);
+      // console.log(groupBilling, "Processing customer:", state, stationName);
 
       if (!groupBilling) {
         stationPromises.push(
@@ -2038,13 +2040,13 @@ router.post('/multipleCustomerGSTDetails', (req, res) => {
 
 router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
   const { customer } = req.params;
-  console.log(customer, 'params customer');
+  // console.log(customer, 'params customer');
 
   const customerQuery = 'SELECT * FROM customers WHERE customer = ?';
 
   db.query(customerQuery, [customer], (err, customerResult) => {
     if (err) {
-      console.error(err, 'error');
+      // console.error(err, 'error');
       return res.status(500).json({ error: 'Database error while fetching customer' });
     }
 
@@ -2055,7 +2057,7 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
     const groupBilling = customerResult[0]?.billingGroup;
     const state = customerResult[0]?.state;
     const stationName = customerResult[0]?.servicestation;
-    console.log(customerResult, 'customer result', groupBilling, state, stationName);
+    // console.log(customerResult, 'customer result', groupBilling, state, stationName);
 
     // Query to fetch stations with state and stationName dependencies
     const stationQuery = `
@@ -2080,7 +2082,7 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
     const fetchStations = (state, stationName, callback) => {
       db.query(stationQuery, [state, stationName], (err, stationResult) => {
         if (err) {
-          console.error(err, 'error');
+          // console.error(err, 'error');
           return res.status(500).json({ error: 'Database error while fetching stations' });
         }
 
@@ -2089,7 +2091,7 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
         if (allGstEmpty) {
           db.query(defaultStationQuery, (err, defaultStations) => {
             if (err) {
-              console.error(err, 'error');
+              // console.error(err, 'error');
               return res.status(500).json({ error: 'Database error while fetching default stations' });
             }
             callback(defaultStations);
@@ -2101,10 +2103,10 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
     };
 
     if (groupBilling === null || groupBilling === '') {
-      console.log(groupBilling, 'No group billing, fetching stations for customer state');
+      // console.log(groupBilling, 'No group billing, fetching stations for customer state');
 
       fetchStations(state, stationName, stationResult => {
-        console.log(stationResult, 'Station results for customer state');
+        // console.log(stationResult, 'Station results for customer state');
         res.status(200).json({
           customerDetails: customerResult,
           customerStations: stationResult,
@@ -2119,13 +2121,13 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
           return res.status(500).json({ error: 'Database error while fetching group billing details' });
         }
 
-        console.log(billingResult, 'Group billing result');
+        // console.log(billingResult, 'Group billing result');
         const groupBillingState = billingResult[0]?.state;
         const groupBillingStationName = billingResult[0]?.servicestation;
 
-        console.log('Fetching stations for group billing state and station');
+        // console.log('Fetching stations for group billing state and station');
         fetchStations(groupBillingState, groupBillingStationName, billingGroupStationResult => {
-          console.log(billingGroupStationResult, 'Station results for group billing state and station');
+          // console.log(billingGroupStationResult, 'Station results for group billing state and station');
           res.status(200).json({
             customerDetails: billingResult,
             customerStations: billingGroupStationResult,

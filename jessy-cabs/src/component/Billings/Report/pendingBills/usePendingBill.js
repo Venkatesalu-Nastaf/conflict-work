@@ -125,7 +125,7 @@ const usePendingBill = () => {
                 setErrorMessage(errorMessage);
             }
         } catch (error) {
-            console.log(`Error fetching bills:`, error);
+            // console.log(`Error fetching bills:`, error);
             if (error.message ) {
                 setRows([])
                 setError(true);

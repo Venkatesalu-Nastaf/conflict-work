@@ -13,8 +13,10 @@ import TabContext from "@mui/lab/TabContext";
 // import LogDetails from './LogDetails/LogDetails';
 // import { ReportData } from './Context/ReportContext';
 import { ReportData } from '../Report/Context/ReportContext';
-import VendorStatement from '../Report/VendorStatement/VendorStatement';
-import VehicleStatement from '../Report/VehicleStatement/VehicleStatement';
+// import VendorStatement from '../Report/VendorStatement/VendorStatement';
+// import VehicleStatement from '../Report/VehicleStatement/VehicleStatement';
+import VendorStatement from '../VendorReports/VendorStatement/VendorStatement';
+import VehicleStatement from '../VendorReports/VehicleStatement/VehicleStatement';
 
 export const VendorReports = ({ stationName,Statename }) => {
     const { values, setValues } = ReportData()

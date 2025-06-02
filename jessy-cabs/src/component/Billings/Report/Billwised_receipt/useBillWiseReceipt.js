@@ -198,9 +198,9 @@ const useBillWiseReceipt = () => {
       setErrorMessage("Please Enter Customer");
       return;
     }
-    const customer = billWiseReport.CustomerName;
+    // const customer = billWiseReport.CustomerName;
 
-    let currentId = 1;
+    // let currentId = 1;
     try {
       const response = await axios.get(`${apiUrl}/customerBilledDetails`, {
         params: { customer: billWiseReport.CustomerName },
@@ -299,7 +299,7 @@ combinedPendingBill?.forEach(pendingBill => {
       // }));
 
  const gst = gstTax / 2;
- console.log(combinedPendingBill, "updated combinedPendingBill",gst);
+//  console.log(combinedPendingBill, "updated combinedPendingBill",gst);
 
 const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => {
   const amount = parseInt(item.netAmount) || 0;
@@ -321,7 +321,7 @@ const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) =>
 
 
 
-      console.log(combinedPendingBillWithSnoAndId,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",combinedPendingBill);
+      // console.log(combinedPendingBillWithSnoAndId,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",combinedPendingBill);
       
       if (combinedPendingBillWithSnoAndId.length === 0) {
         setError(true);
@@ -355,13 +355,13 @@ const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) =>
     if (balanceAmount === true) {
       if (selectionModel.length > 0) {
         const selectedID = selectionModel[selectionModel.length - 1]; // Get the last selected row
-        console.log(selectedID, "selected ID", balanceAmount);
+        // console.log(selectedID, "selected ID", balanceAmount);
 
         setSelectedRows([selectedID]); // Store only the last selected row
 
         const selectedData = pendingBillRows.filter((row) => row.id === selectedID); // Direct comparison
         const selectedInvoiceNo = selectedData.map(li => li.BillNo);
-        console.log(selectionModel,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk------------",selectedData);
+        // console.log(selectionModel,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk------------",selectedData);
 
         setSelectedBillRow(selectedData);
         
@@ -375,7 +375,7 @@ const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) =>
       setSelectedRows(selectionModel);
 
       const selectedIDs = new Set(selectionModel);
-      console.log(selectedIDs, "selected IDs", balanceAmount);
+      // console.log(selectedIDs, "selected IDs", balanceAmount);
 
       const selectedData = pendingBillRows.filter((row) => selectedIDs.has(row.id)); // Use `.has()` with Set
       const selectedInvoiceNo = selectedData.map(li => li.BillNo);
@@ -386,7 +386,7 @@ const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) =>
       .map(id => id.trim())                 // clean up extra spaces if any
       .filter(id => id);                    // remove any empty strings
     
-    console.log(tripIds, "final Trip_id array check");
+    // console.log(tripIds, "final Trip_id array check");
     setSelectedTripId(tripIds)
       setSelectedBillRow(selectedData);
       setInvoiceNo(selectedInvoiceNo);
@@ -423,7 +423,7 @@ const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) =>
   // };
 
   const handleApplyBill = async () => {
-    console.log(selectedBillRow,"selectedbillrowwwwwwwwwwwwwwwwwwwwww");
+    // console.log(selectedBillRow,"selectedbillrowwwwwwwwwwwwwwwwwwwwww");
 
     if (selectedBillRow.length === 0 || selectedBillRow.length === undefined) {
       setError(true)
@@ -594,8 +594,8 @@ const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) =>
     }
     const newTDS = Number(event.target.value) || 0; // Default to 0 if conversion fails
     // Calculate new totalAmount based on the new TDS value
-    const newTotalAmount =
-      (totals.totalAmount || 0) + (totals.tds || 0) - newTDS;
+    // const newTotalAmount =
+    //   (totals.totalAmount || 0) + (totals.tds || 0) - newTDS;
 
     const newCollectedAmount = (totals.collectedAmount || 0) + (totals.tds || 0) - newTDS
 
@@ -736,15 +736,15 @@ const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) =>
         //   combinedData.totalAmount,
       };
 
-      const BillNo = rows.map((li) => li.BillNo);
+      // const BillNo = rows.map((li) => li.BillNo);
 
       try {
         // Post the formatted data
-        const postResponse = await axios.post(
+        await axios.post(
           `${apiUrl}/addBillAmountReceived`,
           formattedData
         );
-        console.log(postResponse.data, "response data");
+        // console.log(postResponse.data, "response data");
 
         await axios.post(`${apiUrl}/updateInvoiceStatus`, {
           invoiceNo: invoiceNo

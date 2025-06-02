@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { fetchBankOptions } from './BillingData';
+// import { fetchBankOptions } from './BillingData';
 import dayjs from "dayjs";
 import { APIURL } from "../../../url.js";
 import { PdfData } from '../../Transfer/TransferReport/PdfContext.js';
@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 const useBilling = () => {
     const apiUrl = APIURL;
     const location = useLocation();
-    const [bankOptions, setBankOptions] = useState([]);
+    // const [bankOptions, setBankOptions] = useState([]);
     const [info, setInfo] = useState(false);
     const [actionName] = useState('');
     const [popupOpen, setPopupOpen] = useState(false);
@@ -20,7 +20,7 @@ const useBilling = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [selectedBankAccount, setSelectedBankAccount] = useState('');
-    const [routeData, setRouteData] = useState('');
+    // const [routeData, setRouteData] = useState('');
     const [customerData, setCustomerData] = useState('');
     const [mapimageUrl, setMapImageUrl] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
@@ -30,7 +30,7 @@ const useBilling = () => {
     const [invoiceno,setInvoiceNo]=useState();
     const[invoicestate,setINvoicestate]=useState('')
     const dataempty = Number(localStorage.getItem("searchdataurl"))
-    const [stateDetails, setStateDetails] = useState([]);
+    // const [stateDetails, setStateDetails] = useState([]);
     const [billadd,setBillAdd]=useState(false)
     const [dataotherStations,setDataOtherStations]=useState([])
     const [datastate,setDataState]=useState('')
@@ -290,7 +290,7 @@ const useBilling = () => {
     const total_GrossAmount = () => {
         const nhamount = total_Nighthalt_Amount() || book.nhamount;
         // const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll } = book;
-        const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount, permit, parking, toll,} = book;
+        const { package_amount, ex_kmAmount, ex_hrAmount, driverBeta_amount, OtherChargesamount} = book;
         // const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount, permit, parking, toll, vpermettovendor, vendortoll].map((value) =>
             const parsedValues = [package_amount, ex_kmAmount, ex_hrAmount, nhamount, driverBeta_amount, OtherChargesamount].map((value) =>
             isNaN(Number(value)) ? 0 : Number(value)
@@ -357,7 +357,7 @@ const handlefullTotalAmount = () => {
 
     const balanceRecivable = () => {
         const customeradvance = parseFloat(book.customeradvance || 0);
-        console.log(customeradvance,"advance",discound_PercentageCalc())
+        // console.log(customeradvance,"advance",discound_PercentageCalc())
         const discountAmount = parseFloat(discound_PercentageCalc() || book.DiscountAmount || 0);
         // console.log(discountAmount,"disca",total_GrossAmount())
         const GrossAmount = parseFloat(total_GrossAmount() || book.GrossAmount || 0);
@@ -404,7 +404,7 @@ const handlefullTotalAmount = () => {
 
     const handleCancel = () => {
         setBook(emptyBookvalues);
-        setSelectedBankAccount('');
+        // setSelectedBankAccount('');
         setCustomerData('')
         setBillingDate()
         setInvoiceNo()
@@ -528,7 +528,7 @@ const handlefullTotalAmount = () => {
             setErrorMessage("Please enter TripID");
             return
         }
-        console.log(book,"inddddddddddddddddd");
+        // console.log(book,"inddddddddddddddddd");
         
         try {
             const statedata = await customerMotherdatagroupstation(book.customer ||  selectbillingdata.customer);
@@ -625,17 +625,17 @@ const handlefullTotalAmount = () => {
         }
     };
 
-    useEffect(() => {
-        fetchBankOptions()
-            .then((data) => {
-                if (data) {
-                    setBankOptions(data);
-                } else {
-                }
-            })
-            .catch(() => {
-            });
-    }, []);
+    // useEffect(() => {
+    //     fetchBankOptions()
+    //         .then((data) => {
+    //             if (data) {
+    //                 setBankOptions(data);
+    //             } else {
+    //             }
+    //         })
+    //         .catch(() => {
+    //         });
+    // }, []);
 
     
     useEffect(() => {
@@ -659,28 +659,28 @@ const handlefullTotalAmount = () => {
         fetchCustomerData();
     }, [memoizedCustomer, apiUrl]);
 
-    useEffect(() => {
-        const fetchStateDetails = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/statedetails`);
+    // useEffect(() => {
+    //     const fetchStateDetails = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/statedetails`);
     
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to fetch state details');
-                }
+    //             if (!response.ok) {
+    //                 const errorData = await response.json();
+    //                 throw new Error(errorData.error || 'Failed to fetch state details');
+    //             }
     
-                const data = await response.json();
-                setStateDetails(data);
+    //             const data = await response.json();
+    //             setStateDetails(data);
     
-                console.log(data, 'State details fetched'); 
-            } 
-            catch (err) {
-                // setError(err.message); // Handle errors
-                console.error('Error fetching state details:', err);
-            }
-        };
-        fetchStateDetails();    
-    }, [customerData]);
+    //             console.log(data, 'State details fetched'); 
+    //         } 
+    //         catch (err) {
+    //             // setError(err.message); // Handle errors
+    //             console.error('Error fetching state details:', err);
+    //         }
+    //     };
+    //     fetchStateDetails();    
+    // }, [customerData]);
 
 
 
@@ -713,7 +713,7 @@ const handlefullTotalAmount = () => {
             if (event.key === "Enter") {
               event.preventDefault();
               const invoicenodata = invoiceno || invoicestate
-             console.log(datastate,"settt",invoiceno,"lllll")
+            //  console.log(datastate,"settt",invoiceno,"lllll")
               try {
                 if (invoicenodata && datastate) {
                 const response = await axios.get(
@@ -732,6 +732,8 @@ const handlefullTotalAmount = () => {
                 setSuccessMessage("Successfully listed");
              
                 setEdit(true);
+            setBillAdd(false)
+
                 setIndividualBilled(false)
             
                 }
@@ -741,6 +743,7 @@ const handlefullTotalAmount = () => {
                     setDataState('')
                     setError(true);
                     setErrorMessage("Data Not Found");
+                        setBillAdd(true)
                 }
             }
 
@@ -756,28 +759,28 @@ const handlefullTotalAmount = () => {
           }
     
 
-    const [organizationdata, setorganizationData] = useState('');
+    // const [organizationdata, setorganizationData] = useState('');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/organizationdata`);
-                if (response.status === 200) {
-                    const userDataArray = await response.json();
-                    if (userDataArray.length > 0) {
-                        setorganizationData(userDataArray[0]);
-                    }
-                } else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
-                }
-                // }
-                // return;
-            } catch {
-            }
-        };
-        fetchData();
-    }, [apiUrl]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/organizationdata`);
+    //             if (response.status === 200) {
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setorganizationData(userDataArray[0]);
+    //                 }
+    //             } else {
+    //                 const timer = setTimeout(fetchData, 2000);
+    //                 return () => clearTimeout(timer);
+    //             }
+    //             // }
+    //             // return;
+    //         } catch {
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl]);
     // Empty the book
    
     useEffect(() => {
@@ -812,11 +815,11 @@ const handlefullTotalAmount = () => {
         // handleKeyenterBilling,
         handleKeyDown,
         handleDateChange,
-        organizationdata,
+        // organizationdata,
         setSelectedBankAccount,
         handleAutocompleteChange,
         selectedBankAccount,
-        bankOptions,
+        // bankOptions,
         popupOpen,
         handlePopupClose,
         // triprequest,
@@ -844,13 +847,14 @@ const handlefullTotalAmount = () => {
         customerData,
         setBook,
         emptyBookvalues,
-        setRouteData,
+        // setRouteData,
         setMapImageUrl,
         setGMapImageUrl,
         handleKeyenterinvoicdeno,
         setInvoiceNo,billadd,invoicestate,dataotherStations,handleserviceInputChange,datastate,
         mapimageUrl, total_Nighthalt_Amount, discound_PercentageCalc, balanceRecivable, roundOffCalc, pendingAmountCalc,edit,selectbillingdata,billingdate,
-        stateDetails,setStateDetails,handlefullTotalAmount,hanldetollpark
+        // stateDetails,setStateDetails,
+        handlefullTotalAmount,hanldetollpark
     };
 };
 

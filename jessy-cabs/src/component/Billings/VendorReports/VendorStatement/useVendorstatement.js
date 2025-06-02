@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react';
+import { useState,useEffect} from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
@@ -9,9 +9,16 @@ import Excel from 'exceljs';
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "tripid", headerName: "TripNo", width: 130 },
-    { field: "shedOutDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'), },
-    { field: "customer", header: "Customer Name", width: 150 },
+    // { field: "shedOutDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'), },
+        { field: "shedOutDate", headerName: "Date", width: 130,  valueFormatter: (params) => {
+   
+    const date = dayjs(params.value, ['YYYY-MM-DD'], true);
+    // console.log("Parsed dayjs date:", date.toString(), "| Is valid:", date.isValid());
+    return date.isValid() ? date.format('DD-MM-YYYY') : params.value;
+  },},
+    { field: "customer", headerName: "Customer Name", width: 150 },
     { field: "travelsname", headerName: "Vendor Name", width: 130 },
+    {field: "vehRegNo", headerName:"Vehicle Number",width:130},
     { field: "vendor_vehicle", headerName: "Vehicle", width: 90 },
     { field: "duty", headerName: "Duty", width: 160 },
     { field: "vendorshedoutkm", headerName: "Start-kMS", width: 130 },
@@ -253,7 +260,7 @@ const handleExcelDownload = async () => {
         // });
         rows.forEach((singleData, index) => {
 
-            console.log(rows,'data of roe')
+            // console.log(rows,'data of roe')
             const dateFields = [
                 "startdate",
                 "shedInDate",
@@ -284,6 +291,7 @@ const handleExcelDownload = async () => {
                 column.width = Math.max(currentColumnWidth, cellLength + 5);
             });
         });
+        // console.log(rows,"rowssssssssexcel");
         
         const totalKms = rows.reduce((sum, row) => sum + parseInt(row.vendortotalkm || 0, 10), 0);
                 const totalpermit = rows.reduce((sum, row) => sum + parseInt(row.vpermettovendor || 0, 10), 0);
@@ -814,6 +822,7 @@ const handlePdfDownload = () => {
             setWarningMessage("Enter the Travelsname")
             return
         }
+                    console.log(fromDate,"ffffff222222222222222",toDate,travelsname);
         try {
             const response = await axios.get(
                 `${apiUrl}/VehicleStatement-bookings?Travelsname=${encodeURIComponent(
@@ -822,6 +831,7 @@ const handlePdfDownload = () => {
                     toDate.toISOString()
                 )}`
             );
+            
             const data = response.data;
             console.log(data)
             if (data.length > 0) {

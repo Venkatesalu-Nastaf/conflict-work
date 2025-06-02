@@ -9,11 +9,11 @@ import MenuItem from '@mui/material/MenuItem';
 import { Menu, TextField } from "@mui/material";
 import Mapinvoice from './Mapinvoice/Mapinvoice';
 import Luxuryinvoice from './Luxuryinvoice/Luxuryinvoice';
-import Reportinvoice from './Reportinvoice/Reportinvoice';
+// import Reportinvoice from './Reportinvoice/Reportinvoice';
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import Mailpdf from './Mailpdf/Mailpdf';
+// import Mailpdf from './Mailpdf/Mailpdf';
 import PdfPage from './PdfPage';
 import { saveAs } from 'file-saver';
 import dayjs from "dayjs";
@@ -46,7 +46,7 @@ import { PdfData } from './PdfContext';
 import { PiMoneyBold } from "react-icons/pi";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { CircularProgress } from '@mui/material';
-import { GiConsoleController } from 'react-icons/gi';
+// import { GiConsoleController } from 'react-icons/gi';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Backdrop from '@mui/material/Backdrop';
 export const PDFbill = [
@@ -80,50 +80,50 @@ const TransferReport = ({ Statename }) => {
     endDate,
     invoiceDate,
     rows,
-    actionName,
+    // actionName,
     error,
     success,
     warning,
     successMessage,
     errorMessage,
     warningMessage,
-    handleClick,
+    // handleClick,
     ratetypeforpage,
     hidePopup,
-    organizationdata,
+    // organizationdata,
     // routedData,
     date,
     customer,
     tripData,
     // bankOptions,
-    selectedImage,
+    // selectedImage,
     // setCustomer,
     misformat, setMisformat,
     servicestation,
     handleserviceInputChange,
     handleCheckboxChange,
-    pbpopupOpen,
+    // pbpopupOpen,
     handlePopupClose,
     npopupOpen,
     lxpopupOpen,
-    routeData,
-    roundedAmount,
-    sumTotalAndRounded,
-    totalValue,
-    attachedImage,
-    organizationaddress1,
-    organizationaddress2,
+    // routeData,
+    // roundedAmount,
+    // sumTotalAndRounded,
+    // totalValue,
+    // attachedImage,
+    // organizationaddress1,
+    // organizationaddress2,
     popupOpen,
-    organizationcity,
-    organizationgstnumber,
+    // organizationcity,
+    // organizationgstnumber,
     pdfBillList,
     setPdfBillList,
     setError,
     setErrorMessage,
-    handleRowSelection,
+    // handleRowSelection,
     // rowzip,
-    rowSelectionModel,
-    setRowSelectionModel,
+    // rowSelectionModel,
+    // setRowSelectionModel,
     pdfzipdata,
     bookingMail,
     handleKeyDown,
@@ -132,7 +132,7 @@ const TransferReport = ({ Statename }) => {
     handleGroupKeyDown,
     setGroupTripid,
     // handleRemove,
-    billedStatusCheck,
+    // billedStatusCheck,
     // setBilledStatusCheck,
     loading,
     // setLoading,
@@ -153,12 +153,12 @@ const TransferReport = ({ Statename }) => {
   const [organizationsdetail1, setOrganisationDetail] = useState([]);
   const { logo } = useData();
   const [particularPdf, setParticularPdf] = useState([])
-  const [imageorganisation, setSelectedImageorganisation] = useState(null);
+  // const [imageorganisation, setSelectedImageorganisation] = useState(null);
   const [tripno, setTripno] = useState('')
   const { pdfPrint, setPdfPrint, billGenerate, setBillGenerate } = PdfData()
-  const [billId, setBillId] = useState()
+  // const [billId, setBillId] = useState()
   const [stateDetails, setStateDetails] = useState([]);
-  const [comparisonResult, setComparisonResult] = useState(null);
+  // const [comparisonResult, setComparisonResult] = useState(null);
   const [customerData, setCustomerData] = useState([]);
   const [stationData, setStationData] = useState([])
   const [isPdfloading, setIsPdfloading] = useState(false)
@@ -167,11 +167,11 @@ const TransferReport = ({ Statename }) => {
   //   setSelectedImageorganisation(sharedData)
   // }, [sharedData])
 
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
+  // useEffect(() => {
+  //   if (actionName === 'List') {
+  //     handleClick(null, 'List');
+  //   }
+  // }, [actionName, handleClick]);
 
   const CustomNoRowsOverlay = () => (
     <Box
@@ -192,13 +192,16 @@ const TransferReport = ({ Statename }) => {
   useEffect(() => {
     const fetchdata = async () => {
       try {
-
+        // console.log(customer,"noenter")
         if (!customer) return
+        // console.log(customer,"cusss")
+        
 
         const response = await axios.get(`${apiUrl}/customeraddress/${customer}`);
+        // console.log(response,"adreeeeeeeeeeeeeeeeeeeeeeeee",response.data[0])
 
-        const addressdetail = await response.data;
-        console.log(addressDetails, 'addressdetails');
+        const addressdetail =  response.data;
+        // console.log(addressdetail, 'addressdetails');
 
         setAddressDetails(addressdetail);
       } catch (err) {
@@ -207,8 +210,9 @@ const TransferReport = ({ Statename }) => {
     };
 
     fetchdata();
+      }, [apiUrl,customer,groupTripid]);
 
-  }, [apiUrl, customer, groupTripid, pdfBillList]);
+  // }, [apiUrl, customer, groupTripid, pdfBillList]);
 
 
   useEffect(() => {
@@ -225,7 +229,7 @@ const TransferReport = ({ Statename }) => {
         const data = await response.json();
         setStateDetails(data); // Save the retrieved state details in state
 
-        console.log(data, 'State details fetched'); // Log the fetched data
+        // console.log(data, 'State details fetched'); // Log the fetched data
       } catch (err) {
         setError(err.message); // Handle errors
         // console.error('Error fetching state details:', err); // Log the error for debugging
@@ -266,13 +270,17 @@ const TransferReport = ({ Statename }) => {
   }, [apiUrl, customer]);
   useEffect(() => {
     const fetchData = async () => {
-
+      // console.log(customer,"pooo",tripID)
+       if((!customer || customer === '') && !tripID){
+        return
+       }
 
       try {
-        const tripid = localStorage.getItem("selectedtripsheetid");
-        const encoded = localStorage.getItem("selectedcustomerdata");
-        localStorage.setItem("selectedcustomer", encoded);
-        const storedCustomer = localStorage.getItem("selectedcustomer");
+            console.log(customer,"pooo",tripID)
+        // const tripid = localStorage.getItem("selectedtripsheetid");
+        // const encoded = localStorage.getItem("selectedcustomerdata");
+        // localStorage.setItem("selectedcustomer", encoded);
+        // const storedCustomer = localStorage.getItem("selectedcustomer");
         // const customer = decodeURIComponent(storedCustomer);
         // const trip = tripID?.join(',')
 
@@ -281,14 +289,14 @@ const TransferReport = ({ Statename }) => {
         const response = await fetch(
           `${apiUrl}/newtripsheetcustomertripid/${encodeURIComponent(customer)}/${tripID}`);
 
-
+        // console.log(response,"pooneww")
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const tripData = await response.json();
-        console.log(tripData, 'tripdata');
+        // console.log(tripData, 'pootripdata');
 
-        setBillId(tripData)
+        // setBillId(tripData)
         setInvoicedata(tripData)
         if (tripData.length > 0) {
           setisButtonLoading(false)
@@ -300,10 +308,16 @@ const TransferReport = ({ Statename }) => {
       }
     }
     fetchData()
-  }, [apiUrl, billGenerate, misformat])
+  // }, [apiUrl, billGenerate, misformat])
+    }, [apiUrl,customer,tripID])
 
   useEffect(() => {
-    if (addressDetails[0]?.billingGroup !== "") {
+    //  if (addressDetails[0]?.billingGroup !== "") {
+     if (addressDetails[0]?.billingGroup !== "") {
+      return
+     }
+    if (addressDetails[0]?.billingGroup) {
+      console.log(addressDetails[0]?.billingGroup,"enterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
       const fetchData = async () => {
         const billingGroupCustomer = addressDetails[0]?.billingGroup
         console.log('GroupBillCustomer', billingGroupCustomer);
@@ -398,12 +412,12 @@ const TransferReport = ({ Statename }) => {
         return
       }
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
-      const blob = await pdf(<PdfPage logo={logo} invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} customerData={customerData} stationData={stationData} />).toBlob();
+      const blob = await pdf(<PdfPage logo={logo} invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} customerData={customerData} stationData={stationData} />).toBlob();
       saveAs(blob, fileName);
       localStorage.removeItem("selectedcustomerdata");
       localStorage.removeItem("selectedtripsheetid");
       // console.log( commonState,'Address for output')
-      setComparisonResult(commonState);
+      // setComparisonResult(commonState);
     }
     else if (pdfBillList === "PDF 2") {
       console.log(pdfBillList, 'pdfBilllist');
@@ -419,7 +433,7 @@ const TransferReport = ({ Statename }) => {
       console.log('checking', invoiceno, pdfBillList);
 
       const fileName = `${invoiceno} ${pdfBillList}.pdf`;
-      const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation} commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} customerData={customerData} stationData={stationData} />).toBlob();
+      const blob = await pdf(<PdfContent2 logo={logo} invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1}  commonStateAdress={commonState} billingGroupDetails={billingGroupDetails} customerData={customerData} stationData={stationData} />).toBlob();
       saveAs(blob, fileName);
       localStorage.removeItem("selectedcustomerdata");
       localStorage.removeItem("selectedtripsheetid");
@@ -459,11 +473,14 @@ const TransferReport = ({ Statename }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if(!customer){
+        return
+      }
       try {
-        console.log(customer, 'customer =====');
+        // console.log(customer, 'customer =====');
 
         const response = await axios.get(`${apiUrl}/customerDetailsAndGroupBillingDetails/${customer}`)
-        console.log(response.data, 'customer response');
+        // console.log(response.data, 'customer response');
         const data = response.data;
         const customerDetails = data.customerDetails;
         const stationDetails = data.customerStations;
@@ -478,7 +495,8 @@ const TransferReport = ({ Statename }) => {
       }
     }
     fetchData()
-  }, [apiUrl, customer, misformat, pdfBillList])
+  // }, [apiUrl, customer, misformat, pdfBillList])
+   }, [apiUrl, customer])
 
 
   // const handleButtonClick = async (params) => {
@@ -650,7 +668,7 @@ const TransferReport = ({ Statename }) => {
                     // onChange={(event, value) => setMisformat(value?.label)}
                     onChange={(event, value) => {
                       setMisformat(value?.label)
-                      setisButtonLoading(true);
+                      // setisButtonLoading(true);
                       // setTimeout(() => {
                       //   setisButtonLoading(false);
                       // }, 3000);
@@ -802,7 +820,7 @@ const TransferReport = ({ Statename }) => {
                     // onChange={(event, value) => setPdfBillList(value?.label)}
                     onChange={(event, value) => {
                       setPdfBillList(value?.label);
-                      setisButtonLoading(true);
+                      // setisButtonLoading(true);
                       // setTimeout(() => {
                       //   setisButtonLoading(false);
                       // }, 3000);
@@ -910,7 +928,7 @@ const TransferReport = ({ Statename }) => {
             {/* booking mail dialog box */}
             <Dialog open={popupOpen} onClose={handlePopupClose}>
               <DialogContent>
-                <Mailpdf attachedImage={attachedImage} />
+                {/* <Mailpdf attachedImage={attachedImage} /> */}
               </DialogContent>
               <DialogActions>
                 <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -958,7 +976,8 @@ const TransferReport = ({ Statename }) => {
                     </LoadingButton>
                     <Menu {...bindMenu(popupState)}>
                       {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                      <MenuItem onClick={() => handledatazipDownload(tripheaderIndex, misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel, customerData, stationData, bookingMail)}>  ZIP </MenuItem>
+                      {/* <MenuItem onClick={() => handledatazipDownload(tripheaderIndex, misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, rowSelectionModel, customerData, stationData, bookingMail)}>  ZIP </MenuItem> */}
+                        <MenuItem onClick={() => handledatazipDownload(tripheaderIndex, misformat, pdfzipdata, invoiceDate, customer, organizationsdetail1, logo, customerData, stationData, bookingMail)}>  ZIP </MenuItem>
                       {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
                       {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
                     </Menu>
@@ -1066,13 +1085,13 @@ const TransferReport = ({ Statename }) => {
                   rows={rows}
                   columns={columns}
                   pageSize={5}
-                  onRowSelectionModelChange={(newRowSelectionModel) => {
-                    setRowSelectionModel(newRowSelectionModel);
-                    handleRowSelection(newRowSelectionModel);
-                  }}
+                  // onRowSelectionModelChange={(newRowSelectionModel) => {
+                  //   setRowSelectionModel(newRowSelectionModel);
+                  //   handleRowSelection(newRowSelectionModel);
+                  // }}
                   checkboxSelection
                   disableRowSelectionOnClick
-                  selectionModel={rowSelectionModel}
+                  // selectionModel={rowSelectionModel}
                   components={{
                     NoRowsOverlay: CustomNoRowsOverlay,
                   }}
@@ -1161,7 +1180,7 @@ const TransferReport = ({ Statename }) => {
               overflowY: 'auto'
             }}
           >
-            <PdfParticularData logo={logo} customerData={customerData} stationData={stationData} addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} tripno={tripno} />
+            <PdfParticularData logo={logo} customerData={customerData} stationData={stationData} addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1}  tripno={tripno} />
           </Box>
         </Modal>
       </form>

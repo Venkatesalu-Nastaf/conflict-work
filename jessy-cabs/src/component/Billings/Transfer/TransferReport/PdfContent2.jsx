@@ -157,20 +157,20 @@ const styles = StyleSheet.create({
     }
 })
 
-const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invoiceDate, fromDate, enddate, organisationname, imagename, commonStateAdress, billingGroupDetails, customerData, stationData }) => {
-    const [address1, setAddress1] = useState('')
+const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invoiceDate, fromDate, enddate, organisationname,commonStateAdress, billingGroupDetails, customerData, stationData }) => {
+    // const [address1, setAddress1] = useState('')
     const [totalAmount, setTotalAmount] = useState('')
-    const [extraKmAmount, setExtraKmAmount] = useState('')
+    // const [extraKmAmount, setExtraKmAmount] = useState('')
     const [parking, setParking] = useState('')
     const [permit, setPermit] = useState('')
     const [toll, setToll] = useState('')
-    const [gst, setGst] = useState('')
+    // const [gst, setGst] = useState('')
     const [gstAmount, setGstAmount] = useState(0)
     const [advance, setAdvance] = useState();
     const apiUrl = APIURL;
     const organisationdetailfill = organisationname
-    const organisationimage = imagename
-    const customStateDatas = commonStateAdress
+    // const organisationimage = imagename
+    // const customStateDatas = commonStateAdress
 
 
     useEffect(() => {
@@ -179,7 +179,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
             let parkingamount = 0
             let Tollamount = 0
             let permitamount = 0
-            let exkmamount = 0
+            // let exkmamount = 0
             let advanceamount = 0
             let gstamount = 0
             invdata?.map((li) => {
@@ -187,7 +187,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
                 parkingamount += parseInt(li.parking || 0) 
                 Tollamount += parseInt(li.toll || 0)
                 permitamount += parseInt(li.permit || 0)
-                exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
+                // exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
                 advanceamount += parseInt(li.customeradvance || 0)
                 gstamount = parseInt(li.gstTax)
                 return null
@@ -196,26 +196,26 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
             setToll(Tollamount)
             setParking(parkingamount)
             setPermit(permitamount)
-            setExtraKmAmount(exkmamount)
+            // setExtraKmAmount(exkmamount)
             setGstAmount(gstamount)
             setAdvance(advanceamount)
         }
     }, [apiUrl, invdata])
 
-    useEffect(() => {
-        if (customeraddress) {
-            let address1 = ""
-            let gstno = ""
-            customeraddress?.map((li) => {
-                address1 = li.address1
-                gstno = li.gstnumber
-                return null
-            })
+    // useEffect(() => {
+    //     if (customeraddress) {
+    //         let address1 = ""
+    //         let gstno = ""
+    //         customeraddress?.map((li) => {
+    //             address1 = li.address1
+    //             gstno = li.gstnumber
+    //             return null
+    //         })
 
-            setAddress1(address1)
-            setGst(gstno)
-        }
-    }, [apiUrl, customeraddress])
+    //         setAddress1(address1)
+    //         setGst(gstno)
+    //     }
+    // }, [apiUrl, customeraddress])
     const park = parseInt(parking)
     const permitcharge = parseInt(permit)
     const tollcharge = parseInt(toll)
@@ -225,11 +225,11 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     const calgst = gstAmount / 2;
     const cgst = Math.round(fullAmount * calgst / 100)
     const sgst = Math.round(fullAmount * calgst / 100)
-    const igst = Math.round(fullAmount * gstAmount / 100)
+    // const igst = Math.round(fullAmount * gstAmount / 100)
     const groupgst = billingGroupDetails[0]?.gstTax / 2;
-    const groupigst = billingGroupDetails[0]?.gstTax;
+    // const groupigst = billingGroupDetails[0]?.gstTax;
     const billingGroupCGST = Math.round(fullAmount * groupgst / 100 || 0)
-    const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
+    // const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
 
     // const park = parseInt(parking)
     // const permitcharge = parseInt(permit)
@@ -240,8 +240,8 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
     // const formattedFullAmount = FullAmount.toFixed(0);
     const formattedFullAmount = formattedFullwithtollpark.toFixed(0);
     // const igstFullAmount = fullAmount + igst - parseInt(advance);
-    const igstFullAmount = billingGroupDetails.length > 0 ? fullAmount + billingGroupIGST - parseInt(advance) : fullAmount + igst - parseInt(advance)
-    const igstFullFormattedAmount = igstFullAmount.toFixed(0)
+    // const igstFullAmount = billingGroupDetails.length > 0 ? fullAmount + billingGroupIGST - parseInt(advance) : fullAmount + igst - parseInt(advance)
+    // const igstFullFormattedAmount = igstFullAmount.toFixed(0)
     const tripsheetnos = invdata?.length
     const rupeestext = numWords(parseInt(formattedFullAmount));
 
@@ -252,7 +252,7 @@ const PdfContent2 = ({ logo, invdata, customeraddress, invoiceno, customer, invo
 
     const igstcalc = customerData[0]?.gstTax;
     const igstAmount = Math.round(fullAmount * igstcalc / 100 || 0)
-    console.log(customer, 'pdf222');
+    // console.log(customer, 'pdf222');
 
     return (
         <PDFDocument>

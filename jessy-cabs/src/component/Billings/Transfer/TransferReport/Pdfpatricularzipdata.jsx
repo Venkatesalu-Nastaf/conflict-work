@@ -533,9 +533,9 @@ const styles = StyleSheet.create({
 const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, customerData, stationData }) => {
 
   const [orgname, setOrgname] = useState('')
-  const [orgaddress1, setOrgaddress1] = useState('')
-  const [orgaddress3, setOrgaddress3] = useState('')
-  const [address1, setAddress1] = useState('')
+  // const [orgaddress1, setOrgaddress1] = useState('')
+  // const [orgaddress3, setOrgaddress3] = useState('')
+  // const [address1, setAddress1] = useState('')
   const [guestaddress1, setGuestAddress1] = useState('')
   const [customer, setCustomer] = useState('')
   const [empno, setEmpno] = useState('')
@@ -582,14 +582,14 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   const [totalparking, setTotalParking] = useState('')
   const [tripCustomercode, setTripCustomercode] = useState('')
   const [category, setCategory] = useState('')
-  const [addresscustomer, setAddresscustomer] = useState('')
-  const [bookimage, setBookingimage] = useState([])
-  const [starttime, setStarttime] = useState('0')
-  const [shedintime, setShedintime] = useState('0')
-  const [startkm, setStartkm] = useState('0')
-  const [closekm, setClosekm] = useState('0')
-  const [releasingKM, setReleasingKM] = useState('0')
-  const [reportKM, setReportKM] = useState('0')
+  // const [addresscustomer, setAddresscustomer] = useState('')
+  // const [bookimage, setBookingimage] = useState([])
+  // // const [starttime, setStarttime] = useState('0')
+  // // const [shedintime, setShedintime] = useState('0')
+  // // const [startkm, setStartkm] = useState('0')
+  // // const [closekm, setClosekm] = useState('0')
+  // // const [releasingKM, setReleasingKM] = useState('0')
+  // // const [reportKM, setReportKM] = useState('0')
 
 
   const [remark, setRemark] = useState('')
@@ -628,16 +628,16 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   }
 
   useEffect(() => {
-    let addressone = ''
-    let addressthree = ''
+    // let addressone = ''
+    // let addressthree = ''
     let organisationname = ''
     organisationdetail?.forEach((li) => {
-      addressone = li.addressLine1
-      addressthree = li.location
+      // addressone = li.addressLine1
+      // addressthree = li.location
       organisationname = li.organizationname
     })
-    setOrgaddress1(addressone)
-    setOrgaddress3(addressthree)
+    // setOrgaddress1(addressone)
+    // setOrgaddress3(addressthree)
     setOrgname(organisationname)
   }, [organisationdetail])
 
@@ -685,17 +685,17 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     let Categorygroups = ''
     let routemapdata = []
     let attachedimagedata = []
-    let customeraddress1 = ""
-    let startTime = ''
-    let shedInTime = ''
-    let startkm = ''
-    let closekm = ''
-    let reportkm = ''
-    let releasekm = ''
+    // let customeraddress1 = ""
+    // let startTime = ''
+    // let shedInTime = ''
+    // let startkm = ''
+    // let closekm = ''
+    // let reportkm = ''
+    // let releasekm = ''
     let Tripshedoutdate = ''
     let Tripshedindate = ''
 
-    let bookingimagedata = []
+    // let bookingimagedata = []
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
         addressone = li.address1
@@ -715,7 +715,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         mapimage = JSON.parse(li.map_data)
         routemapdata = JSON.parse(li.gmapdata)
         attachedimagedata = JSON.parse(li.Attachedimage)
-        bookingimagedata = JSON.parse(li.bookattachedimage)
+        // bookingimagedata = JSON.parse(li.bookattachedimage)
         packages = li.calcPackage
         Dropaddress = li.useage
         Report = li.transferreport
@@ -727,7 +727,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         Tripstartdate = li.startdate
         TripClosedate = li.closedate
         Tripshedoutdate = li.shedOutDate
-        Tripshedindate = li.shedInDate
+        // Tripshedindate = li.shedInDate
+        Tripshedindate = li.shedInDateold
 
         // Reporttime = li.starttime
         // Starttime = li.reporttime
@@ -765,7 +766,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         TotalPermit = li.permit
         CustomerCode = li.customercode
         Categorygroups = li.orderedby
-        customeraddress1 = li.Customeraddress1
+        // customeraddress1 = li.Customeraddress1
 
 
 
@@ -773,20 +774,20 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
       })
     }
-    console.log(particularPdf, "pdfff")
+    // console.log(particularPdf, "pdfff")
 
 
 
     const uniqueArray = Array.from(new Set(attachedimagedata?.filter(item => item.attachedimageurl !== null)?.map(JSON.stringify)))?.map(JSON.parse);
 
-    const uniqueArraybook = Array.from(new Set(bookingimagedata?.filter(item => item.imagees !== null)?.map(JSON.stringify)))?.map(JSON.parse);
+    // const uniqueArraybook = Array.from(new Set(bookingimagedata?.filter(item => item.imagees !== null)?.map(JSON.stringify)))?.map(JSON.parse);
 
 
     // const uniqueArraybook = Array.from(new Set(bookingimagedata?.map(JSON.stringify)))?.map(JSON.parse);
 
     // Convert the unique array back to a JSON string
     const uniqueJsonString = JSON.stringify(uniqueArray);
-    const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+    // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
     // const mapdata = Array.from(new Set(routemapdata?.filter(item => item.trip_type !== null && item.place_name)?.map(JSON.stringify)))?.map(JSON.parse);
 
     const mapdata = Array.from(new Set(routemapdata?.filter(item => item.trip_type !== null && item.place_name)?.map(JSON.stringify)))?.map(JSON.parse)?.sort((a, b) => {
@@ -794,10 +795,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
       return (order[a.trip_type] || 4) - (order[b.trip_type] || 4);
 
     });
-    console.log(mapdata,"mapdata")
+    // console.log(mapdata,"mapdata")
     const { signature_path } = signatureimage
     const { map_path } = mapimage
-    setAddress1(customeraddress1)
+    // setAddress1(customeraddress1)
     setGuestAddress1(addressone)
     setCustomer(customers)
     setFuel(fueltype)
@@ -845,11 +846,11 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     setTotaltoll(TotalToll)
     setTripCustomercode(CustomerCode)
     setCategory(Categorygroups)
-    setAddresscustomer(customeraddress1)
+    // setAddresscustomer(customeraddress1)
     // setStarttime(startTime)
     // setShedintime(shedInTime)
     setCalcPackages(packages)
-    setBookingimage(JSON.parse(uniqueJsonStringbook))
+    // setBookingimage(JSON.parse(uniqueJsonStringbook))
     // setStartkm(startkm)
     // setClosekm(closekm)
     // setReleasingKM(releasekm)
@@ -857,14 +858,14 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     setAttachedimage(JSON.parse(uniqueJsonString))
   }, [particularPdf])
 
-  const firstSet = routemap.slice(0, 12);
-  const nextSet = routemap.slice(12, 24);
-  const remainingItems = routemap.slice(24);
+  // const firstSet = routemap.slice(0, 12);
+  // const nextSet = routemap.slice(12, 24);
+  // const remainingItems = routemap.slice(24);
   const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripStartKm || 0)
-  console.log(tripCloseKm, tripReportKm, "kmmmm")
-  console.log(bookimage, "bookimage", stationData, "stationData")
-  console.log(tripshedinDate, "tripshed", tripCloseDate)
-  console.log(vehicletype, "zip")
+  // console.log(tripCloseKm, tripReportKm, "kmmmm")
+  // console.log(bookimage, "bookimage", stationData, "stationData")
+  // console.log(tripshedinDate, "tripshed", tripCloseDate)
+  // console.log(vehicletype, "zip")
 
   return (
     <>

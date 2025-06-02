@@ -30,7 +30,7 @@ import { PermissionContext } from '../../../context/permissionContext';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LoadingButton from '@mui/lab/LoadingButton';
 
-const GroupBilling = ({ stationName, organizationNames }) => {
+const GroupBilling = ({organizationNames }) => {
     const apiurl = APIURL;
     const {
         rows,
@@ -186,10 +186,26 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     }, [apiurl, customer]);
 
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const customer = refCustomer[0]
+    //         if (refCustomer !== "") {
+    //             try {
+    //                 const response = await axios.get(`${apiUrl}/gstdetails/${customer}`);
+    //                 setGstno(response.data)
+    //             } catch (error) {
+    //                 console.error('Errorgst', error);
+    //                 throw error;
+    //             }
+    //         }
+    //     }
+
+    //     fetchData()
+    // }, [apiUrl, refCustomer, setGstno])
+      useEffect(() => {
         const fetchData = async () => {
-            const customer = refCustomer[0]
-            if (refCustomer !== "") {
+            
+            if (customer !== "") {
                 try {
                     const response = await axios.get(`${apiUrl}/gstdetails/${customer}`);
                     setGstno(response.data)
@@ -201,14 +217,14 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         }
 
         fetchData()
-    }, [apiUrl, refCustomer, setGstno])
+    }, [apiUrl,setGstno])
 
     // get billingGroupDetailss
 
     
     useEffect(() => {
-        // if (gstno.length > 0 && gstno[0]?.billingGroup) {
-        if (gstno[0]?.billingGroup !== "") {
+        if (gstno.length > 0 && gstno[0]?.billingGroup) {
+        // if (gstno[0]?.billingGroup !== "") {
             const fetchData = async () => {
                 const billingGroupCustomer = gstno[0]?.billingGroup
                 console.log('GroupBillCustomer', billingGroupCustomer);

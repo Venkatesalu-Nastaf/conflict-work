@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { saveAs } from "file-saver";
-import jsPDF from "jspdf";
+// import { saveAs } from "file-saver";
+// import jsPDF from "jspdf";
 // import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
 import { APIURL } from "../../../url";
 import { useLocation } from "react-router-dom";
@@ -38,16 +38,16 @@ const useTransferreport = () => {
   const [pdfBillList, setPdfBillList] = useState('');
   const [bookingMail, setBookingMail] = useState(false);
   const [tripID, setTripID] = useState();
-  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  // const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [pdfzipdata, setPdfzipdata] = useState([])
-  const [selectedRow, setSelectedRow] = useState([])
+  // const [selectedRow, setSelectedRow] = useState([])
   const [billedStatusCheck, setBilledStatusCheck] = useState();
   const location = useLocation()
   const { transferReport, setTransferReport } = PdfData()
   // set All Tripsheet Values
-  const [allTripData, setAllTripData] = useState([])
-  const [removeUpdate, setRemoveUpdate] = useState(false)
-  const [totalTransferAmount, setTotalTransferAmount] = useState()
+  // const [allTripData, setAllTripData] = useState([])
+  // const [removeUpdate, setRemoveUpdate] = useState(false)
+  // const [totalTransferAmount, setTotalTransferAmount] = useState()
   const [billingGroupDetails, setBillingGroupDetails] = useState('')
 
   const [loading, setLoading] = useState(false)
@@ -66,7 +66,8 @@ const useTransferreport = () => {
         formData[key] = value;
       }
     });
-    console.log(formData.State, 'state999');
+    // console.log(formData.State, 'state999');
+
 
     setCustomer(formData.Customer)
     setFromDate(formData.FromDate)
@@ -98,7 +99,7 @@ const useTransferreport = () => {
       setInvoiceno('')
       setInvoiceDate('')
       setGroupTripid('');
-      setCustomerData("")
+      // setCustomerData("")
       setTripID()
       setRows([])
       // setRowSelectionModel([])
@@ -108,37 +109,37 @@ const useTransferreport = () => {
   useEffect(() => {
     window.history.replaceState(null, document.title, window.location.pathname);
   }, []);
-  const tableData = rows.map((row) => [
-    row["id"],
-    row["tripid"],
-    row["vcode"],
-    row["guestname"],
-    row["status"]
-  ]);
-  const handleExcelDownload = () => {
-    const header = ["Sno", "Tripsheet No", "VCode", "Status", "Guest Name"];
-    const csvData = [
-      header,
-      ...tableData?.map((row) => row.map((value) => `"${value}"`)),
-    ]
-      .map((row) => row.join(","))
-      .join("\n");
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "customer_details.csv");
-  };
-  const handlePdfDownload = () => {
-    const pdf = new jsPDF();
-    pdf.setFontSize(12);
-    pdf.setFont("helvetica", "normal");
-    pdf.text("Customer Details", 10, 10);
-    pdf.autoTable({
-      head: [["Sno", "Tripsheet No", "VCode", "Status", "Guest Name"]],
-      body: tableData,
-      startY: 20,
-    });
-    const pdfBlob = pdf.output("blob");
-    saveAs(pdfBlob, "Transfer Report.pdf");
-  };
+  // const tableData = rows.map((row) => [
+  //   row["id"],
+  //   row["tripid"],
+  //   row["vcode"],
+  //   row["guestname"],
+  //   row["status"]
+  // ]);
+  // const handleExcelDownload = () => {
+  //   const header = ["Sno", "Tripsheet No", "VCode", "Status", "Guest Name"];
+  //   const csvData = [
+  //     header,
+  //     ...tableData?.map((row) => row.map((value) => `"${value}"`)),
+  //   ]
+  //     .map((row) => row.join(","))
+  //     .join("\n");
+  //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+  //   saveAs(blob, "customer_details.csv");
+  // };
+  // const handlePdfDownload = () => {
+  //   const pdf = new jsPDF();
+  //   pdf.setFontSize(12);
+  //   pdf.setFont("helvetica", "normal");
+  //   pdf.text("Customer Details", 10, 10);
+  //   pdf.autoTable({
+  //     head: [["Sno", "Tripsheet No", "VCode", "Status", "Guest Name"]],
+  //     body: tableData,
+  //     startY: 20,
+  //   });
+  //   const pdfBlob = pdf.output("blob");
+  //   saveAs(pdfBlob, "Transfer Report.pdf");
+  // };
 
   useEffect(() => {
     if (error || success || warning || info) {
@@ -233,9 +234,9 @@ const useTransferreport = () => {
 
       try {
         const tripid = localStorage.getItem("selectedtripsheetid");
-        const encoded = localStorage.getItem("selectedcustomerdata");
-        localStorage.setItem("selectedcustomer", encoded);
-        const storedCustomer = localStorage.getItem("selectedcustomer");
+        // const encoded = localStorage.getItem("selectedcustomerdata");
+        // localStorage.setItem("selectedcustomer", encoded);
+        // const storedCustomer = localStorage.getItem("selectedcustomer");
         // const customer = decodeURIComponent(storedCustomer);
         if (!customer || !tripid) return
 
@@ -294,61 +295,61 @@ const useTransferreport = () => {
   };
 
   //tripsheet data get for normal invoice
-  const [routeData, setRouteData] = useState("");
-  const [customerData, setCustomerData] = useState("");
-  const [totalValue, setTotalValue] = useState("");
-  const [roundedAmount, setRoundedAmount] = useState("");
-  const [sumTotalAndRounded, setSumTotalAndRounded] = useState("");
+  // const [routeData, setRouteData] = useState("");
+  // const [customerData, setCustomerData] = useState("");
+  // const [totalValue, setTotalValue] = useState("");
+  // const [roundedAmount, setRoundedAmount] = useState("");
+  // const [sumTotalAndRounded, setSumTotalAndRounded] = useState("");
   const [ratetypeforpage, setRatetypeforpage] = useState("");
 
-  const calculateNetAmountSum = (data) => {
-    return data.reduce((sum, item) => {
-      const netAmountValue = parseFloat(item.netamount, 10);
-      return sum + netAmountValue;
-    }, 0);
-  };
+  // const calculateNetAmountSum = (data) => {
+  //   return data.reduce((sum, item) => {
+  //     const netAmountValue = parseFloat(item.netamount, 10);
+  //     return sum + netAmountValue;
+  //   }, 0);
+  // };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const tripid = localStorage.getItem("selectedtripsheetid");
-      // const customer = localStorage.getItem("selectedcustomer");
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     // const tripid = localStorage.getItem("selectedtripsheetid");
+  //     // const customer = localStorage.getItem("selectedcustomer");
 
-      try {
+  //     try {
 
-        if (!tripID || !customer) return
+  //       if (!tripID || !customer) return
 
-        const response = await fetch(
-          `${apiUrl}/tripsheetcustomertripid/${customer}/${tripID}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const responseData = await response.json();
-        if (Array.isArray(responseData)) {
-          setRouteData(responseData);
-          const netAmountSum = calculateNetAmountSum(responseData);
-          setTotalValue(netAmountSum);
+  //       const response = await fetch(
+  //         `${apiUrl}/tripsheetcustomertripid/${customer}/${tripID}`
+  //       );
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+  //       const responseData = await response.json();
+  //       if (Array.isArray(responseData)) {
+  //         setRouteData(responseData);
+  //         const netAmountSum = calculateNetAmountSum(responseData);
+  //         setTotalValue(netAmountSum);
 
-          const calculateRoundOff = () => {
-            const balanceAmount = parseFloat(totalValue);
-            const roundedGrossAmount = Math.ceil(balanceAmount);
-            const roundOff = roundedGrossAmount - balanceAmount;
-            return roundOff.toFixed(2);
-          };
+  //         const calculateRoundOff = () => {
+  //           const balanceAmount = parseFloat(totalValue);
+  //           const roundedGrossAmount = Math.ceil(balanceAmount);
+  //           const roundOff = roundedGrossAmount - balanceAmount;
+  //           return roundOff.toFixed(2);
+  //         };
 
-          const roundOffValue = calculateRoundOff();
-          setRoundedAmount(roundOffValue);
+  //         const roundOffValue = calculateRoundOff();
+  //         setRoundedAmount(roundOffValue);
 
-          const sumTotalAndRounded =
-            parseFloat(netAmountSum) + parseFloat(roundOffValue);
-          setSumTotalAndRounded(sumTotalAndRounded);
-        } else {
-        }
-      } catch { }
+  //         const sumTotalAndRounded =
+  //           parseFloat(netAmountSum) + parseFloat(roundOffValue);
+  //         setSumTotalAndRounded(sumTotalAndRounded);
+  //       } else {
+  //       }
+  //     } catch { }
 
-    };
-    fetchData();
-  }, [totalValue, roundedAmount, apiUrl]);
+  //   };
+  //   fetchData();
+  // }, [totalValue, roundedAmount, apiUrl]);
 
   useEffect(() => {
     //this is for getting organization details
@@ -366,7 +367,7 @@ const useTransferreport = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const customerData = await response.json();
-        setCustomerData(customerData);
+        // setCustomerData(customerData);
         const ratetype = customerData.rateType;
         setRatetypeforpage(ratetype)
       } catch { }
@@ -376,10 +377,10 @@ const useTransferreport = () => {
 
 
 
-  const organizationaddress1 = customerData.address1;
-  const organizationaddress2 = customerData.address2;
-  const organizationcity = customerData.city;
-  const organizationgstnumber = customerData.gstnumber;
+  // const organizationaddress1 = customerData.address1;
+  // const organizationaddress2 = customerData.address2;
+  // const organizationcity = customerData.city;
+  // const organizationgstnumber = customerData.gstnumber;
 
   // useEffect(() => {
   //   Organization()
@@ -430,7 +431,7 @@ const useTransferreport = () => {
   //   fetchData4();
   // }, [customer, servicestation, tripData, apiUrl]);
 
-  const [attachedImage, setAttachedImage] = useState("");
+  // const [attachedImage, setAttachedImage] = useState("");
   //  its is booking table or tripsheettabel
   //  i change api for booking mail pdf go to see booking.js
   // useEffect(() => {
@@ -456,91 +457,91 @@ const useTransferreport = () => {
   //   fetchData();
   // }, [apiUrl]);
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // const organizationname = localStorage.getItem("usercompany");
-        // if (!organizationname) {
-        //   return;
-        // }
-        const response = await fetch(`${apiUrl}/get-companyimage`);
-        if (response.status === 200) {
-          const data = await response.json();
-          const attachedImageUrls = data.imagePaths.map(
-            (path) => `${apiUrl}/images/${path}`
-          );
-          localStorage.setItem(
-            "selectedImage",
-            JSON.stringify(attachedImageUrls)
-          );
-          setSelectedImage(attachedImageUrls);
-        } else {
-          const timer = setTimeout(fetchData, 2000);
-          return () => clearTimeout(timer);
-        }
-      } catch { }
-    };
-    fetchData();
-  }, [apiUrl]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // const organizationname = localStorage.getItem("usercompany");
+  //       // if (!organizationname) {
+  //       //   return;
+  //       // }
+  //       const response = await fetch(`${apiUrl}/get-companyimage`);
+  //       if (response.status === 200) {
+  //         const data = await response.json();
+  //         const attachedImageUrls = data.imagePaths.map(
+  //           (path) => `${apiUrl}/images/${path}`
+  //         );
+  //         localStorage.setItem(
+  //           "selectedImage",
+  //           JSON.stringify(attachedImageUrls)
+  //         );
+  //         setSelectedImage(attachedImageUrls);
+  //       } else {
+  //         const timer = setTimeout(fetchData, 2000);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     } catch { }
+  //   };
+  //   fetchData();
+  // }, [apiUrl]);
 
-  const [organizationdata, setorganizationData] = useState("");
+  // const [organizationdata, setorganizationData] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      // const encoded = localStorage.getItem("usercompany");
-      // localStorage.setItem("usercompanyname", encoded);
-      // const storedcomanyname = localStorage.getItem("usercompanyname");
-      // const organizationname = decodeURIComponent(storedcomanyname);
-      try {
-        // const response = await fetch(
-        //   `${apiUrl}/organizationdata/${organizationname}`
-        // );
-        const response = await fetch(
-          `${apiUrl}/organizationdata`
-        );
-        if (response.status === 200) {
-          const userDataArray = await response.json();
-          if (userDataArray.length > 0) {
-            setorganizationData(userDataArray[0]);
-          }
-        } else {
-          const timer = setTimeout(fetchData, 2000);
-          return () => clearTimeout(timer);
-        }
-      } catch { }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     // const encoded = localStorage.getItem("usercompany");
+  //     // localStorage.setItem("usercompanyname", encoded);
+  //     // const storedcomanyname = localStorage.getItem("usercompanyname");
+  //     // const organizationname = decodeURIComponent(storedcomanyname);
+  //     try {
+  //       // const response = await fetch(
+  //       //   `${apiUrl}/organizationdata/${organizationname}`
+  //       // );
+  //       const response = await fetch(
+  //         `${apiUrl}/organizationdata`
+  //       );
+  //       if (response.status === 200) {
+  //         const userDataArray = await response.json();
+  //         if (userDataArray.length > 0) {
+  //           setorganizationData(userDataArray[0]);
+  //         }
+  //       } else {
+  //         const timer = setTimeout(fetchData, 2000);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     } catch { }
+  //   };
 
-    fetchData();
-  }, [apiUrl]);
+  //   fetchData();
+  // }, [apiUrl]);
 
-  const handleRowSelection = (newSelectionModel) => {
-    const selectedTripIds = newSelectionModel
-      .filter((selectedId) => selectedId !== null)
-      .map((selectedId) => {
-        const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
-        return selectedRow ? selectedRow.tripid : null;
-      })
-      .filter((tripid) => tripid !== null);
+  // const handleRowSelection = (newSelectionModel) => {
+  //   const selectedTripIds = newSelectionModel
+  //     .filter((selectedId) => selectedId !== null)
+  //     .map((selectedId) => {
+  //       const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+  //       return selectedRow ? selectedRow.tripid : null;
+  //     })
+  //     .filter((tripid) => tripid !== null);
 
-    console.log("Selected Trip IDs:", selectedTripIds);
+  //   console.log("Selected Trip IDs:", selectedTripIds);
 
-    const selectedTrips = newSelectionModel
-      .filter((selectedId) => selectedId !== null)
-      .map((selectedId) => {
-        const selectedRow = allTripData.find((row) => row.id === parseInt(selectedId));
-        return selectedRow ? selectedRow : null;
-      })
-      .filter((tripid) => tripid !== null);
+  //   const selectedTrips = newSelectionModel
+  //     .filter((selectedId) => selectedId !== null)
+  //     .map((selectedId) => {
+  //       const selectedRow = allTripData.find((row) => row.id === parseInt(selectedId));
+  //       return selectedRow ? selectedRow : null;
+  //     })
+  //     .filter((tripid) => tripid !== null);
 
-    console.log("Selected Trips:", selectedTrips);
-    setSelectedRow(selectedTrips)
-    const tripsheetid = selectedTripIds;
-    setRowSelectionModel(tripsheetid);
+  //   console.log("Selected Trips:", selectedTrips);
+  //   setSelectedRow(selectedTrips)
+  //   const tripsheetid = selectedTripIds;
+  //   setRowSelectionModel(tripsheetid);
 
-    console.log("Row Selection Model (Trip Sheet IDs):", tripsheetid);
-  };
+  //   console.log("Row Selection Model (Trip Sheet IDs):", tripsheetid);
+  // };
   // console.log(rowSelectionModel,"rrrrrr",rowSelectionModel.length);
 
 //   useEffect(() => {
@@ -703,7 +704,7 @@ console.log(a.length,"aaaaaaaaaaaaaaaaaaaaaaaaa",a);
           setZipIsloading(false);
         }
 
-        console.log(uniqueData, "final uniqueData", uniqueData.length,allTripData,"ssssss",tripData);
+        console.log(uniqueData, "final uniqueData", uniqueData?.length,allTripData,"ssssss",tripData);
         setPdfzipdata(allTripData);
 
       } else {
@@ -862,7 +863,7 @@ console.log(a.length,"aaaaaaaaaaaaaaaaaaaaaaaaa",a);
 
         const tripData = response.data;
         // console.log(tripData, 'tripData');
-        setAllTripData(tripData);
+        // setAllTripData(tripData);
 
         if (tripData.length > 0) {
           const tripsheetNumbers = tripData.map((row, index) => ({
@@ -991,8 +992,8 @@ console.log(a.length,"aaaaaaaaaaaaaaaaaaaaaaaaa",a);
           setGroupTripid(groupTripid)
           const Invoice_no = Result?.map(li => li.Invoice_no)
           setInvoiceno(Invoice_no)
-          const Amount = Result?.map(li => li.Amount)
-          setTotalTransferAmount(Amount)
+          // const Amount = Result?.map(li => li.Amount)
+          // setTotalTransferAmount(Amount)
           const Status = Result?.map(li => li.Status)
 
           const checkStatus = Status[0];
@@ -1021,21 +1022,21 @@ console.log(a.length,"aaaaaaaaaaaaaaaaaaaaaaaaa",a);
   }
 
   // to get select tripdetails
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/togetSelectTripsheetDetails`, {
-          params: {
-            Trip_id: rowSelectionModel,
-          },
-        });
-        setAllTripData(response.data)
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, [rowSelectionModel]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/togetSelectTripsheetDetails`, {
+  //         params: {
+  //           Trip_id: rowSelectionModel,
+  //         },
+  //       });
+  //       setAllTripData(response.data)
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [rowSelectionModel]);
 
 
   // const handleRemove = async () => {
@@ -1085,7 +1086,7 @@ console.log(a.length,"aaaaaaaaaaaaaaaaaaaaaaaaa",a);
     errorMessage,
     setErrorMessage,
     warningMessage,
-    organizationdata,
+    // organizationdata,
     hidePopup,
     // routedData,
     date,
@@ -1093,11 +1094,11 @@ console.log(a.length,"aaaaaaaaaaaaaaaaaaaaaaaaa",a);
     tripData,
     // bankOptions,
     ratetypeforpage,
-    attachedImage,
+    // attachedImage,
     setCustomer,
     servicestation,
     setServiceStation,
-    selectedImage,
+    // selectedImage,
     handleserviceInputChange,
     handleEInvoiceClick,
     handleMapInvoiceClick,
@@ -1108,19 +1109,19 @@ console.log(a.length,"aaaaaaaaaaaaaaaaaaaaaaaaa",a);
     handleCheckboxChange,
     npopupOpen,
     lxpopupOpen,
-    handleExcelDownload,
-    handlePdfDownload,
+    // handleExcelDownload,
+    // handlePdfDownload,
     handleETripsheetClick,
-    routeData,
-    roundedAmount,
+    // routeData,
+    // roundedAmount,
     setBookingMail,
     bookingMail,
-    sumTotalAndRounded,
-    totalValue,
-    organizationaddress1,
-    organizationaddress2,
-    organizationcity,
-    organizationgstnumber,
+    // sumTotalAndRounded,
+    // totalValue,
+    // organizationaddress1,
+    // organizationaddress2,
+    // organizationcity,
+    // organizationgstnumber,
     invoiceno,
     groupTripid,
     fromDate,
@@ -1131,11 +1132,11 @@ console.log(a.length,"aaaaaaaaaaaaaaaaaaaaaaaaa",a);
     pdfBillList,
     setPdfBillList,
 
-    handleRowSelection,
+    // handleRowSelection,
     // rowzip,
-    rowSelectionModel,
+    // rowSelectionModel,
 
-    setRowSelectionModel,
+    // setRowSelectionModel,
     pdfzipdata,
     handleKeyDown,
     handleChange,

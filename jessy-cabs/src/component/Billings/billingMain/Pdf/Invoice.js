@@ -8,15 +8,16 @@ const Invoice = () => {
     const [GmapimageUrl, setGMapImageUrl] = useState('');
     const [signimageUrl, setSignImageUrl] = useState('');
     const [routeData, setRouteData] = useState('');
-    const [IndividualBillData, setIndividualBillData] = useState({
-        Invoice_No: '',
-        Trip_id: '',
-        Status: '',
-        Amount: '',
-        Bill_Date: '',
-        Customer: '',
-        Trips: "1"
-    })
+    // const [IndividualBillData, setIndividualBillData] = useState({
+    //     Invoice_No: '',
+    //     Trip_id: '',
+    //     Status: '',
+    //     Amount: '',
+
+    //     Bill_Date: '',
+    //     Customer: '',
+    //     Trips: "1"
+    // })
     //  const [IndividualBillData, setIndividualBillData] = useState(false)
 
     const apiUrl = APIURL;
@@ -84,7 +85,7 @@ const Invoice = () => {
     //   routeData map
     useEffect(() => {
         const fetchData = async () => {
-            const tripidno = particularRefNo
+            // const tripidno = particularRefNo
             try {
                 const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(particularRefNo)}`);
                 if (response.status === 200) {
@@ -111,8 +112,8 @@ const Invoice = () => {
         GmapimageUrl,
         signimageUrl,
         routeData,
-        IndividualBillData,
-        setIndividualBillData
+        // IndividualBillData,
+        // setIndividualBillData
       
     }
 }

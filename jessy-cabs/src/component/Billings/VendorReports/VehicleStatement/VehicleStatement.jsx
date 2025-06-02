@@ -8,7 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import ClearIcon from '@mui/icons-material/Clear';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+// import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -44,36 +44,36 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 
 
-const customer_colums = [
-  { field: 'id', headerName: 'S.no', width: 70 },
-  { field: 'vehRegNo', headerName: 'Vehicle', width: 160 },
-  { field: 'totalTime', headerName: 'Tot. Time', width: 120 },
-  { field: 'totalKilometers', headerName: 'TKMS', width: 120 },
-  { field: "betaTotalAmount", headerName: "Beta", with: 100 },
-  { field: "grandTotal", headerName: "TotalAmount", with: 100 },
-  // { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
-  { field: 'totalcustomeradvance', headerName: 'Driver Advance', width: 130 },
-  // { field: 'balance', headerName: 'Balance', width: 130 },
-  // { field: "betaTotalAmount", headerName: "Beta", with: 100 },
-  { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
-  { field: 'totalPackageAmount', headerName: 'Total Balance', width: 130 },
-  // { field: "grandTotal", headerName: "TotalAmount", with: 100 }
-]
-const customer_colums1 = [
-  { field: 'id', headerName: 'S.no', width: 70 },
-  { field: 'vehRegNo', headerName: 'Vehicle', width: 160 },
-  { field: 'totalTime', headerName: 'Tot. Time', width: 120 },
-  { field: 'totalKilometers', headerName: 'TKMS', width: 120 },
-  { field: "betaTotalAmount", headerName: "Beta", with: 100 },
-  { field: "grandTotal", headerName: "TotalAmount", with: 100 },
-  // { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
-  { field: 'totalcustomeradvance', headerName: 'Driver Advance', width: 130 },
-  // { field: 'balance', headerName: 'Balance', width: 130 },
-  // { field: "betaTotalAmount", headerName: "Beta", with: 100 },
-  { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
-  // { field: 'totalPackageAmount', headerName: 'Total Balance', width: 130 },
-  // { field: "grandTotal", headerName: "TotalAmount", with: 100 }
-]
+// const customer_colums = [
+//   { field: 'id', headerName: 'S.no', width: 70 },
+//   { field: 'vehRegNo', headerName: 'Vehicle', width: 160 },
+//   { field: 'totalTime', headerName: 'Tot. Time', width: 120 },
+//   { field: 'totalKilometers', headerName: 'TKMS', width: 120 },
+//   { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+//   { field: "grandTotal", headerName: "TotalAmount", with: 100 },
+//   // { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
+//   { field: 'totalcustomeradvance', headerName: 'Driver Advance', width: 130 },
+//   // { field: 'balance', headerName: 'Balance', width: 130 },
+//   // { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+//   { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
+//   { field: 'totalPackageAmount', headerName: 'Total Balance', width: 130 },
+//   // { field: "grandTotal", headerName: "TotalAmount", with: 100 }
+// ]
+// const customer_colums1 = [
+//   { field: 'id', headerName: 'S.no', width: 70 },
+//   { field: 'vehRegNo', headerName: 'Vehicle', width: 160 },
+//   { field: 'totalTime', headerName: 'Tot. Time', width: 120 },
+//   { field: 'totalKilometers', headerName: 'TKMS', width: 120 },
+//   { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+//   { field: "grandTotal", headerName: "TotalAmount", with: 100 },
+//   // { field: 'totalPackageAmount', headerName: 'Amount', width: 130 },
+//   { field: 'totalcustomeradvance', headerName: 'Driver Advance', width: 130 },
+//   // { field: 'balance', headerName: 'Balance', width: 130 },
+//   // { field: "betaTotalAmount", headerName: "Beta", with: 100 },
+//   { field: "fuelamount", headerName: "Fuel Amount", with: 100 },
+//   // { field: 'totalPackageAmount', headerName: 'Total Balance', width: 130 },
+//   // { field: "grandTotal", headerName: "TotalAmount", with: 100 }
+// ]
 
 const newColumnsVehicleStatement = [
   { field: 'id', headerName: 'S.no', width: 70 },
@@ -103,11 +103,11 @@ const VehicleStatement = () => {
   const superAdminstatement = localStorage.getItem("SuperAdmin")
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
-  const [successMessage, setSuccessMessage] = useState({});
+  // const [successMessage, setSuccessMessage] = useState({});
   const [success, setSuccess] = useState(false);
   const [warning, setWarning] = useState(false);
   const [warningMessage, setWarningMessgae] = useState({});
-  const [setTableData] = useState([])
+  // const [setTableData] = useState([])
   const [veghdata, setVehDatashow] = useState([])
   const [vehregvalue, setVehRegValue] = useState('')
 
@@ -178,34 +178,34 @@ const VehicleStatement = () => {
 
   //   return (hours * 60) + minutes;
   // };
-  const convertTotalTimeToMinutes = (totaltime) => {
-    console.log(totaltime, "ee")
-    const hoursMatch = totaltime.match(/(\d+)h/);
-    // const minutesMatch = totaltime.match(/(\d+)m/);
-    const minutesMatch = totaltime.match(/(\d+)m/);
+  // const convertTotalTimeToMinutes = (totaltime) => {
+  //   console.log(totaltime, "ee")
+  //   const hoursMatch = totaltime.match(/(\d+)h/);
+  //   // const minutesMatch = totaltime.match(/(\d+)m/);
+  //   const minutesMatch = totaltime.match(/(\d+)m/);
 
-    // Extract hours and minutes, defaulting to 0 if not present
-    const hours1 = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
-    const minutes1 = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
-    console.log(hours1, "match", minutes1)
-    // // const [hoursPart, minutesPart] = totaltime.split(' ');
-    // const hours = parseInt(hoursPart?.replace('h', ''), 10);
-    // const minutes = parseInt(minutesPart?.replace('m', ''), 10);
+  //   // Extract hours and minutes, defaulting to 0 if not present
+  //   const hours1 = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+  //   const minutes1 = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+  //   console.log(hours1, "match", minutes1)
+  //   // // const [hoursPart, minutesPart] = totaltime.split(' ');
+  //   // const hours = parseInt(hoursPart?.replace('h', ''), 10);
+  //   // const minutes = parseInt(minutesPart?.replace('m', ''), 10);
 
-    return (hours1 * 60) + minutes1;
-  };
+  //   return (hours1 * 60) + minutes1;
+  // };
 
-  const convertMinutesToTime = (minutes) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
-  };
+  // const convertMinutesToTime = (minutes) => {
+  //   const hours = Math.floor(minutes / 60);
+  //   const mins = minutes % 60;
+  //   return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+  // };
 
-  // TIME CONVERTION TYPE 00:00
-  const convertTimeToMinutes2 = (time) => {
-    const [hours, minutes] = time.split(':').map(Number);
-    return hours * 60 + minutes;
-  };
+  // // TIME CONVERTION TYPE 00:00
+  // const convertTimeToMinutes2 = (time) => {
+  //   const [hours, minutes] = time.split(':').map(Number);
+  //   return hours * 60 + minutes;
+  // };
 
   //----------------------------------------
 
@@ -267,7 +267,7 @@ const VehicleStatement = () => {
     let FuelAmount = 0;
     let TotalBalance = 0;
   
-    console.log(data, "dataaaaaaaaa");
+    // console.log(data, "dataaaaaaaaa");
   
     data?.forEach((element) => {
       // Add total hours
@@ -290,7 +290,7 @@ const VehicleStatement = () => {
       FuelAmount += fuelPrice;
       const BalanceAmount = totalCalcAmount - (customerAdvance + FuelAmount) || 0;
       TotalBalance = BalanceAmount
-      console.log(BalanceAmount,"bbbbbbbbbbbbbbbbbbbbbbbb");
+      // console.log(BalanceAmount,"bbbbbbbbbbbbbbbbbbbbbbbb");
       
     });
 
@@ -305,8 +305,8 @@ const VehicleStatement = () => {
       grandTotal: (totalCalcAmount + totalBeta + FuelAmount), // or however you define grandTotal
     });
   
-    console.log("Total Hours:", totalHours);
-    console.log("Total Kilometers:", totalKM,totalBeta,totalCalcAmount,TotalBalance);
+    // console.log("Total Hours:", totalHours);
+    // console.log("Total Kilometers:", totalKM,totalBeta,totalCalcAmount,TotalBalance);
   };
   
   
@@ -331,24 +331,24 @@ const VehicleStatement = () => {
   //   return result;
   // }
 
-  const reduceFun = (data) => {
-    const result = data.reduce((accumulator, current) => {
-      accumulator.totalTime += convertTimeToMinutes2(current.totalTime) || 0
-      accumulator.totalKilometers += current.totalKilometers || 0;
-      accumulator.totalPackageAmount += current.totalPackageAmount || 0;
-      accumulator.totalAdvance += current.totalcustomeradvance || 0;
-      accumulator.totaalBalance += current.balance || 0;
-      accumulator.totalBeta += current.betaTotalAmount || 0;
-      accumulator.grandTotal += parseFloat(current.totalcalcAmount) || 0;
-      accumulator.fuelamount += current.fuelamount || 0;
+//   const reduceFun = (data) => {
+//     const result = data.reduce((accumulator, current) => {
+//       accumulator.totalTime += convertTimeToMinutes2(current.totalTime) || 0
+//       accumulator.totalKilometers += current.totalKilometers || 0;
+//       accumulator.totalPackageAmount += current.totalPackageAmount || 0;
+//       accumulator.totalAdvance += current.totalcustomeradvance || 0;
+//       accumulator.totaalBalance += current.balance || 0;
+//       accumulator.totalBeta += current.betaTotalAmount || 0;
+//       accumulator.grandTotal += parseFloat(current.totalcalcAmount) || 0;
+//       accumulator.fuelamount += current.fuelamount || 0;
 
-console.log(accumulator,"accccccccccccccccccccccccccccccccccccccc",current);
+// console.log(accumulator,"accccccccccccccccccccccccccccccccccccccc",current);
 
-      return accumulator
-    }, { totalPackageAmount: 0, totalKilometers: 0, totaalBalance: 0, totalTime: 0, totalAdvance: 0, totalBeta: 0, fuelamount: 0, grandTotal: 0 })
+//       return accumulator
+//     }, { totalPackageAmount: 0, totalKilometers: 0, totaalBalance: 0, totalTime: 0, totalAdvance: 0, totalBeta: 0, fuelamount: 0, grandTotal: 0 })
 
-    return result;
-  }
+//     return result;
+//   }
 
   const [Customerdata, setCustomerData] = useState([])
 
@@ -490,7 +490,7 @@ console.log(accumulator,"accccccccccccccccccccccccccccccccccccccc",current);
         };
       });
       
-      console.log(datas, "updated data with FinalTotalAmount");
+      // console.log(datas, "updated data with FinalTotalAmount");
 
 
       if (data.hireTypes === "Own Vehicle") {
@@ -593,7 +593,7 @@ console.log(accumulator,"accccccccccccccccccccccccccccccccccccccc",current);
         if (datas.length > 0) {
 
 
-          const parseData = transformAtached(datas);
+          transformAtached(datas);
           setCustomerData(datas)
           // if (parseData.length > 0) {
           //   const reducedData = reduceFun(parseData);
@@ -634,7 +634,7 @@ console.log(accumulator,"accccccccccccccccccccccccccccccccccccccc",current);
 
       } else if (data.hireTypes === "DCO Vehicle") {
         if (datas.length > 0) {
-          const parseData = transformAtached(datas);
+          transformAtached(datas);
           // if (parseData.length > 0) {
           //   const reducedData = reduceFun(parseData);
 
@@ -676,7 +676,7 @@ setCustomerData(datas)
       }
       else if (data.hireTypes === "All") {
         if (datas.length > 0) {
-          const parseData = transformAtached(datas);
+          transformAtached(datas);
           // const parseData = datas;
           
 
@@ -1504,13 +1504,13 @@ setCustomerData(datas)
               <p>{errorMessage}</p>
             </div>
           }
-          {success &&
+          {/* {success &&
             <div className='alert-popup Success' >
               <div className="popup-icon"> <FileDownloadDoneIcon /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' /> </span>
               <p>{successMessage}</p>
             </div>
-          }
+          } */}
           {warning &&
             <div className='alert-popup Warning' >
               <div className="popup-icon"> <ErrorOutlineIcon /> </div>

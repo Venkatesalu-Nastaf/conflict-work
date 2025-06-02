@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import "./GstReport.css";
 import Box from "@mui/material/Box";
 import { Menu, TextField } from "@mui/material";
@@ -18,17 +18,17 @@ import { Autocomplete } from "@mui/material";
 import dayjs from 'dayjs';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import axios from "axios"
-import { APIURL } from '../../../url';
-import LoadingButton from '@mui/lab/LoadingButton';
+// import axios from "axios"
+// import { APIURL } from '../../../url';
+// import LoadingButton from '@mui/lab/LoadingButton';
 
 
 
-export const GstReport = ({ stationName, Statename }) => {
-  const { organization, gstReport, setGstReport, department, handleShow, hidePopup, handleShowAll, rows, columns,
-    taxReport, handleDownloadPdf, handleDownloadExcel, success, successMessage, error, errorMessage,isGstbtnloading,setisGstbtnloading } = useGstReport();
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const apiUrl = APIURL;
+export const GstReport = ({Statename }) => {
+  const { organization, gstReport, setGstReport,handleShow, hidePopup,rows, columns,
+    taxReport, handleDownloadPdf, handleDownloadExcel, success, successMessage, error, errorMessage,setisGstbtnloading } = useGstReport();
+  // const [showSuggestions, setShowSuggestions] = useState(false);
+  // const apiUrl = APIURL;
 
   const handleDateChange = (field, date) => {
     setGstReport(prevGstReport => ({

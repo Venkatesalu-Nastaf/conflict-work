@@ -28,7 +28,8 @@ import { PermissionContext } from "../../../context/permissionContext";
 export const BillWiseReceipt = () => {
 
   const { organization, accountDetails, billWiseReport, setBillWiseReport, handlePendingBills
-    , rows, pendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection, handleBalanceAmount,
+    , rows, pendingBillRows, columns, columnsPendingBill, handleApplyBill, handleRowSelection,
+    //  handleBalanceAmount,
     totals, handlechange, handleAddBillReceive, error, errorMessage, success, successMessage, hidePopup, handlePending, handleCollectedChange,
     voucherID, selectedRows
   } = useBillWiseReceipt();
@@ -36,7 +37,7 @@ export const BillWiseReceipt = () => {
   // const Report_read = permissions[1]?.read;
   const Report_add = permissions[1]?.new;
 
-  const Report_create = permissions[8]?.delete;
+  // const Report_create = permissions[8]?.delete;
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -79,6 +80,8 @@ export const BillWiseReceipt = () => {
                     value={voucherID || ""}
                     autoComplete="new-password"
                     inputRef={voucherRef}
+                    // aria-readonly
+                    
                   />
                 </div>
                 <div className="input">

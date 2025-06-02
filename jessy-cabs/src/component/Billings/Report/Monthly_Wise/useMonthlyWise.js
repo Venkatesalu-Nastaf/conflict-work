@@ -79,7 +79,7 @@ const useMonthlyWise = () => {
         fromDate: fromDate,
         toDate: toDate
       })
-      console.log(response.data, "monthlyresponsedata");
+      // console.log(response.data, "monthlyresponsedata");
       // const { customerDetails, transferList, individualBilling, groupBilling } = response.data;
       const customerDetails  = response.data;
       if(customerDetails.length > 0){
@@ -155,7 +155,7 @@ const useMonthlyWise = () => {
       // Check if there's no response, indicating a network error
       if (error.message) {
         setError(true);
-        console.log(error, "error Message");
+        // console.log(error, "error Message");
         setErrorMessage("Check your internet connection");
         // console.log('Network error');
       } else if (error.response) {

@@ -478,7 +478,9 @@ const tripsheetResultsQuery = `
 
 db.query(tripsheetResultsQuery, [formattedFromDate, formattedToDate,customerNames], (err, result) => {
   if (err) {
-    console.log(err,"error");
+     // console.log(err, "error");
+        return res.status(500).json({ error: "Database error in customer details query" });
+    // console.log(err,"error");
     
   } else {
     const tripsheetMap = {};

@@ -8,8 +8,8 @@ import { GstReport } from './GST_Report/GstReport';
 import { BillWiseReceipt } from './Billwised_receipt/BillWiseReceipt';
 import MonthlyWise from './Monthly_Wise/MonthlyWise';
 import { PendingBills } from './pendingBills/PendingBills';
-import VendorStatement from './VendorStatement/VendorStatement';
-import VehicleStatement from './VehicleStatement/VehicleStatement';
+// import VendorStatement from './VendorStatement/VendorStatement';
+// import VehicleStatement from './VehicleStatement/VehicleStatement';
 // import LogDetails from './LogDetails/LogDetails';
 import { ReportData } from './Context/ReportContext';
 export const Reports = ({ stationName,Statename }) => {
@@ -34,7 +34,7 @@ export const Reports = ({ stationName,Statename }) => {
 const [hasChanged,sethasChanged] = useState(false)
 
 const handleChange = (event, newValue) => {
-    console.log(newValue, "valueinner");
+    // console.log(newValue, "valueinner");
     setValue(newValue);
     sethasChanged(true)
     localStorage.removeItem('reports')

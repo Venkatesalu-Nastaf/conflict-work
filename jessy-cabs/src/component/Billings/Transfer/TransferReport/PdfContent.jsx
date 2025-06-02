@@ -304,19 +304,19 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const [totalAmount, setTotalAmount] = useState('')
   const [parking, setParking] = useState('')
   const [permit, setPermit] = useState('')
-  const [address1, setAddress1] = useState('')
-  const [gst, setGst] = useState('')
+  // const [address1, setAddress1] = useState('')
+  // const [gst, setGst] = useState('')
   const [extraKmAmount, setExtraKmAmount] = useState('')
   const [extraHrAmount, setExtraHrAmount] = useState('')
   const [toll, setToll] = useState('')
-  const [vpermettovendor, setVpermettovendor] = useState('')
-  const [vendortoll, setVendortoll] = useState('')
+  // const [vpermettovendor, setVpermettovendor] = useState('')
+  // const [vendortoll, setVendortoll] = useState('')
   const [nightTotalAmount, setNightTotalAmount] = useState('')
   const [driverBetaAmount, setDriverBetaAmount] = useState('')
   const [gstAmount, setGstAmount] = useState(0)
-  const [fullGST, setFullGST] = useState(0)
+  // const [fullGST, setFullGST] = useState(0)
   const [advance, setAdvance] = useState();
-  const organizationname = customer
+  // const organizationname = customer
   const organisationdetailfill = organisationdetails
   // const organisationimage = images
   const newStateforpdf = customStateDetails
@@ -348,13 +348,13 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
       let exkmamount = 0
       let exhramount = 0
       let tollamount = 0
-      let vpermet = 0
-      let vendortollamount = 0
+      // let vpermet = 0
+      // let vendortollamount = 0
       let nightAmount = 0
       let driverBeta = 0
       let gstamount = 0
       let advanceamount = 0
-      let totalDays = 0
+      // let totalDays = 0
       invdata?.map((li) => {
         totalamount += parseInt(li.package_amount || 0)
         parkingamount += parseInt(li.parking || 0)
@@ -362,14 +362,14 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
         exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
         exhramount += parseInt(li.ex_hrAmount || 0)
         tollamount += parseInt(li.toll || 0)
-        vpermet += parseInt(li.vpermettovendor || 0)
-        vendortollamount += parseInt(li.vendortoll || 0)
+        // vpermet += parseInt(li.vpermettovendor || 0)
+        // vendortollamount += parseInt(li.vendortoll || 0)
         nightAmount += parseInt(li.night_totalAmount || 0)
         driverBeta += parseInt(li.driverBeta_amount || 0)
         advanceamount += parseInt(li.customeradvance || 0)
         gstamount = parseFloat(li.gstTax / 2 || 0)
-        totalDays = li.totaldays
-        setFullGST(li.gstTax || 0)
+        // totalDays = li.totaldays
+        // setFullGST(li.gstTax || 0)
         return null
       })
       setTotalAmount(totalamount)
@@ -378,8 +378,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
       setExtraKmAmount(exkmamount)
       setExtraHrAmount(exhramount)
       setToll(tollamount)
-      setVpermettovendor(vpermet)
-      setVendortoll(vendortollamount)
+      // setVpermettovendor(vpermet)
+      // setVendortoll(vendortollamount)
       setNightTotalAmount(nightAmount)
       setDriverBetaAmount(driverBeta)
       setGstAmount(gstamount)
@@ -388,37 +388,37 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   }, [apiUrl, invdata])
 
 
-  useEffect(() => {
-    if (customeraddress) {
-      let address1 = ""
-      // let address2 = ""
-      // let city = ""
-      let gstno = ""
-      customeraddress?.map((li) => {
-        address1 = li.address1
-        // address2 = li.address2
-        // city = li.city
-        gstno = li.gstnumber
-        return null
-      })
+  // useEffect(() => {
+  //   if (customeraddress) {
+  //     let address1 = ""
+  //     // let address2 = ""
+  //     // let city = ""
+  //     let gstno = ""
+  //     customeraddress?.map((li) => {
+  //       address1 = li.address1
+  //       // address2 = li.address2
+  //       // city = li.city
+  //       gstno = li.gstnumber
+  //       return null
+  //     })
 
-      setAddress1(address1)
-      // setAddress2(address2)
-      // setAddress3(city)
-      setGst(gstno)
-    }
-  }, [apiUrl, customeraddress])
+  //     setAddress1(address1)
+  //     // setAddress2(address2)
+  //     // setAddress3(city)
+  //     setGst(gstno)
+  //   }
+  // }, [apiUrl, customeraddress])
 
   const fullAmount = parseInt(totalAmount) + parseInt(nightTotalAmount) + parseInt(driverBetaAmount) + parseInt(extraHrAmount) + parseInt(extraKmAmount)
   // const cgst = fullAmount * 2.5 / 100
   // const sgst = fullAmount * 2.5 / 100
   const groupgst = billingGroupDetails[0]?.gstTax / 2;
-  const groupigst = billingGroupDetails[0]?.gstTax;
-  const igst = (fullAmount * fullGST / 100);
+  // const groupigst = billingGroupDetails[0]?.gstTax;
+  // const igst = (fullAmount * fullGST / 100);
   const cgst = (fullAmount * gstAmount / 100);
   const sgst = (fullAmount * gstAmount / 100);
   const billingGroupCGST = (fullAmount * groupgst / 100 || 0)
-  const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
+  // const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
 
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)

@@ -70,17 +70,17 @@ router.delete('/deletebankdetails/:id', (req, res) => {
     });
 });
 
-router.get('/totalCapital_from_billing', (req, res) => {
-    const query = 'SELECT SUM(netbalance) AS total FROM bankaccountdetails';
+// router.get('/totalCapital_from_billing', (req, res) => {
+//     const query = 'SELECT SUM(netbalance) AS total FROM bankaccountdetails';
 
-    db.query(query, (err, result) => {
-        if (err) {
-            res.status(500).send('Internal Server Error');
-        } else {
-            const totalAmount = result[0].total || 0;
-            res.json({ totalAmount });
-        }
-    });
-});
+//     db.query(query, (err, result) => {
+//         if (err) {
+//             res.status(500).send('Internal Server Error');
+//         } else {
+//             const totalAmount = result[0].total || 0;
+//             res.json({ totalAmount });
+//         }
+//     });
+// });
 
 module.exports = router;

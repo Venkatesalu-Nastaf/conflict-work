@@ -88,8 +88,8 @@ router.post('/billing', (req, res) => {
 // });
 
 router.post('/updateGroupBilling', (req, res) => {
-  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, State, ReferenceNo } = req.body;
-  console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, State, ReferenceNo, 'updateGroup');
+  const { status, InvoiceDate, Customer, FromDate, ToDate,Amount, Trip_id, State, ReferenceNo } = req.body;
+  console.log(status, InvoiceDate, Customer, FromDate, ToDate, Amount, Trip_id, State, ReferenceNo, 'updateGroup');
 
   // Ensure that a ReferenceNo is provided to identify the row to update
   if (!ReferenceNo) {
@@ -101,10 +101,15 @@ router.post('/updateGroupBilling', (req, res) => {
   //     SET status = ?, InvoiceDate = ?, Customer = ?, FromDate = ?, ToDate = ?, 
   //         Trips = ?, Amount = ?, Trip_id = ?, station = ?
   //     WHERE ReferenceNo = ?`;
-  const updateGroupBillingQuery = `
+  // const updateGroupBillingQuery = `
+  // UPDATE Group_billing 
+  // SET status = ?, InvoiceDate = ?, Customer = ?, FromDate = ?, ToDate = ?, 
+  //     Trips = ?, Amount = ?, Trip_id = ?, State = ?
+  // WHERE ReferenceNo = ?`;
+    const updateGroupBillingQuery = `
   UPDATE Group_billing 
   SET status = ?, InvoiceDate = ?, Customer = ?, FromDate = ?, ToDate = ?, 
-      Trips = ?, Amount = ?, Trip_id = ?, State = ?
+       Amount = ?, Trip_id = ?, State = ?
   WHERE ReferenceNo = ?`;
 
   const selectGroupTripIdQuery = `
@@ -117,7 +122,7 @@ router.post('/updateGroupBilling', (req, res) => {
       UPDATE tripsheet SET GroupTripId = ? WHERE tripid IN (?)`;
 
   // Step 1: Update Group_billing
-  db.query(updateGroupBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), State, ReferenceNo], (err, result) => {
+  db.query(updateGroupBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate,Amount, Trip_id.join(','), State, ReferenceNo], (err, result) => {
     if (err) {
       console.log(err, 'error');
       return res.status(500).json({ error: 'Failed to update the record in MySQL' });
@@ -171,12 +176,12 @@ router.post('/updateGroupBilling', (req, res) => {
 
 
 router.post('/GroupBillingList', (req, res) => {
-  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, State } = req.body;
-  console.log(status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id, 'groupbill');
+  const { status, InvoiceDate, Customer, FromDate, ToDate,Amount,Trip_id, State } = req.body;
+  console.log(status, InvoiceDate, Customer, FromDate, ToDate,Amount,Trip_id, 'groupbill');
 
   const insertBillingQuery = `
-    INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id,State)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate,Amount, Trip_id,State)
+    VALUES (?,?,?,?,?,?,?,?)`;
 
   const selectGroupTripIdQuery = `
     SELECT ReferenceNo AS Grouptrip_id FROM Group_billing WHERE Trip_id IN (?)`;
@@ -189,8 +194,9 @@ router.post('/GroupBillingList', (req, res) => {
 
 
   // Step 1: Insert into Group_billing
-  db.query(insertBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(','), State], (err, result) => {
+  db.query(insertBillingQuery, [status, InvoiceDate, Customer, FromDate, ToDate,Amount, Trip_id.join(','), State], (err, result) => {
     if (err) {
+      console.log(err)
       return res.status(500).json({ error: 'Failed to insert into MySQL' });
     }
 
@@ -495,11 +501,11 @@ router.put('/statusupdate', (req, res) => {
   if (!Array.isArray(Trip_id)) {
     return res.status(400).json({ error: "Trip_id must be an array" });
   }
-  const sqlUpdateGroupBilling = "UPDATE Group_billing SET Trips = ?, Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
+  const sqlUpdateGroupBilling = "UPDATE Group_billing SET  Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
 
   // Iterate over the Trip_id array
   Trip_id.forEach(tripId => {
-    db.query(sqlUpdateGroupBilling, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
+    db.query(sqlUpdateGroupBilling, [Amount, tripId, tripId], (err, updateGroupBillingResult) => {
       if (err) {
         console.log(err, 'error');
         return res.status(500).json({ error: "Failed to update data in MySQL" });

@@ -30,14 +30,14 @@ const CoveringSubmit = ({ stationName,Statename, organizationNames }) => {
 
     const {
         rows,
-        actionName,
+        // actionName,
         error,
         success,
         warning,
         successMessage,
         errorMessage,
         warningMessage,
-        handleClick,
+        // handleClick,
         hidePopup,
         customer,
         tripData,
@@ -57,11 +57,11 @@ const CoveringSubmit = ({ stationName,Statename, organizationNames }) => {
         // handleButtonClickTripsheet
     } = useCoversubmit();
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    }, [actionName, handleClick]);
+    // useEffect(() => {
+    //     if (actionName === 'List') {
+    //         handleClick(null, 'List');
+    //     }
+    // }, [actionName, handleClick]);
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)

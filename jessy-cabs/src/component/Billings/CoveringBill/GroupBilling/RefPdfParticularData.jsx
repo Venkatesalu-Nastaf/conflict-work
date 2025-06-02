@@ -13,111 +13,111 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     const { handlePopup } = useGroupbilling()
     const targetRef = useRef()
     const [orgname, setOrgname] = useState('')
-    const [orgaddress1, setOrgaddress1] = useState('')
+    // const [orgaddress1, setOrgaddress1] = useState('')
     // const [orgaddress2, setOrgaddress2] = useState('')
-    const [orgaddress3, setOrgaddress3] = useState('')
-    const [customerAddress, setCustomerAddress] = useState('')
-    const [customer, setCustomer] = useState('')
-    const [gst, setGst] = useState('')
-    const [fullAmount, setFullAmount] = useState('')
-    const [totalCgst, setTotalCgst] = useState(0)
-    const [totalIGST, setTotalIGST] = useState(0);
-    const [advance, setAdvance] = useState();
-    const [fullTotal, setFullTotal] = useState(0)
+    // const [orgaddress3, setOrgaddress3] = useState('')
+    // const [customerAddress, setCustomerAddress] = useState('')
+    // const [customer, setCustomer] = useState('')
+    // const [gst, setGst] = useState('')
+    // const [fullAmount, setFullAmount] = useState('')
+    // const [totalCgst, setTotalCgst] = useState(0)
+    // const [totalIGST, setTotalIGST] = useState(0);
+    // const [advance, setAdvance] = useState();
+    // const [fullTotal, setFullTotal] = useState(0)
     // const apiUrl = APIURL;
     // const organisationimage = imagename
     const FromDate = refFromDate
     // const ToDate = refToDate
     const refno = referenceno
-    const BranchList = ['chennai', 'Bangalore', 'Hydrebad']
-    const stateBranch = gstno[0]?.state;
-    const servicestationname = gstno[0]?.servicestation
+    // const BranchList = ['chennai', 'Bangalore', 'Hydrebad']
+    // const stateBranch = gstno[0]?.state;
+    // const servicestationname = gstno[0]?.servicestation
     // const commonState = Branchstate?.filter(item => item.state === stateBranch) || [];
 
-    const commonState = Branchstate?.filter(item =>
-        item?.state === stateBranch
-    ) || [];
+    // const commonState = Branchstate?.filter(item =>
+    //     item?.state === stateBranch
+    // ) || [];
 
-    const billingGroupMatch = billingGroupData[0]?.state;
+    // const billingGroupMatch = billingGroupData[0]?.state;
 
-    const stateToUse = billingGroupMatch ? billingGroupMatch : stateBranch;
-    console.log(billingGroupMatch, 'commonbillingmatch', stateToUse, 'commonbr', Branchstate);
+    // const stateToUse = billingGroupMatch ? billingGroupMatch : stateBranch;
+    // console.log(billingGroupMatch, 'commonbillingmatch', stateToUse, 'commonbr', Branchstate);
 
-    const commonStates = Branchstate?.filter(item =>
-        item.state === stateToUse
-    ) || [];
-    console.log(commonStates, 'common0000');
+    // const commonStates = Branchstate?.filter(item =>
+    //     item.state === stateToUse
+    // ) || [];
+    // console.log(commonStates, 'common0000');
 
-    console.log(billingGroupMatch, 'commonbillingmatch');
-
-
-    console.log(stateBranch, commonState, 'commonstate group', commonState.length, gstno, billingGroupData);
-    console.log(Branchstate, 'stationfromjessy');
-    console.log(gstno, 'stationcustomer details');
-    console.log(commonState, 'stationmatching details');
+    // console.log(billingGroupMatch, 'commonbillingmatch');
 
 
-    useEffect(() => {
-        if (Array.isArray(gstno) && gstno.length > 0) { // Check if gstno is an array and not empty
-            let gstNo = "";
-            gstno.forEach((li) => {
-                gstNo = li.gstTax;
-            });
-            setGst(gstNo);
-        }
-    }, [gstno]);
+    // console.log(stateBranch, commonState, 'commonstate group', commonState.length, gstno, billingGroupData);
+    // console.log(Branchstate, 'stationfromjessy');
+    // console.log(gstno, 'stationcustomer details');
+    // console.log(commonState, 'stationmatching details');
+
+
+    // useEffect(() => {
+    //     if (Array.isArray(gstno) && gstno.length > 0) { // Check if gstno is an array and not empty
+    //         let gstNo = "";
+    //         gstno.forEach((li) => {
+    //             gstNo = li.gstTax;
+    //         });
+    //         setGst(gstNo);
+    //     }
+    // }, [gstno]);
 
     const Gst = customerData[0]?.gstTax / 2;
-    const fullGST = customerData[0]?.gstTax
+    // const fullGST = customerData[0]?.gstTax
 
     useEffect(() => {
-        let address = ""
+        // let address = ""
         //  let address1 = ""
         //  let city = ""
-        let customer = ""
+        // let customer = ""
         let totalamount = 0
         let totalcgst = 0
-        let totaligst = 0
-        let advanceamount = 0
-        let fullamount = 0
+        // let totaligst = 0
+        // let advanceamount = 0
+        // let fullamount = 0
 
         if (Array.isArray(pdfData)) {
             pdfData?.forEach((li) => {
-                address = li.address1
-                customer = li.customer
+                // address = li.address1
+                // customer = li.customer
                 totalamount += parseInt(li.totalcalcAmount)
                 totalcgst += parseInt(li.totalcalcAmount) * Gst / 100
-                totaligst += parseInt(li.totalcalcAmount) * fullGST / 100
-                advanceamount += parseInt(li.customeradvance || 0)
-                fullamount += parseInt(li.totalcalcAmount || 0) + parseInt(li.totalcalcAmount || 0) * Gst / 100 + parseInt(li.totalcalcAmount || 0) * Gst / 100 - (parseInt(li.customeradvance || 0) || 0)
+                // totaligst += parseInt(li.totalcalcAmount) * fullGST / 100
+                // advanceamount += parseInt(li.customeradvance || 0)
+                // fullamount += parseInt(li.totalcalcAmount || 0) + parseInt(li.totalcalcAmount || 0) * Gst / 100 + parseInt(li.totalcalcAmount || 0) * Gst / 100 - (parseInt(li.customeradvance || 0) || 0)
             })
         }
 
-        setCustomerAddress(address)
-        setCustomer(customer)
-        setFullAmount(totalamount.toFixed(0))
-        setTotalCgst(totalcgst.toFixed(0))
-        setTotalIGST(totaligst.toFixed(0))
-        setAdvance(advanceamount)
-        setFullTotal(fullamount.toFixed(0) || 0)
+        // setCustomerAddress(address)
+        // setCustomer(customer)
+        // setFullAmount(totalamount.toFixed(0))
+        // setTotalCgst(totalcgst.toFixed(0))
+        // setTotalIGST(totaligst.toFixed(0))
+        // setAdvance(advanceamount)
+        // setFullTotal(fullamount.toFixed(0) || 0)
     }, [pdfData, Gst])
 
     useEffect(() => {
-        let addressone = ''
+        // let addressone = ''
         // let addresstwo = ''
-        let addressthree = ''
+        // let addressthree = ''
         let organisationname = ''
 
         if (Array.isArray(organizationdetails)) {
             organizationdetails.forEach((li) => {
-                addressone = li.addressLine1
-                addressthree = li.location
+                // addressone = li.addressLine1
+                // addressthree = li.location
                 organisationname = li.organizationname
             })
         }
 
-        setOrgaddress1(addressone)
-        setOrgaddress3(addressthree)
+        // setOrgaddress1(addressone)
+        // setOrgaddress3(addressthree)
         setOrgname(organisationname)
     }, [organizationdetails])
 
@@ -155,21 +155,21 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     // const rupeestext = convertToWords(fullTotal) || '------';
 
     // const rupeestext = convertToWords(fullTotal);
-    const commonBillingState = commonStates.length > 0 ? commonStates : commonState;
-    console.log(commonBillingState, 'common--------');
+    // const commonBillingState = commonStates.length > 0 ? commonStates : commonState;
+    // console.log(commonBillingState, 'common--------');
 
-    console.log(customerData, 'customer2222', stationData, 'full', fullAmount, 'totalCgst', totalCgst);
+    // console.log(customerData, 'customer2222', stationData, 'full', fullAmount, 'totalCgst', totalCgst);
 
     // final calculation
     const cgstcalc = customerData[0]?.gstTax / 2;
-    const sgstcalc = customerData[0]?.gstTax / 2;
+    // const sgstcalc = customerData[0]?.gstTax / 2;
     // const cgstAmount = Math.round(fullAmount * cgstcalc / 100 || 0);
 
     // const cgstAmount = fullAmount * cgstcalc / 100 || 0;
 
     // const igstcalc = customerData[0]?.gstTax;
     // const igstAmount = Math.round(fullAmount * igstcalc / 100 || 0)
-    console.log(pdfData, "lll")
+    // console.log(pdfData, "lll")
 
     const totalSum = pdfData?.reduce((sum, li) =>
         sum + Number(li.parking || 0) + Number(li.permit || 0) + Number(li.toll || 0), 0);

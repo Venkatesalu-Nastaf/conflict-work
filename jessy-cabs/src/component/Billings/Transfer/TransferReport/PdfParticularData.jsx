@@ -7,11 +7,11 @@ import dayjs from "dayjs";
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
-import { blue } from "@mui/material/colors";
+// import { blue } from "@mui/material/colors";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
-const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationdetail, imagename, tripno, customerData, stationData }) => {
+const PdfParticularData = ({ logo,particularPdf, organisationdetail,tripno, customerData, stationData }) => {
 
   const targetRef = useRef();
   const { setPdfPrint } = PdfData()
@@ -23,8 +23,8 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
   // }
 
   const [orgname, setOrgname] = useState('')
-  const [orgaddress1, setOrgaddress1] = useState('')
-  const [orgaddress3, setOrgaddress3] = useState('')
+  // const [orgaddress1, setOrgaddress1] = useState('')
+  // const [orgaddress3, setOrgaddress3] = useState('')
   const [address1, setAddress1] = useState('')
   const [customer, setCustomer] = useState('')
   const [empno, setEmpno] = useState('')
@@ -48,7 +48,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
   const [department, setDepartment] = useState('')
   const [escort, setEscort] = useState('')
   const [Tripidno, setTripidno] = useState('')
-  const [tripsheetdate, setTripsheetdate] = useState('')
+  // const [tripsheetdate, setTripsheetdate] = useState('')
   const [tripStartDate, setTripStartDate] = useState('')
   const [tripCloseDate, setTripCloseDate] = useState('')
   const [tripshedoutDate, setTripShedOutDate] = useState('')
@@ -69,14 +69,14 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
   const [totalparking, setTotalParking] = useState('')
   const [tripCustomercode, setTripCustomercode] = useState('')
   const [category, setCategory] = useState('')
-  const [addressCustomer, setAddresscustomer] = useState('')
-  const [bookmailiamge, setBookmailimage] = useState('')
+  // const [addressCustomer, setAddresscustomer] = useState('')
+  // const [bookmailiamge, setBookmailimage] = useState('')
   const [remark, setRemark] = useState('')
   const apiUrl = APIURL;
-  const organisationimage = imagename
+  // const organisationimage = imagename
   const organisationdetails = organisationdetail
   const [pdfPageCounts, setPdfPageCounts] = useState({});
-  const [pdfErrors, setPdfErrors] = useState([]);
+  const [setPdfErrors] = useState([]);
 
 
   const onDocumentLoadSuccess = (index, { numPages }) => {
@@ -100,16 +100,16 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
   };
 
   useEffect(() => {
-    let addressone = ''
-    let addressthree = ''
+    // let addressone = ''
+    // let addressthree = ''
     let organisationname = ''
     organisationdetail?.forEach((li) => {
-      addressone = li.addressLine1
-      addressthree = li.location
+      // addressone = li.addressLine1
+      // addressthree = li.location
       organisationname = li.organizationname
     })
-    setOrgaddress1(addressone)
-    setOrgaddress3(addressthree)
+    // setOrgaddress1(addressone)
+    // setOrgaddress3(addressthree)
     setOrgname(organisationname)
   }, [organisationdetail])
 
@@ -135,7 +135,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     let Department = ''
     let Escort = ''
     let Tripid = ''
-    let Tripdate = ''
+    // let Tripdate = ''
     let Tripstartdate = ''
     let TripClosedate = ''
     let Tripshedoutdate = ''
@@ -156,7 +156,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     let TotalPermit = ''
     let CustomerCode = ''
     let Categorygroups = ''
-    let AddressCustomer1 = ''
+    // let AddressCustomer1 = ''
 
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
@@ -184,7 +184,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
         Department = li.department
         Escort = li.escort
         Tripid = li.tripid
-        Tripdate = li.tripsheetdate
+        // Tripdate = li.tripsheetdate
         Tripstartdate = li.startdate
         TripClosedate = li.closedate
         Tripshedoutdate = li.shedOutDate
@@ -215,7 +215,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
         TotalPermit = li.permit
         CustomerCode = li.customercode
         Categorygroups = li.orderedby
-        AddressCustomer1 = li.CustomerAddress1
+        // AddressCustomer1 = li.CustomerAddress1
 
 
       })
@@ -256,7 +256,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     setDepartment(Department)
     setEscort(Escort)
     setTripidno(Tripid)
-    setTripsheetdate(Tripdate)
+    // setTripsheetdate(Tripdate)
     setTripStartDate(Tripstartdate)
     setTripCloseDate(TripClosedate)
     setTripShedOutDate(Tripshedoutdate)
@@ -271,7 +271,7 @@ const PdfParticularData = ({ logo, addressDetails, particularPdf, organisationde
     setTotaltoll(TotalToll)
     setTripCustomercode(CustomerCode)
     setCategory(Categorygroups)
-    setAddresscustomer(AddressCustomer1)
+    // setAddresscustomer(AddressCustomer1)
 
     setCalcPackages(packages)
   }, [particularPdf, segment])

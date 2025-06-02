@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     pageBreakInside: 'avoid',
     overflow: 'hidden',
     border: '2px solid rgb(0, 0, 0)',
-    paddingBottom: 4,
+    paddingBottom: 6,
   },
   heading: {
     // border: '2px solid rgb(255, 0, 0)',
@@ -122,7 +122,8 @@ const styles = StyleSheet.create({
     width: '9.33%', // Set the width of each cell to 33.33% for equal distribution
     padding: 5,
     fontSize: '12px',
-    borderRight: '1px solid #000000'
+    borderRight: '1px solid #000000',
+    borderLeft: '1px solid #000000'
   },
   tableheadingparticular: {
     width: '66%',
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     // borderBottom: '1px solid #000000',
     // borderRight: '1px solid #000000',
-    borderLeft: '1px solid #000000',
+    // borderLeft: '1px solid #000000',
   },
   tablevalueRow: {
     flexDirection: 'row'
@@ -595,7 +596,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <View style={[styles.tablevalue, { fontSize: "10px" }]}>
                       {invdata.map((item, index) => (
 
-                        <View style={styles.tablevalueRow} key={index}>
+                        <View style={styles.tablevalueRow} wrap={false} key={index}>
                           <React.Fragment>
                             <View style={styles.tablecellsno}>
                               <Text style={{ fontSize: 9 }}>{index + 1}</Text>
@@ -701,12 +702,13 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                           </React.Fragment>
                         </View>
                       ))}
+                      <View style={styles.borderBottom} fixed/>
                     </View>
-                     <View style={styles.borderBottom} fixed/>
+                     {/* <View style={styles.borderBottom} fixed/> */}
                   </View>
                 </View>
               </View>
-              <View style={styles.totalsum}>
+              <View style={styles.totalsum} wrap={false} break>
                 {customerData[0]?.gstTax === 0 || customerData[0]?.gstTax === null ? (
 
                   <View style={styles.totalsuminitial}>

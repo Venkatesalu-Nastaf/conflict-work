@@ -118,7 +118,7 @@ router.post('/particularGpsRecords', (req, res) => {
             console.log(error, "error");
             return res.status(500).json({ error: "Database error" });
         }
-        console.log(result, "particularrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+        // console.log(result, "particularrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
 
         res.status(200).json(result);
     });
@@ -174,22 +174,25 @@ router.post('/getAlladddateandtripid/:hybrid', (req, res) => {
 
                 return res.status(500).json({ error: "Database Error" })
             }
+            // console.log(results,"filreee")
              
               if (results) {
                 if (results.length > 0) {
                     const formattedResult = results.map(row => ({
                         Trip_id: String(row.Trip_id) 
                     }));
-                    // console.log(formattedResult)
+                    // console.log(formattedResult,"fil")
                     // console.log(results,"filtertrip");
                     
                    return res.status(200).json(formattedResult)
                 }
+                else{
+                    // console.log(results,"fillllllllllllllllllllll")
+                       return res.status(200).json(results);
+                }
             }
             else{
-
-            
-            // console.log(results,"tripiddd");
+            // console.log(results,"filtripiddd");
             
              return res.status(200).json(results);
             }
@@ -206,12 +209,14 @@ router.post('/getAlladddateandtripid/:hybrid', (req, res) => {
                     const formattedResult = result.map(row => ({
                         Trip_id: String(row.Trip_id) // Convert to string
                     }));
-                    // console.log(formattedResult, "plj")
+                    // console.log(formattedResult, "fiplj")
                     return res.status(200).json(formattedResult);
                 }
+                else{
+                    // console.log(result,"checkinggggg");     
+                    res.status(200).json(result)
+                }
             }else{
-
-            
 
             res.status(200).json(result);
             }
@@ -233,7 +238,7 @@ router.post('/gettripbasedmapdetails', (req, res) => {
         if (error) {
             console.log(error, "error");
         }
-        console.log(result, "Today vehicle lists....");
+        // console.log(result, "Today vehicle lists....");
         const vehdata = result[0]?.vehRegNo;
         db.query(sqlquery2, [vehdata], (error, result2) => {
             if (error) {

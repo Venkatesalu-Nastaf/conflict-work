@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import GoogleMapDrawer from "./GoogleMapDrawer";
 import OSMapDrawer from "./OSMapDrawer";
-import { MenuItem, Select, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
+import { MenuItem, Select, Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from "@mui/material";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import TabList from '@mui/lab/TabList';
@@ -50,6 +50,8 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
     const [tripvalue, setTripvalue] = useState([])
 
     const [valuetabs, setValuetabs] = useState('1');
+
+    const [loading, setLoading] = useState(false)
 
     const handleChangetabs = (event, newValue) => {
         setValuetabs(newValue);
@@ -162,7 +164,7 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
 
     //     fetchData();
     // }, [filterDate, apiUrl, vehNo]);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             //   const vehicleNo = vehicleListData?.map((li) => li.vehRegNo);
@@ -172,26 +174,29 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
             // const selectedDate = filterDate ? filterDate : dayjs().format("YYYY-MM-DD");
 
             //   console.log(vehicleNo,"Vehicle Numbers");
+            setLoading(true)
 
             try {
                 // if (selectedDate !== "" || selectedDate !== null) {
                 const hybrid = localStorage.getItem("SuperAdmin")
-                // console.log(hybrid,"Hybridvalueeee");
-                
-                
+                // console.log(hybrid, "Hybridvalueeee");
+
+
                 if (filterDate) {
-                    console.log(filterDate, "enetr")
+
                     const response = await axios.post(`${apiUrl}/getAlladddateandtripid/${hybrid}`, {
                         selectedDate: filterDate,
                         vehicleNumber: vehNo
                     });
 
-                    const result = response.data;
-                    console.log(result, "GPS Datatripid");
-                    settripdown(result)
 
+                    const result = response.data;
+                    // console.log(result, "GPS Datatripid");
+                    settripdown(result)
+                    setLoading(false);
                 }
                 else {
+                    // settripdown([]);
                     return
                 }
 
@@ -430,11 +435,22 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
                                 // size="small"
                                 sx={{ width: 180 }}
                                 // options={tripidOptions || ""}
-                                options={tripdropdown.map((option) => ({
+                                options=
+                                {tripdropdown.map((option) => ({
                                     label: option.Trip_id,
                                 }))}
                                 // value={selectedTripid || tripdropdown[0]?.Trip_id}
-                                value={selectedTripid || null}
+                                // value={selectedTripid || null}
+                                value={
+                                    loading
+                                        ? null
+                                        : tripdropdown.length === 0
+                                            ? { label: 'No data found', disabled: true }
+                                            : selectedTripid
+                                                ? { label: selectedTripid }
+                                                : null
+                                }
+                                loading={loading}
                                 isOptionEqualToValue={(option, value) => option?.label === value.label}
                                 // onChange={(value) => handleTripidChange(value)} // Correcting onChange
                                 onChange={(event, value) => {
@@ -445,7 +461,19 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
                                     }
                                 }}
                                 // getOptionLabel={option => option.label}
-                                renderInput={(params) => <TextField {...params} label="Select Trip ID" />}
+                                renderInput={(params) => <TextField
+                                    {...params}
+                                    label="Select Trip ID"
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        endAdornment: (
+                                            <>
+                                                {loading ? <CircularProgress color="primary" size={20} /> : null}
+                                                {params.InputProps.endAdornment}
+                                            </>
+                                        ),
+                                    }}
+                                />}
                             />
                         </div>
                     </div>

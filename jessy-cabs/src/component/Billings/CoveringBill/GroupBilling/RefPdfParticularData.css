@@ -33,7 +33,7 @@
 }
 
 .Refnotext {
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -45,26 +45,28 @@
 }
 
 .image {
-  height: 100px;
+  height: 80px;
   width: 110px;
 }
 
 .mobilediv {
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: space-between;
   border-bottom: 1px solid grey;
   padding-bottom: 5px;
 }
 
-.organisationtext {
-  font-size: 17px;
+.organisationtextref {
+  font-size: 16px;
   margin: 0px;
 }
+
 .organisationtext-ref {
-  font-size: 17px;
+  font-size: 16px;
   margin: 0px;
-  text-align: right;
+  /* text-align: right; */
 }
 
 .Datediv {
@@ -72,7 +74,7 @@
   flex-direction: row;
   width: 100%;
   gap: 80px;
-  border-bottom: 1px solid grey;
+  /* border-bottom: 1px solid grey; */
   padding-bottom: 5px;
 }
 
@@ -82,8 +84,8 @@
 
 .tableheadtext {
   color: 'black';
-  font-weight:500;
-  padding: 10px;
+  font-weight: 500;
+  padding: 10px 6px;
   font-size: 13.5px;
 }
 
@@ -93,7 +95,8 @@ tbody {
 }
 
 .tdata {
-  padding: 6.5px;
+  /* padding: 6.5px; */
+  padding: 10px 6px;
   border-right: 1px solid gray;
 
 }
@@ -107,17 +110,19 @@ tbody {
 .table-ref,
 .table-ref th {
   border: 1px solid gray;
-
+  white-space: nowrap;
 }
 
 .table-ref th {
   border: 1px solid gray !important;
-  
+
 }
 
-.total-div{
+.total-div {
   display: flex;
   justify-content: end;
   gap: 30px;
   /* margin-right: 40px; */
 }
+
+

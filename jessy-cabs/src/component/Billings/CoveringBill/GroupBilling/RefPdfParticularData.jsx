@@ -27,7 +27,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     // const apiUrl = APIURL;
     // const organisationimage = imagename
     const FromDate = refFromDate
-    // const ToDate = refToDate
+    const ToDate = refToDate
     const refno = referenceno
     // const BranchList = ['chennai', 'Bangalore', 'Hydrebad']
     // const stateBranch = gstno[0]?.state;
@@ -182,7 +182,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
     //     0
     // );
 
-    const totalSumcalc= pdfData?.reduce(
+    const totalSumcalc = pdfData?.reduce(
         (sum, li) =>
             sum + (Number(li.totalcalcAmount || 0) - (Number(li.parking || 0) + Number(li.permit || 0) + Number(li.toll || 0))),
         0
@@ -208,9 +208,9 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                         <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{orgname}</h2>
                         <h2 className="organisationtext">{customerAddress}</h2>
                     </div> */}
-                    <div>
+                    <div style={{width: "35%"}}>
                         <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{orgname}</h2>
-                        <h2 className="organisationtext">{stationData[0]?.address}</h2>
+                        <h2 className="organisationtextref">{stationData[0]?.address}</h2>
 
                         {/* {commonBillingState.length > 0 ?  (
                             <h2 className="organisationtext">{commonBillingState[0].address}</h2>
@@ -234,17 +234,17 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                 </div>
 
                 <div className="mobilediv">
-                    <h2 className="organisationtext">Tel : {organizationdetails[0]?.telephone} Mob : {organizationdetails[0]?.contactPhoneNumber}</h2>
+                    <h2 className="organisationtextref">Tel : {organizationdetails[0]?.telephone} Mob : {organizationdetails[0]?.contactPhoneNumber}</h2>
                     <h2 className="organisationtext-ref">GST : {stationData[0]?.gstno}</h2>
                     {/* <h2 className="organisationtext">GST : {stationData[0]?.gstnumber}</h2>  */}
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '50px', borderBottom: '1px solid grey', paddingBottom: 5 }}>
-                    <div>
+                    <div style={{ width: "70%" }}>
                         <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{customerData[0]?.customer}</h2>
-                        <h2 className="organisationtext">{customerData[0]?.address1}</h2>
-                        <h2 className="organisationtext"> {customerData[0]?.state}</h2>
-                        <h2 className="organisationtext">GST : {customerData[0]?.gstnumber}</h2>
+                        <h2 className="organisationtextref">{customerData[0]?.address1}</h2>
+                        <h2 className="organisationtextref"> {customerData[0]?.state}</h2>
+                        <h2 className="organisationtextref">GST : {customerData[0]?.gstnumber}</h2>
 
                         {/* <h2 className="organisationtext">{orgaddress1}</h2>
                         <h2 className="organisationtext">{orgaddress3}</h2> */}
@@ -279,7 +279,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
 
                     <p>From: <span className="Datetext">{dayjs(FromDate).format('DD-MM-YYYY')}</span></p>
 
-                    <p>To: <span className="Datetext">{dayjs(FromDate).format('DD-MM-YYYY')}</span></p>
+                    <p>To: <span className="Datetext">{dayjs(ToDate).format('DD-MM-YYYY')}</span></p>
                 </div>
                 {/* <div>
                     <table className="table-ref">
@@ -413,7 +413,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
 
                                     <td className="tdata">{li.customeradvance || 0}.00</td>
                                     {/* <td className="tdata">{li.totalcalcAmount -  (li.parking+li.permit, li.toll)}</td> */}
-                                    <td className="tdata" style={{textAlign:'center'}}>{li.totalcalcAmount - (Number(li.parking || 0) + Number(li.permit || 0) + Number(li.toll || 0))}.00 </td>
+                                    <td className="tdata" style={{ textAlign: 'center' }}>{li.totalcalcAmount - (Number(li.parking || 0) + Number(li.permit || 0) + Number(li.toll || 0))}.00 </td>
 
                                     {/* <td className="tdata">
   {[li.parking, li.permit, li.toll, li.customeradvance || 0, li.totalcalcAmount || 0].reduce((sum, value) => sum + Number(value), 0)}
@@ -469,7 +469,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
 
 
 
-                        <tfoot>
+                        < tfoot >
                             <tr>
                                 <td className="tdata">{ }</td>
                                 <td className="tdata"> </td>
@@ -478,7 +478,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                 <td className="tdata">Total</td>
                                 <td className="tdata">{totalSum}.00</td>
                                 <td className="tdata">{totalSumadvance}.00</td>
-                                <td className="tdata" style={{textAlign:"center"}}>{totalSumcalc}.00</td>
+                                <td className="tdata" style={{ textAlign: "center" }}>{totalSumcalc}.00</td>
                                 {/* <td className="tdata">
   {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}
 </td>                    */}
@@ -515,32 +515,52 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                                 {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
                                     <>
 
-                                        <h4 style={{margin:"5px"}}>Amount :</h4>
+                                        <h4 style={{ margin: "5px" }}>Amount :</h4>
 
                                         {/* <h4>CGST {Gst}% on {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}:</h4> */}
-                                        <h4 style={{margin:"5px"}}>CGST {Gst}% on {Number(totalSumcalc)}:</h4>
+                                        <h4 style={{ margin: "5px" }}>CGST {Gst}% on {Number(totalSumcalc)}:</h4>
 
 
                                         {/* <h4>CGST {Gst}% on {Number(totalSum) + Number(totalSumadvance) + Number(totalSumcalc)}:</h4> */}
-                                        <h4 style={{margin:"5px"}}>SGST {Gst}% on {Number(totalSumcalc)}:</h4>
-                                        <h4 style={{margin:"5px"}}>Parking & Permit:</h4>
+                                        <h4 style={{ margin: "5px" }}>SGST {Gst}% on {Number(totalSumcalc)}:</h4>
+                                        <h4 style={{ margin: "5px" }}>Parking & Permit:</h4>
 
-                                        <h4 style={{margin:"5px"}}>Total Amount :</h4> </> : <>
-                                        <h4 style={{margin:"5px"}}>Amount :</h4> <h4></h4>
+                                        <h4 style={{ margin: "5px" }}>Total Amount :</h4>
+                                    </>
+                                    :
+                                    <>
+                                        {/* <h4 style={{ margin: "5px" }}>Amount :</h4>
                                         <h4></h4>
-                                        <h4 style={{ marginTop: '110px' }}>Total Amount :</h4>
+                                        <h4></h4>
+                                        <h4></h4>
+                                        <h4 style={{ marginTop: '110px' }}>Total Amount :</h4> */}
+
+                                        <h4 style={{ margin: "5px" }}>Amount :</h4>
+                                        <h4 style={{ margin: "5px" }}>Parking & Permit:</h4>
+                                        <h4 style={{ margin: "5px" }}>Total Amount :</h4>
                                     </>}
                             </div>
+
                             <div className="amount-div">
-                             
-                                <p className="amounttext" style={{margin:'5px'}}>{Number(totalSumcalc)}.00</p>
-
-
-                                <p className="amounttext" style={{ marginTop: '5px', paddingLeft: "14px" }}>{cgstAmount.toFixed(2)}.00</p>
-                                <p className="amounttext" style={{ marginTop: '5px', paddingLeft: "14px" }}>{cgstAmount.toFixed(2)}.00</p>
-                                <p className="amounttext" style={{ marginTop: '5px', paddingLeft: "14px" }}>{totalSum}.00</p>
-                                <p className="amounttext" style={{ marginTop: '5px' }}>{paymentValue.toFixed(0)}.00</p>
+                                {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && customerData[0]?.gstTax !== undefined ?
+                                    <>
+                                        <p className="amounttext" style={{ margin: '5px' }}>{Number(totalSumcalc)}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '5px', paddingLeft: "14px" }}>{cgstAmount.toFixed(2)}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '5px', paddingLeft: "14px" }}>{cgstAmount.toFixed(2)}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '5px', paddingLeft: "14px" }}>{totalSum}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '5px' }}>{paymentValue.toFixed(0)}.00</p>
+                                    </>
+                                    :
+                                    <>
+                                        <p className="amounttext" style={{ margin: '5px' }}>{Number(totalSumcalc)}.00</p>
+                                        {/* <p className="amounttext" style={{ marginTop: '5px', paddingLeft: "14px" }}>{cgstAmount.toFixed(2)}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '5px', paddingLeft: "14px" }}>{cgstAmount.toFixed(2)}.00</p> */}
+                                        <p className="amounttext" style={{ marginTop: '5px', paddingLeft: "14px" }}>{totalSum}.00</p>
+                                        <p className="amounttext" style={{ marginTop: '5px' }}>{paymentValue.toFixed(0)}.00</p>
+                                    </>
+                                }
                             </div>
+
                         </> : <>
 
                             {customerData[0]?.gstTax !== 0 && customerData[0]?.gstTax !== null && <>
@@ -569,7 +589,7 @@ const RefPdfParticularData = ({ pdfData = [], organizationdetails = [], imagenam
                         <h4 style={{ fontWeight: 600, marginRight: '5px' }}>NOTE:</h4>
                         <h4 style={{ padding: 2, wordSpacing: 3 }}>
                             IGST@5% or both CGST@2.5% & SGST@2.5% of Rs:  {Number(totalSumcalc) > 0 ? (Number(totalSumcalc) * 0.05).toFixed(2) : '0.00'} is to be paid by Service Recipient Under RCM as per Notification 22/2019 – Central tax (Rate) dated 30-09-2019
-                            </h4>
+                        </h4>
                     </div> : ""
                 }
 

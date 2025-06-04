@@ -127,7 +127,7 @@ const OSMap = ({todayVehicle }) => {
     // <div style={{ height: "100vh", width: "100vw" }}>
       <MapContainer center={[13.080555, 80.163118]} zoom={13} minZoom={1}  // Prevent zooming out too much
       // <MapContainer center={center} zoom={13} minZoom={1}
-      maxZoom={19} style={{ height: "100%", width: "100%" }}>
+      maxZoom={19} style={{ height: "90%", width: "100%" }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

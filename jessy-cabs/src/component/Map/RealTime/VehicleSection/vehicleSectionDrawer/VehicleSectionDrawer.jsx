@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import GoogleMapDrawer from "./GoogleMapDrawer";
 import OSMapDrawer from "./OSMapDrawer";
-import { MenuItem, Select, Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from "@mui/material";
+import { MenuItem, Select, Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress, IconButton } from "@mui/material";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import TabList from '@mui/lab/TabList';
@@ -23,6 +23,7 @@ import Box from '@mui/material/Box';
 import useDetailsVehicle from "../useDetailsVehicle";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
+import CloseIcon from '@mui/icons-material/Close';
 
 const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
     const { isPlaying,
@@ -164,6 +165,8 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
 
     //     fetchData();
     // }, [filterDate, apiUrl, vehNo]);
+    const hybrid = localStorage.getItem("SuperAdmin")
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -407,19 +410,43 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
                         padding: '10px',
                     },
                 }}>
-                    <DialogTitle></DialogTitle>
-                    <Select
+                    <DialogTitle>
+                        <IconButton
+                            aria-label="close"
+                            onClick={handleClose1}
+                            sx={{
+                                position: 'absolute',
+                                left: 8,
+                                top: 8,
+                                color: 'gray',
+                            }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </DialogTitle>
+                    {/* <Select
                         labelId="map-select-label"
                         id="map-select"
                         value={selectMap}
                         onChange={handleChangeMap}
                         displayEmpty
-                        style={{ marginBottom: "10px", width: "150px" }}
+                        style={{ marginBottom: "10px", width: "150px" ,marginTop: "10px"}}
                     >
                         <MenuItem value="OSMap">OSMap</MenuItem>
                         <MenuItem value="GoogleMap">Google Map</MenuItem>
-                    </Select>
+                    </Select> */}
                     <div className="select-tripid-label">
+                        <Select
+                            labelId="map-select-label"
+                            id="map-select"
+                            value={selectMap}
+                            onChange={handleChangeMap}
+                            displayEmpty
+                            style={{ marginBottom: "10px", width: "150px", marginTop: "10px" }}
+                        >
+                            <MenuItem value="OSMap">OSMap</MenuItem>
+                            <MenuItem value="GoogleMap">Google Map</MenuItem>
+                        </Select>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label="filterDate"
@@ -427,16 +454,19 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
                                 format="DD/MM/YYYY"
                                 value={filterDate ? dayjs(filterDate) : dayjs()}
                                 onChange={(date) => handleChange(date)}
+                                disabled={hybrid === "Hybrid_Customer"}
+                                readOnly={hybrid === "Hybrid_Customer"}
+                                sx={{ width: 170 }}
                             />
                         </LocalizationProvider>
                         <div>
                             <Autocomplete
                                 fullWidth
-                                // size="small"
-                                sx={{ width: 180 }}
+                                size="small"
+                                sx={{ width: 170 }}
                                 // options={tripidOptions || ""}
                                 options=
-                                {tripdropdown.map((option) => ({
+                                {tripdropdown?.map((option) => ({
                                     label: option.Trip_id,
                                 }))}
                                 // value={selectedTripid || tripdropdown[0]?.Trip_id}
@@ -444,7 +474,7 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
                                 value={
                                     loading
                                         ? null
-                                        : tripdropdown.length === 0
+                                        : tripdropdown?.length === 0
                                             ? { label: 'No data found', disabled: true }
                                             : selectedTripid
                                                 ? { label: selectedTripid }
@@ -488,25 +518,35 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
                                         <Box sx={{ width: '100%', typography: 'body1' }}>
                                             <TabContext value={valuetabs}>
                                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                                    <TabList onChange={handleChangetabs} aria-label="lab API tabs example">
-                                                        <Tab label="Overview" value="1" />
-                                                        <Tab label="Speed Graph" value="2" />
-                                                        <Tab label="Directions" value="3" />
-                                                        <Tab label="Near By" value="4" />
-                                                    </TabList>
+                                                    {hybrid === "Hybrid_Customer" ? (
+                                                        <>
+                                                            <TabList onChange={handleChangetabs} aria-label="lab API tabs example">
+                                                                <Tab label="Overview" value="1" />
+                                                            </TabList>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <TabList onChange={handleChangetabs} aria-label="lab API tabs example">
+                                                                <Tab label="Overview" value="1" />
+                                                                <Tab label="Speed Graph" value="2" />
+                                                                <Tab label="Directions" value="3" />
+                                                                <Tab label="Near By" value="4" />
+                                                            </TabList>
+                                                        </>
+                                                    )}
                                                 </Box>
                                                 <TabPanel value="1" >
-                                                    <div className='overview-content-head'>
+                                                    <div className='overview-content-head' style={{ padding: "18px" }}>
 
 
-                                                        <div className='overview-content' >
-                                                            <p className='overview-left'>Parked:</p>
-                                                            <p style={{ color: 'green' }}>Speed 13km/h</p>
+                                                        <div className='overview-content' style={{ marginTop: 0 }}>
+                                                            <span className='overview-left'>Parked:</span>
+                                                            <span style={{ color: 'green' }}>Speed 13km/h</span>
                                                         </div>
                                                         {/* <div className='overview-content'>
                         `                                    <span className='overview-left'>Current Location:</span>
                                                         <span>{address}</span> *
-                                                        </div>  */}`
+                                                        </div>  */}
                                                         <div className='overview-content'>
                                                             <span className='overview-left'>Vehicle No:</span>
                                                             <span>{vehNo}</span>

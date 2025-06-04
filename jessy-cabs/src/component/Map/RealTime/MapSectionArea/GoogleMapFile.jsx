@@ -9,7 +9,7 @@ import { ApiKey } from "../../../ApiKey/mapApiKey";
 
 const containerStyle = {
   width: "100%",
-  height: "500px",
+  height: "90%",
 };
 
 // const defaultCenter = {

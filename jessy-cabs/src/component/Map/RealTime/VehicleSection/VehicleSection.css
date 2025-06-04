@@ -131,7 +131,8 @@
 
 .overview-left {
     font-weight: 600;
-    font-size: 18px;
+    font-size: 17px;
+    color: #444;
 }
 
 .overview-content-head {
@@ -205,29 +206,31 @@
 
 .vehicle {
     width: 100%;
-    height: 500px;
+    height: 440px;
     display: flex;
+    gap: 10px;
 }
 
 .vehicle-info {
     width: 40%;
-    height: 500px;
+    height: 100%;
     overflow: scroll;
 }
 
 .g-map {
     width: 70%;
-    height: 500px;
+    height: 90%;
 }
 
-.select-tripid-label{
+.select-tripid-label {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
-.play-speed{
+.play-speed {
     text-align: center;
-    margin: 0 
+    margin: 5px;
 }
 
 @media screen and (max-width:500px) {
@@ -249,23 +252,23 @@
         width: 100% !important;
     }
 
-    .playspeed{
+    .playspeed {
         display: flex;
         gap: 5px;
         margin-top: 10px;
     }
 
-    .playspeed-buttons{
+    .playspeed-buttons {
         display: flex;
         flex-wrap: nowrap;
         gap: 5px;
     }
 
-    .select-tripid-label{
+    .select-tripid-label {
         flex-wrap: wrap;
     }
 
-    .overview-content-head{
+    .overview-content-head {
         overflow: auto;
         height: 50vh;
     }
@@ -275,17 +278,45 @@
         justify-content: flex-start;
     }
 
-    .playArrow{
+    .playArrow {
         display: flex;
         flex-wrap: nowrap;
         gap: 0;
     }
 
-    .play-speed{
+    .play-speed {
         font-size: 14px;
     }
 
-    .speed-btn{
+    .speed-btn {
         padding: 2px 8px !important;
     }
+}
+
+.css-ypiqxq-MuiDialogContent-root {
+    overflow-y: visible !important;
+}
+
+@media screen and (min-width:1200px) and (max-width:1400px) {
+
+    .vehicle-info {
+        width: 40%;
+        height: 90%;
+        overflow: scroll;
+    }
+
+    .g-map {
+        width: 70%;
+        height: 80%;
+    }
+
+    .vehicle {
+        width: 100%;
+        height: 350px;
+        display: flex;
+    }
+}
+
+.vehicle-info::-webkit-scrollbar {
+    display: none;
 }

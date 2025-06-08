@@ -7,7 +7,7 @@ const db = require('../../../db');
 const cors = require('cors'); // Import the cors middleware
 
 router.use(cors());
-router.use(express.static('customer_master'));
+// router.use(express.static('customer_master'));
 
 // Add Customer Master database
 router.post('/addcompany', (req, res) => {
@@ -83,18 +83,18 @@ router.put('/companyupdate/:id', (req, res) => {
 });
 
 
-router.delete('/companydelete/:organizationname', (req, res) => {
-    const organizationname = req.params.organizationname;
-    db.query('DELETE FROM tripsheetupload WHERE organizationname = ?', organizationname, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: "Failed to delete data from MySQL" });
-        }
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Customer not found" });
-        }
-        return res.status(200).json({ message: "Data deleted successfully" });
-    });
-});
+// router.delete('/companydelete/:organizationname', (req, res) => {
+//     const organizationname = req.params.organizationname;
+//     db.query('DELETE FROM tripsheetupload WHERE organizationname = ?', organizationname, (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: "Failed to delete data from MySQL" });
+//         }
+//         if (result.affectedRows === 0) {
+//             return res.status(404).json({ error: "Customer not found" });
+//         }
+//         return res.status(200).json({ message: "Data deleted successfully" });
+//     });
+// });
 
 
 //----------------------------------logo upload

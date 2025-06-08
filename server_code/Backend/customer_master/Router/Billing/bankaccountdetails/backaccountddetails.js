@@ -22,15 +22,15 @@ router.get('/getbankdetails', (req, res) => {
     });
 });
 
-router.get('/getCollecedAmount', (req, res) => {
-    db.query('SELECT * FROM BillWiseReceipt', (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-        }
+// router.get('/getCollecedAmount', (req, res) => {
+//     db.query('SELECT * FROM BillWiseReceipt', (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+//         }
 
-        return res.status(200).json(result);
-    });
-});
+//         return res.status(200).json(result);
+//     });
+// });
 
 router.get('/bankoptions', (req, res) => {
     db.query('SELECT DISTINCT bankname FROM bankaccountdetails', (err, rows) => {

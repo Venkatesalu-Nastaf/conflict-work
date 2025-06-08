@@ -431,45 +431,45 @@ router.put('/updateBalanceAmount', async (req, res) => {
 // })
 
 
-router.delete('/deleteBillWiseReport', (req, res) => {
-    const { BillNo } = req.body; // Assumes BillNo is an array
+// router.delete('/deleteBillWiseReport', (req, res) => {
+//     const { BillNo } = req.body; // Assumes BillNo is an array
 
-    if (!Array.isArray(BillNo) || BillNo.length === 0) {
-        return res.status(400).json({ error: 'BillNo must be a non-empty array' });
-    }
+//     if (!Array.isArray(BillNo) || BillNo.length === 0) {
+//         return res.status(400).json({ error: 'BillNo must be a non-empty array' });
+//     }
 
-    // Construct placeholders for the array
-    const placeholders = BillNo.map(() => '?').join(',');
+//     // Construct placeholders for the array
+//     const placeholders = BillNo.map(() => '?').join(',');
 
-    // Perform delete operations for each table
-    const deleteQueries = [
-        "DELETE FROM Transfer_list WHERE Invoice_no IN (" + placeholders + ")",
-        "DELETE FROM Group_billing WHERE InvoiceNo IN (" + placeholders + ")",
-        "DELETE FROM Individual_Billing WHERE Invoice_No IN (" + placeholders + ")"
-    ];
+//     // Perform delete operations for each table
+//     const deleteQueries = [
+//         "DELETE FROM Transfer_list WHERE Invoice_no IN (" + placeholders + ")",
+//         "DELETE FROM Group_billing WHERE InvoiceNo IN (" + placeholders + ")",
+//         "DELETE FROM Individual_Billing WHERE Invoice_No IN (" + placeholders + ")"
+//     ];
 
-    const deletePromises = deleteQueries.map(query => {
-        return new Promise((resolve, reject) => {
-            db.query(query, BillNo, (err, result) => {
-                if (err) {
-                    return reject({ error: 'Failed to delete data from MySQL' });
-                }
-                if (result.affectedRows === 0) {
-                    return resolve({ message: 'No records deleted' });
-                }
-                resolve({ message: 'Data deleted successfully' });
-            });
-        });
-    });
+//     const deletePromises = deleteQueries.map(query => {
+//         return new Promise((resolve, reject) => {
+//             db.query(query, BillNo, (err, result) => {
+//                 if (err) {
+//                     return reject({ error: 'Failed to delete data from MySQL' });
+//                 }
+//                 if (result.affectedRows === 0) {
+//                     return resolve({ message: 'No records deleted' });
+//                 }
+//                 resolve({ message: 'Data deleted successfully' });
+//             });
+//         });
+//     });
 
-    Promise.all(deletePromises)
-        .then(results => res.status(200).json({ messages: results }))
-        .catch(error => res.status(500).json(error));
-});
+//     Promise.all(deletePromises)
+//         .then(results => res.status(200).json({ messages: results }))
+//         .catch(error => res.status(500).json(error));
+// });
 // update tripsheet table for payment received
 router.post("/updateTripsheetForAmountReceived", (req, res) => {
     const { Trip_id } = req.body;
-    console.log(Trip_id, "balance amount update Tripidd");
+    // console.log(Trip_id, "balance amount update Tripidd");
 
     if (!Trip_id || Trip_id.length === 0) {
         return res.status(400).json({ message: "Trip_id is required." });
@@ -483,7 +483,7 @@ router.post("/updateTripsheetForAmountReceived", (req, res) => {
 
     db.query(sqlUpdateTripsheetQuery, [Trip_id], (error, result) => {
         if (error) {
-            console.error(error);
+            // console.error(error);
             return res.status(500).json({ message: "Error updating tripsheets." });
         }
 
@@ -521,7 +521,7 @@ router.get('/getGSTTaxByCustomerAPI', (req, res) => {
 
     db.query(sqlQuery, [customerName], (error, customerResult) => {
         if (error) {
-            console.error(error);
+            // console.error(error);
             return res.status(500).json({ error: 'Failed to fetch GST Tax' });
         }
 
@@ -529,10 +529,10 @@ router.get('/getGSTTaxByCustomerAPI', (req, res) => {
 
         db.query(sqlTripsheetQuery, [groupIdArray], (tripError, tripResults) => {
             if (tripError) {
-                console.error(tripError);
+                // console.error(tripError);
                 return res.status(500).json({ error: 'Failed to fetch trip sheet data' });
             }
-            console.log(tripResults, "newgroup")
+            // console.log(tripResults, "newgroup")
             // Map through tripResults to compute netAmount per trip
             //   const computedTrips = tripResults.map(item => {
             //     const netAmount = (parseInt(item.totalcalcAmount) || 0) - ((parseInt(item.parking) || 0) + (parseInt(item.permit) || 0) + (parseInt(item.toll) || 0));

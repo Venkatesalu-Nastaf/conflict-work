@@ -7,12 +7,26 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 const axios = require('axios');
 const decryption = require('../dataDecrypt');
+const imagePath = require('../../../imagepath')
+// console.log(imagePath, "mailers");
+
+// router.use(express.static('customer_master'));
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, './customer_master/public/Templateimage')
+//     },
+//     filename: (req, file, cb) => {
 
 
-router.use(express.static('customer_master'));
+//         cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
+//     },
+
+// })
+// router.use(express.static('Imagefolder'));
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './customer_master/public/Templateimage')
+        // cb(null, '../../../Imagefolder/Templateimage')
+          cb(null, `${imagePath}/Templateimage`)
     },
     filename: (req, file, cb) => {
 
@@ -67,7 +81,7 @@ router.post('/templatedatainsert', (req, res) => {
     const template = req.body;
     db.query('insert into TemplateMessage  SET ?', [template], (err, result) => {
         if (err) {
-            console.log(err)
+            // console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
 
         }
@@ -199,11 +213,17 @@ router.post('/send-emailtemplate', async (req, res) => {
                 `${data.CustomerName}`
             );
 
-            const signatureDirectoryRelative = path.join('Backend', 'customer_master', 'public', 'Templateimage');
+            //Old code
+            // const signatureDirectoryRelative = path.join('Backend', 'customer_master', 'public', 'Templateimage');
 
             
+            // // Get the complete absolute path
+            // const signatureDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', signatureDirectoryRelative);
+
+            //New code
+            const signatureDirectoryRelative = path.join('Imagefolder', 'Templateimage');      
             // Get the complete absolute path
-            const signatureDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', signatureDirectoryRelative);
+            const signatureDirectoryAbsolute = path.resolve(__dirname, '../../../../../../Imagefolder/Templateimage', signatureDirectoryRelative);
 
             // console.log(signatureDirectoryAbsolute);
 
@@ -256,7 +276,7 @@ router.post('/send-emailtemplate', async (req, res) => {
 
         res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
@@ -279,6 +299,55 @@ router.post('/send-emailtemplate', async (req, res) => {
 
 // })
 
+// router.delete('/templatedeleteimageedata/:templateid', (req, res) => {
+//     const templateid = req.params.templateid
+
+//     db.query('select templateimage from Templateattachement where templateid=?', [templateid], (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: "Failed to insert data into MySQL" });
+//         }
+
+//         if (results.length === 0) {
+//             return res.status(500).json({ error: "templateid not found" });
+//         }
+//         db.query('delete from Templateattachement where templateid=?', [templateid], (err, results1) => {
+
+//             if (err) {
+//                 return res.status(500).json({ error: "Failed to insert data into MySQL" });
+//             }
+
+//             results.forEach((row) => {
+//                 const oldFileName = row.templateimage;
+
+//                 if (oldFileName) {
+
+//                     const oldImagePath = path.join('Backend', 'customer_master', 'public', 'Templateimage');
+
+//                     // Get the complete absolute path
+//                     const oldImagePathDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', oldImagePath, oldFileName);
+
+
+
+//                     // Check if the file exists
+//                     if (fs.existsSync(oldImagePathDirectoryAbsolute)) {
+//                         try {
+//                             // Delete the file
+//                             fs.unlinkSync(oldImagePathDirectoryAbsolute);
+//                             // console.log('File deleted successfully:', oldFileName);
+//                         } catch (error) {
+//                             console.error('Error deleting file:', error);
+//                         }
+//                     } else {
+//                         console.log('File does not exist:', oldFileName);
+//                     }
+//                 }
+//             })
+
+//             return res.status(200).json({ message: "Data delete successfully" });
+
+//         })
+//     })
+// })
 router.delete('/templatedeleteimageedata/:templateid', (req, res) => {
     const templateid = req.params.templateid
 
@@ -301,65 +370,79 @@ router.delete('/templatedeleteimageedata/:templateid', (req, res) => {
 
                 if (oldFileName) {
 
-                    const oldImagePath = path.join('Backend', 'customer_master', 'public', 'Templateimage');
-
-                    // Get the complete absolute path
-                    const oldImagePathDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', oldImagePath, oldFileName);
-
-
+                    const oldImagePath = path.join(`${imagePath}/Templateimage`,oldFileName);
 
                     // Check if the file exists
-                    if (fs.existsSync(oldImagePathDirectoryAbsolute)) {
-                        try {
-                            // Delete the file
-                            fs.unlinkSync(oldImagePathDirectoryAbsolute);
-                            // console.log('File deleted successfully:', oldFileName);
-                        } catch (error) {
-                            console.error('Error deleting file:', error);
-                        }
-                    } else {
-                        console.log('File does not exist:', oldFileName);
-                    }
+                   try{
+                    fs.unlinkSync(oldImagePath)
+                   }catch{
+                    
+                   }
                 }
             })
 
             return res.status(200).json({ message: "Data delete successfully" });
 
-
-
         })
     })
 })
 
+// router.delete('/templatesingledataimage/:templateid/:templateimage', (req, res) => {
+//     const templateid = req.params.templateid
+//     const templateimage = req.params.templateimage
+//     console.log(templateimage,"seletcted image dele");
+    
+//     db.query('delete from Templateattachement where templateid=? And templateimage=?', [templateid, templateimage], (err, results1) => {
+
+//         if (err) {
+//             return res.status(500).json({ error: "Failed to insert data into MySQL" });
+//         }
+//         if (templateimage) {
+//             //old path
+//             // const oldImagePath = path.join('Backend', 'customer_master', 'public', 'Templateimage');
+
+//             //new path
+//             const oldImagePath = path.join('../../../Imagefolder/Templateimage')
+
+//             // Get the complete absolute path
+//             const oldImagePathDirectoryAbsolute = path.resolve(__dirname, '..','..', '..', '..', '..', oldImagePath, templateimage);
+
+//             // Check if the file exists
+//             if (fs.existsSync(oldImagePathDirectoryAbsolute)) {
+//                 try {
+//                     // Delete the file
+//                     fs.unlinkSync(oldImagePathDirectoryAbsolute);
+//                     // console.log('File deleted successfully:', templateimage);
+//                 } catch (error) {
+//                     console.error('Error deleting file:', error);
+//                 }
+//             } else {
+//                 console.log('File does not exist:', templateimage);
+//             }
+//         }
+//         return res.status(200).json("image data delete siccessfully")
+//     })
+// })
 router.delete('/templatesingledataimage/:templateid/:templateimage', (req, res) => {
     const templateid = req.params.templateid
     const templateimage = req.params.templateimage
-
+    // console.log(templateimage,"seletcted image dele");
+    
     db.query('delete from Templateattachement where templateid=? And templateimage=?', [templateid, templateimage], (err, results1) => {
 
         if (err) {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
         if (templateimage) {
+            //old path
+            // const oldImagePath = path.join('Backend', 'customer_master', 'public', 'Templateimage');
 
-            const oldImagePath = path.join('Backend', 'customer_master', 'public', 'Templateimage');
+            //new path
+            const oldImagePath = path.join(`${imagePath}/Templateimage`, templateimage)
 
-            // Get the complete absolute path
-            const oldImagePathDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', oldImagePath, templateimage);
-
-
-            // Check if the file exists
-            if (fs.existsSync(oldImagePathDirectoryAbsolute)) {
-                try {
-                    // Delete the file
-                    fs.unlinkSync(oldImagePathDirectoryAbsolute);
-                    // console.log('File deleted successfully:', templateimage);
-                } catch (error) {
-                    console.error('Error deleting file:', error);
-                }
-            } else {
-                console.log('File does not exist:', templateimage);
-            }
+          try{
+            fs.unlinkSync(oldImagePath)
+          }catch{}
         }
         return res.status(200).json("image data delete siccessfully")
     })
@@ -428,7 +511,7 @@ router.get('/smsreportdata', async (req, res) => {
             res.json(resultsWithStatus);
         });
     } catch (error) {
-        console.error('Error handling SMS report data:', error);
+        // console.error('Error handling SMS report data:', error);
         res.status(500).json({ error: 'An unexpected error occurred' });
     }
 });

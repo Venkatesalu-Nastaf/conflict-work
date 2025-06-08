@@ -678,7 +678,14 @@ const Employe = () => {
                         onClick={(event) => {
                           handlecheckbox(img.fileName)
                         }} />
-                      <img src={`${apiUrl}/public/employee_doc/` + img.fileName} type="application/pdf" width="350" height="300" alt="" />
+                      
+                      {//old image path
+                      /* <img src={`${apiUrl}/public/employee_doc/` + img.fileName}  */}
+                      
+                      {/*new path */}
+                      <img src={`${apiUrl}/employee_doc/${img.fileName}`} 
+                      type="application/pdf"
+                       width="350" height="300" alt="" />
 
                     </div>
                   ))}

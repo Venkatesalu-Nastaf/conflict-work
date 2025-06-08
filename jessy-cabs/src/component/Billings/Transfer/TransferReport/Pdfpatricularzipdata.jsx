@@ -1451,7 +1451,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
                   <View style={styles.signdiv}>
                     <View style={styles.signimg}>
-                      <Image src={`${apiUrl}/public/signature_images/${signnature_image}`} style={styles.signatureimage} />
+                      {/* old code */}
+                      {/* <Image src={`${apiUrl}/public/signature_images/${signnature_image}`} style={styles.signatureimage} /> */}
+                      {/* new code */}
+                       <Image src={`${apiUrl}/signimages/${signnature_image}`} style={styles.signatureimage} />
 
                     </View>
                     <View style={styles.signtxt}>
@@ -1494,7 +1497,11 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   <View style={styles.mapsection}>
                     {map_image && (
                       <View style={{ height: 150, width: '28%' }}>
-                        <Image style={{ height: "100%", width: '100%' }} src={`${apiUrl}/public/map_images/${map_image}`} />
+                        {/* old code */}
+                        {/* <Image style={{ height: "100%", width: '100%' }} src={`${apiUrl}/public/map_images/${map_image}`} /> */}
+
+                        {/* new code */}
+                         <Image style={{ height: "100%", width: '100%' }} src={`${apiUrl}/mapimagesnew/${map_image}`} />
                       </View>
                     )}
 

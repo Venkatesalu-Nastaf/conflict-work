@@ -4,7 +4,8 @@ const db = require('../../../db');
 const multer = require('multer');
 const path = require('path');
 const decryption = require('../dataDecrypt')
-
+const imagePath = require('../../../imagepath')
+// console.log(imagePath,"employee");
 
 // Add Customer Master database
 router.post('/employees', (req, res) => {
@@ -139,12 +140,25 @@ router.get('/table-for-employee', (req, res) => {
 //---------------Rigister->employee-------------------
 
 // its for make folder puclicc
-router.use(express.static('customer_master'));
+// router.use(express.static('customer_master'));
+
+// // its for multer file- 1
+// const employee_storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, './customer_master/public/employee_doc')
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//     }
+// })
+
+// router.use(express.static('Imagefolder'));
 
 // its for multer file- 1
 const employee_storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './customer_master/public/employee_doc')
+        // cb(null, '../../../Imagefolder/employee_doc')
+         cb(null, `${imagePath}/employee_doc`)
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
@@ -157,13 +171,10 @@ router.post('/employee-pdf/:id', employee_uploadfile.single("file"), async (req,
 
     const emp_id = req.params.id;
 
-    // console.log(emp_id,"checking the id ");
-    
     const fileName = req.file.filename;
-    // console.log(fileName,"filename");
 
     const fileType = req.file.mimetype;
-    // console.log(fileType ,"fileType");
+   
   
     const sql = "INSERT INTO rigister_employee_doc (emp_id,fileName,file_type) VALUES (?,?,?)";
 

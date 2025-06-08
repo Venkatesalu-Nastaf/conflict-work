@@ -5,6 +5,8 @@ const db = require('../../../db');
 const multer = require('multer');
 const moment = require('moment');
 const path = require('path');
+const imagePath = require('../../../imagepath')
+// console.log(imagePath,"booking.js");
 
 //its for to use aysn/await 
 const util = require('util');
@@ -210,7 +212,7 @@ router.delete('/bookingDLETEUPLOAD/:bookingno', async (req, res) => {
     // Check if this booking added tripsheet or not
     db.query('SELECT * FROM booking_doc WHERE booking_id = ?', [bookingno], (err1, result1) => {
       if (err1) {
-        console.log(err1,"bb")
+        // console.log(err1,"bb")
         return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
       }
   
@@ -218,7 +220,7 @@ router.delete('/bookingDLETEUPLOAD/:bookingno', async (req, res) => {
         // If booking exists, delete it
         db.query('DELETE FROM booking_doc WHERE booking_id = ?', [bookingno], (err, result2) => {
           if (err) {
-            console.log(err,"aa")
+            // console.log(err,"aa")
             return res.status(500).json({ error: 'Failed to delete booking details from MySQL' });
           }
           return res.status(200).json("Successfully deleted");
@@ -334,29 +336,29 @@ router.get('booking', async (req, res) => {
 // });
 
 // collect data from vehicleInfo database
-router.get('/name-customers/:customer', (req, res) => {
-    const customer = req.params.customer; // Access the parameter using req.params
-    // Modify the query to use the LIKE operator for partial matching
-    db.query('SELECT * FROM customers WHERE customer LIKE ?', [`%${customer}%`], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
-        }
-        if (result.length === 0) {
-            return res.status(404).json({ error: 'Customer not found' });
-        }
-        const customerDetails = result[0]; // Assuming there is only one matching customer
-        return res.status(200).json(customerDetails);
-    });
-});
+// router.get('/name-customers/:customer', (req, res) => {
+//     const customer = req.params.customer; // Access the parameter using req.params
+//     // Modify the query to use the LIKE operator for partial matching
+//     db.query('SELECT * FROM customers WHERE customer LIKE ?', [`%${customer}%`], (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+//         }
+//         if (result.length === 0) {
+//             return res.status(404).json({ error: 'Customer not found' });
+//         }
+//         const customerDetails = result[0]; // Assuming there is only one matching customer
+//         return res.status(200).json(customerDetails);
+//     });
+// });
 
 
 router.get('/drivername-details/:driver', (req, res) => {
     const customer = req.params.driver;
-    console.log("customer", customer)
+    // console.log("customer", customer)
     // Modify the query to use the LIKE operator for partial matching
     // db.query('SELECT * FROM  vehicleinfo WHERE driverName OR  vehRegNo LIKE ? ', [`${customer}%`], (err, result) => {
     db.query('SELECT * FROM  vehicleinfo WHERE driverName LIKE ? OR vehRegNo LIKE ?', [`%${customer}%`, `%${customer}%`], (err, result) => {
-        console.log("result", result)
+        // console.log("result", result)
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
         }
@@ -397,7 +399,7 @@ router.get('/drivername-details/:driver', (req, res) => {
 // ----------------------------------tripsheest travelname code api-----------------------
 router.get('/drivername-detailsaccount/:driver', (req, res) => {
     const customer = req.params.driver;
-    console.log("customer", customer);
+    // console.log("customer", customer);
 
     // Query to perform left joins
     // const query = `
@@ -423,7 +425,7 @@ router.get('/drivername-detailsaccount/:driver', (req, res) => {
 
     db.query(query, [`%${customer}%`, `%${customer}%`], (err, result) => {
         if (err) {
-            console.log(err)
+            // console.log(err)
             return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
         }
         if (result.length === 0) {
@@ -438,7 +440,7 @@ router.get('/drivername-detailsaccount/:driver', (req, res) => {
 
 router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
     const travelname = req.params.travelname;
-    console.log("customer", travelname);
+    // console.log("customer", travelname);
 
     // Query to perform left joins
     // const query = `
@@ -464,7 +466,7 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
 
     db.query(query, [travelname], (err, result) => {
         if (err) {
-            console.log(err)
+            // console.log(err)
             return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
         }
         if (result.length === 0) {
@@ -511,7 +513,7 @@ router.get('/travelsnamedetailfetch/:travelname', (req, res) => {
 
 router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
     const travelname = req.params.travelname;
-    console.log("customer", travelname);
+    // console.log("customer", travelname);
 
     // Query to perform left joins
     // const query = `
@@ -634,7 +636,7 @@ router.get('/travelsnamedetailfetchbooking/:travelname', (req, res) => {
 router.post('/send-email', async (req, res) => {
     try {
         const { Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehicleName, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass } = req.body;
-        console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehicleName, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass, "mailto")
+        // console.log(Address, guestname, guestmobileno, customeremail, email, startdate, starttime, driverName, useage, vehicleName, mobileNo, vehRegNo, servicestation, status, requestno, bookingno, duty, username, Sendmailauth, Mailauthpass, "mailto")
         const formattedFromDate = moment(startdate).format('DD-MM-YYYY');
       
         // Create a Nodemailer transporter
@@ -988,10 +990,26 @@ router.post('/send-onbook-email', async (req, res) => {
 //         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
 //     }
 // })
-router.use(express.static('customer_master'));
+
+
+//old code for booking attchemend pdf images
+// router.use(express.static('customer_master'));
+// const booking_storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, './customer_master/public/imagesUploads_doc')
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//     }
+// })
+// const booking_uploadfile = multer({ storage: booking_storage });
+
+//New code
+// router.use(express.static('Imagefolder'));
 const booking_storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './customer_master/public/imagesUploads_doc')
+        // cb(null, '../../../Imagefolder/imagesUploads_doc')
+           cb(null, `${imagePath}/imagesUploads_doc`)
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
@@ -999,18 +1017,20 @@ const booking_storage = multer.diskStorage({
 })
 const booking_uploadfile = multer({ storage: booking_storage });
 
-//-----------------post ---------------
 
+//-----------------post ---------------
 router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req, res) => {
     const booking_id = req.params.id;
     const fileType = req.file.mimetype;
     const fileName = req.file.filename;
     const { created_at } = req.body;
     const dynamicfileType = fileType.replace(/^[^/]+\//, "Booking Attachment/");
-    console.log(booking_id, "ll", fileName, "ll", fileType, path,dynamicfileType)
+    // console.log(booking_id, "ll", fileName, "ll", fileType, path,dynamicfileType)
+    // console.log(fileName,"file name in booking doc");
+    
 
-    console.log("booking_id", booking_id, fileType, fileName, created_at)
-    console.log("id", booking_id)
+    // console.log("booking_id", booking_id, fileType, fileName, created_at)
+    // console.log("id", booking_id)
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;
     db.query(sql, [booking_id, fileName, dynamicfileType, created_at], (err, result) => {
@@ -1022,6 +1042,7 @@ router.post('/bookingdatapdf/:id', booking_uploadfile.single("file"), async (req
 });
 
 
+
 router.post('/upload-booking-image', booking_uploadfile.single("file"), async (req, res) => {
     const booking_id = req.body.bookingId;
     const fileType = req.file.mimetype;
@@ -1029,7 +1050,7 @@ router.post('/upload-booking-image', booking_uploadfile.single("file"), async (r
     const path = req.file.path;
     const { created_at } = req.body;
     const dynamicfileType = fileType.replace(/^[^/]+\//, "Booking Attachment/");
-    console.log(booking_id, "ll", fileName, "ll", fileType, path,dynamicfileType)
+    // console.log(booking_id, "ll", fileName, "ll", fileType, path,dynamicfileType)
 
 
     const sql = `INSERT INTO booking_doc (booking_id, path, documenttype,created_at) VALUES (?, ?, ?,?)`;
@@ -1100,7 +1121,7 @@ router.get('/bookinglogdetailsget', (req, res) => {
 
     db.query(query, params, (err, result) => {
         if (err) {
-            console.error(err, 'Database Error');
+            // console.error(err, 'Database Error');
             return res.status(500).json({ error: 'Database query failed' });
         }
         // console.log(result,'log resultsss');
@@ -1113,7 +1134,7 @@ router.get('/bookinglogdetailsget', (req, res) => {
 // navigate booking to tripsheet to chack status
 router.get('/getBookingStatusByTripId', (req, res) => {
     const { tripid } = req.query;
-    console.log(tripid, " <-- received tripid in query");
+    // console.log(tripid, " <-- received tripid in query");
   
     if (!tripid) {
       return res.status(400).json({ error: "Trip ID is required" });
@@ -1122,11 +1143,11 @@ router.get('/getBookingStatusByTripId', (req, res) => {
     const sqlQuery = `SELECT status FROM booking WHERE bookingno = ?`;
     db.query(sqlQuery, [tripid], (error, result) => {
       if (error) {
-        console.error(error, "SQL query error");
+        // console.error(error, "SQL query error");
         return res.status(500).json({ error: "Internal server error" });
       }
   
-      console.log(result, " <-- result from booking table");
+    //   console.log(result, " <-- result from booking table");
   
       return res.json(result);
     });

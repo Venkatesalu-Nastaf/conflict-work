@@ -5,10 +5,13 @@ const nodemailer = require('nodemailer');
 const multer = require('multer');
 const fs = require('fs')
 const path = require('path');
-router.use(express.static('customer_master'));
+// router.use(express.static('customer_master'));
 const cron = require('node-cron');
 const moment = require('moment');
+const imagePath = require('../../../imagepath')
+// console.log(imagePath,"agreement");
 
+// router.use(express.static('Imagefolder'));
 // add Aggrement database
 
 // router.post('/agreementdatas', (req, res) => {
@@ -38,14 +41,28 @@ const moment = require('moment');
 //         return res.status(200).json(result);
 //     });
 // }); 
+
+//old path
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/agreement_doc');
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
+//   },
+// });
+
+//new path
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './customer_master/public/agreement_doc');
+    // cb(null, '../../../../Imagefolder/agreement_doc');
+     cb(null, `${imagePath}/agreement_doc`);
   },
   filename: (req, file, cb) => {
     cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
   },
 });
+
 
 const uploadfile = multer({ storage: storage });
 
@@ -101,7 +118,7 @@ router.post('/agreementdocumentimage', uploadfile.single('Agreement_Image'), (re
       gstno
     ], (err, result) => {
       if (err) {
-        console.log(err);
+        // console.log(err);
         return res.status(500).json({ error: "Failed to insert data into Aggrement table" });
       }
 
@@ -117,11 +134,16 @@ router.post('/agreementdocumentimage', uploadfile.single('Agreement_Image'), (re
 
         db.query(agreementImageSql, [customer, Agreement_Image], (err, imageResult) => {
           if (err) {
-            console.log(err);
+            // console.log(err);
             return res.status(500).json({ error: "Failed to insert Agreement_Image into agreement_image table" });
           }
 
-          return res.status(200).json({ message: "Data and image inserted successfully" });
+          // console.log(imageResult,"check");
+          //doubt
+          // const imageUrl = `http:// 192.168.0.126:1010/Imagefolder/agreement_doc/${Agreement_Image}`
+          // return res.status(200).json({ message: "Data and image inserted successfully" ,
+          //                               imageUrl:imageUrl});
+           return res.status(200).json({ message: "Data and image inserted successfully"});
         });
       } else {
         return res.status(200).json({ message: "Data inserted successfully, no image uploaded" });
@@ -131,17 +153,17 @@ router.post('/agreementdocumentimage', uploadfile.single('Agreement_Image'), (re
 });
 
 
-const storageLicence = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, './customer_master/public/agreement_doc')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
+// const storageLicence = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/agreement_doc')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
 
-})
+// })
 
-const uploadfileLicence = multer({ storage: storageLicence });
+// const uploadfileLicence = multer({ storage: storageLicence });
 
 // router.post('/Customer-Uploadpdf/:customer', uploadfileLicence.single("file"), async (req, res) => {
 //   const customer = req.params.customer
@@ -603,7 +625,7 @@ const createTransporter = async () => {
 
 // Function to parse and validate dates
 const parseDate = (dateStr) => {
-  console.log(`Attempting to parse: "${dateStr}"`);
+  // console.log(`Attempting to parse: "${dateStr}"`);
 
   const validFormats = [
     "DD-MM-YYYY",
@@ -830,7 +852,7 @@ router.get('/lastcustomergetimage', (req, res) => {
 router.post('/agreementpdf_Document/:id', uploadfile.single("file"), async (req, res) => {
   const customer = req.params.id;
 
-  console.log(customer, "checking");
+  // console.log(customer, "checking");
   const fileType = req.file.mimetype;
   const sql = `insert into agreement_image(customer,Agreement_Image,file_type)values(${customer},'${fileType}')`;
   db.query(sql, (err, result) => {
@@ -856,7 +878,7 @@ router.post('/agreementpdf_Documents/:customer', uploadfile.single("Agreement_Im
   const sql = "INSERT INTO agreement_image (customer, Agreement_Image, file_type) VALUES (?, ?, ?)";
   db.query(sql, [customer, Agreement_Image, fileType], (err, result) => {
     if (err) {
-      console.error("Insert error:", err);
+      // console.error("Insert error:", err);
       return res.status(500).json({ error: "Database error" });
     }
     // console.log(result, "valueee");
@@ -897,7 +919,7 @@ router.get('/agreement_Docview/:id', (req, res) => {
 
     db.query(sql, [id], (err, result) => {
     if (err) {
-      console.log(err);
+      // console.log(err);
       return res.status(500).json({ message: "Error retrieving data from agreement_image table" });
     }
     // console.log(result ,"uuuuuuuuuuuuuuuuu");
@@ -911,6 +933,29 @@ router.get('/agreement_Docview/:id', (req, res) => {
 
 
 // TO Delete
+// router.delete('/agreementimage-delete/:filename', (req, res) => {
+//   const sql = "delete from agreement_image where Agreement_Image=?";
+//   const fileName = req.params.filename;
+//   // console.log(fileName, "delete");
+
+//   const oldFileName = req.params.filename;
+//   // console.log(oldFileName, "fghg");
+
+//   if (oldFileName) {
+//     //Old path
+//     // const oldImagePath = path.join("./customer_master/public/agreement_doc", oldFileName);
+
+//     
+//     try {
+//       fs.unlinkSync(oldImagePath)
+//     } catch { }
+
+//   }
+//   db.query(sql, [fileName], (err, result) => {
+//     if (err) return res.json({ Message: "Error inside serevre" });
+//     return res.json(result);
+//   })
+// })
 router.delete('/agreementimage-delete/:filename', (req, res) => {
   const sql = "delete from agreement_image where Agreement_Image=?";
   const fileName = req.params.filename;
@@ -920,7 +965,10 @@ router.delete('/agreementimage-delete/:filename', (req, res) => {
   // console.log(oldFileName, "fghg");
 
   if (oldFileName) {
-    const oldImagePath = path.join("./customer_master/public/agreement_doc", oldFileName);
+   
+    //New Path
+    // const oldImagePath = path.join("../../../Imagefolder/agreement_doc", oldFileName)
+    const oldImagePath = path.join(`${imagePath}/agreement_doc`, oldFileName)
     try {
       fs.unlinkSync(oldImagePath)
     } catch { }
@@ -931,7 +979,53 @@ router.delete('/agreementimage-delete/:filename', (req, res) => {
     return res.json(result);
   })
 })
+
 //delete multiple images 
+
+// router.post('/agreementimage-delete-many', (req, res) => {
+
+//   const files = req.body.files;
+
+//   // console.log(files,"file delete");
+  
+
+
+//   if (!Array.isArray(files) || files.length === 0) {
+//     return res.status(400).json({ message: "No files to delete " })
+//   }
+
+//   const sql = "DELETE FROM agreement_image WHERE Agreement_Image IN (?)"
+
+//   files.forEach(file => {
+//     //old path
+//     // const filePath = path.join('./customer_master/public/agreement_doc', file)
+
+//     //new path
+//     const filePath = path.join('../../../Imagefolder/agreement_doc', file)
+//     // console.log(filePath,"check");
+//     try {
+//       fs.unlinkSync(filePath);
+
+//     } catch (err) {
+//       console.log(err, `Failed to delete file  ${file}`);
+
+//     }
+//   });
+//   db.query(sql, [files], (err, deleteresult) => {
+
+//     if (err) {
+//       return res.status(500).json({ error: "Database err" })
+//     } 
+   
+    
+//     else {
+//       //  console.log(deleteresult,"result");
+//       return res.status(200).json({ message: "Image deleted successfully" })
+//     }
+
+//   })
+
+// });
 
 router.post('/agreementimage-delete-many', (req, res) => {
 
@@ -939,8 +1033,6 @@ router.post('/agreementimage-delete-many', (req, res) => {
 
   // console.log(files,"file delete");
   
-
-
   if (!Array.isArray(files) || files.length === 0) {
     return res.status(400).json({ message: "No files to delete " })
   }
@@ -948,7 +1040,10 @@ router.post('/agreementimage-delete-many', (req, res) => {
   const sql = "DELETE FROM agreement_image WHERE Agreement_Image IN (?)"
 
   files.forEach(file => {
-    const filePath = path.join('./customer_master/public/agreement_doc', file)
+
+    //new path
+    // const filePath = path.join('../../../Imagefolder/agreement_doc', file)
+    const filePath = path.join(`${imagePath}/agreement_doc`, file)
     // console.log(filePath,"check");
     try {
       fs.unlinkSync(filePath);
@@ -989,7 +1084,7 @@ router.get('/Customerdatasfetch', (req, res) => {
     `;
   db.query(sql, (err, result) => {
     if (err) {
-      console.log(err);
+      // console.log(err);
       return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
     }
     // console.log(result,"result");
@@ -1023,7 +1118,7 @@ router.delete('/aggreementdeleteid/:id', (req, res) => {
 
   db.query('DELETE FROM Aggrement WHERE id = ?', [id], (err, result) => {
     if (err) {
-      console.error(err);
+      // console.error(err);
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }
     if (result.affectedRows === 0) {

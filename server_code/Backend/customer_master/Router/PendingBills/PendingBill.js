@@ -23,7 +23,7 @@ router.post('/getPendingBills', (req, res) => {
     const { customerData } = req.body;
     const { fromDate, toDate, CustomerName } = customerData;
 
-    console.log(customerData, fromDate, toDate, "Received filter data");
+    // console.log(customerData, fromDate, toDate, "Received filter data");
 
     const individualBillingPromise = new Promise((resolve, reject) => {
         const Individual_BillingQuery = `
@@ -34,7 +34,7 @@ router.post('/getPendingBills', (req, res) => {
         `;
         db.query(Individual_BillingQuery, [CustomerName, fromDate, toDate], (err, result) => {
             if (err) return reject('Error fetching individual billing details');
-            console.log(result,"iiiiiiiiiiiiiiiiiiiiiiiiii");
+            // console.log(result,"iiiiiiiiiiiiiiiiiiiiiiiiii");
             
             resolve(result);
         });
@@ -49,7 +49,7 @@ router.post('/getPendingBills', (req, res) => {
         `;
         db.query(Group_BillingQuery, [CustomerName, fromDate, toDate], async (error, result) => {
             if (error){
-                console.log(error,"error billing groupdetailssssssssssssssssssss");
+                // console.log(error,"error billing groupdetailssssssssssssssssssss");
                 
                 return reject('Error fetching group billing details');
                 
@@ -92,11 +92,11 @@ router.post('/getPendingBills', (req, res) => {
                         })
                     )
                 ).flat();
-console.log(updatedResult,"ttttttttttttttttttttttttttttttttttttttttttttttttttt");
+// console.log(updatedResult,"ttttttttttttttttttttttttttttttttttttttttttttttttttt");
 
                 resolve(updatedResult);
             } catch (err) {
-                console.error(err);
+                // console.error(err);
                 reject('Error processing group billing result');
             }
         });
@@ -111,7 +111,7 @@ console.log(updatedResult,"ttttttttttttttttttttttttttttttttttttttttttttttttttt")
         `;
         db.query(TransferlistQuery, [CustomerName, fromDate, toDate], (err, result) => {
             if (err) return reject('Error fetching transfer list details');
-            console.log(result,"rrrrrrrrrrrrrrrrrrr");
+            // console.log(result,"rrrrrrrrrrrrrrrrrrr");
             
             resolve(result);
         });
@@ -159,7 +159,7 @@ console.log(updatedResult,"ttttttttttttttttttttttttttttttttttttttttttttttttttt")
         res.status(200).json(allBillsWithId); // ✅ returns [{ id: 1, ... }]
     })
     .catch((error) => {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error });
     });
 });
@@ -169,7 +169,7 @@ router.post('/getAllBills', (req, res) => {
     const { customerData } = req.body;
     const { fromDate, toDate, CustomerName } = customerData;
 
-    console.log(customerData, fromDate, toDate, "Received filter data");
+    // console.log(customerData, fromDate, toDate, "Received filter data");
     const AccountQuery = `SELECT Account FROM BillWiseReceipt WHERE CustomerName = ?`;
     const individualBillingPromise = new Promise((resolve, reject) => {
         const Individual_BillingQuery = `
@@ -179,7 +179,7 @@ router.post('/getAllBills', (req, res) => {
         `;
         db.query(Individual_BillingQuery, [CustomerName, fromDate, toDate], (err, result) => {
             if (err) return reject('Error fetching individual billing details');
-            console.log(result,"iiiiiiiiiiiiiiiiiiiiiiiiii");
+            // console.log(result,"iiiiiiiiiiiiiiiiiiiiiiiiii");
             
             resolve(result);
         });
@@ -193,7 +193,7 @@ router.post('/getAllBills', (req, res) => {
         `;
         db.query(Group_BillingQuery, [CustomerName, fromDate, toDate], async (error, result) => {
             if (error){
-                console.log(error,"error billing groupdetailssssssssssssssssssss");
+                // console.log(error,"error billing groupdetailssssssssssssssssssss");
                 
                 return reject('Error fetching group billing details');
                 
@@ -239,7 +239,7 @@ router.post('/getAllBills', (req, res) => {
 
                 resolve(updatedResult);
             } catch (err) {
-                console.error(err);
+                // console.error(err);
                 reject('Error processing group billing result');
             }
         });
@@ -253,7 +253,7 @@ router.post('/getAllBills', (req, res) => {
         `;
         db.query(TransferlistQuery, [CustomerName, fromDate, toDate], (err, result) => {
             if (err) return reject('Error fetching transfer list details');
-            console.log(result,"rrrrrrrrrrrrrrrrrrr");
+            // console.log(result,"rrrrrrrrrrrrrrrrrrr");
             
             resolve(result);
         });
@@ -315,7 +315,7 @@ router.post('/getAllBills', (req, res) => {
         res.status(200).json(allBillsWithId); // ✅ returns [{ id: 1, ... }]
     })
     .catch((error) => {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error });
     });
 

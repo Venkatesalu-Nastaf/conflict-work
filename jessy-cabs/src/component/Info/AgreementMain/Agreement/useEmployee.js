@@ -1087,10 +1087,12 @@ const useEmployee = () => {
 
             // Download each file
             for (const file of selectedFiles) {
-                const response = await axios.get(`${apiUrl}/public/employee_doc/` + file.fileName, {
+                // const response = await axios.get(`${apiUrl}/public/employee_doc/` + file.fileName, {
+                //     responseType: 'blob', // Important to get a binary response
+                // });
+                  const response = await axios.get(`${apiUrl}/employee_doc/` + file.fileName, {
                     responseType: 'blob', // Important to get a binary response
-                });
-
+                })
                 // Convert image blob to base64 data URL
                 const reader = new FileReader();
                 reader.readAsDataURL(response.data);

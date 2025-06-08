@@ -999,7 +999,10 @@ const useVehicleinfo = () => {
             const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
             // Download each file
             for (const file of selectedFiles) {
-                const response = await axios.get(`${apiUrl}/public/vehicle_doc/` + file.fileName, {
+                // const response = await axios.get(`${apiUrl}/public/vehicle_doc/` + file.fileName, {
+                //     responseType: 'blob', // Important to get a binary response
+                // });
+                 const response = await axios.get(`${apiUrl}/vehicle_doc/` + file.fileName, {
                     responseType: 'blob', // Important to get a binary response
                 });
                 // Convert image blob to base64 data URL

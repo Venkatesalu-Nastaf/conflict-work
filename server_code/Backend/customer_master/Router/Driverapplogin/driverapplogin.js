@@ -6,7 +6,12 @@ const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const decryption = require('../dataDecrypt');
-router.use(express.static('customer_master'));
+const imagePath = require('../../../imagepath')
+// console.log(imagePath, "driveraaplogin.js");
+
+// router.use(express.static('customer_master'));
+// router.use(express.static('Imagefolder'));
+
 // user creation database
 // add user creation database
 
@@ -23,18 +28,30 @@ router.use(express.static('customer_master'));
 //   });
 // });
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, './customer_master/public/driver_doc')
-  },
-  filename: (req, file, cb) => {
+
+//Old path 
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/driver_doc')
+//   },
+//   filename: (req, file, cb) => {
 
     
+//     cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
+// },
+    
+// })
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // cb(null, '../../../Imagefolder/user_profile')
+     cb(null, `${imagePath}/user_profile`)
+  },
+  filename: (req, file, cb) => {
+  
     cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
 },
     
-  
-
 })
 
 const uploadfile = multer({ storage: storage });
@@ -50,7 +67,7 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
   else{
     profile_image = req.file.filename;
   }
-  // console.log(profile_image)
+  // console.log(profile_image ,)
   const {
     drivername,
     username,
@@ -90,11 +107,11 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
   const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,Profile_image,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
   db.query(sql, [drivername, username, stations, Mobileno,formattedToDate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,profile_image,created_at], (err, result) => {
     if (err) {
-      console.log(err)
+      // console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
       
           }
-          // console.log(result,"add driver details")
+          // console.log(result,"add driver details in drivercreation table")
           return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
@@ -162,7 +179,7 @@ router.put('/drivercreation/:driverid',uploadfile.single('Profile_image'), (req,
   
   const updatedCustomerData = req.body;
   if (req.file) {
-    console.log(req.file)
+    // console.log(req.file)
     updatedCustomerData.Profile_image = req.file.filename;
   }
  
@@ -194,7 +211,7 @@ router.get('/getDriverDetails', (req, res) => {
 })
 
 // Getting vehicle Details
-router.get('/getVehicleDetails', (req, res) => {
+router.get('/getDriverDetails1', (req, res) => {
   db.query('SELECT * FROM vehicleinfo WHERE active ="yes" ', (err, result) => {
     if (err) {
       // console.log(err, 'error');
@@ -239,7 +256,7 @@ router.post('/removeAssign', (req, res) => {
 
 router.post('/driverAssign', (req, res) => {
   const { driverName } = req.body;
-  console.log(driverName, 'drivername');
+  // console.log(driverName, 'drivername');
 
   db.query('UPDATE drivercreation SET driverApp="assigned" WHERE drivername IN (?)', [driverName], (err, result) => {
     if (err) {
@@ -272,7 +289,7 @@ router.get('/drivercreation', (req, res) => {
 router.get('/searchfordriver', (req, res) => {
   const { searchText, fromDate, toDate } = req.query;
   // console.log(searchText,"ss",fromDate, toDate)
-  console.log(req.query,"check");
+  // console.log(req.query,"check");
   let decryptText = null;
 
   if(searchText && searchText.trim() !== ""){
@@ -426,7 +443,7 @@ router.post('/send-emaildriverdata', async (req, res) => {
       // console.log('Email sent successfully');
       res.status(200).json({ message: 'Email sent successfully' });
   } catch (err) {
-      console.error("Error sending email:", err);
+      // console.error("Error sending email:", err);
       res.status(500).json({ message: 'An error occurred while sending the email' });
   }
 });

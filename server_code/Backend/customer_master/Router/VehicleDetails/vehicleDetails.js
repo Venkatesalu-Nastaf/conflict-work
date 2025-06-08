@@ -3,6 +3,8 @@ const router = express.Router();
 const db = require('../../../db');
 const multer = require('multer');
 const path = require('path');
+const imagePath = require('../../../imagepath')
+// console.log(imagePath,"vehicleDetails.js");
 
 
 router.get('/getAllVehicleDetailsList', (req, res) => {
@@ -10,7 +12,7 @@ router.get('/getAllVehicleDetailsList', (req, res) => {
 
   db.query(vehicleQuery, (error, result) => {
     if (error) {
-      console.log("mooError fetching vehicle details:", error);
+      // console.log("mooError fetching vehicle details:", error);
       return res.status(500).json({
         error: "Failed to fetch vehicle details",
         details: error.message
@@ -28,8 +30,8 @@ router.get('/getVehicle-Hcl-Customers/:todayDate/:hybrid', (req, res) => {
   const todayDate = req.params.todayDate;
   const hybrid = req.params.hybrid;
 
-  console.log(todayDate, "date hcl");
-  console.log(hybrid, "hybrid checking");
+  // console.log(todayDate, "date hcl");
+  // console.log(hybrid, "hybrid checking");
 
 
   const vehicleQuery = "SELECT * FROM vehicleinfo";
@@ -124,12 +126,12 @@ router.get('/getVehicle-Hcl-Customers/:todayDate/:hybrid', (req, res) => {
 
 router.get('/getVehicleParticularInfo', (req, res) => {
   const { vehicleSearchDetails } = req.query; // Use req.query for GET requests
-  console.log(vehicleSearchDetails, "vehicle nooo");
+  // console.log(vehicleSearchDetails, "vehicle nooo");
 
   const sqlQuery = "SELECT * FROM vehicleinfo WHERE vehRegNo = ?";
   db.query(sqlQuery, [vehicleSearchDetails], (error, result) => {
     if (error) {
-      console.error(error, "DB Error");
+      // console.error(error, "DB Error");
       return res.status(500).json({ error: "Database query failed" });
     }
     return res.status(200).json(result);
@@ -141,7 +143,7 @@ router.get('/getVehicleNamesList', (req, res) => {
 
   db.query(sqlQuery, (error, result) => {
     if (error) {
-      console.error("Database query failed:", error);
+      // console.error("Database query failed:", error);
       return res.status(500).json({ error: "Database query failed" });
     }
 
@@ -166,12 +168,12 @@ router.post('/updateVehicleNamesList', (req, res) => {
 
 router.post('/deleteVehicleNamesList', (req, res) => {
   const { id } = req.body;
-  console.log(id, "delete vehicle id");
+  // console.log(id, "delete vehicle id");
 
   const sqlquery = "DELETE FROM VehicleName WHERE id = ?";
   db.query(sqlquery, [id], (error, result) => {
     if (error) {
-      console.error(error, "error");
+      // console.error(error, "error");
       return res.status(500).json({ error: "Database query failed" });
     }
     // console.log(result, "checking deleted result");
@@ -190,7 +192,7 @@ router.post('/store-location', (req, res) => {
   const query = 'INSERT INTO gps_records (Latitude, Longitude) VALUES (?, ?)';
   db.execute(query, [latitude, longitude], (err, result) => {
     if (err) {
-      console.error('Error inserting data:', err);
+      // console.error('Error inserting data:', err);
       return res.status(500).send('Error storing location data');
     }
     res.send('Location data stored successfully');
@@ -237,12 +239,13 @@ router.post('/store-location', (req, res) => {
 
 // })
 // router.use(express.static('Backend'));
-router.use(express.static('customer_master'));
+// router.use(express.static('customer_master'));
 
 const storagetripsheet1 = multer.diskStorage({
   destination: (req, file, cb) => {
     // cb(null, './uploads')
-    cb(null, './customer_master/public/imagesUploads_doc')
+    // cb(null, '../../../Imagefolder/imagesUploads_doc')
+    cb(null, `${imagePath}/imagesUploads_doc`)
 
   },
   filename: (req, file, cb) => {
@@ -254,7 +257,7 @@ const uploadtripsheet1 = multer({
   storage: storagetripsheet1
 })
 router.post('/tripsheetdatadriverappimage/:data', uploadtripsheet1.single('file'), (req, res) => {
-  console.log(req.params.data, "kk")
+  // console.log(req.params.data, "kk")
   const fullPath = path.resolve(req.file.path);
   const fileData = {
     name: req.file.originalname,
@@ -266,7 +269,7 @@ router.post('/tripsheetdatadriverappimage/:data', uploadtripsheet1.single('file'
     date: req.body.datadate
 
   };
-  console.log(fileData)
+  // console.log(fileData)
   // res.send("datasend")
   res.json({ fileData })
 

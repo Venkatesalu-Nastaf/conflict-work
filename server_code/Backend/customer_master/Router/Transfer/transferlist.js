@@ -730,7 +730,7 @@ router.get('/getTripsheetDetailsFromTransferTripId', (req, res) => {
 
   db.query(sqlquery, [tripIdArray], (error, result) => {
     if (error) {
-      console.error(error, 'error');
+      // console.error(error, 'error');
       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
     }
 
@@ -752,7 +752,7 @@ router.get('/getTripIdFromTransferList', (req, res) => {
 
   db.query(sqlquery, [groupid], (error, result) => {
     if (error) {
-      console.error(error, 'error');
+      // console.error(error, 'error');
       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
     }
 
@@ -775,7 +775,7 @@ router.get('/getTripIdFromTransferListforinvoiceno', (req, res) => {
 
   db.query(sqlquery, [invoicno, State], (error, result) => {
     if (error) {
-      console.error(error, 'error');
+      // console.error(error, 'error');
       return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
     }
 
@@ -857,7 +857,7 @@ router.get('/EmptyRowDelete', (req, res) => {
   // First query to get Grouptrip_id where Trip_id is empty
   db.query('SELECT Grouptrip_id FROM Transfer_list WHERE Trip_id IS NULL OR Trip_id = ""', (error, result) => {
     if (error) {
-      console.error('Error fetching Grouptrip_id:', error);
+      // console.error('Error fetching Grouptrip_id:', error);
       return res.status(500).json({ error: 'Database query error' });
     }
 
@@ -869,7 +869,7 @@ router.get('/EmptyRowDelete', (req, res) => {
 
     db.query('DELETE FROM Transfer_list WHERE Grouptrip_id = ?', [grouptripId], (deleteError, deleteResult) => {
       if (deleteError) {
-        console.error('Error deleting row:', deleteError);
+        // console.error('Error deleting row:', deleteError);
         return res.status(500).json({ error: 'Error deleting row' });
       }
 
@@ -1156,7 +1156,7 @@ router.delete('/deleteTransfer/:groupid', (req, res) => {
 
   db.query(sql, [groupid], (err, result) => {
     if (err) {
-      console.log(err, 'error');
+      // console.log(err, 'error');
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
     }
     return res.status(200).json({ message: "Data deleted successfully" });
@@ -1285,7 +1285,7 @@ router.get('/Transferlistgetinvoicenolast/:Grouptrip', async (req, res) => {
     if (err) {
       console.log(err, 'error');
     }
-    console.log(result)
+    // console.log(result)
     return res.status(200).json(result);
 
   })
@@ -1329,14 +1329,14 @@ router.put('/statusChangeTripsheet/:tripid', (req, res) => {
   // Execute the first query
   db.query(sqlquery, [tripIds], (err, result) => {
     if (err) {
-      console.error(err);
+      // console.error(err);
       return res.status(500).json({ error: "Internal server error" });
     }
 
     // After the first query is successful, execute the second query
     db.query(updateQuery, [tripIds], (err, result) => {
       if (err) {
-        console.error(err);
+        // console.error(err);
         return res.status(500).json({ error: "Internal server error" });
       }
 
@@ -1348,13 +1348,13 @@ router.put('/statusChangeTripsheet/:tripid', (req, res) => {
 
 router.get('/gettransfer_listdatas', (req, res) => {
   const { Status, Organization_name, FromDate, EndDate, Station, } = req.query;
-  console.log(Status, decodeURIComponent(Organization_name), FromDate, EndDate, "pppp", Station)
+  // console.log(Status, decodeURIComponent(Organization_name), FromDate, EndDate, "pppp", Station)
   const orgName = decodeURIComponent(Organization_name)
 
   // console.log(data,"ll")
 
   if (Station) {  // const { Status  } = req.query;
-    console.log(Station, "SSALLLL")
+    // console.log(Station, "SSALLLL")
     if (Status === "all") {
       db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND State = ?', [orgName, FromDate, EndDate, Station], (err, result) => {
         // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
@@ -1396,7 +1396,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
       db.query('SELECT * FROM Transfer_list WHERE Organization_name=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND  Status = ? AND State = ?', [orgName, FromDate, EndDate, Status, Station], (err, result) => {
 
         if (err) {
-          console.error(err); // Log the error for debugging
+          // console.error(err); // Log the error for debugging
           return res.status(500).json({ message: 'Failed to retrieve data' });
         }
 
@@ -1452,7 +1452,7 @@ router.get('/gettransfer_listdatas', (req, res) => {
       db.query('SELECT * FROM Transfer_list WHERE Organization_name=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY) AND Status = ? ', [orgName, FromDate, EndDate, Status], (err, result) => {
 
         if (err) {
-          console.error(err); // Log the error for debugging
+          // console.error(err); // Log the error for debugging
           return res.status(500).json({ message: 'Failed to retrieve data' });
         }
 
@@ -1629,7 +1629,7 @@ const tripids = raw
   .split(",")
   .filter(Boolean);        // remove empty strings if any
 
-console.log(tripids,"cleannnnnnnnnnnnnnnnnnnnnnnnnnn",tripids.length);
+// console.log(tripids,"cleannnnnnnnnnnnnnnnnnnnnnnnnnn",tripids.length);
 
 // const tripids = tripidsRaw
 //   .map((id, index) => {
@@ -1640,10 +1640,10 @@ console.log(tripids,"cleannnnnnnnnnnnnnnnnnnnnnnnnnn",tripids.length);
 //   .filter(id => id)  // remove empty strings if any
 //   .flatMap(id => id.split(',')) // split any joined ids like "1962,1963,1985" into separate items
 //   .filter(id => id.trim() !== '');  // remove any accidental empty strings after split
+// 
+// console.log(tripids, "✅ cleanedTripIds ✅");
 
-console.log(tripids, "✅ cleanedTripIds ✅");
-
-  console.log(tripids,"aaaaaaaaaaaaaaaaaaaaaaaaa",tripids.length);
+  // console.log(tripids,"aaaaaaaaaaaaaaaaaaaaaaaaa",tripids.length);
   
   let clientDisconnected = false;
 
@@ -1752,7 +1752,7 @@ router.get('/customerdatamothergroup/:customers', (req, res) => {
 
   db.query(query, [customers], (err, results) => {
     if (err) {
-      console.log(err)
+      // console.log(err)
       return res.status(500).send({ error: 'Database query failed' });
     }
 
@@ -1765,7 +1765,7 @@ router.get('/customerdatamothergroup/:customers', (req, res) => {
       else {
         db.query(sql1, [data], (err, results1) => {
           if (err) {
-            console.log(err, "sql1")
+            // console.log(err, "sql1")
             return res.status(500).send({ error: 'Database query failed' });
           }
           const datas = results1[0].state || null;
@@ -1969,7 +1969,7 @@ router.post('/multipleCustomerGSTDetails', (req, res) => {
           if (allGstEmpty) {
             db.query(defaultStationQuery, (err, defaultStations) => {
               if (err) {
-                console.error(err, 'error');
+                // console.error(err, 'error');
                 return reject({ error: 'Database error while fetching default stations' });
               }
               resolve(defaultStations);
@@ -2001,7 +2001,7 @@ router.post('/multipleCustomerGSTDetails', (req, res) => {
           new Promise((resolve, reject) => {
             db.query(groupBillingQuery, [groupBilling], (err, billingResults) => {
               if (err) {
-                console.error(err, 'error');
+                // console.error(err, 'error');
                 return reject({ error: 'Database error while fetching group billing details' });
               }
 
@@ -2117,7 +2117,7 @@ router.get('/customerDetailsAndGroupBillingDetails/:customer', (req, res) => {
 
       db.query(groupBillingQuery, [groupBilling], (err, billingResult) => {
         if (err) {
-          console.error(err, 'error');
+          // console.error(err, 'error');
           return res.status(500).json({ error: 'Database error while fetching group billing details' });
         }
 
@@ -2237,7 +2237,7 @@ router.get('/customerdatgst/:customers', (req, res) => {
 
   db.query(query, [customers], (err, results) => {
     if (err) {
-      console.log(err)
+      // console.log(err)
       return res.status(500).send({ error: 'Database query failed' });
     }
 
@@ -2248,7 +2248,7 @@ router.get('/customerdatgst/:customers', (req, res) => {
         const datas2 = results[0].servicestation || null;
         db.query(sql2, [datas, datas2], (err, results3) => {
           if (err) {
-            console.log(err, "sql1")
+            // console.log(err, "sql1")
             return res.status(500).send({ error: 'Database query failed' });
           }
           if (results3.length > 0) {
@@ -2278,17 +2278,17 @@ router.get('/customerdatgst/:customers', (req, res) => {
       else {
         db.query(sql1, [data], (err, results1) => {
           if (err) {
-            console.log(err, "sql1")
+            // console.log(err, "sql1")
             return res.status(500).send({ error: 'Database query failed' });
           }
           const datas = results1[0].state || null;
           const datas2 = results[0].servicestation || null;
-          console.log(results1, "lll")
-          console.log(datas)
+          // console.log(results1, "lll")
+          // console.log(datas)
           if (results1.length > 0) {
             db.query(sql2, [datas, datas2], (err, result5) => {
               if (err) {
-                console.log(err, "sql1")
+                // console.log(err, "sql1")
                 return res.status(500).send({ error: 'Database query failed' });
               }
               if (result5.length > 0) {
@@ -2338,7 +2338,7 @@ router.get('/customerinvoicecreate/:customers', (req, res) => {
 
   db.query(query, [customers], (err, results) => {
     if (err) {
-      console.log(err)
+      // console.log(err)
       return res.status(500).send({ error: 'Database query failed' });
     }
 
@@ -2348,7 +2348,7 @@ router.get('/customerinvoicecreate/:customers', (req, res) => {
         const datas = results[0].state || null;
         db.query(sql2, [datas], (err, results3) => {
           if (err) {
-            console.log(err, "sql1")
+            // console.log(err, "sql1")
             return res.status(500).send({ error: 'Database query failed' });
           }
           if (results3.length > 0) {
@@ -2370,16 +2370,16 @@ router.get('/customerinvoicecreate/:customers', (req, res) => {
       else {
         db.query(sql1, [data], (err, results1) => {
           if (err) {
-            console.log(err, "sql1")
+            // console.log(err, "sql1")
             return res.status(500).send({ error: 'Database query failed' });
           }
           const datas = results1[0].state || null;
-          console.log(results1, "lll")
-          console.log(datas)
+          // console.log(results1, "lll")
+          // console.log(datas)
           if (results1.length > 0) {
             db.query(sql2, [datas], (err, result5) => {
               if (err) {
-                console.log(err, "sql1")
+                // console.log(err, "sql1")
                 return res.status(500).send({ error: 'Database query failed' });
               }
               if (result5.length > 0) {

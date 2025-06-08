@@ -10,20 +10,20 @@ const decryption = require('../dataDecrypt');
 
 
 router.use(cors());
-router.use(express.static('customer_master'));
+// router.use(express.static('customer_master'));
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, './customer_master/public/user_profile')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
-})
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/user_profile')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
 
-const upload = multer({
-  storage: storage
-})
+// const upload = multer({
+//   storage: storage
+// })
 
 router.get('/TemplateUser--Creation', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "UserCreation"'

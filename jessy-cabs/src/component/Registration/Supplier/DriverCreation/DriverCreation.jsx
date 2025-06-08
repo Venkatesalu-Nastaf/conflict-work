@@ -836,8 +836,13 @@ const DriverCreation = ({ stationName }) => {
                                     </Button>                                    {Array.isArray(allFile) && allFile.map((img, index) => (
                                         <div key={index} className='driver-creation-dialog-box-div2'>
                                             {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
-                                                ? <img src={`${apiUrl}/public/driver_doc/` + img.fileName} alt="driverimage" type="application/pdf" width="100%" height="400px" /> :
-                                                <embed src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />}
+                                                ? 
+                                                // <img src={`${apiUrl}/public/driver_doc/` + img.fileName} alt="driverimage" type="application/pdf" width="100%" height="400px" /> :
+                                                // <embed src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />
+                                                <img src={`${apiUrl}/driver_doc/` + img.fileName} alt="driverimage" type="application/pdf" width="100%" height="400px" /> :
+                                                <embed src={`${apiUrl}/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />
+                                                
+                                                }
                                             <Checkbox typeof='checked'
                                                 checked={deletefile.includes(img.fileName)}
                                                 onClick={(event) => {

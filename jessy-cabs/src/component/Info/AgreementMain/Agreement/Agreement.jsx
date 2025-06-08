@@ -849,7 +849,10 @@ const Agreement = ({ organizationNames }) => {
                           }} />
                         {file.Agreement_Image.endsWith('.pdf') ? (
                           <iframe
-                            src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
+                          //old path
+                            // src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
+                            //new
+                            src={`${apiUrl}/agreement_doc/` + file.Agreement_Image}
                             width="350"
                             height="300"
                             title={`PDF ${index}`}
@@ -857,7 +860,10 @@ const Agreement = ({ organizationNames }) => {
                           />
                         ) : (
                           <img
-                            src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
+                          //old path
+                            // src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
+                          //new
+                            src={`${apiUrl}/agreement_doc/` + file.Agreement_Image}
                             width="350"
                             height="300"
                             alt=""

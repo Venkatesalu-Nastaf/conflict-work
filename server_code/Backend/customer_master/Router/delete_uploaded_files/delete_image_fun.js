@@ -3,13 +3,40 @@ const router = express.Router();
 const db = require('../../../db');
 const fs = require('fs');
 const path = require('path');
+const imagePath = require('../../../imagepath')
+// console.log(imagePath, " delete image func");
 
-router.use(express.static('customer_master'));
+// router.use(express.static('customer_master'));
 
 
 
 /////---image delete --for register ->employee- TO Delete
 // TO Delete
+// router.delete('/image-delete/:filename', (req, res) => {
+//     const sql = "delete from rigister_employee_doc where fileName=?";
+
+//     const fileName = req.params.filename;
+
+//     console.log(fileName,"backend");
+    
+//     const oldFileName = req.params.filename;
+//     if (oldFileName) {
+//         //old path
+//         // const oldImagePath = path.join("./customer_master/public/employee_doc", oldFileName);
+
+//         //new path
+//          const oldImagePath = path.join("../../../Imagefolder/employee_doc", oldFileName);
+//         try {
+//             fs.unlinkSync(oldImagePath)
+//         } catch { }
+
+//     }
+//     db.query(sql, [fileName], (err, result) => {
+//         if (err) return res.json({ Message: "Error inside serevre" });
+//         // console.log(result ,"deleted values ");    
+//         return res.json(result);     
+//     })
+// })
 router.delete('/image-delete/:filename', (req, res) => {
     const sql = "delete from rigister_employee_doc where fileName=?";
 
@@ -19,7 +46,9 @@ router.delete('/image-delete/:filename', (req, res) => {
     
     const oldFileName = req.params.filename;
     if (oldFileName) {
-        const oldImagePath = path.join("./customer_master/public/employee_doc", oldFileName);
+        //new path
+        //  const oldImagePath = path.join("../../../Imagefolder/employee_doc", oldFileName);
+          const oldImagePath = path.join(`${imagePath}/employee_doc`, oldFileName);
         try {
             fs.unlinkSync(oldImagePath)
         } catch { }
@@ -35,6 +64,40 @@ router.delete('/image-delete/:filename', (req, res) => {
 // ------------------------
 /////---image delete --for register ->supplier-vehicle- TO Delete
 // TO Delete
+
+
+// router.delete('/vehicle_documents/:filename', (req, res) => {
+//     const sql = "delete from vehicle_documents where fileName=?";
+//     const sqlselectcommand = "select * from vehicle_documents where fileName=?"
+//     const fileName = req.params.filename;
+//     const fileNames1 = fileName.split(',')
+
+
+//     fileNames1.forEach((fileName) => {
+//         const oldFileName = fileName;
+
+//         db.query(sqlselectcommand, [oldFileName], (err, results) => {
+//             if (err) {
+//                 console.log(err, 'error');
+//             }
+//             if (results.length >= 1) {
+//                 db.query(sql, [oldFileName], (err, result) => {
+//                     if (err) {
+//                         console.error("Error executing SQL query:", err);
+//                         return res.status(500).json({ Message: "Error inside server" });
+//                     }
+//                 });
+//             }
+//             const oldImagePath = path.join("./customer_master/public/vehicle_doc", oldFileName);
+//             try {
+//                 fs.unlinkSync(oldImagePath);
+//             } catch {
+//             }
+//         })
+//     });
+// })
+
+//for deleting the images in vehicleinfo page
 router.delete('/vehicle_documents/:filename', (req, res) => {
     const sql = "delete from vehicle_documents where fileName=?";
     const sqlselectcommand = "select * from vehicle_documents where fileName=?"
@@ -57,7 +120,8 @@ router.delete('/vehicle_documents/:filename', (req, res) => {
                     }
                 });
             }
-            const oldImagePath = path.join("./customer_master/public/vehicle_doc", oldFileName);
+            // const oldImagePath = path.join("../../../Imagefolder/vehicle_doc", oldFileName);
+             const oldImagePath = path.join(`${imagePath}/vehicle_doc`, oldFileName);
             try {
                 fs.unlinkSync(oldImagePath);
             } catch {
@@ -66,11 +130,81 @@ router.delete('/vehicle_documents/:filename', (req, res) => {
     });
 })
 
+// router.delete('/driver_proof/:filename', (req, res) => {
+//     const sql = "delete from driver_proof where fileName=?";
+//     const sqlselectcommand = "select * from driver_proof where fileName=?"
+//     const fileNames = req.params.filename; // Assuming filenames are sent in the request body as an array
+
+//     const fileNames1 = fileNames.split(',')
+//     fileNames1.forEach((fileName) => {
+//         const oldFileName = fileName;
+//         db.query(sqlselectcommand, [oldFileName], (err, result) => {
+//             if (err) {
+//                 console.log(err, 'error');
+//             }
+//             db.query(sql, [oldFileName], (err, result) => {
+//                 if (err) {
+//                     console.error("Error executing SQL query:", err);
+//                     return res.status(500).json({ Message: "Error inside server" });
+//                 }
+//             });
+
+//             if (oldFileName) {
+//                 const oldImagePath = path.join("./customer_master/public/driver_doc", oldFileName);
+//                 try {
+//                     fs.unlinkSync(oldImagePath);
+//                 } catch (error) {
+//                     console.error("Error deleting file:", error);
+//                 }
+//             }
+//         })
+//     });
+
+//     return res.status(200).json({ Message: "Files deleted successfully" });
+// });
+
+
+//old code for deleting license image in driver creation
+// router.delete('/driver_proof/:filename', (req, res) => {
+//     const sql = "delete from driver_proof where fileName=?";
+//     const sqlselectcommand = "select * from driver_proof where fileName=?"
+//     const fileNames = req.params.filename; // Assuming filenames are sent in the request body as an array
+
+//     const fileNames1 = fileNames.split(',')
+//     fileNames1.forEach((fileName) => {
+//         const oldFileName = fileName;
+//         db.query(sqlselectcommand, [oldFileName], (err, result) => {
+//             if (err) {
+//                 console.log(err, 'error');
+//             }
+//             db.query(sql, [oldFileName], (err, result) => {
+//                 if (err) {
+//                     console.error("Error executing SQL query:", err);
+//                     return res.status(500).json({ Message: "Error inside server" });
+//                 }
+//             });
+
+//             if (oldFileName) {
+//                 const oldImagePath = path.join("./customer_master/public/driver_doc", oldFileName);
+//                 try {
+//                     fs.unlinkSync(oldImagePath);
+//                 } catch (error) {
+//                     console.error("Error deleting file:", error);
+//                 }
+//             }
+//         })
+//     });
+
+//     return res.status(200).json({ Message: "Files deleted successfully" });
+// });
+
+//new code for deleting the licence image
 router.delete('/driver_proof/:filename', (req, res) => {
     const sql = "delete from driver_proof where fileName=?";
     const sqlselectcommand = "select * from driver_proof where fileName=?"
     const fileNames = req.params.filename; // Assuming filenames are sent in the request body as an array
 
+    // console.log(fileNames,"deleteimage name ");
     const fileNames1 = fileNames.split(',')
     fileNames1.forEach((fileName) => {
         const oldFileName = fileName;
@@ -86,7 +220,7 @@ router.delete('/driver_proof/:filename', (req, res) => {
             });
 
             if (oldFileName) {
-                const oldImagePath = path.join("./customer_master/public/driver_doc", oldFileName);
+                const oldImagePath = path.join(`${imagePath}/driver_doc`, oldFileName);
                 try {
                     fs.unlinkSync(oldImagePath);
                 } catch (error) {
@@ -96,48 +230,98 @@ router.delete('/driver_proof/:filename', (req, res) => {
         })
     });
 
+
     return res.status(200).json({ Message: "Files deleted successfully" });
 });
 
 
 /////---image delete --for register ->employee- TO Delete
 // TO Delete
-router.delete('/booking_doc/:filename', (req, res) => {
-    const sql = "delete from booking_doc where fileName=?";
-    const fileName = req.params.filename;
-    const oldFileName = req.params.filename;
+// router.delete('/booking_doc/:filename', (req, res) => {
+//     const sql = "delete from booking_doc where fileName=?";
+//     const fileName = req.params.filename;
+//     const oldFileName = req.params.filename;
 
-    if (oldFileName) {
-        const oldImagePath = path.join("./customer_master/public/booking_doc", oldFileName);
-        if (fs.existsSync(oldImagePath)) {
-            try {
-                // Delete the file
-                fs.unlinkSync(oldImagePath);
-            } catch (error) {
-                console.error('Error deleting file:', error);
-            }
-        } else {
-            console.log('File does not exist:', oldFileName);
-        }
-    }
-    db.query(sql, [fileName], (err, result) => {
-        if (err) return res.json({ Message: "Error inside serevre" });
-        return res.json(result);
-    })
-})
-
-
+//     if (oldFileName) {
+//         const oldImagePath = path.join("./customer_master/public/booking_doc", oldFileName);
+//         if (fs.existsSync(oldImagePath)) {
+//             try {
+//                 // Delete the file
+//                 fs.unlinkSync(oldImagePath);
+//             } catch (error) {
+//                 console.error('Error deleting file:', error);
+//             }
+//         } else {
+//             console.log('File does not exist:', oldFileName);
+//         }
+//     }
+//     db.query(sql, [fileName], (err, result) => {
+//         if (err) return res.json({ Message: "Error inside serevre" });
+//         return res.json(result);
+//     })
+// })
 
 
+
+
+// router.delete('/tripsheet-imagedelete', (req, res) => {
+//     // const tripid = req.params.tripid
+//     const pathimage = req.query.path
+//     const sql = 'delete from tripsheetupload where path=?';
+//     const sql2 = 'delete from booking_doc where path=?'
+//     // const removeFromLocal = path.join("./uploads", pathimage)
+//     const removeFromLocal = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+//     // const removeFromLocal = path.join(__dirname, "uploads", pathimage)
+
+//     const removeFile = () => {
+//         if (fs.existsSync(removeFromLocal)) {
+//             try {
+//                 fs.unlinkSync(removeFromLocal)
+//             } catch (err) {
+//                 console.log("err", err)
+//             }
+//         } else {
+//             console.log("file dosent exist")
+//         }
+//     }
+
+
+
+//     db.query(sql, [pathimage], (err, result) => {
+//         if (err) return res.status(500).json({ message: err.message, success: false })
+
+//         if (result.affectedRows > 0) {
+//             removeFile()
+//             return res.json({ message: "file deleted sucess", success: true })
+//         }
+//         else {
+
+//             db.query(sql2, [pathimage], (err, result) => {
+//                 if (err) return res.status(500).json({ message: err.message, success: false })
+
+//                 if (result.affectedRows > 0) {
+//                     removeFile()
+//                     return res.json({ message: "file deleted sucess", success: true })
+//                 }
+//             })
+//         }
+
+//     })
+
+// })
+
+//New code for deleting the image pdf in tripsheet 
 router.delete('/tripsheet-imagedelete', (req, res) => {
     // const tripid = req.params.tripid
     const pathimage = req.query.path
+
+    // console.log(pathimage,"deleted image");
+    
     const sql = 'delete from tripsheetupload where path=?';
     const sql2 = 'delete from booking_doc where path=?'
     // const removeFromLocal = path.join("./uploads", pathimage)
-    const removeFromLocal = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
-    // const removeFromLocal = path.join(__dirname, "uploads", pathimage)
-
+    const removeFromLocal = path.join(__dirname, '../../../../../../Imagefolder/imagesUploads_doc', pathimage);
+ 
     const removeFile = () => {
         if (fs.existsSync(removeFromLocal)) {
             try {
@@ -149,8 +333,6 @@ router.delete('/tripsheet-imagedelete', (req, res) => {
             console.log("file dosent exist")
         }
     }
-
-
 
     db.query(sql, [pathimage], (err, result) => {
         if (err) return res.status(500).json({ message: err.message, success: false })
@@ -215,11 +397,57 @@ router.delete('/tripsheet-imagedelete', (req, res) => {
 
 // Replace with your actual database connection
 
+//old code for deleting the imagepdf in booking page
+// router.delete('/booking_doc-delete/:imagedata/:tripid', async (req, res) => {
+//     const image = req.params.imagedata;
+//     const deleteImage = image.split(',');
+//     const tripid = req.params.tripid;
+
+//     const sql = 'DELETE FROM booking_doc WHERE path = ? AND booking_id = ?';
+
+//     try {
+//         // Create an array of promises for deletion
+//         const deletePromises = deleteImage.map((img) => {
+//             return new Promise((resolve, reject) => {
+//                 db.query(sql, [img, tripid], (err, result) => {
+//                     if (err) {
+//                         reject(err);
+//                     } else {
+//                         // const deleteImagePath = path.join('./uploads', img);
+//                         const deleteImagePath = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+//                         if (fs.existsSync(deleteImagePath)) {
+//                             try {
+//                                 fs.unlinkSync(deleteImagePath);
+//                                 resolve({ success: true, message: `Deleted ${img}` });
+//                             } catch (err) {
+//                                 reject(err);
+//                             }
+//                         } else {
+//                             console.log(`File ${img} does not exist`);
+//                             resolve({ success: true, message: `File ${img} does not exist` });
+//                         }
+//                     }
+//                 });
+//             });
+//         });
+
+//         // Wait for all deletion promises to resolve
+//         const results = await Promise.all(deletePromises);
+//         res.json({ success: true, message: "All files processed", results });
+//     } catch (err) {
+//         console.error("Error deleting images or database records", err);
+//         res.status(500).json({ success: false, message: "Error processing request", error: err.message });
+//     }
+// });
+
+//New code for deleting the image in booking page 
 router.delete('/booking_doc-delete/:imagedata/:tripid', async (req, res) => {
     const image = req.params.imagedata;
     const deleteImage = image.split(',');
     const tripid = req.params.tripid;
 
+    // console.log(image," deleting images");
+    
     const sql = 'DELETE FROM booking_doc WHERE path = ? AND booking_id = ?';
 
     try {
@@ -230,8 +458,10 @@ router.delete('/booking_doc-delete/:imagedata/:tripid', async (req, res) => {
                     if (err) {
                         reject(err);
                     } else {
-                        // const deleteImagePath = path.join('./uploads', img);
-                        const deleteImagePath = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+                        const deleteImagePath = path.join(__dirname, '../../../../../../Imagefolder/imagesUploads_doc', img);
+
+                            //    console.log(deleteImagePath,"checking");
+                               
                         if (fs.existsSync(deleteImagePath)) {
                             try {
                                 fs.unlinkSync(deleteImagePath);
@@ -240,7 +470,7 @@ router.delete('/booking_doc-delete/:imagedata/:tripid', async (req, res) => {
                                 reject(err);
                             }
                         } else {
-                            console.log(`File ${img} does not exist`);
+                            // console.log(`File ${img} does not exist`);
                             resolve({ success: true, message: `File ${img} does not exist` });
                         }
                     }
@@ -252,12 +482,10 @@ router.delete('/booking_doc-delete/:imagedata/:tripid', async (req, res) => {
         const results = await Promise.all(deletePromises);
         res.json({ success: true, message: "All files processed", results });
     } catch (err) {
-        console.error("Error deleting images or database records", err);
+        // console.error("Error deleting images or database records", err);
         res.status(500).json({ success: false, message: "Error processing request", error: err.message });
     }
 });
-
-
 
 
 // router.delete('/booking_doc-delete/:imagedata/:tripid', async (req, res) => {

@@ -1097,7 +1097,7 @@ const Vehicaleinfo = ({ stationName }) => {
               </div>
             </div>
 
-            <div className="input-permit-no">
+            {/* <div className="input-permit-no">
             <div className="icone">
                     <AirportShuttleIcon color="action" />
                   </div>
@@ -1133,7 +1133,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </Button>
                 <span class="rc-book-copy-tooltiptext">Upload RC-Book Copy</span>
               </div>
-            </div>
+            </div> */}
             <div className="input-permit-no">
               <div className='icone'>
                 <CalendarMonthIcon />
@@ -1569,8 +1569,14 @@ const Vehicaleinfo = ({ stationName }) => {
                 {Array.isArray(allFile) && allFile.map((img, index) => (
                   <div key={index} className='vehicle-info-dailog-box-btn-division'>
                     {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
-                      ? <img src={`${apiUrl}/public/vehicle_doc/` + img.fileName} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
-                      <embed src={`${apiUrl}/public/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />}
+                      ? 
+                      //old code
+                      // <img src={`${apiUrl}/public/vehicle_doc/` + img.fileName} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
+                      // <embed src={`${apiUrl}/public/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />
+                      //new path
+                      <img src={`${apiUrl}/vehicle_doc/` + img.fileName} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
+                      <embed src={`${apiUrl}/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />
+                      }
                     <Checkbox typeof='checked'
                       checked={deletefile.includes(img.fileName)}
                       onClick={(event) => {

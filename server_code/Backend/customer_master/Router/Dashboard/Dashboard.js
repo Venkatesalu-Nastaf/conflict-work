@@ -236,10 +236,10 @@ router.get("/customerreviewdataallmonth/:station/:fromdate/:todate", (req, res) 
   const station = req.params.station;
   const fromtodate = req.params.fromdate;
   const endtodate = req.params.todate;
-  console.log(fromtodate, "ff", endtodate)
+  // console.log(fromtodate, "ff", endtodate)
 
   const stationname = station?.split(',');
-  console.log(stationname, "name")
+  // console.log(stationname, "name")
 
   const promises = stationname.map(data => {
     return new Promise((resolve, reject) => {
@@ -274,8 +274,8 @@ router.get("/customerreviewtoday/:station/:dateoftoday", (req, res) => {
 
   const station = req.params.station;
   const stationname = station.split(',');
-  console.log(stationname, "name")
-  console.log(dateoftoday, "of date")
+  // console.log(stationname, "name")
+  // console.log(dateoftoday, "of date")
 
   const promises = stationname.map(data => {
     return new Promise((resolve, reject) => {
@@ -361,7 +361,7 @@ WHERE MONTH(startdate) = ? AND YEAR(startdate) = ? AND Bill_Amount_Update = 'Suc
 
   db.query(sqlQueryBilledAmount, [selectedMonth, selectedYear], (error, result) => {
     if (error) {
-      console.log(error, "error");
+      // console.log(error, "error");
       return res.status(500).json({ error: "Database query error" });
     }
     // console.log(result, "billamountresultttttttttttttttttttttttttttttttttttttttttt");
@@ -394,7 +394,7 @@ router.get('/getvendorAmountDetails', (req, res) => {
   // const year = new Date(selectedMonth).getFullYear();
   const month = new Date(selectedMonth).getMonth() + 1;
   const year = parseInt(selectedYear)
-  console.log(selectedMonth, "selectedDate", "Year:", year, "Month:", month, selectedYear, typeof (year), year);
+  // console.log(selectedMonth, "selectedDate", "Year:", year, "Month:", month, selectedYear, typeof (year), year);
 
   const sqlVendorAmountQuery = `
     SELECT 
@@ -410,7 +410,7 @@ router.get('/getvendorAmountDetails', (req, res) => {
 
   db.query(sqlVendorAmountQuery, [month, year], (err, result) => {
     if (err) {
-      console.error(err);
+      // console.error(err);
       return res.status(500).send("Database error");
     }
 
@@ -418,7 +418,7 @@ router.get('/getvendorAmountDetails', (req, res) => {
     ...item,
     profit: item.profit < 0 ? 0 : item.profit
   }));
-      console.log(updatedResult, "vendorrrrrrrrrrresult", updatedResult.length);
+      // console.log(updatedResult, "vendorrrrrrrrrrresult", updatedResult.length);
     return res.status(200).json(updatedResult[0]);
   });
 });
@@ -429,7 +429,7 @@ router.get('/getvendorAmountDetails', (req, res) => {
 
 router.get('/getVendorAmountAllDetails', (req, res) => {
   const { selectedYear } = req.query;
-  console.log(selectedYear, "selectedYearrrr");
+  // console.log(selectedYear, "selectedYearrrr");
 
   const sql = `
   SELECT 
@@ -445,7 +445,7 @@ WHERE YEAR(startdate) = ?
 
   db.query(sql, [selectedYear], (error, result) => {
     if (error) {
-      console.log(error, "error");
+      // console.log(error, "error");
       return res.status(500).json({ error });
     }
 
@@ -453,7 +453,7 @@ WHERE YEAR(startdate) = ?
     ...item,
     profit: item.profit < 0 ? 0 : item.profit
   }));
-      console.log(updatedResult, "AllVendorResult");
+      // console.log(updatedResult, "AllVendorResult");
 
     return res.status(200).json(updatedResult[0]);
   });
@@ -470,7 +470,7 @@ router.get('/getAllSelectedMonthProfit', (req, res) => {
   const year = parseInt(selectedYear)
   const monthLimit = compareyear === year ? currentDate.getMonth() + 1 : 12;
 
-  console.log("Year:", year, "Selected Month:", monthLimit);
+  // console.log("Year:", year, "Selected Month:", monthLimit);
 
   const sqlQuery = `
     SELECT 
@@ -489,7 +489,7 @@ router.get('/getAllSelectedMonthProfit', (req, res) => {
 
   db.query(sqlQuery, [year, monthLimit], (err, result) => {
     if (err) {
-      console.error(err);
+      // console.error(err);
       return res.status(500).send("Database error");
     }
 
@@ -497,54 +497,54 @@ router.get('/getAllSelectedMonthProfit', (req, res) => {
     ...item,
     profit: item.profit < 0 ? 0 : item.profit
   }));
-  console.log(updatedResult,"result");
+  // console.log(updatedResult,"result");
   
     return res.status(200).json(updatedResult);
   });
 });
 
 // get start month to current month selected year and selected month
-router.get('/getFromToSelectedMonthProfit', (req, res) => {
-  let { selectedMonth, selectedYear } = req.query;
+// router.get('/getFromToSelectedMonthProfit', (req, res) => {
+//   let { selectedMonth, selectedYear } = req.query;
 
-  if (!selectedMonth || !selectedYear) {
-    return res.status(400).send("selectedMonth and selectedYear are required");
-  }
+//   if (!selectedMonth || !selectedYear) {
+//     return res.status(400).send("selectedMonth and selectedYear are required");
+//   }
 
-  const month = new Date(selectedMonth).getMonth() + 1;
-  const year = parseInt(selectedYear);
+//   const month = new Date(selectedMonth).getMonth() + 1;
+//   const year = parseInt(selectedYear);
 
-  console.log("Selected Year:", year, "Selected Month:", month);
+//   console.log("Selected Year:", year, "Selected Month:", month);
 
-  const sqlQuery = `
-    SELECT 
-      MONTH(startdate) AS month,
-      SUM(totalcalcAmount) AS totalCalcAmount,
-      SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END) AS totalVendorAmount,
-      (SUM(totalcalcAmount) - SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END)) AS profit
-    FROM tripsheet
-    WHERE YEAR(startdate) = ?
-      AND MONTH(startdate) = ?
-      AND Vendor_FULLTotalAmount IS NOT NULL
-      AND Vendor_FULLTotalAmount != 0
-    GROUP BY MONTH(startdate)
-  `;
+//   const sqlQuery = `
+//     SELECT 
+//       MONTH(startdate) AS month,
+//       SUM(totalcalcAmount) AS totalCalcAmount,
+//       SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END) AS totalVendorAmount,
+//       (SUM(totalcalcAmount) - SUM(CASE WHEN Vendor_FULLTotalAmount > 0 THEN Vendor_FULLTotalAmount ELSE 0 END)) AS profit
+//     FROM tripsheet
+//     WHERE YEAR(startdate) = ?
+//       AND MONTH(startdate) = ?
+//       AND Vendor_FULLTotalAmount IS NOT NULL
+//       AND Vendor_FULLTotalAmount != 0
+//     GROUP BY MONTH(startdate)
+//   `;
 
-  db.query(sqlQuery, [year, month], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("Database error");
-    }
+//   db.query(sqlQuery, [year, month], (err, result) => {
+//     if (err) {
+//       console.error(err);
+//       return res.status(500).send("Database error");
+//     }
 
-      const updatedResult = result.map(item => ({
-    ...item,
-    profit: item.profit < 0 ? 0 : item.profit
-  }));
+//       const updatedResult = result.map(item => ({
+//     ...item,
+//     profit: item.profit < 0 ? 0 : item.profit
+//   }));
 
-  console.log(updatedResult, "profit result for selected month");
-    return res.status(200).json(updatedResult);
-  });
-});
+//   console.log(updatedResult, "profit result for selected month");
+//     return res.status(200).json(updatedResult);
+//   });
+// });
 
 // get profit details to get from to end selected  year
 router.get('/getAllCurrentAndPreviousYearReports', (req, res) => {
@@ -564,7 +564,7 @@ router.get('/getAllCurrentAndPreviousYearReports', (req, res) => {
 
   const yearsList = yearQueries.join(' UNION ALL ');
 
-  console.log(yearsList, "yearlist");
+  // console.log(yearsList, "yearlist");
 
   const sqlQuery = `
     SELECT 
@@ -584,7 +584,7 @@ router.get('/getAllCurrentAndPreviousYearReports', (req, res) => {
 
   db.query(sqlQuery, (err, results) => {
     if (err) {
-      console.error("Error fetching year totals:", err);
+      // console.error("Error fetching year totals:", err);
       return res.status(500).json({ error: "Internal server error" });
     }
          const updatedResult = results.map(item => ({

@@ -629,79 +629,79 @@ const finalCustomerDetails = enrichedCustomerDetails
 
 
 //doubt
-router.get("/Monthilywisedatatrip", (req, res) => {
-  const { customer, fromDate, toDate } = req.query;
-  // console.log(req.query, "checking full values");
+// router.get("/Monthilywisedatatrip", (req, res) => {
+//   const { customer, fromDate, toDate } = req.query;
+//   // console.log(req.query, "checking full values");
 
-  const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
-  // console.log(formattedFromDate,"from date");
+//   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+//   // console.log(formattedFromDate,"from date");
 
-  const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  // console.log(formattedToDate,"todate");
+//   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+//   // console.log(formattedToDate,"todate");
 
 
 
-  let query = 'SELECT * FROM customers';
-  let params = [];
+//   let query = 'SELECT * FROM customers';
+//   let params = [];
 
-  if (customer !== "All") {
-    query += ' WHERE customerType = ?';
-    params.push(customer);
-  }
+//   if (customer !== "All") {
+//     query += ' WHERE customerType = ?';
+//     params.push(customer);
+//   }
 
-  db.query(query, params, (err, results) => {
-    if (err) {
-      return res.status(400).json(err)
-    }
+//   db.query(query, params, (err, results) => {
+//     if (err) {
+//       return res.status(400).json(err)
+//     }
 
-    const datas = results?.map((data) => data.customer)
-    const sql = `
-  SELECT 
-    customer,orderbyemail,billingno,
-    SUM(IFNULL(totalcalcAmount, 0))  AS totalAmount
-  FROM 
-    tripsheet
-  WHERE 
-   tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-   AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
-    AND customer IN (?)
-  GROUP BY 
-    customer,orderbyemail,billingno
-`;
+//     const datas = results?.map((data) => data.customer)
+//     const sql = `
+//   SELECT 
+//     customer,orderbyemail,billingno,
+//     SUM(IFNULL(totalcalcAmount, 0))  AS totalAmount
+//   FROM 
+//     tripsheet
+//   WHERE 
+//    tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+//    AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+//     AND customer IN (?)
+//   GROUP BY 
+//     customer,orderbyemail,billingno
+// `;
 
-    // const sql = `
-    // SELECT 
-    //   customer,
-    //   SUM(IFNULL(totalcalcAmount, 0))  AS totalAmount
-    // FROM 
-    //   tripsheet
-    // WHERE 
-    //  tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
-    //  AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
-    //   AND customer IN (?)
-    // GROUP BY 
-    //   customer
-    // `;
+//     // const sql = `
+//     // SELECT 
+//     //   customer,
+//     //   SUM(IFNULL(totalcalcAmount, 0))  AS totalAmount
+//     // FROM 
+//     //   tripsheet
+//     // WHERE 
+//     //  tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+//     //  AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)
+//     //   AND customer IN (?)
+//     // GROUP BY 
+//     //   customer
+//     // `;
 
-    db.query(sql, [fromDate, toDate, datas], (err, results1) => {
-      if (err) {
-        console.log(err)
-      }
+//     db.query(sql, [fromDate, toDate, datas], (err, results1) => {
+//       if (err) {
+//         console.log(err)
+//       }
 
-      const combinedResults = results1?.map(trip => {
-        const customerDetail = results?.find(detail => detail.customer === trip.customer);
-        return {
-          ...trip,
-          customerId: customerDetail ? customerDetail.customerId : null,
-          customertype: customerDetail ? customerDetail.customerType : null,
-          address: customerDetail ? customerDetail.address1 : null,
-        };
-      });
+//       const combinedResults = results1?.map(trip => {
+//         const customerDetail = results?.find(detail => detail.customer === trip.customer);
+//         return {
+//           ...trip,
+//           customerId: customerDetail ? customerDetail.customerId : null,
+//           customertype: customerDetail ? customerDetail.customerType : null,
+//           address: customerDetail ? customerDetail.address1 : null,
+//         };
+//       });
 
-      return res.status(200).json(combinedResults)
-    })
-  })
-})
+//       return res.status(200).json(combinedResults)
+//     })
+//   })
+// })
 
 router.get('/montlywisedataall', (req, res) => {
   db.query("select c.customerId,c.customerType as customertype,c.address1 as address,t.orderbyemail,t.billingno,sum(totalcalcAmount) as totalAmount,t.customer from customers c INNER JOIN  tripsheet t on c.customer = t.customer group by t.customer,c.customerId,t.orderbyemail,t.billingno", (err, result) => {

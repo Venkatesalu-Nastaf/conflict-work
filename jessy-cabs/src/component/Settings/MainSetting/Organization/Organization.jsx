@@ -25,7 +25,7 @@ const Organization = ({ logoImage }) => {
 
     const {
         selectedCustomerData,
-        actionName,
+        // actionName,
         error,
         success,
         warning,
@@ -35,7 +35,7 @@ const Organization = ({ logoImage }) => {
         book,
         info,
         infoMessage,
-        handleClick,
+        // handleClick,
         handleChange,
         hidePopup,
 
@@ -48,21 +48,21 @@ const Organization = ({ logoImage }) => {
         handleAddNewAPIKey,
         handleApiKeyChange,
         allApiKey,
-        updateKey,
+        // updateKey,
         handleUpdateChange,
         handleUpdateApiKey,
         selectedApikey
     } = useOrganization();
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    }, [actionName, handleClick]);
+    // useEffect(() => {
+    //     if (actionName === 'List') {
+    //         handleClick(null, 'List');
+    //     }
+    // }, [actionName, handleClick]);
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-    const MainSetting_modify = permissions[16]?.modify;
+    const MainSetting_modify = permissions[17]?.modify;
 
 
 

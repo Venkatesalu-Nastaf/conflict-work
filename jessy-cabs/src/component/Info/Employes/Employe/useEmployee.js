@@ -775,6 +775,11 @@ const useEmployee = () => {
         try {
             const encryptSearch = encryption(searchText);
             // console.log(encryptSearch, "checking the search");
+             if(!searchText){
+                 setError(true);
+                setErrorMessage("Enter the Serachfield ")
+                return
+            }
 
             const response = await fetch(`${apiUrl}/table-for-employee?searchText=${encryptSearch}`);
             const data = await response.json();
@@ -947,7 +952,8 @@ const useEmployee = () => {
         setErrorMessage,
         deletefile,
         loading,
-        setLoading, deleteemployeedata, setDeleteEmployeedata,
+        // setLoading,
+         deleteemployeedata, setDeleteEmployeedata,
     };
 };
 

@@ -157,7 +157,7 @@ const SMSReport = () => {
   const filterData = () => {
     // setLoading(true); 
   
-    console.log(smsreport, "filterdatat");
+    // console.log(smsreport, "filterdatat");
     const filtered = smsreport.filter(report => {
       const submitDate = dayjs(report.SubmitDate, 'DD MMM YYYY');
       const startDateWithoutTime = fromDate.startOf('day'); // Start of the day for fromDate
@@ -167,7 +167,7 @@ const SMSReport = () => {
     });
   
     if (filtered.length === 0) {
-      console.log("errr");
+      // console.log("errr");
       setInfo(true);
       setINFOMessage("Data Not Found");
       setLoading(true)
@@ -220,7 +220,7 @@ const SMSReport = () => {
         column.width = column.header.length + 5;
         column.alignment = { horizontal: 'center', vertical: 'middle' };
       });
-
+// console.log(row,"dd")
       row.forEach((singleData, index) => {
 
 

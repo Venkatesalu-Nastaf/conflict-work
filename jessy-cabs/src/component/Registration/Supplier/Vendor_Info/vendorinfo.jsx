@@ -17,7 +17,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup,Switch} from "@mui/material";
 import { PermissionContext } from '../../../context/permissionContext';
-import DomainAddIcon from "@mui/icons-material/DomainAdd";
+// import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -65,14 +65,14 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const Vendorinfo = ({ stationName }) => {
+const Vendorinfo = () => {
 
 
 
   const {
     selectedCustomerData,
     selectedCustomerId,
-    actionName,
+    // actionName,
     error,
     success,
     info,
@@ -92,7 +92,7 @@ const Vendorinfo = ({ stationName }) => {
     handleExcelDownload,
     handlePdfDownload,
     // handleRemoveField,
-    handleFieldChange,
+    // handleFieldChange,
     setSearchText,
     handleSearch,
     setFromDate,
@@ -113,10 +113,10 @@ const Vendorinfo = ({ stationName }) => {
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
-  const Supllier_read = permissions[12]?.read;
-  const Supllier_new = permissions[12]?.new;
-  const Supllier_modify = permissions[12]?.modify;
-  const Supllier_delete = permissions[12]?.delete;
+  const Supllier_read = permissions[13]?.read;
+  const Supllier_new = permissions[13]?.new;
+  const Supllier_modify = permissions[13]?.modify;
+  const Supllier_delete = permissions[13]?.delete;
 
   return (
     <div className="main-content-form">

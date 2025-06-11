@@ -39,6 +39,7 @@ const useGroupbilling = () => {
     const [groupInvoiceNumber, setGroupInvoiceNumber] = useState('')
     const [groupInvoiceDate, setGroupInvoiceDate] = useState('')
     const [referenceNo, setReferenceNo] = useState([])
+       const [trigger,setTriggerrefno]=useState(false)
     const [particularId, setParticularId] = useState([])
     const [refInvNo, setRefInvNo] = useState('')
     const [refInvDate, setRefInvDate] = useState('')
@@ -49,7 +50,7 @@ const useGroupbilling = () => {
     const [selectedRow, setSelectedRow] = useState([])
     const { setRefPdfPrint, setRefCustomer, setReferNo } = RefPdfData()
     // const [ groupBillAmount,setGroupBillAmount] = useState(0)
-    const [trips, setTrips] = useState(0)
+    // const [trips, setTrips] = useState(0)
     // const [department, setDepartment] = useState('');
     const [referInvoiceno, setReferINVOICENO] = useState('')
     const [groupAmount, setGroupAmount] = useState(0)
@@ -124,7 +125,7 @@ const useGroupbilling = () => {
             }
         }
         fetchData()
-    }, [apiUrl])
+    }, [apiUrl,trigger])
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -795,18 +796,18 @@ const useGroupbilling = () => {
     //     }
     // };
 
-    function removeSeconds(time) {
-        // Split the time string by colon (:)
-        const timeParts = time.split(':');
+    // function removeSeconds(time) {
+    //     // Split the time string by colon (:)
+    //     const timeParts = time.split(':');
 
-        // Check if there are seconds (length 3), return hours:minutes
-        if (timeParts.length === 3) {
-            return `${timeParts[0]}:${timeParts[1]}`;
-        }
+    //     // Check if there are seconds (length 3), return hours:minutes
+    //     if (timeParts.length === 3) {
+    //         return `${timeParts[0]}:${timeParts[1]}`;
+    //     }
 
-        // If there's only hours:minutes, return it as is
-        return time;
-    }
+    //     // If there's only hours:minutes, return it as is
+    //     return time;
+    // }
 
     //   function addPercentage(amount, percent) {
 
@@ -1510,24 +1511,24 @@ const useGroupbilling = () => {
     };
 
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (!invoiceno) return
-                const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
-                const GroupReference = response.data;
-                const Amount = GroupReference.map((li) => li.Amount)
-                // setGroupBillAmount(Amount)
-                const Trips = GroupReference.map((li) => li.Trips)
-                const tripcount = parseInt(Trips)
-                setTrips(tripcount)
-            }
-            catch (err) {
-                console.log(err, 'error');
-            }
-        }
-        fetchData()
-    }, [rowSelectionModel, apiUrl, invoiceno, rowSelectionModel])
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             if (!invoiceno) return
+    //             const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
+    //             const GroupReference = response.data;
+    //             const Amount = GroupReference.map((li) => li.Amount)
+    //             // setGroupBillAmount(Amount)
+    //             const Trips = GroupReference.map((li) => li.Trips)
+    //             const tripcount = parseInt(Trips)
+    //             setTrips(tripcount)
+    //         }
+    //         catch (err) {
+    //             console.log(err, 'error');
+    //         }
+    //     }
+    //     fetchData()
+    // }, [rowSelectionModel, apiUrl, invoiceno, rowSelectionModel])
 
 
 
@@ -1639,17 +1640,17 @@ const useGroupbilling = () => {
         }
 
         const tripIds = rowSelectionModel.map(row => row.tripid.toString());
-        const amounts = rowSelectionModel.map(row => row.netamount.split(',')).flat(); // Split and flatten
-        const totalAmount = amounts.reduce((acc, curr) => acc + parseFloat(curr), 0);
+        // const amounts = rowSelectionModel.map(row => row.netamount.split(',')).flat(); // Split and flatten
+        // const totalAmount = amounts.reduce((acc, curr) => acc + parseFloat(curr), 0);
         const total = rows.reduce((sum, li) => sum + li.totalcalcAmount, 0);
         const selectedTotal = rowSelectedValues.reduce((sum, value) => sum + value, 0);
         const Amount = total - selectedTotal;
         // console.log(amounts, totalAmount, Amount, 'remove-----', selectedTotal, total);
 
-        const TripCount = trips - rowSelectionModel.length;
-        const Tripcounts = TripCount.toString();
+        // const TripCount = trips - rowSelectionModel.length;
+        // const Tripcounts = TripCount.toString();
         const groupUpdateList = {
-            Trips: Tripcounts,
+            // Trips: Tripcounts,
             Amount: Amount,
             Trip_id: tripIds
         };
@@ -1659,13 +1660,13 @@ const useGroupbilling = () => {
 
 
         try {
-            const response = await axios.post(`${apiUrl}/tripsheetstatusupdate`, {
+             await axios.post(`${apiUrl}/tripsheetstatusupdate`, {
                 tripids: tripIds,
                 status: 'Closed',
             });
             // console.log(response, 'response');
 
-            const updatelist = await axios.put(`${apiUrl}/statusupdate`, groupUpdateList);
+            await axios.put(`${apiUrl}/statusupdate`, groupUpdateList);
             // console.log(updatelist, 'uplist');
 
             // if (!invoiceno) {
@@ -1681,7 +1682,7 @@ const useGroupbilling = () => {
             const groupid = result?.map(li => li.id);
 
             if (tripno[0] === "") {
-                const getresponse = await axios.delete(`${apiUrl}/deleteGroup/${groupid}`);
+                 await axios.delete(`${apiUrl}/deleteGroup/${groupid}`);
                 // console.log(getresponse, 'Removed Successfully');
             }
             setSuccess(true)
@@ -1727,7 +1728,7 @@ const useGroupbilling = () => {
         // console.log(referenceNo, invoiceno, 'reference');
 
         if (invoiceno === "") {
-            const TripsCount = rowSelectionModel.length;
+            // const TripsCount = rowSelectionModel.length;
             // console.log(TripsCount, typeof (TripsCount), 'TripsCount');
 
             let TotalAmount = 0; // Change from const to let
@@ -1758,7 +1759,7 @@ const useGroupbilling = () => {
                     Customer: customer,
                     FromDate: FromDate,
                     ToDate: ToDate,
-                    Trips: TripsCount,
+                    // Trips: TripsCount,
                     Amount: TotalAmount,
                     Trip_id: selectedRow,
                     State: stateNamce,
@@ -1772,6 +1773,7 @@ const useGroupbilling = () => {
                 setisSaveload(false)
                 setSuccessMessage("Successfully Added")
                 setRows([])
+                 setTriggerrefno(prev => !prev)
             }
             // catch (err) {
             //     console.log(err, "errordetails");
@@ -1799,13 +1801,13 @@ const useGroupbilling = () => {
             }
         }
         else {
-            const TripsCount = rowSelectionModel.length;
+            // const TripsCount = rowSelectionModel.length;
             // console.log(trips, 'tripssss', TripsCount, rows.length);
 
-            let TotalAmount = 0; // Change from const to let
-            rowSelectedValues?.forEach((li) => {
-                TotalAmount += li;
-            });
+            // let TotalAmount = 0; // Change from const to let
+            // rowSelectedValues?.forEach((li) => {
+            //     TotalAmount += li;
+            // });
             // console.log(rowSelectedValues, 'rowselected values', groupAmount);
 
             const selectedTotal = rowSelectedValues?.reduce((sum, value) => sum + value, 0);
@@ -1815,9 +1817,12 @@ const useGroupbilling = () => {
             // const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
             // const ToDate = dayjs(toDate).format('YYYY-MM-DD')
             // const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
-            const FromDate = dayjs(refPdfData[0]?.startdate).format('DD-MM-YYYY')
-            const ToDate = dayjs(refPdfData[refPdfData.length - 1]?.startdate).format('DD-MM-YYYY')
-            const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
+            // const FromDate = dayjs(refPdfData[0]?.startdate).format('DD-MM-YYYY')
+            // const ToDate = dayjs(refPdfData[refPdfData.length - 1]?.startdate).format('DD-MM-YYYY')
+            // const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
+                const FromDate = dayjs(refPdfData[0]?.startdate).format('YYYY-MM-DD')
+            const ToDate = dayjs(refPdfData[refPdfData.length - 1]?.startdate).format('YYYY-MM-DD')
+            const InvoiceDate = dayjs(Billingdate).format('YYYY-MM-DD')
             // console.log(fromDate, ToDate, InvoiceDate, TripsCount, TotalAmount, 'usegroup');
 
             if (rowSelectionModel.length === 0) {
@@ -1829,8 +1834,8 @@ const useGroupbilling = () => {
                 setisSaveload(true)
                 const totalAmount = groupTotal + selectedTotal;
                 // const trips = parseInt(groupBillingData[0].Trips)
-                const Trip = particularId.length + rowSelectionModel.length
-                const Trips = Trip.toString()
+                // const Trip = particularId.length + rowSelectionModel.length
+                // const Trips = Trip.toString()
                 const tripid = groupBillingData[0].Trip_id
                 let tripIdArray = tripid.split(',');
 
@@ -1843,7 +1848,7 @@ const useGroupbilling = () => {
                     Customer: customer,
                     FromDate: FromDate,
                     ToDate: ToDate,
-                    Trips: Trips,
+                    // Trips: Trips,
                     Amount: totalAmount,
                     Trip_id: tripIdArray,
                     State: stateNamce,
@@ -1856,6 +1861,7 @@ const useGroupbilling = () => {
                 setisSaveload(false)
                 setSuccessMessage("Successfully Added")
                 setRows([])
+                 setTriggerrefno(prev => !prev)
             }
             catch (err) {
                 setisSaveload(false)
@@ -1890,7 +1896,7 @@ const useGroupbilling = () => {
                 Invoiceno: "created",
 
             };
-            const response = await axios.post(`${apiUrl}/billgeneratecoveringbill`, groupinvoiceList)
+             await axios.post(`${apiUrl}/billgeneratecoveringbill`, groupinvoiceList)
             // console.log(response)
             setSuccess(true)
             setisBillload(false)

@@ -42,7 +42,7 @@ const Billings = () => {
   const Transfer = permissions[6]?.read;
   const Covering_Bill = permissions[7]?.read;
   const Reports = permissions[8]?.read;
-  const Vendor_Reports = permissions[8]?.read;
+  const Vendor_Reports = permissions[9]?.read;
   // const Log_Details = permissions[8]?.read;
   const [activeMenuItem, setActiveMenuItem] = useState('');
   const handleMenuItemClick = (label, alt, e) => {

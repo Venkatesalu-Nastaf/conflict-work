@@ -238,7 +238,9 @@ const Vehicaleinfo = ({ stationName }) => {
     handleSelectAll,
     handleDocumentDownload,
     drivername,
-    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch,
+    handleAutocompleteChange, handleUploadFile,
+    //  handleKeyEnter,
+     handleenterSearch,
     //  rows1,
      handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
     loading, isVButonLoading,setDeletevehciledata,deletevehciledata
@@ -322,11 +324,11 @@ const Vehicaleinfo = ({ stationName }) => {
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
-  const Supllier_read = permissions[12]?.read;
-  const Supllier_new = permissions[12]?.new;
-  const Supllier_modify = permissions[12]?.modify;
-  const Supllier_delete = permissions[12]?.delete;
 
+  const Supllier_read = permissions[13]?.read;
+  const Supllier_new = permissions[13]?.new;
+  const Supllier_modify = permissions[13]?.modify;
+  const Supllier_delete = permissions[13]?.delete;
   const handleEditmodalClose = () => {
     setEditModal(false)
   }
@@ -400,7 +402,9 @@ const Vehicaleinfo = ({ stationName }) => {
                     getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleName || ''}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="Vehicle Name" name="vehicleName" onKeyDown={handleKeyEnter} inputRef={params.inputRef} />
+                        <TextField {...params} label="Vehicle Name" name="vehicleName" 
+                        // onKeyDown={handleKeyEnter}
+                         inputRef={params.inputRef} />
                       )
                     }
                     }

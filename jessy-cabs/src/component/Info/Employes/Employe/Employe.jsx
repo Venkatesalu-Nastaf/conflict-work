@@ -115,7 +115,7 @@ const Employe = () => {
     deletefile,
     handlecheckbox,
     loading,
-    setLoading,
+    // setLoading,
     deleteemployeedata, setDeleteEmployeedata,
 
   } = useEmployee();
@@ -124,10 +124,10 @@ const Employe = () => {
 
   // permissions
   const { permissions } = useContext(PermissionContext)
-  const Employee_read = permissions[20]?.read;
-  const Employee_new = permissions[20]?.new;
-  const Employee_modify = permissions[20]?.modify;
-  const Employee_delete = permissions[20]?.delete;
+ const Employee_read = permissions[21]?.read;
+  const Employee_new = permissions[21]?.new;
+  const Employee_modify = permissions[21]?.modify;
+  const Employee_delete = permissions[21]?.delete;
 
   return (
     <div className="main-content-form Scroll-Style-hide">

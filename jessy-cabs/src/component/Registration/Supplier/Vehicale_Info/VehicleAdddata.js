@@ -100,7 +100,7 @@ const VehicleAddData = () => {
 
     const handleVehicleEditName = async (row) => {
         setEditModal(true)
-        console.log(row, "editrowdata");
+        // console.log(row, "editrowdata");
         const vehicleName = row
         setEditData(vehicleName)
     }

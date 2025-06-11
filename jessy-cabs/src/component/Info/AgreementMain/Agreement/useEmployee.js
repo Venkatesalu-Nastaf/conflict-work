@@ -15,7 +15,7 @@ const useEmployee = () => {
     // const user_id = localStorage.getItem('useridno');
     // const [selectedCustomerData, setSelectedCustomerDatas] = useState({});
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------ 
-    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    // const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [templateMessageData, setTemplateMessageData] = useState('');
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
@@ -303,7 +303,7 @@ const useEmployee = () => {
         // Agreement_Image:null,
     });
 
-    const [customerPDF, setCustomerPDF] = useState(null);
+    // const [customerPDF, setCustomerPDF] = useState(null);
 
 
     // const licenceSubmit = async (customer) => {
@@ -677,15 +677,15 @@ const useEmployee = () => {
     const handlecheckmaildriver = async () => {
         try {
             // Add templateMessageData to the dataToSend object
-            const dataToSend = {
-                customer: book.customer,
-                email: book.email,
-                fromDate: fromdate,
-                todate: book.todate,
-                Sendmailauth: organistaionsendmail.Sendmailauth,
-                Mailauthpass: organistaionsendmail.Mailauthpass,
-                templateMessageData
-            };
+            // const dataToSend = {
+            //     customer: book.customer,
+            //     email: book.email,
+            //     fromDate: fromdate,
+            //     todate: book.todate,
+            //     Sendmailauth: organistaionsendmail.Sendmailauth,
+            //     Mailauthpass: organistaionsendmail.Mailauthpass,
+            //     templateMessageData
+            // };
 
             // console.log("Sending data:", dataToSend); // For debugging purposes
             // await axios.post(`${apiUrl}/send-emailagreementdata`, dataToSend);
@@ -960,7 +960,8 @@ const useEmployee = () => {
             }
         };
         fetchData();
-    }, [apiUrl], [templateMessageData]);
+    // }, [apiUrl], [templateMessageData]);
+        }, [apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -981,7 +982,8 @@ const useEmployee = () => {
             }
         };
         fetchData();
-    }, [apiUrl], [templateMessageData]);
+    // }, [apiUrl], [templateMessageData]);
+        }, [apiUrl]);
 
 
     useEffect(() => {
@@ -1087,12 +1089,10 @@ const useEmployee = () => {
 
             // Download each file
             for (const file of selectedFiles) {
-                // const response = await axios.get(`${apiUrl}/public/employee_doc/` + file.fileName, {
-                //     responseType: 'blob', // Important to get a binary response
-                // });
-                  const response = await axios.get(`${apiUrl}/employee_doc/` + file.fileName, {
+                const response = await axios.get(`${apiUrl}/public/employee_doc/` + file.fileName, {
                     responseType: 'blob', // Important to get a binary response
-                })
+                });
+
                 // Convert image blob to base64 data URL
                 const reader = new FileReader();
                 reader.readAsDataURL(response.data);
@@ -1204,7 +1204,7 @@ const useEmployee = () => {
 
     return {
         selectedCustomerData,
-        selectedCustomerId,
+        // selectedCustomerId,
         rows,
         actionName,
         error,
@@ -1236,7 +1236,7 @@ const useEmployee = () => {
         setSearchText,
         // fromDate,setFromDate,
         handleFileChange,
-        setCustomerPDF,
+        // setCustomerPDF,
         handleShowAll,
         organizationNames,
         setOrganizationNames,

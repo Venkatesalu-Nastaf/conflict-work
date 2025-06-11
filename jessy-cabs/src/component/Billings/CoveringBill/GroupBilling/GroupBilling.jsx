@@ -432,7 +432,7 @@ const invoiceNoCheck = !rows[0]?.InvoiceNo || rows[0]?.InvoiceNo[0] == null || r
                                     <Button variant="contained" disabled={!CoveringBill_read} onClick={() => handleShow()} >View Bill</Button>
                                 </div>
 }
-                                {invoiceno && disabeldata &&  referInvoiceno != "created" && (
+                                {invoiceno && disabeldata &&  referInvoiceno !== "created" && (
 
                                 <div className="input">
                                     {/* <Button variant="contained" disabled={!CoveringBill_read} 

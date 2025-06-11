@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 // import {
 //     VehicleRate,
 // } from "./TripSheetdata";
-import { APIURL, Apiurltransfer } from "../../url";
+import { APIURL} from "../../url";
 import { Button } from '@mui/material';
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit3 } from "react-icons/fi";
@@ -33,7 +33,7 @@ const useTripsheet = () => {
     // const tripno = formData.tripid || selectedCustomerData.tripid || book.tripid;
     // const statusCheck = formData.status || selectedCustomerData.status || book.status;
     // THIS APIURL TRANSFER FRO DRIVER APP
-    const apiurltransfer = Apiurltransfer;
+    // const apiurltransfer = Apiurltransfer;
     //  const signatureurlinkurl=`http://localhost:3000/SignatureGenerate`
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
@@ -2327,10 +2327,10 @@ const useTripsheet = () => {
                 setSuccessMessage("Successfully added");
                 handleRefresh()
 
-                if (documentType === 'Toll' || documentType === 'Parking') {
-                    await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
-                    setSuccessMessage("Successfully added");
-                }
+                // if (documentType === 'Toll' || documentType === 'Parking') {
+                //     await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
+                //     setSuccessMessage("Successfully added");
+                // }
                 // setSuccess(true);
                 setFormData((prev) => ({
                     ...prev,
@@ -4496,7 +4496,7 @@ const useTripsheet = () => {
                     const bookingDetails = response.data;
                     handleCancel()
                     if (response.status === 200 && bookingDetails) {
-                        if (bookingDetails.status === "Cancelled") {
+                        if (bookingDetails.status === "Cancelled" && superAdminAccess !== "SuperAdmin") {
                             setError(true)
                             setErrorMessage("Trip Cancelled")
                             setSelectedCustomerData({});
@@ -4932,7 +4932,7 @@ const useTripsheet = () => {
                 }));
 
                 // THIS API FRO DRIVER APP 
-                await axios.post(`${apiurltransfer}/signatureimageuploaddriver/${datadate}`, formData)
+                // await axios.post(`${apiurltransfer}/signatureimageuploaddriver/${datadate}`, formData)
 
 
 
@@ -5301,22 +5301,25 @@ const useTripsheet = () => {
                 setcusnightCount(calcNight)
             }
             else {
-                if (calculateTotalDay() === 1) {
-                    if (Number(newTimeString) < 6.00) {
+                // if (calculateTotalDay() === 1) {
+                //     if (Number(newTimeString) < 6.00) {
 
-                        calcNight = 1;
-                    }
-                }
+                //         calcNight = 1;
+                //     }
+                // }
 
 
                 if (TotalDay > 1) {
-                    if (Number(newTimeString) < 6.00) {
-                        console.log(Number(newTimeString))
-                        calcNight = TotalDay;
-                    }
-                    else {
+                    // console.log(TotalDay,"dd")
+                    // if (Number(newTimeString) < 6.00) {
+                    //     console.log(Number(newTimeString))
+                    //     calcNight = TotalDay;
+                    // }
+                    // else {
+                    //  console.log(calcNight,"ddcalllll",TotalDay - 1)
                         calcNight = TotalDay - 1;
-                    }
+                        // console.log(calcNight,"ddcalllll")
+                    // }
 
 
                     // calcNight = TotalDay-1;
@@ -5664,19 +5667,20 @@ const useTripsheet = () => {
 
             }
         } else {
-            if (TotalDay === 1) {
-                if (Number(newTimeString) < 6.00) {
-                    calcNight = 1;
-                }
-            }
+            // if (TotalDay === 1) {
+            //     if (Number(newTimeString) < 6.00) {
+            //         calcNight = 1;
+            //     }
+            // }
+          
 
             if (TotalDay > 1) {
-                if (Number(newTimeString) < 6.00) {
-                    calcNight = TotalDay;
-                }
-                else {
+                // if (Number(newTimeString) >) {
+                //     calcNight = TotalDay;
+                // }
+                // else {
                     calcNight = TotalDay - 1;
-                }
+                // }
 
 
 

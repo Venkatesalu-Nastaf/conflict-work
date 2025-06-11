@@ -39,6 +39,7 @@ const useStationCreation = () => {
 
     const {isstationtrigger,setisStationtrigger} = useData();
     const [deletestationdata,setDeleteStationData] = useState(false)
+    const [addLoading, setAddLoading] = useState(false)
     //-----------------popup---------------------
 
     const hidePopup = () => {
@@ -660,6 +661,7 @@ const handleStationChange = async (event, value) => {
             setWarningMessage("Station Name Already Exists");
             return;
         }
+        setAddLoading(true);
     
         try {
             await axios.post(`${apiUrl}/stationcreation`, book);
@@ -674,7 +676,9 @@ const handleStationChange = async (event, value) => {
                 created_at: dayjs(),
             });
             // console.log(book,"checking station add");
-            
+            setTimeout(() => {                
+              setAddLoading(false);
+                  }, 500);
             setisStationtrigger(!isstationtrigger)
             setSelectedState(''); // Clear the selected state
             setSelectedStation('');
@@ -828,7 +832,7 @@ const handleStationChange = async (event, value) => {
 
     useEffect(() => {
         const handleList = async () => {
-
+// console.log("trigger")
             setLoading(true);
             setError(false);
             setErrorMessage("");
@@ -903,6 +907,7 @@ const handleStationChange = async (event, value) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
+                // console.log("enterrrrrrrrrrrr")
                 const response = await axios.get(`${apiUrl}/stationcreation`);
                 const data = response.data;
                 if (data.length > 0) {
@@ -954,11 +959,11 @@ const handleStationChange = async (event, value) => {
             setErrorMessage("Failed to Retrive data");
         }
     };
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    },[isstationtrigger]);
+    // useEffect(() => {
+    //     if (actionName === 'List') {
+    //         handleClick(null, 'List');
+    //     }
+    // },[isstationtrigger]);
 
     return {
         selectedCustomerData,
@@ -986,7 +991,7 @@ const handleStationChange = async (event, value) => {
         loading,
         setLoading,
         getStateFromStation,
-        handleStationChange,
+        handleStationChange,addLoading,
         selectedStation, setSelectedStation,selectedState, setSelectedState,isDisabled,setisDisabled,cerendentialdata, setCredentialData,
         handleStationAddData,stationDatas,open,setOpen,handleSubmiStation,handlestationOnChange,setDeleteStationData,deletestationdata
     };

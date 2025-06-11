@@ -18,8 +18,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import { UnderGroup, states, Customertype, Select, stateToStations, allStations } from "./Customerdata";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { UnderGroup,Customertype,allStations } from "./Customerdata";
+import { TextField,FormLabel,Switch, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { FaPercent } from "react-icons/fa";
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
@@ -44,8 +44,8 @@ import { PermissionContext } from '../../context/permissionContext';
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { GrSelect } from "react-icons/gr";
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+// import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+// import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { FaHashtag } from "react-icons/fa";
 import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -107,7 +107,7 @@ const Customer = ({ stationName }) => {
     handleChangecustomer, deletedialogbox, setDeletedDialog,
     setInfo, setInfoMessage, loading,
     handleAddExtra, BillingGroup, handleAutocompleteChangebilling, handleRemove, customerratetype, handleChangeuniquecustomer,
-    cerendentialdata, selectedStation, setSelectedStation, selectedState, setSelectedState, handleStationChange, btnloading, setbtnLoading,
+    cerendentialdata, selectedStation,selectedState, setSelectedState,btnloading,
     deletecustomerdata,setDeletecustomerdata
   } = useCustomer();
 
@@ -119,12 +119,12 @@ const Customer = ({ stationName }) => {
 
   const { permissions } = useContext(PermissionContext)
 
-  const Customer_read = permissions[11]?.read;
-  const Customer_new = permissions[11]?.new;
-  const Customer_modify = permissions[11]?.modify;
-  const Customer_delete = permissions[11]?.delete;
-  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-  const checkedIcon = <CheckBoxIcon fontSize="small" />;
+  const Customer_read = permissions[12]?.read;
+  const Customer_new = permissions[12]?.new;
+  const Customer_modify = permissions[12]?.modify;
+  const Customer_delete = permissions[12]?.delete;
+  // const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  // const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   const handleClickOpen = () => {
 
@@ -140,6 +140,7 @@ const Customer = ({ stationName }) => {
   const handleClose = () => {
     setDeletedDialog(false)
   }
+
 
   return (
     <div className="form-container form-container-customer">
@@ -415,7 +416,7 @@ const Customer = ({ stationName }) => {
                             onChange={(e) => handleChangecustomer(e, index)}
                           />
                         </div>
-                        {index == 0 && (
+                        {index === 0 && (
                           <div className="input" style={{ justifyContent: 'flex-start' }}>
                             <Button disabled={!Customer_new} variant="contained" onClick={handleAddExtra} style={{ width: 'fit-content' }}>Add+</Button>
                           </div>
@@ -677,7 +678,7 @@ const Customer = ({ stationName }) => {
                     id="free-solo-demo-underGroup"
                     freeSolo
                     onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
-                    value={UnderGroup.find((option) => option.option)?.label || selectedCustomerData?.underGroup || ''}
+                    value={UnderGroup.find((option) => option.option)?.label || selectedCustomerData?.underGroup ||'' }
                     options={UnderGroup.map((option) => ({
                       label: option.option,
                     }))}

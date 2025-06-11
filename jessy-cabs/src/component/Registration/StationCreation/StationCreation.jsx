@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, {useContext } from 'react';
 import "./StationCreation.css";
 import Box from "@mui/material/Box";
 // import Typography from '@mui/material/Typography';
@@ -78,7 +78,7 @@ const StationCreation = () => {
     selectedCustomerData,
     selectedCustomerId,
     rows,
-    actionName,
+    // actionName,
     error,
     success,
     info,
@@ -104,28 +104,28 @@ const StationCreation = () => {
     //  setSelectedStation,
      selectedState,
       // setSelectedState,
-      handleStateChange, isDisabled, 
+      handleStateChange, isDisabled,addLoading, 
     //  setisDisabled,
     // handleStationAddData, 
     stationDatas,open,setOpen,handleSubmiStation,handlestationOnChange,setDeleteStationData,deletestationdata
   } = useStationCreation();
 
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
+  // useEffect(() => {
+  //   if (actionName === 'List') {
+  //     handleClick(null, 'List');
+  //   }
+  // }, [actionName, handleClick]);
 
-  const handleOpen = () => setOpen(true);
+  // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
 
-  const StationCreation_read = permissions[16]?.read;
-  const StationCreation_new = permissions[16]?.new;
-  const StationCreation_modify = permissions[16]?.modify;
-  const StationCreation_delete = permissions[16]?.delete;
+  const StationCreation_read = permissions[14]?.read;
+  const StationCreation_new = permissions[14]?.new;
+  const StationCreation_modify = permissions[14]?.modify;
+  const StationCreation_delete = permissions[14]?.delete;
 
   return (
     <div className="stationcreation-main">
@@ -589,7 +589,8 @@ const StationCreation = () => {
                   {isEditMode ? (
                     <Button variant="contained" disabled={!StationCreation_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
-                    <Button variant="contained" disabled={!StationCreation_new} onClick={handleAdd} >Add</Button>
+                    // <Button variant="contained" disabled={!StationCreation_new} onClick={handleAdd} >Add</Button>
+                    <Button variant="outlined" disabled={!StationCreation_new} onClick={handleAdd} >{addLoading ?<CircularProgress /> : "ADD"}</Button>
                   )}
                 </div>
                 {/* <Button variant="contained" onClick={() => handleStationAddData()}>Add Station</Button> */}

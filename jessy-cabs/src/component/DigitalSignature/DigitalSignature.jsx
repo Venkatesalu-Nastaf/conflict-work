@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import "./DigitalSignature.css";
-import { APIURL, Apiurltransfer } from "../url";
+import { APIURL} from "../url";
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import { format as datefunsdata } from 'date-fns';
@@ -17,7 +17,7 @@ const DigitalSignature = () => {
   const apiUrl = APIURL;
   const [uploadtoll, setUploadToll] = useState()
   // THSI API FOR DRIVER APP APIURL TRANFER
-  const apiurltransfer = Apiurltransfer;
+  // const apiurltransfer = Apiurltransfer;
   const sigCanvasRef = useRef(null);
   const [dsiabelbutton,setDisableButton]=useState(false);
 
@@ -290,9 +290,9 @@ const DigitalSignature = () => {
       updateclosedate: dates,
       updateclosetime: timesdata,
     };
-    const signaturedata = {
-      dataurlsign: dataUrl,
-    };
+    // const signaturedata = {
+    //   dataurlsign: dataUrl,
+    // };
     const updatedetails = {
       tripid: tripId,
       Expired: true,
@@ -307,7 +307,7 @@ const DigitalSignature = () => {
     try {
       setIsLoading(true);
 
-   const hh =   await fetch(`${apiUrl}/api/saveSignaturewtid`, {
+      await fetch(`${apiUrl}/api/saveSignaturewtid`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -330,8 +330,8 @@ const DigitalSignature = () => {
 
       // setSuccessMessage("Upload successfully");
 
-      const res = await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`, signaturedata);
-      console.log(res, "yyy")
+      // const res = await axios.post(`${apiurltransfer}/signatureimagesavedriver/${datadate}`, signaturedata);
+      // console.log(res, "yyy")
       setSuccess(true)
       setSuccessMessage("Upload successfully");
       setDisableButton(true)

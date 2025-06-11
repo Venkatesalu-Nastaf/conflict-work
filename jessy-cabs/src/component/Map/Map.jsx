@@ -41,11 +41,11 @@ const Map = () => {
   // const Map_Reminders = permissions[25]?.read || 0
   // const Map_History = permissions[26]?.read || 0
   // const Map_Records = permissions[27]?.read || 0
-  const Map_Realtime = permissions[24]?.read || 0
-  const Map_Vehicle = permissions[25]?.read || 0
-  const Map_Reminders = permissions[26]?.read || 0
-  const Map_History = permissions[27]?.read || 0
-  const Map_Records = permissions[28]?.read || 0
+  const Map_Realtime = permissions[25]?.read || 0
+  const Map_Vehicle = permissions[26]?.read || 0
+  const Map_Reminders = permissions[27]?.read || 0
+  const Map_History = permissions[28]?.read || 0
+  const Map_Records = permissions[29]?.read || 0
 
 
 

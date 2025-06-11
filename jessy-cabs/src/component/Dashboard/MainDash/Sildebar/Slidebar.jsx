@@ -30,7 +30,7 @@ import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 //import { GiDuration } from "react-icons/gi";
 import { SiMinutemailer } from "react-icons/si";
-import { BsFillFuelPumpFill } from "react-icons/bs";
+// import { BsFillFuelPumpFill } from "react-icons/bs";
 import { FaChevronDown } from "react-icons/fa";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaMoneyBillWheat } from "react-icons/fa6";
@@ -296,51 +296,53 @@ const Sidebar = () => {
   const Billing_Transfer = permissions[6]?.read
   const Billing_CoveringBill = permissions[7]?.read
   const Billing_Reports = permissions[8]?.read
-  const Billing_VendorReports = permissions[8]?.read
+  const Billing_VendorReports = permissions[9]?.read
 
-  const PAYMENT = permissions[8]?.read;
-  const Payment_Vendor = permissions[8]?.read;
-  const Payment_Customer = permissions[8]?.read
+  const PAYMENT = permissions[30]?.read;
+  const Payment_Vendor = permissions[31]?.read;
+  const Payment_Customer = permissions[32]?.read
   // const Billing_Logs = permissions[8]?.read
   // const REGISTER = permissions[8]?.read;
   // const SETTING = permissions[12]?.read || permissions[13]?.read;
   // const REGISTER = permissions[9]?.read;
-  const REGISTER = permissions[9]?.read
-  const SETTING = permissions[14]?.read
-  const R_RATEtype = permissions[10]?.read
-  const R_Customer = permissions[11]?.read
-  const R_Supllier = permissions[12]?.read
-  const R_Station = permissions[13]?.read
+  const REGISTER = permissions[10]?.read
+  const SETTING = permissions[15]?.read
+  const R_RATEtype = permissions[11]?.read
+  const R_Customer = permissions[12]?.read
+  const R_Supllier = permissions[13]?.read
+  const R_Station = permissions[14]?.read
   // const INFO = permissions[16]?.read;
   // const Dashbord_read = permissions[21]?.read;
-  const INFO = permissions[17]?.read;
+  const INFO = permissions[18]?.read;
   // const Dashbord_read = permissions[21]?.read;
-  const Dashbord_read = permissions[22]?.read;
+  const Dashbord_read = permissions[23]?.read;
   // thsi for map page permisiion
-  const Maps = permissions[23]?.read;
-  const mailer = permissions[18]?.read;
-  const Fuel = permissions[19]?.read;
-  const Employee1 = permissions[20]?.read;
-  const Aggrement = permissions[21]?.read;
-  const userCreation = permissions[15]?.read;
-  const Map_Realtime = permissions[24]?.read;
-  const Map_Vehicle = permissions[25]?.read;
-  const Map_Reminders = permissions[26]?.read;
-  const Map_History = permissions[27]?.read;
-  const Map_Records = permissions[28]?.read;
+  const Maps = permissions[24]?.read;
+  const mailer = permissions[19]?.read;
+  // const Fuel = permissions[19]?.read;
+  const Employee1 = permissions[21]?.read;
+  const Aggrement = permissions[22]?.read;
+  const logdetails = permissions[20]?.read;
+  const userCreation = permissions[16]?.read;
+  // const Mainsetting = permissions[17]?.read;
+  const Map_Realtime = permissions[25]?.read;
+  const Map_Vehicle = permissions[26]?.read;
+  const Map_Reminders = permissions[27]?.read;
+  const Map_History = permissions[28]?.read; 
+  const Map_Records = permissions[29]?.read;
 
 
 
   // its for hiding navigation based on permission 
   const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
-  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read || permissions[8]?.read
-  const Payment_permission = permissions[8]?.read || permissions[8]?.read || permissions[8]?.read
-  const Register_page_permission = permissions[9]?.read || permissions[10]?.read || permissions[11]?.read || permissions[12]?.read || permissions[13]?.read
-  const Setting_page_permission = permissions[14]?.read || permissions[15]?.read || permissions[16]?.read
-  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read || permissions[21]?.read
+  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read || permissions[8]?.read || permissions[9]?.read
+  const Payment_permission = permissions[30]?.read || permissions[31]?.read || permissions[32]?.read
+  const Register_page_permission = permissions[10]?.read || permissions[11]?.read || permissions[12]?.read || permissions[13]?.read || permissions[14]?.read
+  const Setting_page_permission = permissions[15]?.read || permissions[16]?.read || permissions[17]?.read
+  const Info_page_permission = permissions[18]?.read || permissions[19]?.read || permissions[20]?.read || permissions[21]?.read || permissions[22]?.read
 
   // thsi for map page permisiion
-  const Map_page_permission = permissions[23]?.read || permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read || permissions[28]?.read
+  const Map_page_permission = permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read || permissions[28]?.read || permissions[29]?.read
 
   const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
     localStorage.removeItem('reports');
@@ -1181,7 +1183,7 @@ const Sidebar = () => {
                 to={
                   mailer ?
                     "/home/info/mailer"
-                    : Fuel
+                    : logdetails
                       ? "/home/info/LogDetails"
                       : Employee1
                         ? "/home/info/employee" :
@@ -1202,7 +1204,7 @@ const Sidebar = () => {
                 alt={
                   mailer
                     ? "/home/info/mailer"
-                    : Fuel
+                    : logdetails
                       ? "/home/info/LogDetails"
                       : Employee1
                         ? "/home/info/employee"
@@ -1366,7 +1368,7 @@ const Sidebar = () => {
                     </span>
                   </p>
                 </div> : <></>}
-              {Fuel ?
+              {logdetails?
                 <div className="settings-dropdown-links">
                   <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/LogDetails')}>
                     <span>

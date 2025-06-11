@@ -452,7 +452,7 @@ const VehicleStatement = () => {
       const data2 = { ...data, vehregvalue }
       console.log(data2, "data222222222222222");
 
-      const response = await axios.get(`${APIURL}/getvehicleInfo`, { params: data2 });
+      const response = await axios.get(`${APIURL}/getvehicleInfostate`, { params: data2 });
       const dataresponse = response.data;
       // console.log(datas, "data222222222222222alldatassssssssssssssssssssssssssssssssss");
       // const datas = dataresponse.map((li) => {

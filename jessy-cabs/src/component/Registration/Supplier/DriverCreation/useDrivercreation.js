@@ -800,7 +800,7 @@ const useDrivercreation = () => {
             const formData = new FormData();
             formData.append("file", file);
             formData.append("created_at", create_atdata); // assuming create_atdata is defined elsewhere
-            console.log(file, "filee")
+            // console.log(file, "filee")
 
             try {
                 await axios.post(`${apiUrl}/driver-pdf/${driveruserid}`, formData);
@@ -922,7 +922,7 @@ const useDrivercreation = () => {
             }
         };
         fetchData();
-    }, [apiUrl], [templateMessageData]);
+    }, [apiUrl]);
 
 
     //   useEffect(() => {

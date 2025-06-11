@@ -15,7 +15,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import WarehouseIcon from '@mui/icons-material/Warehouse';
+// import WarehouseIcon from '@mui/icons-material/Warehouse';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -88,10 +88,10 @@ const RateType = () => {
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-    const INFO_read = permissions[10]?.read;
-    const INFO_new = permissions[10]?.new;
-    const INFO_modify = permissions[10]?.modify;
-    const INFO_delete = permissions[10]?.delete;
+    const INFO_read = permissions[11]?.read;
+    const INFO_new = permissions[11]?.new;
+    const INFO_modify = permissions[11]?.modify;
+    const INFO_delete = permissions[11]?.delete;
 
     return (
         <div className="main-content-form Scroll-Style-hide">

@@ -177,10 +177,10 @@ const EmployeeCreation = ({ stationName }) => {
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
 
-  const UserCreation_read = permissions[15]?.read;
-  const UserCreation_new = permissions[15]?.new;
-  const UserCreation_modify = permissions[15]?.modify;
-  const UserCreation_delete = permissions[15]?.delete;
+  const UserCreation_read = permissions[16]?.read;
+  const UserCreation_new = permissions[16]?.new;
+  const UserCreation_modify = permissions[16]?.modify;
+  const UserCreation_delete = permissions[16]?.delete;
 
   // search operation ----------------
   const [searchUser, setSearchUser] = useState("")

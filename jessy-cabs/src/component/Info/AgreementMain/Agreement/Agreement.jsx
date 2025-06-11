@@ -111,7 +111,7 @@ const Agreement = ({ organizationNames }) => {
     handleAutocompleteChange,
     handleExcelDownload,
     handlePdfDownload,
-    setCustomerPDF,
+    // setCustomerPDF,
     columns,
     searchText,
     setSearchText,
@@ -147,10 +147,14 @@ const Agreement = ({ organizationNames }) => {
 
   // permissions
   const { permissions } = useContext(PermissionContext)
-  const Agreement_read = permissions[21]?.read;
-  const Agreement_new = permissions[21]?.new;
-  const Agreement_modify = permissions[21]?.modify;
-  const Agreement_delete = permissions[21]?.delete;
+  // const Agreement_read = permissions[21]?.read;
+  // const Agreement_new = permissions[21]?.new;
+  // const Agreement_modify = permissions[21]?.modify;
+  // const Agreement_delete = permissions[21]?.delete;
+  const Agreement_read = permissions[22]?.read;
+  const Agreement_new = permissions[22]?.new;
+  const Agreement_modify = permissions[22]?.modify;
+  const Agreement_delete = permissions[22]?.delete;
 
   // const [fileName, setFileName] = useState("");
 
@@ -539,7 +543,7 @@ const Agreement = ({ organizationNames }) => {
                   onChange={(e) => {
                     const file = e.target.files[0];
                     if (file) {
-                      setCustomerPDF(file)
+                      // setCustomerPDF(file)
                       handleFileChange(e);
                       if (isEditMode) {
                         handleUpload(file)

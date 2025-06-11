@@ -62,10 +62,10 @@ const MailDetails = () => {
   const [datatrigger, setDataTrigger] = useState(false)
   const fileInputRef = useRef(null);
   const { permissions } = useContext(PermissionContext)
-  const Mailer_create = permissions[18]?.new;
-  const Mailer_modify = permissions[18]?.modify;
-  const Mailer_delete = permissions[18]?.delete;
-  const Mailer_read = permissions[18]?.read;
+  const Mailer_create = permissions[19]?.new;
+  const Mailer_modify = permissions[19]?.modify;
+  const Mailer_delete = permissions[19]?.delete;
+  const Mailer_read = permissions[19]?.read;
 
   const columns = [
     { field: "idno", headerName: "Sno", width: 50 },
@@ -325,7 +325,7 @@ const MailDetails = () => {
       }
 
 
-      const response = await axios.post(`${apiurl}/send-emailtemplate`, datatosend)
+       await axios.post(`${apiurl}/send-emailtemplate`, datatosend)
       // console.log(response)
       setData({})
       setFile(null)
@@ -376,6 +376,12 @@ const MailDetails = () => {
   const handleShowdata = async () => {
     try {
       const encryptSearch = encryption(searchname)
+      // console.log(searchname,"ddd")
+      if(!searchname){
+         setError(true);
+        setErrorMessage("Enter the Searchfield");
+        return
+      }
       const response = await fetch(
         `${apiurl}/tabletemplateseatch?searchText=${encryptSearch}`
       );

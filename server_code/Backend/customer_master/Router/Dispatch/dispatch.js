@@ -601,9 +601,10 @@ router.get('/getdatafromboookingvalue/:bookingno',(req,res)=>{
 })
 router.get('/VehicleStatement-bookings', (req, res) => {
   const { Travelsname, fromDate, toDate } = req.query;
+  // console.log(Travelsname,fromDate,toDate,"1111checkingvendorrrrrrrrrrrrrrrrrrrr");
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  console.log(Travelsname,fromDate,toDate,"checkingvendorrrrrrrrrrrrrrrrrrrr");
+  console.log(Travelsname,fromDate,toDate,"checkingvendorrrrrrrrrrrrrrrrrrrr",formattedFromDate,formattedToDate);
   
   // db.query("select *,Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) As totalvendoramount from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)",
   db.query(`select *,COALESCE(NULLIF(advancepaidtovendor, ''), 0) AS totalvendoramount,
@@ -616,7 +617,7 @@ router.get('/VehicleStatement-bookings', (req, res) => {
  + COALESCE(NULLIF(vendortoll, ''), 0) 
  + COALESCE(NULLIF(vendorparking, ''), 0) 
  + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandtotal
-    from tripsheet where travelsname=? AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`,
+from tripsheet where travelsname=? AND shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`,
     [Travelsname,formattedFromDate,formattedToDate], (err, results) => {
       if (err) {
         return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
@@ -651,7 +652,7 @@ router.get('/tripsheetvendordata', (req, res) => {
 + COALESCE(NULLIF(vendortoll, ''), 0) 
 + COALESCE(NULLIF(vendorparking, ''), 0) 
 + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandtotal
-from tripsheet where tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 0 DAY)`
+from tripsheet where shedOutDate  >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate  <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`
   // db.query("SELECT *, Vendor_FULLTotalAmount - CAST(advancepaidtovendor AS DECIMAL) AS totalvendoramount FROM tripsheet", (err, results) => {
     db.query(sql,[formattedFromvendor,formattedToDatevendor], (err, results) => {
     if (err) {

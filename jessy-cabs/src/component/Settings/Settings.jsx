@@ -28,9 +28,9 @@ const Settings = () => {
   const { permissions } = useContext(PermissionContext)
 
   // const SETTING = permissions[14]?.read;
-  const User_Creation = permissions[15]?.read;
+  const User_Creation = permissions[16]?.read;
   // const Station_Creation = permissions[14]?.read;
-  const Main_Setting = permissions[16]?.read;
+  const Main_Setting = permissions[17]?.read;
 
   const [warning, setWarning] = useState(false);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import './AgreementMain.css';
+// import './AgreementMain.css';
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";

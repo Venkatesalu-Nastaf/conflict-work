@@ -46,11 +46,11 @@ const TemplateCreation = () => {
   const fileInputRef = useRef(null);
   const [filedata, setFiledata] = useState(null)
   const { permissions } = useContext(PermissionContext)
-const Template_create = permissions[18]?.new ;
-const Temaplate_modify=permissions[18]?.modify ;
-const Temaplate_delete=permissions[18]?.delete ;
+const Template_create = permissions[19]?.new ;
+const Temaplate_modify=permissions[19]?.modify ;
+const Temaplate_delete=permissions[19]?.delete ;
 
-const diasblebothdata=permissions[18]?.new ||permissions[18]?.modify ;
+const diasblebothdata=permissions[19]?.new ||permissions[19]?.modify ;
 
 // console.log(temaplaa,"sa")
 

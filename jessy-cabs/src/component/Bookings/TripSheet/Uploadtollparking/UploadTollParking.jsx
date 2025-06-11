@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './Uploadtollpark.css'
-import { APIURL, Apiurltransfer } from '../../../url';
+import { APIURL} from '../../../url';
 import axios from 'axios';
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
@@ -9,7 +9,7 @@ const UploadTollParking = () => {
 
   const [expired, setExpired] = useState()
   const apiUrl = APIURL;
-  const apiurltransfer = Apiurltransfer;
+  // const apiurltransfer = Apiurltransfer;
   const tripId = new URLSearchParams(window.location.search).get("Tripid");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -78,7 +78,7 @@ const UploadTollParking = () => {
         // console.log(documentTypedata, "yypeenter34543243",documentdata);
 
         await axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentdata}/${data}`, formData);
-        await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
+        // await axios.post(`${apiurltransfer}/uploadfolrderapp/${data}`, formData);
         //   await axios.post(`http://localhost:7000/uploadfolrderapp/${data}`, formData);
         setSuccess(true)
         setDocumentTypedata({...documentTypedata, [documentdata]: documentdata})

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext} from 'react';
 import "./PackageRateEntery.css";
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
@@ -73,8 +73,12 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
     handleChange11,
     // datevalidity,
     handleShow,
-    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata, loading, setLoading, isbtnloading, setisbtnloading,
-    multipleSelect, setSelectedRowDelete, selectedrowdelete, deletepackaagerate, setDeletePackagerate
+    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata, loading,
+    //  setLoading,
+      isbtnloading, 
+    //   setisbtnloading,
+    // multipleSelect,
+     setSelectedRowDelete, selectedrowdelete, deletepackaagerate, setDeletePackagerate
 
   } = usePackagerateentry();
 
@@ -82,10 +86,10 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
   const startdate = dayjs(validitydata[0]?.starttime).format(" MMMM YYYY");
   const enddate = dayjs(validitydata[0]?.closetime).format(" MMMM YYYY");
   const { permissions } = useContext(PermissionContext)
-  const RateManagement_read = permissions[10]?.read;
-  const RateManagement_new = permissions[10]?.new;
-  const RateManagement_modify = permissions[10]?.modify;
-  const RateManagement_delete = permissions[10]?.delete;
+  const RateManagement_read = permissions[11]?.read;
+  const RateManagement_new = permissions[11]?.new;
+  const RateManagement_modify = permissions[11]?.modify;
+  const RateManagement_delete = permissions[11]?.delete;
 
   //--------------------------------------------------------------------
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -311,7 +315,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       }
                       }
                     />
-                    {console.log(fieldSet?.duty === "Local" ? true : false, "Local", fieldSet?.duty)}
+                    {/* {console.log(fieldSet?.duty === "Local" ? true : false, "Local", fieldSet?.duty)} */}
                   </div>
                   <div className="input">
                     <TextField

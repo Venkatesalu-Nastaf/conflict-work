@@ -1108,7 +1108,7 @@ const useCustomer = () => {
             }
 
             else if (actionName === 'Delete') {
-              const response1 =  await axios.delete(`${apiUrl}/customers/${selectedCustomerData.customerId}`);
+               await axios.delete(`${apiUrl}/customers/${selectedCustomerData.customerId}`);
             //   console.log(response1,"res11")
               if (dataordereddata.length > 0) {
                await axios.delete(`${apiUrl}/deletecustomerorderdata/${selectedCustomerData.customer || book.customer}`);

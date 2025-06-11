@@ -594,11 +594,11 @@ const useRatype = () => {
         }));
         setBook((prevBook) => ({
             ...prevBook,
-            ["ratename"]:"",
+            ratename:"",
         }));
         setSelectedCustomerData((prevData) => ({
             ...prevData,
-            ["ratename"]: "",
+            ratename: "",
         }));
         setCredentialData(false)
     };
@@ -805,7 +805,7 @@ const useRatype = () => {
             }
 
             else if (actionName === 'Delete') {
-               const data = await axios.delete(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
+               await axios.delete(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
             //    console.log(data,"responsedaata")
                 setSelectedCustomerData(null);
                 setSuccess(true);

@@ -1253,11 +1253,11 @@ app.get("/getFuelType/:fuelType", (req, res) => {
 
 
 
-app.get("/getvehicleInfo", (req, res) => {
+app.get("/getvehicleInfostate", (req, res) => {
   try {
     // console.log("query", req.query);
     const { hireTypes, startDate, endDate, vehregvalue } = req.query;
-    const status = 'Closed'
+    // const status = 'Closed'
     let sql = ''
     const paramsdata = []
     // console.log(hireTypes, "jj")
@@ -1272,8 +1272,8 @@ app.get("/getvehicleInfo", (req, res) => {
 + COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
 + COALESCE(NULLIF(vendortoll, ''), 0) 
 + COALESCE(NULLIF(vendorparking, ''), 0) 
-+ COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE hireTypes = ? AND vehRegNo=? AND shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?`
-        paramsdata.push(hireTypes, vehregvalue, startDate, endDate, status)
++ COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE hireTypes = ? AND vehRegNo=? AND shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`
+        paramsdata.push(hireTypes, vehregvalue, startDate, endDate)
       }
       else {
         sql = ` SELECT *,(COALESCE(NULLIF(Vendor_totalAmountKms, ''), 0) 
@@ -1283,8 +1283,8 @@ app.get("/getvehicleInfo", (req, res) => {
     + COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
     + COALESCE(NULLIF(vendortoll, ''), 0) 
     + COALESCE(NULLIF(vendorparking, ''), 0) 
-    + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE hireTypes = ?  AND shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?`
-        paramsdata.push(hireTypes, startDate, endDate, status)
+    + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE hireTypes = ?  AND shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`
+        paramsdata.push(hireTypes, startDate, endDate)
       }
     }
     else {
@@ -1298,8 +1298,8 @@ app.get("/getvehicleInfo", (req, res) => {
   + COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
   + COALESCE(NULLIF(vendortoll, ''), 0) 
   + COALESCE(NULLIF(vendorparking, ''), 0) 
-  + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE vehRegNo=? AND   shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?`
-        paramsdata.push(vehregvalue, startDate, endDate, status)
+  + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE vehRegNo=? AND  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`
+        paramsdata.push(vehregvalue, startDate, endDate)
       }
       else {
         // console.log("all and all")
@@ -1310,8 +1310,8 @@ app.get("/getvehicleInfo", (req, res) => {
       + COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
       + COALESCE(NULLIF(vendortoll, ''), 0) 
       + COALESCE(NULLIF(vendorparking, ''), 0) 
-      + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?`
-        paramsdata.push(startDate, endDate, status)
+      + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`
+        paramsdata.push(startDate, endDate)
       }
     }
 

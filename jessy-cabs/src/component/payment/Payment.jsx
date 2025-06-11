@@ -34,8 +34,8 @@ const Payment = () => {
   // const Station_Creation = permissions[14]?.read;
 
   
-  const Payment_Vendor = permissions[8]?.read;
-  const Payment_Customer = permissions[8]?.read
+  const Payment_Vendor = permissions[31]?.read;
+  const Payment_Customer = permissions[32]?.read
   // const Rate_Management = permissions[17]?.read;
 
   const [warning, setWarning] = useState(false);

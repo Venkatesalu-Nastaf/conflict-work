@@ -630,7 +630,7 @@ const useVehicleinfo = () => {
         setSelectedCustomerData({});
         setIsEditMode(false);
         setDeletevehciledata(false)
-        handleList();
+        // handleList();
     };
 
     const handleAutocompleteChange = (event, value, name) => {
@@ -1097,93 +1097,93 @@ const useVehicleinfo = () => {
         fetchData();
     }, [apiUrl]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/TemplateforFCdate`);
-                if (response.status === 200) {
-                    const userDataArray = await response.json();
-                    if (userDataArray.length > 0) {
-                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
-                } else {
-                    console.log("Failed to fetch data, status:", response.status);
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-            }
-        };
-        fetchData();
-    }, [apiUrl],[templateMessageData]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/TemplateforFCdate`);
+    //             if (response.status === 200) {
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+    //                 } 
+    //             } else {
+    //                 console.log("Failed to fetch data, status:", response.status);
+    //             }
+    //         } catch (error) {
+    //             console.error("Fetch error:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl],[templateMessageData]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/Templateforstatepermitdate`);
-                if (response.status === 200) {
-                    const userDataArray = await response.json();
-                    if (userDataArray.length > 0) {
-                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
-                } else {
-                    console.log("Failed to fetch data, status:", response.status);
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-            }
-        };
-        fetchData();
-    }, [apiUrl],[templateMessageData]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/Templateforstatepermitdate`);
+    //             if (response.status === 200) {
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+    //                 } 
+    //             } else {
+    //                 console.log("Failed to fetch data, status:", response.status);
+    //             }
+    //         } catch (error) {
+    //             console.error("Fetch error:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl],[templateMessageData]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/Templateforinsuranceduedate`);
-                if (response.status === 200) {
-                    const userDataArray = await response.json();
-                    if (userDataArray.length > 0) {
-                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
-                } else {
-                    console.log("Failed to fetch data, status:", response.status);
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-            }
-        };
-        fetchData();
-    }, [apiUrl],[templateMessageData]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/Templateforinsuranceduedate`);
+    //             if (response.status === 200) {
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+    //                 } 
+    //             } else {
+    //                 console.log("Failed to fetch data, status:", response.status);
+    //             }
+    //         } catch (error) {
+    //             console.error("Fetch error:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl],[templateMessageData]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/Templatefornationalpermitdate`);
-                if (response.status === 200) {
-                    const userDataArray = await response.json();
-                    if (userDataArray.length > 0) {
-                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
-                } else {
-                    console.log("Failed to fetch data, status:", response.status);
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-            }
-        };
-        fetchData();
-    }, [apiUrl],[templateMessageData]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/Templatefornationalpermitdate`);
+    //             if (response.status === 200) {
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+    //                 } 
+    //             } else {
+    //                 console.log("Failed to fetch data, status:", response.status);
+    //             }
+    //         } catch (error) {
+    //             console.error("Fetch error:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl],[templateMessageData]);
 
     const handlecheckmaildriver = async () => {
         try {
             // Add templateMessageData to the dataToSend object
-            const dataToSend = {
-                email: book.email,
-                fcdate:book.fcdate,
-                // todate:book.todate,
-                Sendmailauth: organistaionsendmail.Sendmailauth,
-                Mailauthpass: organistaionsendmail.Mailauthpass,
-                templateMessageData
-            };
+            // const dataToSend = {
+            //     email: book.email,
+            //     fcdate:book.fcdate,
+            //     // todate:book.todate,
+            //     Sendmailauth: organistaionsendmail.Sendmailauth,
+            //     Mailauthpass: organistaionsendmail.Mailauthpass,
+            //     templateMessageData
+            // };
     
             // console.log("Sending data:", dataToSend); // For debugging purposes
             // await axios.post(`${apiUrl}/send-emailagreementdata`, dataToSend);
@@ -1327,7 +1327,7 @@ const useVehicleinfo = () => {
 
     useEffect(() => {
         handleList();
-    }, [handleList]);
+    }, []);
 
     //search funtion
     const handleSearch = async () => {

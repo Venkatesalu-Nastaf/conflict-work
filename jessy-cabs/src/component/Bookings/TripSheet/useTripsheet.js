@@ -1704,7 +1704,7 @@ const useTripsheet = () => {
                     totaldays: parseInt(calculateTotalDay() || 0) || 0,
                     totalkm1: calculateTotalKilometers(),
                     totaltime: calculateTotalTimes(),
-                    netamount: calculateTotalAmount(),
+                    netamount: 0,
                     TotalTimeWithoutAddHours: calculatewithoutadditonalhour(),
                     exkm: packageDetails[0]?.extraKMS,
                     exHrs: packageDetails[0]?.extraHours,
@@ -1914,7 +1914,7 @@ const useTripsheet = () => {
                 totalkm1: calculateTotalKilometers(),
                 totaltime: calculateTotalTimes(),
                 TotalTimeWithoutAddHours: calculatewithoutadditonalhour(),
-                netamount: calculateTotalAmount(),
+                netamount: 0,
                 exkm: packageDetails[0]?.extraKMS,
                 exHrs: packageDetails[0]?.extraHours,
                 night: packageDetails[0]?.NHalt,
@@ -3688,27 +3688,27 @@ const useTripsheet = () => {
         return '';
     };
 
-    function calculateTotalAmount() {
-        const amount = parseFloat(formData.amount || selectedCustomerData.amount || book.amount || packageDetails[0]?.Rate) || 0;
-        const amount1 = parseFloat(formData.amount1 || selectedCustomerData.amount1 || book.amount1) || calculateExkmAmount() || 0;
-        const amount2 = parseFloat(formData.amount2 || selectedCustomerData.amount2 || book.amount2) || calculateExHrsAmount() || 0;
-        const amount3 = parseFloat(formData.amount3 || selectedCustomerData.amount3 || book.amount3) || calculateNightAmount() || 0;
-        const amount4 = parseFloat(formData.amount4 || selectedCustomerData.amount4 || book.amount4) || calculatedriverconvienceAmount() || 0;
+    // function calculateTotalAmount() {
+    //     const amount = parseFloat(formData.amount || selectedCustomerData.amount || book.amount || packageDetails[0]?.Rate) || 0;
+    //     const amount1 = parseFloat(formData.amount1 || selectedCustomerData.amount1 || book.amount1) || calculateExkmAmount() || 0;
+    //     const amount2 = parseFloat(formData.amount2 || selectedCustomerData.amount2 || book.amount2) || calculateExHrsAmount() || 0;
+    //     const amount3 = parseFloat(formData.amount3 || selectedCustomerData.amount3 || book.amount3) || calculateNightAmount() || 0;
+    //     const amount4 = parseFloat(formData.amount4 || selectedCustomerData.amount4 || book.amount4) || calculatedriverconvienceAmount() || 0;
 
-        const totalAmount = amount + amount1 + amount2 + amount3 + amount4;
-        return totalAmount;
-    }
+    //     const totalAmount = amount + amount1 + amount2 + amount3 + amount4;
+    //     return totalAmount;
+    // }
 
-    function calculateTotalAmount2() {
-        const amount5 = parseFloat(formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate);
-        const amount6 = parseFloat(formData.amount6 || selectedCustomerData.amount6 || book.amount6) || calculateExkmAmount2();
-        const amount7 = parseFloat(formData.amount7 || selectedCustomerData.amount7 || book.amount7) || calculateExHrsAmount2();
-        const amount8 = parseFloat(formData.amount8 || selectedCustomerData.amount8 || book.amount8) || calculateNightAmount2();
-        const amount9 = parseFloat(formData.amount9 || selectedCustomerData.amount9 || book.amount9) || calculatedriverconvienceAmount2();
+    // function calculateTotalAmount2() {
+    //     const amount5 = parseFloat(formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate);
+    //     const amount6 = parseFloat(formData.amount6 || selectedCustomerData.amount6 || book.amount6) || calculateExkmAmount2();
+    //     const amount7 = parseFloat(formData.amount7 || selectedCustomerData.amount7 || book.amount7) || calculateExHrsAmount2();
+    //     const amount8 = parseFloat(formData.amount8 || selectedCustomerData.amount8 || book.amount8) || calculateNightAmount2();
+    //     const amount9 = parseFloat(formData.amount9 || selectedCustomerData.amount9 || book.amount9) || calculatedriverconvienceAmount2();
 
-        const totalAmount = amount5 + amount6 + amount7 + amount8 + amount9;
-        return totalAmount;
-    }
+    //     const totalAmount = amount5 + amount6 + amount7 + amount8 + amount9;
+    //     return totalAmount;
+    // }
 
     // -=----------------vendorbill-----------------------------------------
     // const calculatevendorTotalDays = () => {
@@ -9188,13 +9188,13 @@ const useTripsheet = () => {
         calculateExkmAmount,
         calculateExHrsAmount,
         calculateNightAmount,
-        calculateTotalAmount,
+        // calculateTotalAmount,
         calculatedriverconvienceAmount,
         calculateExkmAmount2,
         calculateExHrsAmount2,
         calculateNightAmount2,
         calculatedriverconvienceAmount2,
-        calculateTotalAmount2,
+        // calculateTotalAmount2,
         handleTripmapClick,
         mapimgpopupOpen,
         handleimgPopupClose,

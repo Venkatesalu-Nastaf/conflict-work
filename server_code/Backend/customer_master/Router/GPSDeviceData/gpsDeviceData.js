@@ -155,16 +155,20 @@ router.post('/getAlladddateandtripid/:hybrid', (req, res) => {
     const { selectedDate, vehicleNumber } = req.body;
     const formattedStartDate = moment(selectedDate).format('YYYY-MM-DD');
     // console.log(selectedDate,"selectded date");
-    
+
 
     // console.log("pljToday's Date:alllladtaaa", vehicleNumber, formattedStartDate);
-    const sqlHybridQuery = `SELECT DISTINCT  V.Trip_id FROM
+    const sqlHybridQuery = `SELECT  V.Trip_id FROM
                             VehicleAccessLocation V LEFT JOIN 
                             tripsheet T ON T.tripid = V.Trip_id WHERE V.Runing_Date =?
                             AND V.Vehicle_NO=? AND V.Trip_Status = 'Reached' AND T.Hybriddata = 1`;
 
-    const sqlQuery = `SELECT Distinct Trip_id FROM VehicleAccessLocation WHERE Runing_Date =?  AND Vehicle_No = ?  AND Trip_Status  IN ('Reached')   `;
+    // const sqlQuery = `SELECT Trip_id FROM VehicleAccessLocation WHERE Runing_Date =?  AND Vehicle_No = ?  AND Trip_Status  IN ('Reached')   `;
 
+    const sqlQuery = `SELECT DISTINCT V.Trip_id FROM
+                            VehicleAccessLocation V LEFT JOIN 
+                            tripsheet T ON T.tripid = V.Trip_id WHERE V.Runing_Date =?
+                            AND V.Vehicle_NO=? AND V.Trip_Status = 'Reached' AND T.tripid IS NOT NULL`;
 
     if (hybrid === "Hybrid_Customer") {
 
@@ -176,25 +180,25 @@ router.post('/getAlladddateandtripid/:hybrid', (req, res) => {
             }
             // console.log(results,"filreee")
              
-              if (results) {
+            if (results) {
                 if (results.length > 0) {
                     const formattedResult = results.map(row => ({
-                        Trip_id: String(row.Trip_id) 
+                        Trip_id: String(row.Trip_id)
                     }));
                     // console.log(formattedResult,"fil")
                     // console.log(results,"filtertrip");
                     
-                   return res.status(200).json(formattedResult)
+                    return res.status(200).json(formattedResult)
                 }
                 else{
                     // console.log(results,"fillllllllllllllllllllll")
-                       return res.status(200).json(results);
+                    return res.status(200).json(results);
                 }
             }
-            else{
-            // console.log(results,"filtripiddd");
+            else {
+                // console.log(results,"filtripiddd");
             
-             return res.status(200).json(results);
+                return res.status(200).json(results);
             }
         })
     }
@@ -212,13 +216,14 @@ router.post('/getAlladddateandtripid/:hybrid', (req, res) => {
                     // console.log(formattedResult, "fiplj")
                     return res.status(200).json(formattedResult);
                 }
-                else{
+                else {
                     // console.log(result,"checkinggggg");     
-                    res.status(200).json(result)
+                  return res.status(200).json(result)
                 }
-            }else{
-
-            res.status(200).json(result);
+            } else {
+                // console.log(result, "trippppppp");
+                
+               return res.status(200).json(result);
             }
         });
     }
@@ -323,31 +328,50 @@ router.post('/getTodayVehiclePoints', (req, res) => {
 
     const hybrid = req.body.hybrid;
     // console.log(hybrid, "hybrid getTodayVehiclePointss");
-    
+
     // const formattedStartDate = '2025-03-18';
     // console.log("Hardcoded Test Date:", formattedStartDate);
 
     // Query to get the full row with the latest created_at timestamp for each Vehicle_No
+    // const sqlQueryAll = `
+    //     SELECT v.*
+    //     FROM VehicleAccessLocation v
+    //     INNER JOIN (
+    //         SELECT Vehicle_No, MAX(created_at) AS max_time
+    //         FROM VehicleAccessLocation
+    //         WHERE Runing_Date = ? and Vehicle_No !== ""
+    //         GROUP BY Vehicle_No
+    //     ) latest 
+    //     ON v.Vehicle_No = latest.Vehicle_No 
+    //     AND v.created_at = latest.max_time
+    //     WHERE v.Runing_Date = ?;
+    // `;
+
+
     const sqlQueryAll = `
-        SELECT v.*
-        FROM VehicleAccessLocation v
-        INNER JOIN (
-            SELECT Vehicle_No, MAX(created_at) AS max_time
-            FROM VehicleAccessLocation
-            WHERE Runing_Date = ?
-            GROUP BY Vehicle_No
-        ) latest 
-        ON v.Vehicle_No = latest.Vehicle_No 
-        AND v.created_at = latest.max_time
-        WHERE v.Runing_Date = ?;
-    `;
-    const sqlQuery = `
                             SELECT v.*
+                    FROM VehicleAccessLocation v
+                    INNER JOIN (
+                        SELECT Vehicle_No, MAX(created_at) AS max_time
+                        FROM VehicleAccessLocation
+                        WHERE Runing_Date = ?
+                        AND Vehicle_No IS NOT NULL
+                        AND Vehicle_No <> ''
+                        GROUP BY Vehicle_No
+                    ) latest 
+                    ON v.Vehicle_No = latest.Vehicle_No 
+                    AND v.created_at = latest.max_time
+                    WHERE v.Runing_Date = ?;`;
+
+    const sqlQuery = 
+                            `SELECT v.*
                             FROM VehicleAccessLocation v
                             INNER JOIN (
                                 SELECT Vehicle_No, MAX(created_at) AS max_time
                                 FROM VehicleAccessLocation
                                 WHERE Runing_Date = ?
+                                AND Vehicle_No IS NOT NULL
+                                AND Vehicle_No <> ''
                                 GROUP BY Vehicle_No
                             ) latest 
                             ON v.Vehicle_No = latest.Vehicle_No 
@@ -374,8 +398,8 @@ router.post('/getTodayVehiclePoints', (req, res) => {
                 return res.status(500).json({ error: "Database Error" })
             }
             else {
-                // console.log(results,"Non hybrid");
-                
+                // console.log(results, "Non hybrid");
+
                 return res.status(200).json(results)
             }
         })
@@ -420,7 +444,7 @@ async function getAddressFromLatLng(lat, lng) {
             return 'Address not found';
         }
     } catch (error) {
-        console.error('Error fetching address:', error);
+        // console.error('Error fetching address:', error);
         return 'Address lookup failed';
     }
 }
@@ -458,7 +482,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
             return res.status(500).json({ error: "Internal Server Error" });
         }
 
-        console.log("gmapresultttttttttttttttttttttttttttlengthhhhhhhhhhhhhhhhhhhhh", gmapResult.length);
+        // console.log("gmapresultttttttttttttttttttttttttttlengthhhhhhhhhhhhhhhhhhhhh", gmapResult.length);
 
         if (gmapResult.length > 0) {
             // console.log(gmapResult, "gmapresultttttttttttttttttttttttttttinnnnnnnnnnnnnnnnnnnnnnnnnnn");
@@ -469,7 +493,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
 
             db.query(sqlQueryCheckReached, [gpsTripId], (error1, reachedResult) => {
                 if (error1) {
-                    console.log("Database query error:", error);
+                    // console.log("Database query error:", error);
                     return res.status(500).json({ error: "Internal Server Error" });
                 }
 
@@ -479,7 +503,7 @@ router.get('/getLatLongByTripId', async (req, res) => {
                 if (reachedCount > 0) {
                     db.query(sqlQueryAllStatuses, [gpsTripId], async (error2, allStatusesResult) => {
                         if (error2) {
-                            console.log("Database query error:", error);
+                            // console.log("Database query error:", error);
                             return res.status(500).json({ error: "Internal Server Error" });
                         }
 

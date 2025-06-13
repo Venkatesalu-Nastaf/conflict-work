@@ -8,6 +8,7 @@ import GoogleMapFile from "./MapSectionArea/GoogleMapFile";
 import OSMap from "./MapSectionArea/OSMap";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import { VehicleMapData } from "../vehicleMapContext/vehcileMapContext";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -39,6 +40,10 @@ export const RealTime = ({ allVehicleList, vehicleCurrentLocation, todayVehicle 
     setSelectMap(event.target.value);
   };
 
+  const {hover} = VehicleMapData();
+
+  // console.log(hover, "Realtimeeeee");
+  
   return (
     <>
       <div className="form-container-realtime">
@@ -65,9 +70,9 @@ export const RealTime = ({ allVehicleList, vehicleCurrentLocation, todayVehicle 
                 </Select>
 
                 {selectMap === "OSMap" &&
-                  <OSMap vehicleCurrentLocation={vehicleCurrentLocation} todayVehicle={todayVehicle} />}
+                  <OSMap todayVehicle={todayVehicle} hover = {hover}/>}
                 {selectMap === "GoogleMap" &&
-                  <GoogleMapFile vehicleCurrentLocation={todayVehicle} />}
+                  <GoogleMapFile vehicleCurrentLocation={todayVehicle} hover = {hover}/>}
               </div>
             </div>
           </div>

@@ -69,7 +69,7 @@
 }
 
 .location-button-border {
-    border: 1px solid #1976d2;
+    border: 1px solid rgb(25, 118, 210);
 }
 
 .vehicle-details {
@@ -79,6 +79,17 @@
 
 .vehicle-details::-webkit-scrollbar {
     width: 12px;
+}
+.hovered-card{
+    padding: 10px;
+    border-radius: 5px;
+    border: 0.5px solid #0078d4;
+    transition: all 0.3s ease;
+}
+.hovered-card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 1px 6px rgba(25, 118, 210, 0.15);
+    background-color: #e6f2ff;
 }
 
 @media screen and (min-width:1000px) and (max-width:1176px) {
@@ -319,4 +330,13 @@
 
 .vehicle-info::-webkit-scrollbar {
     display: none;
+}
+
+
+.reached-card {
+  background-color: #f0f0f0; /* Light gray */
+  color: #999999; /* Muted text */
+  border: 1px dashed #cccccc;
+  cursor: not-allowed;
+  opacity: 0.8;
 }

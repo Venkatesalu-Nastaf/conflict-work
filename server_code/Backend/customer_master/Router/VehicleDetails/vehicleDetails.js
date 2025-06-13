@@ -34,16 +34,27 @@ router.get('/getVehicle-Hcl-Customers/:todayDate/:hybrid', (req, res) => {
   // console.log(hybrid, "hybrid checking");
 
 
-  const vehicleQuery = "SELECT * FROM vehicleinfo";
+  // const vehicleQuery = "SELECT * FROM vehicleinfo";
 
-
-  const tripQuery = ` SELECT DISTINCT TS.vehRegNo, TS.driverName, TS.vehicleName
+  const vehicleQuery = `SELECT  TS.vehRegNo, TS.driverName, TS.tripid
                      FROM tripsheet TS
                      WHERE TS.tripid IN(
                      SELECT TS.tripid
                     FROM tripsheet TS
                     LEFT JOIN VehicleAccessLocation VA ON TS.tripid = VA.Trip_id
-                    WHERE VA.Runing_Date = ? AND TS.Hybriddata = 1
+                    WHERE VA.Runing_Date = ? AND VA.Vehicle_No IS NOT NULL 
+                    AND VA.Vehicle_No <> '' 
+                    GROUP BY VA.Vehicle_No, VA.Trip_id
+                    )`;
+
+  const tripQuery = ` SELECT TS.vehRegNo, TS.driverName, TS.tripid
+                     FROM tripsheet TS
+                     WHERE TS.tripid IN(
+                     SELECT TS.tripid
+                    FROM tripsheet TS
+                    LEFT JOIN VehicleAccessLocation VA ON TS.tripid = VA.Trip_id
+                    WHERE VA.Runing_Date = ? AND TS.Hybriddata = 1 AND VA.Vehicle_No IS NOT NULL 
+                    AND VA.Vehicle_No <> ''
                     GROUP BY VA.Vehicle_No, VA.Trip_id
                     )`;
 
@@ -55,47 +66,121 @@ router.get('/getVehicle-Hcl-Customers/:todayDate/:hybrid', (req, res) => {
         // console.log(err, "moott")
         return res.status(500).json(err)
       }
-      if(tripResult.length > 0){
+      if (tripResult.length > 0) {
 
-      
-      const uniqueResult = [];
 
-      const seenVehRegNo = [];
+        // const uniqueResult = [];
 
-      tripResult.forEach(item => {
+        // const seenVehRegNo = [];
 
-        if (!seenVehRegNo.includes(item.vehRegNo)) {
-          seenVehRegNo.push(item.vehRegNo);
-          uniqueResult.push(item);
-        }
-      });
-      // console.log(uniqueResult, "result of this uniqueResult");
-      return res.status(200).json(uniqueResult);
-    }
-    else{
-      // console.log(tripResult ,"tripresult");
-      
+        // tripResult.forEach(item => {
+
+        //   if (!seenVehRegNo.includes(item.vehRegNo)) {
+        //     seenVehRegNo.push(item.vehRegNo);
+        //     uniqueResult.push(item);
+        //   }
+        // });
+        // // console.log(uniqueResult, "result of this uniqueResult");
+        // return res.status(200).json(uniqueResult);
+         const groupedResult = {};   
+       tripResult.forEach(({ vehRegNo, driverName, tripid }) => {
+          if (!groupedResult[vehRegNo]) {
+            groupedResult[vehRegNo] = {
+              vehRegNo,
+              driverName,
+              tripids: [tripid]
+            };
+          } else {
+            groupedResult[vehRegNo].tripids.push(tripid);
+          }
+        });
+
+        const finalResult = Object.values(groupedResult);
+        return res.status(200).json(finalResult)
+      }
+      else {
+        // console.log(tripResult ,"tripresult");
+
         return res.status(200).json(tripResult);
-    }
+      }
 
     });
   } else {
 
-    db.query(vehicleQuery, (err, vehicleResult) => {
+    db.query(vehicleQuery, [todayDate], (err, vehicleResult) => {
 
       if (err) {
         // console.log(err, "moottbb")
         return res.status(500).json(err)
       }
+      if (vehicleResult.length > 0) {
 
-      // console.log(vehicleResult, "vehicle resultttt");
+        // const uniqueResult = [];
+        // const seenVehRegNo = [];
 
-      return res.status(200).json(vehicleResult)
-    })
+        // vehicleResult.forEach(item =>{
+
+        //   if(!seenVehRegNo.includes(item.vehRegNo)){
+        //     seenVehRegNo.push(item.vehRegNo)
+        //     uniqueResult.push(item)
+        //   }
+        // })
+
+        // console.log(uniqueResult, "findddd");
+        // return res.status(200).json(vehicleResult)
+        const groupedResult = {};
+
+        vehicleResult.forEach(({ vehRegNo, driverName, tripid }) => {
+          if (!groupedResult[vehRegNo]) {
+            groupedResult[vehRegNo] = {
+              vehRegNo,
+              driverName,
+              tripids: [tripid]
+            };
+          } else {
+            groupedResult[vehRegNo].tripids.push(tripid);
+          }
+        });
+
+        const finalResult = Object.values(groupedResult);
+        return res.status(200).json(finalResult)
+       
+      }
+      else {
+        // console.log(vehicleResult, "vehicle resultttt");
+
+        return res.status(200).json(vehicleResult)
+      }
+    });
 
   }
 
 });
+router.get('/tripStatus/:tripId' , (req, res) =>{
+
+  const tripId = req.params.tripId;
+
+  const selectQuery =`
+    SELECT Trip_Status
+    FROM VehicleAccessLocation 
+    WHERE Trip_id = ? 
+    ORDER BY created_at DESC 
+    LIMIT 1
+  `;
+  db.query(selectQuery, [tripId], (err, result)=>{
+    if(err){
+      return res.status(500).json(err)
+    }
+    if(result.length ===0){
+      return res.status(404).json({message:"Trip Id Not found"})
+    }
+    else{
+       return res.status(200).json({ status: result[0].Trip_Status});
+    }
+  })
+})
+
+
 // router.get('/gethybridvalue', (req, res) => {
 
 //   // const today = new Date().toISOString().split('T')[0];

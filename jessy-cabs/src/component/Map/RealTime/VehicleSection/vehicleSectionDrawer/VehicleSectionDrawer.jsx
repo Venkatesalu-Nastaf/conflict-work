@@ -176,17 +176,19 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
             // console.log("closeddate")
             // const selectedDate = filterDate ? filterDate : dayjs().format("YYYY-MM-DD");
 
-            //   console.log(vehicleNo,"Vehicle Numbers");
-            setLoading(true)
-
+            //   console.log("callVehicle Numbers");
+            if(!filterDate || !vehNo){
+                return;
+            }
+            
             try {
                 // if (selectedDate !== "" || selectedDate !== null) {
                 const hybrid = localStorage.getItem("SuperAdmin")
                 // console.log(hybrid, "Hybridvalueeee");
-
-
+                
+                    setLoading(true)   
                 if (filterDate) {
-
+                        console.log(filterDate,"callll");                
                     const response = await axios.post(`${apiUrl}/getAlladddateandtripid/${hybrid}`, {
                         selectedDate: filterDate,
                         vehicleNumber: vehNo
@@ -194,12 +196,13 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
 
 
                     const result = response.data;
-                    // console.log(result, "GPS Datatripid");
+                    // console.log(result, "callGPS Datatripid");
                     settripdown(result)
                     setLoading(false);
                 }
                 else {
                     // settripdown([]);
+                    // console.log("call")
                     return
                 }
 
@@ -220,7 +223,7 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
     //     return uniqueTripids.map(id => ({ label: `${id}`, value: id }));
     // }, [currentDatePoints, filterDate, selectedTripid]);
     const getbasedtipidformap = async () => {
-        console.log(selectedTripid, "gg")
+        // console.log(selectedTripid, "gg")
         try {
             const resposefortrip = await axios.post(`${apiUrl}/gettripbasedmapdetails`, {
 
@@ -245,14 +248,14 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
 
 
     const handleTripidChange = (event, value) => {
-        console.log(value, "val22222",);
+        // console.log(value, "val22222",);
         // if (!value) {
         //     console.warn("Selected trip is null or undefined");
         //     return;
         // }
         const selectedOption = value ? value.label : null;
         // const seleteddata = value ? value.label : ""
-        console.log(selectedOption, "ss")
+        // console.log(selectedOption, "ss")
 
         setSelectedTripid(selectedOption);
         setDynamicPolyline1([])
@@ -343,11 +346,11 @@ const VehcileSectionDrawer = ({ open, handleClose, vehNo, todayVehicle }) => {
                 return "Address not found";
             }
         } catch (error) {
-            console.error("Error fetching address:", error);
+            // console.error("Error fetching address:", error);
             return "Address not found";
         }
     };
-    console.log(startMarkerPosition, "tolldps")
+    // console.log(startMarkerPosition, "tolldps")
 
     useEffect(() => {
         if (startMarkerPosition) {

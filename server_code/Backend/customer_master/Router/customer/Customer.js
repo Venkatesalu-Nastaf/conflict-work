@@ -414,8 +414,8 @@ router.post("/monthlyWiseBillingDataReport", (req, res) => {
 
   // Prepare query and params based on customerType
   const customerSqlQuery = customerType === "All"
-    ? `SELECT Customer, customerType,address1 FROM customers`
-    : `SELECT Customer, customerType,address1 FROM customers WHERE customerType = ?`;
+    ? `SELECT Customer, customerType,address1,gstTax FROM customers`
+    : `SELECT Customer, customerType,address1,gstTax FROM customers WHERE customerType = ?`;
 
   const queryParams = customerType === "All" ? [] : [customerType];
 
@@ -459,7 +459,8 @@ router.post("/monthlyWiseBillingDataReport", (req, res) => {
           uniqueCustomerDetailsMap.set(c.customer, {
             ...c,
             address: customerAddressMap[c.customer] || null,
-            customerType: customers?.find(cust => cust.Customer === c.customer)?.customerType || null
+            customerType: customers?.find(cust => cust.Customer === c.customer)?.customerType || null,
+            gstTax: customers?.find(cust => cust.Customer === c.customer)?.gstTax || null,
           });
         }
       });

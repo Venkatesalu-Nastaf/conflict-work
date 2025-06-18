@@ -98,7 +98,7 @@ const Login = () => {
         
       }else if (error.response.status === 403) {
         setError(error)
-        setErrorMessage("Account is inactive.please contact the admin")
+        setErrorMessage("Account inactive. Please contact admin.")
       } else {
         // Handle general errors  
         setError(true);

@@ -79,11 +79,16 @@ const newColumnsVehicleStatement = [
   { field: 'id', headerName: 'S.no', width: 70 },
   { field: 'shedOutDate', headerName: 'ShedOutDate', width: 120 , valueFormatter: (params) => dayjs(params.value).format('DD-MM-YYYY'),},
   { field: 'tripid', headerName: 'TripID', width: 120 },
+  { field: 'customer',headerName:'CustomerName',width:120},
   { field: 'vehicleName', headerName: 'CarType', width: 120 },
   { field: 'driverName', headerName: 'DriverName',width: 150 },
   { field: 'vehRegNo', headerName: 'VehicleNo', width: 120 },
   { field: 'duty', headerName: 'DutyType', width: 120 },
+  { field: 'startkm',headerName:'StartKM',width:120},
+  { field:'closekm',headerName:'CloseKM',width:120},
   { field: 'totalkm1', headerName: 'TotalKM', width: 120 },
+  { field:'starttime',headerName:'starttime',width:120},
+  { field:'closetime',headerName:'closetime',width:120},
   { field: 'totaltime', headerName: 'TotalHRS', width: 120 },
   { field: 'totalcalcAmount', headerName: 'TotalAmount', width: 100 },
   { field: 'parking', headerName: 'Parking', width: 100 },
@@ -479,14 +484,14 @@ const VehicleStatement = () => {
           (parseFloat(li.fuelamount || 0) + parseFloat(li.advancepaidtovendor || 0));
       
         // Format shedOutDate using dayjs
-        const formattedShedOutDate = li.shedOutDate
-          ? dayjs(li.shedOutDate).format('DD-MM-YYYY')
-          : '';
+        // const formattedShedOutDate = li.shedOutDate
+        //   ? dayjs(li.shedOutDate).format('DD-MM-YYYY')
+        //   : '';
       
         return {
           ...li,
           FinalTotalAmount: totalAmount,
-          shedOutDate: formattedShedOutDate, // Replace original with formatted version
+          // shedOutDate: formattedShedOutDate, // Replace original with formatted version
         };
       });
       
@@ -752,7 +757,18 @@ setCustomerData(datas)
     }
   };
 
+function removeSeconds(time) {
+        // Split the time string by colon (:)
+        const timeParts = time.split(':');
 
+        // Check if there are seconds (length 3), return hours:minutes
+        if (timeParts.length === 3) {
+            return `${timeParts[0]}:${timeParts[1]}`;
+        }
+
+        // If there's only hours:minutes, return it as is
+        return time;
+    }
   //Excel
   const handleExcelDownload = async () => {
     const workbook = new Excel.Workbook();
@@ -782,8 +798,18 @@ setCustomerData(datas)
         };
         // cell.alignment = { vertical: 'middle', horizontal: 'centre' }; 
       });
-      Customerdata.forEach((item) => {
+      Customerdata.forEach((item,index) => {
         const rowData = {};
+        item["id"]= index + 1
+        item["starttime"]=item["Hybriddata"] === 1 ? removeSeconds(item["starttime"]) : removeSeconds(item["reporttime"])
+        item["closetime"]=item["Hybriddata"] === 1 ? removeSeconds(item["closetime"]) : removeSeconds(item["shedintime"])
+        item["startkm"]=item["Hybriddata"] === 1 ? (item["startkm"] || 0) : (item["shedout"] || 0)
+        item["closekm"]=item["Hybriddata"] === 1 ? (item["closekm"] || 0) : (item["shedin"] || 0)
+        item["toll"]=(item["toll"] || 0)
+        item["parking"]=(item["parking"] || 0)
+        item["permit"]=(item["permit"] || 0)
+        item["fuelamount"]=(item["fuelamount"] || 0)
+        item["advancepaidtovendor"]=(item["advancepaidtovendor"] || 0)
         columns.forEach(({ key }) => {
           let value = item[key] ?? '';
       

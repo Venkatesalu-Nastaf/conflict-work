@@ -32,7 +32,7 @@ const useMonthlyWise = () => {
     // },
     { field: 'customer', headerName: 'Customer Name', width: 200 },
     { field: 'address', headerName: 'Address', width: 300 },
-    { field: 'totalAmount', headerName: 'Amount', width: 130 },
+    { field: 'finalAmount', headerName: 'Amount', width: 130 },
     { field: 'orderByEmail', headerName: 'Email', width: 180 },
     { field: 'customerType', headerName: 'CustomerType', width: 130 },
     // { field: 'customerId', headerName: 'CustomerID', width: 130 },
@@ -48,7 +48,7 @@ const useMonthlyWise = () => {
     //   width: 90,
     // },
     { field: 'customer', headerName: 'Customer Name', width: 180 },
-    { field: 'totalAmount', headerName: 'Amount', width: 130 },
+    { field: 'finalAmount', headerName: 'Amount', width: 130 },
         { field: 'address', headerName: 'Address', width: 300 },
     { field: 'orderByEmail', headerName: 'Email', width: 180 },
     { field: 'customerType', headerName: 'CustomerType', width: 130 },
@@ -83,10 +83,17 @@ const useMonthlyWise = () => {
       // const { customerDetails, transferList, individualBilling, groupBilling } = response.data;
       const customerDetails  = response.data;
       if(customerDetails.length > 0){
-              const rowsWithUniqueId = customerDetails.map((row, index) => ({
-          ...row,
-          id: index + 1,
-        }));
+        //       const rowsWithUniqueId = customerDetails.map((row, index) => ({
+        //   ...row,
+        //   id: index + 1,
+        // }));
+        const rowsWithUniqueId = customerDetails.map((row, index) => ({
+    ...row,
+    id: index + 1,
+    finalAmount: row.gstTax !== 0 
+      ? Math.round(row.totalAmount + (row.totalAmount * row.gstTax / 100))
+      : row.totalAmount
+  })); 
                setSuccess(true);
         setSuccessMessage("successfully listed")
         setRows(rowsWithUniqueId)
@@ -319,7 +326,7 @@ const useMonthlyWise = () => {
         });
       });
 
-      const totalKms = rows.reduce((sum, row) => sum + parseInt(row.totalAmount || 0, 10), 0);
+      const totalKms = rows.reduce((sum, row) => sum + parseInt(row.finalAmount || 0, 10), 0);
       const totalRow = worksheet.addRow({});
       totalRow.getCell(columndata.findIndex(col => col.header === 'Customer Name') + 1).value = 'TOTAL';
       totalRow.getCell(columndata.findIndex(col => col.header === 'Amount') + 1).value = totalKms;
@@ -414,10 +421,10 @@ const useMonthlyWise = () => {
       return columns.map(column => row[column.field]);
     });
 
-    const totalSum = rows.reduce((sum, row) => sum + row['totalAmount'], 0);
+    const totalSum = rows.reduce((sum, row) => sum + row['finalAmount'], 0);
 
     // Add the total row
-    const totalRow = columns.map(column => column.field === 'totalAmount' ? totalSum : (column.headerName === 'Customer Name' ? 'Total' : ''));
+    const totalRow = columns.map(column => column.field === 'finalAmount' ? totalSum : (column.headerName === 'Customer Name' ? 'Total' : ''));
     rowValues.push(totalRow);
 
     let fontdata = 1;

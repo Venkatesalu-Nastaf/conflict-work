@@ -173,7 +173,7 @@ router.get("/Statecreation", (req, res) => {
   db.query('SELECT DISTINCT state FROM stationcreation WHERE state is not null and  gstno IS NOT NULL AND gstno != ""',(error, result) => {
     if (error) {
       // console.log(error, 'error'); // Log the error for debugging
-      return res.status(500).json({ message: "Database query error", error });
+      return res.status(500).json({ message: "Daxtabase query error", error });
     }
 
     res.status(200).json(result);

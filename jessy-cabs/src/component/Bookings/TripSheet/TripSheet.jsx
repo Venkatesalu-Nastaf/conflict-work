@@ -334,7 +334,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     // --------------------this zoom code image data----------------------------------------
     posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, onDrag, handleFullDeleteMapData,tripIdRef,
     mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl, bookingTripStatus, handleTemporaryDelete, handleTemporaryDeleteMapDataClose, temporaryDeleteGmap,loading,setLoading,
-    mapLoading, setMapLoading,routeLoading,setRouteLoading
+    mapLoading, setMapLoading,routeLoading,setRouteLoading,
+     conflictCompareCount,conflictCompareDatas,currentConflict,setCurrentConflict,routeSummary
     //  setTemporaryDeleteGmap, handleTemporaryDeleteMapDataOpen
     // this code zoom image data---------------------------------
   } = useTripsheet();
@@ -532,6 +533,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   //   }
   //  ;
   // { kmValue.startDate && ((kmValue.closeDate ? (Number(kmValue?.close_totalDays) > 0 ? '' : <lable className='invalid-km'>invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)) }
+  const duty = formData.duty || selectedCustomerData.duty || book.duty;
 
   const shedOutDateObj = new Date(formData?.shedOutDate || selectedCustomerDatas?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate)
   const SatrtDateObj = new Date(formData?.startdate || selectedCustomerDatas?.startdate || selectedCustomerData?.startdate || book?.startdate)
@@ -876,6 +878,104 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     return equalDateCheck || minimumTimeNotAllowed
   }
 
+  const conflictCompareFunction = useMemo(() => {
+  console.log("surCalculating conflictCompareResult...");
+console.log(dayhcl,"dayhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",typeof(dayhcl),duty);
+
+  const filtercount = parseInt(conflictCompareCount) || 0;
+  // formData.shedintime || selectedCustomerData.shedintime || book.shedintime
+// formData.shedInDate
+  // const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+  // const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY");
+  const closeTimedata = formData.closetime || selectedCustomerData.closetime || book.closetime;
+  const reportTimedata = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+// const reportTime = dayhcl === 1 && (dayhcl === 1 || duty === "Outstation") ? closeTimedata : reportTimedata
+const reportTime = dayhcl === 1 && duty !== "Outstation" ? closeTimedata : reportTimedata
+
+const closedataData = dayjs(formData.closedate || selectedCustomerData.closedate || book.closedate).format("DD-MM-YYYY");
+  const shedOutDateData = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format("DD-MM-YYYY");
+
+  // const shedOutDate = dayhcl === 1 && (dayhcl === 1 || duty === "Outstation") ? closedataData : shedOutDateData
+  const shedOutDate = dayhcl === 1 && duty !== "Outstation" ? closedataData : shedOutDateData
+
+  const shedoutTimeFormat = reportTime?.replace(":", ".");
+  const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2);
+
+  const parseDate = (dateStr) => {
+    const [day, month, year] = dateStr?.split('-');
+    return new Date(`${year}-${month}-${day}`);
+  };
+
+  const minDate = dayjs(minTimeData?.date).format("DD-MM-YYYY");
+  const maxDate = dayjs(maxTimeData?.date).format("DD-MM-YYYY");
+  console.log(maxTimeData,"fffffff",minTimeData,finalShedOutTime);
+  
+
+  const finalshedoutdate = parseDate(shedOutDate);
+  finalshedoutdate?.setHours(0, 0, 0, 0);
+  const finalMindate = parseDate(minDate);
+  finalMindate?.setHours(0, 0, 0, 0);
+  const finalMaxdate = parseDate(maxDate);
+  finalMaxdate?.setHours(0, 0, 0, 0);
+console.log(filtercount,"fffffffffilter")
+console.log(shedoutTimeFormat,"finalformatttttttttttttt",finalShedOutTime,"finalformatttttttttttttt",finalshedoutdate,"finalformatttttttttttttt",finalMaxdate,finalMindate);
+console.log(finalShedOutTime,"qqqqqqqqqqqqqqqqqqqqqqqqqq",maxTimeData?.time);
+console.log(filtercount,"suuuuuuuuuuuuuuuuuuuu---------------",conflictCompareDatas);
+
+  if (filtercount > 0 && conflictCompareDatas?.length > 0 && minTimeData !== null) {
+    console.log("suuuuuuuu");
+    
+    // const checkingFunction =
+    //   parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
+    //   parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
+    //   finalshedoutdate.getTime() === finalMaxdate.getTime();
+
+    const dateLessThanFunction =
+      finalshedoutdate.getFullYear() < finalMaxdate.getFullYear() ||
+      (finalshedoutdate.getFullYear() === finalMaxdate.getFullYear() &&
+        finalshedoutdate.getMonth() < finalMaxdate.getMonth()) ||
+      (finalshedoutdate.getFullYear() === finalMaxdate.getFullYear() &&
+        finalshedoutdate.getMonth() === finalMaxdate.getMonth() &&
+        finalshedoutdate.getDate() < finalMaxdate.getDate()) ||
+      (finalshedoutdate.getFullYear() === finalMaxdate.getFullYear() &&
+        finalshedoutdate.getMonth() === finalMaxdate.getMonth() &&
+        finalshedoutdate.getDate() === finalMaxdate.getDate() &&
+        // parseFloat(finalShedOutTime) >= parseFloat(maxTimeData?.time));
+                parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time));
+
+    console.log("fffffcheckingFunction:",  "dateLessThanFunction:", dateLessThanFunction);
+setCurrentConflict( dateLessThanFunction)
+console.log(dateLessThanFunction,"dddddddddddddddddddddddddd+++++++++++++++++++++++++",formData.closedate,selectedCustomerData.closedate,book.closedate);
+
+    return  dateLessThanFunction;
+  } else {
+    setCurrentConflict(null)
+    return false;
+  }
+}, [
+  conflictCompareCount,
+  formData.shedintime,
+  formData.closetime,
+  formData.shedInDate,
+  formData.closedate,
+  selectedCustomerData.shedintime,
+  selectedCustomerData.closetime,
+  selectedCustomerData.shedInDate,
+  selectedCustomerData.closedate,
+  selectedCustomerDatas.shedintime,
+  selectedCustomerDatas.closetime,
+  book.shedintime,
+  book.closetime,
+  book.shedInDate,
+  book.closedate,
+  minTimeData?.date,
+  maxTimeData?.date,
+  minTimeData?.time,
+  maxTimeData?.time,
+  conflictCompareDatas
+]);
+console.log(conflictCompareFunction,"conflictcheckinggggggggggg",minTimeData,"conflictcheckinggggggg",maxTimeData);
+
   const maxShedInDate = () => {
     const shedindate = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format("DD-MM-YYYY");
     const maximumShedInDate = dayjs(shedInTimeData?.[0]?.shedindate || "")?.format("DD-MM-YYYY")
@@ -991,7 +1091,6 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     }
     setOpensnack(false); // Close the Snackbar
   };
-  const duty = formData.duty || selectedCustomerData.duty || book.duty;
 
   // super Admin access
   // const superAdminAccess = localStorage.getItem("SuperAdmin")
@@ -1027,7 +1126,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   const handleKmConflictModal = () => {
     setOpenConflictKMPopup(true)
   }
-  const conflictModalbox = (checkingMinimumData() && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null)) || (maxShedInDate() && conflictLoad !== null);
+  // const conflictModalbox = (checkingMinimumData() && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null)) || (maxShedInDate() && conflictLoad !== null);
+   const conflictModalbox = (conflictCompareFunction && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null)) ;
 
   const signaturedisabled = signimageUrl === "" && temporaryStatus ? true : false
 
@@ -1827,7 +1927,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
                   <div className="input" style={{ display: "grid", position: "relative" }}>
                     <div style={{ top: -24, left: 27, cursor: 'pointer', position: 'absolute', }} onClick={handleConflictModal}>
-                      <p style={{ backgroundColor: conflictModalbox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p>
+                      {/* <p style={{ backgroundColor: conflictModalbox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p> */}
+                      <p style={{ backgroundColor: conflictCompareFunction ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p>
 
                     </div>
                     {/* {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
@@ -1841,7 +1942,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                       <label className='invalid-km' style={{ paddingBottom: '5px' }}> Shed in Date Achieved :{shedInTimeData[0]?.Tripid} {'\n'}  conflict Date :{dayjs(shedInTimeData[0]?.shedindate).format("DD-MM-YYYY")}  MinTripId:  {minTimeData?.tripid} MinTime : {minTimeData?.time} - MaxTripId : {maxTimeData?.tripid} MaxTime : {maxTimeData?.time}   </label>
                     } */}
 
-                    <Modal
+                   <Modal
                       open={openModalConflict}
                       onClose={handleConflictPopup}
                       aria-labelledby="modal-title"
@@ -1867,28 +1968,37 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           overflowY: 'auto'
                         }}
                       >
-                        {conflictModalbox ? (
+                        {/* {conflictModalbox ? ( */}
+                        {/* {console.log(conflictLoad,"sureshhhhhhhhh",conflictCompareFunction)} */}
+                                                {conflictCompareFunction ? (
                           <>
-                            {checkingMinimumData() &&
+                            {/* {checkingMinimumData() &&   */}
+                             {/* {conflictCompareFunction &&
                               conflictLoad !== null &&
                               (shedInTimeData?.length === 0 || shedInTimeData === null) && (
                                 <label className="invalid-km" >
                                   Conflict Date: {dayjs(minTimeData?.date).format("DD-MM-YYYY")}<br />
-                                  MinTripId: {minTimeData?.tripid}{'\n'}
-                                  MinTime: {minTimeData?.time} <br />
-                                  MaxTripId: {maxTimeData?.tripid}{'\n'}
-                                  MaxTime: {maxTimeData?.time}
+                               
+                                    nextTripId: {minTimeData?.tripid}{'\n'}
+                                  shedoutTime: {minTimeData?.time} <br />
+                             
                                 </label>
-                              )}
-                            {maxShedInDate() &&
-                              conflictLoad !== null && (
+                              )} */}
+                            {/* {maxShedInDate() && */}
+                            {
+                              // conflictLoad !== null && (
+                                                            conflictCompareFunction && (
                                 <label className="invalid-km" >
-                                  Shed in Date Achieved : {shedInTimeData[0]?.Tripid}<br />
-                                  Conflict Date : {dayjs(shedInTimeData[0]?.shedindate).format("DD-MM-YYYY")}<br />
-                                  MinTripId : {minTimeData?.tripid}{'\n'}
+                                  {/* Shed in Date Achieved : {shedInTimeData[0]?.Tripid}<br /> */}
+                                  {/* Conflict Date : {dayjs(shedInTimeData[0]?.shedindate)?.format("DD-MM-YYYY") || ""}<br /> */}
+                                  {/* MinTripId : {minTimeData?.tripid}{'\n'}
                                   MinTime : {minTimeData?.time} <br />
                                   MaxTripId : {maxTimeData?.tripid}{'\n'}
-                                  MaxTime : {maxTimeData?.time}
+                                  MaxTime : {maxTimeData?.time} */}
+                                   Conflict Date : {dayjs(minTimeData?.date).format('DD-MM-YYYY')}<br />
+
+                                     nextTripId: {minTimeData?.tripid}{'\n'}<br />
+                                  shedoutTime: {minTimeData?.time} <br />
                                 </label>
                               )}
 
@@ -2547,7 +2657,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
                     <div className="input" style={{ display: "grid", position: "relative" }} >
                       <div className='kmConflict' onClick={handleKmConflictModal}>
-                        <p style={{ backgroundColor: conflictModalKmBox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p>
+                        {/* <p style={{ backgroundColor: conflictModalKmBox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p> */}
+                        {dayhcl === 0 ? <p style={{ backgroundColor: conflictModalKmBox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p> : ""}
 
                       </div>
                       {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
@@ -4445,8 +4556,9 @@ Please Click the link to close E-Tripsheet-`}
                           // </Button>
 
 
+                          editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <Button variant="contained" disabled={!Tripsheet_modify } onClick={handleEdit}> Save</Button>
 
-                          editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}> Save</Button>
+                          // editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}> Save</Button>
 
                           : <></>
                         }

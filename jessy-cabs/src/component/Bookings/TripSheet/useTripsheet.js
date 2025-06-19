@@ -9525,7 +9525,7 @@ useEffect(() => {
         // this zoom image code state-----------------
 
         loading, setLoading,mapLoading,setMapLoading,routeLoading,setRouteLoading,
-        conflictCompareCount,conflictCompareDatas,currentConflict,setCurrentConflict,routeSummary
+        conflictCompareCount,conflictCompareDatas,currentConflict,setCurrentConflict,routeSummary,
 
 
     };

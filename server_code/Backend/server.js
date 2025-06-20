@@ -1,4 +1,15 @@
 //Database connection for Nastaf Appliction this file contain Add, Delete, Collect data from mysql, and Update functions:  
+// const express = require('express');
+// const cors = require('cors');
+// const bodyParser = require('body-parser');
+// const app = express();
+// const fs = require('fs');
+// const db = require('./db');
+// // const uuid = require('uuid');
+// const multer = require('multer');
+// const path = require('path');
+// const imagePath = require('./imagepath')
+//Database connection for Nastaf Appliction this file contain Add, Delete, Collect data from mysql, and Update functions:
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -9,6 +20,44 @@ const db = require('./db');
 const multer = require('multer');
 const path = require('path');
 const imagePath = require('./imagepath')
+const https = require('https');
+
+//https open
+
+// // Environment Variables for Port and Host
+const HTTPS_PORT = process.env.HTTPS_PORT || 3131;
+const HOST = process.env.HOST || '192.168.1.11';
+
+let httpsOption;
+try {
+  httpsOption = {
+    key: fs.readFileSync('/etc/letsencrypt/live/jessycabs.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/jessycabs.com/fullchain.pem'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/jessycabs.com/chain.pem')
+  };
+  console.log("SSL configuration successfully loaded.");
+} catch (error) {
+  console.error("Error loading SSL configuration:", error.message);
+  process.exit(1);
+}
+
+// HTTPS Server
+const httpsServer = https.createServer(httpsOption, app);
+
+httpsServer.listen(HTTPS_PORT, HOST, () => {
+  console.log(`Backend running securely at https://${HOST}:${HTTPS_PORT}`);
+});
+
+httpsServer.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${HTTPS_PORT} is already in use.`);
+  } else {
+    console.error('Server error:', err.message);
+  }
+  process.exit(1);
+});
+
+//https close
 // console.log(imagePath);
 
 var CryptoJS = require("crypto-js");
@@ -1370,8 +1419,8 @@ app.get("/hiretypebasedvehicle/:gethire", (req, res) => {
 
 
 // const port = 8081;
-const port = process.env.PORT;
+// const port = process.env.PORT;
 
-app.listen(port, () => {
-  console.log(`Connected to backend on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Connected to backend on port ${port}`);
+// });

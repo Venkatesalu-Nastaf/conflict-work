@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useData1 } from '../../Dashboard/Maindashboard/DataContext';
 import { APIURL } from "../../url";
+import encryption from '../../dataEncrypt';
+
 
 const useUserinfo = () => {
     const apiUrl = APIURL;
@@ -21,6 +23,8 @@ const useUserinfo = () => {
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
+    const [originalData, setOriginalData] = useState(null);
+
 
     const [book, setBook] = useState({
         userid: '',
@@ -36,36 +40,37 @@ const useUserinfo = () => {
 
     const handleUpdate = async (userid) => {
         try {
+
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            console.log(selectedCustomer, updatedCustomer, "user info");
 
             const response = await axios.put(`${apiUrl}/usercreationdataupdate/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
-            console.log(response, "user response error");
+            // console.log(response, "user response error");
 
             const dataresponse = response.data.affectedRows
-            console.log(dataresponse, "dataresp", updatedCustomer.username)
-
+            // console.log(dataresponse, "dataresp", updatedCustomer.username)
             if (dataresponse >= 1) {
-                console.log(dataresponse, "dataresp", updatedCustomer.username)
+                // console.log(dataresponse, "dataresp", updatedCustomer.username)
                 localStorage.removeItem("username")
                 localStorage.setItem("username", updatedCustomer.username)
                 SetDataTrigUser(updatedCustomer.username)
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 setEditMode((prevEditMode) => !prevEditMode);
-
-
-
             }
-
 
         }
         catch (err) {
-            console.log(err, "user error");
-
-            setError(true);
+            // console.log(err, "user error");
+            
+            if (err.message === 'Network Error') {
+                setError(true);
+                setErrorMessage("Check network connection.");
+            }
+            else{
+                setError(true);
             setErrorMessage("Data Not Update");
+            }
         }
     };
 
@@ -130,16 +135,17 @@ const useUserinfo = () => {
                 if (userid === "undefined") {
                     return;
                 }
-                const response = await fetch(`${apiUrl}/userdataforuserinfo/${userid}`);
+                const encrtyptedId = encryption(userid)
+                // console.log(encrtyptedId,"checking id");               
+                const response = await fetch(`${apiUrl}/userdataforuserinfo/${encrtyptedId}`);
                 if (response.status === 200) {
-
                     const userDataArray = await response.json();
+                    // console.log(userDataArray,"checking");                  
                     if (userDataArray.length > 0) {
                         setSelectedCustomerData(userDataArray[0]);
+                        setBook(userDataArray[0])
                     }
-
                 }
-
             }
             catch {
 
@@ -165,9 +171,15 @@ const useUserinfo = () => {
     }, [success, warning, error, info]);
 
     const toggleEditMode = () => {
-        setEditMode((prevEditMode) => !prevEditMode);
-    };
+        if (!editMode) {
+            setOriginalData({ ...book })
+        } else {
+            setBook({ ...originalData })
+        }
+        setEditMode(!editMode)
 
+    };
+    
     return {
         selectedCustomerData,
         error,
@@ -176,6 +188,8 @@ const useUserinfo = () => {
         warning,
         successMessage,
         errorMessage,
+        setError,
+        setErrorMessage,
         warningMessage,
         infoMessage,
         book,

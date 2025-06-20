@@ -41,7 +41,7 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import {  CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -74,9 +74,9 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
 
 
   const Roledatauser = localStorage.getItem("SuperAdmin")
-  
+
   const filteredStatus =
-  Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO" || Roledatauser === "Billing_Headoffice"
+    Roledatauser === "SuperAdmin" || Roledatauser === "Assistant CFO" || Roledatauser === "Billing_Headoffice"
       ? Status // Show all statuses for superAdmin and CFo
       : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
 
@@ -133,12 +133,12 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
     imageDetails,
     setImageDetails,
     setLoading,
-    loading,isStations,setisStations
+    loading, isStations, setisStations
 
 
   } = useOverviewDrawer();
   // console.log(reversedRows,' datas if grid')
-  
+
 
   const [allCustomer, setAllCustomer] = useState([])
   const { permissions } = useContext(PermissionContext)
@@ -161,15 +161,15 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
 
   const CustomNoRowsOverlay = () => (
     <div style={{ textAlign: 'center', padding: '20px' }}>
-        {/* Optionally, you can add your own message or styles */}
-        <p></p>
+      {/* Optionally, you can add your own message or styles */}
+      <p></p>
     </div>
-);
+  );
 
 
   return (
     <>
-      <div className=''>
+      <div className='overview-drawer'>
         <Drawer
           anchor="left"
           open={isDrawerOpen}
@@ -282,48 +282,48 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
             </div> */}
 
             <div className="input">
-                              <div className="icone">
-                                <GiMatterStates color="action" />
-                              </div>
-                              <Autocomplete
-                                fullWidth
-                                multiple
-                                id="Department"
-                                size="small"
-                                value={department}
-                                options={[{ label: "All" }, ...stationName.map(option => ({ label: option.Stationname }))]}
-                                isOptionEqualToValue={(option, value) => option.label === value.label}
-                                onChange={(event, value) => {
-                                  if (value.some(v => v.label === "All")) {
-                                    // If "All" is selected, only keep "All"
-                                    handleInputChange(event, [{ label: "All" }]);
-                                  } else {
-                                    // If any other option is selected, remove "All"
-                                    const filteredValues = value.filter(v => v.label !== "All");
-                                    handleInputChange(event, filteredValues);
-                                  }
-                                }}
-                                disableCloseOnSelect
-                                renderOption={(props, option, { selected }) => {
-                                  const isAllSelected = department.some(d => d.label === "All");
-            
-                                  return (
-                                    <li {...props}>
-                                      <Checkbox
-                                        icon={icon}
-                                        checkedIcon={checkedIcon}
-                                        style={{ marginRight: 8 }}
-                                        checked={isAllSelected || selected} // Ensure all checkboxes are checked when "All" is selected
-                                      />
-                                      {option.label}
-                                    </li>
-                                  );
-                                }}
-                                renderInput={(params) => (
-                                  <TextField {...params} label="Department" inputRef={params.inputRef} />
-                                )}
-                              />
-                              </div>
+              <div className="icone">
+                <GiMatterStates color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                multiple
+                id="Department"
+                size="small"
+                value={department}
+                options={[{ label: "All" }, ...stationName.map(option => ({ label: option.Stationname }))]}
+                isOptionEqualToValue={(option, value) => option.label === value.label}
+                onChange={(event, value) => {
+                  if (value.some(v => v.label === "All")) {
+                    // If "All" is selected, only keep "All"
+                    handleInputChange(event, [{ label: "All" }]);
+                  } else {
+                    // If any other option is selected, remove "All"
+                    const filteredValues = value.filter(v => v.label !== "All");
+                    handleInputChange(event, filteredValues);
+                  }
+                }}
+                disableCloseOnSelect
+                renderOption={(props, option, { selected }) => {
+                  const isAllSelected = department.some(d => d.label === "All");
+
+                  return (
+                    <li {...props}>
+                      <Checkbox
+                        icon={icon}
+                        checkedIcon={checkedIcon}
+                        style={{ marginRight: 8 }}
+                        checked={isAllSelected || selected} // Ensure all checkboxes are checked when "All" is selected
+                      />
+                      {option.label}
+                    </li>
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Department" inputRef={params.inputRef} />
+                )}
+              />
+            </div>
 
             <div className="input">
               <div className="icone">
@@ -453,18 +453,18 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
             {/* <p onClick={handleShowCards}>Show Cards</p> */}
             {showCards ?
               <div className='top-cards'>
-                 <IconButton onClick={handleCloseCards}  sx={{ position: 'absolute', right: '16px', top: '300px' }}>
-                        <CloseIcon sx={{ fontSize: '2rem' }} />
-                    </IconButton>
+                <IconButton onClick={handleCloseCards} sx={{ position: 'absolute', right: '16px', top: '300px' }}>
+                  <CloseIcon sx={{ fontSize: '2rem' }} />
+                </IconButton>
                 {/* <EtripSheetSignature /> */}
                 <EtripSheetSignature signImageUrl={signImageUrl} />
 
                 {/* <EtripSheetMap /> */}
-                <EtripSheetMap mapImgUrl = {mapImgUrl}/>
+                <EtripSheetMap mapImgUrl={mapImgUrl} />
                 {/* <EtripSheetImages /> */}
                 {/* <EtripSheetImages imageDetails = {imageDetails}/> */}
-               {/* <EtripSheetImages imageDetails={imageDetails} /> */}
-                 <EtripSheetImages imageDetails={imageDetails} />
+                {/* <EtripSheetImages imageDetails={imageDetails} /> */}
+                <EtripSheetImages imageDetails={imageDetails} />
 
               </div>
               :
@@ -474,7 +474,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
               </div>
             }
             <div className='table-top-buttons'>
-              <Button variant="outlined">Cancel</Button>  
+              <Button variant="outlined">Cancel</Button>
               <Button variant="contained">Verified</Button>
               {/* <Button onRowClick={(event) => handleButtonClick(event.row)}>Show</Button> */}
               {/* <Button onClick={handleButtonClick}>Show</Button> */}
@@ -487,7 +487,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
               onRowClick={(event) => handleButtonClick(event.row)}
               pageSize={5}
                /> */}
-            
+
           </Box>
           {/* <Box sx={{ padding: '16px' }}>
          
@@ -515,14 +515,14 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                   },
                 }}
               > */}
-                {/* <DataGrid
+          {/* <DataGrid
                   rows={reversedRows}
                   columns={columnshowall ? columns : filteredColumns}
                   onRowClick={(event) => handleButtonClick(event.row)}
                   pageSize={5}
                 /> */}
-                {/* chges for show button and show card button */}
-                {/* <DataGrid
+          {/* chges for show button and show card button */}
+          {/* <DataGrid
                   rows={reversedRows}
                   columns={columnshowall ? columns : filteredColumns}
                   onRowClick={(event) => handleRowClick(event.row)}
@@ -530,81 +530,83 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
                 />
               </Box> */}
 
-            {/* </div>
+          {/* </div>
           </Box> */}
 
           {/* Code with loading */}
           <Box sx={{ padding: '16px' }}>
+            <div className='trip-status-table-container'>
             <div className='trip-status-table'>
-                <Box
+              <Box
+                sx={{
+                  position: 'relative', // Set position relative for the container
+                  height: 400, // Adjust this value to fit your needs
+                  '& .MuiDataGrid-virtualScroller': {
+                    '&::-webkit-scrollbar': {
+                      width: '8px',
+                      height: '8px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#457cdc',
+                      borderRadius: '20px',
+                      minHeight: '60px',
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      backgroundColor: '#3367d6',
+                    },
+                  },
+                }}
+              >
+                {/* Show loading spinner if loading is true */}
+                {loading && (
+                  // <Box
+                  //     sx={{
+                  //         position: 'absolute', // Position the loading spinner absolutely
+                  //         top: '50%',
+                  //         left: '50%',
+                  //         transform: 'translate(-50%, -50%)', // Center the spinner
+                  //         zIndex: 1, // Ensure it appears above the DataGrid
+                  //         width: '100%', // Make it full width of the parent
+                  //         height: '70%', // Make it full height of the parent
+                  //     }}
+                  // >
+                  //     <CircularProgress />
+                  <Box
                     sx={{
-                        position: 'relative', // Set position relative for the container
-                        height: 400, // Adjust this value to fit your needs
-                        '& .MuiDataGrid-virtualScroller': {
-                            '&::-webkit-scrollbar': {
-                                width: '8px',
-                                height: '8px',
-                            },
-                            '&::-webkit-scrollbar-track': {
-                                backgroundColor: '#f1f1f1',
-                            },
-                            '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: '#457cdc',
-                                borderRadius: '20px',
-                                minHeight: '60px',
-                            },
-                            '&::-webkit-scrollbar-thumb:hover': {
-                                backgroundColor: '#3367d6',
-                            },
-                        },
+                      position: 'absolute', // Position the loading spinner absolutely
+                      top: '50%', // Adjust this value based on your DataGrid header height
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)', // Center the spinner horizontally
+                      zIndex: 1, // Ensure it appears above the DataGrid
+                      width: '100%', // Make it full width of the parent
+                      height: '70%', // Make it full height of the parent
+                      display: 'flex', // Use flexbox for centering
+                      justifyContent: 'center', // Center horizontally
+                      alignItems: 'center', // Center vertically
                     }}
-                >
-                    {/* Show loading spinner if loading is true */}
-                    {loading && (
-                        // <Box
-                        //     sx={{
-                        //         position: 'absolute', // Position the loading spinner absolutely
-                        //         top: '50%',
-                        //         left: '50%',
-                        //         transform: 'translate(-50%, -50%)', // Center the spinner
-                        //         zIndex: 1, // Ensure it appears above the DataGrid
-                        //         width: '100%', // Make it full width of the parent
-                        //         height: '70%', // Make it full height of the parent
-                        //     }}
-                        // >
-                        //     <CircularProgress />
-                        <Box
-                        sx={{
-                          position: 'absolute', // Position the loading spinner absolutely
-                          top: '50%', // Adjust this value based on your DataGrid header height
-                          left: '50%',
-                          transform: 'translate(-50%, -50%)', // Center the spinner horizontally
-                          zIndex: 1, // Ensure it appears above the DataGrid
-                          width: '100%', // Make it full width of the parent
-                          height: '70%', // Make it full height of the parent
-                          display: 'flex', // Use flexbox for centering
-                          justifyContent: 'center', // Center horizontally
-                          alignItems: 'center', // Center vertically
-                        }}
-                      >
-                        <CircularProgress />
-                            
-                        </Box>
-                    )}
-                    <DataGrid
-                        rows={reversedRows}
-                        columns={columnshowall ? columsnew : filteredColumns}
-                        onRowClick={(event) => handleRowClick(event.row)}
-                        pageSize={5}
-                        components={{
-                          NoRowsOverlay: CustomNoRowsOverlay, // Use custom overlay
-                      }}
-                    />
-                </Box>
+                  >
+                    <CircularProgress />
+
+                  </Box>
+                )}
+                <DataGrid
+                  rows={reversedRows}
+                  columns={columnshowall ? columsnew : filteredColumns}
+                  onRowClick={(event) => handleRowClick(event.row)}
+                  pageSize={5}
+                  components={{
+                    NoRowsOverlay: CustomNoRowsOverlay, // Use custom overlay
+                  }}
+                />
+              </Box>
             </div>
-        </Box>
+            </div>
+          </Box>
         </Drawer>
-      </div> 
+      </div>
       <Dialog open={popupOpen} onClose={handlePopupClose}>
         <DialogTitle>Select an Option</DialogTitle>
         <DialogContent>
@@ -613,7 +615,7 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
               <Button onClick={handleBookingClick}>Booking</Button>
               <Button onClick={handleTripsheetClick}>Tripsheet</Button>
             </div>
-          )} 
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -621,9 +623,9 @@ const OverviewDrawer = ({ stationName, customer, vehicleNo }) => {
           </Button>
         </DialogActions>
       </Dialog>
-      
+
     </>
-    
+
   )
 }
 

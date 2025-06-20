@@ -4,12 +4,14 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import { MdCancel } from "@react-icons/all-files/md/MdCancel";
+
 import { DataGrid } from "@mui/x-data-grid"; // Import DataGrid
 // import Chart from "react-apexcharts";
 // import axios from "axios";
 // import { APIURL } from "../../../../url";
 import useCard from "../useCard";
 import dayjs from "dayjs";
+
 
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
@@ -38,33 +40,89 @@ function CompactCard({ param, setExpanded }) {
 
   const Png = param.png;
   return (
-    <div>
-      {(
-        <motion.div
-          className="CompactCard"
-          style={{
-            background: param.color.backGround,
-            boxShadow: param.color.boxShadow,
-            border: '2px solid #c7c7c7c0',
-          }}
-          layoutId="expandableCard"
-          onClick={setExpanded}
-        >
-          <div className="radialBar">
-            <CircularProgressbar
-              value={param.barValue}
-              // text={param.title === 'Billing' ? '' : `${param.barValue}%`}
-            />
-            <span>{param.title}</span>
-          </div>
-          <div className="detail">
-            <Png />
-            <span>&#8377; {param.amount}</span>
-            <span>Last 24 hours</span>
-          </div>
-        </motion.div>
-      )}
+    // <div>
+    //   {(
+    //     <motion.div
+    //       className="CompactCard"
+    //       style={{
+    //         background: param.color.backGround,
+    //         boxShadow: param.color.boxShadow,
+    //         border: '2px solid #c7c7c7c0',
+    //       }}
+    //       layoutId="expandableCard"
+    //       onClick={setExpanded}
+    //     >
+    //       <div className="radialBar">
+    //         <CircularProgressbar
+    //           value={param.barValue}
+    //           // text={param.title === 'Billing' ? '' : `${param.barValue}%`}
+    //         />
+    //         <span>{param.title}</span>
+    //       </div>
+    //       <div className="detail">
+    //         <Png />
+    //         <span>&#8377; {param.amount}</span>
+    //         <span>Last 24 hours</span>
+    //       </div>
+    //     </motion.div>
+    //   )}
+    // </div>
+
+<div>
+  <motion.div
+    className="ClassicCard"
+    style={{
+      background: param.color.backGround,
+    }}
+    layoutId="expandableCard"
+    onClick={setExpanded}
+    whileHover={{ y: -2 }}
+  >
+    {/* Top Row: Icon, Title and Amount in One Line */}
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: '10px',
+    }}>
+      <Png style={{ width: '24px', height: '24px', color: '#5a4a3a' }} />
+      <h3 style={{
+        margin: 0,
+        fontSize: '18px',
+        fontWeight: 'bold',
+        letterSpacing: '0.5px',
+        textAlign: 'center',
+        flex: 1,
+        color: param.color.color,
+      }}>
+        {param.title}
+      </h3>
+      <div style={{
+        fontSize: '20px',
+        fontWeight: 'bold',
+        color: '#3a2e22',
+      }}>
+        ₹{param.amount}
+      </div>
     </div>
+
+    {/* Bottom: Last updated */}
+    <div style={{
+      borderTop: '1px dashed gray',
+      marginTop: '10px',
+      paddingTop: '10px',
+      fontSize: '12px',
+      fontStyle: 'italic',
+      fontWeight: '600',
+      color: param.color.color,
+      textAlign: 'right',
+    }}>
+      Updated just now
+    </div>
+  </motion.div>
+</div>
+
+
   );
 }
 
@@ -356,18 +414,32 @@ const title = param.title
   const columns = getColumns();
 
   
+  // const rows = billData.map((item, index,) => ({
+  //   title:title,
+  //   id: index + 1,
+  //   sno: index + 1,
+  //   orgname: item.CustomerName || "N/A", 
+  //   // date: item.BillDate || "N/A", 
+  //   date: item.BillDate
+  //   ? dayjs(item.BillDate).format("DD/MM/YYYY") // Format as DD/MM/YYYY
+  //   : "N/A",
+  //   amount: item.TotalAmount || 0, 
+  //   collected: item.TotalCollected || 0, 
+  //   pending: item.TotalBalance || 0, 
+  // }));
+
   const rows = billData.map((item, index,) => ({
     title:title,
     id: index + 1,
     sno: index + 1,
-    orgname: item.CustomerName || "N/A", 
+    orgname: item.customer || "N/A", 
     // date: item.BillDate || "N/A", 
-    date: item.BillDate
-    ? dayjs(item.BillDate).format("DD/MM/YYYY") // Format as DD/MM/YYYY
+    date: item.startdate
+    ? dayjs(item.startdate).format("DD/MM/YYYY") // Format as DD/MM/YYYY
     : "N/A",
-    amount: item.TotalAmount || 0, 
-    collected: item.TotalCollected || 0, 
-    pending: item.TotalBalance || 0, 
+    amount: item.totalcalcAmount || 0, 
+    collected: item.totalcalcAmount || 0, 
+    pending: item.Balance_Amount || 0, 
   }));
 
   // Log the rows to verify structure
@@ -378,8 +450,10 @@ const title = param.title
       className="ExpandedCard"
       style={{
         background: param.color.backGround,
-        boxShadow: param.color.boxShadow,
+        boxShadow: param.color.color,
         padding: '20px',
+        color:param.color.color,
+
         
       }}
       layoutId="expandableCard"
@@ -387,7 +461,7 @@ const title = param.title
       <div className="card-division">
         <MdCancel onClick={setExpanded} style={{ cursor: 'pointer' }} />
       </div>
-      <span>{param.title}</span>
+      <span style={{color:"black"}}>{param.title}</span>
 
       <div style={{ height: 400, width: '100%', marginTop: '20px' }}>
         <DataGrid

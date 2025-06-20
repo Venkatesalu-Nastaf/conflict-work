@@ -71,3 +71,12 @@
   background-color: #ffffff;
   z-index: 5;
 } */
+
+@media screen and (max-width: 768px) {
+ 
+  .form-container-Transfer {
+    /* overflow-x: hidden; */
+    /* padding: 20px; */
+  }
+
+}

@@ -105,10 +105,10 @@ import InvoiceHCL from '../Invoice/InvoiceHCL';
 import { APIURL } from '../../url';
 import axios from "axios";
 import CopyEmailHtmlcontent from './CopyEmailcontent';
-import {
-  vehicaleinfos
-} from "../../Bookings/BookingMain/Booking/Booking";
-import { PiCarSimpleFill } from 'react-icons/pi';
+// import {
+//   vehicaleinfos
+// } from "../../Bookings/BookingMain/Booking/Booking";
+// import { PiCarSimpleFill } from 'react-icons/pi';
 import useTripsheet from './useTripsheet';
 import { WhatsappShareButton } from 'react-share';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -162,21 +162,21 @@ const style = {
   p: 4,
 };
 
-const style1 = {
-  position: 'absolute',
-  top: '50%',
-  // height: '80%',
-  height: 'fit-content',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  // width: 1300,
-  width: "90%",
-  bgcolor: 'background.paper',
-  // bgcolor: 'yellow',
-  // border: '1px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+// const style1 = {
+//   position: 'absolute',
+//   top: '50%',
+//   // height: '80%',
+//   height: 'fit-content',
+//   left: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   // width: 1300,
+//   width: "90%",
+//   bgcolor: 'background.paper',
+//   // bgcolor: 'yellow',
+//   // border: '1px solid #000',
+//   boxShadow: 24,
+//   p: 4,
+// };
 const style3 = {
   position: 'absolute',
   top: '50%',
@@ -227,7 +227,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     handleKeyDown,
     handleDateChange,
     handleAutocompleteChange,
-    setFormValues,
+    // setFormValues,
     packageData,
     smsguest,
     sendEmail,
@@ -243,7 +243,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     setBook,
     setFormData,
     setSelectedCustomerData,
-    selectedStatus,
+    // selectedStatus,
     // setSelectedStatus, 
     setCloseTime,
     organizationdata,
@@ -258,9 +258,10 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     handleETripsheetClick,
     handlePopupClose,
     tripSheetData,
-    attachedImage,
+    // attachedImage,
     routeData,
     signimageUrl,
+    signimageUrl1,
     GmapimageUrl,
     handleTripmapClick,
     mapimgpopupOpen,
@@ -283,12 +284,13 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     calcPackage, extraHR, extraKM, package_amount,
     extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount,
-    driverBeta_amount, setdriverBeta, setdriverbeta_Count, setdriverBeta_amount,
+    driverBeta_amount, setdriverBeta, setdriverbeta_Count,
+    // setdriverBeta_amount,
     totalcalcAmount, escort, handleEscortChange,
     open, handleClose, handleTransferChange, transferreport,
     signaturepopup, setSignaturepopup, siganturediaglogclose,
     handlesignaturemageDownload, setSignatureupload,
-    handleFileChangesignature, getSignatureImage, handlesignaturemageDelete,
+    handleFileChangesignature,handlesignaturemageDelete,
     handleVendorcalc, calculatevendorTotalDays, vendorinfo, handleAutocompleteVendor, handleDatevendorChange, lockdata, setLockData, setVendorinfodata, calculatevendorTotalTime, calculatevendorTotalKilometers, vendorbilldata, handlevendor_billdata,
     vendornightdatatotalAmount, vendorExtarkmTotalAmount, vendorExtrahrTotalAmount, handlevendorinfofata, vendorpassvalue, accountinfodata, handletravelsAutocompleteChange,
     generateAndCopyLinkdata,
@@ -301,27 +303,47 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     calculateTotalDay,
     calculateTotalTimes,
     handleClickOpen,
-    setSelectedMapRow, CopyEmail, setCopyEmail, conflictkm, lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
+    setSelectedMapRow, CopyEmail, setCopyEmail, 
+    // conflictkm, 
+    lockdatavendorbill, setLockDatavendorBill, lockdatacustomerbill, setLockDatacustomerBill,
     maxconflict, setExtraKM, setextrakm_amount, setExtraHR, setextrahr_amount, handleRefreshsign, groupTripId,
     handleEditMap,
     handleDeleteMap, copydatalink, setCopyDataLink, speeddailacesssedit, speeddailacesss, checksignatureandmap, getSignatureImageverify,
     //  conflictenddate,
-    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer, setSuccess, oldStatusCheck,
-    setSuccessMessage, handleChangetexttrip, handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip, messageditedtrip, messageditedbeforetrip,
+    mapPopUp, setMapPopUp, manualTripID, calculatewithoutadditonalhour, hybridhclcustomer,
+    //  setSuccess, 
+     oldStatusCheck,
+    // setSuccessMessage, 
+    handleChangetexttrip, handleMessagetrip, handleCloseMessagetrip, dialogmessagetrip,
+    //  messageditedtrip,
+      messageditedbeforetrip,
     // timeToggle,HclKMCalculation,
 
-    hybridhclnavigate, isAddload, setisAddload, isEditload, setisEditload, hideField, temporaryStatus, emptyState, editButtonStatusCheck, conflictCompareDatas, Permissiondeleteroles,
+    hybridhclnavigate, isAddload,
+    //  setisAddload,
+      isEditload, 
+      // setisEditload,
+       hideField, temporaryStatus, emptyState, editButtonStatusCheck,
+        // conflictCompareDatas,
+        // outStationHide,
+        //  Scale,
+         Permissiondeleteroles,
     userStatus, minTimeData, maxTimeData, shedInTimeData, conflictLoad, selectedStatuschecking, openModalConflict, setOpenModalConflict, handleAutocompleteChangecustomer, fueldataamountdis, setFuelAdvancedamountHide,
-    setError, setErrorMessage, outStationHide, openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
+    setError, setErrorMessage,openConflictKMPopup, setOpenConflictKMPopup, enterTrigger, setNoChangeData, nochangedata, handlecalcpackage, handlecalcpackageamount, orderByDropDown,
     tripGpsData, fullGpsData, allGpsData, handleExcelDownloadtrip, handlePdfDownloadtrip, attachedImageEtrip, deletetripasheetdata, setDeleteTripsheetData,
     // --------------------this zoom code image data----------------------------------------
-    posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, Scale, onDrag, handleFullDeleteMapData,
-    mapDataDeleteModal, setMapDataDeleteModal,outStationDispatchHide,setGMapImageUrl,bookingTripStatus
+    posX, posY, zoom, handleZoomOut, startDrag, stopDrag, handleScrollZoom, handleZoomIn, isDragging, onDrag, handleFullDeleteMapData,tripIdRef,
+    mapDataDeleteModal, setMapDataDeleteModal, outStationDispatchHide, setGMapImageUrl, bookingTripStatus, handleTemporaryDelete, handleTemporaryDeleteMapDataClose, temporaryDeleteGmap,loading,setLoading,
+    mapLoading, setMapLoading,routeLoading,setRouteLoading,
+     conflictCompareCount,conflictCompareDatas,currentConflict,setCurrentConflict,routeSummary
+    //  setTemporaryDeleteGmap, handleTemporaryDeleteMapDataOpen
     // this code zoom image data---------------------------------
   } = useTripsheet();
+
+  
   const { getHtmlContentdata } = CopyEmailHtmlcontent();
   const dayhcl = hybridhclcustomer || hybridhclnavigate
-  // console.log(dayhcl,"dayhcl",hybridhclcustomer,"nnnnn",hybridhclnavigate)
+  // console.log(dayhcl,"hclhclllllllllll",hybridhclcustomer,"nnnnn",hybridhclnavigate)
   const apiurl = APIURL
   // Permission ------------ayyan
 
@@ -350,9 +372,9 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   const superpower = localStorage.getItem("SuperAdmin")
   const Tripsheet_new = permissions[3]?.new;
   const Tripsheet_modify = permissions[3]?.modify;
-  const Tripsheet_delete = permissions[3]?.delete;
+  // const Tripsheet_delete = permissions[3]?.delete;
 
-  const billing_read = permissions[4]?.read;
+  // const billing_read = permissions[4]?.read;
 
   // varibles for validation 
 
@@ -471,7 +493,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
         setWarning(false);
         // setSuccessMessage("Signature loaded successfully!");
 
-        console.log("success")
+        // console.log("success")
       } else {
         setSignImageUrl(""); // Clear state
         if (fileInputRefdata.current) {
@@ -479,7 +501,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
           setSignatureupload(false);
           checksignatureandmap();
           getSignatureImageverify()
-          console.log("successno")
+          // console.log("successno")
           // setSuccessMessage("Please upload a signature image.");
         } else {
           console.error("File input ref is not available");
@@ -511,6 +533,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   //   }
   //  ;
   // { kmValue.startDate && ((kmValue.closeDate ? (Number(kmValue?.close_totalDays) > 0 ? '' : <lable className='invalid-km'>invalid Date</lable>) : <lable className='invalid-km'>Give Date</lable>)) }
+  const duty = formData.duty || selectedCustomerData.duty || book.duty;
 
   const shedOutDateObj = new Date(formData?.shedOutDate || selectedCustomerDatas?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate)
   const SatrtDateObj = new Date(formData?.startdate || selectedCustomerDatas?.startdate || selectedCustomerData?.startdate || book?.startdate)
@@ -648,15 +671,51 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   }, [customer, apiurl])
   const appsstatus = formData.apps || selectedCustomerData.apps || book.apps;
 
-  const dataToSend = {
+  // const dataToSend = {
+  //   bookingno: formData.tripid || selectedCustomerData.tripid || book.tripid,
+  //   guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
+  //   guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
+  //   email: formValues.email || selectedCustomerData.email || book.email || formData.email,
+  //   driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+  //   requestno: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
+  //   vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
+  //   mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
+  //   vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
+  //   starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
+  //   startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
+  //   status: formData.status || book.status || selectedCustomerData.status,
+  //   customeremail: formData.orderbyemail || book.orderbyemail || selectedCustomerData.orderbyemail,
+  //   servicestation: formData.department || formValues.department || selectedCustomerData.department || book.department || '',
+  //   Addresscutsomer: formData.address1 || selectedCustomerData.address1 || book.address1 || '',
+  //   dropuseage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || '',
+  //   duty: formData.duty || selectedCustomerData.duty || book.duty || ''
+  // }
+
+  // const driverNamedemo = selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName;
+  //   const vehRegNodemo = formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo;
+  //   const mobilenodemo  = formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '';
+  //   const driverNamedemo1 =  selectedCustomerData.driverName || formData.driverName || formValues.driverName || book.driverName;
+  //   const vehRegNodemo1 = selectedCustomerData.vehRegNo  || formData.vehRegNo  || formValues.vehRegNo || book.vehRegNo;
+  //   const mobilenodemo1  =  selectedCustomerData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '';
+  // const vehtype = selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName;
+
+  // console.log(driverNamedemo,"dr",vehRegNodemo,"veh",mobilenodemo,"mo","drivermail",driverNamedemo1,"dr",vehRegNodemo1,"veh",mobilenodemo1)
+  // console.log(selectedCustomerData.vehicleName ,selectedCustomerData.vehicleName,formData.vehicleName,formValues.vehicleName,packageData.vehicleName,book.vehicleName,"qdriverrrrrrrrrrrrrrrrrrrrrrrrrr")
+  // console.log(vehtype,"qdriverrr")
+  // console.log( formData.hireTypes,"gg",formValues.hireTypes,"ff",selectedCustomerData.hireTypes,"dd",book.hireTypes,"qa")
+
+   const dataToSend = {
     bookingno: formData.tripid || selectedCustomerData.tripid || book.tripid,
     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
     guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
     email: formValues.email || selectedCustomerData.email || book.email || formData.email,
-    driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+    // driverName: selectedCustomerDatas.driverName || selectedCustomerData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
+    driverName: selectedCustomerData.driverName ||formData.driverName || tripSheetData.driverName || selectedCustomerDatas.driverName || book.driverName,
     requestno: selectedCustomerDatas.request || selectedCustomerData.request || formValues.request || book.request,
-    vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
-    mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
+    // vehRegNo: formData.vehRegNo || selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || book.vehRegNo,
+    // mobileNo: formData.mobileNo || selectedCustomerDatas.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || book.mobileNo || '',
+    vehRegNo:  selectedCustomerData.vehRegNo||formData.vehRegNo || selectedCustomerDatas.vehRegNo || formValues.vehRegNo || book.vehRegNo,
+    mobileNo:selectedCustomerData.mobileNo || formData.mobileNo || selectedCustomerDatas.mobileNo || formValues.mobileNo || book.mobileNo || '',
     vehType: selectedCustomerDatas.vehicleName || formData.vehicleName || selectedCustomerData.vehicleName || formValues.vehicleName || packageData.vehicleName || book.vehicleName,
     starttime: formData.starttime || formData.starttime || selectedCustomerData.starttime || book.starttime,
     startdate: formData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
@@ -667,6 +726,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     dropuseage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || '',
     duty: formData.duty || selectedCustomerData.duty || book.duty || ''
   }
+  // console.log(dataToSend,"ll")
 
   const handlecopiedemailcontent = () => {
     const tripidstatus = formData.status || book.status || selectedCustomerData.status;
@@ -694,78 +754,78 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     }
   }
 
-  const checkForConflict = () => {
-    // console.log(conflictCompareDatas, "data", conflictCompareDatas?.conflictmaxdate)
-    // console.log(conflictenddate, "data2")
-    const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
-    const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
-    const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-    const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
-    // const formattedLatestTime = maxDateData.row?.latestTime?.replace(":", ".")
-    // const finalLatestTime = parseFloat(formattedLatestTime).toFixed(2);
-    const shedinTimeFormat = reportTime?.replace(":", ".")
-    const finalshedinTimeFormat = parseFloat(shedinTimeFormat)?.toFixed(2);
-    const lastestTimeFormat = conflictCompareDatas?.latestTime?.replace(":", ".")
-    const leastTimeFormat = conflictCompareDatas?.leastTime?.replace(":", ".")
-    const finallastestTimeFormat = parseFloat(lastestTimeFormat)?.toFixed(2)
-    const finalleastTimeFormat = parseFloat(leastTimeFormat)?.toFixed(2)
-    const parseDate = (dateStr) => {
-      const [day, month, year] = dateStr?.split('-');
-      return new Date(`${year}-${month}-${day}`);
-    };
-    const finalshedouttime = parseDate(shedOutDate || "")
-    const finalmaxtime = parseDate(conflictCompareDatas?.conflictmaxdate || "")
-    finalshedouttime?.setHours(0, 0, 0, 0);
-    finalmaxtime?.setHours(0, 0, 0, 0);
+  // const checkForConflict = () => {
+  //   // console.log(conflictCompareDatas, "data", conflictCompareDatas?.conflictmaxdate)
+  //   // console.log(conflictenddate, "data2")
+  //   const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+  //   const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
+  //   const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+  //   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
+  //   // const formattedLatestTime = maxDateData.row?.latestTime?.replace(":", ".")
+  //   // const finalLatestTime = parseFloat(formattedLatestTime).toFixed(2);
+  //   const shedinTimeFormat = reportTime?.replace(":", ".")
+  //   const finalshedinTimeFormat = parseFloat(shedinTimeFormat)?.toFixed(2);
+  //   const lastestTimeFormat = conflictCompareDatas?.latestTime?.replace(":", ".")
+  //   const leastTimeFormat = conflictCompareDatas?.leastTime?.replace(":", ".")
+  //   const finallastestTimeFormat = parseFloat(lastestTimeFormat)?.toFixed(2)
+  //   const finalleastTimeFormat = parseFloat(leastTimeFormat)?.toFixed(2)
+  //   const parseDate = (dateStr) => {
+  //     const [day, month, year] = dateStr?.split('-');
+  //     return new Date(`${year}-${month}-${day}`);
+  //   };
+  //   const finalshedouttime = parseDate(shedOutDate || "")
+  //   const finalmaxtime = parseDate(conflictCompareDatas?.conflictmaxdate || "")
+  //   finalshedouttime?.setHours(0, 0, 0, 0);
+  //   finalmaxtime?.setHours(0, 0, 0, 0);
 
-    const finalShedoutFormat = parseFloat(finalshedinTimeFormat).toFixed(2)
-    const finalLatestFormat = parseFloat(finallastestTimeFormat).toFixed(2)
+  //   const finalShedoutFormat = parseFloat(finalshedinTimeFormat).toFixed(2)
+  //   const finalLatestFormat = parseFloat(finallastestTimeFormat).toFixed(2)
 
-    const isEqual = (
+  //   const isEqual = (
 
-      // isEditMode &&
-      conflictCompareDatas?.conflictmaxdate !== null &&
-      conflictCompareDatas?.tripids !== null &&
-      conflictCompareDatas?.tripids !== tripid &&
-      finalshedouttime.getDate() === finalmaxtime.getDate() &&
-      finalshedouttime.getMonth() === finalmaxtime.getMonth() &&
-      finalshedouttime.getFullYear() === finalmaxtime.getFullYear() &&
+  //     // isEditMode &&
+  //     conflictCompareDatas?.conflictmaxdate !== null &&
+  //     conflictCompareDatas?.tripids !== null &&
+  //     conflictCompareDatas?.tripids !== tripid &&
+  //     finalshedouttime.getDate() === finalmaxtime.getDate() &&
+  //     finalshedouttime.getMonth() === finalmaxtime.getMonth() &&
+  //     finalshedouttime.getFullYear() === finalmaxtime.getFullYear() &&
 
-      // !shedindate &&
-      // reportTime <= conflictCompareDatas?.latestTime &&
-      parseFloat(finalShedoutFormat || 0) === parseFloat(finalLatestFormat || 0)
-      //  (parseFloat(a || 0) === parseFloat(b || 0) || parseFloat(a) < parseFloat(b) )
-      // shedOutDate === conflictCompareDatas?.conflictmaxdate
+  //     // !shedindate &&
+  //     // reportTime <= conflictCompareDatas?.latestTime &&
+  //     parseFloat(finalShedoutFormat || 0) === parseFloat(finalLatestFormat || 0)
+  //     //  (parseFloat(a || 0) === parseFloat(b || 0) || parseFloat(a) < parseFloat(b) )
+  //     // shedOutDate === conflictCompareDatas?.conflictmaxdate
 
-    )
+  //   )
 
-    const isLessThan = (
-      // isEditMode &&
-      conflictCompareDatas?.conflictmaxdate !== null &&
-      conflictCompareDatas?.tripids !== null &&
-      // conflictCompareDatas?.tripids !== tripID &&
-      // !shedindate &&
-      finalshedouttime.getDate() === finalmaxtime.getDate() &&
-      finalshedouttime.getMonth() === finalmaxtime.getMonth() &&
-      finalshedouttime.getFullYear() === finalmaxtime.getFullYear() &&
-      parseFloat(finalShedoutFormat) === parseFloat(finalleastTimeFormat) &&
-      parseFloat(finalShedoutFormat) <= parseFloat(finalLatestFormat)
-      // Check if shedOutDate is less than conflictenddate
-    );
+  //   const isLessThan = (
+  //     // isEditMode &&
+  //     conflictCompareDatas?.conflictmaxdate !== null &&
+  //     conflictCompareDatas?.tripids !== null &&
+  //     // conflictCompareDatas?.tripids !== tripID &&
+  //     // !shedindate &&
+  //     finalshedouttime.getDate() === finalmaxtime.getDate() &&
+  //     finalshedouttime.getMonth() === finalmaxtime.getMonth() &&
+  //     finalshedouttime.getFullYear() === finalmaxtime.getFullYear() &&
+  //     parseFloat(finalShedoutFormat) === parseFloat(finalleastTimeFormat) &&
+  //     parseFloat(finalShedoutFormat) <= parseFloat(finalLatestFormat)
+  //     // Check if shedOutDate is less than conflictenddate
+  //   );
 
 
-    return isEqual;
-  };
+  //   return isEqual;
+  // };
 
 
   const checkingMinimumData = () => {
 
     const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
     const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY")
-    const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
-    const shedintime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime || '';
-    const shedintimeformat = shedintime.replace(":", ".");
-    const finalshedincalc = parseFloat(shedintimeformat).toFixed(2);
+    // const shedindate = formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate;
+    // const shedintime = formData.shedintime || selectedCustomerData.shedintime || book.shedintime || '';
+    // const shedintimeformat = shedintime.replace(":", ".");
+    // const finalshedincalc = parseFloat(shedintimeformat).toFixed(2);
     const shedoutTimeFormat = reportTime?.replace(":", ".")
     const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2)
     const tripid = formData.tripid || selectedCustomerData.tripid || parseInt(book.tripid) || '';
@@ -803,20 +863,118 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
       !parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
       !parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time))
 
-    const maximumTimeNotAllowed = (
-      maxTimeData?.tripid !== undefined &&
-      tripid !== parseInt(maxTimeData?.tripid) &&
-      finalshedoutdate.getDate() === finalMindate.getDate() &&
-      finalshedoutdate.getMonth() === finalMindate.getMonth() &&
-      finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
-      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
-      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
-    )
+    // const maximumTimeNotAllowed = (
+    //   maxTimeData?.tripid !== undefined &&
+    //   tripid !== parseInt(maxTimeData?.tripid) &&
+    //   finalshedoutdate.getDate() === finalMindate.getDate() &&
+    //   finalshedoutdate.getMonth() === finalMindate.getMonth() &&
+    //   finalshedoutdate.getFullYear() === finalMindate.getFullYear() &&
+    //   parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
+    //   parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time)
+    // )
 
 
 
     return equalDateCheck || minimumTimeNotAllowed
   }
+
+  const conflictCompareFunction = useMemo(() => {
+  console.log("surCalculating conflictCompareResult...");
+console.log(dayhcl,"dayhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",typeof(dayhcl),duty);
+
+  const filtercount = parseInt(conflictCompareCount) || 0;
+  // formData.shedintime || selectedCustomerData.shedintime || book.shedintime
+// formData.shedInDate
+  // const reportTime = formData.reporttime || selectedCustomerData.reporttime || selectedCustomerDatas.reporttime || book.reporttime;
+  // const shedOutDate = dayjs(formData.shedOutDate || selectedCustomerData.shedOutDate || book.shedOutDate).format("DD-MM-YYYY");
+  const closeTimedata = formData.closetime || selectedCustomerData.closetime || book.closetime;
+  const reportTimedata = formData.shedintime || selectedCustomerData.shedintime || book.shedintime;
+// const reportTime = dayhcl === 1 && (dayhcl === 1 || duty === "Outstation") ? closeTimedata : reportTimedata
+const reportTime = dayhcl === 1 && duty !== "Outstation" ? closeTimedata : reportTimedata
+
+const closedataData = dayjs(formData.closedate || selectedCustomerData.closedate || book.closedate).format("DD-MM-YYYY");
+  const shedOutDateData = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format("DD-MM-YYYY");
+
+  // const shedOutDate = dayhcl === 1 && (dayhcl === 1 || duty === "Outstation") ? closedataData : shedOutDateData
+  const shedOutDate = dayhcl === 1 && duty !== "Outstation" ? closedataData : shedOutDateData
+
+  const shedoutTimeFormat = reportTime?.replace(":", ".");
+  const finalShedOutTime = parseFloat(shedoutTimeFormat).toFixed(2);
+
+  const parseDate = (dateStr) => {
+    const [day, month, year] = dateStr?.split('-');
+    return new Date(`${year}-${month}-${day}`);
+  };
+
+  const minDate = dayjs(minTimeData?.date).format("DD-MM-YYYY");
+  const maxDate = dayjs(maxTimeData?.date).format("DD-MM-YYYY");
+  console.log(maxTimeData,"fffffff",minTimeData,finalShedOutTime);
+  
+
+  const finalshedoutdate = parseDate(shedOutDate);
+  finalshedoutdate?.setHours(0, 0, 0, 0);
+  const finalMindate = parseDate(minDate);
+  finalMindate?.setHours(0, 0, 0, 0);
+  const finalMaxdate = parseDate(maxDate);
+  finalMaxdate?.setHours(0, 0, 0, 0);
+console.log(filtercount,"fffffffffilter")
+console.log(shedoutTimeFormat,"finalformatttttttttttttt",finalShedOutTime,"finalformatttttttttttttt",finalshedoutdate,"finalformatttttttttttttt",finalMaxdate,finalMindate);
+console.log(finalShedOutTime,"qqqqqqqqqqqqqqqqqqqqqqqqqq",maxTimeData?.time);
+console.log(filtercount,"suuuuuuuuuuuuuuuuuuuu---------------",conflictCompareDatas);
+
+  if (filtercount > 0 && conflictCompareDatas?.length > 0 && minTimeData !== null) {
+    console.log("suuuuuuuu");
+    
+    // const checkingFunction =
+    //   parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time) &&
+    //   parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
+    //   finalshedoutdate.getTime() === finalMaxdate.getTime();
+
+    const dateLessThanFunction =
+      finalshedoutdate.getFullYear() < finalMaxdate.getFullYear() ||
+      (finalshedoutdate.getFullYear() === finalMaxdate.getFullYear() &&
+        finalshedoutdate.getMonth() < finalMaxdate.getMonth()) ||
+      (finalshedoutdate.getFullYear() === finalMaxdate.getFullYear() &&
+        finalshedoutdate.getMonth() === finalMaxdate.getMonth() &&
+        finalshedoutdate.getDate() < finalMaxdate.getDate()) ||
+      (finalshedoutdate.getFullYear() === finalMaxdate.getFullYear() &&
+        finalshedoutdate.getMonth() === finalMaxdate.getMonth() &&
+        finalshedoutdate.getDate() === finalMaxdate.getDate() &&
+        // parseFloat(finalShedOutTime) >= parseFloat(maxTimeData?.time));
+                parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time));
+
+    console.log("fffffcheckingFunction:",  "dateLessThanFunction:", dateLessThanFunction);
+setCurrentConflict( dateLessThanFunction)
+console.log(dateLessThanFunction,"dddddddddddddddddddddddddd+++++++++++++++++++++++++",formData.closedate,selectedCustomerData.closedate,book.closedate);
+
+    return  dateLessThanFunction;
+  } else {
+    setCurrentConflict(null)
+    return false;
+  }
+}, [
+  conflictCompareCount,
+  formData.shedintime,
+  formData.closetime,
+  formData.shedInDate,
+  formData.closedate,
+  selectedCustomerData.shedintime,
+  selectedCustomerData.closetime,
+  selectedCustomerData.shedInDate,
+  selectedCustomerData.closedate,
+  selectedCustomerDatas.shedintime,
+  selectedCustomerDatas.closetime,
+  book.shedintime,
+  book.closetime,
+  book.shedInDate,
+  book.closedate,
+  minTimeData?.date,
+  maxTimeData?.date,
+  minTimeData?.time,
+  maxTimeData?.time,
+  conflictCompareDatas
+]);
+console.log(conflictCompareFunction,"conflictcheckinggggggggggg",minTimeData,"conflictcheckinggggggg",maxTimeData);
 
   const maxShedInDate = () => {
     const shedindate = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format("DD-MM-YYYY");
@@ -860,23 +1018,23 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
       parseFloat(minTimeData?.tripid) !== tripid &&
       shedInTimeData?.length > 0 &&
       shedindate !== "" &&
-      finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
+      finalMaximumShedInDate.getDate() === finalshedoutdate.getDate() &&
       finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
       finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
       parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
       parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time)
     );
-    const maxminTime = (
-      parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
-      parseFloat(minTimeData?.tripid) !== tripid &&
-      shedInTimeData?.length > 0 &&
-      shedindate !== "" &&
-      finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
-      finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
-      finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
-      parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
-      parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time)
-    );
+    // const maxminTime = (
+    //   parseInt(shedInTimeData?.[0]?.Tripid) !== tripid &&
+    //   parseFloat(minTimeData?.tripid) !== tripid &&
+    //   shedInTimeData?.length > 0 &&
+    //   shedindate !== "" &&
+    //   finalMaximumShedInDate.getDate() == finalshedoutdate.getDate() &&
+    //   finalMaximumShedInDate.getFullYear() === finalshedoutdate.getFullYear() &&
+    //   finalMaximumShedInDate.getMonth() === finalshedoutdate.getMonth() &&
+    //   parseFloat(finalShedOutTime) <= parseFloat(maxTimeData?.time) &&
+    //   parseFloat(finalShedOutTime) >= parseFloat(minTimeData?.time)
+    // );
 
     return shedInDateChecking || shedInDateLessTime
 
@@ -890,7 +1048,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   const startdate = dayjs(book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate).format('YYYY-MM-DD');
   const closedate = dayjs(book.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || formData.closedate).format('YYYY-MM-DD');
   const tripShedInDate = dayjs(formData.shedInDate || selectedCustomerData.shedInDate || book.shedInDate).format('YYYY-MM-DD')
-  const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
+  // const data = formData.shedin || book.shedin || selectedCustomerData.shedin || selectedCustomerDatas.shedin;
   const tripshedoutdate = dayjs(formData?.shedOutDate || selectedCustomerData?.shedOutDate || book?.shedOutDate).format('YYYY-MM-DD')
   const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid || '';
   const formatTime = (timeString) => {
@@ -933,7 +1091,6 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
     }
     setOpensnack(false); // Close the Snackbar
   };
-  const duty = formData.duty || selectedCustomerData.duty || book.duty;
 
   // super Admin access
   // const superAdminAccess = localStorage.getItem("SuperAdmin")
@@ -969,17 +1126,21 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
   const handleKmConflictModal = () => {
     setOpenConflictKMPopup(true)
   }
-  const conflictModalbox = (checkingMinimumData() && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null)) || (maxShedInDate() && conflictLoad !== null);
+  // const conflictModalbox = (checkingMinimumData() && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null)) || (maxShedInDate() && conflictLoad !== null);
+   const conflictModalbox = (conflictCompareFunction && conflictLoad !== null && (shedInTimeData?.length === 0 || shedInTimeData === null)) ;
 
   const signaturedisabled = signimageUrl === "" && temporaryStatus ? true : false
 
-  const shedoutDisabled = temporaryStatus ? hideField : hideField;
+  // const shedoutDisabled = temporaryStatus ? hideField : hideField;
   const shedoutkm = formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout
-  const conflictModalKmBox = (tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && enterTrigger !== null && shedoutkm !== null && shedoutkm !== "")
+    const conflictModalKmBox = (tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && enterTrigger !== null && shedoutkm !== null && shedoutkm !== "")
+  // const conflictModalKmBox = (tripID !== maxconflict?.maxTripid && dayhcl === 0 && maxconflict?.maxconflictdata !== 0 && Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout) <= Number(maxconflict?.maxconflictdata) && shedoutkm !== null && shedoutkm !== "")
+  // console.log(conflictModalKmBox,"hcldataconflict",tripID !== maxconflict?.maxTripid,dayhcl === 0,dayhcl,maxconflict?.maxconflictdata !== 0 ,Number(kmValue.shedOutState || formData.shedout || book.shedout || selectedCustomerDatas.shedout || selectedCustomerData.shedout), Number(maxconflict?.maxconflictdata),shedoutkm !== null, shedoutkm !== "","trigger",enterTrigger,enterTrigger !== null)
+  
   // status for conflict message
   useEffect(() => {
     let timeout;
-    console.log(conflictModalbox, "conflictttttttttttt")
+    // console.log(conflictModalbox, "conflictttttttttttt")
     if (conflictModalbox && emptyState !== true) {
       timeout = setTimeout(() => {
         setError(true);
@@ -1193,7 +1354,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                       </span>
                     </>
                   )}
-                </div>
+                {/* </div> */}
 
                 {/* <div className="" style={{width:"200px"}}>
                   <FormControlLabel
@@ -1241,6 +1402,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                   />
                 </div>
 
+</div>
               </div>
               <div className='tripsheet-division1'>
                 <div className="input">
@@ -1259,6 +1421,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     onKeyDown={handleKeyDown}
                     autoComplete="password"
                     autoFocus
+                    inputRef={tripIdRef}
                   />
                 </div>
 
@@ -1764,7 +1927,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
                   <div className="input" style={{ display: "grid", position: "relative" }}>
                     <div style={{ top: -24, left: 27, cursor: 'pointer', position: 'absolute', }} onClick={handleConflictModal}>
-                      <p style={{ backgroundColor: conflictModalbox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p>
+                      {/* <p style={{ backgroundColor: conflictModalbox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p> */}
+                      <p style={{ backgroundColor: conflictCompareFunction ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p>
 
                     </div>
                     {/* {checkForConflict() && <label className='invalid-km' style={{ paddingBottom: '5px' }}>
@@ -1778,7 +1942,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                       <label className='invalid-km' style={{ paddingBottom: '5px' }}> Shed in Date Achieved :{shedInTimeData[0]?.Tripid} {'\n'}  conflict Date :{dayjs(shedInTimeData[0]?.shedindate).format("DD-MM-YYYY")}  MinTripId:  {minTimeData?.tripid} MinTime : {minTimeData?.time} - MaxTripId : {maxTimeData?.tripid} MaxTime : {maxTimeData?.time}   </label>
                     } */}
 
-                    <Modal
+                   <Modal
                       open={openModalConflict}
                       onClose={handleConflictPopup}
                       aria-labelledby="modal-title"
@@ -1804,28 +1968,37 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           overflowY: 'auto'
                         }}
                       >
-                        {conflictModalbox ? (
+                        {/* {conflictModalbox ? ( */}
+                        {/* {console.log(conflictLoad,"sureshhhhhhhhh",conflictCompareFunction)} */}
+                                                {conflictCompareFunction ? (
                           <>
-                            {checkingMinimumData() &&
+                            {/* {checkingMinimumData() &&   */}
+                             {/* {conflictCompareFunction &&
                               conflictLoad !== null &&
                               (shedInTimeData?.length === 0 || shedInTimeData === null) && (
                                 <label className="invalid-km" >
                                   Conflict Date: {dayjs(minTimeData?.date).format("DD-MM-YYYY")}<br />
-                                  MinTripId: {minTimeData?.tripid}{'\n'}
-                                  MinTime: {minTimeData?.time} <br />
-                                  MaxTripId: {maxTimeData?.tripid}{'\n'}
-                                  MaxTime: {maxTimeData?.time}
+                               
+                                    nextTripId: {minTimeData?.tripid}{'\n'}
+                                  shedoutTime: {minTimeData?.time} <br />
+                             
                                 </label>
-                              )}
-                            {maxShedInDate() &&
-                              conflictLoad !== null && (
+                              )} */}
+                            {/* {maxShedInDate() && */}
+                            {
+                              // conflictLoad !== null && (
+                                                            conflictCompareFunction && (
                                 <label className="invalid-km" >
-                                  Shed in Date Achieved : {shedInTimeData[0]?.Tripid}<br />
-                                  Conflict Date : {dayjs(shedInTimeData[0]?.shedindate).format("DD-MM-YYYY")}<br />
-                                  MinTripId : {minTimeData?.tripid}{'\n'}
+                                  {/* Shed in Date Achieved : {shedInTimeData[0]?.Tripid}<br /> */}
+                                  {/* Conflict Date : {dayjs(shedInTimeData[0]?.shedindate)?.format("DD-MM-YYYY") || ""}<br /> */}
+                                  {/* MinTripId : {minTimeData?.tripid}{'\n'}
                                   MinTime : {minTimeData?.time} <br />
                                   MaxTripId : {maxTimeData?.tripid}{'\n'}
-                                  MaxTime : {maxTimeData?.time}
+                                  MaxTime : {maxTimeData?.time} */}
+                                   Conflict Date : {dayjs(minTimeData?.date).format('DD-MM-YYYY')}<br />
+
+                                     nextTripId: {minTimeData?.tripid}{'\n'}<br />
+                                  shedoutTime: {minTimeData?.time} <br />
                                 </label>
                               )}
 
@@ -2005,9 +2178,9 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                               : selectedCustomerData?.shedOutDate
                                 ? dayjs(selectedCustomerData.shedOutDate)
                                 : null ||
-                                // book?.closedate ? dayjs(book?.closedate) : dayjs(book?.shedOutDate)
+                                  // book?.closedate ? dayjs(book?.closedate) : dayjs(book?.shedOutDate)
                                   book?.shedOutDate && bookingTripStatus[0]?.status === "pending" ? dayjs(book?.shedOutDate) : null ||
-                                  book?.closedate && bookingTripStatus[0]?.status !== "pending" ? dayjs(book?.closedate) : null
+                                    book?.closedate && bookingTripStatus[0]?.status !== "pending" ? dayjs(book?.closedate) : null
                           }
                           format="DD/MM/YYYY"
                           onChange={(date) => {
@@ -2109,29 +2282,29 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     </div>
                     <DemoItem>
                       {duty === "Outstation" ?
-                      <TextField
-                        name="totaldays"
-                        value={calculateTotalDay()}
-                        label="Total Days"
-                        disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
-                        size="small"
-                        type="number"
-                        id="totaldays"
-                        // variant="standard"
-                        autoComplete="password"
-                      /> :
-                      <TextField
-                      name="totaldays"
-                      value={"-"}
-                      label="Total Days"
-                      disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
-                      size="small"
-                      // type="number"
-                      id="totaldays"
-                      // variant="standard"
-                      autoComplete="password"
-                    /> 
-}
+                        <TextField
+                          name="totaldays"
+                          value={calculateTotalDay()}
+                          label="Total Days"
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                          size="small"
+                          type="number"
+                          id="totaldays"
+                          // variant="standard"
+                          autoComplete="password"
+                        /> :
+                        <TextField
+                          name="totaldays"
+                          value={"-"}
+                          label="Total Days"
+                          disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
+                          size="small"
+                          // type="number"
+                          id="totaldays"
+                          // variant="standard"
+                          autoComplete="password"
+                        />
+                      }
                     </DemoItem>
                   </div>}
 
@@ -2163,7 +2336,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           onChange={(event) => {
                             let value = event.target.value;
                             const [hours, minutes] = value.split(':');
-                            const correctedValue = `${hours}:${minutes}`;
+                            // const correctedValue = `${hours}:${minutes}`;
 
                             setPrevHours((prevState) => ({
                               ...prevState,
@@ -2195,7 +2368,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                             if (!lockdata) {
                               setVendorinfodata({ ...vendorinfo, vendorreporttime: event.target.value })
                             }
-                           
+
                           }}
                         />
                       </div>
@@ -2382,21 +2555,21 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           //     // If the shed in time is invalid, display an error message but allow input
                           //     console.log("Invalid Shed In Time");
                           //   }
-                            //  else {
-                              // Valid input, you can handle any additional logic here
-                              // if (!lockdata && dayhcl === 0) {
-                              //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                              // }
-                              // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
-                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                              // }
-                              // if (lockdata && dayhcl === 0) {
-                              //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
-                              // }
-                              // if (lockdata && dayhcl === 1 && duty === "Outstation") {
-                              //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
-                              // }
-                            // }
+                          //  else {
+                          // Valid input, you can handle any additional logic here
+                          // if (!lockdata && dayhcl === 0) {
+                          //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          // }
+                          // if (!lockdata && dayhcl === 1 && duty === "Outstation") {
+                          //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          // }
+                          // if (lockdata && dayhcl === 0) {
+                          //   setVendorinfodata({ ...vendorinfo, vendorshedintime: rTime });
+                          // }
+                          // if (lockdata && dayhcl === 1 && duty === "Outstation") {
+                          //   setVendorinfodata((prev) => ({ ...prev, vendorshedintime: rTime }))
+                          // }
+                          // }
                           // } 
                           // else {
                           //   // If the day difference is more than 1, allow any time
@@ -2462,13 +2635,13 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                       <div style={{ position: 'relative', top: '-4px' }}>
                         <TextField
                           name="totaltime"
-                          // value={ calculateTotalTimes()}
-                          value={
-                            (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
-                              (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
-                              ? calculateTotalTimes()
-                              : ""
-                          }
+                          value={calculateTotalTimes()}
+                          // value={
+                          //   (book.reporttime !== "" || selectedCustomerData.reporttime !== "") &&
+                          //     (book.shedintime !== "" || selectedCustomerData.shedintime !== "" || selectedCustomerDatas.shedintime !== "")
+                          //     ? calculateTotalTimes()
+                          //     : ""
+                          // }
                           disabled={temporaryStatus && superAdminAccess !== "SuperAdmin" && !a}
                           // onChange={handleChange}
                           id="totaltime"
@@ -2484,7 +2657,8 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
 
                     <div className="input" style={{ display: "grid", position: "relative" }} >
                       <div className='kmConflict' onClick={handleKmConflictModal}>
-                        <p style={{ backgroundColor: conflictModalKmBox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p>
+                        {/* <p style={{ backgroundColor: conflictModalKmBox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p> */}
+                        {dayhcl === 0 ? <p style={{ backgroundColor: conflictModalKmBox ? 'red' : '#457cdc', fontSize: '9px', height: '15px', width: '15px', textAlign: 'center', borderRadius: '15px', color: '#fff', border: '1px solid', }}>!</p> : ""}
 
                       </div>
                       {/* {kmValue.shedOutState && customer && !/hcl/i.test(customer) && ((Number(kmValue.shedOutState) <= Number(checkCloseKM.maxShedInkm)) && (tripID !== checkCloseKM.maxTripId && <lable className='invalid-km'>Conflict id: {checkCloseKM.maxTripId}, KM: {checkCloseKM.maxShedInkm}</lable>))} */}
@@ -2614,7 +2788,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                             // if (!lockdata && dayhcl === 1 && duty !== "Outstation") {
                             //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                             // }
-                            
+
                             // if (lockdata && dayhcl === 1 && duty !== "Outstation") {
                             //   setVendorinfodata((prev) => ({ ...prev, vendorshedoutkm: e.target.value }))
                             // }
@@ -2712,7 +2886,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                     <TextField
                       name="shedkm"
                       // value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
-                      value={shedKilometers.shedkm ||formData.shedkm || book.shedkm || selectedCustomerData.shedkm ||  ''}
+                      value={shedKilometers.shedkm || formData.shedkm || book.shedkm || selectedCustomerData.shedkm || ''}
                       onChange={(e) => {
                         const value = e.target.value;
                         if (value >= 0) {
@@ -2936,45 +3110,61 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                           "--Tabs-gap": "0px",
                           borderRadius: "lg",
                           boxShadow: "sm",
-                          overflow: "auto",
+                          // overflow: "auto",
+                          overflow: "hidden",
                           border: `2px solid #ccc`,
                         })}
                       >
-                        <TabList
-                          className='tripsheet-tab'
+                        <Box
                           sx={{
-                            "--ListItem-radius": "0px",
-                            borderRadius: 0,
-                            [`& .${tabClasses.root}`]: {
-                              fontWeight: "lg",
-                              flex: 1,
-                              bgcolor: "background.body",
-                              position: "relative",
-                              [`&.${tabClasses.selected}`]: {
-                                color: "primary.500",
-                              },
-                              [`&.${tabClasses.selected}:before`]: {
-                                content: '""',
-                                display: "block",
-                                position: "absolute",
-                                bottom: -1,
-                                width: "100%",
-                                height: 2,
-                                bgcolor: "primary.400",
-                              },
-                              [`&.${tabClasses.focusVisible}`]: {
-                                outlineOffset: "-3px",
-                              },
-                            },
+                            width: '100%',
+                            overflowX: 'auto',
+                            whiteSpace: 'nowrap',
+                            overflowY: "hidden",
                           }}
                         >
-                          {/* {billing_read ? <Tab>Bill</Tab> : <> </>} */}
-                          {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <Tab>Bill</Tab> : <> </>}
-                          <Tab>GPS Attached</Tab>
-                          <Tab>Messages</Tab>
-                        </TabList>
+                          < TabList
+                            className='tripsheet-tab'
+                            sx={{
+                              "--ListItem-radius": "0px",
+                              borderRadius: 0,
+                              [`& .${tabClasses.root}`]: {
+                                fontWeight: "lg",
+                                flex: 1,
+                                bgcolor: "background.body",
+                                position: "relative",
+                                [`&.${tabClasses.selected}`]: {
+                                  color: "primary.500",
+                                },
+                                [`&.${tabClasses.selected}:before`]: {
+                                  content: '""',
+                                  display: "block",
+                                  position: "absolute",
+                                  bottom: -1,
+                                  width: "100%",
+                                  height: 2,
+                                  bgcolor: "primary.400",
+                                },
+                                [`&.${tabClasses.focusVisible}`]: {
+                                  outlineOffset: "-3px",
+                                },
+                              },
+                            }}
+                          >
+                            {/* {billing_read ? <Tab>Bill</Tab> : <> </>} */}
+                            {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <Tab>Bill</Tab> : <> </>}
+                            <Tab>GPS Attached</Tab>
+                            <Tab>Messages</Tab>
+                          </TabList>
+                        </Box>
                         {/* <TabPanel value={billing_read ? 1 : 0} sx={{ p: 2 }}> */}
-                        <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 1 : 0} sx={{ p: 2 }}>
+                        <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 1 : 0}
+                           sx={{
+                            p: 2,
+                            height: "400px",
+                            overflowY: "auto",
+                          }}
+                        >
                           <div className="Customer-Gps-att-Slider tripsheet-vendor-gps-att-main">
                             <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap" }}>
                               <div className='left-buttons'>
@@ -3014,6 +3204,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       </div>
                                     </DialogContent>
                                     <DialogActions>
+                                      {/* <Button onClick={handleTemporaryDeleteMapDataOpen} variant='outlined'>Temporary Delete</Button> */}
                                       <Button variant='contained' onClick={() => handleMapDataDelete()}>Delete Full Log</Button>
                                       <div style={{ paddingRight: '15px' }}>
                                         <PopupState variant="popover" popupId="demo-popup-menu">
@@ -3038,27 +3229,47 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       </Button>
                                     </DialogActions>
                                     <Modal
-                                      open={mapDataDeleteModal}
-                                      onClose={handleDeleteMapDataClose}
+                                      open={temporaryDeleteGmap}
+                                      onClose={handleTemporaryDeleteMapDataClose}
                                       aria-labelledby="modal-modal-title"
                                       aria-describedby="modal-modal-description"
                                     >
                                       <Box sx={style3}>
-                                        <div style={{ display:'flex',flexDirection:'column',gap: 15 }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
                                           <div>
-                                            <Typography variant="body2" sx={{ color: "#333", fontWeight: 500,fontSize:20 }}>
+                                            <Typography variant="body2" sx={{ color: "#333", fontWeight: 500, fontSize: 20 }}>
                                               Are you sure want to delete the log data?
                                             </Typography>
                                           </div>
                                           <div>
-                                            <Button onClick={() => handleDeleteMapDataClose()}>No</Button>
-                                            <Button onClick={() => handleFullDeleteMapData()}>Yes</Button>
+                                            <Button onClick={() => handleTemporaryDeleteMapDataClose()}>No</Button>
+                                            <Button onClick={() => handleTemporaryDelete()}>Yes</Button>
                                           </div>
                                         </div>
                                       </Box>
                                     </Modal>
                                   </Dialog>
                                 </div>
+                                <Modal
+                                  open={mapDataDeleteModal}
+                                  onClose={handleDeleteMapDataClose}
+                                  aria-labelledby="modal-modal-title"
+                                  aria-describedby="modal-modal-description"
+                                >
+                                  <Box sx={style3}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+                                      <div>
+                                        <Typography variant="body2" sx={{ color: "#333", fontWeight: 500, fontSize: 20 }}>
+                                          Are you sure want to delete the log data?
+                                        </Typography>
+                                      </div>
+                                      <div>
+                                        <Button onClick={() => handleDeleteMapDataClose()}>No</Button>
+                                        <Button onClick={() => handleFullDeleteMapData()}>Yes</Button>
+                                      </div>
+                                    </div>
+                                  </Box>
+                                </Modal>
                                 <div className="in-feild" style={{ marginTop: '10px' }}>
                                   <div className="input">
                                     <Autocomplete
@@ -3116,6 +3327,7 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                     <Button variant="contained" disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus && !a)} onClick={handleUpload} className='full-width'>Upload Doc</Button>
                                   </div>
                                 </div>
+                                {/* {console.log(signimageUrl1,"urldata")} */}
                                 <div className="in-feild" style={{ marginTop: '20px' }}>
 
                                   {/* <div className="input">
@@ -3127,8 +3339,10 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                                       // disabled={!Tripsheet_modify || (superAdminAccess !== "SuperAdmin" && temporaryStatus)}
                                       onClick={handlesignatureimages}
                                       variant="contained"
-                                      className={`full-width ${signimageUrl ? 'green-button' : ''}`}
-                                      sx={!signimageUrl ? { backgroundColor: '' } : undefined}
+                                      // className={`full-width ${signimageUrl ? 'green-button' : ''}`}
+                                      // sx={!signimageUrl ? { backgroundColor: '' } : undefined}
+                                        className={`full-width ${signimageUrl1 ? 'green-button' : ''}`}
+                                      sx={!signimageUrl1 ? { backgroundColor: '' } : undefined}
                                     >
                                       Signature
                                     </Button>
@@ -3398,7 +3612,13 @@ const TripSheet = ({ stationName, logoImage, customerData }) => {
                         </TabPanel>
                         {/* <TabPanel value={billing_read ? 2 : 1} sx={{ p: 2 }}> */}
 
-                        <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 2 : 1} sx={{ p: 2 }}>
+                        <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 2 : 1}
+                           sx={{
+                            p: 2,
+                            height: "400px",
+                            overflowY: "auto",
+                          }}
+                        >
                           <div className="Customer-Message-Slider">
                             <div className="input-field">
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -3458,7 +3678,13 @@ Please Click the link to close E-Tripsheet-`}
                         </TabPanel>
                         {/* {billing_read ? <TabPanel value={billing_read ? 0 : ""} sx={{ p: 2 }}> */}
                         {/* {superpower ? <TabPanel value={superpower === "" ? 0 : ""} sx={{ p: 2 }}> */}
-                        {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 0 : ""} sx={{ p: 2 }}>
+                        {(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? <TabPanel value={(superpower === "Assistant CFO" || superAdminAccess === "SuperAdmin") ? 0 : ""}
+                         sx={{
+                          p: 2,
+                          height: "400px",
+                          overflowY: "auto",
+                        }}
+                         >
                           <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }} className='bill-section'>
                             <div className="Customer-Customer-Bill-Slider bill-section-third  tripsheet-vendor-info-main tripsheet-vendor-info-main-popup">
 
@@ -3585,27 +3811,27 @@ Please Click the link to close E-Tripsheet-`}
                                 <div className="input-g">
 
                                   {vendorinfo?.vendor_duty === "Outstation" ?
-                                  <TextField
-                                    name="vendortotaldays"
-                                    value={calculatevendorTotalDays()}
-                                    label="Total Days"
-                                    disabled={lockdata}
-                                    size="small"
-                                    type="number"
-                                    id="totaldays"
-                                    sx={{ width: "100%" }}
-                                  />
-                                  :
-                                  <TextField
-                                  name="vendortotaldays"
-                                  value={"-"}
-                                  label="Total Days"
-                                  disabled={lockdata}
-                                  size="small"
-                                  // type="number"
-                                  id="totaldays"
-                                  sx={{ width: "100%" }}
-                                />}
+                                    <TextField
+                                      name="vendortotaldays"
+                                      value={calculatevendorTotalDays()}
+                                      label="Total Days"
+                                      disabled={lockdata}
+                                      size="small"
+                                      type="number"
+                                      id="totaldays"
+                                      sx={{ width: "100%" }}
+                                    />
+                                    :
+                                    <TextField
+                                      name="vendortotaldays"
+                                      value={"-"}
+                                      label="Total Days"
+                                      disabled={lockdata}
+                                      size="small"
+                                      // type="number"
+                                      id="totaldays"
+                                      sx={{ width: "100%" }}
+                                    />}
                                 </div>
 
                               </div>
@@ -4330,8 +4556,9 @@ Please Click the link to close E-Tripsheet-`}
                           // </Button>
 
 
+                          editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <Button variant="contained" disabled={!Tripsheet_modify } onClick={handleEdit}> Save</Button>
 
-                          editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}> Save</Button>
+                          // editButtonStatusCheck && superAdminAccess !== "SuperAdmin" ? "" : <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}> Save</Button>
 
                           : <></>
                         }
@@ -4602,8 +4829,8 @@ Please Click the link to close E-Tripsheet-`}
                   </div>
                   <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                     <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                      {dayhcl === 1 ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImageEtrip} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)
-                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImageEtrip} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />)}
+                      {dayhcl === 1 ? (<InvoiceHCL customerAddress={customerAddress} fueltype={fueltype} pack={calcPackage || formData.calcPackage} airportTransfer={transferreport} tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImageEtrip} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} TotalDays={calculateTotalDay()} book={book} signimageUrl={signimageUrl1} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} loading={loading}  setLoading={setLoading} mapLoading={mapLoading} setMapLoading ={setMapLoading} routeLoading={routeLoading} setRouteLoading={setRouteLoading}/>)
+                        : (<Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={logoImage} attachedImage={attachedImageEtrip} routeData={routeData} Totaltimes={calculatewithoutadditonalhour()} book={book} TotalDays={calculateTotalDay()} signimageUrl={signimageUrl1} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} loading={loading} setLoading={setLoading} mapLoading={mapLoading} setMapLoading ={setMapLoading} routeLoading={routeLoading} setRouteLoading={setRouteLoading}/>)}
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -4611,6 +4838,7 @@ Please Click the link to close E-Tripsheet-`}
                       </Button>
                     </DialogActions>
                   </Dialog>
+                  {/* {console.log(editButtonStatusCheck,"checknew")} */}
                   <div className="input-tripsheet-btns">
                     {isEditMode ? (<>
                       {/* <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button> */}
@@ -4637,15 +4865,17 @@ Please Click the link to close E-Tripsheet-`}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
                         disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
-                        value={
-                          formData.hireTypes ||
-                          formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                        // value={
+                        //   formData.hireTypes ||
+                        //   formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                          value={ selectedCustomerData.hireTypes || book.hireTypes || formData.hireTypes ||
+                          formValues.hireTypes ||''}
                         options={HireTypes.map((option) => ({
                           label: option.option,
                         }))}
                         getOptionLabel={(option) => option.label
-                          || formData.hireTypes
-                          || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                          ||selectedCustomerData.hireTypes || book.hireTypes || formData.hireTypes
+                          || formValues.hireTypes ||  ''}
                         renderInput={(params) => {
                           return (
                             <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
@@ -4773,7 +5003,8 @@ Please Click the link to close E-Tripsheet-`}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleName2")}
                         // disabled={hideField && superAdminAccess !== "SuperAdmin"}
                         disabled={hideField && (superAdminAccess !== "SuperAdmin" && superAdminAccess !== "Booking Head" && superAdminAccess !== "Billing_Headoffice")}
-                        value={selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
+                        // value={selectedCustomerDatas.vehicleName2 || formData.vehicleName2 || selectedCustomerData.vehicleName2 || formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
+                        value={selectedCustomerData.vehicleName2 || formData.vehicleName2||formValues.vehicleName2 || packageData.vehicleName2 || book.vehicleName2 || ''}
                         options={vehileNames?.map((option) => ({
                           label: option,
                         }))}
@@ -4897,8 +5128,10 @@ Please Click the link to close E-Tripsheet-`}
                         onInputChange={(event, value) => {
                           if (event !== null) {
                             setNoChangeData({ ...nochangedata, driverName: value });
+                            handleDriverChange(event, value, "driverName")
+
                           }
-                          handleDriverChange(event, value, "driverName")
+                          // handleDriverChange(event, value, "driverName")
                         }
 
                         }  // Handle manual input
@@ -5089,29 +5322,29 @@ Please Click the link to close E-Tripsheet-`}
                         </div>
 
                         <div className="input-g">
-                        {vendorinfo?.vendor_duty === "Outstation" ? 
-                          <TextField
-                            name="vendortotaldays"
-                            value={calculatevendorTotalDays()}
-                            label="Total Days"
-                            disabled={lockdata}
-                            size="small"
-                            type="number"
-                            id="totaldays"
-                            sx={{ width: "100%" }}
-                          />
-                          :
-                          <TextField
-                          name="vendortotaldays"
-                          value={"-"}
-                          label="Total Days"
-                          disabled={lockdata}
-                          size="small"
-                          // type="number"
-                          id="totaldays"
-                          sx={{ width: "100%" }}
-                        />
-                        }
+                          {vendorinfo?.vendor_duty === "Outstation" ?
+                            <TextField
+                              name="vendortotaldays"
+                              value={calculatevendorTotalDays()}
+                              label="Total Days"
+                              disabled={lockdata}
+                              size="small"
+                              type="number"
+                              id="totaldays"
+                              sx={{ width: "100%" }}
+                            />
+                            :
+                            <TextField
+                              name="vendortotaldays"
+                              value={"-"}
+                              label="Total Days"
+                              disabled={lockdata}
+                              size="small"
+                              // type="number"
+                              id="totaldays"
+                              sx={{ width: "100%" }}
+                            />
+                          }
                         </div>
 
                       </div>
@@ -5373,7 +5606,7 @@ Please Click the link to close E-Tripsheet-`}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                <Box sx={style1}>
+                <Box className="modal-box">
                   <Box>
 
                     {/* <div className='closebuttonhover'>
@@ -5382,25 +5615,23 @@ Please Click the link to close E-Tripsheet-`}
                         </IconButton>
                       </div> */}
 
-                    <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                    <div className='editmap-header'>
 
 
-                      <div style={{ display: 'flex', gap: "20px", padding: '0px', flexWrap: "nowrap", }}>
+                      <div className='editmapheader-label'>
                         <label style={{ fontWeight: "600" }}>  Trip Id :<span>{tripid}</span> </label>
                         <label style={{ fontWeight: '600' }}>Start Date : <span>{dayjs(startdate).format("DD/MM/YYYY")}</span></label>
                         <label style={{ fontWeight: '600' }}>Close Date : <span>{dayjs(closedate).format("DD/MM/YYYY")}</span></label>
                         <label style={{ fontWeight: '600' }}>Start Time : <span>{removeSeconds(starttime)}</span></label>
                         <label style={{ fontWeight: '600' }}>Close Time : <span>{removeSeconds(endtime)}</span> </label>
-                        <label style={{ display: "flex", gap: '10px' }}>
-                          <span style={{ fontWeight: 'bold', height: "50px", display: "flex", flexWrap: 'nowrap', gap: "10px" }}>
-                            <span style={{ fontWeight: '600' }}>Remarks</span>
-                            <span> :</span>
+                        <label className='remarks-label'>
 
-                          </span>
+                          <span style={{ fontWeight: '600'}}>Remarks : </span>
 
-                          <span style={{ height: '50px', border: "1px solid #ccc", overflow: 'auto', width: "300px", padding: "5px" }}>{formData.remark || selectedCustomerData.remark || book.remark}</span>
+                          <span className='remark-label'>{formData.remark || selectedCustomerData.remark || book.remark}</span>
 
-                        </label>                        </div>
+                        </label>
+                      </div>
                       {/* <div style={{ width: '60%', display: "flex", justifyContent: "space-around", padding: '10px' }}>
                           <label style={{ display: "flex", gap: '10px' }}>
                             <span style={{ fontWeight: 'bold', height: "50px", display: "flex", flexWrap: 'nowrap', gap: "10px" }}>
@@ -5519,7 +5750,7 @@ Please Click the link to close E-Tripsheet-`}
             </div>
           </div>
 
-          {open == false &&
+          {open === false &&
             <div className='alert-popup-main'>
               {error &&
                 <div className='alert-popup Error' >

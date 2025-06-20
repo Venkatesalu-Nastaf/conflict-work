@@ -2,6 +2,8 @@
     width: -webkit-fill-available;
     overflow-y: auto;
     height: 350px !important;
+    border: 1px solid #d6d6d68a;
+    border-radius: 10px;
 }
 
 .permission-table::-webkit-scrollbar {
@@ -85,3 +87,9 @@
 .th-border-last{
     border-top-right-radius: 10px;
 }
+
+/* .table-containerr{
+    border: 1px solid #d6d6d68a;
+    border-radius: 10px;
+    overflow-x: auto;
+} */

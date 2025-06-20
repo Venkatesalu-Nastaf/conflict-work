@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import "./DriverCreation.css";
 import Box from "@mui/material/Box";
 import Input from '@mui/material/Input';
@@ -77,7 +77,7 @@ const DriverCreation = ({ stationName }) => {
         selectedCustomerData,
         selectedCustomerId,
         rows,
-        actionName,
+        // actionName,
         error,
         success,
         info,
@@ -101,8 +101,8 @@ const DriverCreation = ({ stationName }) => {
         handleCloseDialog,
         dialogOpen,
         allFile,
-        setFile,
-        setLicencepdf,
+        // setFile,
+        // setLicencepdf,
         isEditMode,
         handleEdit,
         handleContextMenu,
@@ -119,7 +119,11 @@ const DriverCreation = ({ stationName }) => {
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll,
         handleFileChange, handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2,
-        loading, setLoading,isDButtonLoading,setisDbuttonLoading,deletedriverdate,setDeleteDriverdata
+        loading, 
+        // setLoading,
+        isDButtonLoading,
+        // setisDbuttonLoading,
+        deletedriverdate,setDeleteDriverdata
         
     } = useDrivercreation();
 
@@ -127,10 +131,11 @@ const DriverCreation = ({ stationName }) => {
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-    const Supllier_read = permissions[12]?.read;
-    const Supllier_new = permissions[12]?.new;
-    const Supllier_modify = permissions[12]?.modify;
-    const Supllier_delete = permissions[12]?.delete;
+    
+     const Supllier_read = permissions[13]?.read;
+    const Supllier_new = permissions[13]?.new;
+    const Supllier_modify = permissions[13]?.modify;
+    const Supllier_delete = permissions[13]?.delete;
 
     return (
         <div className="DriverCreation-main">
@@ -832,8 +837,13 @@ const DriverCreation = ({ stationName }) => {
                                     </Button>                                    {Array.isArray(allFile) && allFile.map((img, index) => (
                                         <div key={index} className='driver-creation-dialog-box-div2'>
                                             {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
-                                                ? <img src={`${apiUrl}/public/driver_doc/` + img.fileName} alt="driverimage" type="application/pdf" width="100%" height="400px" /> :
-                                                <embed src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />}
+                                                ? 
+                                                // <img src={`${apiUrl}/public/driver_doc/` + img.fileName} alt="driverimage" type="application/pdf" width="100%" height="400px" /> :
+                                                // <embed src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />
+                                                <img src={`${apiUrl}/driver_doc/` + img.fileName} alt="driverimage" type="application/pdf" width="100%" height="400px" /> :
+                                                <embed src={`${apiUrl}/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />
+                                                
+                                                }
                                             <Checkbox typeof='checked'
                                                 checked={deletefile.includes(img.fileName)}
                                                 onClick={(event) => {

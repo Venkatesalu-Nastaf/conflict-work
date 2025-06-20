@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, {useContext } from "react";
 import "./Agreement.css";
 import "jspdf-autotable";
 import dayjs from "dayjs";
@@ -22,40 +22,40 @@ import DialogContent from '@mui/material/DialogContent';
 
 // ICONS
 import useEmployee from "./useEmployee";
-import BadgeIcon from "@mui/icons-material/Badge";
+// import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from "@mui/icons-material/Email";
 import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
+// import FactCheckIcon from "@mui/icons-material/FactCheck";
 import ChecklistIcon from "@mui/icons-material/Checklist";
-import BloodtypeIcon from "@mui/icons-material/Bloodtype";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
+// import BloodtypeIcon from "@mui/icons-material/Bloodtype";
+// import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+// import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 // import LocationCityIcon from "@mui/icons-material/LocationCity";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+// import DateRangeIcon from '@mui/icons-material/DateRange';
+// import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+// import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import EscalatorWarningIcon from "@mui/icons-material/EscalatorWarning";
-import DeviceHubRoundedIcon from "@mui/icons-material/DeviceHubRounded";
+// import EscalatorWarningIcon from "@mui/icons-material/EscalatorWarning";
+// import DeviceHubRoundedIcon from "@mui/icons-material/DeviceHubRounded";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
-import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
-import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
+// import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
+// import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
+// import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
 import Checkbox from '@mui/material/Checkbox';
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import { CircularProgress } from '@mui/material';
 import { APIURL } from "../../../url";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+// import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import DeleteConfirmationDialog from "../../../DeleteData/DeleteData";
 
 // import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -74,71 +74,72 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const Agreement = ({organizationNames}) => {
+const Agreement = ({ organizationNames }) => {
   const apiUrl = APIURL;
   const {
     selectedCustomerData,
-    selectedCustomerId,
+    // selectedCustomerId,
     rows,
-    actionName,
+    // actionName,
     error,
     success,
     info,
     warning,
-    fromdate,setFromdate,
+    // fromdate, setFromdate,
     // selectedCustomerDatas,
     successMessage,
-    customer,
-    setCustomer,
-    handlecustomer,
+    // customer,
+    // setCustomer,
+    // handlecustomer,
     errorMessage,
     warningMessage,
-    setSelectedCustomerData,
+    // setSelectedCustomerData,
     infoMessage,
-    toDate,
-    setTodate,
+    // toDate,
+    // setTodate,
     book,
     handleClick,
     selectAll,
-    handleSelectAll,  
+    handleSelectAll,
     handleChange,
     handleRowClick,
     handleAdd,
     hidePopup,
-    formData,
+    // formData,
     handleenterSearch,
     handleDateChange,
     handleAutocompleteChange,
     handleExcelDownload,
     handlePdfDownload,
-    setCustomerPDF,
+    // setCustomerPDF,
     columns,
     searchText,
     setSearchText,
-    handleShowAll,
+    // handleShowAll,
     allFile,
     handleCloseDialog,
     dialogOpen,
-    setFile,
+    // setFile,
     // setFromDate,
-  
-    setBook,
+
+    // setBook,
     handleFileChange,
-    fromDate,
+    // fromDate,
     isEditMode,
     handleEdit,
     handleContextMenu,
     handleimagedelete,
-    handleDocumentDownload,
+    // handleDocumentDownload,
     handleClosedeleteDialog,
     dialogdeleteOpen,
-    setError,
-    setErrorMessage,
+    // setError,
+    // setErrorMessage,
     deletefile,
     handlecheckbox,
     loading,
-    setLoading,deleteAgreementdata,setDeleteAgreementdata
-  
+    // setLoading, 
+    deleteAgreementdata, setDeleteAgreementdata,
+    handleUpload
 
   } = useEmployee();
   // console.log(organizationNames,"ppppppppppppp")
@@ -146,10 +147,14 @@ const Agreement = ({organizationNames}) => {
 
   // permissions
   const { permissions } = useContext(PermissionContext)
-  const Agreement_read = permissions[21]?.read;
-  const Agreement_new = permissions[21]?.new;
-  const Agreement_modify = permissions[21]?.modify;
-  const Agreement_delete = permissions[21]?.delete;
+  // const Agreement_read = permissions[21]?.read;
+  // const Agreement_new = permissions[21]?.new;
+  // const Agreement_modify = permissions[21]?.modify;
+  // const Agreement_delete = permissions[21]?.delete;
+  const Agreement_read = permissions[22]?.read;
+  const Agreement_new = permissions[22]?.new;
+  const Agreement_modify = permissions[22]?.modify;
+  const Agreement_delete = permissions[22]?.delete;
 
   // const [fileName, setFileName] = useState("");
 
@@ -159,8 +164,6 @@ const Agreement = ({organizationNames}) => {
   //     setFileName(file.name);
   //     console.log("Selected file:", file);
   //   }
-  // };
-  
 
   return (
     <div className="main-content-form Scroll-Style-hide">
@@ -168,7 +171,7 @@ const Agreement = ({organizationNames}) => {
         <div className="detail-container-main-Employe">
           <div className="container-Employe">
             <div className="input-field employee-input-feilds">
-            {/* <div className="input input-transferlist">
+              {/* <div className="input input-transferlist">
                             <div className="icone">
                                 <HailOutlinedIcon color="action" />
                             </div>
@@ -189,34 +192,64 @@ const Agreement = ({organizationNames}) => {
                                 )}
                             />
                         </div> */}
-                      <div className="input input-transferlist">
-                        <div className="icone">
-                          <HailOutlinedIcon color="action" />
-                        </div>
-                        <Autocomplete
-                          fullWidth
-                          id="free-solo-Organization"
-                          className="full-width"
-                          freeSolo
-                          size="small"
-                          name="customer"
-                          value={selectedCustomerData?.customer || book.customer}
-                          options={organizationNames.map((option) =>
-                            typeof option === "string" ? { label: option } : option
-                          )} // Map options to have a label
-                          onChange={(event, value) => handleAutocompleteChange(event, value, "customer")}
-                          onInputChange={(event, value) => handleAutocompleteChange(event, value, "customer")}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              label="Organization"
-                              inputRef={params.inputRef}
-                            />
-                          )}
-                        />
-                      </div>
-                                
-                      {/* <div className="input">
+              <div className="input input-transferlist">
+                <div className="icone">
+                  <HailOutlinedIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-Organization"
+                  className="full-width"
+                  freeSolo
+                  size="small"
+                  name="customer"
+                  value={selectedCustomerData?.customer || book.customer}
+                  options={organizationNames.map((option) =>
+                    typeof option === "string" ? { label: option } : option
+                  )} // Map options to have a label
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "customer")}
+                  // onInputChange={(event, value) => handleAutocompleteChange(event, value, "customer")}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Organization"
+                      inputRef={params.inputRef}
+                    />
+                  )}
+                />
+                {/* <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="customer"
+                  freeSolo
+                  sx={{ width: "100%" }}
+                  onChange={(event, value) => {
+                    handleAutocompleteChange(event, value, "customer")
+                  }}
+                  value={
+                    selectedCustomerData.customer ||
+                   
+                    book.customer ||
+                    ""}
+                   options={organizationNames.map((option) =>
+                    typeof option === "string" ? { label: option } : option
+                  )}
+                    //  onInputChange={(event, value) => handleAutocompleteChange(event, value, "customer")}
+                  getOptionLabel={(option) => option.label  || selectedCustomerData.customer ||
+                    book.customer || ''}
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        {...params}
+                        label="Organization"
+                        inputRef={params.inputRef}
+                      />
+                    );
+                  }}
+                /> */}
+              </div>
+
+              {/* <div className="input">
                       <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
@@ -231,8 +264,8 @@ const Agreement = ({organizationNames}) => {
                                 </DemoContainer>
                             </LocalizationProvider>
                         </div> */}
-                      
-                      {/* <div className="input">
+
+              {/* <div className="input">
                                   <div className="icone">
                                       <CalendarMonthIcon className="ratetype-startdate-icon" />
                                   </div>
@@ -250,42 +283,42 @@ const Agreement = ({organizationNames}) => {
                                   </LocalizationProvider>
                               </div> */}
 
-                                  <div className="input">
-                                    <div className='icone'>
-                                        <CalendarMonthIcon className='ratetype-startdate-icon' />
-                                    </div>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        
-                                            <DatePicker
-                                            label="From Date"
-                                                id="fromdate"
-                                                value={
-                                                    selectedCustomerData.frodate || book.fromdate
-                                                        ? dayjs(selectedCustomerData.fromdate|| book.fromdate)
-                                                        : book.fromdate
-                                                }
-                                                format="DD/MM/YYYY"
-                                                onChange={(date) => handleDateChange(date, "fromdate")}
-                                            >
-                                                {({ inputProps, inputRef }) => (
-                                                    <TextField
-                                                        {...inputProps}
-                                                        inputRef={inputRef}
-                                                        value={selectedCustomerData?.fromdate || book.fromdate}
-                                                    />
-                                                )}
-                                            </DatePicker>
-                                       
-                                    </LocalizationProvider>
-                                </div>
-                                
-                              {/* <div className="input">
+              <div className="input">
+                <div className='icone'>
+                  <CalendarMonthIcon className='ratetype-startdate-icon' />
+                </div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                  <DatePicker
+                    label="From Date"
+                    id="fromdate"
+                    value={
+                      selectedCustomerData.frodate || book.fromdate
+                        ? dayjs(selectedCustomerData.fromdate || book.fromdate)
+                        : book.fromdate
+                    }
+                    format="DD/MM/YYYY"
+                    onChange={(date) => handleDateChange(date, "fromdate")}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField
+                        {...inputProps}
+                        inputRef={inputRef}
+                        value={selectedCustomerData?.fromdate || book.fromdate}
+                      />
+                    )}
+                  </DatePicker>
+
+                </LocalizationProvider>
+              </div>
+
+              {/* <div className="input">
                                     <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
                                     <div>
                                         {/* <label>From Date</label> */}
-                                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
                                                 label="From Date"
                                                     id="fromdate"
@@ -309,10 +342,10 @@ const Agreement = ({organizationNames}) => {
                                                 </DatePicker>                                            
                                         </LocalizationProvider>
                                     </div>
-                                </div> */} 
-                                {/* {console.log(selectedCustomerData.todate, "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"ll",book.todate)} */}
+                                </div> */}
+              {/* {console.log(selectedCustomerData.todate, "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"ll",book.todate)} */}
 
-                        {/* <div className="input driver-input">
+              {/* <div className="input driver-input">
                             <div className="icone">
                                 <CalendarMonthIcon />
                             </div>
@@ -340,36 +373,36 @@ const Agreement = ({organizationNames}) => {
                             </LocalizationProvider>
                         </div> */}
 
-                      {/* {console.log(dayjs(selectedCustomerData.todate), "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"kkkkkk",book.todate)} */}
-                      <div className="input">
-                                    <div className='icone'>
-                                        <CalendarMonthIcon className='ratetype-startdate-icon' />
-                                    </div>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        
-                                            <DatePicker
-                                            label="To Date"
-                                                id="todate"
-                                                value={
-                                                    selectedCustomerData.todate || book.todate
-                                                        ? dayjs(selectedCustomerData.todate || book.todate)
-                                                        : book.todate
-                                                }
-                                                format="DD/MM/YYYY"
-                                                onChange={(date) => handleDateChange(date, "todate")}
-                                            >
-                                                {({ inputProps, inputRef }) => (
-                                                    <TextField
-                                                        {...inputProps}
-                                                        inputRef={inputRef}
-                                                        value={selectedCustomerData?.todate || book.todate}
-                                                    />
-                                                )}
-                                            </DatePicker>
-                                        
-                                    </LocalizationProvider>
-                                </div>
-                        {/* {console.log(selectedCustomerData.todate, "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"ll",book.todate)
+              {/* {console.log(dayjs(selectedCustomerData.todate), "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"kkkkkk",book.todate)} */}
+              <div className="input">
+                <div className='icone'>
+                  <CalendarMonthIcon className='ratetype-startdate-icon' />
+                </div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                  <DatePicker
+                    label="To Date"
+                    id="todate"
+                    value={
+                      selectedCustomerData.todate || book.todate
+                        ? dayjs(selectedCustomerData.todate || book.todate)
+                        : book.todate
+                    }
+                    format="DD/MM/YYYY"
+                    onChange={(date) => handleDateChange(date, "todate")}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField
+                        {...inputProps}
+                        inputRef={inputRef}
+                        value={selectedCustomerData?.todate || book.todate}
+                      />
+                    )}
+                  </DatePicker>
+
+                </LocalizationProvider>
+              </div>
+              {/* {console.log(selectedCustomerData.todate, "tttttttttttttttttt",dayjs(selectedCustomerData.todate).format("DD-MM-YYYY"),"ll",book.todate)
                         
 
                               <div className="input">
@@ -399,13 +432,13 @@ const Agreement = ({organizationNames}) => {
                               </div>  */}
 
 
-                                {/* <div className="input">
+              {/* <div className="input">
                                     <div className='icone'>
                                         <CalendarMonthIcon className='ratetype-startdate-icon' />
                                     </div>
                                     <div> */}
-                                        {/* <label>To Date</label> */}
-                                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <label>To Date</label> */}
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
                                                 label="To Date"
                                                     id="toDate"
@@ -429,8 +462,8 @@ const Agreement = ({organizationNames}) => {
                                                 </DatePicker>                                            
                                         </LocalizationProvider>
                                     </div>
-                                </div> */} 
-                                
+                                </div> */}
+
               <div className="input">
                 <div className="icone">
                   <EmailIcon color="action" />
@@ -444,6 +477,7 @@ const Agreement = ({organizationNames}) => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.email || book.email}
                   onChange={handleChange}
+                  InputLabelProps={{ shrink: true }}
                 />
               </div>
               <div className="input">
@@ -457,7 +491,8 @@ const Agreement = ({organizationNames}) => {
                   label="Mobile"
                   name="mobileno"
                   // autoComplete="new-password"
-                  value={selectedCustomerData?.mobileno || book.mobileno || ''}
+                  value={selectedCustomerData?.mobileno || book?.mobileno || ''}
+                  InputLabelProps={{ shrink: true }}
                   onChange={handleChange}
                 />
               </div>
@@ -487,26 +522,37 @@ const Agreement = ({organizationNames}) => {
                   label="GST"
                   name="gstno"
                   autoComplete="new-password"
-                value={selectedCustomerData?.gstno|| book.gstno}
-                onChange={handleChange}
+                  value={selectedCustomerData?.gstno || book.gstno}
+                  InputLabelProps={{ shrink: true }}
+                  onChange={handleChange}
                 />
               </div>
 
-              <div className="input">   
+              <div className="input">
                 <input
                   id="file-upload"
                   name="Agreement_Image"
                   type="file"
                   style={{ display: "none" }}
                   // onChange={handleFileChange}
+                  // onChange={(e) => {
+                  //   setCustomerPDF(e.target.files[0]);
+                  //     console.log('File selected:', e.target.files[0]);
+                  //     handleFileChange(e);
+                  // }}
                   onChange={(e) => {
-                    setCustomerPDF(e.target.files[0]);
-                      console.log('File selected:', e.target.files[0]);
+                    const file = e.target.files[0];
+                    if (file) {
+                      // setCustomerPDF(file)
                       handleFileChange(e);
+                      if (isEditMode) {
+                        handleUpload(file)
+                      }
+                    }
                   }}
-                />    
+                />
                 <label htmlFor="file-upload">
-                  <Button variant="outlined" disabled={isEditMode ? !Agreement_modify : !Agreement_new} component="span">
+                  <Button variant="outlined" disabled={isEditMode ? !Agreement_modify : !Agreement_new} component="span" >
                     Upload
                   </Button>
                 </label>
@@ -536,7 +582,7 @@ const Agreement = ({organizationNames}) => {
               <div className="input">
                 {isEditMode ? (
                   <Button variant="contained" disabled={!Agreement_modify} onClick={handleEdit}>Edit</Button>
-                ) : ( 
+                ) : (
                   <Button variant="contained" disabled={!Agreement_new} onClick={handleAdd}>Add</Button>
                 )}
               </div>
@@ -623,11 +669,11 @@ const Agreement = ({organizationNames}) => {
               //   onClick={(event) => handleClick(event, "Delete")}
               // />
               <SpeedDialAction
-              key="delete"
-              icon={<DeleteIcon />}
-              tooltipTitle="Delete"
-              onClick={() => setDeleteAgreementdata(true)}
-            />
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={() => setDeleteAgreementdata(true)}
+              />
             )}
             {Agreement_new === 1 && !isEditMode && (
               <SpeedDialAction
@@ -670,7 +716,7 @@ const Agreement = ({organizationNames}) => {
 
             <div className="Employe-search-container">
               <div className="input-field Employe-search-input">
-                <div className="input" style={{paddingRight:'30px'}}>
+                <div className="input" style={{ paddingRight: '30px' }}>
                   <div className="icone">
                     <AiOutlineFileSearch
                       color="action"
@@ -682,7 +728,7 @@ const Agreement = ({organizationNames}) => {
                     label="Search"
                     name="searchText"
                     value={searchText || ''}
-                    onKeyDown={handleenterSearch} 
+                    onKeyDown={handleenterSearch}
                     onChange={(e) => setSearchText(e.target.value)}
                   />
                 </div>
@@ -693,14 +739,14 @@ const Agreement = ({organizationNames}) => {
             </div>
           </div>
 
-        {deleteAgreementdata && 
-         <DeleteConfirmationDialog
-                open={deleteAgreementdata}
-                onClose={() => setDeleteAgreementdata(false)}
-                onConfirm={handleClick}
-              />
-        }
-          
+          {deleteAgreementdata &&
+            <DeleteConfirmationDialog
+              open={deleteAgreementdata}
+              onClose={() => setDeleteAgreementdata(false)}
+              onConfirm={handleClick}
+            />
+          }
+
           <div className="table-bookingCopy-Employe ">
             <div className="registration-employee-table">
               {/* <DataGrid
@@ -779,72 +825,78 @@ const Agreement = ({organizationNames}) => {
               </DialogContent>
             </Dialog> */}
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-  <DialogContent>
-    <div className="employee-dialogbox-div1">
-      <Button
-        variant="contained"
-        onClick={handleSelectAll} // Assuming handleSelectAll toggles the selectAll state
-      >
-        {selectAll ? 'Deselect All' : 'Select All'}
-      </Button>
+              <DialogContent>
+                <div className="employee-dialogbox-div1">
+                  <Button
+                    variant="contained"
+                    onClick={handleSelectAll} // Assuming handleSelectAll toggles the selectAll state
+                  >
+                    {selectAll ? 'Deselect All' : 'Select All'}
+                  </Button>
 
-      {Array.isArray(allFile) &&
-        allFile.map((file, index) => (
-          
-          <div key={index} className="employee-dialogbox-div2">
-            {/* <Checkbox
+                  {Array.isArray(allFile) &&
+                    allFile.map((file, index) => (
+
+                      <div key={index} className="employee-dialogbox-div2">
+                        {/* <Checkbox
               type="checkbox"
               checked={deletefile.includes(file.fileName)}
               onClick={() => handlecheckbox(file.fileName)} // handlecheckbox will manage individual selection
             /> */}
 
-                                            <Checkbox typeof='checked'
-                                                checked={deletefile.includes(file.Agreement_Image)}
-                                                onClick={(event) => {
+                        <Checkbox typeof='checked'
+                          checked={deletefile.includes(file.Agreement_Image)}
+                          onClick={(event) => {
 
-                                                    handlecheckbox(file.Agreement_Image)
+                            handlecheckbox(file.Agreement_Image)
 
-                                                }} />
-            {file.Agreement_Image.endsWith('.pdf') ? (
-              <iframe
-                src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
-                width="350"
-                height="300"
-                title={`PDF ${index}`}
-                style={{ border: "none" }}
-              />
-            ) : (
-              <img
-                src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
-                width="350"
-                height="300"
-                alt=""
-              />
-            )}
-          </div>
-        ))}
-    </div>
-  
-    <div style={{ height: 1, backgroundColor: 'black', marginTop: 5, marginBottom: 10 }}></div>
-    
-    <div style={{ display: 'flex' }}>
-      <Button
-        disabled={!Agreement_delete}
-        variant="contained"
-        onClick={() => handleimagedelete(deletefile)}
-      >
-        Delete
-      </Button>
-      {/* <Button
+                          }} />
+                        {file.Agreement_Image.endsWith('.pdf') ? (
+                          <iframe
+                          //old path
+                            // src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
+                            //new
+                            src={`${apiUrl}/agreement_doc/` + file.Agreement_Image}
+                            width="350"
+                            height="300"
+                            title={`PDF ${index}`}
+                            style={{ border: "none" }}
+                          />
+                        ) : (
+                          <img
+                          //old path
+                            // src={`${apiUrl}/public/agreement_doc/` + file.Agreement_Image}
+                          //new
+                            src={`${apiUrl}/agreement_doc/` + file.Agreement_Image}
+                            width="350"
+                            height="300"
+                            alt=""
+                          />
+                        )}
+                      </div>
+                    ))}
+                </div>
+
+                <div style={{ height: 1, backgroundColor: 'black', marginTop: 5, marginBottom: 10 }}></div>
+
+                <div style={{ display: 'flex' }}>
+                  <Button
+                    disabled={!Agreement_delete}
+                    variant="contained"
+                    onClick={() => handleimagedelete(deletefile)}
+                  >
+                    Delete
+                  </Button>
+                  {/* <Button
         variant="contained"
         onClick={() => handleDocumentDownload()}
         style={{ marginLeft: '20px' }}
       >
         Print
       </Button> */}
-    </div>
-  </DialogContent>
-</Dialog>
+                </div>
+              </DialogContent>
+            </Dialog>
             <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
               <DialogContent>
                 <div>

@@ -22,10 +22,10 @@ const Themes = () => {
 
   const handleThemeChange = async (theme, themeNo) => {
     
-    console.log(theme,themeNo,'stheme');
+    // console.log(theme,themeNo,'stheme');
     const userid = localStorage.getItem('useridno');
     setSelectedTheme(theme);
-    
+  
     if (themeNo === 1) {
       setThemeOne(true);
       setThemeTwo(false);
@@ -108,6 +108,7 @@ const Themes = () => {
     }
 
     localStorage.removeItem("selectedusertheme");
+    // console.log("checking the theme", localStorage.getItem("selectedusertheme"))
     await axios.post(`${apiUrl}/updatethemename`, {
       userid: userid,
       theme: theme

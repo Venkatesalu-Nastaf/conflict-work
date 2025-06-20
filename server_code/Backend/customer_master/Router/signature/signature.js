@@ -4,6 +4,8 @@ const fs = require('fs'); // signature png
 const db = require('../../../db');
 const path = require('path'); // Import the path module
 const multer = require('multer');
+const imagePath = require('../../../imagepath')
+// console.log(imagePath,"signature.js");
 
 // router.post('/api/saveSignature', (req, res) => {
 //     const { signatureData } = req.body;
@@ -69,11 +71,29 @@ const multer = require('multer');
 //   });
 // });
 
-router.use(express.static('customer_master'));
+
+//Old code for signature
+// router.use(express.static('customer_master'));
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/signature_images')
+//   },
+//   filename: (req, file, cb) => {
+
+
+//     cb(null, `signature-${req.params.data}.png`);
+//   },
+
+
+
+// })
+router.use(express.static('Imagefolder'));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './customer_master/public/signature_images')
+    // cb(null, '../../../Imagefolder/signature_images')
+     cb(null, `${imagePath}/signature_images`)
   },
   filename: (req, file, cb) => {
 
@@ -85,10 +105,10 @@ const storage = multer.diskStorage({
 
 })
 
-
 const uploadfile = multer({ storage: storage });
 
-const baseImagetripidPath = 'customer_master/public/signature_images'; // Relative path to the base directory
+// const baseImagetripidPath = 'customer_master/public/signature_images'; // Relative path to the base directory
+const baseImagetripidPath = `${imagePath}/signature_images`; 
 
 router.post('/api/saveSignaturewtid', (req, res) => {
   const { signatureData, tripId, uniqueno,imageName } = req.body;
@@ -98,14 +118,14 @@ router.post('/api/saveSignaturewtid', (req, res) => {
   const imagePath = path.join(baseImagetripidPath, imageName2); // Use the base path
   fs.writeFile(imagePath, imageBuffer, (error) => {
     if (error) {
-      console.error('Error saving signature:', error);
+      // console.error('Error saving signature:', error);
       res.status(500).json({ error: 'Failed to save signature' });
     } else {
       const relativeImagePath = path.relative(baseImagetripidPath, imagePath);
       const sql = 'UPDATE signatures SET signature_path = ? WHERE tripid = ? AND unique_number = ?';
       db.query(sql, [relativeImagePath, tripId, uniqueno], (dbError, results) => {
         if (dbError) {
-          console.error('Error updating database:', dbError);
+          // console.error('Error updating database:', dbError);
           res.status(500).json({ error: 'Failed to update database' });
         } else {
           const uniqueNumber = generateUniqueNumbers();
@@ -113,7 +133,7 @@ router.post('/api/saveSignaturewtid', (req, res) => {
           const sql3='update tripsheet set apps="Closed" where tripid = ? ';
           db.query(sql2, [uniqueNumber, tripId], (dbError, results) => {
             if (dbError) {
-              console.error('Error updating unique number:', dbError);
+              // console.error('Error updating unique number:', dbError);
               res.status(500).json({ error: 'Failed to update unique number' });
             } else {
               db.query(sql3,[tripId],(err,results2)=>{
@@ -140,10 +160,12 @@ router.post('/api/uploadsignaturedata/:tripid/:data', uploadfile.single('signatu
 
   const tripid = req.params.tripid;
 
-  console.log(tripid)
+  // console.log(tripid)
 
   const signature_image = req.file.filename;
 
+  // console.log(signature_image, "Sign image");
+  
   if (signature_image !== null) {
 
     const uniqueNumber = generateUniqueNumbers();
@@ -166,7 +188,7 @@ router.post('/api/uploadsignaturedata/:tripid/:data', uploadfile.single('signatu
           if (err2) {
             return res.status(500).json({ message: "err" });
           }
-          console.log(result)
+          // console.log(result)
           if(result.affectedRows === 0){
             return res.status(200).json({ message: "signature notUploaded " });
           }
@@ -191,6 +213,61 @@ router.post('/api/uploadsignaturedata/:tripid/:data', uploadfile.single('signatu
 
 });
 
+// router.delete('/api/signatureimagedelete/:tripid', (req, res) => {
+//   const tripid = req.params.tripid;
+//   const sql = `SELECT signature_path FROM signatures WHERE tripid = ?`;
+//   db.query(sql, [tripid], (err1, results) => {
+//     if (err1) {
+//       return res.status(500).json({ message: "Error checking profile existence", error: err1 });
+//     }
+
+
+//     if (results.length >= 1) {
+//       db.query("DELETE FROM signatures WHERE tripid = ?", [tripid], (err, result) => {
+//         if (err) {
+//           return res.status(500).json({ error: "Failed to delete data from MySQL" });
+//         }
+//         if (result.affectedRows === 0) {
+//           return res.status(404).json({ error: "data not found" });
+//         }
+      
+        
+
+//         const signimage = results[0].signature_path
+
+//         if (signimage) {
+         
+
+//           const oldImagePath = path.join('Backend', 'customer_master', 'public', 'signature_images');
+
+
+//           // Get the complete absolute path
+//           const oldImagePathDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', oldImagePath, signimage);
+
+
+
+//           // Check if the file exists
+//           if (fs.existsSync(oldImagePathDirectoryAbsolute)) {
+//             try {
+//               // Delete the file
+//               fs.unlinkSync(oldImagePathDirectoryAbsolute);
+//               console.log('File deleted successfully:', signimage);
+//             } catch (error) {
+//               console.error('Error deleting file:', error);
+//             }
+//           } else {
+//             console.log('File does not exist:', signimage);
+//           }
+//         }
+
+//       })
+   
+//       return res.status(200).json({ message: "Data deleted successfully" });
+
+//     }
+//   })
+// })
+
 router.delete('/api/signatureimagedelete/:tripid', (req, res) => {
   const tripid = req.params.tripid;
   const sql = `SELECT signature_path FROM signatures WHERE tripid = ?`;
@@ -213,23 +290,18 @@ router.delete('/api/signatureimagedelete/:tripid', (req, res) => {
 
         const signimage = results[0].signature_path
 
+        // console.log(signimage,"deleting images");
+        
         if (signimage) {
          
-
-          const oldImagePath = path.join('Backend', 'customer_master', 'public', 'signature_images');
-
-
-          // Get the complete absolute path
-          const oldImagePathDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', oldImagePath, signimage);
-
-
+              const oldImagePath = path.join(`${imagePath}/signature_images` , signimage);
 
           // Check if the file exists
-          if (fs.existsSync(oldImagePathDirectoryAbsolute)) {
+          if (fs.existsSync(oldImagePath)) {
             try {
               // Delete the file
-              fs.unlinkSync(oldImagePathDirectoryAbsolute);
-              console.log('File deleted successfully:', signimage);
+              fs.unlinkSync(oldImagePath);
+              // console.log('File deleted successfully:', signimage);
             } catch (error) {
               console.error('Error deleting file:', error);
             }
@@ -256,7 +328,7 @@ router.post("/signautureimagedriverapp",(req,res)=>{
   const imagePath = path.join(baseImagetripidPath, imageName);
   fs.writeFile(imagePath, imageBuffer, (error) => {
     if (error) {
-      console.error('Error saving signature:', error);
+      // console.error('Error saving signature:', error);
       res.status(500).json({ error: 'Failed to save signature' });
     } else {
   res.send("success")

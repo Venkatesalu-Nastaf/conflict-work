@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import "./Organization.css";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
-import { TextField } from "@mui/material";
+import { TextField,MenuItem } from "@mui/material";
 
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -25,7 +25,7 @@ const Organization = ({ logoImage }) => {
 
     const {
         selectedCustomerData,
-        actionName,
+        // actionName,
         error,
         success,
         warning,
@@ -35,7 +35,7 @@ const Organization = ({ logoImage }) => {
         book,
         info,
         infoMessage,
-        handleClick,
+        // handleClick,
         handleChange,
         hidePopup,
 
@@ -44,17 +44,25 @@ const Organization = ({ logoImage }) => {
         toggleEditMode,
         handleKeyDown,
         handleUpdate,
+        AddNewKey,
+        handleAddNewAPIKey,
+        handleApiKeyChange,
+        allApiKey,
+        // updateKey,
+        handleUpdateChange,
+        handleUpdateApiKey,
+        selectedApikey
     } = useOrganization();
 
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    }, [actionName, handleClick]);
+    // useEffect(() => {
+    //     if (actionName === 'List') {
+    //         handleClick(null, 'List');
+    //     }
+    // }, [actionName, handleClick]);
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-    const MainSetting_modify = permissions[16]?.modify;
+    const MainSetting_modify = permissions[17]?.modify;
 
 
 
@@ -174,9 +182,22 @@ const Organization = ({ logoImage }) => {
                                         </div>
                                     </div>
                                     <div className="user-photo-edit">
-                                        <IconButton color="primary" disabled={!MainSetting_modify} onClick={toggleEditMode} size='small' variant="outlined" component="label">
+                                        {/* <IconButton color="primary" disabled={!MainSetting_modify} onClick={toggleEditMode} size='small' variant="outlined" component="label">
                                             <ModeEditIcon />
-                                        </IconButton>
+                                        </IconButton> */}
+                                         <IconButton color="primary" disabled={!MainSetting_modify} 
+                                         onClick={()=>{
+                                            if(editMode){
+                                                handleUpdate();
+                                            }else{
+                                                toggleEditMode();
+                                            }
+                                         }}
+                                         size='small' variant="outlined" component="label"
+                                         >
+                                            <ModeEditIcon />
+                                         </IconButton>
+
                                     </div>
 
                                     <div className='alert-popup-main'>
@@ -374,6 +395,56 @@ const Organization = ({ logoImage }) => {
                                             disabled={!editMode} />
                                     </div>
 
+                                </div>
+                                <div className="input organization-input">
+                                    <div style={{ display: 'grid', justifyContent: 'center' }}>
+                                        <label htmlFor="">Add New API KEY :</label>
+                                        <TextField
+                                            sx={{ width: "250px" }}
+                                            name="newApi"
+                                            className='address-field organisation-address-field Scroll-Style-hide'
+                                            value={AddNewKey}
+                                            onChange={handleApiKeyChange}
+                                            // label="BankDetails"
+                                            id="mapApi"
+                                            // multiline
+                                            // rows={5}
+                                            // autoComplete="password"
+                                            disabled={!editMode} />
+                                    </div>
+                                    <div>
+                                        {editMode ? 
+                                        <Button variant='contained' onClick={handleAddNewAPIKey}>
+                                            ADD
+                                        </Button> : ""}
+                                    </div>
+                                </div>
+                                <div className="input organization-input">
+                                    <div style={{ display: 'grid', justifyContent: 'center' }}>
+                                        <label htmlFor="mapApi">Map Api Key :</label>
+                                        <TextField
+                                            select
+                                            sx={{ width: "410px" }}
+                                            name="BankDetails"
+                                            className='address-field organisation-address-field Scroll-Style-hide'
+                                            value={selectedApikey}
+                                            onChange={handleUpdateChange}
+                                            id="mapApi"
+                                            disabled={!editMode}
+                                        >
+                                            {allApiKey.map((key, index) => (
+                                                <MenuItem key={index} value={key}>
+                                                    {key}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </div>
+                                    <div>
+                                        {editMode ?
+                                        <Button variant='contained' onClick={handleUpdateApiKey}>
+                                            Edit
+                                        </Button> : ""}
+                                    </div>
                                 </div>
                                 {/* <textarea /> */}
                             </div>

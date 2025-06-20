@@ -45,10 +45,10 @@ const Info = () => {
 
   const { permissions } = useContext(PermissionContext)
   // const INFO = permissions[16]?.read;
-  const Mailers = permissions[18]?.read;
-  const Fuel_Info = permissions[19]?.read;
-  const Employee = permissions[20]?.read;
-  const Agreement = permissions[21]?.read;
+  const Mailers = permissions[19]?.read;
+  const Fuel_Info = permissions[20]?.read;
+  const Employee = permissions[21]?.read;
+  const Agreement = permissions[22]?.read;
   const handleMenuItemClick = (menuItem, alt, e) => {
 
     localStorage.setItem('activeMenuItem', menuItem);

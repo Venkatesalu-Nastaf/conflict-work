@@ -8,8 +8,8 @@ import { GstReport } from './GST_Report/GstReport';
 import { BillWiseReceipt } from './Billwised_receipt/BillWiseReceipt';
 import MonthlyWise from './Monthly_Wise/MonthlyWise';
 import { PendingBills } from './pendingBills/PendingBills';
-import VendorStatement from './VendorStatement/VendorStatement';
-import VehicleStatement from './VehicleStatement/VehicleStatement';
+// import VendorStatement from './VendorStatement/VendorStatement';
+// import VehicleStatement from './VehicleStatement/VehicleStatement';
 // import LogDetails from './LogDetails/LogDetails';
 import { ReportData } from './Context/ReportContext';
 export const Reports = ({ stationName,Statename }) => {
@@ -34,7 +34,7 @@ export const Reports = ({ stationName,Statename }) => {
 const [hasChanged,sethasChanged] = useState(false)
 
 const handleChange = (event, newValue) => {
-    console.log(newValue, "valueinner");
+    // console.log(newValue, "valueinner");
     setValue(newValue);
     sethasChanged(true)
     localStorage.removeItem('reports')
@@ -66,8 +66,8 @@ const reports = localStorage.getItem('reports');
                                 <Tab label="GST Reports" className='tab-content' value="GSTReports" />
                                 <Tab label="Billed wise Receipt" className='tab-content' value="BilledwiseReceipt" />
                                 <Tab label="Pending Bills" className='tab-content' value="Pendingbills" />
-                                <Tab label="Vendor Statement" className='tab-content' value="VendorStatement" />
-                                <Tab label="Vehicle Statement" className='tab-content' value="VehicleStatement" />
+                                {/* <Tab label="Vendor Statement" className='tab-content' value="VendorStatement" />
+                                <Tab label="Vehicle Statement" className='tab-content' value="VehicleStatement" /> */}
                                 {/* <Tab label="Log Details" className='tab-content' value="logDetails" /> */}
                             </TabList>
                         </Box>
@@ -76,8 +76,8 @@ const reports = localStorage.getItem('reports');
 
                         <TabPanel value="BilledwiseReceipt"><BillWiseReceipt stationName={stationName} /></TabPanel>
                         <TabPanel value="Pendingbills"><PendingBills /></TabPanel>
-                        <TabPanel value="VendorStatement"><VendorStatement /></TabPanel>
-                        <TabPanel value="VehicleStatement"><VehicleStatement /></TabPanel>
+                        {/* <TabPanel value="VendorStatement"><VendorStatement /></TabPanel>
+                        <TabPanel value="VehicleStatement"><VehicleStatement /></TabPanel> */}
                         {/* <TabPanel value="logDetails"><LogDetails /></TabPanel> */}
                     </TabContext>
                 </Box>

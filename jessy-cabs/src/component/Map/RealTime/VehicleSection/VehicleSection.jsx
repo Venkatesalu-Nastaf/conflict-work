@@ -28,7 +28,8 @@ import { useNavigate } from 'react-router-dom';
 import useDetailsVehicle from './useDetailsVehicle';
 import { VehicleMapData } from '../../vehicleMapContext/vehcileMapContext';
 import "./VehicleSection.css"
-
+import axios from 'axios';
+import { APIURL } from '../../../url';
 
 // for timeline tab
 function CustomTabPanel(props) {
@@ -55,18 +56,29 @@ CustomTabPanel.propTypes = {
 
 
 
-const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) => {
+const VehicleSection = ({ allVehicleList, vehicleCurrentLocation, todayVehicle }) => {
 
   const { setOpenHistoryDrawer, setOpenmessage, setOpenshare, setOpenDriverModify, setHistoryLocation, setOpenAddTag, setOpendetailsDrawer, setOpen, vehicleListData, setVehicleListData,
     vehicleSearchDetails, setVehicleSearchDetails
   } = useContext(PermissionContext)
   const { vehiclesData } = useDetailsVehicle()
-  const { jessyCabsDistance, vehcilecurrentAddress } = VehicleMapData()
+  const { jessyCabsDistance, vehcilecurrentAddress, hover, setHover } = VehicleMapData()
   const [selectedOption, setSelectedOption] = useState('Vehicle');
   const [searchTerm, setSearchTerm] = useState('');
   const [dropdownValue, setDropdownValue] = useState('');
   const [selectValue, setSelectedValue] = useState(false);
-  const [vehNo,setVehNo] = useState(null)
+  const [vehNo, setVehNo] = useState(null);
+
+  //Tripid search state
+  const [isTripid, setIsTripid] = useState(false);
+  const [tripStatusMessage, setTripStatusMessage] = useState('');
+  const [isStatusError, setIsStatusError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [active, setActive] = useState(null);
+  const [reached, setReached] = useState('')
+
+
+
   const handleToggleChange = (event, newOption) => {
     if (newOption !== null) {
       setSelectedOption(newOption);
@@ -75,7 +87,45 @@ const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) 
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+    setIsTripid(false);
+    setReached('')
+    setTripStatusMessage('');
+    setIsStatusError(false)
   };
+
+  // const handleKeyDown =(event)=>{
+
+  //   if(event.key === 'Enter'){
+  //     setIsTripid(true)
+  //   }
+  // }
+  // console.log(searchTerm,"kkwwwwwwwwwwwwwwwwww")
+  const apiUrl = APIURL
+  const handleKeyDown = async (event) => {
+    // console.log(searchTerm,"kkkjjjjjjjjjjjjjjjjjjjj")
+    if(!searchTerm){
+      return;
+    }
+    if (event.key === 'Enter') {
+      setIsTripid(true);
+      try {
+        const response = await axios.get(`${apiUrl}/tripStatus/${searchTerm}`);
+        const status = response.data.status;
+        // console.log("TripStatus:", status);
+        setReached(status)
+        // console.log(reached,"reachedghj");
+        setTripStatusMessage(`Trip Status: ${status}`);
+        setSuccess(true);
+      } catch (error) {
+        // console.error("Error", error);
+        setTripStatusMessage("Trip ID not found or error occurred.");
+        setIsStatusError(true);
+        setReached('')
+      }
+    }
+  };
+
+
 
   const handleDropdownChange = (event) => {
     setDropdownValue(event.target.value);
@@ -86,7 +136,7 @@ const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) 
   }
   //vehicle section drawer
   const toggleDrawer = (open, vehno) => (event) => {
-    console.log(vehno, "vehnooo");
+    // console.log(vehno, "vehnooo");
 
     setVehicleSearchDetails(vehno);
     setVehNo(vehno)
@@ -142,16 +192,23 @@ const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) 
   //   );
   // });
   const filteredVehicles = Array.isArray(allVehicleList)
-    ? allVehicleList.filter((vehicle) => {
+    ? allVehicleList?.filter((vehicle) => {
+      if (isTripid) {
+        return vehicle.tripids?.some((id) =>
+          id.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
       return (
         vehicle.vehRegNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         vehicle.driverName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         vehicle.stations?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         vehicle.fueltype?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         vehicle.vehicleName?.toLowerCase().includes(searchTerm.toLowerCase())
+        // vehicle.tripid?.toString().toLowerCase().includes(searchTerm.toLowerCase())
       );
     })
     : [];
+  const hybrid = localStorage.getItem("SuperAdmin")
   return (
     <>
       <div className='vehicle-section'>
@@ -163,6 +220,7 @@ const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) 
                 placeholder="Search vehicles/Groups..."
                 value={searchTerm}
                 onChange={handleSearchChange}
+                onKeyDown={handleKeyDown}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -173,54 +231,66 @@ const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) 
                 sx={{ display: 'flex', justifyContent: 'center', margin: '10px 0px 10px 0px', }}
               />
             )}
-
-            {selectedOption === 'Location' && (
-              <TextField
-                select
-                variant="outlined"
-                label="Search for Locations"
-                placeholder="Search for Locations..."
-                value={dropdownValue}
-                onChange={handleDropdownChange}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{ display: 'flex', justifyContent: 'center', margin: '10px 0px 10px 0px', height: "50px" }}
-              >
-                <MenuItem value="car">Car</MenuItem>
-                <MenuItem value="bike">Bike</MenuItem>
-                <MenuItem value="truck">Truck</MenuItem>
-              </TextField>
+            {tripStatusMessage && (
+              <p style={{ color: isStatusError ? 'red' : 'green', margin: '5px 0 0 10px', fontSize: '14px' }}>
+                {tripStatusMessage}
+              </p>
             )}
           </div>
-          <div className='buttons-width'>
-            <ToggleButtonGroup
-              value={selectedOption}
-              exclusive
-              onChange={handleToggleChange}
-              aria-label="text alignment"
-              sx={{ display: 'flex', justifyContent: 'center', margin: '20px' }}
-            >
-              <ToggleButton value="Vehicle" aria-label="Vehicle" sx={{ margin: '0px', borderTopLeftRadius: "10px", borderBottomLeftRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "13px", fontWeight: "500", color: "#0078d4 !important" }}>
-                Vehicle
-              </ToggleButton>
-              <ToggleButton value="Location" aria-label="Location" sx={{ margin: '0px', borderTopRightRadius: "10px", borderBottomRightRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "13px", fontWeight: "500", color: "#0078d4 !important" }}>
-                Location
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </div>
+
+
+          {hybrid === "Hybrid_Customer" ? (
+            <>
+            </>
+          ) : (
+            <div className='buttons-width'>
+              <ToggleButtonGroup
+                value={selectedOption}
+                exclusive
+                onChange={handleToggleChange}
+                aria-label="text alignment"
+                sx={{ display: 'flex', justifyContent: 'center', margin: '20px' }}
+              >
+                <ToggleButton value="Vehicle" aria-label="Vehicle" sx={{ margin: '0px', borderTopLeftRadius: "10px", borderBottomLeftRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "13px", fontWeight: "500", color: "#0078d4 !important" }}>
+                  Vehicle
+                </ToggleButton>
+                <ToggleButton value="Location" aria-label="Location" sx={{ margin: '0px', borderTopRightRadius: "10px", borderBottomRightRadius: "10px", height: "35px", padding: '10px', border: '1px solid #0078d4', fontSize: "13px", fontWeight: "500", color: "#0078d4 !important" }}>
+                  Location
+                </ToggleButton>
+
+              </ToggleButtonGroup>
+            </div>
+          )}
         </div>
+        {/* {console.log(active ,reached !== "Reached",reached ,"kkkk")} */}
         {selectedOption === 'Vehicle' && (
 
           <div className='vehicle-details' style={{ height: "400px", overflow: "auto" }} >
             <div className="vehicle-indiduals">
-              {filteredVehicles?.map((li) => (
+              {filteredVehicles?.map((li, index) => (
                 <>
-                  <div className='vehicle-indiduals-cards' onClick={toggleDrawer(true, li?.vehRegNo)}>
+                  <div className={`vehicle-indiduals-cards ${active === index && reached !== "Reached" ? 'hovered-card' : ''}`}
+                    // onMouseEnter={() => console.log('Hovered:', li)}
+                    onMouseEnter={() => {
+                      if (reached !== "Reached") {
+                        setHover(li);
+                        setActive(index)
+                      }else if(reached === "Reached"){
+                        setHover(null)
+                        setActive(null);
+                        
+                      }else{
+                         setHover(li);
+                        setActive(index)           
+                      }
+                    }}
+                    onMouseLeave={() => {
+                     
+                        setHover(null)
+                        setActive(null);
+                     
+                    }}
+                    onClick={toggleDrawer(true, li?.vehRegNo)}>
                     <div className='vehicle-indiduals-cards-width' >
                       <div className='vehicle-indiduals-cards'>
                         <h3 className='heading-three ' onClick={toggleDrawer(true, li?.vehRegNo)}>{li?.vehRegNo}</h3>
@@ -259,15 +329,20 @@ const VehicleSection = ({ allVehicleList,vehicleCurrentLocation,todayVehicle }) 
                       </div>
                     </div>
                   </div>
-                  <div className='last-row-buttons' style={{ marginBottom: "10px" }} >
-                    <button className='bottom-buttons' onClick={handleOpenHistoryDrawer}>History</button>
-                    <button className='bottom-buttons' onClick={handleOpendetailsDrawer}>Details</button>
-                    <button className='bottom-buttons' onClick={handleClickOpenAddTag}>Add Tag</button>
-                    <button className='bottom-buttons' onClick={handleOpenhistoryLocation}>History Location</button>
-                  </div>
+
+
+                  {/* {hybrid === "Hybrid_Customer" ? (
+                    <></>
+                  ) : (
+                    <div className='last-row-buttons' style={{ marginBottom: "10px" }} >
+                      <button className='bottom-buttons' onClick={handleOpenHistoryDrawer}>History</button>
+                      <button className='bottom-buttons' onClick={handleOpendetailsDrawer}>Details</button>
+                      <button className='bottom-buttons' onClick={handleClickOpenAddTag}>Add Tag</button>
+                      <button className='bottom-buttons' onClick={handleOpenhistoryLocation}>History Location</button>
+                    </div>
+                  )} */}
                 </>
               ))
-
               }
 
             </div>

@@ -177,3 +177,32 @@
   background-color: #e9e9e9;
   padding: 25px;
 }
+
+@media screen and (max-width: 600px) {
+
+  .template-selection-main-container {
+    padding: 10px;
+  }
+
+  .template-selection-menu {
+    width: 70%;
+    height: auto;
+    padding: 10px;
+  }
+
+  .template-selection-btn {
+    font-size: 14px;
+    width: fit-content;
+    border: none;
+    font-weight: 600;
+    background-color: transparent;
+    margin-bottom: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .template-selection-template-section {
+    padding: 10px;
+  }
+
+}

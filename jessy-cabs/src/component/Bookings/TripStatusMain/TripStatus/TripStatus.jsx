@@ -13,7 +13,7 @@ import { MdOutlineCalendarMonth } from "react-icons/md";
 import { SiStatuspal } from "react-icons/si";
 import { GiMatterStates } from "react-icons/gi";
 import Box from "@mui/material/Box";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+// import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -21,9 +21,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { styled } from "@mui/material/styles";
-import SpeedDial from "@mui/material/SpeedDial";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+// import { styled } from "@mui/material/styles";
+// import SpeedDial from "@mui/material/SpeedDial";
+// import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DialogTitle from '@mui/material/DialogTitle';
 import { PermissionContext } from '../../../context/permissionContext.js';
 // ICONS
@@ -32,25 +32,25 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+// import ChecklistIcon from "@mui/icons-material/Checklist";
+// import SpeedDialAction from "@mui/material/SpeedDialAction";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Checkbox from '@mui/material/Checkbox';
 //import Skeleton from '@mui/material/Skeleton';
 import { CircularProgress } from '@mui/material';
 
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
-  position: "absolute",
-  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
-  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
-    top: theme.spacing(2),
-    left: theme.spacing(2),
-  },
-}));
+// const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+//   position: "absolute",
+//   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+//     bottom: theme.spacing(2),
+//     right: theme.spacing(2),
+//   },
+//   "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+//     top: theme.spacing(2),
+//     left: theme.spacing(2),
+//   },
+// }));
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -59,10 +59,10 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
   const {
     statusvalue, handlestatusChange, VehNo, cutomerName,
     fromDate, handleVechicleNoChange, handleCustomerChange,
-    selectedCustomerId,
+    // selectedCustomerId,
     setFromDate,
     toDate,
-    actionName,
+    // actionName,
     error,
     success,
     info,
@@ -72,7 +72,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     warningMessage,
     infoMessage,
     setToDate,
-    handleClick,
+    // handleClick,
     handleShow,
     // handleShowAll,
     department,
@@ -86,7 +86,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     handlePopupClose,
     selectedRow,
     handleTripsheetClick,
-    columns,
+    // columns,
     filteredColumns,
     columnshowall,
     columsnew,
@@ -94,16 +94,18 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
     // setVehNo, 
     handleBookingClick,
     loading,
-    isStations, setisStations,
+    // isStations, 
+    setisStations,
     setdepartment,
-    allDepartment,setAllDepartment
+    // allDepartment,
+    setAllDepartment
     // setLoading
   } = useTripStatus();
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  }, [actionName, handleClick]);
+  // useEffect(() => {
+  //   if (actionName === 'List') {
+  //     handleClick(null, 'List');
+  //   }
+  // }, [actionName, handleClick]);
   const { permissions } = useContext(PermissionContext)
   const TripStatus_read = permissions[2]?.read;
   const [allCustomer, setAllCustomer] = useState([])
@@ -146,7 +148,7 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
       : Status.filter((option) => option.optionvalue !== "Billed" && option.optionvalue !== "All");
 
       const handleInputChange = (event, newValue) => {
-        console.log(newValue, "newValue Change");
+        // console.log(newValue, "newValue Change");
       
         const departmentFilter = newValue?.map(li => li.label);
       
@@ -247,9 +249,10 @@ const TripStatus = ({ stationName, customer, vehicleNo }) => {
                     disableCloseOnSelect
                     renderOption={(props, option, { selected }) => {
                       const isAllSelected = department.some(d => d.label === "All");
-
+                      const { key, ...rest } = props;
                       return (
-                        <li {...props}>
+                        // <li {...props}>
+                            <li key={key} {...rest}>
                           <Checkbox
                             icon={icon}
                             checkedIcon={checkedIcon}

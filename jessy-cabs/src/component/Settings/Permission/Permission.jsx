@@ -97,9 +97,9 @@ const Permission = () => {
                   <table>
                     <thead >
                       <tr id="update-header">
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Mail_ID</th>
+                        <th className="tabledata">ID</th>
+                        <th className="tabledata">Name</th>
+                        <th className="tabledata">Mail_ID</th>
                       </tr>
                     </thead>
                     <tbody>

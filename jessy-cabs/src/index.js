@@ -16,6 +16,10 @@ import { VehicleMapDataProvider } from "./component/Map/vehicleMapContext/vehcil
 import { ReportProvider } from "./component/Billings/Report/Context/ReportContext";
 // import { EditMapProvider } from "./component/Bookings/TripSheet/NavigationMap/EditMapContext";
 import { EditMapProvider } from "./component/Bookings/TripSheet/NavigationMap/EditMapContext";
+import { PaymentProvider } from "./component/payment/Vendor/paymentContext";
+import { VendorInvoiceProvider } from "./component/payment/Vendor/Invoice/invoiceContext";
+import { CustomerInvoiceProvider } from "./component/payment/Customer/Invoice/customerInvoiceContext";
+import { CustomerPaymentProvider } from "./component/payment/Customer/customerPaymentContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
@@ -23,23 +27,29 @@ root.render(
     <RefPdfDataProvider>
       <PdfDataProvider>
         <VehicleMapDataProvider>
-        <MailerTemplateDataProvider>
-          <EditMapProvider>
-          <ReportProvider>
-            <DataProvider2>
-              <DataProvider>
-                <UserProvider>
-                  <PermissionProvider>
-                    <App />
-                  </PermissionProvider>
-
-                </UserProvider>
-              </DataProvider>
-            </DataProvider2>
-
-          </ReportProvider>
-          </EditMapProvider>
-        </MailerTemplateDataProvider>
+          <MailerTemplateDataProvider>
+            <EditMapProvider>
+              <ReportProvider>
+                <DataProvider2>
+                  <DataProvider>
+                    <UserProvider>
+                      <PermissionProvider>
+                        <PaymentProvider>
+                          <VendorInvoiceProvider>
+                            <CustomerInvoiceProvider>
+                              <CustomerPaymentProvider>
+                                     <App />
+                              </CustomerPaymentProvider>
+                            </CustomerInvoiceProvider>
+                          </VendorInvoiceProvider>
+                        </PaymentProvider>
+                      </PermissionProvider>
+                    </UserProvider>
+                  </DataProvider>
+                </DataProvider2>
+              </ReportProvider>
+            </EditMapProvider>
+          </MailerTemplateDataProvider>
         </VehicleMapDataProvider>
       </PdfDataProvider>
     </RefPdfDataProvider>

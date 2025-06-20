@@ -30,7 +30,12 @@ export const PdfDataProvider = ({ children }) => {
         gstnumber: ''
     });
     const location = useLocation()
-    const [selectedMonths,setSelectedMonths] = useState(getCurrentMonth())
+    const [selectedMonths,setSelectedMonths] = useState(getCurrentMonth());
+    //  const [selectedProfitMonths,setSelectedProfitMonths] = useState("All");
+    //   const [selectedProfitYear, setSelectedProfitYear] = useState(currentYear);
+     
+       const [fromYear, setFromYear] = useState(currentYear);
+    const [toYear, setToYear] = useState(currentYear);
     function getCurrentMonth() {
         const currentDate = new Date();
 
@@ -76,7 +81,9 @@ export const PdfDataProvider = ({ children }) => {
         <DataContext.Provider value={{
             pdfPrint, setPdfPrint, billingPage, setBillingPage, individualBilled, setIndividualBilled,billGenerate,setBillGenerate,
             transferReport, setTransferReport, particularPdf, setParticularPdf, organizationDetail, particularRefNo, setParticularRefNo,
-            selectedMonths,setSelectedMonths,selectedYear,setSelectedYear
+            selectedMonths,setSelectedMonths,selectedYear,setSelectedYear,
+            // selectedProfitMonths,setSelectedProfitMonths,selectedProfitYear,setSelectedProfitYear
+            fromYear,setFromYear,toYear,setToYear
         }}>
             {children}
         </DataContext.Provider>

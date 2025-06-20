@@ -7,14 +7,15 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
+// import encryption from '../../../dataEncrypt';
 // import { toDate } from 'validator';
 
 const useEmployee = () => {
     const apiUrl = APIURL;
     // const user_id = localStorage.getItem('useridno');
     // const [selectedCustomerData, setSelectedCustomerDatas] = useState({});
-    const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
-    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------ 
+    // const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [templateMessageData, setTemplateMessageData] = useState('');
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
@@ -40,7 +41,7 @@ const useEmployee = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const [loading, setLoading] = useState(false);
-    const [deleteAgreementdata,setDeleteAgreementdata] = useState(false)
+    const [deleteAgreementdata, setDeleteAgreementdata] = useState(false)
 
     const handleButtonClick = (params) => {
         const { customer } = params.row;
@@ -53,11 +54,12 @@ const useEmployee = () => {
         showPdf(customer);
     };
 
+
     // TABLE STRAT
     const columns = [
         { field: "id4", headerName: "Sno", width: 50 },
         {
-            field: 'actions',   
+            field: 'actions',
             headerName: 'Actions',
             width: 130,
             renderCell: (params) => (
@@ -73,15 +75,15 @@ const useEmployee = () => {
             ),
         },
         { field: "customer", headerName: "Customer", width: 140 },
-        { 
-            field: "fromdate", 
-            headerName: "From Date", 
+        {
+            field: "fromdate",
+            headerName: "From Date",
             width: 140,
             valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY'), // Format to DD/MM/YYYY
         },
-        { 
-            field: "todate", 
-            headerName: "To Date", 
+        {
+            field: "todate",
+            headerName: "To Date",
             width: 140,
             valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY'), // Format to DD/MM/YYYY
         },
@@ -91,9 +93,10 @@ const useEmployee = () => {
         { field: "gstno", headerName: "GST No", width: 140 },
 
     ];
-   
+
     // TABLE END
 
+    // };
     // };
 
     const handleExcelDownload = async () => {
@@ -184,7 +187,7 @@ const useEmployee = () => {
         }
 
     }
-    
+
     const handlePdfDownload = () => {
         const pdf = new jsPDF({
             orientation: "landscape",
@@ -194,10 +197,14 @@ const useEmployee = () => {
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("Employee Details", 10, 10);
-        const header = Object.keys(rows[0]);
-
+        // const header = Object.keys(rows[0]);
         // Extracting body
-        const body = rows.map(row => Object.values(row));
+        // const body = rows.map(row => Object.values(row));
+
+
+        const selectedFields = ["id4", "customer", "fromdate", "todate", "mobileno","address","gstno"]
+        const header = selectedFields;
+        const body = rows.map(row =>selectedFields.map(field =>row[field]))
 
         let fontdata = 1;
         if (header.length <= 13) {
@@ -287,8 +294,8 @@ const useEmployee = () => {
 
     const [book, setBook] = useState({
         customer: '',
-        fromdate:dayjs(),
-        todate:dayjs(),
+        fromdate: dayjs(),
+        todate: dayjs(),
         email: '',
         mobileno: '',
         address: '',
@@ -296,28 +303,33 @@ const useEmployee = () => {
         // Agreement_Image:null,
     });
 
-    const [customerPDF, setCustomerPDF] = useState(null);
+    // const [customerPDF, setCustomerPDF] = useState(null);
 
 
-    const licenceSubmit = async (customer) => {
-        if (customerPDF !== null) {
-            const formData = new FormData();
-            formData.append("file", customerPDF);
-            
-            try {
-                await axios.post(`${apiUrl}/Customer-Uploadpdf/${customer}`, formData);
-                setCustomerPDF(null);
-            }
-            catch {
-                setError(true);
-                setErrorMessage('Image not inserted');
-            }
-        } else {
-            return
-        }
-        setCustomerPDF(null);
-    };
-    
+    // const licenceSubmit = async (customer) => {
+    //     if (customerPDF !== null) {
+    //         const formData = new FormData();
+    //         formData.append("file", customerPDF);
+    //         console.log(formData,"frontend");
+
+    //         try {
+    //             await axios.post(`${apiUrl}/Customer-Uploadpdf/${customer}`, formData,{
+    //                 headers:{
+    //                     'Content-Type': 'multipart/form-data'
+    //                 }
+    //             });
+    //             setCustomerPDF(null);
+    //         }
+    //         catch {
+    //             setError(true);
+    //             setErrorMessage('Image not inserted');
+    //         }
+    //     } else {
+    //         return
+    //     }
+    //     setCustomerPDF(null);
+    // };
+
 
     const handleFileChange = (e) => {
         // console.log( e.target.files , "Uploaddddddddddddddd");
@@ -336,7 +348,7 @@ const useEmployee = () => {
         setSuccessMessage("Uploaded successfully");
     };
 
-    
+
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
 
@@ -362,21 +374,23 @@ const useEmployee = () => {
     };
 
     const handleenterSearch = useCallback(async (e) => {
+       
+      if(searchText === '') return;
+        
         if (e.key === "Enter") {
-            console.log("Search Text:", searchText);
-
+            // console.log("Search Text:", searchText);
             try {
                 // Fetching data from the server
                 const response = await fetch(`${apiUrl}/searchAgreementpage?searchText=${encodeURIComponent(searchText)}`);
 
                 // Checking if the response is not OK
                 if (!response.ok) {
-                    console.error("Network response not OK:", response.statusText);
+                    // console.error("Network response not OK:", response.statusText);
                     throw new Error('Network response was not ok');
                 }
 
                 const data = await response.json();
-                console.log("Fetched data:", data);  // Log the data to ensure it's correct
+                // console.log("Fetched data:", data);  // Log the data to ensure it's correct
 
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -401,32 +415,32 @@ const useEmployee = () => {
 
     const handleAutocompleteChange = (event, value, name) => {
         const manualInput = typeof value === "string" ? value : value?.label || "";
-        console.log("Manual Input:", manualInput);
+        // console.log("Manual Input:", manualInput);
         if (name === "customer") {
-          const selectedOrganization = organizationNames?.find(
-            (option) => option.customer === manualInput
-          );
-          console.log("Selected Organization:", selectedOrganization);
-          setBook((prevState) => ({
-            ...prevState,
-            customer: manualInput,
-            address: selectedOrganization?.address1,
-            gstno: selectedOrganization?.gstnumber,
-            // fromdate: selectedOrganization?.fromdate,
-            email:selectedOrganization?.orderByEmail,
-            mobileno:selectedOrganization?.orderByMobileNo,
-          }));
-          setSelectedCustomerData((prevState) => ({
-            ...prevState,
-            customer: manualInput,
-            address: selectedOrganization?.address1,
-            gstno: selectedOrganization?.gstnumber,
-            // fromdate: selectedOrganization?.fromdate,
-            email:selectedOrganization?.orderByEmail,
-            mobileno:selectedOrganization?.orderByMobileNo
-          }));
+            const selectedOrganization = organizationNames?.find(
+                (option) => option.customer === manualInput
+            );
+            //   console.log("Selected Organization:", selectedOrganization);
+            setBook((prevState) => ({
+                ...prevState,
+                customer: manualInput,
+                address: selectedOrganization?.address1,
+                gstno: selectedOrganization?.gstnumber,
+                // fromdate: selectedOrganization?.fromdate,
+                email: selectedOrganization?.orderByEmail,
+                mobileno: selectedOrganization?.orderByMobileNo,
+            }));
+            setSelectedCustomerData((prevState) => ({
+                ...prevState,
+                customer: manualInput,
+                address: selectedOrganization?.address1,
+                gstno: selectedOrganization?.gstnumber,
+                // fromdate: selectedOrganization?.fromdate,
+                email: selectedOrganization?.orderByEmail,
+                mobileno: selectedOrganization?.orderByMobileNo
+            }));
         }
-      };
+    };
     //   console.log(dayjs())
     //   console.log(selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate).format("DD/MM/YYYY") : dayjs().format("DD/MM/YYYY"),"ppppp")
     //   console.log(selectedCustomerData.fromdate ? "hhh": "oooo","ppppp")
@@ -454,7 +468,7 @@ const useEmployee = () => {
     //     const parsedDate = dayjs(date).format("DD/MM/YYYY");
     //     // const parsedDate = dayjs(formattedDate).format("DD-MM-YYYY");
     //     console.log(parsedDate,name,"HHHHHHHHH");
-        
+
 
 
     //     setBook((prevBook) => ({
@@ -468,46 +482,49 @@ const useEmployee = () => {
     //     }));
     // };
 
-     const handleDateChange = (date, name) => {
-            const formattedDate = dayjs(date).format("YYYY-MM-DD");
-            const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
-    
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: parsedDate,
-            }));
-    
-            setSelectedCustomerData((prevValues) => ({
-                ...prevValues,
-                [name]: parsedDate,
-            }));
-        };
+    const handleDateChange = (date, name) => {
+        const formattedDate = dayjs(date).format("YYYY-MM-DD");
+        const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
+
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: parsedDate,
+        }));
+
+        setSelectedCustomerData((prevValues) => ({
+            ...prevValues,
+            [name]: parsedDate,
+        }));
+    };
 
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
-        customer:'',
-        fromdate:dayjs(),
-        todate:dayjs(),
-        email:'',
-        mobileno:'',
-        address:'',
-        gstno:'',
+            customer: '',
+            fromdate: dayjs(),
+            todate: dayjs(),
+            email: '',
+            mobileno: '',
+            address: '',
+            gstno: '',
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
         setDeleteAgreementdata(false)
     };
-    
-    const handleRowClick =(params) => {
+
+    const handleRowClick = (params) => {
         const customerData = params.row;
-        console.log(customerData,"kkkkkkkkkkkkkkkkkkkkkkk")
-        setSelectedCustomerData(customerData); 
+        // console.log(customerData, "row values")
+        setSelectedCustomerData(customerData);
+
+        setBook(customerData);
+
         // setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
         // console.log(customerData,'ddddddddddddddddddddd');
     };
-   
+
     //--------show pdf---------------
     const [allFile, setAllFile] = useState([]);
     const showPdf = (showID) => {
@@ -527,6 +544,7 @@ const useEmployee = () => {
 
     const handleCloseDialog = () => {
         setDialogOpen(false);
+        setSelectAll(false)
     };
 
     ///--------------------------------------------
@@ -538,8 +556,15 @@ const useEmployee = () => {
         if (file !== null) {
             const formData = new FormData();
             formData.append("file", file);
+
             try {
-                await axios.post(`${apiUrl}/agreementpdf_Document/${id}`, formData)
+
+                await axios.post(`${apiUrl}/agreementpdf_Document/${id}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                })
+
             }
             catch {
                 setError(true);
@@ -553,7 +578,7 @@ const useEmployee = () => {
     // const handleList = useCallback(async () => {
     //     setLoading(true)
     //     try {
-           
+
     //         const response = await axios.get(`${apiUrl}/employees`);
     //         const data = response.data
     //         const rowsWithUniqueId = data.map((row, index) => ({
@@ -579,18 +604,18 @@ const useEmployee = () => {
         try {
             const response = await axios.get(`${apiUrl}/agreementdata`);
             const data = response.data;
-            
+            // console.log(data, "getting the values");
             const rowsWithUniqueId = data.map((row, index) => ({
                 ...row,
                 id4: index + 1,
             }));
-            
+
             setRows(rowsWithUniqueId);
-            
+
         } catch (err) {
             if (err.message === 'Network Error') {
                 setErrorMessage("Check network connection.");
-            } 
+            }
             // else {
             //     setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
             // }
@@ -599,8 +624,8 @@ const useEmployee = () => {
             setLoading(false); // Ensure loading is false in all cases
         }
     }, [apiUrl]);
-    
-    
+
+
     useEffect(() => {
         handleList();
     }, [handleList]);
@@ -614,22 +639,22 @@ const useEmployee = () => {
     //         setErrorMessage("Enter Organization Details");
     //         return;
     //     }
-    
+
     //     try {
     //         const formData = new FormData();
     //         for (const key in book) {
     //             formData.append(key, book[key]);
     //         }
-    
+
     //         // API call to upload data and file
     //         const response = await axios.post(`${apiUrl}/agreementdocumentimage`, formData, {
     //             headers: { "Content-Type": "multipart/form-data" },
     //         });
-    
+
     //         // Handle success
     //         setSuccess(true);
     //         setSuccessMessage(response.data.message || "Successfully Added");
-    
+
     //         // Reset form and states
     //         handleCancel();
     //         addPdf();
@@ -638,7 +663,7 @@ const useEmployee = () => {
     //         handleList();
     //     } catch (error) {
     //         console.error("Error occurred:", error);
-    
+
     //         // Error handling
     //         if (error.response) {
     //             setError(true);
@@ -652,17 +677,17 @@ const useEmployee = () => {
     const handlecheckmaildriver = async () => {
         try {
             // Add templateMessageData to the dataToSend object
-            const dataToSend = {
-                customer:book.customer,
-                email: book.email,
-                fromDate:fromdate,  
-                todate:book.todate,
-                Sendmailauth: organistaionsendmail.Sendmailauth,
-                Mailauthpass: organistaionsendmail.Mailauthpass,
-                templateMessageData
-            };
-    
-            console.log("Sending data:", dataToSend); // For debugging purposes
+            // const dataToSend = {
+            //     customer: book.customer,
+            //     email: book.email,
+            //     fromDate: fromdate,
+            //     todate: book.todate,
+            //     Sendmailauth: organistaionsendmail.Sendmailauth,
+            //     Mailauthpass: organistaionsendmail.Mailauthpass,
+            //     templateMessageData
+            // };
+
+            // console.log("Sending data:", dataToSend); // For debugging purposes
             // await axios.post(`${apiUrl}/send-emailagreementdata`, dataToSend);
             setSuccess(true);
             setSuccessMessage("Mail Sent Successfully");
@@ -682,30 +707,30 @@ const useEmployee = () => {
             setErrorMessage("Enter Organization Details");
             return;
         }
-    
+
         try {
             const formData = new FormData();
-            console.log(book,"llll")
+            // console.log(book,"llll")
             for (const key in book) {
                 formData.append(key, book[key]);
             }
-    
+
             // Step 1: Upload data and file
             const uploadResponse = await axios.post(`${apiUrl}/agreementdocumentimage`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-    
+
             // Step 2: Fetch the last inserted ID if applicable
             // const lastIdResponse = await axios.get(`${apiUrl}/lastcustomergetimage`);
             // const lastDriverId = lastIdResponse.data.driverid;
-    
+
             // Step 3: Handle dependent operations (PDF upload, email, etc.)
             // addPdf(lastDriverId);
-            licenceSubmit(book.customer);
+            // licenceSubmit(book.customer);
             handlecheckmaildriver(book.customer)
             setSuccess(true);
             setSuccessMessage(uploadResponse.data.message || "Successfully Added");
-    
+
             // Reset form and states
             handleCancel();
             setCustomer();
@@ -713,7 +738,7 @@ const useEmployee = () => {
             handleList();
         } catch (error) {
             console.error("Error occurred:", error);
-    
+
             // Error handling
             if (error.response) {
                 setError(true);
@@ -722,28 +747,66 @@ const useEmployee = () => {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
             }
-        } 
+        }
     };
-    
-    
 
-    const handleEdit = async() => {
-        console.log("edited")
-        // const selectedCustomer = rows.find((row) => row.email === email);
-        const { id4,id,Agreement_Image, ...rest } = selectedCustomerData;
-        console.log(id4,"value",selectedCustomerData)
+
+    const handleEdit = async () => {
+        const { id4, id, Agreement_Image, ...rest } = selectedCustomerData;
+
         const updatedCustomer = { ...rest };
-        await axios.put(`${apiUrl}/agreementedit/${id}`, updatedCustomer);
-        setSuccess(true);
-        setSuccessMessage("Successfully updated");
-        handleCancel();
-        addPdf();   
-        licenceSubmit(updatedCustomer.customer)
-        console.log(updatedCustomer.customer, 'ggggggggggggg');
-        
-        setRows([]);
-        handleList()
+        try {
+            await axios.put(`${apiUrl}/agreementedit/${id}`, updatedCustomer);
+
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            addPdf();
+            // licenceSubmit(updatedCustomer.customer)
+            // console.log(updatedCustomer.customer, 'ggggggggggggg');
+            setRows([]);
+            handleList();
+        } catch (error) {
+            // console.error("Error occurred:", error);
+
+            if (error.response) {
+                setError(true);
+                setErrorMessage(error.response.data.message || "Failed to add data");
+            } else {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+            }
+        }
+
     };
+    const handleUpload = async (file) => {
+
+        const customer = selectedCustomerData.customer
+
+        // console.log(customer, "values");
+        try {
+            if (file) {
+                const formData = new FormData();
+                formData.append("Agreement_Image", file);
+
+                await axios.post(`${apiUrl}/agreementpdf_Documents/${customer}`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                })
+            }
+        } catch (error) {
+            // console.error("Error occurred:", error);
+
+            if (error.response) {
+                setError(true);
+                setErrorMessage(error.response.data.message || "Failed to add data");
+            } else {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+            }
+        }
+    }
 
     // const handleEdit = async () => {
     //     console.log("Editing data...");
@@ -775,7 +838,7 @@ const useEmployee = () => {
     //         }
     //     }
     // };
-    
+
     const handleSelectAll = () => {
         if (selectAll) {
             setDeleteFile([]);
@@ -784,17 +847,17 @@ const useEmployee = () => {
             const allFiles = allFile.map(img => img.Agreement_Image);
             setDeleteFile(allFiles);
             // setCheckbox(allFiles)
-            setSelectAll(false)
+            // setSelectAll(false)
         }
-        setSelectAll(prevState => !prevState);
+        setSelectAll(!selectAll);
     };
 
 
     const handleClick = async (event, actionName, empid) => {
         event.preventDefault();
-        
-            if (actionName === 'List') {
-                try {
+
+        if (actionName === 'List') {
+            try {
                 const response = await axios.get(`${apiUrl}/employees`);
                 const data = response.data;
                 if (data.length > 0) {
@@ -805,56 +868,60 @@ const useEmployee = () => {
                     setRows(rowsWithUniqueId);
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
+                    handleList();
                 } else {
                     setRows([]);
                     setError(true);
                     setErrorMessage("No data found");
                 }
-                }
-                catch {
-                    setError(true);
-                    setErrorMessage("Failed to Retrive Data");
-                }
             }
+            catch {
+                setError(true);
+                setErrorMessage("Failed to Retrive Data");
+            }
+        }
 
-            else if (actionName === 'Cancel') {
+        else if (actionName === 'Cancel') {
+            handleCancel();
+            setRows([]);
+            handleList();
+        }
+
+        else if (actionName === 'Delete') {
+            // const { id, ...rest } = selectedCustomerData; // Use only 'id' for delete
+            const { id } =selectedCustomerData;
+            // console.log(id, "value", selectedCustomerData);
+
+            try {
+                await axios.delete(`${apiUrl}/aggreementdeleteid/${id}`); // Pass only 'id' in the endpoint
+                setSelectedCustomerData(null);
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
                 handleCancel();
                 setRows([]);
-            }
-
-            else if (actionName === 'Delete') {
-                const { id, ...rest } = selectedCustomerData; // Use only 'id' for delete
-                console.log(id, "value", selectedCustomerData);
-            
-                try {
-                    await axios.delete(`${apiUrl}/aggreementdeleteid/${id}`); // Pass only 'id' in the endpoint
-                    setSelectedCustomerData(null);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Deleted");
-                    handleCancel();
-                    setRows([]);
-                    handleList(); // Refresh the list after deletion
-                } catch (error) {
-                    console.error('Error deleting data:', error);
-                    setSuccess(false);
-                    setSuccessMessage("Failed to delete data");
+                handleList(); // Refresh the list after deletion
+            } catch (error) {
+                console.error('Error deleting data:', error);
+                // setSuccess(false);
+                // setSuccessMessage("Failed to delete data");
+                if (error.response) {
+                    setError(true);
+                    setErrorMessage(error.response.data.message || "Failed to add data");
+                } else {
+                    setError(true);
+                    setErrorMessage("Check your Network Connection");
                 }
             }
-            
+        }
+        else if (actionName === 'Add') {
+            handleAdd()
+         
 
-            else if (actionName === 'Edit') {
-          
-                const { id4,id, ...rest } = selectedCustomerData;
-        console.log(id4,"value",selectedCustomerData)
-        const updatedCustomer = { ...rest };
-        await axios.put(`${apiUrl}/agreementedit/${id}`, updatedCustomer);
-        setSuccess(true);
-        setSuccessMessage("Successfully updated");
-        handleCancel();
-        addPdf();   
-        setRows([]);
-        handleList()   
-            }
+
+        }
+        else if (actionName === 'Edit'){
+            handleEdit()
+         }
         //  catch {
         //     setError(true);
         //     setErrorMessage("Check your Network Connection");
@@ -879,12 +946,12 @@ const useEmployee = () => {
             try {
                 const response = await fetch(`${apiUrl}/TemplateForAgreementMail`);
                 if (response.status === 200) {
-                    const userDataArray = await response.json();    
+                    const userDataArray = await response.json();
                     // console.log("Fetched data:", userDataArray);
-    
+
                     if (userDataArray.length > 0) {
                         setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
+                    }
                 } else {
                     console.log("Failed to fetch data, status:", response.status);
                 }
@@ -893,19 +960,20 @@ const useEmployee = () => {
             }
         };
         fetchData();
-    }, [apiUrl],[templateMessageData]);
+    // }, [apiUrl], [templateMessageData]);
+        }, [apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(`${apiUrl}/TemplateForAgreementOwnerMail`);
                 if (response.status === 200) {
-                    const userDataArray = await response.json();    
+                    const userDataArray = await response.json();
                     // console.log("Fetched data:", userDataArray);
-    
+
                     if (userDataArray.length > 0) {
                         setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
+                    }
                 } else {
                     console.log("Failed to fetch data, status:", response.status);
                 }
@@ -914,7 +982,8 @@ const useEmployee = () => {
             }
         };
         fetchData();
-    }, [apiUrl],[templateMessageData]);
+    // }, [apiUrl], [templateMessageData]);
+        }, [apiUrl]);
 
 
     useEffect(() => {
@@ -923,14 +992,14 @@ const useEmployee = () => {
                 const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
                 if (response.status === 200) {
                     const userDataArray = await response.json();
-                      console.log(userDataArray,'userdata');
+                    //   console.log(userDataArray,'userdata');
                     if (userDataArray.length > 0) {
                         setOrganisationSendEmail(userDataArray[0])
                         // setDatatrigger(!datatrigger)
                     } else {
                         setErrorMessage('User data not found.');
                         setError(true);
-                    }   
+                    }
                 }
             }
             catch {
@@ -943,20 +1012,21 @@ const useEmployee = () => {
 
     useEffect(() => {
         const fetchOrganizationNames = async () => {
-          try {
-            const response = await axios.get(`${apiUrl}/Customerdatasfetch`);
-            const data = response.data;
-            setOrganizationNames(data);
-          } catch (error) {
-            console.error("Error fetching organization names:", error);
-          }
+            try {
+                const response = await axios.get(`${apiUrl}/Customerdatasfetch`);
+                const data = response.data;
+                // console.log(data,"customer");
+                setOrganizationNames(data);
+            } catch (error) {
+                console.error("Error fetching organization names:", error);
+            }
         };
-      
+
         fetchOrganizationNames();
-      }, [apiUrl]);
+    }, [apiUrl]);
     //   console.log(organizationNames,'dghjkkkkkkkkkkkk');
-      
-      
+
+
     const handleShowAll = async () => {
         try {
             const response = await fetch(`${apiUrl}/table-for-employee?searchText=${searchText}`);
@@ -974,16 +1044,16 @@ const useEmployee = () => {
                 setError(true);
                 setErrorMessage("no data found")
             }
-        } 
+        }
         // catch {
         //     setError(true);
         //     setErrorMessage("Failed to Retrieve Data")
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
@@ -1086,29 +1156,55 @@ const useEmployee = () => {
 
 
     const handleContextMenu = () => {
-        axios
-            .delete(`${apiUrl}/agreementimage-delete/` + imagedata)
-            .then(res => {
-                console.log("Deleted successfully:", res.data);
-                setSuccess(true); 
-                setSuccessMessage("Successfully Deleted");
-                setError(false); 
-            })
-            .catch(err => {
-                console.error("Error deleting the image:", err);
-                setError(true); 
-                setErrorMessage("Failed to delete the image");
-            })
-            .finally(() => {
-                setDialogdeleteOpen(false);
-                setDialogOpen(false);
-            });
+        if (Array.isArray(deletefile) && deletefile.length > 1) {
+            deleteMultipleImage(deletefile);
+            return;
+        }
+        if (imagedata) {
+            axios
+                .delete(`${apiUrl}/agreementimage-delete/` + imagedata)
+                .then(res => {
+                    console.log("Deleted successfully:", res.data);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully Deleted");
+                    setError(false);
+                })
+                .catch(err => {
+                    console.error("Error deleting the image:", err);
+                    setError(true);
+                    setErrorMessage("Failed to delete the image");
+                })
+                .finally(() => {
+                    setDialogdeleteOpen(false);
+                    setDialogOpen(false);
+                });
+        } else {
+            setError(true);
+            setErrorMessage("No files selected for deletion");
+        }
     };
-    
+
+    const deleteMultipleImage = async (files) => {
+        try {
+            const response = await axios.post(`${apiUrl}/agreementimage-delete-many`, { files });
+            console.log(response.data);
+
+            setSuccess(true);
+            setSuccessMessage("All files deleted successfully");
+            setDialogdeleteOpen(false);
+            setDialogOpen(false);
+        } catch (err) {
+            console.error("Failed to delete files", err);
+            setError(true);
+            setErrorMessage("Failed to delete some or all files");
+        }
+    };
+
+
 
     return {
         selectedCustomerData,
-        selectedCustomerId,
+        // selectedCustomerId,
         rows,
         actionName,
         error,
@@ -1123,7 +1219,7 @@ const useEmployee = () => {
         handleClick,
         handleChange,
         setSelectedCustomerData,
-        selectedCustomerData,
+        // selectedCustomerData,
         setBook,
         handleRowClick,
         handleAdd,
@@ -1140,7 +1236,7 @@ const useEmployee = () => {
         setSearchText,
         // fromDate,setFromDate,
         handleFileChange,
-        setCustomerPDF,
+        // setCustomerPDF,
         handleShowAll,
         organizationNames,
         setOrganizationNames,
@@ -1158,7 +1254,7 @@ const useEmployee = () => {
         toDate,
         setTodate,
         handleAutocompleteChange,
-        fromdate,setFromdate,
+        fromdate, setFromdate,
         handleimagedelete,
         checkbox,
         setCheckbox,
@@ -1170,7 +1266,8 @@ const useEmployee = () => {
         setErrorMessage,
         deletefile,
         loading,
-        setLoading,deleteAgreementdata,setDeleteAgreementdata
+        setLoading, deleteAgreementdata, setDeleteAgreementdata,
+        handleUpload, deleteMultipleImage
     };
 };
 

@@ -186,8 +186,8 @@ const PackageRateEntery = ({ organizationNames, vehileName }) => {
                     variant="standard"
                   />
                 </div>
-                <div style={{ marginLeft: "10px" }}>
-                  <Button variant="contained" disabled={!RateManagement_new} onClick={handleShow} >Show</Button>
+                <div style={{marginLeft:"10px"}}>
+                  <Button variant="contained" disabled={!RateManagement_new} onClick={handleShow}>Show</Button>
 
                 </div>
               </div>

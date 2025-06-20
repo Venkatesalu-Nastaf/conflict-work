@@ -27,7 +27,7 @@ const usePaymentdetails = () => {
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
   const [error, setError] = useState(false);
-  const [searchText, setSearchText] = useState("")
+  // const [searchText, setSearchText] = useState("")
   const [warning, setWarning] = useState(false);
   const [info, setInfo] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -37,13 +37,13 @@ const usePaymentdetails = () => {
   const [infoMessage] = useState({});
 
 
-  const convertToCSV = (data) => {
-    const header = columns.map((column) => column.headerName).join(",");
-    const rows = data.map((row) =>
-      columns.map((column) => row[column.field]).join(",")
-    );
-    return [header, ...rows].join("\n");
-  };
+  // const convertToCSV = (data) => {
+  //   const header = columns.map((column) => column.headerName).join(",");
+  //   const rows = data.map((row) =>
+  //     columns.map((column) => row[column.field]).join(",")
+  //   );
+  //   return [header, ...rows].join("\n");
+  // };
   // const handleExcelDownload = () => {
   //   const csvData = convertToCSV(rows);
   //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
@@ -109,7 +109,7 @@ const handleExcelDownload = async () => {
 
         // Add rows of data
         formattedRows.forEach((singleData) => {
-            const row = worksheet.addRow(singleData);
+             worksheet.addRow(singleData);
             worksheet.columns.forEach((column) => {
                 const cellValue = singleData[column.key] || '';
                 const cellLength = cellValue.toString().length;
@@ -117,20 +117,52 @@ const handleExcelDownload = async () => {
                 column.width = Math.max(currentColumnWidth, cellLength + 5);
             });
 
+            
+            // rows.forEach((singleData, index) => {
+
+            //     singleData["balance"] = singleData["Vendor_FULLTotalAmount"]
+            //     worksheet.addRow(singleData);
+
+            //     // Adjust column width based on the length of the cell values in the added row
+            //     worksheet.columns.forEach((column) => {
+            //         const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+            //         const cellLength = cellValue.toString().length; // Get length of cell value as a string
+            //         const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+            //         // Set column width to the maximum of current width and cell length plus extra space
+            //         column.width = Math.max(currentColumnWidth, cellLength + 5);
+            //     });
+            // });
             // Apply borders for each cell
-            row.eachCell((cell) => {
-                cell.border = {
+            // row.eachCell((cell) => {
+            //     cell.border = {
+            //         top: { style: 'thin' },
+            //         left: { style: 'thin' },
+            //         bottom: { style: 'thin' },
+            //         right: { style: 'thin' },
+            //     };
+            //     const isHeader = row.number === 1;
+            //     worksheet.getCell(cell).alignment = {
+            //         horizontal: isHeader ? 'center' : 'left',
+            //         vertical: 'middle',
+            //     };
+            // });
+             worksheet.eachRow({ includeEmpty: false }, (row) => {
+            row._cells.forEach((singleCell) => {
+                const cellAddress = singleCell._address;
+                worksheet.getCell(cellAddress).border = {
                     top: { style: 'thin' },
                     left: { style: 'thin' },
                     bottom: { style: 'thin' },
                     right: { style: 'thin' },
                 };
                 const isHeader = row.number === 1;
-                worksheet.getCell(cell).alignment = {
+                worksheet.getCell(cellAddress).alignment = {
                     horizontal: isHeader ? 'center' : 'left',
                     vertical: 'middle',
                 };
             });
+        });
         });
 
         // Write to buffer and save the file
@@ -178,10 +210,20 @@ const handleExcelDownload = async () => {
   // };
 
 const handlePdfDownload = () => {
-  const pdf = new jsPDF();
+  // const pdf = new jsPDF();
+  const pdf = new jsPDF({
+    orientation: 'portrait', // Use 'landscape' if preferred
+    unit: 'pt', // Points as units
+    format: [792, 1224], // Width x Height in points
+  });
   pdf.setFontSize(12);
   pdf.setFont("helvetica", "normal");
-  pdf.text("Individual Billing Details", 10, 10);
+  const pageWidth = pdf.internal.pageSize.getWidth();
+
+  // Center the text horizontally
+  pdf.text("Individual Billing Details", pageWidth / 2, 10, { align: 'center' });
+  // pdf.text("Individual Billing Details", 10, 10);
+  
 
   // Map over the rows and format the Bill_Date
   const tableData = rows.map((row) => [
@@ -198,7 +240,7 @@ const handlePdfDownload = () => {
 
   ]);
 
-  console.log(rows, 'datss of roew inndualbilling');
+  // console.log(rows, 'datss of roew inndualbilling');
   
   pdf.autoTable({
     head: [
@@ -382,7 +424,7 @@ const handlePdfDownload = () => {
         setErrorMessage("no data found");
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      // console.error('Error fetching data:', error);
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");
@@ -413,7 +455,7 @@ const handlePdfDownload = () => {
     warningMessage,
     infoMessage,
     hidePopup,
-    setSearchText,
+    // setSearchText,
     billingno,
     handleInputChange,
     customer,

@@ -5,10 +5,13 @@ const bodyParser = require('body-parser');
 const app = express();
 const fs = require('fs');
 const db = require('./db');
-const uuid = require('uuid');
+// const uuid = require('uuid');
 const multer = require('multer');
 const path = require('path');
+const imagePath = require('./imagepath')
 
+//https close
+// console.log(imagePath);
 
 var CryptoJS = require("crypto-js");
 
@@ -17,12 +20,26 @@ require('dotenv').config()
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
-const upload = multer({ dest: 'uploads/' });
-app.use(express.static('customer_master'));
+// const upload = multer({ dest: 'uploads/' });
+// app.use(express.static('customer_master'));
+app.use(express.static('Imagefolder'));
+
+// const storage1 = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/map_images')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
+
+// const upload2 = multer({
+//   storage: storage1
+// })
 
 const storage1 = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './customer_master/public/map_images')
+    cb(null, `${imagePath}/map_images`)
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
@@ -85,6 +102,7 @@ const AggrementPage = require('./customer_master/Router/Aggrement/aggrement')
 const DashBoardBillReport = require('./customer_master/Router/BillingDashboard/BillingDashboard');
 const VehcileDetails = require('./customer_master/Router/VehicleDetails/vehicleDetails')
 const gpsDeviceDatas = require('./customer_master/Router/GPSDeviceData/gpsDeviceData')
+const googlemapApiKey = require('./customer_master/Router/GooglemapApiKey/googleMapApiKey')
 
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// Customer Page Database
@@ -179,6 +197,8 @@ app.use('/', DashBoardBillReport)
 app.use('/', VehcileDetails)
 // --------------------------------------------------------------------------------------------
 app.use('/',gpsDeviceDatas);//gpsdevicedatas
+// --------------------------------------------------------------------------------------------
+app.use('/',googlemapApiKey);//googlemapapikey
 
 app.post('/updatethemename', (req, res) => {
   const { userid, theme } = req.body;
@@ -250,9 +270,16 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
 
 
 //get map image from the folder
-const mapimageDirectory = path.join(__dirname, 'customer_master', 'public', 'map_images')
+//old code 
+// const mapimageDirectory = path.join(__dirname, 'customer_master', 'public', 'map_images')
+// app.use('/mapimages', express.static(mapimageDirectory));
 
-app.use('/mapimages', express.static(mapimageDirectory));
+//New code
+const mapimageDirectory = path.join(__dirname, `${imagePath}/map_images`);
+// console.log(mapimageDirectory,"fghjk")
+
+app.use('/mapimagesnew', express.static(mapimageDirectory));
+
 
 app.get('/getmapimages/:tripid', (req, res) => {
   const { tripid } = req.params;
@@ -320,7 +347,6 @@ app.delete('/api/mapimagedelete/:tripid', (req, res) => {
       return res.status(500).json({ message: "Error checking profile existence", error: err1 });
     }
 
-
     if (results.length >= 1) {
       db.query("DELETE FROM mapimage WHERE tripid = ?", [tripid], (err, result) => {
         if (err) {
@@ -329,8 +355,6 @@ app.delete('/api/mapimagedelete/:tripid', (req, res) => {
         if (result.affectedRows === 0) {
           return res.status(404).json({ error: "data not found" });
         }
-
-
 
         const mapimage = results[0].path
 
@@ -342,8 +366,6 @@ app.delete('/api/mapimagedelete/:tripid', (req, res) => {
 
           // Get the complete absolute path
           const oldImagePathDirectoryAbsolute = path.resolve(__dirname, '..', '..', '..', '..', oldImagePath, mapimage);
-
-
 
           // Check if the file exists
           if (fs.existsSync(oldImagePathDirectoryAbsolute)) {
@@ -368,34 +390,38 @@ app.delete('/api/mapimagedelete/:tripid', (req, res) => {
 })
 
 //file upload in tripsheet
-app.post('/uploads', upload.single('file'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'No file uploaded.' });
-  }
-  const fileData = {
-    name: req.file.originalname,
-    mimetype: req.file.mimetype,
-    size: req.file.size,
-    path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
-    tripid: req.body.tripid,
-    bookingno: req.body.bookingno,
-    empid: req.body.empid,
-    organizationname: req.body.organizationname,
-    userid: req.body.userid,
-    vehicleId: req.body.vehicleId,
-  };
-  const query = 'INSERT INTO tripsheetupload SET ?';
-  db.query(query, fileData, (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error storing file in the database.' });
-    }
-    return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
-  });
-});
+// app.post('/uploads', upload.single('file'), (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).json({ error: 'No file uploaded.' });
+//   }
+//   const fileData = {
+//     name: req.file.originalname,
+//     mimetype: req.file.mimetype,
+//     size: req.file.size,
+//     path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
+//     tripid: req.body.tripid,
+//     bookingno: req.body.bookingno,
+//     empid: req.body.empid,
+//     organizationname: req.body.organizationname,
+//     userid: req.body.userid,
+//     vehicleId: req.body.vehicleId,
+//   };
+//   const query = 'INSERT INTO tripsheetupload SET ?';
+//   db.query(query, fileData, (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ error: 'Error storing file in the database.' });
+//     }
+//     return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
+//   });
+// });
 //get image from the folder
-const imageDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+// const imageDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
 // const basemapImagePath = path.join(__dirname, 'customer_master', 'public', 'map_images');
 
+
+//This is for tripsheet upload document
+const imageDirectory = path.join(__dirname, `${imagePath}/imagesUploads_doc`);
+// console.log(imageDirectory);
 
 // Serve static files from the imageDirectory
 app.use('/images', express.static(imageDirectory));
@@ -428,9 +454,22 @@ app.get('/get-image/:filename', (req, res) => {
 //   }
 
 // })
+// const storagetripsheet = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/imagesUploads_doc')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))
+//   }
+
+// })
+
+// const uploadtripsheet = multer({
+//   storage: storagetripsheet
+// })
 const storagetripsheet = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './customer_master/public/imagesUploads_doc')
+    cb(null, `${imagePath}/imagesUploads_doc`)
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + req.params.data + path.extname(file.originalname))
@@ -448,6 +487,8 @@ app.put('/tripsheet_uploads/:id/:documentType/:data', uploadtripsheet.single('im
   const documentType = req.params.documentType;
   const filename = req.file.originalname;
 
+  // console.log(fileName , "1st code");
+  
   if (userId, fileName, filename, documentType) {
     const insertQuery = `INSERT INTO tripsheetupload (tripid, path, name,documenttype) VALUES (?, ?, ?,?)`;
     db.query(insertQuery, [userId, fileName, filename, documentType], (err, result) => {
@@ -495,6 +536,8 @@ app.put('/tripsheet_uploads/:id/:data', uploadstartkm.single('image'), (req, res
   const fileName = req.file?.filename;
   const originalName = req.file?.originalname;
 
+  // console.log(fileName , "2nd code");
+
   if (tripId && fileName && originalName) {
     const updateQuery = `UPDATE tripsheetupload SET startkm_imgpath = ? WHERE tripid = ?`;
     db.query(updateQuery, [fileName, tripId], (err, result) => {
@@ -520,6 +563,7 @@ app.put('/tripsheet_uploadsclosekm/:id/:data', uploadclosekm.single('image'), (r
   const fileName = req.file?.filename;
   const originalName = req.file?.originalname;
 
+ 
   if (tripId && fileName && originalName) {
     const updateQuery = `UPDATE tripsheetupload SET closekm_imgpath = ? WHERE tripid = ?`;
     db.query(updateQuery, [fileName, tripId], (err, result) => {
@@ -623,6 +667,12 @@ app.post('/login', (req, res) => {
     if (result.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials. Please check your username and userpassword.' });
     }
+    const user = result[0];
+    console.log(user.active);
+    
+    if(user.active !== 'yes' ){
+      return res.status(403).json({error:"Account is inactive"})
+    }
     // console.log(process.env.JSON_SECERETKEY)
     // const secretKey = process.env.JSON_SECERETKEY
     // const token = jwt.sign({ id: result[0].userid, username: result[0].username }, secretKey, { expiresIn: '2h' });
@@ -631,7 +681,7 @@ app.post('/login', (req, res) => {
 
     // const secretKey="NASTAF_APPLICATION_DATAKEY@123"
 
-    return res.status(200).json({ message: 'Login successful', user: result[0] });
+    return res.status(200).json({ message: 'Login successful', user: user });
 
     // return res.status(200).json({ message: 'Login successful', user: result[0] });
   });
@@ -664,11 +714,57 @@ app.post('/api/savemapimage', (req, res) => {
   });
 });
 
+//this is for agreement image
+const agreementDoc = path.join(__dirname, `${imagePath}/agreement_doc`);
+app.use('/agreement_doc', express.static(agreementDoc))
+// console.log(agreementDoc);
+
+//this is for employeement image
+const employeeDirect = path.join(__dirname,`${imagePath}/employee_doc`)
+app.use('/employee_doc', express.static(employeeDirect))
+// console.log(employeeDirect);
+
+//TemplateImage 
+
+const templateImage = path.join(__dirname, `${imagePath}/Templateimage`);
+app.use('/template', express.static(templateImage))
+// console.log(templateImage);
+
+//Driverdocument in drivercreation 
+
+const driverDoc = path.join(__dirname, `${imagePath}/driver_doc`);
+
+app.use('/driver_doc', express.static(driverDoc))
+// console.log(driverDoc);
 
 
-const signatureDirectory = path.join(__dirname, 'customer_master', 'public', 'signature_images');
+//vehicledocument in vehicle info page 
+
+const vehicleDoc = path.join(__dirname, `${imagePath}/vehicle_doc`);
+app.use('/vehicle_doc', express.static(vehicleDoc))
+// console.log(vehicleDoc);
+
+
+//Booking page Attach image 
+
+const bookingDoc = path.join(__dirname, `${imagePath}/imagesUploads_doc`)
+
+app.use('/images', express.static(bookingDoc))
+app.use('/pdf', express.static(bookingDoc));
+
+
+//Tripsheet sign image 
+
+const signatureDirectory = path.join(__dirname, `${imagePath}/signature_images`);
 app.use('/signimages', express.static(signatureDirectory));
+// console.log(signatureDirectory);
+
+
+// const signatureDirectory = path.join(__dirname, 'customer_master', 'public', 'signature_images');
+// app.use('/signimages', express.static(signatureDirectory));
+
 // app.use('/signimages', express.static('customer_master'));
+
 app.get('/get-signimage/:tripid', (req, res) => {
   const { tripid } = req.params;
 
@@ -749,14 +845,15 @@ app.get('/get-signimageforpdfrendered/:tripid', (req, res) => {
 });
 
 // const attachedDirectory = path.join(__dirname, 'uploads');
-const attachedDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
-// Serve static files from the imageDirectory
-console.log(attachedDirectory, "attachedDirectory2")
-app.use('/images', express.static(attachedDirectory));
+// const attachedDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+// // Serve static files from the imageDirectory
+// console.log(attachedDirectory, "attachedDirectory2")
+// app.use('/images', express.static(attachedDirectory));
 // Example route to serve an image by its filename
 app.get('/get-attachedimage/:tripid', (req, res) => {
   const { tripid } = req.params;
-  const query = 'SELECT path FROM tripsheetupload WHERE tripid = ? ';
+  // const query = 'SELECT path FROM tripsheetupload WHERE tripid = ? ';
+  const query = 'SELECT path FROM tripsheetupload WHERE tripid = ? And documenttype Not IN ("StartingKm","ClosingKm") ';
   // const query = `SELECT path FROM tripsheetupload WHERE tripid = ? AND documenttype IN ('TripSheet', 'Parking', 'Toll', 'Permit', 'Sign')`;
   db.query(query, [tripid], (err, results) => {
     if (err) {
@@ -793,12 +890,12 @@ app.get('/get-attachedimageforE-tripsheet/:tripid', (req, res) => {
 });
 //get a booking mail...
 // const attachedmailDirectory = path.join(__dirname, 'uploads');
-const attachedmailDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
-// const pdfDirectory = path.join(__dirname, 'uploads');
-const pdfDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
-// Serve static files from the imageDirectory
-app.use('/images', express.static(attachedmailDirectory));
-app.use('/pdf', express.static(pdfDirectory));
+// const attachedmailDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+// // const pdfDirectory = path.join(__dirname, 'uploads');
+// const pdfDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+// // Serve static files from the imageDirectory
+// app.use('/images', express.static(attachedmailDirectory));
+// app.use('/pdf', express.static(pdfDirectory));
 // Example route to serve an image by its filename
 // -----------------its bookingpdf image data  i chnage folder of image i mnot use this api -------------------------------
 app.get('/get-attachedmailimage/:bookingno', (req, res) => {
@@ -827,11 +924,11 @@ app.get('/get-attachedmailimage/:bookingno', (req, res) => {
 
 //get image for organization
 // const companyattachedDirectory = path.join(__dirname, 'uploads');
-const companyattachedDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
-console.log(companyattachedDirectory,"companyattach");
+// const companyattachedDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+// console.log(companyattachedDirectory,"companyattach");
 
-// Serve static files from the imageDirectory
-app.use('/images', express.static(companyattachedDirectory));
+// // Serve static files from the imageDirectory
+// app.use('/images', express.static(companyattachedDirectory));
 // Example route to serve an image by its filename
 app.get('/get-companyimage', (req, res) => {
   const { organizationname } = req.params;
@@ -856,11 +953,11 @@ app.get('/get-companyimage', (req, res) => {
 
 //get image for user profile
 // const userattachedDirectory = path.join(__dirname, 'uploads');
-const userattachedDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
-console.log(userattachedDirectory,"userattach");
+// const userattachedDirectory = path.join(__dirname, 'customer_master', 'public', 'imagesUploads_doc');
+// console.log(userattachedDirectory,"userattach");
 
-// Serve static files from the imageDirectory
-app.use('/images', express.static(userattachedDirectory));
+// // Serve static files from the imageDirectory
+// app.use('/images', express.static(userattachedDirectory));
 // Example route to serve an image by its filename
 app.get('/get-profileimage/:tripid', (req, res) => {
   const { tripid } = req.params;
@@ -1158,11 +1255,11 @@ app.get("/getFuelType/:fuelType", (req, res) => {
 
 
 
-app.get("/getvehicleInfo", (req, res) => {
+app.get("/getvehicleInfostate", (req, res) => {
   try {
     // console.log("query", req.query);
     const { hireTypes, startDate, endDate, vehregvalue } = req.query;
-    const status = 'Closed'
+    // const status = 'Closed'
     let sql = ''
     const paramsdata = []
     // console.log(hireTypes, "jj")
@@ -1177,8 +1274,8 @@ app.get("/getvehicleInfo", (req, res) => {
 + COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
 + COALESCE(NULLIF(vendortoll, ''), 0) 
 + COALESCE(NULLIF(vendorparking, ''), 0) 
-+ COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE hireTypes = ? AND vehRegNo=? AND shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?`
-        paramsdata.push(hireTypes, vehregvalue, startDate, endDate, status)
++ COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE hireTypes = ? AND vehRegNo=? AND shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`
+        paramsdata.push(hireTypes, vehregvalue, startDate, endDate)
       }
       else {
         sql = ` SELECT *,(COALESCE(NULLIF(Vendor_totalAmountKms, ''), 0) 
@@ -1188,8 +1285,8 @@ app.get("/getvehicleInfo", (req, res) => {
     + COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
     + COALESCE(NULLIF(vendortoll, ''), 0) 
     + COALESCE(NULLIF(vendorparking, ''), 0) 
-    + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE hireTypes = ?  AND shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?`
-        paramsdata.push(hireTypes, startDate, endDate, status)
+    + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE hireTypes = ?  AND shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`
+        paramsdata.push(hireTypes, startDate, endDate)
       }
     }
     else {
@@ -1203,8 +1300,8 @@ app.get("/getvehicleInfo", (req, res) => {
   + COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
   + COALESCE(NULLIF(vendortoll, ''), 0) 
   + COALESCE(NULLIF(vendorparking, ''), 0) 
-  + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE vehRegNo=? AND   shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?`
-        paramsdata.push(vehregvalue, startDate, endDate, status)
+  + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE vehRegNo=? AND  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`
+        paramsdata.push(vehregvalue, startDate, endDate)
       }
       else {
         // console.log("all and all")
@@ -1215,8 +1312,8 @@ app.get("/getvehicleInfo", (req, res) => {
       + COALESCE(NULLIF(Vendor_rateAmount, ''), 0) 
       + COALESCE(NULLIF(vendortoll, ''), 0) 
       + COALESCE(NULLIF(vendorparking, ''), 0) 
-      + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status = ?`
-        paramsdata.push(startDate, endDate, status)
+      + COALESCE(NULLIF(vpermettovendor, ''), 0)) AS grandTotal FROM tripsheet  WHERE  shedOutDate >= DATE_ADD(?, INTERVAL 0 DAY) AND shedOutDate <= DATE_ADD(?, INTERVAL 0 DAY) AND status NOT IN ('Cancelled')`
+        paramsdata.push(startDate, endDate)
       }
     }
 
@@ -1278,5 +1375,5 @@ app.get("/hiretypebasedvehicle/:gethire", (req, res) => {
 const port = process.env.PORT;
 
 app.listen(port, () => {
-  console.log(`Connected to backend on port ${port}`);
+  console.log(`Connected to the backend on port ${port}`);
 });

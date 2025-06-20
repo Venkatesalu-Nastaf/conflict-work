@@ -328,53 +328,117 @@ router.post('/tripsheet-add', (req, res) => {
 });
 
 // add vehicleHistorydata table
+// router.post('/addVehicleHistoryData', (req, res) => {
+//     const { tripid,
+//         VehicleNo,
+//         shedouttime,
+//         reporttime,
+//         closetime,
+//         shedintime,
+//         shedoutdate,
+//         reportdate,
+//         closedate,
+//         shedindate,
+//         shedoutkm,
+//         reportkm,
+//         closekm,
+//         shedinkm,
+//         totalkm,
+//         drivername,
+//     } = req.body;
+
+//     const vehcileHistoryData = {
+//         tripid,
+//         VehicleNo,
+//         shedouttime,
+//         reporttime,
+//         closetime,
+//         shedintime,
+//         shedoutdate,
+//         reportdate,
+//         closedate,
+//         shedindate,
+//         shedoutkm,
+//         reportkm,
+//         closekm,
+//         shedinkm,
+//         totalkm,
+//         drivername,
+//     }
+//     db.query('INSERT INTO Vehicle_History_Data SET ?', vehcileHistoryData, (err, result) => {
+//         if (err) {
+//             console.log(err, 'error');
+
+//             return res.status(500).json({ error: "Failed to insert data into MySQL" });
+//         }
+//         return res.status(200).json({ message: "Data inserted successfully" });
+//     })
+
+// })
+
 router.post('/addVehicleHistoryData', (req, res) => {
-    const { tripid,
-        VehicleNo,
-        shedouttime,
-        reporttime,
-        closetime,
-        shedintime,
-        shedoutdate,
-        reportdate,
-        closedate,
-        shedindate,
-        shedoutkm,
-        reportkm,
-        closekm,
-        shedinkm,
-        totalkm,
-        drivername,
+    const {
+        tripid, customer, VehicleNo,
+        shedouttime, reporttime, closetime, shedintime,
+        shedoutdate, reportdate, closedate, shedindate,
+        shedoutkm, reportkm, closekm, shedinkm,
+        totalkm, drivername
     } = req.body;
 
     const vehcileHistoryData = {
-        tripid,
-        VehicleNo,
-        shedouttime,
-        reporttime,
-        closetime,
-        shedintime,
-        shedoutdate,
-        reportdate,
-        closedate,
-        shedindate,
-        shedoutkm,
-        reportkm,
-        closekm,
-        shedinkm,
-        totalkm,
-        drivername,
-    }
-    db.query('INSERT INTO Vehicle_History_Data SET ?', vehcileHistoryData, (err, result) => {
+        tripid, customer, VehicleNo,
+        shedouttime, reporttime, closetime, shedintime,
+        shedoutdate, reportdate, closedate, shedindate,
+        shedoutkm, reportkm, closekm, shedinkm,
+        totalkm, drivername
+    };
+
+    const conflictQuery = `SELECT sameDate_Vehicle_Count FROM Vehicle_History_Data WHERE shedoutdate = ? AND VehicleNo = ?`;
+    const clientConflictQuery = `SELECT company_SameDate_Vehicle_count FROM Vehicle_History_Data WHERE shedoutdate = ? AND VehicleNo = ? AND customer = ?`;
+
+    // First check for sameDate_Vehicle_Count
+    db.query(conflictQuery, [shedoutdate, VehicleNo], (err, conflictResult) => {
         if (err) {
-            console.log(err, 'error');
-
-            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+            console.log(err, 'error checking conflict');
+            return res.status(500).json({ error: "Failed to check conflict in MySQL" });
         }
-        return res.status(200).json({ message: "Data inserted successfully" });
-    })
 
-})
+        let newCount = 1;
+        if (conflictResult.length > 0 && conflictResult[0].sameDate_Vehicle_Count !== null) {
+            let count = conflictResult.length - 1;
+            newCount = parseInt(conflictResult[count].sameDate_Vehicle_Count) + 1;
+        }
+        vehcileHistoryData.sameDate_Vehicle_Count = newCount;
+
+        // Now check for company_SameDate_Vehicle_count
+        db.query(clientConflictQuery, [shedoutdate, VehicleNo, customer], (err, companyConflictResult) => {
+            if (err) {
+                console.log(err, 'error checking company conflict');
+                return res.status(500).json({ error: "Failed to check company conflict in MySQL" });
+            }
+
+            let companyCount = 1;
+            if (companyConflictResult.length > 0 && companyConflictResult[0].company_SameDate_Vehicle_count !== null) {
+                let count = companyConflictResult.length - 1;
+                companyCount = parseInt(companyConflictResult[count].company_SameDate_Vehicle_count) + 1;
+            }
+            vehcileHistoryData.company_SameDate_Vehicle_count = companyCount;
+
+            // Finally insert the data
+            db.query('INSERT INTO Vehicle_History_Data SET ?', vehcileHistoryData, (err, result) => {
+                if (err) {
+                    console.log(err, 'error inserting Vehicle_History_Data');
+                    return res.status(500).json({ error: "Failed to insert data into MySQL" });
+                }
+
+                return res.status(200).json({ message: "Data inserted successfully" });
+            });
+
+        });
+
+    });
+
+});
 
 // router.delete('/deleteVehicleHistoryData/:tripid', (req, res) => {
 //     const tripid = req.params.tripid;
@@ -460,6 +524,76 @@ router.delete('/tripsheet/:tripid', (req, res) => {
     });
 });
 
+router.post('/getEnterTripFullDetailsInVehicleHistoryData',(req,res)=>{
+    const {tripid} = req.body;
+    const sqlQuery = `SELECT * FROM Vehicle_History_Data WHERE Tripid = ?`;
+    db.query(sqlQuery,[tripid],(error,result)=>{
+          if(error){
+            console.log(error,"error");
+          }
+        return res.status(200).json(result);
+    })
+})
+
+router.post('/getConflictVehicleHistoryData',(req,res)=>{
+    const { vehicleNo, dateCheck, tripid, customerName} = req.body;
+console.log(tripid,"editttttttttttttttttttttttttripiddddddddddddddddddddddd");
+
+    if (!vehicleNo || !dateCheck) {
+        return res.status(400).json({ error: "vehicleNo and dateCheck are required" });
+    }
+
+    //  const verificationConflictSqlQuery = `SELECT sameDate_Vehicle_Count FROM Vehicle_History_Data WHERE Tripid = ?`;
+        const verificationConflictSqlQuery = `SELECT company_SameDate_Vehicle_count FROM Vehicle_History_Data WHERE Tripid = ?`;
+
+
+    db.query(verificationConflictSqlQuery, [tripid], (err, conflictResult) => {
+        if (err) {
+            console.error("Error checking conflict:", err);
+            return res.status(500).json({ error: "Failed to check conflict" });
+        }
+console.log(conflictResult,"editttttttttttttttttconflicttttt===================================");
+
+        if (conflictResult.length === 0) {
+            return res.status(404).json({ error: "Trip ID not found" });
+        }
+
+        let sameCount = parseInt(conflictResult[0].company_SameDate_Vehicle_count);
+console.log(sameCount, "editttttttttttttttcurrent sameCount value", typeof(sameCount),"hhiiij",typeof(sameCount));
+
+        // Always increment sameCount by 1
+        let incrementedCount = (sameCount - 1).toString();
+        console.log(incrementedCount, "editttttttttincremented sameCount value");
+
+        const sqlQuery = `
+            SELECT 
+                VehicleNo, 
+                shedoutdate, 
+                reportdate, 
+                closedate, 
+                shedindate,
+                shedouttime, 
+                reporttime, 
+                closetime, 
+                shedintime, 
+                Tripid,
+                company_SameDate_Vehicle_count
+            FROM Vehicle_History_Data 
+            WHERE VehicleNo = ? AND company_SameDate_Vehicle_count = ? AND customer = ? AND shedoutdate = ?
+        `;
+
+        db.query(sqlQuery, [vehicleNo, incrementedCount,customerName,dateCheck], (error, result) => {
+            if (error) {
+                console.error("Database error:", error);
+                return res.status(500).json({ error: "Database query failed" });
+            }
+
+            console.log(result, "final edittttttt query result");
+
+            return res.status(200).json(result);
+        });
+    });
+})
 
 // get vehicleHistorydata by vehicleNo
 // router.post('/getVehcileHistoryData',(req,res)=>{
@@ -645,41 +779,99 @@ router.delete('/tripsheet/:tripid', (req, res) => {
 //     });
 // });
 
+// router.post('/getVehcileHistoryData', (req, res) => {
+//     const { vehicleNo, dateCheck } = req.body;
+
+//     if (!vehicleNo || !dateCheck) {
+//         return res.status(400).json({ error: "vehicleNo and dateCheck are required" });
+//     }
+
+//     const sqlQuery = `
+//         SELECT 
+//             VehicleNo, 
+//             shedoutdate, 
+//             reportdate, 
+//             closedate, 
+//             shedindate,
+//             shedouttime, 
+//             reporttime, 
+//             closetime, 
+//             shedintime, 
+//             Tripid 
+//         FROM Vehicle_History_Data 
+//         WHERE VehicleNo = ? 
+//           AND (shedoutdate = ? OR reportdate = ? OR closedate = ? OR shedindate = ?)`;
+
+//     db.query(sqlQuery, [vehicleNo, dateCheck, dateCheck, dateCheck, dateCheck], (error, result) => {
+//         if (error) {
+//             console.error("Database error:", error);
+//             return res.status(500).json({ error: "Database query failed" });
+//         }
+
+//         // console.log("Query result:", result);
+
+//         return res.status(200).json(result);
+//     });
+// });
 router.post('/getVehcileHistoryData', (req, res) => {
-    const { vehicleNo, dateCheck } = req.body;
+    const { vehicleNo, dateCheck, tripid, customerName} = req.body;
+console.log(tripid,"tripiddddddddddddddd");
 
     if (!vehicleNo || !dateCheck) {
         return res.status(400).json({ error: "vehicleNo and dateCheck are required" });
     }
 
-    const sqlQuery = `
-        SELECT 
-            VehicleNo, 
-            shedoutdate, 
-            reportdate, 
-            closedate, 
-            shedindate,
-            shedouttime, 
-            reporttime, 
-            closetime, 
-            shedintime, 
-            Tripid 
-        FROM Vehicle_History_Data 
-        WHERE VehicleNo = ? 
-          AND (shedoutdate = ? OR reportdate = ? OR closedate = ? OR shedindate = ?)`;
+    // const verificationConflictSqlQuery = `SELECT sameDate_Vehicle_Count FROM Vehicle_History_Data WHERE Tripid = ?`;
+        const verificationConflictSqlQuery = `SELECT company_SameDate_Vehicle_count FROM Vehicle_History_Data WHERE Tripid = ?`;
 
-    db.query(sqlQuery, [vehicleNo, dateCheck, dateCheck, dateCheck, dateCheck], (error, result) => {
-        if (error) {
-            console.error("Database error:", error);
-            return res.status(500).json({ error: "Database query failed" });
+
+    db.query(verificationConflictSqlQuery, [tripid], (err, conflictResult) => {
+        if (err) {
+            console.error("Error checking conflict:", err);
+            return res.status(500).json({ error: "Failed to check conflict" });
+        }
+console.log(conflictResult,"conflicttttt===================================");
+
+        if (conflictResult.length === 0) {
+            return res.status(404).json({ error: "Trip ID not found" });
         }
 
-        // console.log("Query result:", result);
+        let sameCount = parseInt(conflictResult[0].company_SameDate_Vehicle_count);
+        console.log(sameCount, "current sameCount value",typeof(sameCount));
 
-        return res.status(200).json(result);
+        // Always increment sameCount by 1
+        let incrementedCount = (sameCount + 1).toString();
+        console.log(incrementedCount, "incremented sameCount value");
+
+        const sqlQuery = `
+            SELECT 
+                VehicleNo, 
+                shedoutdate, 
+                reportdate, 
+                closedate, 
+                shedindate,
+                shedouttime, 
+                reporttime, 
+                closetime, 
+                shedintime, 
+                Tripid,
+                company_SameDate_Vehicle_count
+            FROM Vehicle_History_Data 
+            WHERE VehicleNo = ? AND shedoutdate = ? AND company_SameDate_Vehicle_count = ? AND customer = ?
+        `;
+
+        db.query(sqlQuery, [vehicleNo,dateCheck, incrementedCount,customerName], (error, result) => {
+            if (error) {
+                console.error("Database error:", error);
+                return res.status(500).json({ error: "Database query failed" });
+            }
+
+            console.log(result, "final query result");
+
+            return res.status(200).json(result);
+        });
     });
 });
-
 router.post('/getVehcileHistoryDataMinimumTime', (req, res) => {
     const { vehicleNo, dateCheck } = req.body;
 
@@ -770,6 +962,7 @@ LIMIT 1;
 router.put('/vehicleHistory/:tripid', (req, res) => {
     const {
         tripid,
+        customer,
         VehicleNo,
         shedouttime,
         reporttime,
@@ -789,6 +982,7 @@ router.put('/vehicleHistory/:tripid', (req, res) => {
 
     const updatevehicleHistory = {
         tripid,
+        customer,
         VehicleNo,
         shedouttime,
         reporttime,
@@ -2425,22 +2619,84 @@ router.post('/gmappost-submitForm', (req, res) => {
 
 
 // Collect maplogdata for gmapdata table
+// router.get('/get-gmapdata/:tripid', (req, res) => {
+//     const tripid = req.params.tripid;
+//     // db.query('SELECT * FROM gmapdata WHERE tripid = ? AND trip_type != "On_Going"', [tripid], (err, results) => {
+//     db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+//         }
+//         return res.status(200).json(results);
+//     });
+// });
 router.get('/get-gmapdata/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    // db.query('SELECT * FROM gmapdata WHERE tripid = ? AND trip_type != "On_Going"', [tripid], (err, results) => {
-    db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
+    const onGoingSqlQuery = `SELECT COUNT(*) AS onGoingCount FROM gmapdata WHERE tripid = ? AND trip_type IN ("waypoint","On_Going","wayLogpoint")`;
+    const AboveOnGoing500 = `SELECT * FROM gmapdata WHERE tripid = ? AND trip_type IN ("start","end","waypoint","wayLogpoint") ORDER BY date,time`;
+    const BelowOnGoing500 = `SELECT * FROM gmapdata WHERE tripid = ? AND trip_type IN ("start","end","waypoint","On_Going") ORDER BY date,time`;
+  
+    // Check On_Going count first
+    db.query(onGoingSqlQuery, [tripid], (error, result) => {
+      if (error) {
+        return res.status(500).json({ error: 'Failed to fetch On_Going count' });
+      }
+  
+      const onGoingCount = result[0].onGoingCount;
+      const finalQuery = onGoingCount >= 500 ? AboveOnGoing500 : BelowOnGoing500;
+  
+      // Run final query based on the count
+      db.query(finalQuery, [tripid], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+          return res.status(500).json({ error: 'Failed to fetch gmap data' });
         }
-        return res.status(200).json(results);
+  
+        // Convert 'wayLogpoint' to 'On_Going' in the response array
+        const updatedResults = results.map(item => {
+          if (item.trip_type === 'wayLogpoint') {
+            return { ...item, trip_type: 'On_Going' };
+          }
+          return item;
+        });
+  
+        console.log(updatedResults, "final processed result");
+        return res.status(200).json(updatedResults);
+      });
     });
-});
+  });
+  
 router.get('/getAllGmapdata', (req, res) => {
     db.query('SELECT * FROM gmapdata', (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
         }
         return res.status(200).json(results);
+    });
+});
+
+// temporary delete gmapdata address not found
+router.post('/TemporarydeleteMapByTripid/:tripid', (req, res) => {
+    const tripid = req.params.tripid;
+
+    // First delete query for mapimage
+    const deleteQuery = `DELETE FROM mapimage WHERE tripid = ?`;
+    const deleteMapDataQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
+
+    db.query(deleteQuery, [tripid], (error, result1) => {
+        if (error) {
+            console.log(error, 'error');
+            return res.status(500).json({ message: 'Error deleting from mapimage', error });
+        }
+
+        // Second delete query for gmapdata
+        db.query(deleteMapDataQuery, [tripid], (error, result2) => {
+            if (error) {
+                console.log(error, 'error');
+                return res.status(500).json({ message: 'Error deleting from gmapdata', error });
+            }
+
+            // Return success response after both deletions
+            return res.status(200).json({ message: 'Deletion successful', result: { mapimage: result1, gmapdata: result2 } });
+        });
     });
 });
 
@@ -3434,6 +3690,350 @@ router.post('/getParticularUserDetails', (req, res) => {
         return res.status(200).json(result);
     });
 });
+// delete temporary for gmapdata address not found data
+router.delete('/DeleteTemporarygmapdata', (req, res) => {
+    const { tripid } = req.body;
 
+    const deleteQuery = `DELETE FROM gmapdata WHERE tripid = ?`;
+    db.query(deleteQuery, [tripid], (error, result) => {
+        if (error) {
+            console.log(error, "temporary-error");
+            return res.status(500).json({ message: "Error deleting data", error });
+        }
+
+        return res.status(200).json({ message: "Data deleted successfully" });
+    });
+});
+
+// get already registered vehicles by update travels name
+router.post('/checkApiByTravelsName',(req,res)=>{
+    const {travelsName,customer,dateCheck,Tripid} = req.body;
+     console.log(travelsName,customer,dateCheck,"apihitttttttttttttttttt");
+     
+    const sqlQuery = `SELECT * FROM Vehicle_History_Data WHERE VehicleNo = ? AND customer = ? AND shedoutdate = ?`;
+
+    db.query(sqlQuery,[travelsName,customer,dateCheck],(error,result)=>{
+        if(error){
+            console.log(error,"error");
+        }
+        return res.status(200).json(result);
+    })
+})
+
+// checkApiByUpdatedTravelsName
+router.post('/checkApiByUpdatedTravelsName',(req,res)=>{
+    const {travelsName,customer,dateCheck,Tripid} = req.body;
+     console.log(travelsName,customer,dateCheck,"apihitttttttttttttttttt");
+     
+    const sqlQuery = `SELECT * FROM Vehicle_History_Data WHERE VehicleNo = ? AND customer = ? AND shedoutdate = ?`;
+
+    db.query(sqlQuery,[travelsName,customer,dateCheck],(error,result)=>{
+        if(error){
+            console.log(error,"error");
+        }
+        return res.status(200).json(result);
+    })
+})
+
+// Insert Into vehiclehistorydata by new updated vehicle
+// router.post('/InsertUpdatedVehicleData',(req,res)=>{
+
+//     const changeNewVehcileHistory = req.body;
+//     console.log(changeNewVehcileHistory,"ccccccccccccccccccccccccccc");
+    
+//     // const {
+//     //     tripid, customer, VehicleNo,
+//     //     shedouttime, reporttime, closetime, shedintime,
+//     //     shedoutdate, reportdate, closedate, shedindate,
+//     //     shedoutkm, reportkm, closekm, shedinkm,
+//     //     totalkm, drivername
+//     // } = req.body;
+
+//     // const vehcileHistoryData = {
+//     //     tripid, customer, VehicleNo,
+//     //     shedouttime, reporttime, closetime, shedintime,
+//     //     shedoutdate, reportdate, closedate, shedindate,
+//     //     shedoutkm, reportkm, closekm, shedinkm,
+//     //     totalkm, drivername
+//     // };
+
+//     // const conflictQuery = `SELECT sameDate_Vehicle_Count FROM Vehicle_History_Data WHERE shedoutdate = ? AND VehicleNo = ?`;
+//     // const clientConflictQuery = `SELECT company_SameDate_Vehicle_count FROM Vehicle_History_Data WHERE shedoutdate = ? AND VehicleNo = ? AND customer = ?`;
+
+//     // // First check for sameDate_Vehicle_Count
+//     // db.query(conflictQuery, [shedoutdate, VehicleNo], (err, conflictResult) => {
+//     //     if (err) {
+//     //         console.log(err, 'error checking conflict');
+//     //         return res.status(500).json({ error: "Failed to check conflict in MySQL" });
+//     //     }
+
+//     //     let newCount = 1;
+//     //     if (conflictResult.length > 0 && conflictResult[0].sameDate_Vehicle_Count !== null) {
+//     //         let count = conflictResult.length - 1;
+//     //         newCount = parseInt(conflictResult[count].sameDate_Vehicle_Count) + 1;
+//     //     }
+//     //     vehcileHistoryData.sameDate_Vehicle_Count = newCount;
+
+//     //     // Now check for company_SameDate_Vehicle_count
+//     //     db.query(clientConflictQuery, [shedoutdate, VehicleNo, customer], (err, companyConflictResult) => {
+//     //         if (err) {
+//     //             console.log(err, 'error checking company conflict');
+//     //             return res.status(500).json({ error: "Failed to check company conflict in MySQL" });
+//     //         }
+
+//     //         let companyCount = 1;
+//     //         if (companyConflictResult.length > 0 && companyConflictResult[0].company_SameDate_Vehicle_count !== null) {
+//     //             let count = companyConflictResult.length - 1;
+//     //             companyCount = parseInt(companyConflictResult[count].company_SameDate_Vehicle_count) + 1;
+//     //         }
+//     //         vehcileHistoryData.company_SameDate_Vehicle_count = companyCount;
+
+//     //         // Finally insert the data
+//     //         db.query('INSERT INTO Vehicle_History_Data SET ?', vehcileHistoryData, (err, result) => {
+//     //             if (err) {
+//     //                 console.log(err, 'error inserting Vehicle_History_Data');
+//     //                 return res.status(500).json({ error: "Failed to insert data into MySQL" });
+//     //             }
+
+//     //             return res.status(200).json({ message: "Data inserted successfully" });
+//     //         });
+
+//     //     });
+
+//     // });
+
+
+// })
+
+router.post('/InsertUpdatedVehicleData', (req, res) => {
+    // const changeNewVehcileHistory = req.body;
+    // console.log(changeNewVehcileHistory, "Received data");
+
+      const {
+        Tripid, customer, VehicleNo,
+        shedouttime, reporttime, closetime, shedintime,
+        shedoutdate, reportdate, closedate, shedindate,
+        shedoutkm, reportkm, closekm, shedinkm,
+        totalkm, drivername
+    } = req.body;
+
+    const changeNewVehcileHistory = {
+        Tripid, customer, VehicleNo,
+        shedouttime, reporttime, closetime, shedintime,
+        shedoutdate, reportdate, closedate, shedindate,
+        shedoutkm, reportkm, closekm, shedinkm,
+        totalkm, drivername
+    };
+console.log(changeNewVehcileHistory,"heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeel");
+
+   const conflictQuery = `SELECT sameDate_Vehicle_Count FROM Vehicle_History_Data WHERE shedoutdate = ? AND VehicleNo = ?`;
+    const clientConflictQuery = `SELECT company_SameDate_Vehicle_count FROM Vehicle_History_Data WHERE shedoutdate = ? AND VehicleNo = ? AND customer = ?`;
+
+    // First check for sameDate_Vehicle_Count
+    db.query(conflictQuery, [shedoutdate, VehicleNo], (err, conflictResult) => {
+        if (err) {
+            console.log(err, 'error checking conflict');
+            return res.status(500).json({ error: "Failed to check conflict in MySQL" });
+        }
+
+        let newCount = 1;
+        if (conflictResult.length > 0 && conflictResult[0].sameDate_Vehicle_Count !== null) {
+            let count = conflictResult.length - 1;
+            newCount = parseInt(conflictResult[count].sameDate_Vehicle_Count) + 1;
+        }
+        changeNewVehcileHistory.sameDate_Vehicle_Count = newCount;
+
+        // Now check for company_SameDate_Vehicle_count
+        db.query(clientConflictQuery, [shedoutdate, VehicleNo, customer], (err, companyConflictResult) => {
+            if (err) {
+                console.log(err, 'error checking company conflict');
+                return res.status(500).json({ error: "Failed to check company conflict in MySQL" });
+            }
+
+            let companyCount = 1;
+            if (companyConflictResult.length > 0 && companyConflictResult[0].company_SameDate_Vehicle_count !== null) {
+                let count = companyConflictResult.length - 1;
+                companyCount = parseInt(companyConflictResult[count].company_SameDate_Vehicle_count) + 1;
+            }
+            changeNewVehcileHistory.company_SameDate_Vehicle_count = companyCount;
+            console.log(companyCount,"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccc---------------------------");
+            
+            // Finally insert the data
+            db.query('INSERT INTO Vehicle_History_Data SET ?', changeNewVehcileHistory, (err, result) => {
+                if (err) {
+                    console.log(err, 'error inserting Vehicle_History_Data');
+                    return res.status(500).json({ error: "Failed to insert data into MySQL" });
+                }
+
+                return res.status(200).json({ message: "Data inserted successfully" });
+            });
+
+        });
+
+    });
+
+});
+
+
+
+// router.post('/updateOldVehicleHistory', (req, res) => {
+//     const enterVehicleNumberUpdatedData = req.body;  // your object with fields including Tripid
+//     console.log(enterVehicleNumberUpdatedData, "llllllllllllllllllllluuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+    
+//     const { Tripid } = enterVehicleNumberUpdatedData;  // note: capital 'T' here
+
+//     if (!Tripid) {
+//         return res.status(400).json({ message: "Tripid is required" });
+//     }
+
+//     // Clone the object to avoid mutating req.body directly
+//     const updateData = { ...enterVehicleNumberUpdatedData };
+//     delete updateData.Tripid;  // Remove Tripid from the data we want to update
+
+//     db.query('UPDATE Vehicle_History_Data SET ? WHERE Tripid = ?', [updateData, Tripid], (err, result) => {
+//         if (err) {
+//             console.log(err, "error");
+//             return res.status(500).json({ message: "Database error", error: err });
+//         }
+//         return res.status(200).json({ message: "Data updated successfully" });
+//     });
+// });
+
+router.post('/updateOldVehicleHistory', (req, res) => {
+    const enterVehicleNumberUpdatedData = req.body;
+     console.log(enterVehicleNumberUpdatedData,"entervehicledataaaaaaaaaaaaaaaaaaaaa");
+     
+    if (!Array.isArray(enterVehicleNumberUpdatedData) || enterVehicleNumberUpdatedData.length === 0) {
+        return res.status(400).json({ message: "Array of update objects is required" });
+    }
+
+    let completed = 0;
+    let hasError = false;
+
+    enterVehicleNumberUpdatedData.forEach((updateObj) => {
+        const { Tripid } = updateObj;
+        const {shedoutdate} = updateObj;
+        const {customer} = updateObj;
+        const {VehicleNo} = updateObj
+
+        if (!Tripid) {
+            hasError = true;
+            console.log("Tripid missing in update object:", updateObj);
+            completed++;
+            if (completed === enterVehicleNumberUpdatedData.length) {
+                return hasError
+                    ? res.status(400).json({ message: "One or more objects missing Tripid" })
+                    : res.status(200).json({ message: "All updates processed" });
+            }
+            return;
+        }
+
+        // First, delete the existing row
+        db.query('DELETE FROM Vehicle_History_Data WHERE shedoutdate = ? AND customer = ? AND VehicleNo = ?', [shedoutdate,customer,VehicleNo], (deleteErr, deleteResult) => {
+            if (deleteErr) {
+                console.error(`Error deleting Tripid ${Tripid}:`, deleteErr);
+                hasError = true;
+                completed++;
+                if (completed === enterVehicleNumberUpdatedData.length) {
+                    return res.status(500).json({ message: "Some deletions failed, check logs" });
+                }
+                console.log("sssssssssssssssssssssssssssss");
+                
+                return;
+            }
+
+            // Then, insert the new record
+            db.query('INSERT INTO Vehicle_History_Data SET ?', updateObj, (insertErr, insertResult) => {
+                if (insertErr) {
+                    console.error(`Error inserting Tripid ${Tripid}:`, insertErr);
+                    hasError = true;
+                }
+
+                completed++;
+                if (completed === enterVehicleNumberUpdatedData.length) {
+                    if (hasError) {
+                        return res.status(500).json({ message: "Some inserts failed, check logs" });
+                    } else {
+                        return res.status(200).json({ message: "All records replaced successfully" });
+                    }
+                }
+            });
+        });
+    });
+});
+
+// dlete trip
+router.post('/deleteCurrentTripid', (req, res) => {
+    const { tripidbookno } = req.body;
+       console.log(tripidbookno,"tripidddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+       
+    if (!tripidbookno) {
+        return res.status(400).json({ message: "Tripid is required" });
+    }
+
+    const sqlQuery = 'DELETE FROM Vehicle_History_Data WHERE Tripid = ?';
+
+    db.query(sqlQuery, [tripidbookno], (err, result) => {
+        if (err) {
+            console.log("Error deleting record:", err);
+            return res.status(500).json({ message: "Failed to delete record" });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Tripid not found" });
+        }
+
+        return res.status(200).json({ message: "Record deleted successfully" });
+    });
+});
+
+
+// order the conflict datas by tripid
+router.post('/orderTheConflictDataByTripId', (req, res) => {
+  const { shedOutDate, VehicleNo } = req.body;
+  console.log(shedOutDate,"updateeeeeeeeeee",VehicleNo);
+  
+  const selectSqlQuery = `
+    SELECT Tripid FROM Vehicle_History_Data
+    WHERE shedoutdate = ? AND VehicleNo = ?
+    ORDER BY Tripid ASC
+  `;
+
+  db.query(selectSqlQuery, [shedOutDate, VehicleNo], (error, results) => {
+    if (error) {
+      console.log(error, "error in select");
+      return res.status(500).send("Database select error");
+    }
+     console.log(results,"tripiddddddddddddddddddddd");
+     
+    if (results.length === 0) {
+      return res.send("No records found");
+    }
+
+    // Now update company_SameDate_Vehicle_count for each record in order
+    let count = 1;
+
+    results.forEach((row) => {
+      const updateSqlQuery = `
+        UPDATE Vehicle_History_Data
+        SET company_SameDate_Vehicle_count	 = ?
+        WHERE Tripid = ?
+      `;
+
+      db.query(updateSqlQuery, [count, row.Tripid], (updateErr, updateResult) => {
+        if (updateErr) {
+          console.log(updateErr, "error in update");
+        } else {
+          console.log(`Updated Tripid ${row.Tripid} with count ${count}`);
+        }
+      });
+       console.log(count,"countttttttttttttttttttttttttt");
+       
+      count++;
+    });
+
+    res.send("Ordering and update completed");
+  });
+});
 
 module.exports = router; 

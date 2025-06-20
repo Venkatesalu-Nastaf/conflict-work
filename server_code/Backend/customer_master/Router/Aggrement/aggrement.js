@@ -3,11 +3,15 @@ const router = express.Router();
 const db = require('../../../db');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
+const fs = require('fs')
 const path = require('path');
-router.use(express.static('customer_master'));
+// router.use(express.static('customer_master'));
 const cron = require('node-cron');
-const moment = require('moment'); 
+const moment = require('moment');
+const imagePath = require('../../../imagepath')
+// console.log(imagePath,"agreement");
 
+// router.use(express.static('Imagefolder'));
 // add Aggrement database
 
 // router.post('/agreementdatas', (req, res) => {
@@ -16,11 +20,11 @@ const moment = require('moment');
 //     db.query('INSERT INTO Aggrement SET ?', customerData, (err, result) => {
 //         if (err) {
 //             console.log(err,'ghjjjj');
-            
+
 //             return res.status(500).json({ error: 'Failed to insert data into MySQL' });
 //         }
 //         console.log(result,'yuiiiiiiiii');
-        
+
 //         return res.status(200).json({ message: 'Data inserted successfully' });
 //     });
 // });
@@ -28,145 +32,201 @@ const moment = require('moment');
 //     const sql = 'SELECT  customer,address1, gstnumber FROM customers';
 //     db.query(sql, (err, result) => {
 //         console.log(err);
-        
+
 //         if (err) {
 //             return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
 //         }
 //         console.log(result);
-        
+
 //         return res.status(200).json(result);
 //     });
 // }); 
+
+//old path
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/agreement_doc');
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
+//   },
+// });
+
+//new path
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, './customer_master/public/agreement_doc');
-    },
-    filename: (req, file, cb) => {
-      cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
-    },
-  });
-  
-  const uploadfile = multer({ storage: storage });
-  
-  // Endpoint to handle file upload and insert data
-  router.post('/agreementdocumentimage', uploadfile.single('Agreement_Image'), (req, res) => {
-    let Agreement_Image = null;
-  
-    if (!req.file) {
-      Agreement_Image = null;
-    } else {
-      Agreement_Image = req.file.filename;
+  destination: (req, file, cb) => {
+    // cb(null, '../../../../Imagefolder/agreement_doc');
+     cb(null, `${imagePath}/agreement_doc`);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
+  },
+});
+
+
+const uploadfile = multer({ storage: storage });
+
+// Endpoint to handle file upload and insert data
+router.post('/agreementdocumentimage', uploadfile.single('Agreement_Image'), (req, res) => {
+  let Agreement_Image = null;
+
+  if (!req.file) {
+    Agreement_Image = null;
+  } else {
+    Agreement_Image = req.file.filename;
+  }
+  // console.log(Agreement_Image, "Uploaded Image");
+
+  const {
+    customer,
+    fromdate,
+    todate,
+    email,
+    mobileno,
+    address,
+    gstno,
+  } = req.body;
+
+  const formattedFromDate1 = moment(fromdate).format('YYYY-MM-DD');
+  const formattedFromDate2 = moment(todate).format('YYYY-MM-DD');
+
+
+  // Check if an entry for the customer already exists in agreement_image
+  const checkSql = `
+      SELECT id FROM agreement_image WHERE customer = ?
+    `;
+
+  db.query(checkSql, [customer], (err, checkResult) => {
+    if (err) {
+      // console.log(err);
+      return res.status(500).json({ error: "Failed to check existing data in agreement_image table" });
     }
-    console.log(Agreement_Image, "Uploaded Image");
-  
-    const {
+
+    // Insert data into Aggrement table without the image
+    const aggrementSql = `
+        INSERT INTO Aggrement (customer, fromdate, todate, email, mobileno, address, gstno) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `;
+
+    db.query(aggrementSql, [
       customer,
-      fromdate,
-      todate,
-      email,
-      mobileno,
-      address,
-      gstno,
-    } = req.body;
-  
-    console.log(
-      customer,
-      fromdate,
-      todate,
+      formattedFromDate1,
+      formattedFromDate2,
       email,
       mobileno,
       address,
       gstno
-    );
-            const formattedFromDate1 = moment(fromdate).format('YYYY-MM-DD');
-            const formattedFromDate2 = moment(todate).format('YYYY-MM-DD');
-            
-  
-    // Check if an entry for the customer already exists in agreement_image
-    const checkSql = `
-      SELECT id FROM agreement_image WHERE customer = ?
-    `;
-  
-    db.query(checkSql, [customer], (err, checkResult) => {
+    ], (err, result) => {
       if (err) {
-        console.log(err);
-        return res.status(500).json({ error: "Failed to check existing data in agreement_image table" });
+        // console.log(err);
+        return res.status(500).json({ error: "Failed to insert data into Aggrement table" });
       }
-  
-      // Insert data into Aggrement table without the image
-      const aggrementSql = `
-        INSERT INTO Aggrement (customer, fromdate, todate, email, mobileno, address, gstno) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `;
-  
-      db.query(aggrementSql, [
-        customer,
-        formattedFromDate1,
-        formattedFromDate2,
-        email,
-        mobileno,
-        address,
-        gstno
-      ], (err, result) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({ error: "Failed to insert data into Aggrement table" });
-        }
-  
-        // Get the inserted ID from Aggrement table
-        const aggrementId = result.insertId;
-  
-        // Insert Agreement_Image into agreement_image table
-        if (Agreement_Image) {
-          const agreementImageSql = `
+
+      // Get the inserted ID from Aggrement table
+      const aggrementId = result.insertId;
+
+      // Insert Agreement_Image into agreement_image table
+      if (Agreement_Image) {
+        const agreementImageSql = `
             INSERT INTO agreement_image (customer, Agreement_Image) 
             VALUES (?, ?)
           `;
-  
-          db.query(agreementImageSql, [customer, Agreement_Image], (err, imageResult) => {
-            if (err) {
-              console.log(err);
-              return res.status(500).json({ error: "Failed to insert Agreement_Image into agreement_image table" });
-            }
-  
-            return res.status(200).json({ message: "Data and image inserted successfully" });
-          });
-        } else {
-          return res.status(200).json({ message: "Data inserted successfully, no image uploaded" });
-        }
-      });
+
+        db.query(agreementImageSql, [customer, Agreement_Image], (err, imageResult) => {
+          if (err) {
+            // console.log(err);
+            return res.status(500).json({ error: "Failed to insert Agreement_Image into agreement_image table" });
+          }
+
+          // console.log(imageResult,"check");
+          //doubt
+          // const imageUrl = `http:// 192.168.0.126:1010/Imagefolder/agreement_doc/${Agreement_Image}`
+          // return res.status(200).json({ message: "Data and image inserted successfully" ,
+          //                               imageUrl:imageUrl});
+           return res.status(200).json({ message: "Data and image inserted successfully"});
+        });
+      } else {
+        return res.status(200).json({ message: "Data inserted successfully, no image uploaded" });
+      }
     });
   });
+});
 
-  const storageLicence = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, './customer_master/public/agreement_doc')
-    },
-    filename: (req, file, cb) => {  
-      cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-    }
 
-  })
+// const storageLicence = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/agreement_doc')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+
+// })
+
+// const uploadfileLicence = multer({ storage: storageLicence });
+
+// router.post('/Customer-Uploadpdf/:customer', uploadfileLicence.single("file"), async (req, res) => {
+//   const customer = req.params.customer
+//   // console.log(customer,"values");
   
-  const uploadfileLicence = multer({ storage: storageLicence });
+//   const Agreement_Image = req.file.filename;
+//   // console.log(Agreement_Image , "image");
   
-  router.post('/Customer-Uploadpdf/:customer', uploadfileLicence.single("file"), async (req, res) => {
-    const customer = req.params.customer
-    const Agreement_Image = req.file.Agreement_Image;
-    const fileType = req.file.mimetype;
-    // const {created_at}=req.body;
-    // console.log(created_at)
-    if (Agreement_Image) {
-      const sql = `insert into agreement_image(customer,Agreement_Image,file_type)values('${customer}','${Agreement_Image}','${fileType}')`;
-      db.query(sql, (err, result) => {
-        if (err) return res.json({ Message: "Error" });
-        console.log(result, "license")
-        return res.json({ Status: "success" });
-      })
-    }
-  })
+//   const fileType = req.file.mimetype;
+//   // const {created_at}=req.body;
+//   // console.log(created_at)
+//   if (Agreement_Image) {
+//     const sql = `insert into agreement_image(customer,Agreement_Image,file_type)values('${customer}','${Agreement_Image}','${fileType}')`;
+//     db.query(sql, (err, result) => {
+//       if (err) return res.json({ Message: "Error" });
+//       // console.log(result, "license")
+//       return res.json({ Status: "success" });
+//     })
+//   }
+// })
 
-  //searchbar in Agreement Page
+//   //searchbar in Agreement Page
+// router.get('/searchAgreementpage', (req, res) => {
+//   const { searchText } = req.query; // Get the searchText from the query params
+//   // console.log(searchText, "search")
+//   console.log(searchText ,"searching the values ");
+
+//   let query = 'SELECT * FROM  Aggrement WHERE 1=1'; // Ensure you query from the correct table
+//   let params = [];
+
+//   console.log(params,"values");
+
+
+//   if (searchText) {
+//     const columnsToSearch = [
+//         'customer',
+//         'email',
+//         'mobileno',
+//         'address',
+//         'gstno'
+//     ];
+//     console.log(columnsToSearch, "columns")
+//     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+//     query += ` AND (${likeConditions})`;
+
+//     // Add searchText to params for each column
+//     // params = columnsToSearch.map(() =>` %${searchText.trim()}%`);
+//     params = columnsToSearch.map(() => `%${searchText.trim()}%`);
+
+//   }
+// console.log(query,params, "fhjf");
+
+//   // Execute the query
+//   db.query(query, params, (err, results) => {
+//     if (err) {
+//       console.error("Database query error:", err); // Log the error for debugging
+//       return res.status(500).json({ error: 'Error retrieving data' });
+//     }
+
+//     console.log("Search results:", results); // Log results to verify
+//     res.json(results); // Send back the results to the client
+//   });
+// });
 router.get('/searchAgreementpage', (req, res) => {
   const { searchText } = req.query; // Get the searchText from the query params
   // console.log(searchText, "search")
@@ -181,24 +241,25 @@ router.get('/searchAgreementpage', (req, res) => {
         'address',
         'gstno'
     ];
-    console.log(columnsToSearch, "columns")
+    // console.log(columnsToSearch, "columns")
     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
     query += ` AND (${likeConditions})`;
 
     // Add searchText to params for each column
-    params = columnsToSearch.map(() =>` ${searchText}%`);
+    params = columnsToSearch.map(() =>`%${searchText}%`);
   }
-console.log(query,params, "fhjf");
 
-  // Execute the query
+  // console.log("SQL Query:", query);
+  // console.log("Query Params:", params);
+
   db.query(query, params, (err, results) => {
     if (err) {
-      console.error("Database query error:", err); // Log the error for debugging
+      // console.error("Database query error:", err);
       return res.status(500).json({ error: 'Error retrieving data' });
     }
 
-    console.log("Search results:", results); // Log results to verify
-    res.json(results); // Send back the results to the client
+    // console.log("Search results:", results);
+    res.json(results);
   });
 });
 
@@ -464,24 +525,24 @@ console.log(query,params, "fhjf");
 router.get('/TemplateForAgreementMail', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "AgreementMail"';
   db.query(query, (err, results) => {
-      if (err) {
-          console.log('Database error:', err);
-          return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-      }
-      console.log('Database results:', results);
-      return res.status(200).json(results);
+    if (err) {
+      // console.log('Database error:', err);
+      return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+    }
+    // console.log('Database results:', results);
+    return res.status(200).json(results);
   });
 });
 
 router.get('/TemplateForAgreementOwnerMail', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "OwnerAgreementMail"';
   db.query(query, (err, results) => {
-      if (err) {
-          console.log('Database error:', err);
-          return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-      }
-      console.log('Database results:', results);
-      return res.status(200).json(results);
+    if (err) {
+      // console.log('Database error:', err);
+      return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+    }
+    // console.log('Database results:', results);
+    return res.status(200).json(results);
   });
 });
 
@@ -511,7 +572,7 @@ const TemplateMessageData = async () => {
   const results = await queryAsync('SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "AgreementMail"');
   if (results.length > 0) {
     return results[0];
-    
+
   } else {
     throw new Error('No credentials found in the table.');
   }
@@ -520,7 +581,7 @@ const TemplateMessageDataOwner = async () => {
   const results = await queryAsync('SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "OwnerAgreementMail"');
   if (results.length > 0) {
     return results[0];
-    
+
   } else {
     throw new Error('No credentials found in the table.');
   }
@@ -545,7 +606,7 @@ const TemplateMessageDataOwner = async () => {
 
 const createTransporter = async () => {
   try {
-    const credentials = await getEmailCredentials(); 
+    const credentials = await getEmailCredentials();
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -553,19 +614,19 @@ const createTransporter = async () => {
         pass: credentials.EmailApp_Password,
       },
     });
-    return { transporter, from: credentials.Sender_mail }; 
+    return { transporter, from: credentials.Sender_mail };
     // console.log('Transporter created successfully');
     // return transporter;
   } catch (error) {
-    console.error('Failed to create transporter:', error);
+    // console.error('Failed to create transporter:', error);
     throw error;
   }
 };
 
 // Function to parse and validate dates
 const parseDate = (dateStr) => {
-  console.log(`Attempting to parse: "${dateStr}"`);
-  
+  // console.log(`Attempting to parse: "${dateStr}"`);
+
   const validFormats = [
     "DD-MM-YYYY",
     "MM/DD/YYYY",
@@ -576,7 +637,7 @@ const parseDate = (dateStr) => {
   ];
 
   for (const format of validFormats) {
-    const parsedDate = moment(dateStr, format, true); 
+    const parsedDate = moment(dateStr, format, true);
     if (parsedDate.isValid()) {
       console.log(`Parsed successfully with format "${format}": ${parsedDate.format("DD-MM-YYYY")}`);
       return parsedDate;
@@ -775,70 +836,242 @@ cron.schedule('00 09 * * *', () => {
 });
 
 
-  router.get('/lastcustomergetimage', (req, res) => {
-    db.query('SELECT customer  FROM  Aggrement ORDER BY customer DESC LIMIT  1', (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-      }
-      if (result.length === 0) {
-        return res.status(404).json({ error: 'Customer not found' });
-      }
-      const lastcustomer = result[0];
-      return res.status(200).json(lastcustomer);
-    });
+router.get('/lastcustomergetimage', (req, res) => {
+  db.query('SELECT customer  FROM  Aggrement ORDER BY customer DESC LIMIT  1', (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+    const lastcustomer = result[0];
+    return res.status(200).json(lastcustomer);
   });
-  
+});
 
-  router.post('/agreementpdf_Document/:id',uploadfile.single("file"), async (req, res) => {
-    const customer = req.params.id;
-    const fileType = req.file.mimetype;
-    const sql = `insert into agreement_image(customer,Agreement_Image,file_type)values(${customer},'${fileType}')`;
-    db.query(sql, (err, result) => {
-        if (err) return res.json({ Message: "Error" });
-        return res.json({ Status: "success" });
-    })
+router.post('/agreementpdf_Document/:id', uploadfile.single("file"), async (req, res) => {
+  const customer = req.params.id;
+
+  // console.log(customer, "checking");
+  const fileType = req.file.mimetype;
+  const sql = `insert into agreement_image(customer,Agreement_Image,file_type)values(${customer},'${fileType}')`;
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Message: "Error" });
+    return res.json({ Status: "success" });
+  });
+})
+router.post('/agreementpdf_Documents/:customer', uploadfile.single("Agreement_Image"), async (req, res) => {
+
+  const customer = req.params.customer;
+  // console.log(customer, "received in backend");
+
+  let Agreement_Image = null;
+
+  if (!req.file) {
+    Agreement_Image = null;
+  } else {
+    Agreement_Image = req.file.filename;
+  }
+
+  const fileType = req.file.mimetype;
+
+  const sql = "INSERT INTO agreement_image (customer, Agreement_Image, file_type) VALUES (?, ?, ?)";
+  db.query(sql, [customer, Agreement_Image, fileType], (err, result) => {
+    if (err) {
+      // console.error("Insert error:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    // console.log(result, "valueee");
+    return res.status(200).json({ message: "Insert successful" });
+  });
+});
+
+
+
+// router.post('/agreementpdf_Documents/:customer', uploadfile.single("file"), async (req, res) => {
+
+//     const customer = req.params.customer;
+
+//     console.log(customer, "received in backend");
+
+//     if (!req.file) {
+//         return res.status(400).json({ error: "No file uploaded" });
+//     }
+
+//     const fileType = req.file.mimetype;
+
+//     const sql = "INSERT INTO agreement_image (customer, Agreement_Image, file_type) VALUES (?, ?, ?)";
+//     db.query(sql, [customer, req.file.filename, fileType], (err, result) => {
+//         if (err) {
+//             console.error("Insert error:", err);
+//             return res.status(500).json({ error: "Database error" });
+//         }
+//         console.log(result , "valueee");   
+//         return res.status(200).json({ message: "Insert successful" });
+//     });
+// });
+
+
+
+router.get('/agreement_Docview/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = 'SELECT Agreement_Image FROM agreement_image WHERE customer = ?';
+
+    db.query(sql, [id], (err, result) => {
+    if (err) {
+      // console.log(err);
+      return res.status(500).json({ message: "Error retrieving data from agreement_image table" });
+    }
+    // console.log(result ,"uuuuuuuuuuuuuuuuu");
+
+    return res.status(200).json(result);
+
+  });
+});
+
+
+
+
+// TO Delete
+// router.delete('/agreementimage-delete/:filename', (req, res) => {
+//   const sql = "delete from agreement_image where Agreement_Image=?";
+//   const fileName = req.params.filename;
+//   // console.log(fileName, "delete");
+
+//   const oldFileName = req.params.filename;
+//   // console.log(oldFileName, "fghg");
+
+//   if (oldFileName) {
+//     //Old path
+//     // const oldImagePath = path.join("./customer_master/public/agreement_doc", oldFileName);
+
+//     
+//     try {
+//       fs.unlinkSync(oldImagePath)
+//     } catch { }
+
+//   }
+//   db.query(sql, [fileName], (err, result) => {
+//     if (err) return res.json({ Message: "Error inside serevre" });
+//     return res.json(result);
+//   })
+// })
+router.delete('/agreementimage-delete/:filename', (req, res) => {
+  const sql = "delete from agreement_image where Agreement_Image=?";
+  const fileName = req.params.filename;
+  // console.log(fileName, "delete");
+
+  const oldFileName = req.params.filename;
+  // console.log(oldFileName, "fghg");
+
+  if (oldFileName) {
+   
+    //New Path
+    // const oldImagePath = path.join("../../../Imagefolder/agreement_doc", oldFileName)
+    const oldImagePath = path.join(`${imagePath}/agreement_doc`, oldFileName)
+    try {
+      fs.unlinkSync(oldImagePath)
+    } catch { }
+
+  }
+  db.query(sql, [fileName], (err, result) => {
+    if (err) return res.json({ Message: "Error inside serevre" });
+    return res.json(result);
+  })
 })
 
-  router.get('/agreement_Docview/:id', (req, res) => {
-    const id = req.params.id;
-    const sql = 'SELECT Agreement_Image FROM agreement_image WHERE customer = ?';
+//delete multiple images 
+
+// router.post('/agreementimage-delete-many', (req, res) => {
+
+//   const files = req.body.files;
+
+//   // console.log(files,"file delete");
+  
+
+
+//   if (!Array.isArray(files) || files.length === 0) {
+//     return res.status(400).json({ message: "No files to delete " })
+//   }
+
+//   const sql = "DELETE FROM agreement_image WHERE Agreement_Image IN (?)"
+
+//   files.forEach(file => {
+//     //old path
+//     // const filePath = path.join('./customer_master/public/agreement_doc', file)
+
+//     //new path
+//     const filePath = path.join('../../../Imagefolder/agreement_doc', file)
+//     // console.log(filePath,"check");
+//     try {
+//       fs.unlinkSync(filePath);
+
+//     } catch (err) {
+//       console.log(err, `Failed to delete file  ${file}`);
+
+//     }
+//   });
+//   db.query(sql, [files], (err, deleteresult) => {
+
+//     if (err) {
+//       return res.status(500).json({ error: "Database err" })
+//     } 
+   
     
-    db.query(sql, [id], (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ message: "Error retrieving data from agreement_image table" });
-      }
-    //   console.log(result ,"uuuuuuuuuuuuuuuuu");
-      
-      return res.status(200).json(result);
-      
-    });
-  });
+//     else {
+//       //  console.log(deleteresult,"result");
+//       return res.status(200).json({ message: "Image deleted successfully" })
+//     }
 
+//   })
 
+// });
+
+router.post('/agreementimage-delete-many', (req, res) => {
+
+  const files = req.body.files;
+
+  // console.log(files,"file delete");
   
-  
-// TO Delete
-router.delete('/agreementimage-delete/:filename', (req, res) => {
-    const sql = "delete from agreement_image where Agreement_Image=?";
-    const fileName = req.params.filename;
-    const oldFileName = req.params.filename;
-    if (oldFileName) {
-        const oldImagePath = path.join("./customer_master/public/agreement_doc", oldFileName);
-        try {
-            fs.unlinkSync(oldImagePath)
-        } catch { }
+  if (!Array.isArray(files) || files.length === 0) {
+    return res.status(400).json({ message: "No files to delete " })
+  }
+
+  const sql = "DELETE FROM agreement_image WHERE Agreement_Image IN (?)"
+
+  files.forEach(file => {
+
+    //new path
+    // const filePath = path.join('../../../Imagefolder/agreement_doc', file)
+    const filePath = path.join(`${imagePath}/agreement_doc`, file)
+    // console.log(filePath,"check");
+    try {
+      fs.unlinkSync(filePath);
+
+    } catch (err) {
+      console.log(err, `Failed to delete file  ${file}`);
 
     }
-    db.query(sql, [fileName], (err, result) => {
-        if (err) return res.json({ Message: "Error inside serevre" });
-        return res.json(result);
-    })
-})
+  });
+  db.query(sql, [files], (err, deleteresult) => {
+
+    if (err) {
+      return res.status(500).json({ error: "Database err" })
+    } 
+   
+    
+    else {
+      //  console.log(deleteresult,"result");
+      return res.status(200).json({ message: "Image deleted successfully" })
+    }
+
+  })
+
+});
 
 
 router.get('/Customerdatasfetch', (req, res) => {
-    const sql = `
+  const sql = `
         SELECT 
             customers.customer, 
             customers.address1, 
@@ -849,58 +1082,61 @@ router.get('/Customerdatasfetch', (req, res) => {
         JOIN customerOrderdata
         ON customers.customer = customerOrderdata.customer
     `;
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
-        }
-        console.log(result);
-        return res.status(200).json(result);
-    });
+  db.query(sql, (err, result) => {
+    if (err) {
+      // console.log(err);
+      return res.status(500).json({ error: "Failed to retrieve data from MySQL" });
+    }
+    // console.log(result,"result");
+    return res.status(200).json(result);
+  });
 });
+
 
 router.put('/agreementedit/:id', (req, res) => {
 
-    const email= req.params.id
-    const updatedCustomerData = req.body;
-    console.log(email,"dddd",updatedCustomerData)
-    db.query('UPDATE Aggrement SET ? WHERE id = ?', [updatedCustomerData,email], (err,  result) => {
-        if (err) {
-            console.log(err,"agg")
-            return res.status(500).json({ error: 'Failed to update data in MySQL' });
-        }
-        console.log(result,"agg")
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Customer not found' });
-        }
-        console.log(result,"agg")
-        return res.status(200).json({ message: 'Data updated successfully' });
-    });
+  const email = req.params.id
+  const updatedCustomerData = req.body;
+  // console.log(email,"dddd",updatedCustomerData)
+  db.query('UPDATE Aggrement SET ? WHERE id = ?', [updatedCustomerData, email], (err, result) => {
+    if (err) {
+      // console.log(err,"agg")
+      return res.status(500).json({ error: 'Failed to update data in MySQL' });
+    }
+    // console.log(result,"agg")
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+    // console.log(result,"agg")
+    return res.status(200).json({ message: 'Data updated successfully' });
+  });
 });
 
 // Delete Customer Master data
-    router.delete('/aggreementdeleteid/:id', (req, res) => {
-        const id = req.params.id; 
+router.delete('/aggreementdeleteid/:id', (req, res) => {
+  const id = req.params.id;
 
-        db.query('DELETE FROM Aggrement WHERE id = ?', [id], (err, result) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ error: 'Failed to delete data from MySQL' });
-            }
-            if (result.affectedRows === 0) {
-                return res.status(404).json({ error: 'Customer not found' });
-            }
-            return res.status(200).json({ message: 'Data deleted successfully' });
-        });
-    });
+  db.query('DELETE FROM Aggrement WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      // console.error(err);
+      return res.status(500).json({ error: 'Failed to delete data from MySQL' });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+    return res.status(200).json({ message: 'Data deleted successfully' });
+  });
+});
 
 router.get('/agreementdata', (req, res) => {
-    db.query('SELECT * FROM Aggrement', (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-        }
-        return res.status(200).json(results);
-    });
+  db.query('SELECT * FROM Aggrement', (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+    }
+    // console.log(results, "values from backend");   
+    return res.status(200).json(results);
+  });
 });
+
 
 module.exports = router;    

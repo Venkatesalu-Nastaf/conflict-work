@@ -34,10 +34,10 @@ const Registration = () => {
   // const Station_Creation = permissions[14]?.read;
 
   
-  const R_RATEtype = permissions[10]?.read ;
-  const R_Customer = permissions[11]?.read ;
-  const R_Supllier = permissions[12]?.read ;
-  const R_Station = permissions[13]?.read ;
+  const R_RATEtype = permissions[11]?.read ;
+  const R_Customer = permissions[12]?.read ;
+  const R_Supllier = permissions[13]?.read ;
+  const R_Station = permissions[14]?.read ;
   // const Rate_Management = permissions[17]?.read;
 
   const [warning, setWarning] = useState(false);

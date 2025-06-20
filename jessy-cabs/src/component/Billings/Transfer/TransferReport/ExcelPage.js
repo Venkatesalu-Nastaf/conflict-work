@@ -11,6 +11,7 @@ import { PDFDocument } from 'pdf-lib';
 
 import PdfzipParticularData from './Pdfpatricularzipdata'
 import { APIURL } from "../../../url";
+import axios from "axios";
 
 
 
@@ -89,7 +90,9 @@ const useExeclpage = () => {
         { key: "toll", header: "Toll", width: 100 },
         { key: "TOTALtollandpark", header: "DND/Toll/Parking Amount", width: 200 },
         { key: "totalcalcAmount1", header: "Amount With All Taxes", width: 200 },
-        { key: "shedInDate", header: "End Date", width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "") },
+        // { key: "shedInDate", header: "End Date", width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "") },
+        { key: "shedInDateold", header: "End Date", width: 200},
+        
 
 
 
@@ -106,15 +109,18 @@ const useExeclpage = () => {
         { key: "calcPackage", header: "Package", width: 150 },
         { key: "VendorName", header: "Vendor Name", width: 150 },
         { key: "vehRegNo", header: "Vehicle No", width: 120 },
-        { key: "vehicleName2", header: "Vehicle Name", width: 120 },
-        // { key: "vehType", header: "Vehicle Make", width: 180 },
-        { key: "vehicleName", header: "Vehicle Make", width: 180 },
+        // { key: "vehicleName2", header: "Vehicle Name", width: 120 },
+     
+        // { key: "vehicleName", header: "Vehicle Make", width: 180 },
+          { key: "vehicleName2", header: "Vehicle Make", width: 120 },
+     
+        { key: "vehicleName", header: "Billing vehtype (as per agreement)", width: 180 },
         // { key: "vehType1", header: "Vehicle Type (Requested)", width: 200 },
         // { key: "vehicleName", header: "Vehicle Make", width: 180 },
         { key: "segement", header: "vehicle Segment", width: 180 },
         { key: "fueltype", header: "Fuel Used", width: 120 },
         // { key: "tripsheetdate", header: "Date", width: 120 },
-        { key: "sheoutDatetrip", header: "Date", width: 120 },
+        { key: "starthcldate", header: "Date", width: 120 },
         // { key: "employeeno", header: "User Name", width: 150 },
         { key: "guestname", header: "User Name", width: 150 },
         { key: "Gender", header: "Gender", width: 100 },
@@ -140,7 +146,8 @@ const useExeclpage = () => {
         { key: "shedin2", header: "Total Km", width: 120 },
         { key: "TOTALtollandpark", header: "DND/Toll/Parking Amount", width: 200 },
         { key: "totalcalcAmount", header: "Total Amount", width: 150 },
-        { key: "shedInDate", header: "End Date", width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "") },
+        // { key: "shedInDate", header: "End Date", width: 200, render: (row) => (row.shedInDate ? dayjs(row.shedInDate).format("DD-MM-YYYY") : "") },
+           { key: "shedindatehcl", header: "End Date", width: 200,},
         { key: "opsremark", header: "Ops Remarks", width: 150 }
 
     ]
@@ -315,7 +322,7 @@ const useExeclpage = () => {
                         singleData["originalExtraKM"] = singleData["extraKM"]; // Store original value
                         singleData["extraKM"] = 0;
                         singleData["extraHR"] = 0;
-                        singleData["ex_kmAmount"] = 0;
+                        // singleData["ex_kmAmount"] = 0;
                     }
                     singleData["SNo"] = index + 1;
                     // singleData["duty1"]=singleData["duty"]
@@ -330,7 +337,11 @@ const useExeclpage = () => {
                     // singleData["calcPackage"] =  singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? singleData["duty"] :singleData["calcPackage"]
                     // singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation"   ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"])  : singleData["calcPackage"];
                     singleData["calcPackage"] = singleData["duty"] === "Transfer" || singleData["duty"] === "Outstation" ? (singleData["duty"] === "Outstation" ? `${singleData["extraKM"] || singleData["originalExtraKM"]} Rs@${singleData["extrakm_amount"]}` : singleData["duty"]) : singleData["calcPackage"];
-                    singleData["package_amount"] = singleData["duty"] === "Outstation" ? singleData["ex_kmAmount"] : singleData["package_amount"]
+                    singleData["outstationkmsamout"]=singleData["ex_kmAmount"] 
+                    singleData["package_amount"] = singleData["duty"] === "Outstation" ? singleData["outstationkmsamout"] : singleData["package_amount"]
+                    singleData["outstationkmsamout"]=0
+                    singleData["ex_kmAmount"] = singleData["duty"] === "Outstation" ? 0 : singleData["ex_kmAmount"]
+                 
                     // singleData["vechicletype"] = singleData["vehType"]
                     // singleData["vehTypebilling"] = singleData["vehType"]
                     singleData["totalkm2"] = singleData["totalkm1"]
@@ -338,7 +349,8 @@ const useExeclpage = () => {
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
 
 
-                    singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                    // singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                     singleData["shedInDateold"] = singleData["shedintold"] ? dayjs(singleData["shedintold"]).format("DD/MM/YYYY") : ""
                     singleData["sheoutDatetrip"] = singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY") : ""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : "00:00"
                     singleData["starttime1"] = removeSeconds(singleData["starttime1"])
@@ -495,7 +507,11 @@ const useExeclpage = () => {
                     // singleData2["vehType1"] = singleData2["vehType"]
                     singleData2["PickupPoint_Shed"] = singleData2["pickup"]
                     singleData2["sheoutDatetrip"] = singleData2["shedOutDate"] ? dayjs(singleData2["shedOutDate"]).format("DD/MM/YYYY") : ""
+                    singleData2 ["startDatehcl"] =singleData2["startdate"] ? dayjs(singleData2["startdate"]).format("DD/MM/YYYY") : ""
+                      singleData2 ["closeDatehcl"] =singleData2["closedate"] ? dayjs(singleData2["closedate"]).format("DD/MM/YYYY") : ""
+                      singleData2["starthcldate"]=singleData2["duty"] === "Outstation" ?  singleData2["sheoutDatetrip"] :  singleData2 ["startDatehcl"]
                     singleData2["shedInDate"] = singleData2["shedInDate"] ? dayjs(singleData2["shedInDate"]).format("DD/MM/YYYY") : ""
+                    singleData2["shedindatehcl"]=singleData2["duty"] === "Outstation" ?   singleData2["shedInDate"] :   singleData2 ["closeDatehcl"]
                     singleData2["tripsheetdate"] = singleData2["tripsheetdate"] ? dayjs(singleData2["tripsheetdate"]).format("DD-MM-YYYY") : ""
                     singleData2["Zonetranfer"] = singleData2["department"] ? ` ${singleData2["department"]}-Airport Transfer` : ""
                     singleData2["starttime"] = singleData2["starttime"] ? removeSeconds(singleData2["starttime"]) : "00.00"
@@ -579,9 +595,8 @@ const useExeclpage = () => {
     }
 
 
-    const handledatazipDownload = async (tripheaderIndex, misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation, rowSelectionModel, customerData, stationData, bookingMail) => {
-        console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel", rowSelectionModel, "mo", imageorganisation, " console for datas")
-
+    const handledatazipDownload = async (tripheaderIndex, misformat, invoice, invoicedate, customer, organizationsdetail1, imageorganisation,customerData, stationData, bookingMail) => {
+        console.log(misformat, "m", invoice, "in", invoicedate, customer, "zipexcel","mo", imageorganisation, " console for datas")
         const data = invoice;
         const customername = customer;
         const workbook = new Excel.Workbook();
@@ -590,11 +605,11 @@ const useExeclpage = () => {
 
         try {
             const zip = new JSZip();
-            if (rowSelectionModel.length === 0) {
-                setError1(true)
-                setErrorMessage1(" SELECT DATA ")
-                return
-            }
+            // if (rowSelectionModel.length === 0) {
+            //     setError1(true)
+            //     setErrorMessage1(" SELECT DATA ")
+            //     return
+            // }
 
             if (!misformat) {
                 setError1(true)
@@ -655,7 +670,8 @@ const useExeclpage = () => {
                     singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
                     singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
                     singleData["tripsheetdate"] = singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY") : ""
-                    singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                    // singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                      singleData["shedInDateold"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
                     singleData["sheoutDatetrip"] = singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY") : ""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : ""
                     singleData["starttime1"] = removeSeconds(singleData["starttime"])
@@ -785,6 +801,11 @@ const useExeclpage = () => {
                     singleData["PickupPoint_Shed"] = singleData["pickup"]
                     singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
                     singleData["sheoutDatetrip"] = singleData["shedOutDate"] ? dayjs(singleData["shedOutDate"]).format("DD/MM/YYYY") : ""
+                          singleData["startDatehcl"] =singleData["startdate"] ? dayjs(singleData["startdate"]).format("DD/MM/YYYY") : ""
+                      singleData["closeDatehcl"] =singleData["closedate"] ? dayjs(singleData["closedate"]).format("DD/MM/YYYY") : ""
+                      singleData["starthcldate"]=singleData["duty"] === "Outstation" ?  singleData["sheoutDatetrip"] :  singleData["startDatehcl"]
+                    singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
+                    singleData["shedindatehcl"]=singleData["duty"] === "Outstation" ?   singleData["shedInDate"] :   singleData["closeDatehcl"]
                     singleData["tripsheetdate"] = singleData["tripsheetdate"] ? dayjs(singleData["tripsheetdate"]).format("DD-MM-YYYY") : ""
                     singleData["shedInDate"] = singleData["shedInDate"] ? dayjs(singleData["shedInDate"]).format("DD/MM/YYYY") : ""
                     singleData["starttime"] = singleData["starttime"] ? removeSeconds(singleData["starttime"]) : ""
@@ -860,176 +881,434 @@ const useExeclpage = () => {
 
             }
 
+console.log(invoice,"invoiceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+//  const pdffolder = zip.folder("pdffolder");
+// const chunkSize = 100;
+// function splitIntoChunks(array, chunkSize) {
+//   const result = [];
+//   for (let i = 0; i < array.length; i += chunkSize) {
+//     result.push(array.slice(i, i + chunkSize));
+//   }
+//   return result;
+// }
 
-            //  let dataimagebook=[]
-            const pdffolder = zip.folder("pdffolder");
-            const pdfPromises = invoice?.map(async (pdfData, index) => {
-                //   console.log(pdfData,"modedata")
-                //  dataimagebook=pdfData.bookattachedimage
+// // Split invoices into batches of 100
+// const invoiceBatches = splitIntoChunks(invoice, chunkSize);
 
+// // Process each batch one by one
+// for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
+// //   const zip = new JSZip();
+// //   const pdffolder = zip.folder("pdffolder");
+//   const batchInvoices = invoiceBatches[batchIndex];
 
-                const blob = await pdf(
-                    <PdfzipParticularData
+//   const pdfPromises = batchInvoices.map(async (pdfData, index) => {
+//     const blob = await pdf(
+//       <PdfzipParticularData
+//         particularPdf={[pdfData]}
+//         organisationdetail={organizationsdetail1}
+//         imagename={imageorganisation}
+//         customerData={customerData}
+//         stationData={stationData}
+//       />
+//     ).toBlob();
 
-                        particularPdf={[pdfData]}
-                        organisationdetail={organizationsdetail1}
-                        imagename={imageorganisation}
-                        customerData={customerData}
-                        stationData={stationData}
+//     const pdfBytes = await blob.arrayBuffer();
+//     const reactPDFDocument = await PDFDocument.load(pdfBytes);
 
-                    />
-                ).toBlob();
+//     const datalink1 = JSON.parse(pdfData.Attachedimage || '[]');
+//     const datalink = JSON.parse(pdfData.bookattachedimage || '[]');
 
-                const pdfBytes = await blob.arrayBuffer();
-                // dont delete this code
-                const reactPDFDocument = await PDFDocument.load(pdfBytes);
+//     const pdfDocuments = [];
 
-                // const data = await JSON.parse(pdfData.bookattachedimage)
-                // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
-                // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-                // const datalink = JSON.parse(uniqueJsonStringbook)
+//     // Fetch attached PDFs from Attachedimage
+//     for (const data of datalink1) {
+//       if (data.attachedimageurl) {
+//         const ext = data.attachedimageurl.split('.').pop();
+//         if (ext === "pdf") {
+//           const response = await fetch(`${apiurl}/images/${data.attachedimageurl}`);
+//           const pdfBytes = await response.arrayBuffer();
+//           const pdfDocument = await PDFDocument.load(pdfBytes);
+//           pdfDocuments.push(pdfDocument);
+//         }
+//       }
+//     }
 
-                const data1 = await JSON.parse(pdfData.Attachedimage)
+//     // Optionally handle bookingMail PDFs
+//     if (bookingMail) {
+//       for (const data of datalink) {
+//         if (data.imagees) {
+//           const ext = data.imagees.split('.').pop();
+//           if (ext === "pdf") {
+//             const response = await fetch(`${apiurl}/images/${data.imagees}`);
+//             const pdfBytes = await response.arrayBuffer();
+//             const pdfDocument = await PDFDocument.load(pdfBytes);
+//             pdfDocuments.push(pdfDocument);
+//           }
+//         }
+//       }
+//     }
+
+//     // Merge PDFs
+//     const mergedPDFDocument = await PDFDocument.create();
+//     const reactPages = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
+//     reactPages.forEach(page => mergedPDFDocument.addPage(page));
+
+//     for (const pdfDocument of pdfDocuments) {
+//       const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
+//       pages.forEach(page => mergedPDFDocument.addPage(page));
+//     }
+
+//     const mergedPDFBytes = await mergedPDFDocument.save();
+//     const fileName = `PDF_${tripheaderIndex[index + batchIndex * chunkSize]}.pdf`;
+//     pdffolder.file(fileName, mergedPDFBytes);
+//   });
+
+//   await Promise.all(pdfPromises);
+
+//   // Download zip for this batch
+//   const zipContent = await zip.generateAsync({ type: 'blob' });
+//   saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} Batch ${batchIndex + 1}.zip`);
+// }
+
+const chunkSize = 100;
+function splitIntoChunks(array, chunkSize) {
+  const result = [];
+  for (let i = 0; i < invoice.length; i += chunkSize) {
+    result.push(array.slice(i, i + chunkSize));
+  }
+  return result;
+}
+
+// Split invoices into batches of 100
+const invoiceBatches = splitIntoChunks(invoice, chunkSize);
+let batchCount;
+// Process each batch one by one
+for (let batchIndex = 0; batchIndex < invoiceBatches.length; batchIndex++) {
+//   const zip = new JSZip();   // << create new zip for each batch
+  const pdffolder = zip.folder("pdffolder");  // << create new pdffolder inside this zip
+//   const misfolder = zip.folder("misfolder");  // << optionally create your misfolder here too
+
+  const batchInvoices = invoiceBatches[batchIndex];
+  batchCount = invoiceBatches[batchIndex];
+
+  const pdfPromises = batchInvoices.map(async (pdfData, index) => {
+    const blob = await pdf(
+      <PdfzipParticularData
+        particularPdf={[pdfData]}
+        organisationdetail={organizationsdetail1}
+        imagename={imageorganisation}
+        customerData={customerData}
+        stationData={stationData}
+      />
+    ).toBlob();
+
+    const pdfBytes = await blob.arrayBuffer();
+    const reactPDFDocument = await PDFDocument.load(pdfBytes);
+       const data1 = await JSON.parse(pdfData.Attachedimage)
                 const uniqueArraybook1 = Array.from(new Set(data1?.map(JSON.stringify)))?.map(JSON.parse);
                 const uniqueJsonStringbook1 = JSON.stringify(uniqueArraybook1);
-                const datalink1 = JSON.parse(uniqueJsonStringbook1)
+                // const datalink1 = JSON.parse(uniqueJsonStringbook1)
 
                 const data = await JSON.parse(pdfData.bookattachedimage)
                 const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
                 const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-                const datalink = JSON.parse(uniqueJsonStringbook)
+                // const datalink = JSON.parse(uniqueJsonStringbook)
+
+    // const datalink1 = JSON.parse(pdfData.Attachedimage || '[]');
+    // const datalink = JSON.parse(pdfData.bookattachedimage || '[]');
+     const datalink1 = JSON.parse(uniqueJsonStringbook1 || '[]');
+    const datalink = JSON.parse(uniqueJsonStringbook || '[]');
+
+    const pdfDocuments = [];
+
+    for (const data of datalink1) {
+      if (data.attachedimageurl) {
+        const ext = data.attachedimageurl.split('.').pop();
+        if (ext === "pdf") {
+        //   const response = await axios.get(`${apiurl}/images/${data.attachedimageurl}`);
+        //   const pdfBytes = await response.arrayBuffer();
+        //   const pdfDocument = await PDFDocument.load(pdfBytes);
+        //   pdfDocuments.push(pdfDocument);
+          try {
+        //  const response = await axios.get(`${apiurl}/images/${data.attachedimageurl}`);
+           const response = await axios.get(`${apiurl}/images/${data.attachedimageurl}`, {
+            responseType: 'arraybuffer'
+          });
+
+          if (response.status === 200) {
+        //  const pdfBytes = await response.arrayBuffer();
+        //     const pdfDocument = await PDFDocument.load(pdfBytes);
+        //     pdfDocuments.push(pdfDocument);
+                const pdfBytes = response.data; // <-- response.data is already arrayBuffer
+            const pdfDocument = await PDFDocument.load(pdfBytes);
+            pdfDocuments.push(pdfDocument);
+          } else {
+            console.log(`Attachimage Failed to fetch PDF for TripID: ${pdfData.tripid} — Status: ${response.status}`);
+          }
+
+        } catch (error) {
+          console.log(`Attachimage Error fetching PDF for TripID: TripID: ${pdfData.tripid}`, error);
+        }
+        }
+      }
+    }
+
+    // if (bookingMail) {
+    //   for (const data of datalink) {
+    //     if (data.imagees) {
+    //       const ext = data.imagees.split('.').pop();
+    //       if (ext === "pdf") {
+    //         // const response = await axios.get(`${apiurl}/images/${data.imagees}`);
+    //         // const pdfBytes = await response.arrayBuffer();
+    //         // const pdfDocument = await PDFDocument.load(pdfBytes);
+    //         // pdfDocuments.push(pdfDocument);
+    //          try {
+    //       const response = await axios.get(`${apiurl}/images/${data.imagees}`);
+
+    //       if (response.status === 200) {
+    //      const pdfBytes = await response.arrayBuffer();
+    //         const pdfDocument = await PDFDocument.load(pdfBytes);
+    //         pdfDocuments.push(pdfDocument);
+    //       } else {
+    //         console.log(`bookingImageErrorFailed to fetch PDF for TripID: ${pdfData.tripid} — Status: ${response.status}`);
+    //       }
+
+    //     } catch (error) {
+    //       console.log(`bookingImageError fetching PDF for TripID: TripID: ${pdfData.tripid}`, error);
+    //     }
+    //       }
+    //     }
+    //   }
+    // }
+if (bookingMail) {
+  for (const data of datalink) {
+    if (data.imagees) {
+      const ext = data.imagees.split('.').pop();
+      if (ext === "pdf") {
+        try {
+          const response = await axios.get(`${apiurl}/images/${data.imagees}`, {
+            responseType: 'arraybuffer'
+          });
+
+          if (response.status === 200) {
+            const pdfBytes = response.data; // <-- response.data is already arrayBuffer
+            const pdfDocument = await PDFDocument.load(pdfBytes);
+            pdfDocuments.push(pdfDocument);
+          } else {
+            console.error(`bookingImageError: Failed to fetch PDF for TripID: ${data.TripID} — Status: ${response.status}`);
+          }
+
+        } catch (error) {
+          console.error(`bookingImageError fetching PDF for TripID: ${data.TripID}`, error);
+        }
+      }
+    }
+  }
+}
+
+    const mergedPDFDocument = await PDFDocument.create();
+    const reactPages = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
+    reactPages.forEach(page => mergedPDFDocument.addPage(page));
+
+    for (const pdfDocument of pdfDocuments) {
+      const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
+      pages.forEach(page => mergedPDFDocument.addPage(page));
+    }
+
+    const mergedPDFBytes = await mergedPDFDocument.save();
+    const fileName = `PDF_${tripheaderIndex[index + batchIndex * chunkSize]}.pdf`;
+    pdffolder.file(fileName, mergedPDFBytes);
+  });
+
+  await Promise.all(pdfPromises);
+
+//   saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} Batch ${batchIndex + 1}.zip`);
+//   saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} Batch ${batchIndex}.zip`);
+}
+  const zipContent = await zip.generateAsync({ type: 'blob' });
+
+  saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format("MMMM D")} .zip`);
 
 
 
-                // return datalink
+//             //  let dataimagebook=[]
+//             const pdffolder = zip.folder("pdffolder");
+//             function splitIntoChunks(array, chunkSize) {
+//   const result = [];
+//   for (let i = 0; i < array.length; i += chunkSize) {
+//     result.push(array.slice(i, i + chunkSize));
+//   }
+//   return result;
+// }
+// const invoiceBatches = splitIntoChunks(invoice, 100);
+
+//             const pdfPromises = invoice?.map(async (pdfData, index) => {
+//                 //   console.log(pdfData,"modedata")
+//                 //  dataimagebook=pdfData.bookattachedimage
 
 
-                // console.log(pdfPromises1,"pmisddd")
+//                 const blob = await pdf(
+//                     <PdfzipParticularData
 
-                // const pdfDocuments = [];
-                // for (const data of datalink) {
-                //     if (data.imagees !== null) {
-                //         const data2 = data.imagees.split('.').pop()
-                //         console.log(data2, "datalonk22")
-                //         if (data2 === "pdf") {
+//                         particularPdf={[pdfData]}
+//                         organisationdetail={organizationsdetail1}
+//                         imagename={imageorganisation}
+//                         customerData={customerData}
+//                         stationData={stationData}
 
-                //             const filePath = `${apiurl}/images/${data.imagees}`;
-                //             console.log(filePath, "datalinkpdfpath")
+//                     />
+//                 ).toBlob();
 
-                //             // Fetch the PDF file
-                //             const response = await fetch(filePath);
-                //             const pdfBytes = await response.arrayBuffer();
+//                 const pdfBytes = await blob.arrayBuffer();
+//                 // dont delete this code
+//                 const reactPDFDocument = await PDFDocument.load(pdfBytes);
 
-                //             // Load the PDF document
-                //             const pdfDocument = await PDFDocument.load(pdfBytes);
-                //             console.log(pdfDocument)
+//                 // const data = await JSON.parse(pdfData.bookattachedimage)
+//                 // const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+//                 // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+//                 // const datalink = JSON.parse(uniqueJsonStringbook)
 
-                //             // Add the PDF document to the array
-                //             pdfDocuments.push(pdfDocument);
-                //         }
-                //     }
-                // }
+//                 const data1 = await JSON.parse(pdfData.Attachedimage)
+//                 const uniqueArraybook1 = Array.from(new Set(data1?.map(JSON.stringify)))?.map(JSON.parse);
+//                 const uniqueJsonStringbook1 = JSON.stringify(uniqueArraybook1);
+//                 const datalink1 = JSON.parse(uniqueJsonStringbook1)
 
-                const pdfDocuments = [];
-
-                for (const data of datalink1) {
-                    if (data.attachedimageurl !== null) {
-                        const data2 = data.attachedimageurl.split('.').pop()
-                        console.log(data2, "datalonk22ATT")
-                        if (data2 === "pdf") {
-
-                            const filePath = `${apiurl}/images/${data.attachedimageurl}`;
-                            console.log(filePath, "datalinkpdfpath")
-
-                            // Fetch the PDF file
-                            const response = await fetch(filePath);
-                            const pdfBytes = await response.arrayBuffer();
-
-                            // Load the PDF document
-                            const pdfDocument = await PDFDocument.load(pdfBytes);
-                            console.log(pdfDocument)
-
-                            // Add the PDF document to the array
-                            pdfDocuments.push(pdfDocument);
-                        }
-                    }
-                }
-                if (bookingMail) {
-                    console.log(bookingMail, "jhgfffffff")
-                    for (const data of datalink) {
-                        if (data.imagees !== null) {
-                            const data2 = data.imagees.split('.').pop()
-                            console.log(data2, "datalonk22")
-                            if (data2 === "pdf") {
-
-                                const filePath = `${apiurl}/images/${data.imagees}`;
-                                console.log(filePath, "datalinkpdfpath")
-
-                                // Fetch the PDF file
-                                const response = await fetch(filePath);
-                                const pdfBytes = await response.arrayBuffer();
-
-                                // Load the PDF document
-                                const pdfDocument = await PDFDocument.load(pdfBytes);
-                                console.log(pdfDocument)
-
-                                // Add the PDF document to the array
-                                pdfDocuments.push(pdfDocument);
-                            }
-                        }
-                    }
-                }
-
-
-                const mergedPDFDocument = await PDFDocument.create();
-                // console.log(mergedPDFDocument)
-
-                // // Add pages from React PDF
-                const [firstReactPage, ...restReactPages] = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
-                mergedPDFDocument.addPage(firstReactPage);
-                for (const page of restReactPages) {
-                    mergedPDFDocument.addPage(page);
-                }
-
-                // Add pages from external PDF
+//                 const data = await JSON.parse(pdfData.bookattachedimage)
+//                 const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+//                 const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+//                 const datalink = JSON.parse(uniqueJsonStringbook)
 
 
 
-                // Add pages from each PDF document to the merged PDF document
-                for (const pdfDocument of pdfDocuments) {
-                    // console.log(pdfDocument,"doc")
-                    const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
-                    for (const page of pages) {
-                        // console.log(page,"docpage")
-                        mergedPDFDocument.addPage(page);
-                    }
-                }
-                // const externalPages = await mergedPDFDocument.copyPages(externalPDFDocument, externalPDFDocument.getPageIndices());
-                // for (const page of externalPages) {
-                //     mergedPDFDocument.addPage(page);
-                // }
+//                 // return datalink
 
-                const mergedPDFBytes = await mergedPDFDocument.save();
-                //   const fileName = `PDF_${index + 1}.pdf`; 
-                const fileName = `PDF_${tripheaderIndex[index]}.pdf`;
-                // const fileName = invoice?.map(li => `PDF_${li.tripid}.pdf`)
-                // console.log(blob,"pdfblob")
-                // zip.file(fileName, blob);
-                pdffolder.file(fileName, mergedPDFBytes);
 
-                // Return the filename for tracking
-            });
+//                 // console.log(pdfPromises1,"pmisddd")
 
-            // Wait for all promises to resolve
-            await Promise.all(pdfPromises);
+//                 // const pdfDocuments = [];
+//                 // for (const data of datalink) {
+//                 //     if (data.imagees !== null) {
+//                 //         const data2 = data.imagees.split('.').pop()
+//                 //         console.log(data2, "datalonk22")
+//                 //         if (data2 === "pdf") {
 
-            const zipContent = await zip.generateAsync({ type: 'blob' });
-            // Download the ZIP file
-            saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format(" MMMM D")}.zip`);
+//                 //             const filePath = `${apiurl}/images/${data.imagees}`;
+//                 //             console.log(filePath, "datalinkpdfpath")
+
+//                 //             // Fetch the PDF file
+//                 //             const response = await fetch(filePath);
+//                 //             const pdfBytes = await response.arrayBuffer();
+
+//                 //             // Load the PDF document
+//                 //             const pdfDocument = await PDFDocument.load(pdfBytes);
+//                 //             console.log(pdfDocument)
+
+//                 //             // Add the PDF document to the array
+//                 //             pdfDocuments.push(pdfDocument);
+//                 //         }
+//                 //     }
+//                 // }
+
+//                 const pdfDocuments = [];
+
+//                 for (const data of datalink1) {
+//                     if (data.attachedimageurl !== null) {
+//                         const data2 = data.attachedimageurl.split('.').pop()
+//                         console.log(data2, "datalonk22ATT")
+//                         if (data2 === "pdf") {
+
+//                             const filePath = `${apiurl}/images/${data.attachedimageurl}`;
+//                             console.log(filePath, "datalinkpdfpath")
+
+//                             // Fetch the PDF file
+//                             const response = await fetch(filePath);
+//                             const pdfBytes = await response.arrayBuffer();
+
+//                             // Load the PDF document
+//                             const pdfDocument = await PDFDocument.load(pdfBytes);
+//                             console.log(pdfDocument)
+
+//                             // Add the PDF document to the array
+//                             pdfDocuments.push(pdfDocument);
+//                         }
+//                     }
+//                 }
+//                 if (bookingMail) {
+//                     console.log(bookingMail, "jhgfffffff")
+//                     for (const data of datalink) {
+//                         if (data.imagees !== null) {
+//                             const data2 = data.imagees.split('.').pop()
+//                             console.log(data2, "datalonk22")
+//                             if (data2 === "pdf") {
+
+//                                 const filePath = `${apiurl}/images/${data.imagees}`;
+//                                 console.log(filePath, "datalinkpdfpath")
+
+//                                 // Fetch the PDF file
+//                                 const response = await fetch(filePath);
+//                                 const pdfBytes = await response.arrayBuffer();
+
+//                                 // Load the PDF document
+//                                 const pdfDocument = await PDFDocument.load(pdfBytes);
+//                                 console.log(pdfDocument)
+
+//                                 // Add the PDF document to the array
+//                                 pdfDocuments.push(pdfDocument);
+//                             }
+//                         }
+//                     }
+//                 }
+
+
+//                 const mergedPDFDocument = await PDFDocument.create();
+//                 // console.log(mergedPDFDocument)
+
+//                 // // Add pages from React PDF
+//                 const [firstReactPage, ...restReactPages] = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
+//                 mergedPDFDocument.addPage(firstReactPage);
+//                 for (const page of restReactPages) {
+//                     mergedPDFDocument.addPage(page);
+//                 }
+
+//                 // Add pages from external PDF
+
+
+
+//                 // Add pages from each PDF document to the merged PDF document
+//                 for (const pdfDocument of pdfDocuments) {
+//                     // console.log(pdfDocument,"doc")
+//                     const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
+//                     for (const page of pages) {
+//                         // console.log(page,"docpage")
+//                         mergedPDFDocument.addPage(page);
+//                     }
+//                 }
+//                 // const externalPages = await mergedPDFDocument.copyPages(externalPDFDocument, externalPDFDocument.getPageIndices());
+//                 // for (const page of externalPages) {
+//                 //     mergedPDFDocument.addPage(page);
+//                 // }
+
+//                 const mergedPDFBytes = await mergedPDFDocument.save();
+//                 //   const fileName = `PDF_${index + 1}.pdf`; 
+//                 const fileName = `PDF_${tripheaderIndex[index]}.pdf`;
+//                 // const fileName = invoice?.map(li => `PDF_${li.tripid}.pdf`)
+//                 // console.log(blob,"pdfblob")
+//                 // zip.file(fileName, blob);
+//                 pdffolder.file(fileName, mergedPDFBytes);
+
+//                 // Return the filename for tracking
+//             });
+
+//             // Wait for all promises to resolve
+//             await Promise.all(pdfPromises);
+
+//             const zipContent = await zip.generateAsync({ type: 'blob' });
+//             // Download the ZIP file
+//             saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format(" MMMM D")}.zip`);
         }
         catch (error) {
-            console.error('<<<ERROR>>>', error);
-            console.error('Something Went Wrong', error.message);
+            console.log('<<<ERROR>>>', error);
+            console.log('Something Went Wrong', error.message);
         } finally {
             // Clean up resources
             workbook.removeWorksheet(workSheetName);

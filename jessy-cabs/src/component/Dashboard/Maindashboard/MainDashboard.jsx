@@ -413,7 +413,8 @@ const MainDashboard = () => {
             </div>
             <Outlet />
           </div>
-          <Dialog open={popupOpen} onClose={handlePopupClose}>
+          <Dialog open={popupOpen} onClose={handlePopupClose} className="open-dialog"   BackdropProps={{ className: 'custom-dialog-backdrop' }}
+>
             <DialogContent>
               <p className="modal-warning-icon">< PiWarningCircleBold className="warning-icon" /></p>
               <p className="modal-warning-text">Are you sure want to logout from this <br /> application ?</p>

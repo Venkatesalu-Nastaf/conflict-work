@@ -30,7 +30,7 @@ import { PermissionContext } from '../../../context/permissionContext';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LoadingButton from '@mui/lab/LoadingButton';
 
-const GroupBilling = ({ stationName, organizationNames }) => {
+const GroupBilling = ({organizationNames }) => {
     const apiurl = APIURL;
     const {
         rows,
@@ -57,7 +57,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         toDate,
         setToDate,
         servicestation,
-        handleserviceInputChange,
+        // handleserviceInputChange,
         handleShow,
         handleExcelDownload,
         columns,
@@ -85,7 +85,10 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         setBillingGroupDetails,
         handlecustomer,
         disabeldata,
-        handleInvoicegenerate,referInvoiceno,setReferINVOICENO,isSaveload , setisSaveload,isgroupEditload , setisGfoupEditload,isBllload , setisBillload
+        handleInvoicegenerate,referInvoiceno,setReferINVOICENO,isSaveload ,
+        // setisSaveload,isgroupEditload , setisGfoupEditload,
+        isBllload , 
+        // setisBillload
     } = useGroupbilling();
 
 
@@ -100,12 +103,20 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     //  get station and customer details
     useEffect(() => {
         const fetchData = async () => {
+
+            if(!customer){
+                setCustomerData([])
+                setStationData([])
+                // console.warn("customer is null or undefined")
+                return;
+            }
+
           try {
             if(customer!==""){
-            console.log(customer, 'customer =====');
+            // console.log(customer, 'customer =====');
     
             const response = await axios.get(`${apiUrl}/customerDetailsAndGroupBillingDetails/${customer}`)
-            console.log(response.data, 'customer response');
+            // console.log(response.data, 'customer response');
             const data = response.data;
             const customerDetails = data.customerDetails;
             const stationDetails = data.customerStations;
@@ -120,6 +131,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         }
         fetchData()
       }, [apiUrl, customer])
+    //   console.log(customerData,stationData,"hello")
 
 
     useEffect(() => {
@@ -135,7 +147,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                 const data = await response.json();
                 setStateDetails(data);
 
-                console.log(data, 'State details fetched');
+                // console.log(data, 'State details fetched');
             }
             catch (err) {
                 // setError(err.message); // Handle errors
@@ -174,10 +186,26 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     }, [apiurl, customer]);
 
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const customer = refCustomer[0]
+    //         if (refCustomer !== "") {
+    //             try {
+    //                 const response = await axios.get(`${apiUrl}/gstdetails/${customer}`);
+    //                 setGstno(response.data)
+    //             } catch (error) {
+    //                 console.error('Errorgst', error);
+    //                 throw error;
+    //             }
+    //         }
+    //     }
+
+    //     fetchData()
+    // }, [apiUrl, refCustomer, setGstno])
+      useEffect(() => {
         const fetchData = async () => {
-            const customer = refCustomer[0]
-            if (refCustomer !== "") {
+            
+            if (customer !== "") {
                 try {
                     const response = await axios.get(`${apiUrl}/gstdetails/${customer}`);
                     setGstno(response.data)
@@ -189,11 +217,14 @@ const GroupBilling = ({ stationName, organizationNames }) => {
         }
 
         fetchData()
-    }, [apiUrl, refCustomer, setGstno])
+    }, [apiUrl,setGstno])
 
     // get billingGroupDetailss
+
+    
     useEffect(() => {
-        if (gstno[0]?.billingGroup !== "") {
+        if (gstno.length > 0 && gstno[0]?.billingGroup) {
+        // if (gstno[0]?.billingGroup !== "") {
             const fetchData = async () => {
                 const billingGroupCustomer = gstno[0]?.billingGroup
                 console.log('GroupBillCustomer', billingGroupCustomer);
@@ -220,7 +251,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
     useEffect(() => {
         if (viewGroupBill && viewGroupBill.length > 0) {
             const firstBill = viewGroupBill[0];
-            console.log(firstBill,"ll")
+            // console.log(firstBill,"ll")
             setReferINVOICENO(firstBill.InvoiceNo)
             setBillingDate(dayjs(firstBill.InvoiceDate, "YYYY-MM-DD"));
             setCustomer(firstBill.Customer);
@@ -401,7 +432,7 @@ const invoiceNoCheck = !rows[0]?.InvoiceNo || rows[0]?.InvoiceNo[0] == null || r
                                     <Button variant="contained" disabled={!CoveringBill_read} onClick={() => handleShow()} >View Bill</Button>
                                 </div>
 }
-                                {invoiceno && disabeldata &&  referInvoiceno != "created" && (
+                                {invoiceno && disabeldata &&  referInvoiceno !== "created" && (
 
                                 <div className="input">
                                     {/* <Button variant="contained" disabled={!CoveringBill_read} 

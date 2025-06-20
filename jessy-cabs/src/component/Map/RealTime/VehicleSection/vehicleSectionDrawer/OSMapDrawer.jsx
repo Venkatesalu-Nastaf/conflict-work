@@ -159,7 +159,7 @@ const OSMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentDateP
   zoom={4}
   minZoom={4}  // Prevent zooming out too much
     maxZoom={19} 
-  style={{ height: "500px", width: "100%" }}
+  style={{ height: "100%", width: "100%" }}
 >
   <SetMapCenter position={startPos} />
   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

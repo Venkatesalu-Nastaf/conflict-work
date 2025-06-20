@@ -96,6 +96,9 @@ const Login = () => {
         setError(true);
         setErrorMessage("Username or password is incorrect");
         
+      }else if (error.response.status === 403) {
+        setError(error)
+        setErrorMessage("Account inactive. Please contact admin.")
       } else {
         // Handle general errors  
         setError(true);

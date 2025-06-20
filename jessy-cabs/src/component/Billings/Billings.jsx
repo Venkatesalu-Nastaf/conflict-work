@@ -42,6 +42,7 @@ const Billings = () => {
   const Transfer = permissions[6]?.read;
   const Covering_Bill = permissions[7]?.read;
   const Reports = permissions[8]?.read;
+  const Vendor_Reports = permissions[9]?.read;
   // const Log_Details = permissions[8]?.read;
   const [activeMenuItem, setActiveMenuItem] = useState('');
   const handleMenuItemClick = (label, alt, e) => {
@@ -61,9 +62,12 @@ const Billings = () => {
       case "Reports":
         hasPermission = Reports;
         break;
-        // case "Log Details":
-        // hasPermission = Log_Details;
-        // break;
+      case "Vendor Reports":
+        hasPermission = Vendor_Reports;
+        break;
+      // case "Log Details":
+      // hasPermission = Log_Details;
+      // break;
       default:
         break;
     }
@@ -86,42 +90,53 @@ const Billings = () => {
       <div className="menu-bar-main">
         <div className="menu-bar">
           {Billing ?
-          <MenuItem
-            label="Billing"
-            to={Billing && ("/home/billing/billing")}
-            alt="/home/billing/billing"
-            menuItemKey="Billing"
-            activeMenuItem={activeMenuItem}
-            handleMenuItemClick={handleMenuItemClick}
-          /> :<></>}
+            <MenuItem
+              label="Billing"
+              to={Billing && ("/home/billing/billing")}
+              alt="/home/billing/billing"
+              menuItemKey="Billing"
+              activeMenuItem={activeMenuItem}
+              handleMenuItemClick={handleMenuItemClick}
+            /> : <></>}
 
           {Transfer ?
-          <MenuItem
-            label="Transfer"
-            to={Transfer && ("/home/billing/transfer")}
-            alt="/home/billing/transfer"
-            menuItemKey="Transfer"
-            activeMenuItem={activeMenuItem}
-            handleMenuItemClick={handleMenuItemClick}
-          /> :<></>}
+            <MenuItem
+              label="Transfer"
+              to={Transfer && ("/home/billing/transfer")}
+              alt="/home/billing/transfer"
+              menuItemKey="Transfer"
+              activeMenuItem={activeMenuItem}
+              handleMenuItemClick={handleMenuItemClick}
+            /> : <></>}
           {Covering_Bill ?
-          <MenuItem
-            label="Covering Bill"
-            to={Covering_Bill && ("/home/billing/coveringbill")}
-            alt="/home/billing/coveringbill"
-            menuItemKey="Covering Bill"
-            activeMenuItem={activeMenuItem}
-            handleMenuItemClick={handleMenuItemClick}
-          />:<></> }
+            <MenuItem
+              label="Covering Bill"
+              to={Covering_Bill && ("/home/billing/coveringbill")}
+              alt="/home/billing/coveringbill"
+              menuItemKey="Covering Bill"
+              activeMenuItem={activeMenuItem}
+              handleMenuItemClick={handleMenuItemClick}
+            /> : <></>}
           {Reports ?
-          <MenuItem
-            label="Reports"
-            to={Covering_Bill && ("/home/billing/reports")}
-            alt="/home/billing/reports"
-            menuItemKey="Reports"
-            activeMenuItem={activeMenuItem}
-            handleMenuItemClick={handleMenuItemClick}
-          /> : <></> }
+            <MenuItem
+              label="Reports"
+              to={Covering_Bill && ("/home/billing/reports")}
+              alt="/home/billing/reports"
+              menuItemKey="Reports"
+              activeMenuItem={activeMenuItem}
+              handleMenuItemClick={handleMenuItemClick}
+            /> : <></>}
+
+          {Vendor_Reports ?
+            <MenuItem
+              label="Vendor Reports"
+              to={Vendor_Reports && ("/home/billing/vendorreports")}
+              alt="/home/billing/vendorreports"
+              menuItemKey="Vendor Reports"
+              activeMenuItem={activeMenuItem}
+              handleMenuItemClick={handleMenuItemClick}
+            /> : <></>}
+
           {/* { Log_Details?
           <MenuItem
             label="Log Details"

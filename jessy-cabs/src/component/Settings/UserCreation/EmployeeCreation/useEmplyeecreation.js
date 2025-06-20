@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 import dayjs from 'dayjs';
+import encryption from '../../../dataEncrypt';
 // import EmployeeCreation from './EmployeeCreation';
 // import { faMobilePhone } from '@fortawesome/free-solid-svg-icons';
 
@@ -157,7 +158,48 @@ const useEmplyeecreation = () => {
     //     { id: 28, name: 'Records', read: false, new: false, modify: false, delete: false },
     // ];
 
-    const initialPermissionsData = [
+    // const initialPermissionsData = [
+
+    //     { id: 0, name: 'BOOKING', read: false, new: false, modify: false, delete: false },
+    //     { id: 1, name: 'Booking', read: false, new: false, modify: false, delete: false },
+    //     { id: 2, name: 'Trip Status', read: false, new: false, modify: false, delete: false },
+    //     { id: 3, name: 'Trip sheet', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 4, name: 'BILLING', read: false, new: false, modify: false, delete: false },
+    //     { id: 5, name: 'Billing', read: false, new: false, modify: false, delete: false },
+    //     { id: 6, name: 'Transfer', read: false, new: false, modify: false, delete: false },
+    //     { id: 7, name: 'Covering Bill', read: false, new: false, modify: false, delete: false },
+    //     { id: 8, name: 'Reports', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 9, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
+    //     { id: 10, name: 'Rate Type', read: false, new: false, modify: false, delete: false },
+    //     { id: 11, name: 'Customer', read: false, new: false, modify: false, delete: false },
+    //     { id: 12, name: 'Supllier', read: false, new: false, modify: false, delete: false },
+    //     { id: 13, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
+    //     // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 14, name: 'SETTING', read: false, new: false, modify: false, delete: false },
+    //     { id: 15, name: 'User Creation', read: false, new: false, modify: false, delete: false },
+    //     { id: 16, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
+
+    //     { id: 17, name: 'INFO', read: false, new: false, modify: false, delete: false },
+    //     // { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
+    //     { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
+    //     { id: 19, name: 'Log Details', read: false, new: false, modify: false, delete: false },
+    //     { id: 20, name: 'Employee', read: false, new: false, modify: false, delete: false },
+    //     { id: 21, name: 'Agreement', read: false, new: false, modify: false, delete: false },
+    //     { id: 22, name: 'Dashboard', read: false },
+    //     // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+    //     { id: 23, name: 'Map', read: false, new: false, modify: false, delete: false },
+    //     { id: 24, name: 'RealTime', read: false, new: false, modify: false, delete: false },
+    //     { id: 25, name: 'Vehicle', read: false, new: false, modify: false, delete: false },
+    //     { id: 26, name: 'Reminders', read: false, new: false, modify: false, delete: false },
+    //     { id: 27, name: 'History', read: false, new: false, modify: false, delete: false },
+    //     { id: 28, name: 'Records', read: false, new: false, modify: false, delete: false },
+    // ];
+
+
+      const initialPermissionsData = [
 
         { id: 0, name: 'BOOKING', read: false, new: false, modify: false, delete: false },
         { id: 1, name: 'Booking', read: false, new: false, modify: false, delete: false },
@@ -169,34 +211,38 @@ const useEmplyeecreation = () => {
         { id: 6, name: 'Transfer', read: false, new: false, modify: false, delete: false },
         { id: 7, name: 'Covering Bill', read: false, new: false, modify: false, delete: false },
         { id: 8, name: 'Reports', read: false, new: false, modify: false, delete: false },
+         { id: 9, name: 'Vendor Reports', read: false, new: false, modify: false, delete: false },
 
-        { id: 9, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
-        { id: 10, name: 'Rate Type', read: false, new: false, modify: false, delete: false },
-        { id: 11, name: 'Customer', read: false, new: false, modify: false, delete: false },
-        { id: 12, name: 'Supllier', read: false, new: false, modify: false, delete: false },
-        { id: 13, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
+        { id: 10, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
+        { id: 11, name: 'Rate Type', read: false, new: false, modify: false, delete: false },
+        { id: 12, name: 'Customer', read: false, new: false, modify: false, delete: false },
+        { id: 13, name: 'Supllier', read: false, new: false, modify: false, delete: false },
+        { id: 14, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
         // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
 
-        { id: 14, name: 'SETTING', read: false, new: false, modify: false, delete: false },
-        { id: 15, name: 'User Creation', read: false, new: false, modify: false, delete: false },
-        { id: 16, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
+        { id: 15, name: 'SETTING', read: false, new: false, modify: false, delete: false },
+        { id: 16, name: 'User Creation', read: false, new: false, modify: false, delete: false },
+        { id: 17, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
 
-        { id: 17, name: 'INFO', read: false, new: false, modify: false, delete: false },
+        { id: 18, name: 'INFO', read: false, new: false, modify: false, delete: false },
         // { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
-        { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
-        { id: 19, name: 'Log Details', read: false, new: false, modify: false, delete: false },
-        { id: 20, name: 'Employee', read: false, new: false, modify: false, delete: false },
-        { id: 21, name: 'Agreement', read: false, new: false, modify: false, delete: false },
-        { id: 22, name: 'Dashboard', read: false },
+        { id: 19, name: 'Mailers', read: false, new: false, modify: false, delete: false },
+        { id: 20, name: 'Log Details', read: false, new: false, modify: false, delete: false },
+        { id: 21, name: 'Employee', read: false, new: false, modify: false, delete: false },
+        { id: 22, name: 'Agreement', read: false, new: false, modify: false, delete: false },
+        { id: 23, name: 'Dashboard', read: false },
         // { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
-        { id: 23, name: 'Map', read: false, new: false, modify: false, delete: false },
-        { id: 24, name: 'RealTime', read: false, new: false, modify: false, delete: false },
-        { id: 25, name: 'Vehicle', read: false, new: false, modify: false, delete: false },
-        { id: 26, name: 'Reminders', read: false, new: false, modify: false, delete: false },
-        { id: 27, name: 'History', read: false, new: false, modify: false, delete: false },
-        { id: 28, name: 'Records', read: false, new: false, modify: false, delete: false },
-    ];
+        { id: 24, name: 'Map', read: false, new: false, modify: false, delete: false },
+        { id: 25, name: 'RealTime', read: false, new: false, modify: false, delete: false },
+        { id: 26, name: 'Vehicle', read: false, new: false, modify: false, delete: false },
+        { id: 27, name: 'Reminders', read: false, new: false, modify: false, delete: false },
+        { id: 28, name: 'History', read: false, new: false, modify: false, delete: false },
+        { id: 29, name: 'Records', read: false, new: false, modify: false, delete: false },
+        { id: 30, name: 'Payment', read: false, new: false, modify: false, delete: false },
+        { id: 31, name: 'Vendorpayment', read: false, new: false, modify: false, delete: false },
+        { id: 32, name: 'Customerpayment', read: false, new: false, modify: false, delete: false },
 
+    ];
 
 
     const [permissionsData, setPermissionsData] = useState(initialPermissionsData);
@@ -371,15 +417,24 @@ const useEmplyeecreation = () => {
 //         { start: 23, end: 27 }
 //       ];
 
-const indexRanges = [
-    { start: 1, end: 3 },
-    { start: 5, end: 8 },
-    { start: 10, end: 13 },
-    { start: 15, end: 16 },
-    { start: 18, end: 21 },
-    { start: 24, end: 28 }
-  ];
+// const indexRanges = [
+//     { start: 1, end: 3 },
+//     { start: 5, end: 8 },
+//     { start: 10, end: 13 },
+//     { start: 15, end: 16 },
+//     { start: 18, end: 21 },
+//     { start: 24, end: 28 }
+//   ];
       
+     const indexRanges = [
+    { start: 1, end: 3 },
+    { start: 5, end: 9},
+    { start: 11, end: 14 },
+    { start: 16, end: 17 },
+    { start: 19, end: 22 },
+    { start: 25, end: 29},
+    { start: 31, end: 32}
+  ];
       useEffect(()=>{
         datacahnges()
     },[permissionsData])
@@ -388,9 +443,7 @@ const indexRanges = [
         
         setPermissionsData(prevData => {
         
-          const updatedData = [...prevData];
-     
-      
+          const updatedData = [...prevData];     
           indexRanges.forEach(range => {
             const readTrue = prevData.slice(range.start, range.end + 1).some(item => item.read === true || item.read === 1);
             const newTrue = prevData.slice(range.start, range.end + 1).some(item => item.new === true || item.new === 1);
@@ -405,7 +458,6 @@ const indexRanges = [
               delete: deleteTrue
             };
           });
-      
           return updatedData;
         });
       };
@@ -568,7 +620,7 @@ const indexRanges = [
                 const response = await fetch(`${apiUrl}/TemplateUser--Creation`);
                 if (response.status === 200) {
                     const userDataArray = await response.json();
-                    console.log("Fetched data:", userDataArray);
+                    // console.log("Fetched data:", userDataArray);
                     
                     if (userDataArray.length > 0) {
                         setTemplateMessageData(userDataArray[0].TemplateMessageData);
@@ -612,11 +664,18 @@ const indexRanges = [
     // }, [apiUrl]);
 
 
+    //encrypt the url;
+ 
     const uniqueusercreationname = async (usernname) => {
      
         if (usernname) {
-
-            const response = await axios.get(`${apiUrl}/getuniqueusercreationdata/${usernname}`)
+            const encryptedUsername = encryption(usernname)
+            // console.log(encryptedUsername,"checking"); 
+            
+            const fullUrl = `${apiUrl}/getuniqueusercreationdata/${encryptedUsername}`
+            // console.log(fullUrl,"checking the url");       
+            const response = await axios.get(fullUrl)
+         
             const responsedata = response.data;
 
             if (responsedata?.length >= 1) {
@@ -633,7 +692,7 @@ const indexRanges = [
     const handleChangeuniquecreation = (event) => {
         const { name, value } = event.target;
         const datacrendital = uniqueusercreationname(value);
-        console.log(datacrendital, "cred")
+        // console.log(datacrendital, "cred")
         setBook((prevBook) => ({
             ...prevBook,
             [name]: value,
@@ -645,18 +704,20 @@ const indexRanges = [
 
     // show list
     const handleList = useCallback(async () => {
+        // console.log("hiiicsal")
         try {
             const response = await axios.get(`${apiUrl}/usercreation`);
             const data = response.data;
-
+            // console.log(data , "checking the values ");
+            
             setRows(data);
             // return data;
         } catch {
         }
     }, [apiUrl])
-    useEffect(() => {
-        handleList();
-    }, [handleList]);
+    // useEffect(() => {
+    //     handleList();
+    // }, [handleList]);
 
 
     const handleAdd = async () => {
@@ -670,9 +731,8 @@ const indexRanges = [
         const mobileno = book.mobileno
         const password = book.userpassword
         // const EmailApp_Password=book.EmailApp_Password
-
-
-
+        // console.log(book,"checking add values");
+    
         if (!password) {
             setWarning(true);
             setWarningMessage("Fill password");
@@ -736,11 +796,13 @@ const indexRanges = [
             const created_at = dayjs().format("YYYY-MM-DD")
             const data = { book, permissionsData, organistaionsendmail,templateMessageData, created_at }
             await axios.post(`${apiUrl}/usercreation-add`, data);
+            
             handleCancel();
             handleList()
             setSuccess(true);
             setSuccessMessage("Successfully Added");
             setCredentialData()
+        
 
         } catch (error) {
             setError(true);
@@ -765,9 +827,8 @@ const indexRanges = [
             const mobileno = book.mobileno
             const password = book.userpassword
             // const EmailApp_Password=book.EmailApp_Password
+            // console.log(book,"checking the edit values")
 
-
-            // console.log("NASTAF Technologies", branchName, "book", book)
 
             if (!password) {
                 setError(true);
@@ -826,8 +887,7 @@ const indexRanges = [
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...book, };
             const data = { updatedCustomer: updatedCustomer, permissionsData }
-
-
+            // console.log(book.active);
             await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, data);
             handleList()
             setCredentialData();
@@ -835,8 +895,6 @@ const indexRanges = [
             setSuccessMessage("Successfully updated");
             handleCancel();
             // handleList()
-
-
 
         } catch {
             setError(true);
@@ -848,8 +906,10 @@ const indexRanges = [
     const handleDelete = async () => {
         try {
             await axios.delete(`${apiUrl}/usercreation-delete/${book.userid}`);
+            // console.log(book.userid,"successfully delleted")
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
+            await handleList();
             handleCancel();
 
         }
@@ -903,8 +963,7 @@ const indexRanges = [
             handleAdd();
             handleList();
         }
-
-       
+      
     };
 
 
@@ -930,9 +989,11 @@ const indexRanges = [
 
     const permissiondata = async (userId) => {
         const userid = userId;
-        if (userid) {
+        const encryptId = encryption(userid)
+        // console.log(encryptId,"checking the id");    
+        if (encryptId) {
             try {
-                const response = await axios.get(`${apiUrl}/user-permissionget/${userid}`);
+                const response = await axios.get(`${apiUrl}/user-permissionget/${encryptId}`);
                 const permissiondata = response?.data;
                 if (permissiondata.length > 0) {
                     return permissiondata;
@@ -951,7 +1012,7 @@ const indexRanges = [
 
     const handleRowClickUser = async (params) => {
         setBook(params)
-        console.log("params-user", params)
+        // console.log("params-user", params)
 
         const user_permission = await permissiondata(params.userid);
         if (user_permission?.length > 0) {
@@ -977,7 +1038,7 @@ const indexRanges = [
 
     const handleAutocompleteChangeStationName = (event, newValue, name) => {
 
-        console.log(newValue, "bill")
+        // console.log(newValue, "bill")
 
         setBook((prevBook) => ({
             ...prevBook,
@@ -1077,14 +1138,14 @@ const indexRanges = [
     };
 
     const permisiionrolefield = async(datas)=>{
-        console.log(datas,"resusedtatw")
+        // console.log(datas,"resusedtatw")
         if(datas){
         try{
             
     
             const response = await axios.get(`${apiUrl}/userrole-permissiongetroless/${datas}`)
             const responsedata = response.data;
-            console.log(responsedata,"resuseperrrr")
+            // console.log(responsedata,"resuseperrrr")
           
             setPermissionsData(responsedata)
             updatePermissionsStateforrole(responsedata)
@@ -1100,26 +1161,25 @@ const indexRanges = [
         }
     }
     else{
-        console.log(datas,"resuse esle")
+        // console.log(datas,"resuse esle")
         setPermissionsData(initialPermissionsData)
     }
            
-      
-    
+        
     }
     
     const handlerolepermissiondata = async (event,veghnodata) => {
           const seleteddata = veghnodata ? veghnodata.label :""
-          console.log(seleteddata,"resusesele")
-          
-        
-      
-    try{
+        //   console.log(seleteddata,"resusesele") 
+    try{    
+        if(!seleteddata ||typeof seleteddata !== 'string'){
+            // console.log("stop")
+            return;
+        }      
             const response = await axios.get(`${apiUrl}/getAllrolefieldunique/${seleteddata}`)
             const responsedata = response.data;
-            console.log(responsedata,"resuseponse")
             if(responsedata.length > 0){
-            console.log(responsedata.length,"resuses",responsedata[0].userRole_id)
+            // console.log(responsedata.length,"resuses",responsedata[0].userRole_id)
             setBook((prevBook) => ({
                 ...prevBook,
                 RoleUser:seleteddata,
@@ -1143,15 +1203,10 @@ const indexRanges = [
             // }
     }
     catch(err){
-      console.log(err,"resuseee")
+    //   console.log(err,"resuseee")
+    }             
+                return true;            
     }
-
-              
-                // return true;
-        
-        
-    }
-
    const handlenochangedatarole=(value)=>{
     setBook((prevBook) => ({
         ...prevBook,
@@ -1159,10 +1214,6 @@ const indexRanges = [
     }));
    }
   
-
-
-
-
     return {
 
         selectedCustomerId, handleAutocompleteChangeStationName,
@@ -1195,7 +1246,9 @@ const indexRanges = [
         // rolefielddropdown,setRoleFielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
 
         //ffor permission
-        deleteuserceationdata,setDeleteUsercreation,setCredentialData,
+        // deleteuserceationdata,setDeleteUsercreation,
+        setCredentialData ,
+        
         permissionsData, handleSwitchChange, handleCheckboxChange, setReadState,setModifyState,setDeleteState,setNewState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows
     };
 };

@@ -38,7 +38,7 @@ import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 // import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import StationCreation from "./component/Registration/StationCreation/StationCreation";
-import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapComponent";
+// import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapComponent";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 import TemplateSelection from "./component/Info/Mailer/TemplateSelection/TemplateSelection";
 import TemplateCreation from "./component/Info/Mailer/TemplateCreation/TemplateCreation";
@@ -67,7 +67,12 @@ import { PendingBills } from "./component/Billings/Report/pendingBills/PendingBi
 // import Agreement from "./component/Info/AgreementMain/Agreement/Agreement";
 import AgreementMain from "./component/Info/AgreementMain/AgreementMain";
 // import LogSheets from "./component/Billings/LogDetails/Logsheets";
+import { VendorReports } from "./component/Billings/VendorReports/VendorReports";
 
+import { PaymentVendor } from "./component/payment/Vendor/PaymentVendor"
+import { PaymentCustomer } from "./component/payment/Customer/PaymentCustomer";
+import Payment from "./component/payment/Payment";
+import dayjs from "dayjs";
 
 function App() {
   const apiUrl = APIURL;
@@ -135,28 +140,34 @@ function App() {
   const Billing_Transfer = permissions[6]?.read
   const Billing_CoveringBill = permissions[7]?.read
   const Billing_Reports = permissions[8]?.read
+  const Billing_VendorReports = permissions[9]?.read
+
+  const PAYMENT = permissions[30]?.read;
+  const Payment_Vendor = permissions[31]?.read
+  const Payment_Customer = permissions[32]?.read
+  
 
 
-  const REGISTER = permissions[9]?.read
-  const R_RATEtype = permissions[10]?.read
-  const R_Customer = permissions[11]?.read
-  const R_Supllier = permissions[12]?.read
-  const R_Station = permissions[13]?.read
+  const REGISTER = permissions[10]?.read
+  const R_RATEtype = permissions[11]?.read
+  const R_Customer = permissions[12]?.read
+  const R_Supllier = permissions[13]?.read
+  const R_Station = permissions[14]?.read
 
 
-  const SETTING = permissions[14]?.read
-  const Main_Setting = permissions[16]?.read
-  const userCreation1 = permissions[15]?.read;
+  const SETTING = permissions[15]?.read
+  const Main_Setting = permissions[17]?.read
+  const userCreation1 = permissions[16]?.read;
 
 
 
 
-  const INFO = permissions[17]?.read;
-  const INFO_MAILER = permissions[18]?.read;
+  const INFO = permissions[18]?.read;
+  const INFO_MAILER = permissions[19]?.read;
   // const Mailers = permissions[18]?.read;
-  const INFO_FuelInfo = permissions[19]?.read;
+  const INFO_FuelInfo = permissions[20]?.read;
 
-  const INFO_Employee = permissions[20]?.read
+  const INFO_Employee = permissions[21]?.read
 
 
   // const Dashbord_read = permissions[21]?.read 
@@ -167,25 +178,28 @@ function App() {
   // const Map_Reminders = permissions[25]?.read 
   // const Map_History = permissions[26]?.read 
   // const Map_Records = permissions[27]?.read 
-  const INFO_Agreement = permissions[21]?.read
-  const Dashbord_read = permissions[22]?.read
+  const INFO_Agreement = permissions[22]?.read
+  const Dashbord_read = permissions[23]?.read
   // this for map page
-  const Maps = permissions[23]?.read
-  const Map_Realtime = permissions[24]?.read
-  const Map_Vehicle = permissions[25]?.read
-  const Map_Reminders = permissions[26]?.read
-  const Map_History = permissions[27]?.read
-  const Map_Records = permissions[28]?.read
+  const Maps = permissions[24]?.read
+  const Map_Realtime = permissions[25]?.read
+  const Map_Vehicle = permissions[26]?.read
+  const Map_Reminders = permissions[27]?.read
+  const Map_History = permissions[28]?.read
+  const Map_Records = permissions[29]?.read
+
+  
 
 
 
   const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
-  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read || permissions[8]?.read
-  const Register_page_permission = permissions[9]?.read || permissions[10]?.read || permissions[11]?.read || permissions[12]?.read || permissions[13]?.read;
-  const Setting_page_permission = permissions[14]?.read || permissions[15]?.read || permissions[16]?.read
+  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read || permissions[8]?.read  || permissions[9]?.read
+  const Payment_permission = permissions[30]?.read || permissions[31]?.read || permissions[32]?.read
+  const Register_page_permission = permissions[10]?.read || permissions[11]?.read || permissions[12]?.read || permissions[13]?.read || permissions[14]?.read;
+  const Setting_page_permission = permissions[15]?.read || permissions[16]?.read || permissions[17]?.read
 
-  const Map_page_permission = permissions[23]?.read || permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read || permissions[28]?.read
-  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read || permissions[21]?.read
+  const Map_page_permission = permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read || permissions[28]?.read || permissions[29]?.read
+  const Info_page_permission = permissions[18]?.read || permissions[19]?.read || permissions[20]?.read || permissions[21]?.read || permissions[22]?.read
 
 
   const { orgName, logo, setLogo, setLogoTrigger, logotrigger, isstationtrigger } = useData()
@@ -559,29 +573,78 @@ function App() {
   const [todayVehicle, setTodayVehicle] = useState(null);
   const menuItem = localStorage.getItem('activeMenuItem');
   const menuselect = localStorage.getItem("menuitemselected");
+  
+
+  // const hybrid = localStorage.getItem("SuperAdmin");
+  //  useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`${apiUrl}/getAllVehicleDetailsList`);
+  //       console.log(menuItem, "API Response:", response.data);
+
+  //       if (Array.isArray(response.data)) {
+  //         setAllVehcileData(response.data); // Ensure it's an array before setting state
+  //       } else {
+  //         console.warn("Unexpected API response:", response.data);
+  //         setAllVehcileData([]); // Fallback to empty array
+  //       }
+  //     } catch (err) {
+  //       console.log(err, "error");
+  //       setAllVehcileData([]); // Reset state on error
+  //     }
+
+  //   };
+
+  //   fetchData();
+  // }, [apiUrl]);
+const hybrid = localStorage.getItem("SuperAdmin");
 
   useEffect(() => {
+    // let interval;
     const fetchData = async () => {
+// const hybrid = localStorage.getItem("SuperAdmin");
+      
+      // console.log(hybrid,"checking the hybrid values no enter");
+        // console.log("checknoenter",menuItem)
+        
       try {
-        const response = await axios.get(`${apiUrl}/getAllVehicleDetailsList`);
-        console.log(menuItem, "API Response:", response.data);
+        if (hybrid !== null) {
+          // console.log("checkkenetrhydridqueyyyyy",menuItem)
 
-        if (Array.isArray(response.data)) {
-          setAllVehcileData(response.data); // Ensure it's an array before setting state
-        } else {
-          console.warn("Unexpected API response:", response.data);
-          setAllVehcileData([]); // Fallback to empty array
+          const todayDate = dayjs(new Date()).format('YYYY-MM-DD')
+          // const response = await axios.get(`${apiUrl}/getAllVehicleDetailsList`);
+          const response = await axios.get(`${apiUrl}/getVehicle-Hcl-Customers/${todayDate}/${hybrid}`,)
+
+          // setAllVehcileData(response.data); // Ensure it's an array before setting state
+          // console.log(response.data,"checkvalues for hybrid checking");
+          if (Array.isArray(response.data)) {
+            setAllVehcileData(response.data); // Ensure it's an array before setting state
+          } else {
+            console.warn("Unexpected API response:", response.data);
+            setAllVehcileData([]); // Fallback to empty array
+          }
         }
+
       } catch (err) {
         console.log(err, "error");
         setAllVehcileData([]); // Reset state on error
       }
 
     };
+    
+    if ((menuselect === "Map page")){
+      console.log(hybrid,"checkhybrid data enter");
+      
+      fetchData(); 
+    }
+//  if (hybrid){
+      
+//       fetchData(); 
+//     }
 
-    fetchData();
-  }, [apiUrl]);
+  }, [apiUrl,menuselect,hybrid]);
 
+  
   //  get allVehicleCurrentLocation
   useEffect(() => {
     const fetchData = async () => {
@@ -601,20 +664,53 @@ function App() {
   }, [apiUrl, menuItem])
 
   // getTodayVehiclePoints
+
+
+  //  useEffect(() => {
+  //   let interval;
+
+  //   const fetchData = async () => {
+  //     try {
+  //       // console.log(menuItem,"gps00",menuselect)
+  //       if (menuItem === "RealTime" || menuselect === "Map page") {
+  //         // console.log(menuItem,menuselect,"gps00enter")
+  //         const response = await axios.post(`${apiUrl}/getTodayVehiclePoints`);
+  //         // console.log(response.data, "todayalllllvehicleeeee");
+  //         setTodayVehicle(response.data);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching vehicle data:", err);
+  //     }
+  //   };
+  //   if (menuItem === "RealTime" || menuselect === "Map page") {
+  //     fetchData();
+  //     interval = setInterval(fetchData, 5000);
+  //   }
+  //   // fetchData();
+
+  //   // interval = setInterval(fetchData, 5000);
+
+  //   return () => clearInterval(interval);
+  // }, [apiUrl, menuItem, menuselect]);
+
   useEffect(() => {
     let interval;
 
     const fetchData = async () => {
       try {
         // console.log(menuItem,"gps00",menuselect)
-        if (menuItem === "RealTime" || menuselect === "Map page") {
+        const hybrid = localStorage.getItem("SuperAdmin");
+        // console.log(hybrid,"SuperAdminnnn");
+        
+        if (menuItem === "RealTime" || menuselect === "Map page" ) {
           // console.log(menuItem,menuselect,"gps00enter")
-          const response = await axios.post(`${apiUrl}/getTodayVehiclePoints`);
-          // console.log(response.data, "todayalllllvehicleeeee");
+          const response = await axios.post(`${apiUrl}/getTodayVehiclePoints`,{ hybrid });
+
+          // console.log(response.data, "checking the values for hybrid");
           setTodayVehicle(response.data);
         }
       } catch (err) {
-        console.error("Error fetching vehicle data:", err);
+        console.error("Error fetching vehicle data for hybrid:", err);
       }
     };
     if (menuItem === "RealTime" || menuselect === "Map page") {
@@ -626,7 +722,7 @@ function App() {
     // interval = setInterval(fetchData, 5000);
 
     return () => clearInterval(interval);
-  }, [apiUrl, menuItem,menuselect]);
+  }, [apiUrl, menuItem, menuselect]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -693,10 +789,15 @@ function App() {
 
                 (booking_page_permission ? (bookingdata ? <Navigate to="/home/bookings/booking" /> : TripStatus ? <Navigate to="/home/bookings/tripstatus" /> : TriSheet ? <Navigate to="/home/bookings/tripsheet" /> : <></>) :
                   (
-                    Billing_permission ? (BILLING_BillingMain ? <Navigate to="/home/billing/billing" /> : Billing_Transfer ? <Navigate to="/home/billing/transfer" /> : Billing_CoveringBill ? <Navigate to="/home/billing/coveringbill" /> : Billing_Reports ? <Navigate to="/home/billing/reports" /> : <></>) :
-                      (
-                        Register_page_permission ? (R_RATEtype ? <Navigate to="/home/registration/ratetype" /> : R_Customer ? <Navigate to="/home/registration/customer" /> : R_Supllier ? <Navigate to="/home/registration/supplier" /> : R_Station ? <Navigate to="/home/registration/stationcreation" /> : <></>) : (Setting_page_permission ? (userCreation1 ? <Navigate to="/home/settings/usercreation" /> : Main_Setting ? <Navigate to="/home/settings/mainsetting" /> : <></>) : Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) : Info_page_permission ? (INFO_MAILER ? <Navigate to="/home/info/mailer" /> : INFO_FuelInfo ? <Navigate to="/home/info/LogDetails" /> : INFO_Employee ? <Navigate to="/home/info/employee" /> : <></>) : (<Navigate to="/home/usersettings/usersetting" />))
-                      )
+                    Billing_permission ? (BILLING_BillingMain ? <Navigate to="/home/billing/billing" /> : Billing_Transfer ? <Navigate to="/home/billing/transfer" /> : Billing_CoveringBill ? <Navigate to="/home/billing/coveringbill" /> : Billing_Reports ? <Navigate to="/home/billing/reports" /> : Billing_VendorReports ? <Navigate to="/home/billing/Vendorreports" /> : <></>) :
+                    Payment_permission ? (Payment_Vendor ? <Navigate to= "/home/payment/vendor" /> : Payment_Customer ? <Navigate to= "/home/payment/customer" /> : <></>) :
+                        (
+                          Register_page_permission ? (R_RATEtype ? <Navigate to="/home/registration/ratetype" /> : R_Customer ? <Navigate to="/home/registration/customer" /> : R_Supllier ? <Navigate to="/home/registration/supplier" /> : R_Station ? <Navigate to="/home/registration/stationcreation" /> : <></>) :
+                            (
+                              Setting_page_permission ? (userCreation1 ? <Navigate to="/home/settings/usercreation" /> : Main_Setting ? <Navigate to="/home/settings/mainsetting" /> : <></>) :
+                                Map_page_permission ? (<Navigate to="/home/Map/RealTime" />) :
+                                  Info_page_permission ? (INFO_MAILER ? <Navigate to="/home/info/mailer" /> : INFO_FuelInfo ? <Navigate to="/home/info/LogDetails" /> : INFO_Employee ? <Navigate to="/home/info/employee" /> : <></>) : (<Navigate to="/home/usersettings/usersetting" />))
+                        )
                   )
                 )
 
@@ -751,7 +852,16 @@ function App() {
               </Route>
 
 
-
+              <Route path="/home/payment" element={PAYMENT !== 0 ? <Payment /> : <NoPermission />}>
+                <Route
+                  path="/home/payment/vendor"
+                  element={Payment_Vendor !== 0 && Payment_Vendor !== undefined ? (<PaymentVendor stationName={stationName} customerData={customerData} />) : (<NoPermission />)}
+                />
+                <Route
+                  path="/home/payment/customer"
+                  element={Payment_Customer !== 0 && Payment_Customer !== undefined ? (<PaymentCustomer stationName={stationName} customerData={customerData} logoImage={logo} />) : (<NoPermission />)}
+                />
+              </Route>
 
 
 
@@ -822,8 +932,11 @@ function App() {
                   element={Billing_CoveringBill !== 0 && Billing_CoveringBill !== undefined ? (<CoveringBill stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)}
                 />
                 <Route path="/home/billing/reports" element={Billing_Reports !== 0 && Billing_Reports !== undefined ? (<Reports stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
+                <Route
+                  path="/home/billing/VendorReports"
+                  element={Billing_VendorReports !== 0 && Billing_VendorReports !== undefined ? (<VendorReports stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} />
                 {/* <Route path="/home/billing/LogDetails" element={Billing_Reports !== 0 && Billing_Reports !== undefined ? (<LogSheets stationName={stationName} Statename={Statename} organizationNames={organizationNames} />) : (<NoPermission />)} /> */}
-                </Route>
+              </Route>
 
               <Route path="/home/billing/reports/Pendingbills" element={<PendingBills />}></Route>
               <Route path="/home/accounts" element={<Accounts />}>
@@ -858,7 +971,7 @@ function App() {
                 /> */}
               </Route>
             </Route>
-            <Route path="/navigationmap" element={<NavigationMap />} />
+            {/* <Route path="/navigationmap" element={<NavigationMap />} /> */}
             <Route path="/onlinelogin" element={<OnlineLoginForm />} />
             <Route path="/onlinebooking" element={<OnlineBooking />} />
             <Route

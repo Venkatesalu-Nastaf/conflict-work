@@ -264,20 +264,20 @@ const useBankaccount = () => {
     }, [bankDetails, book, success]);
 
 
-    useEffect(() => {
-        const fetchOrganizationnames = async () => {
-            try {
-                const response = await axios.get(`${apiUrl}/totalCapital_from_billing`);
-                const data = response.data.totalAmount
-                setTotalCapital(data)
+    // useEffect(() => {
+    //     const fetchOrganizationnames = async () => {
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/totalCapital_from_billing`);
+    //             const data = response.data.totalAmount
+    //             setTotalCapital(data)
 
-            }
-            catch (error) {
-                // console.log(error, "error");
-            }
-        };
-        fetchOrganizationnames()
-    }, [apiUrl, totalcapital, totalIn, totalOut, book, editingIndex])
+    //         }
+    //         catch (error) {
+    //             // console.log(error, "error");
+    //         }
+    //     };
+    //     fetchOrganizationnames()
+    // }, [apiUrl, totalcapital, totalIn, totalOut, book, editingIndex])
 
     return {
         error,

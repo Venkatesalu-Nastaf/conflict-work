@@ -1,5 +1,5 @@
 import React from 'react';
-import './Employes.css';
+// import './Employes.css';
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";

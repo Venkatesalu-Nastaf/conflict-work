@@ -51,11 +51,11 @@
 .live-driver-status-heading {
   background-color: white;
   color: #242d49;
-  padding: 10px;
+  padding: 5px;
   border-radius: 5px;
-  border: solid 1px #ccc;
-  font-weight: 500;
-  font-size: 20px;
+  border: solid 1px #168bff;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 /* .dash-board.theme1 .live-driver-status-heading, */
@@ -134,6 +134,18 @@
   overflow: hidden;
   transition: all 0.3s ease;
 }
+
+.open-dialog
+{
+  width: 550px;
+  align-items: center;
+  margin: auto;
+}
+.custom-dialog-backdrop {
+  backdrop-filter: blur(10px);
+  background-color:rgba(16, 16, 16, 0.9);
+}
+
 
 @media (max-width: 1219px) {
   .glass {
@@ -262,7 +274,7 @@
 
 .cards-container .card-filter {
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: row;
   align-items: flex-start;
   margin: 20px;
 }

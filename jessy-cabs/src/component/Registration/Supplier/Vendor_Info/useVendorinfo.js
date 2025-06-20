@@ -1,12 +1,13 @@
 
 
-import { useState, useEffect, useCallback,useMemo } from 'react';
+import { useState, useEffect, useCallback} from 'react';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
+import encryption from '../../../dataEncrypt';
 
 const useVendorinfo = () => {
   const apiUrl = APIURL;
@@ -25,12 +26,12 @@ const useVendorinfo = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage, setWarningMessage] = useState({});
-  const [infoMessage, setInfoMessage] = useState({});
+  const [infoMessage] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [suppilerrate, setSupplierRatetpe] = useState([])
   const [vechiledata, setVehicleData] = useState([]);
   const [cerendentialdata, setCredentialData] = useState()
-  const [cerendentialdataforstations, setCredentialDataforstations] = useState()
+  // const [cerendentialdataforstations, setCredentialDataforstations] = useState()
 
   const [loading, setLoading] = useState(false)
   const [isAButtonLoading,setisAButtonLoading] = useState(false);
@@ -206,27 +207,61 @@ const useVendorinfo = () => {
         });
 
         // Add borders to cells
-        worksheet.eachRow({ includeEmpty: false }, (row) => {
-            row.eachCell({ includeEmpty: false }, (cell) => {
-                cell.border = {
-                    top: { style: 'thin' },
-                    left: { style: 'thin' },
-                    bottom: { style: 'thin' },
-                    right: { style: 'thin' },
-                };
-                const isHeader = row.number === 1;
-                worksheet.getCell(cell).alignment = {
-                    horizontal: isHeader ? 'center' : 'left',
-                    vertical: 'middle',
-                };
-            });
-        });
+        // worksheet.eachRow({ includeEmpty: false }, (row) => {
+        //     row.eachCell({ includeEmpty: false }, (cell) => {
+        //         cell.border = {
+        //             top: { style: 'thin' },
+        //             left: { style: 'thin' },
+        //             bottom: { style: 'thin' },
+        //             right: { style: 'thin' },
+        //         };
+        //         const isHeader = row.number === 1;
+        //         worksheet.getCell(cell).alignment = {
+        //             horizontal: isHeader ? 'center' : 'left',
+        //             vertical: 'middle',
+        //         };
+        //     });
+        // });
 
+      //   worksheet.eachRow({ includeEmpty: false }, (row) => {
+      //     row.eachCell({ includeEmpty: false }, (cell) => {
+      //         cell.border = {
+      //             top: { style: 'thin' },
+      //             left: { style: 'thin' },
+      //             bottom: { style: 'thin' },
+      //             right: { style: 'thin' },
+      //         };
+      //         const isHeader = row.number === 1;
+      //         cell.alignment = {
+      //             horizontal: isHeader ? 'center' : 'left',
+      //             vertical: 'middle',
+      //         };
+      //     });
+      // });
+
+      worksheet.eachRow({ includeEmpty: false }, (row) => {
+        const currentCell = row._cells;
+        currentCell.forEach((singleCell) => {
+            const cellAddress = singleCell._address;
+            worksheet.getCell(cellAddress).border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' },
+            };
+            const isHeader = row.number === 1;
+            worksheet.getCell(cellAddress).alignment = {
+                horizontal: isHeader ? 'center' : 'left',
+                vertical: 'middle',
+            };
+        });
+    });
+      
         // Write workbook to buffer and download
         const buf = await workbook.xlsx.writeBuffer();
         saveAs(new Blob([buf]), `${fileName}.xlsx`);
     } catch (error) {
-        console.error('<<<ERROR>>>', error);
+        // console.error('<<<ERROR>>>', error);
         console.error('Something Went Wrong', error.message);
     } finally {
         // Remove worksheet instance
@@ -528,8 +563,9 @@ const useVendorinfo = () => {
 
   //search funtion
   const handleSearch = async () => {
+    const encryptSearch = searchText ? encryption(searchText) : '';
     try {
-      const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+      const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${encryptSearch}&fromDate=${fromDate}&toDate=${toDate}`);
       const data = await response.json();
       if (data.length > 0) {
         const rowsWithUniqueId = data.map((row, index) => ({
@@ -572,10 +608,13 @@ const useVendorinfo = () => {
 
 
   const handleenterSearch = useCallback(async (e) => {
+    if(searchText === "") return;
     if (e.key === "Enter") {
       
       try {
-        const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${searchText}`);
+        const encryptSearch = encryption(searchText);
+       
+        const response = await fetch(`${apiUrl}/searchAccountinginfo?searchText=${encryptSearch}`);
         const data = await response.json();
 
         if (data.length > 0) {
@@ -664,12 +703,11 @@ const useVendorinfo = () => {
     setCredentialData(false)
   }, []);
 
-
   const uniquetravellname = async (traveldataname) => {
     
     if (traveldataname) {
-
-      const response = await axios.get(`${apiUrl}/getuniqueacccounttaveldata/${traveldataname}`)
+      const encryptTravels = encryption(traveldataname)
+      const response = await axios.get(`${apiUrl}/getuniqueacccounttaveldata/${encryptTravels}`)
       const responsedata = response.data;
 
 
@@ -780,6 +818,8 @@ const useVendorinfo = () => {
     try {
      
       await axios.post(`${apiUrl}/accountinfo`, book);
+      // console.log(book,"checking");
+      
       handleCancel();
       // setRows([]);
       setSuccess(true);
@@ -834,6 +874,8 @@ const useVendorinfo = () => {
       const { id, ...restselectedcustomer } = selectedCustomerData
       const updatedCustomer = { ...restselectedcustomer };
       await axios.put(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`, updatedCustomer);
+      // console.log(updatedCustomer,"editing");
+      
       setSuccess(true);
       setSuccessMessage("Successfully updated");
       setisAButtonLoading(false)
@@ -902,6 +944,7 @@ const useVendorinfo = () => {
     try {
         const response = await axios.get(`${apiUrl}/accountinfo`);
         const data = response.data;
+        // console.log(data,"getting the values");       
         const rowsWithUniqueId = data.map((row, index) => ({
             ...row,
             id: index + 1,
@@ -981,6 +1024,7 @@ const useVendorinfo = () => {
       else if (actionName === 'Delete') {
         try{
         await axios.delete(`${apiUrl}/accountinfo/${selectedCustomerData.accountNo}`);
+        // console.log(selectedCustomerData.accountNo,"delete");   
         setSelectedCustomerData(null);
         setSuccess(true);
         setSuccessMessage("Successfully Deleted");

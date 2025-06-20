@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback,useMemo} from "react";
+import { useState, useEffect} from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
@@ -222,7 +222,7 @@ const useTransferlist = () => {
       // Download the processed file
       saveAs(new Blob([buf]), `${fileName}.xlsx`);
     } catch (error) {
-      console.error('<<<ERROR>>>', error);
+      // console.error('<<<ERROR>>>', error);
       console.error('Something went wrong', error.message);
     } finally {
       // Removing worksheet's instance to create new one
@@ -562,7 +562,7 @@ row['State']
         setRows([]);
         setError(true);
         setErrorMessage("No data found");
-        console.log(errorMessage,'Error Mesage')
+        // console.log(errorMessage,'Error Mesage')
       }
     } catch (err) {
       // Check if the error is due to a network issue
@@ -576,7 +576,7 @@ row['State']
         setError(true);
         setErrorMessage(errdata?.message || "An error occurred");
       }
-      console.log(err,'erro message')
+      // console.log(err,'erro message')
     }
   }
    
@@ -640,7 +640,7 @@ row['State']
                 setLoading(false);
             }
         } catch (err) {
-            console.error("Error fetching data:", err);
+            // console.error("Error fetching data:", err);
             setRows([]);
             setLoading(false);
             setError(true);

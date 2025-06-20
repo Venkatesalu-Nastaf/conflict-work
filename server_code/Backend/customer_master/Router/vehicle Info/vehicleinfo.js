@@ -6,9 +6,13 @@ const multer = require('multer');
 const nodemailer = require('nodemailer');
 const path = require('path');
 const cron = require('node-cron');
+const decryption = require('../dataDecrypt');
+const imagePath = require('../../../imagepath')
+// console.log(imagePath, "vehicleinfo.js");
 
 
-router.use(express.static('customer_master'));
+// router.use(express.static('customer_master'));
+// router.use(express.static('Imagefolder'));
 
 // vehicle_info database:-
 // Add vehicle_info database
@@ -40,6 +44,8 @@ router.get('/vechileinfogetdata', (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
+    // console.log(result,"checking the get result");
+    
     if (result.length === 0) {
       return res.status(404).json({ error: 'vehicleid not found' });
     }
@@ -68,13 +74,15 @@ router.get('/vechiclenameinfo', (req, res) => {
 });
 router.post('/vehicleinfo', (req, res) => {
   const bookData = req.body;
+  // console.log(bookData,"values");
+  
 
   db.query('INSERT INTO vehicleinfo SET ?', bookData, (err, result) => {
     if (err) {
-      console.log(err)
+      // console.log(err)
       return res.status(500).json({ error: "Failed to insert data" });
     }
-    console.log(result)
+    // console.log(result,"checking add vehicle details")
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
@@ -82,10 +90,13 @@ router.post('/vehicleinfo', (req, res) => {
 // Delete Customer Master data
 router.delete('/vehicleinfo/:vehicleId', (req, res) => {
   const vehicleId = req.params.vehicleId;
+  // console.log(vehicleId, "checking the id")
   db.query('DELETE FROM vehicleinfo WHERE vehicleId = ?', vehicleId, (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to delete data from MySQL' });
     }
+    // console.log(result, "checking");
+   
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Customer not found' });
     }
@@ -96,12 +107,17 @@ router.delete('/vehicleinfo/:vehicleId', (req, res) => {
 // Update Customer Master details
 router.put('/vehicleinfo/:vehicleId', (req, res) => {
   const vehicleId = req.params.vehicleId;
+  // console.log(vehicleId,"iddd");
+  
   const updatedCustomerData = req.body;
+  // console.log(updatedCustomerData,"checking upd");
+  
 
   db.query('UPDATE vehicleinfo SET ? WHERE vehicleId = ?', [updatedCustomerData, vehicleId], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to update data in MySQL' });
     }
+    // console.log(result, "updated values");   
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Customer not found' });
     }
@@ -113,10 +129,10 @@ router.get('/TemplateforFCdate', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "FCdate"';
   db.query(query, (err, results) => {
       if (err) {
-          console.log('Database error:', err);
+          // console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -125,10 +141,10 @@ router.get('/Templateforstatepermitdate', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "StatePermitDate"';
   db.query(query, (err, results) => {
       if (err) {
-          console.log('Database error:', err);
+          // console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -136,10 +152,10 @@ router.get('/Templatefornationalpermitdate', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "NationalPermitDate"';
   db.query(query, (err, results) => {
       if (err) {
-          console.log('Database error:', err);
+          // console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -147,10 +163,10 @@ router.get('/Templateforinsuranceduedate', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "InsuranceDueDate"';
   db.query(query, (err, results) => {
       if (err) {
-          console.log('Database error:', err);
+          // console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -219,7 +235,7 @@ const parseDate = (dateStr) => {
       return parsedDate;
     }
   }
-  console.error(`Failed to parse date: "${dateStr}"`);
+  // console.error(`Failed to parse date: "${dateStr}"`);
   return null;
 };
 
@@ -236,7 +252,7 @@ const sendReminderEmail = async (today, endDate, user, subject, emailTemplate) =
       subject,
       html: emailTemplate,
     });
-    console.log(`Reminder sent to ${user.email} with subject "${subject}"`);
+    // console.log(`Reminder sent to ${user.email} with subject "${subject}"`);
   }
 };
 
@@ -357,12 +373,14 @@ cron.schedule("00 09 * * *", () => {
 
 router.get('/searchvehicleinfo', (req, res) => {
   const { searchText, fromDate, toDate } = req.query;
-  console.log(searchText, fromDate, toDate, "dateeeee");
-
+  // console.log(searchText, fromDate, toDate, "dateeeee");
+  const decryptText = decryption(searchText);
+  // console.log(decryptText,"cvghjk");
+  
   let query = 'SELECT * FROM vehicleinfo WHERE 1=1';
   let params = [];
 
-  if (searchText) {
+  if (decryptText) {
     const columnsToSearch = [
       'vehicleId',
       'vehicleName',
@@ -393,14 +411,14 @@ router.get('/searchvehicleinfo', (req, res) => {
     ];
 
     // If searchText is exactly 4 digits, search for vehRegNo ending with those digits
-    if (searchText.length === 4 && /^\d{4}$/.test(searchText)) {
+    if (decryptText.length === 4 && /^\d{4}$/.test(decryptText)) {
       query += ' AND vehRegNo LIKE ?';
-      params.push(`%${searchText}`);
+      params.push(`%${decryptText}`);
     } else {
       // Otherwise, search across all columns
       const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
       query += ` AND (${likeConditions})`;
-      params = columnsToSearch.map(() => `${searchText}%`);
+      params = columnsToSearch.map(() => `${decryptText}%`);
     }
   }
 
@@ -420,15 +438,26 @@ router.get('/searchvehicleinfo', (req, res) => {
 });
 
 // -----------------------insurence ---------------
+// const Insurance_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/vehicle_doc')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+
+// })
 const Insurance_storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './customer_master/public/vehicle_doc')
+    // cb(null, '../../../Imagefolder/vehicle_doc')
+    cb(null, `${imagePath}/vehicle_doc`)
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
   }
 
 })
+
 
 const Insurance_uploadfile = multer({ storage: Insurance_storage });
 // router.post('/insurance-pdf/:id', Insurance_uploadfile.single("file"), async (req, res) => {
@@ -444,6 +473,8 @@ router.post('/insurance-pdf/:vehicleId', Insurance_uploadfile.single("file"), as
       if (err) {
         return res.status(500).json({ error: 'Failed to retrieve vehicle details ' });
       }
+      // console.log(result,"insurance");
+      
       return res.json({ Status: "success" });
     })
   }
@@ -451,44 +482,55 @@ router.post('/insurance-pdf/:vehicleId', Insurance_uploadfile.single("file"), as
 
 // ----------------------Licence----------------------
 
-const Licence_storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, './customer_master/public/vehicle_doc')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
+// const Licence_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/vehicle_doc')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
 
-})
+// })
 
-const Licence_uploadfile = multer({ storage: Licence_storage });
-router.post('/licence-pdf/:vehicleId', Licence_uploadfile.single("file"), async (req, res) => {
-  const vehicleId = req.params.vehicleId;
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const {created_at}=req.body;
-  if (fileName && vehicleId) {
 
-    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
-    db.query(sql, (err, result) => {
-      if (err) return res.json({ Message: "Error" });
-      return res.json({ Status: "success" });
-    })
-  }
-})
+// const Licence_uploadfile = multer({ storage: Licence_storage });
+// router.post('/licence-pdf/:vehicleId', Licence_uploadfile.single("file"), async (req, res) => {
+//   const vehicleId = req.params.vehicleId;
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const {created_at}=req.body;
+//   if (fileName && vehicleId) {
+
+//     const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
+//     db.query(sql, (err, result) => {
+//       if (err) return res.json({ Message: "Error" });
+//       console.log(result,"licence");
+      
+//       return res.json({ Status: "success" });
+//     })
+//   }
+// })
 
 
 // ----------------------NationalPermit----------------------
 
+// const NationalPermit_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/vehicle_doc')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
 const NationalPermit_storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './customer_master/public/vehicle_doc')
+    // cb(null, '../../../Imagefolder/vehicle_doc')
+    cb(null, `${imagePath}/vehicle_doc`)
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
   }
 })
-
 const NationalPermit_uploadfile = multer({ storage: NationalPermit_storage });
 router.post('/nationalPermit-pdf/:vehicleId', NationalPermit_uploadfile.single("file"), async (req, res) => {
   const vehicleId = req.params.vehicleId;
@@ -500,6 +542,8 @@ router.post('/nationalPermit-pdf/:vehicleId', NationalPermit_uploadfile.single("
     const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
+      // console.log(result,"national permit");
+      
       return res.json({ Status: "success" });
     })
   }
@@ -507,9 +551,18 @@ router.post('/nationalPermit-pdf/:vehicleId', NationalPermit_uploadfile.single("
 
 // ----------------------StatePermit----------------------
 
+// const StatePermit_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/vehicle_doc')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
 const StatePermit_storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './customer_master/public/vehicle_doc')
+      // cb(null, '../../../Imagefolder/vehicle_doc')
+    cb(null, `${imagePath}/vehicle_doc`)
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
@@ -527,6 +580,8 @@ router.post('/statePermit-pdf/:vehicleId', StatePermit_uploadfile.single("file")
     const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
+      // console.log(result,"statepermit");
+      
       return res.json({ Status: "success" });
     })
   }
@@ -534,15 +589,23 @@ router.post('/statePermit-pdf/:vehicleId', StatePermit_uploadfile.single("file")
 
 // ----------------------Rcbook----------------------
 
+// const Rcbook_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/vehicle_doc')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
 const Rcbook_storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './customer_master/public/vehicle_doc')
+    // cb(null, '../../../Imagefolder/vehicle_doc')
+    cb(null, `${imagePath}/vehicle_doc`)
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
   }
 })
-
 const Rcbook_uploadfile = multer({ storage: Rcbook_storage });
 router.post('/rcBook-pdf/:vehicleId', Rcbook_uploadfile.single("file"), async (req, res) => {
   const vehicleId = req.params.vehicleId;
@@ -554,6 +617,8 @@ router.post('/rcBook-pdf/:vehicleId', Rcbook_uploadfile.single("file"), async (r
     const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
+      // console.log(result,"rcbook");
+      
       return res.json({ Status: "success" });
     })
   }
@@ -561,9 +626,19 @@ router.post('/rcBook-pdf/:vehicleId', Rcbook_uploadfile.single("file"), async (r
 
 // ----------------------setFcCopy----------------------
 
+// const setFcCopy_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/vehicle_doc')
+
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
 const setFcCopy_storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './customer_master/public/vehicle_doc')
+     // cb(null, '../../../Imagefolder/vehicle_doc')
+    cb(null, `${imagePath}/vehicle_doc`)
 
   },
   filename: (req, file, cb) => {
@@ -582,6 +657,8 @@ router.post('/fcCopy-pdf/:vehicleId', setFcCopy_uploadfile.single("file"), async
     const sql = `insert into vehicle_documents(vehicleId,fileName,file_type,created_at)values('${vehicleId}','${fileName}','${fileType}','${created_at}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
+      // console.log(result,"fc copy");
+      
       return res.json({ Status: "success" });
     })
   }
@@ -590,9 +667,9 @@ router.post('/fcCopy-pdf/:vehicleId', setFcCopy_uploadfile.single("file"), async
 //-----------------fetch ---------------
 router.get('/vehicle-docView/:vechicleId', (req, res) => {
   const id = req.params.vechicleId
-
+  const decryptId = decryption(id)
   const sql = 'select * from vehicle_documents where vehicleId=?';
-  db.query(sql, [id], (err, result) => {
+  db.query(sql, [decryptId], (err, result) => {
     if (err) return res.json({ Message: "error" })
     return res.json(result);
   })
@@ -600,11 +677,15 @@ router.get('/vehicle-docView/:vechicleId', (req, res) => {
 
 router.get('/uniquevechregnodata/:vehregno',(req,res)=>{
   const vehregno=req.params.vehregno;
-  db.query("select vehRegNo from vehicleinfo where vehRegNo=?",[vehregno],(err,results)=>{
+  // console.log(vehregno,"checing");
+  const decryptVegh = decryption(vehregno);
+  // console.log(decryptVegh,"veghreg");
+  
+  db.query("select vehRegNo from vehicleinfo where vehRegNo=?",[decryptVegh],(err,results)=>{
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(results)
+    // console.log(results)
     return res.status(200).json(results);
   })
 })
@@ -613,15 +694,15 @@ router.get('/uniquevechregnodata/:vehregno',(req,res)=>{
 
 router.post("/getvehciledatauniquevehilcle",(req,res)=>{
   const {vechiclevalue,created_at}=req.body;
-  console.log(vechiclevalue,created_at,"vehhh")
+  // console.log(vechiclevalue,created_at,"vehhh")
   db.query("insert into VehicleName(VechicleNames,created_at) values(?,?)",[vechiclevalue,created_at],(err,result)=>{
     if (err) {
       return res.status(500).json({message: 'Failed to retrieve to data'});
       // return res.status(500).json({error:err});
-    }
-   
+    }  
+    // console.log(result,"checking the add vehicle");
+    
     return res.status(200).json({message:"inserted succesfully"});
-
   })
 })
 

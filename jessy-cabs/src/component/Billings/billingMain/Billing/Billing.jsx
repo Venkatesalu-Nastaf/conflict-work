@@ -18,11 +18,11 @@ import { faBuilding} from '@fortawesome/free-solid-svg-icons';
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import PrintIcon from '@mui/icons-material/Print';
-import DeleteIcon from "@mui/icons-material/Delete";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import CarCrashIcon from '@mui/icons-material/CarCrash';
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
+// import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -38,7 +38,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
-import { faArrowRightArrowLeft, faMoneyBillTransfer, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRightArrowLeft,faMoneyBillTransfer,faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
 import useBilling from './useBilling';
 import { PermissionContext } from '../../../context/permissionContext';
 import { RiPinDistanceLine } from "react-icons/ri";
@@ -79,16 +79,17 @@ const Billing = ({Statename}) => {
         hidePopup,
         handleKeyDown,
         handleDateChange,
-        setSelectedBankAccount,
-        handleAutocompleteChange,
-        selectedBankAccount,
-        bankOptions,
+        // setSelectedBankAccount,
+        // handleAutocompleteChange,
+        // selectedBankAccount,
+        // bankOptions,
         handlePopupClose,
         // organizationaddress1,
         handleKeyenterinvoicdeno,popupOpen,
         total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount,invoicestate,
         discound_PercentageCalc,invoiceno,setInvoiceNo,billadd,dataotherStations,handleserviceInputChange,datastate,handlefullTotalAmount,hanldetollpark,
-        balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,edit,selectbillingdata,billingdate,stateDetails,setStateDetails
+        balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,edit,selectbillingdata,billingdate,
+        // stateDetails,setStateDetails
 
         // ... (other state variables and functions)
     } = useBilling();
@@ -103,7 +104,8 @@ const Billing = ({Statename}) => {
     const Billing_read = permissions[5]?.read;
     const Billing_new = permissions[5]?.new;
     const { logo } = useData()
-    const { particularPdf, organizationDetail } = PdfData()
+    // const { particularPdf, organizationDetail } = PdfData()
+      const { organizationDetail } = PdfData()
    
   
     return (
@@ -656,7 +658,7 @@ const Billing = ({Statename}) => {
                                         name='extrahr_amount'
                                         id='extrahr_amountEx'
                                         autoComplete="new-password"
-                                        value={book.extrahr_amount ||  selectbillingdata .extrahr_amount ||''}
+                                        value={book.extrahr_amount || selectbillingdata.extrahr_amount ||''}
                                         onChange={handleChange}
                                         InputProps={{
                                             startAdornment: (
@@ -1225,7 +1227,7 @@ const Billing = ({Statename}) => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input input-billing">
+                                {/* <div className="input input-billing">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faMoneyBillTransfer} size="lg" />
                                     </div>
@@ -1246,6 +1248,40 @@ const Billing = ({Statename}) => {
                                                 <TextField {...params} label="Bank Account" name="BankAccount" inputRef={params.inputRef} />
                                             );
                                         }}
+                                    />
+                                </div> */}
+
+                                  <div className="input input-billing">
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faMoneyBillTransfer} size="lg" />
+                                    </div>
+                                    {/* <Autocomplete
+                                        fullWidth
+                                        size="small"
+                                        id="free-solo-demo-BankAccount"
+                                        freeSolo
+                                        sx={{ width: "20ch" }}
+                                        onChange={(event, value) => {
+                                            setSelectedBankAccount(value);
+                                            handleAutocompleteChange(event, value, "BankAccount")
+                                        }}
+                                        value={selectedBankAccount || book.BankAccount ||  selectbillingdata.BankAccount||''}
+                                        options={bankOptions}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField {...params} label="Bank Account" name="BankAccount" inputRef={params.inputRef} />
+                                            );
+                                        }}
+                                    /> */}
+
+                                       <TextField
+                                        size="small"
+                                        id="BankAccount"
+                                        label="BankAccount"
+                                        name="BankAccount"
+                                      
+                                      value={book.BankAccount ||''} 
+                                     onChange={handleChange}
                                     />
                                 </div>
                             </div>
@@ -1315,7 +1351,7 @@ const Billing = ({Statename}) => {
                                 organizationdata={organizationDetail}
                                 customerData={customerData}
                                 billdatadate={billingdate}
-                                stateDetails={stateDetails}
+                                // stateDetails={stateDetails}
                                 otherStations={dataotherStations}
                                 invoicedata = {invoicestate || book.invoiceno}
                             />

@@ -26,7 +26,7 @@
     /* height: 300px !important; */
     position: absolute;
     width: 100%;
-    z-index: 999;
+    z-index: 9999;
     /* top: 130px; */
 }
 
@@ -51,6 +51,7 @@
 
 
 .hovering-contents {
+
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -115,6 +116,11 @@
         width: 100%;
     }
 
+    .main-head-hover:hover {
+        height: 400px !important;
+        overflow: auto;
+    }
+
 }
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
@@ -126,7 +132,7 @@
         /* height: 300px !important; */
         position: absolute;
         width: 100%;
-        z-index: 2;
+        z-index: -1;
     }
 }
 

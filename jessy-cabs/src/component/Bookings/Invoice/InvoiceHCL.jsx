@@ -8,8 +8,10 @@ import generatePDF, { Margin } from 'react-to-pdf';
 import dayjs from 'dayjs';
 import { Document, Page } from 'react-pdf';
 import { GoDotFill } from "react-icons/go";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
-const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, Totaltimes, TotalDays }) => {
+const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, Totaltimes, TotalDays,loading,mapLoading,routeLoading }) => {
 
 
   const date = tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate
@@ -60,6 +62,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
   // console.log(attachedImage, "yyyyyyyyyyyyyy");
 
   const targetRef = useRef();
+
   return (
     <>
       <div className="invoice-wrapper" ref={targetRef}>
@@ -70,7 +73,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
               {selectedImage && <img src={selectedImage} alt={"Logo"} />}
             </div>
             <div className="invoice-address">
-              <div style={{ height: "110px", }}>
+              <div>
                 <p className='invoice-address-detials-hcl'>{organizationdata?.addressLine1}
                   {organizationdata?.addressLine2}
                   {organizationdata?.city}<br />
@@ -111,9 +114,9 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                   <th id='table-header-hcl'><span>Report Add:</span></th>
                   <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city} </p></td>
                 </tr>
-                <tr style={{ height: "60px" }}>
-                  <th id='table-header-hcl'><span>Drop Address:</span></th>
-                  <td id='table-data'><p className='table-data-add-hcl'>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage} </p></td>
+                <tr>
+                  <th id='table-header-hcl' ><span>Drop Address:</span></th>
+                  <td id='table-data'><span>{tripSheetData.useage || selectedCustomerData.useage || selectedCustomerDatas.useage || book.useage} </span></td>
                 </tr>
 
                 {/* <tr>
@@ -307,7 +310,13 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                 </div>
                 <div className="guest-sign">
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "baseline" }}>
-                    {signimageUrl !== "" ?
+                    {loading ? (
+                      <>
+                      <div className='loading-spin-signature' ></div>
+                        <p className='guest-sign-text' >Guest Signature</p>
+                        </>
+                    ) : (
+                       signimageUrl !== "" ?
                       <div>
                         <img className='dialogboximg' src={signimageUrl} alt=" " />
                         <p className='guest-sign-text' >Guest Signature</p>
@@ -320,7 +329,9 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                         <p className='guest-sign-text' >Guest Signature</p>
 
                       </div>
-                    }
+                    
+                    )}
+                   
                   </div>
 
                 </div>
@@ -339,23 +350,33 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             <div className='tripsheet-location-img-hcl'>
 
               {/* <img src={GmapimageUrl} alt='mapimage' /> */}
-              {GmapimageUrl !== "" ?
-                <img src={GmapimageUrl} alt='mapimage' /> : <></>}
+             {mapLoading ? (
+              <div className='loading-spin'></div>
+             ):(
+               GmapimageUrl !== "" ?
+                <img src={GmapimageUrl} alt='mapimage' /> : <></>
+             )}
             </div>
             <div className="tripsheet-RouteSummary-hcl">
-              {routeData.length > 0 && (
+             {routeLoading ? (
+              <div className='loading-spin-route'></div>
+             ):(
+               routeData.length > 0 && (
                 <div >
-                  <h2 style={{ margin: "0px", textAlign: "center", fontSize: "17px", fontWeight: '600' }}>Route Summary</h2>
+                  <h2 style={{ margin: "0px", textAlign: "center", fontSize: "15px", fontWeight: '600' }}>Route Summary</h2>
 
                   {routeData.map((data, index) => (
                     <li key={index} className='li-routesummary'>
                       {/* <p style={{margin:'0px'}}><strong>{data.trip_type}</strong>: {data.place_name}</p> */}
-                      <p style={{ margin: '0px' }}><span style={{ marginRight: '5px' }}><GoDotFill /></span> <strong>{data.trip_type}</strong>: {data.place_name}</p>
+                      <p style={{ margin: '0px' }}>
+                        {/* <span style={{ marginRight: '5px' }}><GoDotFill /></span>  */}
+                        <strong>{data.trip_type}</strong>: {data.place_name}</p>
                     </li>
                   ))}
 
                 </div>
-              )}
+              )
+             )}
             </div>
 
           </div>
@@ -422,32 +443,34 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
             })}
         </ol>
       </div> */}
-          {attachedImage?.length > 0 ? <>
+        </article>
+      </div>
+      {attachedImage?.length > 0 ? <>
 
 
-            <div className="attached-toll-hcl" ref={targetRef}>
-              <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
-                {Array.isArray(attachedImage) &&
-                  // attachedImage.map((file, index) => {
-                  //   const isPdf = file.endsWith(".pdf");
-                  attachedImage
-                    .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
-                    .map((file, index) => {
-                      const isPdf = file.endsWith(".pdf");
-                      return (
-                        <>
-                          {isPdf ?
-                            <li
-                              key={index}
-                              style={{
-                                // pageBreakAfter: "always", 
-                                pageBreakAfter: isPdf ? "always" : "auto",
-                                // padding: "20px",
-                                // marginBottom: "50",
-                              }}
-                              className='li-files'
-                            >
-                              {/* {isPdf ? (
+        <div className="attached-toll-hcl" >
+          <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
+            {Array.isArray(attachedImage) &&
+              // attachedImage.map((file, index) => {
+              //   const isPdf = file.endsWith(".pdf");
+              attachedImage
+                .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
+                .map((file, index) => {
+                  const isPdf = file.endsWith(".pdf");
+                  return (
+                    <>
+                      {isPdf ?
+                        <li
+                          key={index}
+                          style={{
+                            // pageBreakAfter: "always", 
+                            pageBreakAfter: isPdf ? "always" : "auto",
+                            // padding: "20px",
+                            // marginBottom: "50",
+                          }}
+                          className='li-files'
+                        >
+                          {/* {isPdf ? (
                     <div style={{height:"500px", background:"red"}}>
                       <Document
                         file={file}
@@ -476,7 +499,7 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
                   )  */}
 
 
-                              {/* <div className='upload-pdf-hcl' >
+                          {/* <div className='upload-pdf-hcl' >
                          <Document
                            file={file}
                            onLoadSuccess={onDocumentLoadSuccess}
@@ -503,158 +526,170 @@ const InvoiceHCL = ({ customerAddress, fueltype, pack, airportTransfer, tripShee
 
 
 
-                              <div className='upload-pdf-hcl' >
-                                <Document
-                                  file={file}
-                                  onLoadSuccess={onDocumentLoadSuccess}
-                                  style={{
-                                    margin: "auto",
-                                    width: "100%",
-                                    padding: "30px"
-                                  }}
-                                >
-                                  {Array.from(new Array(numPages), (el, pageIndex) => (
-                                    <Page
-                                      key={`page_${pageIndex + 1}`}
-                                      pageNumber={pageIndex + 1}
-                                      scale={0.7} // Adjust scale to fit the page to the desired size
-                                      style={{
-                                        // display: "block",
-                                        width: "100%", // Let the width adjust automatically
-                                        // margin: "20px auto", // Add spacing for better display
-                                        border: "2px solid red",
-                                      }}
-                                    />
-                                  ))}
-                                </Document>
-                              </div>
-
-
-
-
-                            </li>
-                            : ''}
-
-
-
-                        </>
-
-                      );
-                    })}
-              </ol>
-            </div>
-
-
-            <div className="attached-toll-hcl" ref={targetRef}>
-              <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
-                {Array.isArray(attachedImage) &&
-
-                  attachedImage
-                    .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
-                    .map((file, index) => {
-                      // const image = file.endsWith('.jpg', '.jpeg', '.png');
-                      const image = !file.endsWith('.pdf');
-                      return (
-                        <>
-                          {image ?
-                            <li
-                              key={index}
+                          <div className='upload-pdf-hcl' >
+                            <Document
+                              file={file}
+                              onLoadSuccess={onDocumentLoadSuccess}
                               style={{
-                                // pageBreakAfter: "always", 
-                                // pageBreakAfter: isPdf ? "always" : "auto",
-                                // padding: "20px 20px 0px 20px",
-                                // marginBottom: "50",
+                                margin: "auto",
+                                width: "100%",
+                                padding: "30px"
                               }}
-                              className='li-files'>
+                            >
+                              {Array.from(new Array(numPages), (el, pageIndex) => (
+                                <Page
+                                  key={`page_${pageIndex + 1}`}
+                                  pageNumber={pageIndex + 1}
+                                  scale={0.7} // Adjust scale to fit the page to the desired size
+                                  style={{
+                                    // display: "block",
+                                    width: "100%", // Let the width adjust automatically
+                                    // margin: "20px auto", // Add spacing for better display
+                                    border: "2px solid red",
+                                  }}
+                                />
+                              ))}
+                            </Document>
+                          </div>
 
 
 
-                              <div className='upload-img-hcl'>
-                                {/* <img
+
+                        </li>
+                        : ''}
+
+
+
+                    </>
+
+                  );
+                })}
+          </ol>
+        </div>
+
+
+        <div className="attached-toll-hcl">
+          <ol type="1" style={{ listStyleType: "none", padding: 0 }}>
+            {Array.isArray(attachedImage) &&
+
+              attachedImage
+                .filter((file) => file && file.trim() !== "") // Filter out empty or invalid files
+                .map((file, index) => {
+                  // const image = file.endsWith('.jpg', '.jpeg', '.png');
+                  const image = !file.endsWith('.pdf');
+                  return (
+                    <>
+                      {image ?
+                        <li
+                          key={index}
+                          style={{
+                            // pageBreakAfter: "always", 
+                            // pageBreakAfter: isPdf ? "always" : "auto",
+                            // padding: "20px 20px 0px 20px",
+                            // marginBottom: "50",
+                          }}
+                          className='li-files'>
+
+
+
+                          <div className='upload-img-hcl'>
+                            {/* <img
                                   src={file}
                                   alt={`image_${index}`}                             
                                   className='image-hcl'
                                  
                                 /> */}
-                                <img src={`${file}?t=${new Date().getTime()}`} alt={`image_${index}`} className='image-hcl' />
+                            {/* <img src={`${file}?t=${new Date().getTime()}`} alt={`image_${index}`} className='image-hcl' /> */}
+                            <img src={`${file}`} alt={`image_${index}`} className='image-hcl' />
 
-                              </div>
-
-
-
-                            </li> : ''}
-                        </>
+                          </div>
 
 
 
+                        </li> : ''}
+                    </>
 
 
 
 
 
-                      );
-                    })}
-              </ol>
-            </div></>
-            : ""
-          }
-        </article>
-      </div>
+
+
+
+                  );
+                })}
+          </ol>
+        </div></>
+        : ""
+      }
       {/* <Button onClick={() => generatePDF(targetRef, { filename: 'E-tripsheet.pdf', margin: Margin.LARGE, })}>Print</Button> */}
-      <Button
-        onClick={() => {
-          // const pdfFiles = attachedImage.filter((file) => file.endsWith(".pdf"));
-          // const imageFiles = attachedImage.filter((file) => !file.endsWith(".pdf"));
-          const attachedImageArray = Array.isArray(attachedImage) ? attachedImage : [attachedImage];
 
-          // Filter PDF and non-PDF files
-          const pdfFiles = attachedImageArray.filter((file) => file.endsWith(".pdf"));
+
+
+      <Button
+        onClick={async () => {
+          const attachedImageArray = Array.isArray(attachedImage) ? attachedImage : [attachedImage];
           const imageFiles = attachedImageArray.filter((file) => !file.endsWith(".pdf"));
 
-          // Custom settings for PDF files
-          const pdfOptions = {
-            filename: `TS${triplabel} E-tripsheet.pdf`,
-            resolution: 3,
-            method: "save",
-            page: {
-              margin: { top: 10, right: 10, bottom: 10, left: 10 },
-              format: "a4",
-              orientation: "portrait",
-            },
-            canvas: {
-              mimeType: "image/jpeg",
-              qualityRatio: 5,
-            },
-          };
-
-          // Custom settings for image files
-          const imageOptions = {
-            filename: `TS${triplabel} E-tripsheet.pdf`,
-            resolution: 2,
-            method: "save",
-            page: {
-              // margin: { top: 5, right: 5, bottom: 5, left: 5 },
-              format: "a4",
-              orientation: "portrait",
-            },
-            canvas: {
-              mimeType: "image/png",
-              qualityRatio: 1.5,
-            },
-          };
-
-          // Decide which options to use
-          if (pdfFiles.length > 0 && imageFiles.length === 0) {
-            generatePDF(targetRef, pdfOptions); // If only PDFs exist
-          } else if (imageFiles.length > 0 && pdfFiles.length === 0) {
-            generatePDF(targetRef, imageOptions); // If only images exist
-          } else {
-            // Handle mixed content (adjust as needed)
-            generatePDF(targetRef, {
-              ...pdfOptions,
-              filename: `TS${triplabel} E-tripsheet.pdf`,
+          const convertToBase64 = async (url) => {
+            const res = await fetch(url);
+            const blob = await res.blob();
+            return new Promise((resolve) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result);
+              reader.readAsDataURL(blob);
             });
+          };
+
+          const topCanvas = await html2canvas(targetRef.current, {
+            scale: 2,
+            useCORS: true,
+          });
+          const topImage = topCanvas.toDataURL("image/png");
+
+          const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const pageHeight = doc.internal.pageSize.getHeight();
+
+          // const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+          const padding = 2;
+          doc.addImage(topImage, "PNG", 0, 0, pageWidth - 2 * padding, pageHeight - 2 * padding);
+
+          // doc.addImage(topImage, "PNG", 0, 0, 190, 270);
+
+          // const pageWidth = doc.internal.pageSize.getWidth();
+          // const pageHeight = doc.internal.pageSize.getHeight();
+
+          const imgWidth = 150;
+          const imgHeight = 130;
+          const gap = 20;
+
+          for (let i = 0; i < imageFiles.length; i += 2) {
+            doc.addPage();
+
+            const totalHeight = imgHeight * 2 + gap;
+
+            const startY = (pageHeight - totalHeight) / 2;
+
+            const centerX = (pageWidth - imgWidth) / 2;
+
+            // const img1 = await convertToBase64(imageFiles[i]);
+            // doc.addImage(img1, "PNG", centerX, startY, imgWidth, imgHeight);
+
+            const base64 = await convertToBase64(imageFiles[i]);
+            const isPng = base64.startsWith("data:image/png");
+            const format = isPng ? "PNG" : "JPEG"; 
+            doc.addImage(base64, format, centerX, startY, imgWidth, imgHeight);
+
+            if (imageFiles[i + 1]) {
+              const img2 = await convertToBase64(imageFiles[i + 1]);
+              doc.addImage(img2, "PNG", centerX, startY + imgHeight + gap, imgWidth, imgHeight);
+            }
           }
+
+
+          doc.save(`TS${triplabel} E-tripsheet.pdf`);
         }}
       >
         Print

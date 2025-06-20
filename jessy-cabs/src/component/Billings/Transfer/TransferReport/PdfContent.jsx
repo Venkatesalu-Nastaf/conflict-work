@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     pageBreakInside: 'avoid',
     overflow: 'hidden',
     border: '2px solid rgb(0, 0, 0)',
-
+    paddingBottom: 6,
   },
   heading: {
     // border: '2px solid rgb(255, 0, 0)',
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
 
   section: {
     marginTop: 10,
-
   },
   tableRow: {
     flexDirection: 'row',
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
   },
   tableheading: {
     fontSize: '11px',
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderLeft: '1px solid #000',
     borderBottom: '1px solid #000',
     width: '17.33%', // Set the width of each cell to 33.33% for equal distribution
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
   },
   tableheadingAmount: {
     fontSize: '11px',
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderRight: '1px solid #000',
     borderBottom: '1px solid #000',
     width: '17.33%', // Set the width of each cell to 33.33% for equal distribution
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
   tableheadsno: {
     fontSize: '11px',
 
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderLeft: '1px solid #000',
     borderBottom: '1px solid #000',
     width: '9.33%', // Set the width of each cell to 33.33% for equal distribution
@@ -123,12 +122,13 @@ const styles = StyleSheet.create({
     width: '9.33%', // Set the width of each cell to 33.33% for equal distribution
     padding: 5,
     fontSize: '12px',
-    borderRight: '1px solid #000000'
+    borderRight: '1px solid #000000',
+    borderLeft: '1px solid #000000'
   },
   tableheadingparticular: {
     width: '66%',
     fontSize: '11px',
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderRight: '1px solid #000',
     borderLeft: '1px solid #000',
     borderBottom: '1px solid #000',
@@ -141,15 +141,19 @@ const styles = StyleSheet.create({
     fontSize: '11px',
     borderRight: '1px solid #000000',
     wordWrap: 'break-word',
+    
   },
   tablecellparticularInside: {
     width: '90%',
     // backgroundColor:"red",
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    height:'70px',
+    // padding:"5px",
+    overflow:'hidden',
   },
   tableheadingpermit: {
     width: '16%',
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderRight: '1px solid #000',
     borderBottom: '1px solid #000',
     padding: 5,
@@ -190,9 +194,9 @@ const styles = StyleSheet.create({
   },
   tablevalue: {
     flexDirection: 'column',
-    borderBottom: '1px solid #000000',
+    // borderBottom: '1px solid #000000',
     // borderRight: '1px solid #000000',
-    borderLeft: '1px solid #000000',
+    // borderLeft: '1px solid #000000',
   },
   tablevalueRow: {
     flexDirection: 'row'
@@ -211,7 +215,7 @@ const styles = StyleSheet.create({
   },
   tableheadtripno: {
     fontSize: '11px',
-    borderTop: '1px solid #000',
+    // borderTop: '1px solid #000',
     borderLeft: '1px solid #000',
     borderBottom: '1px solid #000',
     width: '12.33%', // Set the width of each cell to 33.33% for equal distribution
@@ -287,8 +291,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     gap: '5px',
 
-  }
+  },
 
+  borderBottom : {
+    borderBottom: '1px solid #000000',
+  }
 
 });
 
@@ -297,19 +304,19 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   const [totalAmount, setTotalAmount] = useState('')
   const [parking, setParking] = useState('')
   const [permit, setPermit] = useState('')
-  const [address1, setAddress1] = useState('')
-  const [gst, setGst] = useState('')
+  // const [address1, setAddress1] = useState('')
+  // const [gst, setGst] = useState('')
   const [extraKmAmount, setExtraKmAmount] = useState('')
   const [extraHrAmount, setExtraHrAmount] = useState('')
   const [toll, setToll] = useState('')
-  const [vpermettovendor, setVpermettovendor] = useState('')
-  const [vendortoll, setVendortoll] = useState('')
+  // const [vpermettovendor, setVpermettovendor] = useState('')
+  // const [vendortoll, setVendortoll] = useState('')
   const [nightTotalAmount, setNightTotalAmount] = useState('')
   const [driverBetaAmount, setDriverBetaAmount] = useState('')
   const [gstAmount, setGstAmount] = useState(0)
-  const [fullGST, setFullGST] = useState(0)
+  // const [fullGST, setFullGST] = useState(0)
   const [advance, setAdvance] = useState();
-  const organizationname = customer
+  // const organizationname = customer
   const organisationdetailfill = organisationdetails
   // const organisationimage = images
   const newStateforpdf = customStateDetails
@@ -341,13 +348,13 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
       let exkmamount = 0
       let exhramount = 0
       let tollamount = 0
-      let vpermet = 0
-      let vendortollamount = 0
+      // let vpermet = 0
+      // let vendortollamount = 0
       let nightAmount = 0
       let driverBeta = 0
       let gstamount = 0
       let advanceamount = 0
-      let totalDays = 0
+      // let totalDays = 0
       invdata?.map((li) => {
         totalamount += parseInt(li.package_amount || 0)
         parkingamount += parseInt(li.parking || 0)
@@ -355,14 +362,14 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
         exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
         exhramount += parseInt(li.ex_hrAmount || 0)
         tollamount += parseInt(li.toll || 0)
-        vpermet += parseInt(li.vpermettovendor || 0)
-        vendortollamount += parseInt(li.vendortoll || 0)
+        // vpermet += parseInt(li.vpermettovendor || 0)
+        // vendortollamount += parseInt(li.vendortoll || 0)
         nightAmount += parseInt(li.night_totalAmount || 0)
         driverBeta += parseInt(li.driverBeta_amount || 0)
         advanceamount += parseInt(li.customeradvance || 0)
         gstamount = parseFloat(li.gstTax / 2 || 0)
-        totalDays = li.totaldays
-        setFullGST(li.gstTax || 0)
+        // totalDays = li.totaldays
+        // setFullGST(li.gstTax || 0)
         return null
       })
       setTotalAmount(totalamount)
@@ -371,8 +378,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
       setExtraKmAmount(exkmamount)
       setExtraHrAmount(exhramount)
       setToll(tollamount)
-      setVpermettovendor(vpermet)
-      setVendortoll(vendortollamount)
+      // setVpermettovendor(vpermet)
+      // setVendortoll(vendortollamount)
       setNightTotalAmount(nightAmount)
       setDriverBetaAmount(driverBeta)
       setGstAmount(gstamount)
@@ -381,37 +388,37 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
   }, [apiUrl, invdata])
 
 
-  useEffect(() => {
-    if (customeraddress) {
-      let address1 = ""
-      // let address2 = ""
-      // let city = ""
-      let gstno = ""
-      customeraddress?.map((li) => {
-        address1 = li.address1
-        // address2 = li.address2
-        // city = li.city
-        gstno = li.gstnumber
-        return null
-      })
+  // useEffect(() => {
+  //   if (customeraddress) {
+  //     let address1 = ""
+  //     // let address2 = ""
+  //     // let city = ""
+  //     let gstno = ""
+  //     customeraddress?.map((li) => {
+  //       address1 = li.address1
+  //       // address2 = li.address2
+  //       // city = li.city
+  //       gstno = li.gstnumber
+  //       return null
+  //     })
 
-      setAddress1(address1)
-      // setAddress2(address2)
-      // setAddress3(city)
-      setGst(gstno)
-    }
-  }, [apiUrl, customeraddress])
+  //     setAddress1(address1)
+  //     // setAddress2(address2)
+  //     // setAddress3(city)
+  //     setGst(gstno)
+  //   }
+  // }, [apiUrl, customeraddress])
 
   const fullAmount = parseInt(totalAmount) + parseInt(nightTotalAmount) + parseInt(driverBetaAmount) + parseInt(extraHrAmount) + parseInt(extraKmAmount)
   // const cgst = fullAmount * 2.5 / 100
   // const sgst = fullAmount * 2.5 / 100
   const groupgst = billingGroupDetails[0]?.gstTax / 2;
-  const groupigst = billingGroupDetails[0]?.gstTax;
-  const igst = (fullAmount * fullGST / 100);
+  // const groupigst = billingGroupDetails[0]?.gstTax;
+  // const igst = (fullAmount * fullGST / 100);
   const cgst = (fullAmount * gstAmount / 100);
   const sgst = (fullAmount * gstAmount / 100);
   const billingGroupCGST = (fullAmount * groupgst / 100 || 0)
-  const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
+  // const billingGroupIGST = Math.round(fullAmount * billingGroupDetails[0]?.gstTax / 100 || 0)
 
   const park = parseInt(parking)
   const permitcharge = parseInt(permit)
@@ -576,7 +583,8 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
 
                 <View style={styles.section}>
                   <View>
-                    <View style={styles.tableRow}>
+                    <View style={styles.borderBottom} fixed/>
+                    <View style={styles.tableRow} >
 
                       <View style={styles.tableheadsno}><Text>S No</Text></View>
                       <View style={styles.tableheading}><Text>Trip Date</Text></View>
@@ -588,7 +596,7 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                     <View style={[styles.tablevalue, { fontSize: "10px" }]}>
                       {invdata.map((item, index) => (
 
-                        <View style={styles.tablevalueRow} key={index}>
+                        <View style={styles.tablevalueRow} wrap={false} key={index}>
                           <React.Fragment>
                             <View style={styles.tablecellsno}>
                               <Text style={{ fontSize: 9 }}>{index + 1}</Text>
@@ -599,13 +607,13 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                               <Text style={{ fontSize: 9 }}>{item.tripid}</Text>
                             </View>
                             <View style={styles.tablecellparticular}>
-                              <View style={styles.tablecellparticularInside} >
+                              <View style={styles.tablecellparticularInside}  >
                                 <Text style={{ fontSize: 9 }}>{item.guestname}</Text>
                                 {/* <Text style={{ fontSize: 10 }}>
                                 {item.vehRegNo} / {item.duty} / TKms : {item.totalkm1} / Hrs : {item.totaltime}
                                 / {item.vehicleName2}
                               </Text> */}
-                              <View style={{flexDirection:'column',marginTop:'3px'}}>
+                              <View style={{flexDirection:'column'}}>
 
                               <View style={{width:'100%',}}>
                               {item?.duty === "Outstation" ?
@@ -694,11 +702,13 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
                           </React.Fragment>
                         </View>
                       ))}
+                      <View style={styles.borderBottom} fixed/>
                     </View>
+                     {/* <View style={styles.borderBottom} fixed/> */}
                   </View>
                 </View>
               </View>
-              <View style={styles.totalsum}>
+              <View style={styles.totalsum} wrap={false} break>
                 {customerData[0]?.gstTax === 0 || customerData[0]?.gstTax === null ? (
 
                   <View style={styles.totalsuminitial}>
@@ -900,8 +910,6 @@ const PdfContent = ({ logo, invdata, invoiceno, invoiceDate, groupTripid, custom
             </View>
 
           </View>
-
-
         </Page>
       </PDFDocument>
     </>

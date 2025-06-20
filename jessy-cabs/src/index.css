@@ -259,9 +259,9 @@ body {
   position: absolute;
 }
 
-.Scroll-Style::-webkit-scrollbar-track {
-  /* box-shadow: inset 0 0 6px transparent; */
-}
+/* .Scroll-Style::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px transparent;
+} */
 
 .Scroll-Style::-webkit-scrollbar-thumb {
   background-color: #1976d2;
@@ -850,6 +850,7 @@ body {
   padding: 20px;
   color: #000;
   zoom: 90%;
+  /* width: 100%; */
 }
 
 @media screen and (min-width: 1300px) and (max-width: 1424.99px) {
@@ -925,4 +926,33 @@ body {
 
 .css-160unip>.MuiTextField-root {
   min-width: auto !important;
+}
+
+
+
+/* .css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input {
+  width: auto !important;
+} */
+
+@media screen and (max-width:500px) {
+
+  .css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+    min-width: 0 !important;
+    padding: 0 !important;
+  }
+
+  .css-8cymlm-MuiButtonBase-root-MuiButton-root {
+    min-width: 0 !important;
+    padding: 0 !important;
+  }
+
+  .css-1tumjyn-MuiButtonBase-root-MuiButton-root{
+    min-width: 0 !important;
+    padding: 0 !important;
+  }
+
+  .css-15rd7m4{
+    left: 50% !important;
+  }
+
 }

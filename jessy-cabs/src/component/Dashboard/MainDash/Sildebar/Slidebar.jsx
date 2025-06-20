@@ -30,7 +30,7 @@ import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 //import { GiDuration } from "react-icons/gi";
 import { SiMinutemailer } from "react-icons/si";
-import { BsFillFuelPumpFill } from "react-icons/bs";
+// import { BsFillFuelPumpFill } from "react-icons/bs";
 import { FaChevronDown } from "react-icons/fa";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { FaMoneyBillWheat } from "react-icons/fa6";
@@ -58,6 +58,11 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { BiSolidStoreAlt } from "react-icons/bi";
 import { FaCar } from "react-icons/fa";
 import { SiClockify } from "react-icons/si";
+import { IoBook } from "react-icons/io5";
+import HistoryIcon from '@mui/icons-material/History';
+import PersonIcon from '@mui/icons-material/Person';
+import DescriptionIcon from '@mui/icons-material/Description';
+import { RiMoneyDollarCircleLine } from "@react-icons/all-files/ri/RiMoneyDollarCircleLine";
 
 
 const MenuItem = ({
@@ -122,6 +127,7 @@ const Sidebar = () => {
   const [ismapdropdownclicked, setIsmapdropdownclicked] = useState(false);
   const [isinfodropdownclicked, setIsinfodropdownclicked] = useState(false);
   const [isbillingdropdownclicked, setIsbillingdropdownclicked] = useState(false);
+  const [ispaymentdropdownclicked, setIspaymentdropdownclicked] = useState(false);
   const [isbookingdropdownclicked, setIsbookingdropdownclicked] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
 
@@ -131,6 +137,7 @@ const Sidebar = () => {
     setIssettingdropdownclicked(false);
     setIsinfodropdownclicked(false);
     setIsbillingdropdownclicked(false);
+    setIspaymentdropdownclicked(false);
     setIsbookingdropdownclicked(false);
     setIsmapdropdownclicked(false);
 
@@ -139,6 +146,7 @@ const Sidebar = () => {
     setInfoDropdownVisible(false);
     setRegistrationDropdownVisible(false);
     setBillingDropdownVisible(false);
+    setPaymentDropdownVisible(false);
     setBookingDropdownVisible(false);
   }
 
@@ -159,6 +167,7 @@ const Sidebar = () => {
   const [infoDropdownVisible, setInfoDropdownVisible] = useState(false);
   const [registrationDropdownVisible, setRegistrationDropdownVisible] = useState(false);
   const [billingDropdownVisible, setBillingDropdownVisible] = useState(false);
+  const [paymentDropdownVisible, setPaymentDropdownVisible] = useState(false);
   const [bookingDropdownVisible, setBookingDropdownVisible] = useState(false);
 
   //------------------popup------------------------
@@ -199,6 +208,7 @@ const Sidebar = () => {
     setBookingDropdownVisible(false);
     setIsmapdropdownclicked((prevExpanded) => !prevExpanded);
     setBillingDropdownVisible(false)
+    setPaymentDropdownVisible(false)
   };
 
   const handleSettingsClick = () => {
@@ -208,6 +218,7 @@ const Sidebar = () => {
     setBookingDropdownVisible(false);
     setIssettingdropdownclicked((prevExpanded) => !prevExpanded);
     setBillingDropdownVisible(false);
+    setPaymentDropdownVisible(false);
     setMapDropdownVisible(false);
 
   };
@@ -229,6 +240,7 @@ const Sidebar = () => {
     setInfoDropdownVisible(false)
     setIsRegisterdropdownclicked((prevExpanded) => !prevExpanded);
     setBillingDropdownVisible(false);
+    setPaymentDropdownVisible(false);
     setBookingDropdownVisible(false);
     setMapDropdownVisible(false);
 
@@ -236,10 +248,25 @@ const Sidebar = () => {
 
   const handleBillingClick = () => {
     setBillingDropdownVisible(!billingDropdownVisible);
+    setPaymentDropdownVisible(false);
     setRegistrationDropdownVisible(false);
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false)
     setIsbillingdropdownclicked((prevExpanded) => !prevExpanded);
+    setIspaymentdropdownclicked(false);
+    setBookingDropdownVisible(false);
+    setMapDropdownVisible(false);
+
+  }
+
+  const handlePaymentClick = () => {
+    setBillingDropdownVisible(false);
+    setPaymentDropdownVisible(!paymentDropdownVisible);
+    setRegistrationDropdownVisible(false);
+    setSettingsDropdownVisible(false);
+    setInfoDropdownVisible(false)
+    setIsbillingdropdownclicked(false);
+    setIspaymentdropdownclicked((prevExpanded) => !prevExpanded);
     setBookingDropdownVisible(false);
     setMapDropdownVisible(false);
 
@@ -248,6 +275,7 @@ const Sidebar = () => {
   const handleBookingClick = () => {
     setBookingDropdownVisible(!bookingDropdownVisible);
     setBillingDropdownVisible(false);
+    setPaymentDropdownVisible(false);
     setRegistrationDropdownVisible(false);
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false)
@@ -268,45 +296,53 @@ const Sidebar = () => {
   const Billing_Transfer = permissions[6]?.read
   const Billing_CoveringBill = permissions[7]?.read
   const Billing_Reports = permissions[8]?.read
-// const Billing_Logs = permissions[8]?.read
+  const Billing_VendorReports = permissions[9]?.read
+
+  const PAYMENT = permissions[30]?.read;
+  const Payment_Vendor = permissions[31]?.read;
+  const Payment_Customer = permissions[32]?.read
+  // const Billing_Logs = permissions[8]?.read
   // const REGISTER = permissions[8]?.read;
   // const SETTING = permissions[12]?.read || permissions[13]?.read;
   // const REGISTER = permissions[9]?.read;
-  const REGISTER = permissions[9]?.read
-  const SETTING = permissions[14]?.read
-  const R_RATEtype = permissions[10]?.read
-  const R_Customer = permissions[11]?.read
-  const R_Supllier = permissions[12]?.read
-  const R_Station = permissions[13]?.read
+  const REGISTER = permissions[10]?.read
+  const SETTING = permissions[15]?.read
+  const R_RATEtype = permissions[11]?.read
+  const R_Customer = permissions[12]?.read
+  const R_Supllier = permissions[13]?.read
+  const R_Station = permissions[14]?.read
   // const INFO = permissions[16]?.read;
   // const Dashbord_read = permissions[21]?.read;
-  const INFO = permissions[17]?.read;
+  const INFO = permissions[18]?.read;
   // const Dashbord_read = permissions[21]?.read;
-  const Dashbord_read = permissions[22]?.read;
+  const Dashbord_read = permissions[23]?.read;
   // thsi for map page permisiion
-  const Maps = permissions[23]?.read;
-  const mailer = permissions[18]?.read;
-  const Fuel = permissions[19]?.read;
-  const Employee1 = permissions[20]?.read;
-  const Aggrement = permissions[21]?.read;
-  const userCreation = permissions[15]?.read;
-  const Map_Realtime = permissions[24]?.read;
-  const Map_Vehicle = permissions[25]?.read;
-  const Map_Reminders = permissions[26]?.read;
-  const Map_History = permissions[27]?.read;
-  const Map_Records = permissions[28]?.read;
+  const Maps = permissions[24]?.read;
+  const mailer = permissions[19]?.read;
+  // const Fuel = permissions[19]?.read;
+  const Employee1 = permissions[21]?.read;
+  const Aggrement = permissions[22]?.read;
+  const logdetails = permissions[20]?.read;
+  const userCreation = permissions[16]?.read;
+  // const Mainsetting = permissions[17]?.read;
+  const Map_Realtime = permissions[25]?.read;
+  const Map_Vehicle = permissions[26]?.read;
+  const Map_Reminders = permissions[27]?.read;
+  const Map_History = permissions[28]?.read; 
+  const Map_Records = permissions[29]?.read;
 
 
 
   // its for hiding navigation based on permission 
   const booking_page_permission = permissions[0]?.read || permissions[1]?.read || permissions[2]?.read || permissions[3]?.read
-  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read || permissions[8]?.read
-  const Register_page_permission = permissions[9]?.read || permissions[10]?.read || permissions[11]?.read || permissions[12]?.read || permissions[13]?.read
-  const Setting_page_permission = permissions[14]?.read || permissions[15]?.read || permissions[16]?.read
-  const Info_page_permission = permissions[17]?.read || permissions[18]?.read || permissions[19]?.read || permissions[20]?.read ||  permissions[21]?.read
+  const Billing_permission = permissions[4]?.read || permissions[5]?.read || permissions[6]?.read || permissions[7]?.read || permissions[8]?.read || permissions[9]?.read
+  const Payment_permission = permissions[30]?.read || permissions[31]?.read || permissions[32]?.read
+  const Register_page_permission = permissions[10]?.read || permissions[11]?.read || permissions[12]?.read || permissions[13]?.read || permissions[14]?.read
+  const Setting_page_permission = permissions[15]?.read || permissions[16]?.read || permissions[17]?.read
+  const Info_page_permission = permissions[18]?.read || permissions[19]?.read || permissions[20]?.read || permissions[21]?.read || permissions[22]?.read
 
   // thsi for map page permisiion
-  const Map_page_permission = permissions[23]?.read || permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read || permissions[28]?.read
+  const Map_page_permission = permissions[24]?.read || permissions[25]?.read || permissions[26]?.read || permissions[27]?.read || permissions[28]?.read || permissions[29]?.read
 
   const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
     localStorage.removeItem('reports');
@@ -324,6 +360,9 @@ const Sidebar = () => {
         break;
       case "Billing page":
         hasPermission = BILLING;
+        break;
+      case "Payment page":
+        hasPermission = PAYMENT;
         break;
       case "Register page":
         hasPermission = REGISTER;
@@ -348,7 +387,7 @@ const Sidebar = () => {
     }
 
     localStorage.setItem("selectedMenuItem", menuItemKey);
-    localStorage.setItem("menuitemselected",name);
+    localStorage.setItem("menuitemselected", name);
     try {
 
       if (hasPermission === 1) {
@@ -429,7 +468,7 @@ const Sidebar = () => {
         e.preventDefault();
       }
       // localStorage.removeItem("auth");
-      localStorage.setItem("auth",false);
+      localStorage.setItem("auth", false);
       localStorage.removeItem("username");
       localStorage.removeItem("useridno");
       localStorage.removeItem("selectedImage");
@@ -442,7 +481,7 @@ const Sidebar = () => {
       setExpanded(true);
       navigate("/");
     },
-    [navigate,setExpanded]
+    [navigate, setExpanded]
   );
 
   const [openmodal, setOpenmodal] = useState(false);
@@ -469,6 +508,18 @@ const Sidebar = () => {
 
   const billingSubMenu = (path) => {
     if (BILLING !== 0) {
+      navigate(path);
+      closeMenuFunction();
+    }
+    else {
+      setInfo(true);
+      setInfoMessage("You do not have Permission for this page ..!");
+      return;
+    }
+  }
+
+   const paymentSubMenu = (path) => {
+    if (PAYMENT !== 0) {
       navigate(path);
       closeMenuFunction();
     }
@@ -720,10 +771,10 @@ const Sidebar = () => {
           {Dashbord_read === 1 ? <MenuItem
             label={`${expanded === false ? '' : 'Dashboard'}`}
             // to="/home/dashboard"
-             to={Dashbord_read && "/home/dashboard"}
+            to={Dashbord_read && "/home/dashboard"}
             value="/home/dashboard"
             alt={Dashbord_read && "/home/dashboard"}
-             // alt="/home/dashboard"
+            // alt="/home/dashboard"
             name="Dashboard page"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
@@ -773,40 +824,40 @@ const Sidebar = () => {
           {bookingDropdownVisible && (
             <div className="settings-dropdown">
               {bookingdata ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/booking')}>
-                  <span>
-                    <FaBookmark />
-                  </span>
-                  <span className="menu-items-registration">
-                    Booking
-                  </span>
-                </p>
-              </div>
-:<></>}
-{Tripstatus ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/tripstatus')}>
-                  <span>
-                    <MdOutlineMoving />
-                  </span>
-                  <span className="menu-items-registration">
-                    Trip status
-                  </span>
-                </p>
-              </div> :<></>}
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/booking')}>
+                    <span>
+                      <FaBookmark />
+                    </span>
+                    <span className="menu-items-registration">
+                      Booking
+                    </span>
+                  </p>
+                </div>
+                : <></>}
+              {Tripstatus ?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/tripstatus')}>
+                    <span>
+                      <MdOutlineMoving />
+                    </span>
+                    <span className="menu-items-registration">
+                      Trip status
+                    </span>
+                  </p>
+                </div> : <></>}
               {tripsheet ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/tripsheet')}>
-                  <span>
-                    <BiSpreadsheet />
-                  </span>
-                  <span className="menu-items-registration">
-                    Trip sheet
-                  </span>
-                </p>
-              </div>
-              :<></>}
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/tripsheet')}>
+                    <span>
+                      <BiSpreadsheet />
+                    </span>
+                    <span className="menu-items-registration">
+                      Trip sheet
+                    </span>
+                  </p>
+                </div>
+                : <></>}
             </div>
           )}
           {Billing_permission ?
@@ -824,8 +875,10 @@ const Sidebar = () => {
                         "/home/billing/coveringbill" :
                         Billing_Reports ?
                           "/home/billing/reports" :
-                          "/home/billing/billing"
-                          
+                          Billing_VendorReports ?
+                            "/home/billing/VendorReports" :
+                            "/home/billing/billing"
+
                 }
 
                 // to={
@@ -840,7 +893,7 @@ const Sidebar = () => {
                 //           Billing_Logs ?
                 //           "/home/billing/LogDetails" :
                 //           "/home/billing/billing"
-                          
+
                 // }
 
                 alt={
@@ -852,7 +905,9 @@ const Sidebar = () => {
                         "/home/billing/coveringbill" :
                         Billing_Reports ?
                           "/home/billing/reports" :
-                          "/home/billing/billing"
+                          Billing_VendorReports ?
+                            "/home/billing/VendorReports" :
+                            "/home/billing/billing"
                 }
 
                 // alt={
@@ -901,52 +956,175 @@ const Sidebar = () => {
             </motion.div> : <></>}
           {billingDropdownVisible && (
             <div className="settings-dropdown">
-              {  BILLING_BillingMain ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/billing')}>
-                  <span>
-                    <FaMoneyBillTransfer />
-                  </span>
-                  <span className="menu-items-registration">
-                    Billing
-                  </span>
-                </p>
-              </div>
-:<></>}
-{  Billing_Transfer ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/transfer')}>
-                  <span>
-                    <BiTransfer />
-                  </span>
-                  <span className="menu-items-registration">
-                    Transfer
-                  </span>
-                </p>
-              </div>
-              :<></>}
+              {BILLING_BillingMain ?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/billing')}>
+                    <span>
+                      <FaMoneyBillTransfer />
+                    </span>
+                    <span className="menu-items-registration">
+                      Billing
+                    </span>
+                  </p>
+                </div>
+                : <></>}
+              {Billing_Transfer ?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/transfer')}>
+                    <span>
+                      <BiTransfer />
+                    </span>
+                    <span className="menu-items-registration">
+                      Transfer
+                    </span>
+                  </p>
+                </div>
+                : <></>}
               {Billing_CoveringBill ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/coveringbill')}>
-                  <span>
-                    <FaMoneyBillWheat />
-                  </span>
-                  <span className="menu-items-registration">
-                    Covering Bill
-                  </span>
-                </p>
-              </div>:<></>}
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/coveringbill')}>
+                    <span>
+                      <FaMoneyBillWheat />
+                    </span>
+                    <span className="menu-items-registration">
+                      Covering Bill
+                    </span>
+                  </p>
+                </div> : <></>}
               {Billing_Reports ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/reports')}>
-                  <span>
-                    <FaMoneyBillWheat />
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/reports')}>
+                    <span>
+                      <FaMoneyBillWheat />
+                    </span>
+                    <span className="menu-items-registration">
+                      Reports
+                    </span>
+                  </p>
+                </div> : <></>}
+              {Billing_VendorReports ?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/VendorReports')}>
+                    <span>
+                      <FaMoneyBillWheat />
+                    </span>
+                    <span className="menu-items-registration">
+                      Vendor Reports
+                    </span>
+                  </p>
+                </div> : <></>}
+            </div>
+          )}
+
+          {Payment_permission ?
+            <div className='desktop-menu-without-dropdown'>
+              <MenuItem
+                label={`${expanded === false ? '' : 'Payment'}`}
+                // to={BILLING && ("/home/billing/billing")}
+
+                to={
+                  Payment_Vendor ?
+                    "/home/payment/vendor" :
+                    Payment_Customer ?
+                      "/home/payment/customer" :
+                      "/home/payment/payment"
+
+                }
+
+                // to={
+                //   BILLING_BillingMain ?
+                //     "/home/billing/billing" :
+                //     Billing_Transfer ?
+                //       "/home/billing/transfer" :
+                //       Billing_CoveringBill ?
+                //         "/home/billing/coveringbill" :
+                //         Billing_Reports ?
+                //           "/home/billing/reports" :
+                //           Billing_Logs ?
+                //           "/home/billing/LogDetails" :
+                //           "/home/billing/billing"
+
+                // }
+
+                alt={
+                  Payment_Vendor ?
+                    "/home/payment/vendor" :
+                    Payment_Customer ?
+                      "/home/payment/customer" :
+                      "/home/payment/payment"
+                }
+
+                // alt={
+                //   BILLING_BillingMain ?
+                //     "/home/billing/billing" :
+                //     Billing_Transfer ?
+                //       "/home/billing/transfer" :
+                //       Billing_CoveringBill ?
+                //         "/home/billing/coveringbill" :
+                //         Billing_Reports ?
+                //           "/home/billing/reports" :
+                //           Billing_Logs ?
+                //           "/home/billing/LogDetails" :
+                //           "/home/billing/billing"
+                // }
+                // to={"/home/billing/billing"}
+                // alt="/home/billing/billing"
+                value="/home/payment"
+                menuItemKey="/home/payment"
+                name="Payment page"
+                isActive={isActive}
+                handleMenuItemClick={handleMenuItemClick}
+                icon={RiMoneyDollarCircleLine   }
+              />
+            </div> : <></>}
+
+          {Payment_permission ?
+            <motion.div className='mobile-menu-with-dropdown'>
+              <MenuItem
+                label={
+                  <span className="sidebar-main-menu">
+                    <span>
+                      Payment
+                    </span>
+                    <span className="sidebar-main-menu-arrow">
+                      <FaChevronDown className={ispaymentdropdownclicked ? 'ispaymentdropdownclicked' : ''} />
+                    </span>
                   </span>
-                  <span className="menu-items-registration">
-                    Reports
-                  </span>
-                </p>
-              </div>:<></>}
+                }
+                value="/home/payment"
+                menuItemKey="/home/payment"
+                name="Payment page"
+                isActive={isActive}
+                handleMenuItemClick={handlePaymentClick}
+                icon={RiMoneyDollarCircleLine  }
+              />
+            </motion.div> : <></>}
+          {paymentDropdownVisible && (
+            <div className="settings-dropdown">
+              {Payment_Vendor ?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => paymentSubMenu('/home/payment/vendor')}>
+                    <span>
+                      <FaMoneyBillTransfer />
+                    </span>
+                    <span className="menu-items-registration">
+                      Vendor
+                    </span>
+                  </p>
+                </div>
+                : <></>}
+              {Payment_Customer ?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => paymentSubMenu('/home/payment/customer')}>
+                    <span>
+                      <BiTransfer />
+                    </span>
+                    <span className="menu-items-registration">
+                      Customer
+                    </span>
+                  </p>
+                </div>
+                : <></>}
             </div>
           )}
 
@@ -1005,13 +1183,13 @@ const Sidebar = () => {
                 to={
                   mailer ?
                     "/home/info/mailer"
-                    : Fuel
+                    : logdetails
                       ? "/home/info/LogDetails"
                       : Employee1
                         ? "/home/info/employee" :
                         Aggrement ?
-                        "/home/info/agreement" :
-                         "/home/info/mailer"
+                          "/home/info/agreement" :
+                          "/home/info/mailer"
                 }
                 // alt="/home/info/mailer"
                 // alt={
@@ -1026,13 +1204,13 @@ const Sidebar = () => {
                 alt={
                   mailer
                     ? "/home/info/mailer"
-                    : Fuel
+                    : logdetails
                       ? "/home/info/LogDetails"
                       : Employee1
                         ? "/home/info/employee"
-                        :  Aggrement ?
-                        "/home/info/agreement" :
-                         "/home/info/mailer"
+                        : Aggrement ?
+                          "/home/info/agreement" :
+                          "/home/info/mailer"
                 }
 
                 value="/home/info"
@@ -1108,50 +1286,50 @@ const Sidebar = () => {
             </motion.div> : <></>}
           {registrationDropdownVisible && (
             <div className="settings-dropdown">
-              { R_RATEtype ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/ratetype')}>
-                  <span>
-                    <MdGroup />
-                  </span>
-                  <span className="menu-items-registration">
-                    Ratetype
-                  </span>
-                </p>
-              </div> :<></>}
+              {R_RATEtype ?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/ratetype')}>
+                    <span>
+                      <MdGroup />
+                    </span>
+                    <span className="menu-items-registration">
+                      Ratetype
+                    </span>
+                  </p>
+                </div> : <></>}
               {R_Customer ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/customer')}>
-                  <span>
-                    <MdGroup />
-                  </span>
-                  <span className="menu-items-registration">
-                    Customer
-                  </span>
-                </p>
-              </div>:<></>}
-              {  R_Supllier ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/supplier')}>
-                  <span>
-                    <MdGroupRemove />
-                  </span>
-                  <span className="menu-items-registration">
-                    Supplier
-                  </span>
-                </p>
-              </div> :<></>}
-              {  R_Station ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/stationcreation')}>
-                  <span>
-                    <HiOutlineUserGroup />
-                  </span>
-                  <span className="menu-items-registration">
-                    Station Creation
-                  </span>
-                </p>
-              </div> :<></>}
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/customer')}>
+                    <span>
+                      <MdGroup />
+                    </span>
+                    <span className="menu-items-registration">
+                      Customer
+                    </span>
+                  </p>
+                </div> : <></>}
+              {R_Supllier ?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/supplier')}>
+                    <span>
+                      <MdGroupRemove />
+                    </span>
+                    <span className="menu-items-registration">
+                      Supplier
+                    </span>
+                  </p>
+                </div> : <></>}
+              {R_Station ?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/stationcreation')}>
+                    <span>
+                      <HiOutlineUserGroup />
+                    </span>
+                    <span className="menu-items-registration">
+                      Station Creation
+                    </span>
+                  </p>
+                </div> : <></>}
             </div>
           )}
 
@@ -1179,52 +1357,52 @@ const Sidebar = () => {
           </motion.div> : <></>}
           {infoDropdownVisible && (
             <div className="settings-dropdown">
-           {mailer ? 
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/mailer')}>
-                  <span>
-                    <SiMinutemailer />
-                  </span>
-                  <span>
-                    Mailer
-                  </span>
-                </p>
-              </div> :<></>}
-              {Fuel ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/LogDetails')}>
-                  <span>
-                    <BsFillFuelPumpFill />
-                  </span>
-                  <span>
-                    Fuel Info
-                  </span>
-                </p>
-              </div> :<></>}
+              {mailer ?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/mailer')}>
+                    <span>
+                      <SiMinutemailer />
+                    </span>
+                    <span>
+                      Mailer
+                    </span>
+                  </p>
+                </div> : <></>}
+              {logdetails?
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/LogDetails')}>
+                    <span>
+                      <HistoryIcon />
+                    </span>
+                    <span>
+                      Log Details
+                    </span>
+                  </p>
+                </div> : <></>}
 
               {Employee1 ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/employee')}>
-                  <span>
-                    <BsFillFuelPumpFill />
-                  </span>
-                  <span>
-                    Employee
-                  </span>
-                </p>
-              </div> :<></> }
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/employee')}>
+                    <span>
+                      <PersonIcon />
+                    </span>
+                    <span>
+                      Employee
+                    </span>
+                  </p>
+                </div> : <></>}
 
               {Aggrement ?
-              <div className="settings-dropdown-links">
-                <p className="dropdown-icon" onClick={() => infoSubMenu("/home/info/agreement")}>
-                  <span>
-                    <BsFillFuelPumpFill />
-                  </span>
-                  <span>
-                  Aggrement
-                  </span>
-                </p>
-              </div> :<></> }
+                <div className="settings-dropdown-links">
+                  <p className="dropdown-icon" onClick={() => infoSubMenu("/home/info/agreement")}>
+                    <span>
+                      <DescriptionIcon />
+                    </span>
+                    <span>
+                      Aggrement
+                    </span>
+                  </p>
+                </div> : <></>}
             </div>
           )}
 
@@ -1270,6 +1448,16 @@ const Sidebar = () => {
                   </span>
                   <span>
                     Vehicle
+                  </span>
+                </p>
+              </div>
+              <div className="settings-dropdown-links">
+                <p className="dropdown-icon" onClick={() => MapSubMenu('Map/History')}>
+                  <span>
+                    <IoBook />
+                  </span>
+                  <span>
+                    History
                   </span>
                 </p>
               </div>
@@ -1350,7 +1538,6 @@ const Sidebar = () => {
           </motion.div> : <></>}
           {settingsDropdownVisible && (
             <div className="settings-dropdown">
-              { userCreation ?
               <div className="settings-dropdown-links">
                 <p className="dropdown-icon" onClick={() => settingSubMenu('settings/usercreation')}>
                   <span>
@@ -1361,7 +1548,7 @@ const Sidebar = () => {
                     user Creation
                   </span>
                 </p>
-              </div> :
+              </div>
 
               <div className="settings-dropdown-links">
                 <p className="dropdown-icon" onClick={() => settingSubMenu('settings/mainsetting')}>
@@ -1372,12 +1559,12 @@ const Sidebar = () => {
                     Main setting
                   </span>
                 </p>
-              </div>}
+              </div>
             </div>
           )}
 
 
- <MenuItem
+          <MenuItem
             label={`${expanded === false ? '' : 'User'}`}
             to="/home/usersettings/usersetting"
             alt="/home/usersettings/usersetting"

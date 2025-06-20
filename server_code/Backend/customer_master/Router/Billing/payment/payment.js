@@ -66,35 +66,35 @@ router.get('/getBillnoFromIndividualBill', (req, res) => {
 
     db.query(query, [billingno], (err, results) => {
         if (err) {
-            console.error("Database query error:", err);
+            // console.error("Database query error:", err);
             return res.status(500).json({ error: 'Error retrieving data' });
         }
         res.json(results); 
     });
 });
 
-router.get('/getTripsheetDetailsFromTransferTripId', (req, res) => {
-    const { transferTripId } = req.query;
+// router.get('/getTripsheetDetailsFromTransferTripId', (req, res) => {
+//     const { transferTripId } = req.query;
 
-    if (!transferTripId) {
-        return res.status(400).json({ error: 'Transfer Trip ID is required' });
-    }
-    // Split the string into an array if it's a comma-separated string
-    const tripIdArray = transferTripId.includes(',')
-        ? transferTripId.split(',')  // Split the string by commas
-        : [transferTripId];          // If it's already a single value, wrap it in an array
+//     if (!transferTripId) {
+//         return res.status(400).json({ error: 'Transfer Trip ID is required' });
+//     }
+//     // Split the string into an array if it's a comma-separated string
+//     const tripIdArray = transferTripId.includes(',')
+//         ? transferTripId.split(',')  // Split the string by commas
+//         : [transferTripId];          // If it's already a single value, wrap it in an array
 
-    const sqlquery = `SELECT * FROM tripsheet WHERE tripid IN (?)`;
+//     const sqlquery = `SELECT * FROM tripsheet WHERE tripid IN (?)`;
 
-    db.query(sqlquery, [tripIdArray], (error, result) => {
-        if (error) {
-            console.error(error, 'error');
-            return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
-        }
+//     db.query(sqlquery, [tripIdArray], (error, result) => {
+//         if (error) {
+//             console.error(error, 'error');
+//             return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
+//         }
 
-        return res.status(200).json(result);
-    });
-});
+//         return res.status(200).json(result);
+//     });
+// });
 
 router.get('/payment-details', (req, res) => {
     const { organizationNames, fromDate, toDate } = req.query;
@@ -112,7 +112,7 @@ router.get('/payment-details', (req, res) => {
     }
     db.query(query, params, (err, result) => {
         if (err) {
-            console.log(err, "error");
+            // console.log(err, "error");
 
             return res.status(500).json({ error: 'Failed to retrieve billing details from MySQL' });
         }
@@ -122,18 +122,18 @@ router.get('/payment-details', (req, res) => {
 
 
 //totalamount of billing
-router.get('/totalAmount_from_billing', (req, res) => {
-    const query = 'SELECT SUM(Totalamount) AS total FROM billing';
+// router.get('/totalAmount_from_billing', (req, res) => {
+//     const query = 'SELECT SUM(Totalamount) AS total FROM billing';
 
-    db.query(query, (err, result) => {
-        if (err) {
-            res.status(500).send('Internal Server Error');
-        } else {
-            const totalAmount = result[0].total || 0;
-            res.json({ totalAmount });
-        }
-    });
-});
+//     db.query(query, (err, result) => {
+//         if (err) {
+//             res.status(500).send('Internal Server Error');
+//         } else {
+//             const totalAmount = result[0].total || 0;
+//             res.json({ totalAmount });
+//         }
+//     });
+// });
 
 // router.get('/getdatafromtripsheetvaluebilling/:tripidno', (req, res) => {
 //     const bookingno = req.params.tripidno;
@@ -162,10 +162,10 @@ router.get("/getdatafromtripsheetvaluebilling/:invoiceno/:state", (req, res) => 
     db.query(sql, [bookingno,statedata], (err, results) => {
 
         if (err) {
-            console.log(err)
+            // console.log(err)
             return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
         }
-        console.log(results, 'ff')
+        // console.log(results, 'ff')
         return res.status(200).json(results)
 
 
@@ -189,10 +189,10 @@ router.get("/INVOICEENTER_Billing/:invoiceno/:state", (req, res) => {
     db.query(sql, [bookingno,statedata], (err, results) => {
 
         if (err) {
-            console.log(err)
+            // console.log(err)
             return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
         }
-        console.log(results, 'ff')
+        // console.log(results, 'ff')
         return res.status(200).json(results)
 
 

@@ -1,0 +1,25 @@
+.Payment-conatiner {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+  gap: 1rem;
+  /* align-items: center; */
+  margin-top: 30px;
+}
+
+@media screen and (min-width: 769px) and (max-width: 1135px) {
+  .Payment-conatiner {
+    margin-top: 70px;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .menu-bar {
+    display: none;
+  }
+
+  .Payment-conatiner {
+    margin-top: 0px;
+  }
+}

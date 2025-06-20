@@ -6,6 +6,7 @@ import { saveAs } from 'file-saver';
 import { APIURL } from "../../../url";
 import dayjs from "dayjs";
 import Excel from 'exceljs';
+import encryption from '../../../dataEncrypt';
 
 // TABLE
 
@@ -171,12 +172,12 @@ const useRatype = () => {
     
             // Ensure 'id' is first in the header
             const idIndex = headers.indexOf('id');
-            console.log(idIndex, "index");
+            // console.log(idIndex, "index");
             if (idIndex !== -1) {
                 headers.splice(idIndex, 1);
-                console.log(headers, "splice");
+                // console.log(headers, "splice");
                 headers.unshift('id');
-                console.log(headers, "unshift");
+                // console.log(headers, "unshift");
             }
     
             // Define columns for the worksheet
@@ -393,7 +394,7 @@ const useRatype = () => {
         // Get headers from the first row
         const header = Object.keys(rows[0]);
         const idIndex = header.indexOf('id');
-        console.log(idIndex, "index");
+        // console.log(idIndex, "index");
     
         // Ensure 'id' is first in the header
         if (idIndex !== -1) {
@@ -438,7 +439,7 @@ const useRatype = () => {
         } else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-        console.log(fontdata, "font size");
+        // console.log(fontdata, "font size");
     
         // Generate the table in the PDF
         pdf.autoTable({
@@ -462,7 +463,7 @@ const useRatype = () => {
         });
     
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-        console.log(scaleFactor, "SCALE");
+        // console.log(scaleFactor, "SCALE");
     
         // Scale content
         pdf.scale(scaleFactor, scaleFactor);
@@ -485,7 +486,9 @@ const useRatype = () => {
 
      const uniqueRatetype=async(customerdataname,ratenamedata)=>{
         if(customerdataname && ratenamedata){
-            const response= await axios.get(`${apiUrl}/getcustomeruniqueratetype/${customerdataname}/${ratenamedata}`)
+            const encryptCustomer = encryption(customerdataname)
+            const encryptRate = encryption(ratenamedata)
+            const response= await axios.get(`${apiUrl}/getcustomeruniqueratetype/${encryptCustomer}/${encryptRate}`)
             const responsedata=response.data;
            
             if(responsedata?.length >=1){
@@ -537,13 +540,16 @@ const useRatype = () => {
         }
     };
     const handleenterSearch = useCallback(async (e) => {
+        if(searchText === '') return;
         if (e.key === "Enter") {
-            console.log("Search Text:", searchText);
+            // console.log("Search Text:", searchText);
 
             try {
                 // Fetching data from the server
-                const response = await fetch(`${apiUrl}/searchRatetype?searchText=${encodeURIComponent(searchText)}`);
-
+                const encryptSearch = encryption(searchText)
+                // console.log(encryptSearch,"search");
+                
+                const response = await fetch(`${apiUrl}/searchRatetype?searchText=${encodeURIComponent(encryptSearch)}`);
                 // Checking if the response is not OK
                 if (!response.ok) {
                     console.error("Network response not OK:", response.statusText);
@@ -551,7 +557,7 @@ const useRatype = () => {
                 }
 
                 const data = await response.json();
-                console.log("Fetched data:", data);  // Log the data to ensure it's correct
+                // console.log("Fetched data:", data);  // Log the data to ensure it's correct
 
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -588,11 +594,11 @@ const useRatype = () => {
         }));
         setBook((prevBook) => ({
             ...prevBook,
-            ["ratename"]:"",
+            ratename:"",
         }));
         setSelectedCustomerData((prevData) => ({
             ...prevData,
-            ["ratename"]: "",
+            ratename: "",
         }));
         setCredentialData(false)
     };
@@ -660,7 +666,7 @@ const useRatype = () => {
                 starttime:starttime,
                 closetime:closetime
             }; 
-             console.log(updatedBook)
+            //  console.log(updatedBook)
 
             await axios.post(`${apiUrl}/ratetype`, updatedBook);
             handleCancel();
@@ -709,7 +715,7 @@ const useRatype = () => {
                     ...row,
                     id: index + 1,
                 }));
-                console.log(rowsWithUniqueId,"cust")
+                // console.log(rowsWithUniqueId,"cust")
                 // setRows(rowsWithUniqueId);
                 setRows(data.length > 0 ? rowsWithUniqueId : []);
                
@@ -754,6 +760,7 @@ const useRatype = () => {
             closetime: selectedCustomerData.closetime
         };
         await axios.put(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+        // console.log(updatedCustomer,"checking the frontend value ");     
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         setisRateButtonLoading(false)
@@ -793,10 +800,13 @@ const useRatype = () => {
                 handleCancel();
 
             }
+            else if(actionName === 'Add'){
+                handleAdd();
+            }
 
             else if (actionName === 'Delete') {
-               const data = await axios.delete(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
-               console.log(data,"responsedaata")
+               await axios.delete(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
+            //    console.log(data,"responsedaata")
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");

@@ -1,20 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
+const decryption = require('../dataDecrypt');
 
 // collect data from vehicleInfo database
 router.get('/tripsheet_driver_details', (req, res) => {
     const apps = req.query.apps; // Use 'apps' as the query parameter name
-
+const decryptApp = decryption(apps)
     // Validate the status parameter
-    if (apps !== 'active' && apps !== 'not_active') {
+    if (decryptApp !== 'active' && decryptApp !== 'not_active') {
         return res.status(400).json({ error: 'Invalid status parameter' });
     }
 
     let sqlQuery = 'SELECT id, driverName, startdate, mobileNo,vehicleName apps FROM tripsheet';
 
     // Adjust the SQL query based on the selected status
-    if (apps === 'active') {
+    if (decryptApp === 'active') {
         sqlQuery += ' WHERE apps = "On_Going"';
     } else if (apps === 'not_active') {
         sqlQuery += ' WHERE apps = "Closed"';

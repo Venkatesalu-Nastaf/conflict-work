@@ -1,0 +1,84 @@
+/* .main-content-form-invoice{
+    width: 100%;
+} */
+
+.css-13xfq8m-MuiTabPanel-root {
+    display: flex;
+    padding: 0px !important;
+}
+
+.detail-container-main {
+    display: flex;
+    width: 90% !important;
+}
+
+.form-container-ratetype {
+    display: flex;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.table-bookingCopy-invoice {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: var(--glass);
+}
+
+@media screen and (max-width: 1238px) {
+    .table-bookingCopy-invoice {
+        width: 100%;
+    }
+}
+
+.detail-container-main{
+    margin-bottom: 20px;
+}
+
+.copy-title-btn-invoice {
+    width: 100%;
+}
+
+.invoice-inputs {
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+@media only screen and (max-width:1196px) {
+    .invoice-inputs{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media only screen and (max-width:500px) {
+    .click-menu-icon {
+        top: 37px !important;
+        left: 29px !important;
+    }
+
+    .copy-title-btn-invoice {
+        margin-top: 0px !important;
+        border: none !important;
+        background-color: transparent;
+    }
+}
+
+.invoice-startdate-icon {
+    padding-top: 20px;
+}
+
+.invoice-table {
+    height: 400px;
+    width: 100%;
+}
+
+.add-edit-invoice{
+    margin-top: 20px;
+}
+
+.input-search-ratetype {
+    width: 280px !important;
+    display: flex;
+    align-items: center;
+    padding-right: 15px;
+}

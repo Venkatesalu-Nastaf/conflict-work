@@ -1,9 +1,10 @@
-import React from "react";
-import { MapContainer, TileLayer, Marker, Popup,Tooltip} from "react-leaflet";
+import React,{useEffect, useRef} from "react";
+import { MapContainer, TileLayer, Marker, Popup,Tooltip,useMap} from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png";
+import Runingicon from "../VehicleSection/VehicleInformationDrawer/Runingicon.png";
 import "./osmap.css"
 
 
@@ -11,6 +12,12 @@ import "./osmap.css"
 
 const customIcon = new L.Icon({
   iconUrl: caricon,
+  iconSize: [80, 80],
+  iconAnchor: [40, 80],
+  popupAnchor: [0, -50],
+});
+const Runingcar = new L.Icon({
+  iconUrl: Runingicon,
   iconSize: [80, 80],
   iconAnchor: [40, 80],
   popupAnchor: [0, -50],
@@ -111,28 +118,123 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 //     </div>
 //   );
 // };
-const OSMap = ({todayVehicle }) => {
+
+
+
+//this component for Autozooming
+
+const MapAutoZoom = ({ hover, todayVehicle }) => {
+  const map = useMap();
+  const hasAutoZoomed = useRef(false);
+  useEffect(() => {
+    if (hover?.vehRegNo && todayVehicle?.length > 0) {
+      const matchedVehicle = todayVehicle.find(
+        (v) => v.Vehicle_No === hover.vehRegNo
+      );
+
+      if (matchedVehicle?.Latitude_loc && matchedVehicle?.Longtitude_loc) {
+        const lat = parseFloat(matchedVehicle.Latitude_loc);
+        const lng = parseFloat(matchedVehicle.Longtitude_loc);
+        map.flyTo([lat, lng], 14, { duration: 1.5 });
+        return; 
+      }
+    }
+
+  if (!hover && !hasAutoZoomed.current && todayVehicle?.length > 0) {
+      const bounds = todayVehicle
+        .filter(v => v.Latitude_loc && v.Longtitude_loc)
+        .map(v => [parseFloat(v.Latitude_loc), parseFloat(v.Longtitude_loc)]);
+
+      if (bounds.length > 0) {
+        const leafletBounds = L.latLngBounds(bounds);
+        map.flyToBounds(leafletBounds, { padding: [60, 60], duration: 1.5 });
+        hasAutoZoomed.current = true; 
+      }
+    }
+
+  }, [hover, todayVehicle, map]);
+
+  return null;
+};
+
+const OSMap = ({todayVehicle,hover }) => {
   // console.log(vehicleCurrentLocation, vehicleCurrentLocation.length, "checkkkkkkkkkkkkk");
   // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), [todayVehicle]);
+// console.log(todayVehicle,"kk")
+
+  // console.log(hover, " hoveredvalues");
+  // console.log(todayVehicle, "today vehilce");
+  
+ const vehicleDetails = hover?.vehRegNo
+  ? todayVehicle?.filter(v => v.Vehicle_No === hover.vehRegNo)?.map(v => ({
+      ...v,
+      ...hover
+    }))
+  : todayVehicle;
+
+// console.log(vehicleDetails?.[0]?.Latitude_loc,"checkingggg");
 
 
+  // return (
+  //   // <div style={{ height: "100vh", width: "100vw" }}>
+  //     <MapContainer center={[13.080555, 80.163118]} zoom={13} minZoom={1}  // Prevent zooming out too much
+  //     // <MapContainer center={center} zoom={13} minZoom={1}
+  //     maxZoom={19} style={{ height: "90%", width: "100%" }}>
+  //       <TileLayer
+  //         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  //         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  //       />
+
+  //       {/* Marker Cluster Group with Custom Blue Cluster */}
+  //       <MarkerClusterGroup iconCreateFunction={createClusterIcon}>
+  //         {todayVehicle?.map((vehicle, index) => (
+  //           <Marker
+  //             key={index}
+  //             position={[parseFloat(vehicle.Latitude_loc), parseFloat(vehicle.Longtitude_loc)]}
+  //             icon={vehicle.Trip_Status === "On_Going" ? Runingcar : customIcon }
+  //           >
+              
+  //               <Tooltip className="tooltip" direction="top"  offset={[0, -60]} opacity={1} permanent>
+  //   <div style={{backgroundColor: '#203254', fontWeight: 'bold',
+  //   color: '#FFF', borderRadius: '6px', boxShadow: '0px 2px 6px rgba(0,0,0,0.3)', width: '70px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', textAlign: 'center', overflow: 'hidden',padding: '2px',}}>
+  //     {/* {vehicle.Vehicle_No} or any text you want */}
+  //     {vehicle?.Vehicle_No.slice(-4)}
+
+  //   </div>
+  // </Tooltip>
+
+  //             <Popup>
+  //               <div><strong>Vehicle No:</strong> {vehicle.Vehicle_No}</div>
+  //               <div><strong>Group1:</strong> {vehicle.Group}</div>
+  //               <div><strong>Driver:</strong> {vehicle.Driver}</div>
+  //               <div><strong>Location:</strong> {vehicle.Location}</div>
+  //               <div><strong>Nearest Address:</strong> {vehicle.Nearest_Address}</div>
+  //               <div><strong>Distance to Jessy Cabs:</strong> {calculateDistance(jessyCabsLocation.lat, jessyCabsLocation.lng, parseFloat(vehicle.Latitude_loc), parseFloat(vehicle.Longtitude_loc))} km</div>
+  //             </Popup>
+  //           </Marker>
+  //         ))}
+  //       </MarkerClusterGroup>
+  //     </MapContainer>
+  //   // </div>
+  // );
   return (
     // <div style={{ height: "100vh", width: "100vw" }}>
       <MapContainer center={[13.080555, 80.163118]} zoom={13} minZoom={1}  // Prevent zooming out too much
       // <MapContainer center={center} zoom={13} minZoom={1}
-      maxZoom={19} style={{ height: "100%", width: "100%" }}>
+      maxZoom={19} style={{ height: "90%", width: "100%" }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
+         <MapAutoZoom hover={hover} todayVehicle={todayVehicle} />
         {/* Marker Cluster Group with Custom Blue Cluster */}
         <MarkerClusterGroup iconCreateFunction={createClusterIcon}>
-          {todayVehicle?.map((vehicle, index) => (
+          {vehicleDetails?.map((vehicle, index) => (
             <Marker
               key={index}
               position={[parseFloat(vehicle.Latitude_loc), parseFloat(vehicle.Longtitude_loc)]}
-              icon={customIcon}
+              icon={vehicle.Trip_Status === "On_Going" ? Runingcar : customIcon }
             >
               
                 <Tooltip className="tooltip" direction="top"  offset={[0, -60]} opacity={1} permanent>

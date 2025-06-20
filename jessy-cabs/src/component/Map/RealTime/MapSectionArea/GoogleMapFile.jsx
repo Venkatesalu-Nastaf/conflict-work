@@ -1,14 +1,15 @@
-import React,{useMemo,useState}from "react";
+import React,{useMemo,useState,useRef, useEffect}from "react";
 import { GoogleMap, LoadScript, MarkerF,useJsApiLoader,InfoWindow,InfoBoxF,OverlayView} from "@react-google-maps/api";
 import { MarkerClustererF } from "@react-google-maps/api";
 import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png"
+import { ApiKey } from "../../../ApiKey/mapApiKey";
 // import caricon from "../VehicleSection/VehicleInformationDrawer/mapicon.png"
 // import smallcar from "../../../../assets/img/smallcar.jpg";
 // import
 
 const containerStyle = {
   width: "100%",
-  height: "500px",
+  height: "90%",
 };
 
 // const defaultCenter = {
@@ -34,36 +35,70 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return (R * c).toFixed(2); // Distance in km (2 decimal places)
 };
 
-const GoogleMapFile = ({ vehicleCurrentLocation }) => {
+const GoogleMapFile = ({ vehicleCurrentLocation, hover }) => {
   // const centerdata = {  lat: 13.080555,lng: 80.163118, }
   // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), [vehicleCurrentLocation]);
-  console.log(vehicleCurrentLocation , "koVehicle Locations----------------");
+  // console.log(vehicleCurrentLocation , "koVehicle Locations----------------");
   const [selectedVehicle, setSelectedVehicle] = useState(null);
+
+  //  console.log(hover, "koVehicle Locations");
 
   // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), []);
   const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), []);
+  const libraries = ['places', 'geometry', 'drawing', 'visualization'];
     const { isLoaded } = useJsApiLoader({
-       googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+      //  googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+      googleMapsApiKey: ApiKey,
+       libraries,
      });
      console.log(isLoaded,"lo")
    
-   
+       const mapRef = useRef(null);
+       
+    const vehicleDetails =hover ? vehicleCurrentLocation ?.filter(v=> v.Vehicle_No === hover.vehRegNo)?.
+                          map(v=>({...v, ...hover})) : vehicleCurrentLocation
+
+  useEffect(() => {
+  if (hover && mapRef.current && vehicleCurrentLocation?.length > 0) {
+    const vehicle = vehicleCurrentLocation.find(
+      (v) => v.Vehicle_No === hover.vehRegNo
+    );
+
+    if (vehicle && vehicle.Latitude_loc && vehicle.Longtitude_loc) {
+      const lat = parseFloat(vehicle.Latitude_loc);
+      const lng = parseFloat(vehicle.Longtitude_loc);
+      const position = { lat, lng };
+
+      mapRef.current.panTo(position);
+
+      mapRef.current.setZoom(15);
+    }
+  }
+   else if (!hover && mapRef.current) {
+    mapRef.current.setZoom(8); 
+    mapRef.current.panTo(center); 
+  }
+}, [hover, vehicleCurrentLocation, center]);
+
+
+
+  //  console.log(vehicleDetails?.[0]?.Latitude_loc,"checkingggg");
   return (
     // <LoadScript>
       <GoogleMap
       // options = {OPTIONS}
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={10
-          
+        zoom={10         
         }
+       onLoad={map => (mapRef.current = map)} 
       >
  <MarkerClustererF 
       
         > 
  {(clusterer) =>
           
-            vehicleCurrentLocation?.map((vehicle, index) => (
+            vehicleDetails?.map((vehicle, index) => (
               
               <MarkerF
                 key={index}

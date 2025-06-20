@@ -13,7 +13,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
 // import Avatar from "../../../../assets/img/avatar.png"
 import { UserPermission } from '../../../UserPermission/UserPermission'
 import { PermissionContext } from '../../../context/permissionContext';
@@ -30,8 +30,8 @@ import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import { faUnlockKeyhole, faMailBulk, faPhone } from "@fortawesome/free-solid-svg-icons";
 
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+// import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+// import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 
 // REACT ICONS
@@ -100,16 +100,16 @@ const EmployeeCreation = ({ stationName }) => {
     // handleAutocompleteChange,
     showPasswords,
     handleClickShowPasswords,
-    handleMouseDownPasswords, handleAutocompleteChangeStationName, handleChangeuniquecreation, cerendentialdata,handlerolepermissiondata,
-    isEditMode,handlenochangedatarole,emptyrole,setBook,
-    handleEdit, showPermission, setShowPermission, handleCheckboxChangealldata,deleteuserceationdata,setDeleteUsercreation,
+    handleMouseDownPasswords, handleAutocompleteChangeStationName, handleChangeuniquecreation, cerendentialdata, handlerolepermissiondata,
+    isEditMode, handlenochangedatarole, emptyrole, setBook,
+    handleEdit, showPermission, setShowPermission, handleCheckboxChangealldata, deleteuserceationdata, setDeleteUsercreation,
     // setPermissionsData,setModifyState,setDeleteState,setNewState,
     // rolefield,rolefielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1,
-
-    permissionsData, handleSwitchChange, handleCheckboxChange, setEmptyrole,setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows,setCredentialData
+    permissionsData, handleSwitchChange, handleCheckboxChange, setEmptyrole, setReadState, readState, newState, modifyState, deleteState, handleSwitchforthatrow, handleSwitchforallrows, setCredentialData
   } = useEmplyeecreation();
 
-  const {permissionsData1,setRoleFielddropdown,emptyroletype,setEmptyroletype,handleCheckboxChangealldata1,modalrolefield,error1,errormessage1,handleButtondeleteClickrole, handleEditrole,hidePopup1,handleAddrole, handleSwitchChange1,handleOpenModal,isModalOpen,successMessage1,success1, handleCloseModal,handleCheckboxChange1, readState1, newState1, modifyState1, deleteState1, handleSwitchforthatrow1, handleSwitchforallrows1,rolefield,rolefielddropdown,rolefiledsdata,handleRoleChange,handleRoleChange1}=useEmplyeecreationrole();
+  // console.log(cerendentialdata,"checking the values")
+  const { permissionsData1, setRoleFielddropdown, emptyroletype, setEmptyroletype, handleCheckboxChangealldata1, modalrolefield, error1, errormessage1, handleButtondeleteClickrole, handleEditrole, hidePopup1, handleAddrole, handleSwitchChange1, handleOpenModal, isModalOpen, successMessage1, success1, handleCloseModal, handleCheckboxChange1, readState1, newState1, modifyState1, deleteState1, handleSwitchforthatrow1, handleSwitchforallrows1, rolefield, rolefielddropdown, rolefiledsdata, handleRoleChange, handleRoleChange1 } = useEmplyeecreationrole();
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -118,8 +118,8 @@ const EmployeeCreation = ({ stationName }) => {
   }, [actionName, handleClick]);
 
   const [stationNameforUSer, setSationNameforUser] = useState([])
-  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-  const checkedIcon = <CheckBoxIcon fontSize="small" />;
+  // const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  // const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   useEffect(() => {
 
@@ -127,9 +127,9 @@ const EmployeeCreation = ({ stationName }) => {
     if (stationName?.length > 0) {
       //   // const data = stationName?.map(el => el.map(el => el.Stationname));
       const data = stationName?.map(el => el.Stationname);
-      const updatedData = [...data,"All"];
+      const updatedData = [...data, "All"];
 
-setSationNameforUser(updatedData);
+      setSationNameforUser(updatedData);
 
       // setSationNameforUser(data);
       // }
@@ -154,33 +154,33 @@ setSationNameforUser(updatedData);
     setShowPermission(true);
     setSelectedUserId(row.userid)
   };
-  useEffect(()=>{
-    if(!emptyrole){
+  useEffect(() => {
+    if (!emptyrole) {
       setRoleFielddropdown('')
       setEmptyrole(true)
       // console.log(1,"down")
     }
-  },[emptyrole,setRoleFielddropdown,setEmptyrole])
-  useEffect(()=>{
-    if(!emptyroletype){
+  }, [emptyrole, setRoleFielddropdown, setEmptyrole])
+  useEffect(() => {
+    if (!emptyroletype) {
       setBook((prevBook) => ({
         ...prevBook,
-        RoleUser:'',
-    }));
+        RoleUser: '',
+      }));
       setEmptyroletype(true)
       // console.log(2,"down")
     }
-  },[emptyroletype,setEmptyroletype])
+  }, [emptyroletype, setEmptyroletype])
   // console.log(rolefielddropdown,"down",book.RoleUser,emptyrole)
 
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
 
-  const UserCreation_read = permissions[15]?.read;
-  const UserCreation_new = permissions[15]?.new;
-  const UserCreation_modify = permissions[15]?.modify;
-  const UserCreation_delete = permissions[15]?.delete;
+  const UserCreation_read = permissions[16]?.read;
+  const UserCreation_new = permissions[16]?.new;
+  const UserCreation_modify = permissions[16]?.modify;
+  const UserCreation_delete = permissions[16]?.delete;
 
   // search operation ----------------
   const [searchUser, setSearchUser] = useState("")
@@ -196,7 +196,7 @@ setSationNameforUser(updatedData);
     );
   }, [rows, searchUser]);
   // const [isModalOpen, setModalOpen] = useState(false);
- 
+
 
   // const handleOpenModal = () =>{
   //   if(!rolefielddropdown){
@@ -234,6 +234,7 @@ setSationNameforUser(updatedData);
                     // onChange={handleChange}
                     // variant="standard"
                     style={{ width: '100%' }}
+                    inputProps={{ readOnly: true }}
                   />
                 </div>
                 <div className="input">
@@ -334,17 +335,19 @@ setSationNameforUser(updatedData);
                     isOptionEqualToValue={(option, value) => option === value}
                     disableCloseOnSelect
                     getOptionLabel={(option) => option}
-                    renderOption={(props, option, { selected }) => (
-                      <li {...props}>
-                        <Checkbox
-                          icon={icon}
-                          checkedIcon={checkedIcon}
-                          style={{ marginRight: 8 }}
-                          checked={selected}
-                        />
-                        {option}
-                      </li>
-                    )}
+                    renderOption={(props, option, { selected }) => {
+                      const { key, ...rest } = props;
+                      return (
+                        <li key={key} {...rest}>
+                          <Checkbox
+                            style={{ marginRight: 8 }}
+                            checked={selected}
+                          />
+                          {option}
+                        </li>
+                      );
+                    }}
+
                     // style={{ width: 170 }}
                     renderInput={(params) => (
                       <TextField {...params} label="Station Name" placeholder="Organization" style={{ width: '185px' }} />
@@ -412,12 +415,12 @@ setSationNameforUser(updatedData);
                 {/* {console.log(rolefield,"role",rolefielddropdown)} */}
                 {/* {console.log(rolefielddropdown,"qdownrole",book.RoleUser)} */}
 
-                <div className="input" style={{ paddingRight: '15px'}}>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
-                  <div style={{display:"flex", alignItems:"center", gap:"5px"}}>
-                  {/* <TextField
+                  <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                    {/* <TextField
                     size="small"
                     name="Role"
                     value={book.organizationname || ''}
@@ -426,117 +429,116 @@ setSationNameforUser(updatedData);
                     id="Role"
                     style={{ width: '100%' }}
                   /> */}
-                 
-                        
-                        <Autocomplete
-                                  fullWidth
-                                  size="small"
-                                  id="Role"
-                                  freeSolo
-                                  sx={{ width: "100%" }}
+
+
+                    <Autocomplete
+                      fullWidth
+                      size="small"
+                      id="Role"
+                      freeSolo
+                      sx={{ width: "100%" }}
                                   onChange={(event, value) =>{
-                                    // setRoleFielddropdown(value)
+                        // setRoleFielddropdown(value)
                                     handleRoleChange(event, value)
                                     handlerolepermissiondata(event,value)
-                                  }
-                                    }
+                      }
+                      }
                                   onInputChange={(event, value) =>
                                     {
                                       if(event !== null){
                                       handleRoleChange1(event, value)
                                       handlenochangedatarole(value)
-                                      
+
                                     }} }
-                                    
-                                    // Handle manual input
-                                  // onInputChange={(event, value) =>{
-                                  //   if(event !== null){
-                                  //     setNoChangeData({ ...nochangedata,vehRegNo: value });
-                                  //     setRoleFielddropdown(value)
-                                    
-                                  //   }
-                                    
-                                    // }}
-                                  // onKeyDown={handleKeyEnterdriver}
-                                  value={rolefielddropdown || book.RoleUser || ''}  // Reflect vehRegNo correctly
-                                  options={rolefiledsdata?.map((option) => ({ label: option }))}  // Map vehRegNo from data
-                                  getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''}  // Adjust to show input value or option label
-                                  renderInput={(params) => (
-                                    <TextField
-                                      {...params}
-                                      label="Role"
-                                      // name="vehRegNo"
-                                      value={rolefielddropdown || book.RoleUser || ''}  
-                                       name="Role"
-                                      inputRef={params.inputRef}
-                                      style={{ width: '185px' }}
-                                    />
-                                  )}
-                                />
-                 
-                    <FaPlusCircle style={{fontSize:"30px",color:"#1976d2",cursor:"pointer"}} onClick={()=>handleOpenModal(rolefielddropdown,book?.RoleUser)}/>
+
+                      // Handle manual input
+                      // onInputChange={(event, value) =>{
+                      //   if(event !== null){
+                      //     setNoChangeData({ ...nochangedata,vehRegNo: value });
+                      //     setRoleFielddropdown(value)
+
+                      //   }
+
+                      // }}
+                      // onKeyDown={handleKeyEnterdriver}
+                      value={rolefielddropdown || book.RoleUser || ''}  // Reflect vehRegNo correctly
+                      options={rolefiledsdata?.map((option) => ({ label: option }))}  // Map vehRegNo from data
+                      getOptionLabel={(option) => typeof option === "string" ? option : option.label || ''}  // Adjust to show input value or option label
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Role"
+                          // name="vehRegNo"
+                          value={rolefielddropdown || book.RoleUser || ''}
+                          name="Role"
+                          inputRef={params.inputRef}
+                          style={{ width: '185px' }}
+                        />
+                      )}
+                    />
+                    <FaPlusCircle style={{ fontSize: "30px", color: "#1976d2", cursor: "pointer" }} onClick={() => handleOpenModal(rolefielddropdown, book?.RoleUser)} />
                   </div>
                 </div>
                 <Modal open={isModalOpen} onClose={handleCloseModal}>
-                  <Box 
+                  <Box
                     sx={{
                       position: 'absolute',
                       top: '50%',
                       left: '50%',
                       transform: 'translate(-50%, -50%)',
                       width: '70%',
-                      height:"500px",
-                      overflowY:"auto",
+                      height: "500px",
+                      overflowY: "auto",
                       bgcolor: '#fff',
                       boxShadow: 24,
                       p: '0px 12px 12px 12px',
                       borderRadius: 2,
                     }}
                   >
-                    
-                  <div className='role-input-divi'>
-                  <TextField
-                    size="small"
-                    name="Selected Role"
-                    // value={rolefielddropdown || ''}
-                    value={modalrolefield || ''}
-                    // onChange={handleChange}
-                    label="Selected Role"
-                    id="Selected Role"
-                  
-                      className='role-input'
-                  />
-                  
-          <div>
-          {rolefield ?
-             <Button
-            // disabled={!Mailer_delete}
-            onClick={handleButtondeleteClickrole}
-            aria-label="delete"
-            sx={{ color: 'red' }}
-          >
-            <DeleteIcon />
-          </Button> : <></>
-}
-          </div>
-                  </div>
-                  <PermissionTableEmp 
-                    userid={selectedUserId}
-                  permissionsData={permissionsData1}
-                  handleSwitchChange={handleSwitchChange1}
-                  handleCheckboxChange={handleCheckboxChange1}
-                  readState={readState1}
-                  newState={newState1}
-                  modifyState={modifyState1}
-                  deleteState={deleteState1}
-                  handleSwitchforthatrow={handleSwitchforthatrow1}
-                  handleSwitchforallrows={handleSwitchforallrows1}
-                  handleCheckboxChangealldata={handleCheckboxChangealldata1} />
 
-                  {rolefield ? 
-                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleEditrole}>edit</Button>:
-                    <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handleAddrole}>Add</Button>}
-                        {/* <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handlechnagedatadirecttouser}>link to user</Button>: */}
+                    <div className='role-input-divi'>
+                      <TextField
+                        size="small"
+                        name="Selected Role"
+                        // value={rolefielddropdown || ''}
+                        value={modalrolefield || ''}
+                        // onChange={handleChange}
+                        label="Selected Role"
+                        id="Selected Role"
+
+                        className='role-input'
+                      />
+
+                      <div>
+                        {rolefield ?
+                          <Button
+                            // disabled={!Mailer_delete}
+                            onClick={handleButtondeleteClickrole}
+                            aria-label="delete"
+                            sx={{ color: 'red' }}
+                          >
+                            <DeleteIcon />
+                          </Button> : <></>
+                        }
+                      </div>
+                    </div>
+                    <PermissionTableEmp
+                      userid={selectedUserId}
+                      permissionsData={permissionsData1}
+                      handleSwitchChange={handleSwitchChange1}
+                      handleCheckboxChange={handleCheckboxChange1}
+                      readState={readState1}
+                      newState={newState1}
+                      modifyState={modifyState1}
+                      deleteState={deleteState1}
+                      handleSwitchforthatrow={handleSwitchforthatrow1}
+                      handleSwitchforallrows={handleSwitchforallrows1}
+                      handleCheckboxChangealldata={handleCheckboxChangealldata1} />
+
+                    {rolefield ?
+                      <Button style={{ display: "flex", justifyContent: "flex-end", width: '100%' }} onClick={handleEditrole}>edit</Button> :
+                      <Button style={{ display: "flex", justifyContent: "flex-end", width: '100%' }} onClick={handleAddrole}>Add</Button>}
+                    {/* <Button  style={{display:"flex", justifyContent:"flex-end", width:'100%'}} onClick={handlechnagedatadirecttouser}>link to user</Button>: */}
                   </Box>
                 </Modal>
                 <div className="input radio">
@@ -648,13 +650,13 @@ setSationNameforUser(updatedData);
 
               </div>
             </div>
-{deleteuserceationdata &&
-            <DeleteConfirmationDialog
+            {deleteuserceationdata &&
+              <DeleteConfirmationDialog
                 open={deleteuserceationdata}
                 onClose={() => setDeleteUsercreation(false)}
                 onConfirm={handleClick}
               />
-}
+            }
             <div className='alert-popup-main'>
               {error &&
                 <div className='alert-popup Error' >
@@ -663,7 +665,7 @@ setSationNameforUser(updatedData);
                   <p>{errorMessage}</p>
                 </div>
               }
-               {error1 &&
+              {error1 &&
                 <div className='alert-popup Error' >
                   <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
                   <span className='cancel-btn' onClick={hidePopup1}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
@@ -684,7 +686,7 @@ setSationNameforUser(updatedData);
                   <p>{successMessage}</p>
                 </div>
               }
-               {success1 &&
+              {success1 &&
                 <div className='alert-popup Success' >
                   <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                   <span className='cancel-btn' onClick={hidePopup1}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
@@ -729,12 +731,12 @@ setSationNameforUser(updatedData);
                   //   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                   // />
                   <SpeedDialAction
-                  key="delete"
-                  icon={<DeleteIcon />}
-                  tooltipTitle="Delete"
-                  onClick={() => setDeleteUsercreation(true)}
-                
-                />
+                    key="delete"
+                    icon={<DeleteIcon />}
+                    tooltipTitle="Delete"
+                    onClick={() => setDeleteUsercreation(true)}
+
+                  />
                 )}
                 {UserCreation_new === 1 && !isEditMode && (
                   <SpeedDialAction

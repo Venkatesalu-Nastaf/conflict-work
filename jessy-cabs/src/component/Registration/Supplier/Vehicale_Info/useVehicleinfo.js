@@ -6,6 +6,7 @@ import { saveAs } from 'file-saver';
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 import Excel from 'exceljs';
+import encryption from '../../../dataEncrypt';
 
 const useVehicleinfo = () => {
     const apiUrl = APIURL;
@@ -115,11 +116,11 @@ const useVehicleinfo = () => {
         }
         setSelectAll(prevState => !prevState);
     };
-
     //to see pdf
     const [allFile, setAllFile] = useState([]);
     const showPdf = (showID) => {
-        axios.get(`${apiUrl}/vehicle-docView/${showID}`)
+        const encryptId = encryption(showID)
+        axios.get(`${apiUrl}/vehicle-docView/${encryptId}`)
             .then(res => {
                 if (res.data.length > 0) {
                     setAllFile(res.data);
@@ -313,6 +314,7 @@ const useVehicleinfo = () => {
                     };
                 });
             });
+            
 
             // Write the content using writeBuffer
             const buf = await workbook.xlsx.writeBuffer();
@@ -628,6 +630,7 @@ const useVehicleinfo = () => {
         setSelectedCustomerData({});
         setIsEditMode(false);
         setDeletevehciledata(false)
+        // handleList();
     };
 
     const handleAutocompleteChange = (event, value, name) => {
@@ -680,8 +683,9 @@ const useVehicleinfo = () => {
 
     const uniquevechicleRegno = async (veghnodata) => {
         if (veghnodata) {
-
-            const response = await axios.get(`${apiUrl}/uniquevechregnodata/${veghnodata}`)
+            const encrypData = encryption(veghnodata);
+            // console.log(encrypData,"checking");     
+            const response = await axios.get(`${apiUrl}/uniquevechregnodata/${encrypData}`)
             const responsedata = response.data;
             if (responsedata?.length >= 1) {
 
@@ -995,7 +999,10 @@ const useVehicleinfo = () => {
             const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
             // Download each file
             for (const file of selectedFiles) {
-                const response = await axios.get(`${apiUrl}/public/vehicle_doc/` + file.fileName, {
+                // const response = await axios.get(`${apiUrl}/public/vehicle_doc/` + file.fileName, {
+                //     responseType: 'blob', // Important to get a binary response
+                // });
+                 const response = await axios.get(`${apiUrl}/vehicle_doc/` + file.fileName, {
                     responseType: 'blob', // Important to get a binary response
                 });
                 // Convert image blob to base64 data URL
@@ -1026,6 +1033,7 @@ const useVehicleinfo = () => {
 
             const { id, vehicleId, ...restselectedcustomerdata } = selectedCustomerData
             await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`, restselectedcustomerdata);
+            // console.log(restselectedcustomerdata,"checking");      
             addFcCopy_copy(selectedCustomerData.vehicleId);
             addRcBook_copy(selectedCustomerData.vehicleId);
             addStatePermit_copy(selectedCustomerData.vehicleId);
@@ -1073,7 +1081,7 @@ const useVehicleinfo = () => {
                 const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
                 if (response.status === 200) {
                     const userDataArray = await response.json();
-                      console.log(userDataArray,'userdata');
+                    //   console.log(userDataArray,'userdata');
                     if (userDataArray.length > 0) {
                         setOrganisationSendEmail(userDataArray[0])
                         // setDatatrigger(!datatrigger)
@@ -1089,95 +1097,95 @@ const useVehicleinfo = () => {
         fetchData();
     }, [apiUrl]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/TemplateforFCdate`);
-                if (response.status === 200) {
-                    const userDataArray = await response.json();
-                    if (userDataArray.length > 0) {
-                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
-                } else {
-                    console.log("Failed to fetch data, status:", response.status);
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-            }
-        };
-        fetchData();
-    }, [apiUrl],[templateMessageData]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/TemplateforFCdate`);
+    //             if (response.status === 200) {
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+    //                 } 
+    //             } else {
+    //                 console.log("Failed to fetch data, status:", response.status);
+    //             }
+    //         } catch (error) {
+    //             console.error("Fetch error:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl],[templateMessageData]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/Templateforstatepermitdate`);
-                if (response.status === 200) {
-                    const userDataArray = await response.json();
-                    if (userDataArray.length > 0) {
-                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
-                } else {
-                    console.log("Failed to fetch data, status:", response.status);
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-            }
-        };
-        fetchData();
-    }, [apiUrl],[templateMessageData]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/Templateforstatepermitdate`);
+    //             if (response.status === 200) {
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+    //                 } 
+    //             } else {
+    //                 console.log("Failed to fetch data, status:", response.status);
+    //             }
+    //         } catch (error) {
+    //             console.error("Fetch error:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl],[templateMessageData]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/Templateforinsuranceduedate`);
-                if (response.status === 200) {
-                    const userDataArray = await response.json();
-                    if (userDataArray.length > 0) {
-                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
-                } else {
-                    console.log("Failed to fetch data, status:", response.status);
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-            }
-        };
-        fetchData();
-    }, [apiUrl],[templateMessageData]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/Templateforinsuranceduedate`);
+    //             if (response.status === 200) {
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+    //                 } 
+    //             } else {
+    //                 console.log("Failed to fetch data, status:", response.status);
+    //             }
+    //         } catch (error) {
+    //             console.error("Fetch error:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl],[templateMessageData]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${apiUrl}/Templatefornationalpermitdate`);
-                if (response.status === 200) {
-                    const userDataArray = await response.json();
-                    if (userDataArray.length > 0) {
-                        setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
-                } else {
-                    console.log("Failed to fetch data, status:", response.status);
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-            }
-        };
-        fetchData();
-    }, [apiUrl],[templateMessageData]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${apiUrl}/Templatefornationalpermitdate`);
+    //             if (response.status === 200) {
+    //                 const userDataArray = await response.json();
+    //                 if (userDataArray.length > 0) {
+    //                     setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
+    //                 } 
+    //             } else {
+    //                 console.log("Failed to fetch data, status:", response.status);
+    //             }
+    //         } catch (error) {
+    //             console.error("Fetch error:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl],[templateMessageData]);
 
     const handlecheckmaildriver = async () => {
         try {
             // Add templateMessageData to the dataToSend object
-            const dataToSend = {
-                email: book.email,
-                fcdate:book.fcdate,
-                // todate:book.todate,
-                Sendmailauth: organistaionsendmail.Sendmailauth,
-                Mailauthpass: organistaionsendmail.Mailauthpass,
-                templateMessageData
-            };
+            // const dataToSend = {
+            //     email: book.email,
+            //     fcdate:book.fcdate,
+            //     // todate:book.todate,
+            //     Sendmailauth: organistaionsendmail.Sendmailauth,
+            //     Mailauthpass: organistaionsendmail.Mailauthpass,
+            //     templateMessageData
+            // };
     
-            console.log("Sending data:", dataToSend); // For debugging purposes
+            // console.log("Sending data:", dataToSend); // For debugging purposes
             // await axios.post(`${apiUrl}/send-emailagreementdata`, dataToSend);
             setSuccess(true);
             setSuccessMessage("Mail Sent Successfully");
@@ -1191,22 +1199,24 @@ const useVehicleinfo = () => {
     const handleClick = async (event,actionName) => {
         // try{
         if (actionName === 'List') {
-            const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
-            const data = response.data;
+            // const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
+            // const data = response.data;
+            // console.log(data,"check");       
 
-            if (data.length > 0) {
-                const rowsWithUniqueId = data.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-                setRows(rowsWithUniqueId);
-                setSuccess(true);
-                setSuccessMessage('Successfully listed');
-            } else {
-                setRows([]);
-                setError(true);
-                setErrorMessage('No data found');
-            }
+            // if (data.length > 0) {
+            //     const rowsWithUniqueId = data.map((row, index) => ({
+            //         ...row,
+            //         id: index + 1,
+            //     }));
+            //     setRows(rowsWithUniqueId);
+            //     setSuccess(true);
+            //     setSuccessMessage('Successfully listed');
+            // } else {
+            //     setRows([]);
+            //     setError(true);
+            //     setErrorMessage('No data found');
+            // }
+            handleList();
 
         }
         else if (actionName === 'Cancel') {
@@ -1218,6 +1228,7 @@ const useVehicleinfo = () => {
         else if (actionName === 'Delete') {
             try{
             await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`);
+            // console.log(selectedCustomerData?.vehicleId);      
             setSelectedCustomerData({});
             handleCancel();
             setRows([]);
@@ -1285,6 +1296,8 @@ const useVehicleinfo = () => {
         try {
             const response = await axios.get(`${apiUrl}/vechileinfogetdata`);
             const data = response.data;
+            // console.log(data,"getting the values");
+            
             const rowsWithUniqueId = data.map((row, index) => ({
                 ...row,
                 id: index + 1,
@@ -1314,14 +1327,16 @@ const useVehicleinfo = () => {
 
     useEffect(() => {
         handleList();
-    }, [handleList]);
+    }, []);
 
     //search funtion
     const handleSearch = async () => {
         try {
-            const response = await fetch(`${apiUrl}/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+            const encryptSearchText = searchText ? encryption(searchText) : '';
+            // console.log(encryptSearchText,"searching");      
+            const response = await fetch(`${apiUrl}/searchvehicleinfo?searchText=${encryptSearchText}&fromDate=${fromDate}&toDate=${toDate}`);
             const data = await response.json();
-            console.log(data, "typedata")
+            // console.log(data, "typedata")
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
                     ...row,
@@ -1362,11 +1377,16 @@ const useVehicleinfo = () => {
     };
 
     const handleenterSearch = async (e) => {
+        if(searchText === "") return;
         if (e.key === "Enter") {
 
             try {
+
+                const encryptText = encryption(searchText);
+                // console.log(encryptText,"searchinggg");
+                
                 const response = await fetch(
-                    `${apiUrl}/searchvehicleinfo?searchText=${searchText}`
+                    `${apiUrl}/searchvehicleinfo?searchText=${encryptText}`
                 );
                 const data = await response.json();
 

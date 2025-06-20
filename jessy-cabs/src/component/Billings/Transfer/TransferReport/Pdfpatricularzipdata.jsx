@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { APIURL } from "../../../url";
 import dayjs from "dayjs";
-import { Page, Text, View, Document as PDFDocument, StyleSheet, Image, } from '@react-pdf/renderer';
+import { Page, Text, View, Document as PDFDocument, StyleSheet, Image ,Font } from '@react-pdf/renderer';
+import NotoTamil from '../../../Font/NotoSansTamil-Regular.ttf';
 
+Font.register({
+  family: 'NotoTamil',
+  src: NotoTamil,
+});
 
 const styles = StyleSheet.create({
+
+   tamilText: {
+    fontFamily: 'NotoTamil',
+    fontSize: 8,
+  },
+
   page: {
     flexDirection: 'row',
+    fontSize: "inherit",
     // padding: 10,
   },
   heading: {
     // border: '2px solid rgb(15, 1, 1)',
-    padding: '20px',
+    padding: '15px',
     // height: "",
   },
 
@@ -26,78 +38,85 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: '130px',
-    padding: '0px'
-
+    padding: '0px',
+    marginTop: "2px"
   },
 
   text1: {
-    fontSize: '15px',
-    fontWeight: 'bold'
+    fontSize: '11px',
+    width: "54%",
+    fontWeight: '500',
   },
   text2: {
-    fontSize: '11px',
+    fontSize: '10px',
 
   },
   text2add: {
-    fontSize: '11px',
-    width: "80%",
-    textAlign:"justify",
-    // backgroundColor:"red"
-
+    fontSize: '9px',
+    width: "54%",
+    textAlign: "justify",
   },
 
   gstno: {
-    fontSize: '11px',
-    fontWeight: 'bold'
+    fontSize: '10px',
+    // fontWeight: 'bold'
   },
 
 
   logo: {
-    height: 50,
-    width: 50
+    height: 40,
+    width: 70
   },
 
   headingsection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center',
-    height:"100px"
+    alignItems: "flex-start",
+    // height: "70px",
   },
   logodiv: {
     // marginBottom: 10
-    width:"25%",
+    width: "25%",
     padding: '0px',
-    flexDirection:'row',
-    justifyContent:'flex-end'
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  maintablediv: {
+    border: '1px solid #000000',
   },
   maintabble: {
-    border: '1px solid #000000',
+    // border: '1px solid #000000',
     // display:"flex",
     flexDirection: 'row',
     justifyContent: "space-between",
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: '10px',
     paddingRight: "10px"
   },
   deatilssection: {
 
     flexDirection: 'row',
-    marginTop: "5px",
-
+    // marginTop: "5px",
+    // marginBottom: "1px",
+    alignItems: "center",
 
   },
   deatilssection1: {
 
     flexDirection: 'row',
     // marginTop:"20px",
-    marginBottom: "4px",
+    // marginBottom: "1px",
     alignItems: "center",
 
   },
   labeltag: {
-    fontSize: '10px',
-    fontWeight: 'extrabold',
-    width: '70px',
+    fontSize: '9px',
+    color: '#545151',
+    width: '80px',
+    backgroundColor: '#EEE',
+    padding: "5px 6px",
+    border: 'none',
+    textAlign: 'justify',
   },
   labelMidContainer: {
     fontSize: '10px',
@@ -105,16 +124,18 @@ const styles = StyleSheet.create({
     width: '70px',
   },
   clientName: {
-    fontSize: '10px',
-    color: '#000000',
-    fontWeight: 'extrabold',
+    fontSize: '9px',
+    color: '#545151',
+    padding: "6px",
+    // fontWeight: 'extrabold',
 
   },
   clientNameadd: {
-    fontSize: '10px',
-    color: '#000000',
-    fontWeight: 'extrabold',
-    width: "40%"
+    fontSize: '9px',
+    color: '#545151',
+    // fontWeight: 'extrabold',
+    width: "40%",
+    padding: "6px"
 
   },
   // labeltag1: {
@@ -126,39 +147,43 @@ const styles = StyleSheet.create({
     fontSize: '10px',
     color: '#545151',
     // textAlign: 'center',
-    width:"80%",
+    width: "80%",
 
   },
   clientAddress: {
-    fontSize: '10px',
-    color: '#000000',
-    fontWeight: 'extrabold',
+    padding: "6px",
+    fontSize: '9px',
+    color: '#545151',
+    // fontWeight: 'extrabold',
     textAlign: 'justify',
     lineHeight: '1.3px',
     width: '45%'
   },
   remarksection: {
     flexDirection: 'row',
-    alignItems:"flex-start",
+    alignItems: "flex-start",
     gap: '10px',
-    borderLeft: '1px solid #000000',
-    borderRight: '1px solid #000000',
+    // borderLeft: '1px solid #000000',
+    // borderRight: '1px solid #000000',
     // height: 30,
-    padding:"5px"
+    padding: "5px"
 
 
   }, tablesigndiv: {
     flexDirection: "row",
-    border: '1px solid #000000',
-
+    // border: '1px solid #000000',
+    borderLeft: "1px solid #000000",
+    borderRight: "1px solid #000000",
+    borderBottom: "1px solid #000000",
   },
   tablediv: {
     width: '60%',
+    // borderRight: "1px solid #000000",
     // border: '1px solid green',
     // flexDirection:'row',
-    padding:"20px",
+    // padding: "20px",
     // borderLeft:"1px solid #000000",
-    // borderRight:"1px solid #000000",
+    borderRight: "1px solid #000000",
 
   },
   signdiv: {
@@ -173,143 +198,236 @@ const styles = StyleSheet.create({
   tablehead: {
     flexDirection: "row",
     // width:'25%',
-    textAlign: 'center',
-    borderBottom: '1px solid #000000'
+    textAlign: 'left',
+    // borderBottom: '1px solid #000000'
   },
   labeltag1: {
-
     width: '25%',
     // textAlign: 'center',
-    borderRight: '1px solid #000000',
-    borderTop: '1px solid #000000',
-    borderLeft: '1px solid #000000',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
   labeltagremark: {
     textAlign: 'center',
     fontSize: '10px',
-    paddingLeft: '5px'
-
+    paddingLeft: '5px',
+    // padding: "5px 6px",
+    backgroundColor: '#EEE',
+    border: 'none',
   },
   labeltag2: {
     width: '25%',
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
+    textAlign: 'left',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     fontSize: '10px',
-    padding: '1px',
-    borderTop:"1px solid #000000",
-    borderRight: '1px solid #000000'
+    padding: '2px',
+    color: '#545151',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
+    // borderTop: "1px solid #000000",
+    // borderRight: '1px solid #000000'
   },
 
   labeltag3: {
     width: '25%',
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
+    textAlign: 'left',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    color: '#545151',
     fontSize: '10px',
-    padding: '1px',
-    borderTop:"1px solid #000000",
-    borderRight: '1px solid #000000'
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
+    // borderTop: "1px solid #000000",
+    // borderRight: '1px solid #000000'
   },
   labeltag4: {
     width: '25%',
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
+    textAlign: 'left',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    color: '#545151',
     fontSize: '10px',
-    padding: '1px',
-    borderRight: '1px solid #000000',
-    borderTop:"1px solid #000000",
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
+    // borderRight: '1px solid #000000',
+    // borderTop: "1px solid #000000",
 
   },
 
   labeltag5: {
     fontSize: '10px',
     width: '25%',
-    textAlign: 'center',
-    borderRight: '1px solid #000000',
-    borderLeft: '1px solid #000000',
-    padding: '2px'
+    textAlign: 'left',
+    color: '#545151',
+    // borderRight: '1px solid #000000',
+    // borderLeft: '1px solid #000000',
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
   labeltag6: {
     width: '25%',
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: '10px',
-    borderRight: '1px solid #000000',
+    color: '#545151',
+    // borderRight: '1px solid #000000',
 
-    padding: '2px'
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
 
   labeltag9: {
     fontSize: '10px',
     width: '25%',
-    textAlign: 'center',
-    borderRight: '1px solid #000000',
-    borderLeft: '1px solid #000000',
-    padding: '2px'
+    textAlign: 'left',
+    color: '#545151',
+    // borderRight: '1px solid #000000',
+    // borderLeft: '1px solid #000000',
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
 
   labeltag10: {
     width: '25%',
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: '10px',
-    borderRight: '1px solid #000000',
-    padding: '2px'
+    color: '#545151',
+    // borderRight: '1px solid #000000',
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
 
   labeltag13: {
     fontSize: '10px',
     width: '25%',
-    textAlign: 'center',
-    borderRight: '1px solid #000000',
-    borderLeft: '1px solid #000000',
-    padding: '2px'
+    textAlign: 'left',
+    color: '#545151',
+    // borderRight: '1px solid #000000',
+    // borderLeft: '1px solid #000000',
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
   labeltag14: {
     fontSize: '10px',
     width: '25%',
-    textAlign: 'center',
-    borderRight: '1px solid #000000',
-    padding: '2px'
+    textAlign: 'left',
+    color: '#545151',
+    // borderRight: '1px solid #000000',
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
 
   labeltag17: {
     fontSize: '10px',
     width: '25%',
-    textAlign: 'center',
-    borderLeft: '1px solid #000000',
+    textAlign: 'left',
+    color: '#545151',
+    // borderLeft: '1px solid #000000',
 
-    borderRight: '1px solid #000000',
-    padding: '2px'
+    // borderRight: '1px solid #000000',
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
   labeltag18: {
     width: '25%',
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: '10px',
-
-    borderRight: '1px solid #000000',
-    padding: '2px'
+    color: '#545151',
+    // borderRight: '1px solid #000000',
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
 
   labeltag21: {
     fontSize: '10px',
     width: '25%',
-    textAlign: 'center',
-    borderLeft: '1px solid #000000',
-    borderRight: '1px solid #000000',
-    padding: '2px'
+    textAlign: 'left',
+    color: '#545151',
+    // borderLeft: '1px solid #000000',
+    // borderRight: '1px solid #000000',
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
   labeltag22: {
     width: '25%',
-    textAlign: 'center',
-    borderRight: '1px solid #000000',
+    textAlign: 'left',
+    color: '#545151',
+    // borderRight: '1px solid #000000',
     fontSize: '11px',
-    padding: '2px'
+    padding: '2px',
+    borderRight: '1px solid #ccc',
+    borderTop: '1px solid #ccc',
+    borderLeft: '1px solid #ccc',
+    borderBottom: '1px solid #ccc',
+    borderRadius: "2px",
+    margin: "1px",
   },
 
-
   tablehead1: {
-    borderBottom: '1px solid #000000',
+    // borderBottom: '1px solid #000000',
     flexDirection: 'row',
     // gap:'10px'
 
@@ -317,22 +435,22 @@ const styles = StyleSheet.create({
   },
   tablehead4: {
     flexDirection: 'row',
-    borderBottom: '1px solid #000000',
+    // borderBottom: '1px solid #000000',
 
   },
   tablehead2: {
     flexDirection: 'row',
-    borderBottom: '1px solid #000000',
+    // borderBottom: '1px solid #000000',
 
   },
   tablehead3: {
     flexDirection: 'row',
-    borderBottom: '1px solid #000000',
+    // borderBottom: '1px solid #000000',
 
   },
   tablehead5: {
     flexDirection: 'row',
-    borderBottom: '1px solid #000000',
+    // borderBottom: '1px solid #000000',
 
   }, signimg: {
     flexDirection: 'row',
@@ -351,24 +469,38 @@ const styles = StyleSheet.create({
 
   },
   mapdiv: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: "flex-start",
     // alignItems:'center',
-    gap: "30px",
+    gap: "10px",
     padding: '3px',
-    height:"190px",
-    // backgroundColor:"red",
+    // height: "190px",
+    height: "250px",
   },
   topmap: {
-    marginTop: "40px"
+    // marginTop: "40px"
+    display: "flex",
+    flexDirection: "row",
+    gap: "10px",
+
+  },
+  mapsection: {
+    display: "flex",
+    flexDirection: "row",
+    gap: "10px",
   },
   atimg: {
     textAlign: 'center'
   },
   addimg: {
     display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
+    // flexWrap: 'wrap',
+    flexDirection: 'column',
+    justifyContent: "center",
+    gap: "30px",
+    alignItems: "center",
+    // backgroundColor: "red",
+    // height: '100vh', 
   },
 
   imagedivadd: {
@@ -378,18 +510,20 @@ const styles = StyleSheet.create({
 
   imgwidth: {
     width: '50%',
-   
-
+    // height: '800px',
+    // backgroundColor: "yellow",
   },
 
-  headerSecond : {
-    width:"25%",
-    flexDirection:"row",
-    justifyContent:"flex-start"
+  headerSecond: {
+    width: "25%",
+    flexDirection: "row",
+    justifyContent: "flex-start"
   },
-  
+
   firstHeader: {
-    width:"48%"
+    width: "48%",
+    alignItems: "flex-end",
+    lineHeight: "1.5px",
   },
 
 
@@ -399,9 +533,9 @@ const styles = StyleSheet.create({
 const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, customerData, stationData }) => {
 
   const [orgname, setOrgname] = useState('')
-  const [orgaddress1, setOrgaddress1] = useState('')
-  const [orgaddress3, setOrgaddress3] = useState('')
-  const [address1, setAddress1] = useState('')
+  // const [orgaddress1, setOrgaddress1] = useState('')
+  // const [orgaddress3, setOrgaddress3] = useState('')
+  // const [address1, setAddress1] = useState('')
   const [guestaddress1, setGuestAddress1] = useState('')
   const [customer, setCustomer] = useState('')
   const [empno, setEmpno] = useState('')
@@ -428,8 +562,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   // const [tripsheetdate, setTripsheetdate] = useState('')
   const [tripStartDate, setTripStartDate] = useState('')
   const [tripCloseDate, setTripCloseDate] = useState('')
-   const [tripshedoutDate, setTripShedOutDate] = useState('')
-    const [tripshedinDate, setTripShedinDate] = useState('')
+  const [tripshedoutDate, setTripShedOutDate] = useState('')
+  const [tripshedinDate, setTripShedinDate] = useState('')
   // const [tripReporttime, setTripReporttime] = useState('')
   // const [tripClosetime, setTripClosetime] = useState('')
   const [tripReporttime, setTripReporttime] = useState('')
@@ -448,14 +582,14 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   const [totalparking, setTotalParking] = useState('')
   const [tripCustomercode, setTripCustomercode] = useState('')
   const [category, setCategory] = useState('')
-  const [addresscustomer, setAddresscustomer] = useState('')
-  const [bookimage, setBookingimage] = useState([])
-  const [starttime, setStarttime] = useState('0')
-  const [shedintime, setShedintime] = useState('0')
-  const [startkm, setStartkm] = useState('0')
-  const [closekm, setClosekm] = useState('0')
-  const [releasingKM, setReleasingKM] = useState('0')
-  const [reportKM, setReportKM] = useState('0')
+  // const [addresscustomer, setAddresscustomer] = useState('')
+  // const [bookimage, setBookingimage] = useState([])
+  // // const [starttime, setStarttime] = useState('0')
+  // // const [shedintime, setShedintime] = useState('0')
+  // // const [startkm, setStartkm] = useState('0')
+  // // const [closekm, setClosekm] = useState('0')
+  // // const [releasingKM, setReleasingKM] = useState('0')
+  // // const [reportKM, setReportKM] = useState('0')
 
 
   const [remark, setRemark] = useState('')
@@ -494,16 +628,16 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
   }
 
   useEffect(() => {
-    let addressone = ''
-    let addressthree = ''
+    // let addressone = ''
+    // let addressthree = ''
     let organisationname = ''
     organisationdetail?.forEach((li) => {
-      addressone = li.addressLine1
-      addressthree = li.location
+      // addressone = li.addressLine1
+      // addressthree = li.location
       organisationname = li.organizationname
     })
-    setOrgaddress1(addressone)
-    setOrgaddress3(addressthree)
+    // setOrgaddress1(addressone)
+    // setOrgaddress3(addressthree)
     setOrgname(organisationname)
   }, [organisationdetail])
 
@@ -551,17 +685,17 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     let Categorygroups = ''
     let routemapdata = []
     let attachedimagedata = []
-    let customeraddress1 = ""
-    let startTime = ''
-    let shedInTime = ''
-    let startkm = ''
-    let closekm = ''
-    let reportkm = ''
-    let releasekm = ''
-      let Tripshedoutdate = ''
+    // let customeraddress1 = ""
+    // let startTime = ''
+    // let shedInTime = ''
+    // let startkm = ''
+    // let closekm = ''
+    // let reportkm = ''
+    // let releasekm = ''
+    let Tripshedoutdate = ''
     let Tripshedindate = ''
 
-    let bookingimagedata = []
+    // let bookingimagedata = []
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
         addressone = li.address1
@@ -581,7 +715,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         mapimage = JSON.parse(li.map_data)
         routemapdata = JSON.parse(li.gmapdata)
         attachedimagedata = JSON.parse(li.Attachedimage)
-        bookingimagedata = JSON.parse(li.bookattachedimage)
+        // bookingimagedata = JSON.parse(li.bookattachedimage)
         packages = li.calcPackage
         Dropaddress = li.useage
         Report = li.transferreport
@@ -593,14 +727,15 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         Tripstartdate = li.startdate
         TripClosedate = li.closedate
         Tripshedoutdate = li.shedOutDate
-        Tripshedindate = li.shedInDate
+        // Tripshedindate = li.shedInDate
+        Tripshedindate = li.shedInDateold
 
         // Reporttime = li.starttime
         // Starttime = li.reporttime
         // CloseTime = li.closetime
         // Releasingtime = li.shedintime
 
-        
+
         Starttime = li.starttime
         Reporttime = li.reporttime
         CloseTime = li.closetime
@@ -611,9 +746,9 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         // ReleaseKm = li.closekm
 
         StartKm = li.startkm
-         ReportKm = li.shedout
-         ReleaseKm = li.shedin
-        CloseKm  = li.closekm
+        ReportKm = li.shedout
+        ReleaseKm = li.shedin
+        CloseKm = li.closekm
 
         // Reporttime = trimSeconds(li.reporttime)
         // startTime = trimSeconds(li.starttime)
@@ -631,7 +766,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
         TotalPermit = li.permit
         CustomerCode = li.customercode
         Categorygroups = li.orderedby
-        customeraddress1 = li.Customeraddress1
+        // customeraddress1 = li.Customeraddress1
 
 
 
@@ -639,26 +774,31 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
       })
     }
-    console.log(particularPdf, "pdfff")
+    // console.log(particularPdf, "pdfff")
 
 
 
     const uniqueArray = Array.from(new Set(attachedimagedata?.filter(item => item.attachedimageurl !== null)?.map(JSON.stringify)))?.map(JSON.parse);
 
-    const uniqueArraybook = Array.from(new Set(bookingimagedata?.filter(item => item.imagees !== null)?.map(JSON.stringify)))?.map(JSON.parse);
+    // const uniqueArraybook = Array.from(new Set(bookingimagedata?.filter(item => item.imagees !== null)?.map(JSON.stringify)))?.map(JSON.parse);
 
 
     // const uniqueArraybook = Array.from(new Set(bookingimagedata?.map(JSON.stringify)))?.map(JSON.parse);
 
     // Convert the unique array back to a JSON string
     const uniqueJsonString = JSON.stringify(uniqueArray);
-    const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
-    const mapdata = Array.from(new Set(routemapdata?.filter(item => item.trip_type !== null && item.place_name)?.map(JSON.stringify)))?.map(JSON.parse);
+    // const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+    // const mapdata = Array.from(new Set(routemapdata?.filter(item => item.trip_type !== null && item.place_name)?.map(JSON.stringify)))?.map(JSON.parse);
 
+    const mapdata = Array.from(new Set(routemapdata?.filter(item => item.trip_type !== null && item.place_name)?.map(JSON.stringify)))?.map(JSON.parse)?.sort((a, b) => {
+      const order = { start: 1, waypoint: 2, end: 3 };
+      return (order[a.trip_type] || 4) - (order[b.trip_type] || 4);
 
+    });
+    // console.log(mapdata,"mapdata")
     const { signature_path } = signatureimage
     const { map_path } = mapimage
-    setAddress1(customeraddress1)
+    // setAddress1(customeraddress1)
     setGuestAddress1(addressone)
     setCustomer(customers)
     setFuel(fueltype)
@@ -706,11 +846,11 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     setTotaltoll(TotalToll)
     setTripCustomercode(CustomerCode)
     setCategory(Categorygroups)
-    setAddresscustomer(customeraddress1)
+    // setAddresscustomer(customeraddress1)
     // setStarttime(startTime)
     // setShedintime(shedInTime)
     setCalcPackages(packages)
-    setBookingimage(JSON.parse(uniqueJsonStringbook))
+    // setBookingimage(JSON.parse(uniqueJsonStringbook))
     // setStartkm(startkm)
     // setClosekm(closekm)
     // setReleasingKM(releasekm)
@@ -718,14 +858,14 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
     setAttachedimage(JSON.parse(uniqueJsonString))
   }, [particularPdf])
 
-  const firstSet = routemap.slice(0, 12);
-  const nextSet = routemap.slice(12, 24);
-  const remainingItems = routemap.slice(24);
+  // const firstSet = routemap.slice(0, 12);
+  // const nextSet = routemap.slice(12, 24);
+  // const remainingItems = routemap.slice(24);
   const hclKm = parseInt(tripCloseKm || 0) - parseInt(tripStartKm || 0)
-  console.log(tripCloseKm, tripReportKm, "kmmmm")
-  console.log(bookimage, "bookimage", stationData, "stationData")
-  console.log(tripshedinDate,"tripshed",tripCloseDate)
-  console.log(vehicletype,"zip")
+  // console.log(tripCloseKm, tripReportKm, "kmmmm")
+  // console.log(bookimage, "bookimage", stationData, "stationData")
+  // console.log(tripshedinDate, "tripshed", tripCloseDate)
+  // console.log(vehicletype, "zip")
 
   return (
     <>
@@ -735,18 +875,17 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
             <View style={styles.borderoutsite}>
               <View style={styles.section}>
                 <View style={styles.headingsection}>
+                  <View style={styles.logodiv}>
+                    <Image src={organisationimage} style={styles.logo} />
+                  </View>
                   <View style={styles.firstHeader}>
                     <Text style={styles.text1}>{orgname}</Text>
                     <Text style={styles.text2add}> {stationData[0]?.address}</Text>
                     {/* <Text style={styles.text2}>{orgaddress3} </Text> */}
                   </View>
-                  <View style={styles.headerSecond}>
+                  {/* <View style={styles.headerSecond}>
                     <Text style={{ fontSize: '13px', fontWeight: 'bold', textAlign: 'center' }}>LOG SHEET</Text>
-                  </View>
-                  <View style={styles.logodiv}>
-
-                    <Image src={organisationimage} style={styles.logo} />
-                  </View>
+                  </View> */}
                 </View>
                 <View style={styles.gst}>
                   <View>
@@ -763,80 +902,82 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   </View>
 
                 </View>
-                <View style={styles.maintabble}>
 
-                  <View style={{ flexDirection: "column", margin: "3px" }}>
+                <View style={styles.maintablediv}>
 
-                    <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Client Name </Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}>{customer}</Text>
+                  <View style={styles.maintabble}>
+                    <View style={{ flexDirection: "column", margin: "1px", fontSize: "75%" }}>
+
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Client Name:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={styles.clientName}>{customer}</Text>
+                      </View>
+
+                      <View style={styles.deatilssection1}>
+                        <Text style={[styles.labeltag,{ height: "60px", paddingTop: "20px"}]}>Address:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={[styles.clientAddress, { padding: "2px 6px" }]}> {customerData[0]?.address1}</Text>
+                      </View>
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Category:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {category}  </Text>
+                      </View>
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Fuel Type:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {fuel}</Text>
+                      </View>
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Emp No:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {empno}</Text>
+                      </View>
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Guest Name:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {guestname}</Text>
+                      </View>
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Guest Mobile:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {customermobile}</Text>
+                      </View>
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Report Add:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        {/* <Text style={styles.clientNameadd}> {address1}</Text> */}
+                        <Text style={styles.clientNameadd}> {guestaddress1}</Text>
+                      </View>
+
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Drop Address:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={styles.clientNameadd}> {dropaddress}</Text>
+                      </View>
+
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Escort Route:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {escort}</Text>
+                      </View>
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Airport Transfer:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {report}</Text>
+                      </View>
+                      <View style={styles.deatilssection1}>
+                        <Text style={styles.labeltag}>Ccode:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {tripCustomercode ? tripCustomercode : 'No'}</Text>
+                      </View>
+
+
                     </View>
 
-                    <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Address</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientAddress}> {customerData[0]?.address1}</Text>
-                    </View>
-                    <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Category</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {category}  </Text>
-                    </View>
-                    <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Fuel Type</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {fuel}</Text>
-                    </View>
-                    <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Emp No</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {empno}</Text>
-                    </View>
-                    <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Guest Name</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {guestname}</Text>
-                    </View>
-                    <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Guest Mobile</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientName}> {customermobile}</Text>
-                    </View>
-                    <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Report Add</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      {/* <Text style={styles.clientNameadd}> {address1}</Text> */}
-                      <Text style={styles.clientNameadd}> {guestaddress1}</Text>
-                    </View>
 
-                    <View style={styles.deatilssection1}>
-                      <Text style={styles.labeltag}>Drop Address</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={styles.clientNameadd}> {dropaddress}</Text>
-                    </View>
-
-                    <View style={styles.deatilssection}>
-                      <Text style={styles.labelMidContainer}>Escort Route</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {escort}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
-                      <Text style={styles.labelMidContainer}>Airport Transfer</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {report}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
-                      <Text style={styles.labelMidContainer}>Ccode</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {tripCustomercode ? tripCustomercode : 'No'}</Text>
-                    </View>
-
-
-                  </View>
-
-
-                  {/* <View style={{ flexDirection: "column", margin: "5px" }}>
+                    {/* <View style={{ flexDirection: "column", margin: "5px" }}>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labelMidContainer}>Escort Route</Text>
                       <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
@@ -856,77 +997,80 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   </View> */}
 
 
-                  <View style={{ flexDirection: "column", margin: "5px" }}>
-                    <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Log No</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {Tripidno}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
+                    <View style={{ flexDirection: "column", margin: "1px", fontSize: "75%" }}>
+                      <View style={styles.deatilssection}>
+                        <Text style={styles.labeltag}>Log No:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {Tripidno}</Text>
+                      </View>
+                      <View style={styles.deatilssection}>
 
-                      <Text style={styles.labeltag}>Date</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Duty Type</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {duty}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Vehicle Type</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {vehicletype}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Vehicle No</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {vehicleno}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
+                        <Text style={styles.labeltag}>Date:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
+                      </View>
+                      <View style={styles.deatilssection}>
+                        <Text style={styles.labeltag}>Duty Type:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {duty}</Text>
+                      </View>
+                      <View style={styles.deatilssection}>
+                        <Text style={styles.labeltag}>Vehicle Type:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {vehicletype}</Text>
+                      </View>
+                      <View style={styles.deatilssection}>
+                        <Text style={styles.labeltag}>Vehicle No:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {vehicleno}</Text>
+                      </View>
+                      <View style={styles.deatilssection}>
 
-                      <Text style={styles.labeltag}>Driver Name</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {drivername}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
+                        <Text style={styles.labeltag}>Driver Name:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {drivername}</Text>
+                      </View>
+                      <View style={styles.deatilssection}>
 
-                      <Text style={styles.labeltag}>Driver Mobile</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {drivermobile}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
+                        <Text style={styles.labeltag}>Driver Mobile:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {drivermobile}</Text>
+                      </View>
+                      <View style={styles.deatilssection}>
 
-                      <Text style={styles.labeltag}>Request No</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {request}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Service City</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {department}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Package</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {duty === "Transfer" || duty === "Outstation" ? duty : calcpackage}</Text>
-                    </View>
-                    <View style={styles.deatilssection}>
-                      <Text style={styles.labeltag}>Segment</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                      <Text style={styles.clientName}> {segment}</Text>
-                    </View>
+                        <Text style={styles.labeltag}>Request No:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {request}</Text>
+                      </View>
+                      <View style={styles.deatilssection}>
+                        <Text style={styles.labeltag}>Service City:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {department}</Text>
+                      </View>
+                      <View style={styles.deatilssection}>
+                        <Text style={styles.labeltag}>Package:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {duty === "Transfer" || duty === "Outstation" ? duty : calcpackage}</Text>
+                      </View>
+                      <View style={styles.deatilssection}>
+                        <Text style={styles.labeltag}>Segment:</Text>
+                        {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                        <Text style={styles.clientName}> {segment}</Text>
+                      </View>
 
+
+                    </View>
+                  </View>
+
+                  <View style={styles.remarksection}>
+                    <Text style={styles.labeltagremark}>Remarks:</Text>
+                    {/* <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text> */}
+                    <Text style={styles.clientName1}>{remark}</Text>
 
                   </View>
 
                 </View>
-                <View style={styles.remarksection}>
-                  <Text style={styles.labeltagremark}>Remarks</Text>
-                  <Text style={{ marginLeft: '3px', fontSize: "10px" }}> :</Text>
-                  <Text style={styles.clientName1}>{remark}</Text>
 
-                </View>
 
                 <View style={styles.tablesigndiv}>
                   {/* <View style={styles.tablediv}>
@@ -1094,210 +1238,210 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                       </View>
 
                     </View>
-                    {customerData[0]?.hybrid === 1 ? 
-                    <>
-                 
-                      <View style={styles.tablehead1}>
-                    <View style={styles.labeltag5}>
-                      <Text > Closing</Text>
+                    {customerData[0]?.hybrid === 1 ?
+                      <>
 
-                    </View>
+                        <View style={styles.tablehead1}>
+                          <View style={styles.labeltag5}>
+                            <Text > Closing</Text>
 
-
-                    <View style={styles.labeltag6}>
-                      {/* <Text>{dayjs(tripshedinDate).format('DD/MM/YYYY')}</Text> */}
-                      <Text>{tripshedinDate}</Text>
-
-                    </View>
+                          </View>
 
 
+                          <View style={styles.labeltag6}>
+                            {/* <Text>{dayjs(tripshedinDate).format('DD/MM/YYYY')}</Text> */}
+                            <Text>{tripshedinDate}</Text>
 
-                    <View style={styles.labeltag6}>
-                      {duty !== "Outstation"  ? <Text>{'-'}</Text> : <Text> {trimSeconds(tripRelasingTime)}</Text>}
-
-                    </View>
-                    <View style={styles.labeltag6}>
-                      {duty === "Outstation" ? <Text>{tripReleaseKm}</Text> : <Text>{"-"}</Text>}
-
-                    </View>
-
-                  </View> 
-
-                  <View style={styles.tablehead2}>
-                   <View style={styles.labeltag9}>
-                     <Text >Releasing</Text>
-
-                   </View>
+                          </View>
 
 
-                   <View style={styles.labeltag10}>
-                     <Text>{dayjs(tripCloseDate).format('DD/MM/YYYY')}</Text>
 
-                   </View>
+                          <View style={styles.labeltag6}>
+                            {duty !== "Outstation" ? <Text>{'-'}</Text> : <Text> {trimSeconds(tripRelasingTime)}</Text>}
 
-                   <View style={styles.labeltag10}>
-                     <Text>{trimSeconds(tripClosetime)}</Text>
+                          </View>
+                          <View style={styles.labeltag6}>
+                            {duty === "Outstation" ? <Text>{tripReleaseKm}</Text> : <Text>{"-"}</Text>}
 
-                   </View>
-                   <View style={styles.labeltag10}>
-                    <Text>{tripCloseKm}</Text>
+                          </View>
 
-                   </View>
-                   </View>
-                   <View style={styles.tablehead3}>
-                        <View style={styles.labeltag13}>
-                          <Text >Reporting</Text>
+                        </View>
+
+                        <View style={styles.tablehead2}>
+                          <View style={styles.labeltag9}>
+                            <Text >Releasing</Text>
+
+                          </View>
+
+
+                          <View style={styles.labeltag10}>
+                            <Text>{dayjs(tripCloseDate).format('DD/MM/YYYY')}</Text>
+
+                          </View>
+
+                          <View style={styles.labeltag10}>
+                            <Text>{trimSeconds(tripClosetime)}</Text>
+
+                          </View>
+                          <View style={styles.labeltag10}>
+                            <Text>{tripCloseKm}</Text>
+
+                          </View>
+                        </View>
+                        <View style={styles.tablehead3}>
+                          <View style={styles.labeltag13}>
+                            <Text >Reporting</Text>
+
+                          </View>
+
+
+                          <View style={styles.labeltag14}>
+                            <Text>{dayjs(tripStartDate).format('DD/MM/YYYY')}</Text>
+
+                          </View>
+
+
+
+                          <View style={styles.labeltag14}>
+                            <Text>{trimSeconds(tripStartTime)}</Text>
+
+                          </View>
+                          <View style={styles.labeltag14}>
+                            <Text> {tripStartKm} </Text>
+
+                          </View>
+
+                        </View>
+                        <View style={styles.tablehead4}>
+                          <View style={styles.labeltag17}>
+                            <Text >Starting</Text>
+
+                          </View>
+
+
+                          <View style={styles.labeltag18}>
+                            <Text>{dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
+
+                          </View>
+                          <View style={styles.labeltag18}>
+                            {duty !== "Outstation" ? <Text>{"-"}</Text> : <Text> {trimSeconds(tripReporttime)} </Text>}
+
+                          </View>
+                          <View style={styles.labeltag18}>
+                            <Text>-</Text>
+
+                          </View>
+
+                        </View>
+                        <View style={styles.tablehead5}>
+                          <View style={styles.labeltag21}>
+                            <Text >Total</Text>
+
+                          </View>
+
+
+                          <View style={styles.labeltag22}>
+                            {/* <Text>{triptotaldays ? triptotaldays : 0}</Text> */}
+                            <Text>{duty === "Outstation" ? triptotaldays : "-"}</Text>
+
+                          </View>
+
+                          <View style={styles.labeltag22}>
+                            <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
+
+                          </View>
+                          <View style={styles.labeltag22}>
+                            {duty !== "Outstation" ? <Text>{hclKm}</Text> : <Text>{triptotalkms}</Text>}
+
+                          </View>
 
                         </View>
 
 
-                        <View style={styles.labeltag14}>
-                          <Text>{dayjs(tripStartDate).format('DD/MM/YYYY')}</Text>
-
-                        </View>
 
 
 
-                        <View style={styles.labeltag14}>
-                          <Text>{trimSeconds(tripStartTime)}</Text>
-
-                        </View>
-                        <View style={styles.labeltag14}>
-                          <Text> {tripStartKm} </Text>
-
-                        </View>
-
-                      </View> 
-                      <View style={styles.tablehead4}>
-                      <View style={styles.labeltag17}>
-                        <Text >Starting</Text>
-
-                      </View>
 
 
-                      <View style={styles.labeltag18}>
-                        <Text>{dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
-
-                      </View>
-                      <View style={styles.labeltag18}>
-                        {duty !== "Outstation" ? <Text>{"-"}</Text> : <Text> {trimSeconds(tripReporttime)} </Text>}
-
-                      </View>
-                      <View style={styles.labeltag18}>
-                        <Text>-</Text>
-
-                      </View>
-
-                    </View>
-                    <View style={styles.tablehead5}>
-                      <View style={styles.labeltag21}>
-                        <Text >Total</Text>
-
-                      </View>
-
-
-                      <View style={styles.labeltag22}>
-                        {/* <Text>{triptotaldays ? triptotaldays : 0}</Text> */}
-                        <Text>{duty === "Outstation" ? triptotaldays : "-"}</Text>
-
-                      </View>
-
-                      <View style={styles.labeltag22}>
-                        <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
-
-                      </View>
-                      <View style={styles.labeltag22}>
-                      {duty !== "Outstation" ?  <Text>{hclKm}</Text> : <Text>{triptotalkms}</Text>}
-
-                      </View>
-
-                    </View>
-
-
-
-                   
-
-
-
-                    </>
+                      </>
 
 
                       : <>
-                  
-                                       
-                      <View style={styles.tablehead1}>
-                    <View style={styles.labeltag5}>
-                      <Text > Closing</Text>
-
-                    </View>
 
 
-                    <View style={styles.labeltag6}>
-                      {/* <Text>{dayjs(tripshedinDate).format('DD/MM/YYYY')}</Text> */}
-                      <Text>{tripshedinDate}</Text>
+                        <View style={styles.tablehead1}>
+                          <View style={styles.labeltag5}>
+                            <Text > Closing</Text>
 
-                    </View>
-
-
-
-                    <View style={styles.labeltag6}>
-                     <Text> {trimSeconds(tripRelasingTime)}</Text>
-
-                    </View>
-                    <View style={styles.labeltag6}>
-                      <Text>{tripReleaseKm}</Text>
-
-                    </View>
-
-                  </View> 
-
-                  <View style={styles.tablehead4}>
-                      <View style={styles.labeltag17}>
-                        <Text >Starting</Text>
-
-                      </View>
+                          </View>
 
 
-                      <View style={styles.labeltag18}>
-                        <Text>{dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
+                          <View style={styles.labeltag6}>
+                            {/* <Text>{dayjs(tripshedinDate).format('DD/MM/YYYY')}</Text> */}
+                            <Text>{tripshedinDate}</Text>
 
-                      </View>
-                      <View style={styles.labeltag18}>
-                        <Text> {trimSeconds(tripReporttime)} </Text>
-
-                      </View>
-                      <View style={styles.labeltag18}>
-                        <Text>{tripReportKm}</Text>
-
-                      </View>
-                     
-
-                    </View>
-                    <View style={styles.tablehead5}>
-                      <View style={styles.labeltag21}>
-                        <Text >Total</Text>
-
-                      </View>
+                          </View>
 
 
-                      <View style={styles.labeltag22}>
-                        {/* <Text>{triptotaldays ? triptotaldays : 0}</Text> */}
-                        <Text>{duty === "Outstation" ? triptotaldays : "-"}</Text>
 
-                      </View>
+                          <View style={styles.labeltag6}>
+                            <Text> {trimSeconds(tripRelasingTime)}</Text>
 
-                      <View style={styles.labeltag22}>
-                        <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
+                          </View>
+                          <View style={styles.labeltag6}>
+                            <Text>{tripReleaseKm}</Text>
 
-                      </View>
-                      <View style={styles.labeltag22}>
-                      <Text>{triptotalkms}</Text>
+                          </View>
 
-                      </View>
+                        </View>
 
-                    </View>
-                      
-                   
+                        <View style={styles.tablehead4}>
+                          <View style={styles.labeltag17}>
+                            <Text >Starting</Text>
+
+                          </View>
+
+
+                          <View style={styles.labeltag18}>
+                            <Text>{dayjs(tripshedoutDate).format('DD/MM/YYYY')}</Text>
+
+                          </View>
+                          <View style={styles.labeltag18}>
+                            <Text> {trimSeconds(tripReporttime)} </Text>
+
+                          </View>
+                          <View style={styles.labeltag18}>
+                            <Text>{tripReportKm}</Text>
+
+                          </View>
+
+
+                        </View>
+                        <View style={styles.tablehead5}>
+                          <View style={styles.labeltag21}>
+                            <Text >Total</Text>
+
+                          </View>
+
+
+                          <View style={styles.labeltag22}>
+                            {/* <Text>{triptotaldays ? triptotaldays : 0}</Text> */}
+                            <Text>{duty === "Outstation" ? triptotaldays : "-"}</Text>
+
+                          </View>
+
+                          <View style={styles.labeltag22}>
+                            <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
+
+                          </View>
+                          <View style={styles.labeltag22}>
+                            <Text>{triptotalkms}</Text>
+
+                          </View>
+
+                        </View>
+
+
                       </>
                     }
 
@@ -1307,7 +1451,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
                   <View style={styles.signdiv}>
                     <View style={styles.signimg}>
-                      <Image src={`${apiUrl}/public/signature_images/${signnature_image}`} style={styles.signatureimage} />
+                      {/* old code */}
+                      {/* <Image src={`${apiUrl}/public/signature_images/${signnature_image}`} style={styles.signatureimage} /> */}
+                      {/* new code */}
+                       <Image src={`${apiUrl}/signimages/${signnature_image}`} style={styles.signatureimage} />
 
                     </View>
                     <View style={styles.signtxt}>
@@ -1327,36 +1474,89 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
 
                   </View> */}
 
-                    {map_image && (
-                      <View style={{ height: 170, border: '1px solid #000000', width: '60%' }}>
-                        <Image src={`${apiUrl}/public/map_images/${map_image}`} />
-                      </View>
-                    )}
-
-
                   <View style={styles.topmap}>
-                    <View style={{ flexDirection: 'row', marginTop: "10px" }}>
-                      <Text style={{ fontSize: '12px', width: '90px' }}>Total Parking</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={{ fontSize: '11px', marginRight: '2px', color: '#363434' }}>{totalparking ? totalparking : 0}</Text>
+                    <View style={{ flexDirection: 'row', marginTop: "3px" }}>
+                      <Text style={{ fontSize: '10px' }}>Total Parking</Text>
+                      <Text style={{ fontSize: "9px" }}> :</Text>
+                      <Text style={{ fontSize: '9px', marginRight: '2px', color: '#363434' }}>{totalparking ? totalparking : 0}</Text>
                     </View>
-                    <View style={{ flexDirection: 'row', marginTop: "10px" }}>
-                      <Text style={{ fontSize: '12px', width: '90px' }}>Total Permit</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={{ fontSize: '11px', marginRight: '2px', color: '#363434' }}>{totalpermit ? totalpermit : 0}</Text>
+                    <View style={{ flexDirection: 'row', marginTop: "3px" }}>
+                      <Text style={{ fontSize: '10px' }}>Total Permit</Text>
+                      <Text style={{ fontSize: "9px" }}> :</Text>
+                      <Text style={{ fontSize: '9px', marginRight: '2px', color: '#363434' }}>{totalpermit ? totalpermit : 0}</Text>
 
                     </View>
-                    <View style={{ flexDirection: 'row', marginTop: "10px" }}>
-                      <Text style={{ fontSize: '12px', width: '90px' }}>Total Fastag/Toll</Text>
-                      <Text style={{ marginLeft: '3px', fontSize: "11px" }}> :</Text>
-                      <Text style={{ fontSize: '11px', marginRight: '2px', color: '#363434' }}>{totaltoll ? totaltoll : 0}</Text>
+                    <View style={{ flexDirection: 'row', marginTop: "3px" }}>
+                      <Text style={{ fontSize: '10px' }}>Total Fastag/Toll</Text>
+                      <Text style={{ fontSize: "9px" }}> :</Text>
+                      <Text style={{ fontSize: '9px', marginRight: '2px', color: '#363434' }}>{totaltoll ? totaltoll : 0}</Text>
                     </View>
 
                   </View>
 
+                  <View style={styles.mapsection}>
+                    {map_image && (
+                      <View style={{ height: 150, width: '28%' }}>
+                        {/* old code */}
+                        {/* <Image style={{ height: "100%", width: '100%' }} src={`${apiUrl}/public/map_images/${map_image}`} /> */}
+
+                        {/* new code */}
+                         <Image style={{ height: "100%", width: '100%' }} src={`${apiUrl}/mapimagesnew/${map_image}`} />
+                      </View>
+                    )}
+
+
+                    {/* <View style={{ flexDirection: 'column' }}> */}
+                      {routemap.length > 0 ?
+                      
+                        <View style={{ width: "70%" }}>
+                          {routemap.map((item, index) => (
+                            <View key={index} style={{ flexDirection: 'row' }}>
+                              <Text style={{ fontSize: 8, marginTop: "1px", marginBottom: '2px' }}>
+                                {index + 1} .
+                              </Text>
+                              <Text style={[styles.tamilText,{ marginLeft: '1px', fontSize: 8, marginTop: "1px", marginBottom: '2px'}]}>
+                                {item.trip_type}, {item.place_name}
+                              </Text>
+                            </View>
+                          ))}
+                        </View>
+                        : <></>}
+
+                      {/* {nextSet.length > 0 ?
+                        <View style={{ width: "73%" }}>
+                          {nextSet.map((item, index) => (
+                            <View key={index + 12} style={{ flexDirection: 'row' }}>
+                              <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px', }}>
+                                {index + 13} .
+                              </Text>
+                              <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
+                                {item.trip_type}, {item.place_name}
+                              </Text>
+                            </View>
+                          ))}
+                        </View>
+                        : <></>} */}
+
+
+                      {/* {remainingItems.length > 0 ?
+                        <View style={{ marginTop: '10px' }}>
+                          <Text style={{ opacity: 0 }}>empty Line</Text>
+                          <Text style={{ opacity: 0 }}>empty Line</Text>
+                          {remainingItems.map((item, index) => (
+                            <View key={index + 24} style={{ marginTop: '10px' }}>
+                              <Text style={{ fontSize: 9, marginTop: "2px", marginBottom: '2px' }}>
+                                {index + 25}. {item.trip_type}, {item.place_name}
+                              </Text>
+                            </View>
+                          ))}
+                        </View> : <></>} */}
+
+
+                    {/* </View> */}
+                  </View>
 
                 </View>
-
 
                 {/* <View style={{ flexDirection: 'row', gap: "10px" }}>
                   {routemap.map((item, index) => (
@@ -1365,51 +1565,6 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   }
 
                 </View> */}
-                <View style={{ flexDirection: 'row', gap: '10px', marginTop: '3px' }}>
-                  {firstSet.length > 0 ?
-                    <View style={{ width: "48%" }}>
-                      {firstSet.map((item, index) => (
-                        <View key={index} style={{ flexDirection: 'row' }}>
-                          <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
-                            {index + 1} .
-                          </Text>
-                          <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
-                            {item.trip_type}, {item.place_name}
-                          </Text>
-                        </View>
-                      ))}
-                    </View>
-                    : <></>}
-
-                  {nextSet.length > 0 ?
-                    <View style={{ width: "48%" }}>
-                      {nextSet.map((item, index) => (
-                        <View key={index + 12} style={{ flexDirection: 'row' }}>
-                          <Text style={{ fontSize: 9, marginTop: "1px", marginBottom: '2px', }}>
-                            {index + 13} .
-                          </Text>
-                          <Text style={{ marginLeft: '2px', fontSize: 9, marginTop: "1px", marginBottom: '2px' }}>
-                            {item.trip_type}, {item.place_name}
-                          </Text>
-                        </View>
-                      ))}
-                    </View>
-                    : <></>}
-
-
-                </View>
-                {remainingItems.length > 0 ?
-                  <View style={{ marginTop: '10px' }}>
-                    <Text style={{ opacity: 0 }}>empty Line</Text>
-                    <Text style={{ opacity: 0 }}>empty Line</Text>
-                    {remainingItems.map((item, index) => (
-                      <View key={index + 24} style={{ marginTop: '10px' }}>
-                        <Text style={{ fontSize: 9, marginTop: "2px", marginBottom: '2px' }}>
-                          {index + 25}. {item.trip_type}, {item.place_name}
-                        </Text>
-                      </View>
-                    ))}
-                  </View> : <></>}
 
 
 
@@ -1428,9 +1583,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, cu
                   <></>
                 )} */}
 
+
                 {attachedImage && attachedImage.length > 0 && (
                   <>
-                    <View style={[styles.addimg, { width: '550px' ,}]}>
+                    <View style={[styles.addimg, { width: '550px', }]}>
                       {/* <View key={index} style={[styles.imgwidth, { padding: '3px' }]} > */}
                       {attachedImage.map((item, index) => {
                         const dataimgetype1 = item.attachedimageurl.split('.').pop();

@@ -113,7 +113,7 @@
 @media only screen and (min-width:578px) and (max-width: 768.99px) {
   .sidebar {
     position: fixed;
-    z-index: 9;
+    z-index: 10000;
     background: var(--glass);
     width: 200px;
     padding-right: 1rem;
@@ -124,7 +124,7 @@
 @media only screen and (min-width:430px) and (max-width: 578.99px) {
   .sidebar {
     position: fixed;
-    z-index: 9;
+    z-index: 10000;
     background: var(--glass);
     width: 200px;
     padding-right: 1rem;
@@ -140,7 +140,7 @@
 
   .sidebar {
     position: fixed;
-    z-index: 9;
+    z-index: 10000;
     background: var(--glass);
     width: 200px;
     padding-right: 1rem;
@@ -312,7 +312,7 @@
   display: flex;
 }
 
-.side-bar-closed .header-user-mobile{
+.side-bar-closed .header-user-mobile {
   display: none;
 }
 
@@ -438,28 +438,29 @@
 
   .side-bar-closed .logo>img {
     display: none;
-  }
+  } 
 
   .side-bar-closed .sidebar-main-menu {
     display: none;
   }
 }
-@media screen and (max-width: 1300px) {
-  .menu-section-scroll{
-    height: 85% !important;
+
+@media only screen and  (min-width: 768.99px) and (max-width: 1500px) {
+  .menu-section-scroll {
+    height: 70% !important;
     overflow-y: scroll;
-  } 
+  }
 }
-.menu-section-scroll{
+
+.menu-section-scroll {
   /* height: 580px; */
   height: 85%;
   overflow-y: scroll;
-}  
-
-
+}
 
 .menu-section-scroll::-webkit-scrollbar {
-  width: 0px; /* Chrome, Safari, Edge */
+  width: 0px;
+  /* Chrome, Safari, Edge */
 }
 
 .menu-section-scroll::-webkit-scrollbar-track {

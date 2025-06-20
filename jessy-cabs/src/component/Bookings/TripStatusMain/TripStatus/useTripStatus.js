@@ -49,7 +49,7 @@ import Excel from 'exceljs';
 // ];
 
 const columns = [
-  // { field: "id", headerName: "Sno", width: 50 },
+  { field: "id", headerName: "Sno", width: 50 },
   { field: "shedOutDate", headerName: "ShedOut Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "bookingno", headerName: "Booking No", width: 110 },
   { field: "tripid", headerName: "Tripsheet No", width: 110 },
@@ -95,7 +95,7 @@ const columns = [
 ];
 
 const columnsnormaluser = [
-  // { field: "id", headerName: "Sno", width: 50 },
+  { field: "id", headerName: "Sno", width: 50 },
   { field: "shedOutDate", headerName: "ShedOut Date", width: 120, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "bookingno", headerName: "Booking No", width: 110 },
   { field: "tripid", headerName: "Tripsheet No", width: 110 },
@@ -127,6 +127,9 @@ const columnsnormaluser = [
   { field: "travelsname", headerName: "Travels Name ", width: 130 },
   // { field: "vehiclemodule", headerName: "Vehicle Type", width: 110 },
   { field: "paymenttype", headerName: "Payment Type", width: 130 },
+  { field: "advancepaidtovendor", headerName: "Vendor Advance", width: 90 },
+  { field: "customeradvance", headerName: "Customer Advance", width: 90 },
+  { field: "fuelamount", headerName: "fuel Amount", width: 90 },
   { field: "advance", headerName: "Advance", width: 90 },
   { field: "totaltime", headerName: "TotalHR", width: 90 },
   { field: "totalkm1", headerName: "TotalKM", width: 100 },
@@ -738,7 +741,7 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
           const rowsWithUniqueId = data.map((row, index) => ({
             ...row,
             // id5: index + 1,
-            id1: index + 1,
+            id: index + 1,
             starttime: removeSeconds(row.starttime),
           }));
           setRows(rowsWithUniqueId);
@@ -776,7 +779,7 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
           const combinedRows = [...tripsheetRowsWithUniqueId, ...bookingRowsWithUniqueId].map((row, index) => ({
             ...row,
             // id5: index + 1, 
-            id: index + 1,
+            // id: index + 1,
             // S.No for combined rows
           }))
 
@@ -791,8 +794,16 @@ const columsnew = Roledatauser === "SuperAdmin" ? columns : columnsnormaluser
           
             return 0; // They are equal
           });
-          console.log(combinedRows,'rows with statrt time ')
-          setRows(combinedRows);
+          const newcomninedrows = combinedRows.map((row, index) => ({
+            ...row,
+             id: index + 1,
+            // starttime: dayjs(row.starttime, "HH:mm:ss").format("HH:mm"),
+            
+
+           
+          }));
+          // console.log(combinedRows,'rows with statrt time ',newcomninedrows)
+          setRows(newcomninedrows);
           setColumnShowall(false);
           setSuccess(true);
           setSuccessMessage("Successfully listed");

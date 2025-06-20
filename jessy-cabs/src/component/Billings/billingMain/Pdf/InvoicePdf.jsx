@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import axios from 'axios';
+import React, { useState, useRef} from "react";
+// import axios from 'axios';
 import Button from "@mui/material/Button";
 import { PdfData } from "../../Transfer/TransferReport/PdfContext";
 import generatePDF from 'react-to-pdf';
@@ -7,19 +7,21 @@ import './InvoicePdf.css';
 import dayjs from "dayjs";
 import numWords from 'num-words'
 import Invoice from "./Invoice";
-import { APIURL } from "../../../url";
+// import { APIURL } from "../../../url";
 
 import { Document, Page, pdfjs } from 'react-pdf';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
 
-const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, stateDetails, otherStations, invoicedata }) => {
+// const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, stateDetails, otherStations, invoicedata }) => {
+    const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate,otherStations, invoicedata }) => {
     // const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
-    const { setParticularPdf, particularRefNo, setIndividualBilled, individualBilled } = PdfData();
+    const { setParticularPdf, setIndividualBilled, individualBilled } = PdfData();
     // const [billingDate] = useState(dayjs());
     // console.log(billdatadate,"billlldate")
-    const { attachedImage, GmapimageUrl, signimageUrl, routeData, IndividualBillData, setIndividualBillData } = Invoice();
+    // const { attachedImage, GmapimageUrl, signimageUrl, routeData, IndividualBillData, setIndividualBillData } = Invoice();
+        const { attachedImage, GmapimageUrl, signimageUrl, routeData} = Invoice();
     // console.log(attachedImage.length > 0, attachedImage)
     // const { attachedImage, GmapimageUrl, signimageUrl, routeData} = Invoice();
     // const apiUrl = APIURL;
@@ -46,7 +48,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
     // const billingdate = book.startdate ? dayjs(book.startdate).format('YYYY-MM-DD') : boo
     const tollparking = parseInt(book.permit | 0) + parseInt(book.parking || 0) + parseInt(book.toll || 0);
     const totalAmount = parseInt(book.totalcalcAmount || 0) - tollparking
-    console.log(totalAmount,"booktotal")
+    // console.log(totalAmount,"booktotal")
     // const totalAmount = parseInt(book.totalcalcAmount); // Ensure the total amount is parsed as a number
     // const gstAmount = customerData?.gstTax / 2
     const gstAmount1 = otherStations?.data / 2;
@@ -58,7 +60,7 @@ const InvoicePdf = ({ book, logo, organizationdata, customerData, billdatadate, 
     const sgst = totalAmount * gstAmount1 / 100 || 0;
     const paymentValue = totalAmount + cgst + sgst + tollparking || 0;
     const paymentValue1 = paymentValue.toFixed(0)
-    console.log(paymentValue1, "ooooo")
+    // console.log(paymentValue1, "ooooo")
     const AmountInWords = numWords(parseInt(paymentValue1)) || 0;
     // console.log(AmountInWords,"llll",paymentValue)
 

@@ -5,7 +5,13 @@ const moment = require('moment');
 const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
-router.use(express.static('customer_master'));
+const decryption = require('../dataDecrypt');
+const imagePath = require('../../../imagepath')
+// console.log(imagePath, "driveraaplogin.js");
+
+// router.use(express.static('customer_master'));
+// router.use(express.static('Imagefolder'));
+
 // user creation database
 // add user creation database
 
@@ -22,18 +28,30 @@ router.use(express.static('customer_master'));
 //   });
 // });
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, './customer_master/public/driver_doc')
-  },
-  filename: (req, file, cb) => {
+
+//Old path 
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, './customer_master/public/driver_doc')
+//   },
+//   filename: (req, file, cb) => {
 
     
+//     cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
+// },
+    
+// })
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // cb(null, '../../../Imagefolder/user_profile')
+     cb(null, `${imagePath}/user_profile`)
+  },
+  filename: (req, file, cb) => {
+  
     cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
 },
     
-  
-
 })
 
 const uploadfile = multer({ storage: storage });
@@ -49,7 +67,7 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
   else{
     profile_image = req.file.filename;
   }
-  console.log(profile_image)
+  // console.log(profile_image ,)
   const {
     drivername,
     username,
@@ -70,30 +88,30 @@ router.post('/drivercreation',uploadfile.single('Profile_image'), (req, res) => 
 
   const formattedToDate = moment(joiningdate).format('YYYY-MM-DD');
   
-  console.log(drivername,
-    username,
-    stations,
-    Mobileno,
-    userpassword,
-    formattedToDate,
-    active,
-    address1,
-    licenseno,
-    licenseexpdate,
-    badgeno,
-    badgeexpdate,
-    aadharno,
-    Email,created_at)
+  // console.log(drivername,
+  //   username,
+  //   stations,
+  //   Mobileno,
+  //   userpassword,
+  //   formattedToDate,
+  //   active,
+  //   address1,
+  //   licenseno,
+  //   licenseexpdate,
+  //   badgeno,
+  //   badgeexpdate,
+  //   aadharno,
+  //   Email,created_at)
  
 
   const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,Profile_image,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
   db.query(sql, [drivername, username, stations, Mobileno,formattedToDate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,profile_image,created_at], (err, result) => {
     if (err) {
-      console.log(err)
+      // console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
       
           }
-          
+          // console.log(result,"add driver details in drivercreation table")
           return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
@@ -124,10 +142,14 @@ router.get('/lastdrivergetid', (req, res) => {
 // delete user creation data
 router.delete('/drivercreation/:driverid', (req, res) => {
   const userid = req.params.driverid;
+  // console.log(userid,"delted id");
+  
   db.query('DELETE FROM drivercreation WHERE driverid = ?', userid, (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
     }
+    // console.log(result,"checking deleted result");
+    
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Customer not found" });
     }
@@ -153,9 +175,11 @@ router.delete('/drivercreation/:driverid', (req, res) => {
 
 router.put('/drivercreation/:driverid',uploadfile.single('Profile_image'), (req, res) => {
   const userid = req.params.driverid;
+  // console.log(userid,"checking driver details");
+  
   const updatedCustomerData = req.body;
   if (req.file) {
-    console.log(req.file)
+    // console.log(req.file)
     updatedCustomerData.Profile_image = req.file.filename;
   }
  
@@ -163,6 +187,8 @@ router.put('/drivercreation/:driverid',uploadfile.single('Profile_image'), (req,
     if (err) {
       return res.status(500).json({ error: "Failed to update data in MySQL" });
     }
+    // console.log(result,"updated details");
+    
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Customer not found" });
     }
@@ -185,7 +211,7 @@ router.get('/getDriverDetails', (req, res) => {
 })
 
 // Getting vehicle Details
-router.get('/getVehicleDetails', (req, res) => {
+router.get('/getDriverDetails1', (req, res) => {
   db.query('SELECT * FROM vehicleinfo WHERE active ="yes" ', (err, result) => {
     if (err) {
       // console.log(err, 'error');
@@ -230,7 +256,7 @@ router.post('/removeAssign', (req, res) => {
 
 router.post('/driverAssign', (req, res) => {
   const { driverName } = req.body;
-  console.log(driverName, 'drivername');
+  // console.log(driverName, 'drivername');
 
   db.query('UPDATE drivercreation SET driverApp="assigned" WHERE drivername IN (?)', [driverName], (err, result) => {
     if (err) {
@@ -263,11 +289,20 @@ router.get('/drivercreation', (req, res) => {
 router.get('/searchfordriver', (req, res) => {
   const { searchText, fromDate, toDate } = req.query;
   // console.log(searchText,"ss",fromDate, toDate)
+  // console.log(req.query,"check");
+  let decryptText = null;
+
+  if(searchText && searchText.trim() !== ""){
+     decryptText = decryption(searchText)
+  }
+  // const decryptText = decryption(searchText);
+  // console.log(decryptText,"jj");
+ 
   let query = 'SELECT * FROM drivercreation WHERE 1=1';
   let params = [];
 
 
-  if (searchText) {
+  if (decryptText) {
     const columnsToSearch = [
       'drivername',
       'driverid',
@@ -284,7 +319,7 @@ router.get('/searchfordriver', (req, res) => {
     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
     query += ` AND (${likeConditions})`;
-    params = columnsToSearch.map(() => `${searchText}%`);
+    params = columnsToSearch.map(() => `%${decryptText}%`);
   }
 
   // if (fromDate && moment(fromDate, 'YYYY/MM/DD', true).isValid() && toDate && moment(toDate, 'YYYY/MM/DD', true).isValid())
@@ -310,21 +345,30 @@ router.get('/searchfordriver', (req, res) => {
 
 router.get("/getcreduniquedrivername/:drivername",(req,res)=>{
   const drivername=req.params.drivername;
-  db.query("select drivername from drivercreation  where drivername=?",[drivername],(err,results)=>{
+  // console.log(drivername,"xcvbnm");
+  
+  const decryptDriver = decryption(drivername);
+  // console.log(decryptDriver,"sdfghjkl");
+  
+  db.query("select drivername from drivercreation  where drivername=?",[decryptDriver],(err,results)=>{
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(results)
+    // console.log(results)
     return res.status(200).json(results);
   })
 })
 router.get("/getcreduniqueusername/:username",(req,res)=>{
   const username=req.params.username;
-  db.query("select username from drivercreation  where username=?",[username],(err,results)=>{
+
+  // console.log(username);
+  const decryptName = decryption(username)
+  // console.log(decryptName,"checking");
+  db.query("select username from drivercreation  where username=?",[decryptName],(err,results)=>{
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(results)
+    // console.log(results)
     return res.status(200).json(results);
   })
 })
@@ -333,10 +377,10 @@ router.get('/TemplateForDriverCreation', async (req, res) => {
   const query = 'SELECT TemplateMessageData FROM TemplateMessage WHERE TemplateInfo = "DriverInfo"';
   db.query(query, (err, results) => {
       if (err) {
-          console.log('Database error:', err);
+          // console.log('Database error:', err);
           return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
       }
-      console.log('Database results:', results);
+      // console.log('Database results:', results);
       return res.status(200).json(results);
   });
 });
@@ -349,7 +393,7 @@ router.get('/organisationdatafordriveremail', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ error: 'Route data not found' });
         }
-        console.log(result, 'dsgvd')
+        // console.log(result, 'dsgvd')
         return res.status(200).json(result);
 
     });
@@ -359,7 +403,7 @@ router.get('/organisationdatafordriveremail', (req, res) => {
 router.post('/send-emaildriverdata', async (req, res) => {
   try {
       const { userid, Drivername, UserName, password, Sendmailauth, Mailauthpass, Email, templateMessageData } = req.body;
-      console.log("Received Template Data for Email:", templateMessageData);
+      // console.log("Received Template Data for Email:", templateMessageData);
       // console.log(Sendmailauth, Mailauthpass, "Maaaaaaaaaiiiiiilllllll")
       // Set up the mail transporter
       const transporter = nodemailer.createTransport({
@@ -396,10 +440,10 @@ router.post('/send-emaildriverdata', async (req, res) => {
       };
 
       await transporter.sendMail(mailOptions);
-      console.log('Email sent successfully');
+      // console.log('Email sent successfully');
       res.status(200).json({ message: 'Email sent successfully' });
   } catch (err) {
-      console.error("Error sending email:", err);
+      // console.error("Error sending email:", err);
       res.status(500).json({ message: 'An error occurred while sending the email' });
   }
 });

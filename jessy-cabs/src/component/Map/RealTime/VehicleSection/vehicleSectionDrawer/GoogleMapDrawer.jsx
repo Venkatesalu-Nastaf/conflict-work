@@ -12,7 +12,7 @@ import StartMarkerIcon from '../../../../Bookings/TripSheet/NavigationMap/StartM
 import VehicleDetailsPopup from '../../../VehicleModal/VehicleDetailsPopup';
 // import { VehicleMapData } from "../vehicleMapContext/vehcileMapContext"
 import { VehicleMapData } from "../../../vehicleMapContext/vehcileMapContext"
-
+import { ApiKey } from "../../../../ApiKey/mapApiKey";
 
 
 // const GoogleMapDrawer = ()=>{
@@ -27,7 +27,7 @@ import { VehicleMapData } from "../../../vehicleMapContext/vehcileMapContext"
 
 const containerStyle = {
   width: "100%",
-  height: "500px",
+  height: "100%",
 };
 
 
@@ -80,9 +80,12 @@ const GoogleMapDrawer = ({ vehNo, startMarkerPosition, currentPosition, currentD
   // const [showStartInfoBox, setShowStartInfoBox] = useState(false);
   // const [showInfoBox, setShowInfoBox] = useState(false);
   // const center = useMemo(() => ({  lat: 13.080555,lng: 80.163118, }), []);
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
-  });
+  const libraries = ['places', 'geometry', 'drawing', 'visualization'];
+    const { isLoaded } = useJsApiLoader({
+      //  googleMapsApiKey: "AIzaSyCn47dR5-NLfhq0EqxlgaFw8IEaZO5LnRE",
+      googleMapsApiKey: ApiKey,
+       libraries,
+     });
   console.log(isLoaded, "lo")
 
   //  if (!isLoaded) {

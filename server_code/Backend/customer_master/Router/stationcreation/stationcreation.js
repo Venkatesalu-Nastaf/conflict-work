@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
+const decryption = require('../dataDecrypt');
 
 // router.post('/stationcreation', (req, res) => {
 //   const bookData = req.body;
@@ -29,13 +30,14 @@ const db = require('../../../db');
 // });
 router.post('/stationcreation', (req, res) => {
   const bookData = req.body;
+  // console.log(req.body);
   db.query('INSERT INTO stationcreation SET ?', bookData, (err, result) => {
     if (err) {
-      console.error("Database insertion error:", err); // Log full error details
+      // console.error("Database insertion error:", err); // Log full error details
       return res.status(500).json({ error: "Failed to insert data into MySQL", details: err.message });
     }
 
-    console.log(result, 'Station creation data inserted successfully');
+    // console.log(result, 'Station creation data inserted successfully');
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
@@ -43,10 +45,12 @@ router.post('/stationcreation', (req, res) => {
 // delete Station Creation data
 router.delete('/stationcreation/:stationid', (req, res) => {
   const stationid = req.params.stationid;
+  // console.log(stationid,"deleted")
   db.query('DELETE FROM stationcreation WHERE stationid = ?', stationid, (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
     }
+    // console.log(result,"deleted");
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Customer not found" });
     }
@@ -56,17 +60,19 @@ router.delete('/stationcreation/:stationid', (req, res) => {
 // update  Station Creation details
 router.put('/stationcreation/:stationid', (req, res) => {
   const stationid = req.params.stationid;
-  console.log(stationid,'stationid');
+  // console.log(stationid,'stationid');
   
   const updatedCustomerData = req.body;
-  console.log(stationid,'stationid',updatedCustomerData);
+  // console.log(stationid,'stationid',updatedCustomerData);
 
   db.query('UPDATE stationcreation SET ? WHERE stationid = ?', [updatedCustomerData, stationid], (err, result) => {
     if (err) {
-      console.log(err,'error from station')
+      // console.log(err,'error from station')
       return res.status(500).json({ error: "Failed to update data in MySQL" });
 
     }
+    // console.log(result,"updatating result");
+    
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Customer not found" });
     }
@@ -79,6 +85,8 @@ router.get('/stationcreation', (req, res) => {
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
+    // console.log(results,"gettting");
+    
     return res.status(200).json(results);
   });
 });
@@ -132,11 +140,12 @@ router.get('/getStation-name', (req, res) => {
 router.get("/getcreduniquestationname/:stationname", (req, res) => {
   // const stationname = req.params.stationname;
   const Stationname = req.params;
+  // console.log(req.params,"checking uniqu station");
   db.query("select Stationname  from stationcreation where Stationname=?", [Stationname], (err, results) => {
     if (err) {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
-    console.log(results)
+    // console.log(results)
     return res.status(200).json(results);
   })
 })
@@ -144,11 +153,12 @@ router.get("/getcreduniquestationname/:stationname", (req, res) => {
 // get station details 
 router.get("/getAllStationDetails/:stateName", (req, res) => {
   const { stateName } = req.params;
-  console.log(stateName, 'AllStations');
-
-  db.query("SELECT * FROM stationcreation WHERE state = ?", [stateName], (error, result) => {
+  // console.log(stateName, 'AllStations');
+  const decryptState = decryption(stateName)
+  // console.log(decryptState,"state");
+  db.query("SELECT * FROM stationcreation WHERE state = ?", [decryptState], (error, result) => {
     if (error) {
-      console.log(error, 'error'); // Log the error for debugging
+      // console.log(error, 'error'); // Log the error for debugging
       return res.status(500).json({ message: "Database query error", error });
     }
 
@@ -162,8 +172,8 @@ router.get("/Statecreation", (req, res) => {
 
   db.query('SELECT DISTINCT state FROM stationcreation WHERE state is not null and  gstno IS NOT NULL AND gstno != ""',(error, result) => {
     if (error) {
-      console.log(error, 'error'); // Log the error for debugging
-      return res.status(500).json({ message: "Database query error", error });
+      // console.log(error, 'error'); // Log the error for debugging
+      return res.status(500).json({ message: "Daxtabase query error", error });
     }
 
     res.status(200).json(result);

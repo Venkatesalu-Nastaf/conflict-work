@@ -12,6 +12,7 @@ const useBillWiseReceipt = () => {
   const [accountDetails, setAccountDetails] = useState([]);
   const [invoiceNo, setInvoiceNo] = useState([])
   const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedTripId,setSelectedTripId] = useState("")
   const [billWiseReport, setBillWiseReport] = useState({
     Date: dayjs(),
     CustomerName: "",
@@ -191,19 +192,21 @@ const useBillWiseReceipt = () => {
   //   };
   // };
   const handlePendingBills = async () => {
+    let gstTax;
     if (billWiseReport.CustomerName === "") {
       setError(true);
       setErrorMessage("Please Enter Customer");
       return;
     }
-    const customer = billWiseReport.CustomerName;
+    // const customer = billWiseReport.CustomerName;
 
-    let currentId = 1;
+    // let currentId = 1;
     try {
       const response = await axios.get(`${apiUrl}/customerBilledDetails`, {
         params: { customer: billWiseReport.CustomerName },
       });
-      console.log(response, 'pending response');
+   
+      // const groupid = groupres.map(li=>li.)
       setBalanceAmount(false);
 
       const {
@@ -212,14 +215,57 @@ const useBillWiseReceipt = () => {
         transferListBilling = [],
       } = response.data;
 
+      const groupIddata = (data)=>{
+          return data.map((item) => ({
+          BillNo: item.Invoice_No || item.ReferenceNo || item.Grouptrip_id,
+        }));
+      }
+      const processInd = groupIddata(individualBilling);
+      const processGrp = groupIddata(groupBilling)
+      const processTransfer = groupIddata(transferListBilling);
+
+      const combinedGroupId = [
+        ...processInd,
+        ...processGrp,
+        ...processTransfer
+      ]
+     const groupIds = combinedGroupId.map(item => item.BillNo).join(',');
+
+const response1 = await axios.get(`${apiUrl}/getGSTTaxByCustomerAPI`, {
+  params: {
+    customerName: billWiseReport.CustomerName,
+    groupIds: groupIds
+  }
+});
+const groupres = response1.data.tripAmounts;
+       gstTax = response1.data.gstTax;
+
       const processBillingData = (data) => {
         return data.map((item) => ({
           BillNo: item.Invoice_No || item.ReferenceNo || item.Grouptrip_id,
           BillDate: item.Bill_Date || item.InvoiceDate || item.Billdate,
-          Amount: item.Amount,
+          Amount:  item.Amount,
           ...item,
         }));
       };
+//       const processBillingData = (data) => {
+//   return data.map((item) => {
+//     const billNo = item.Invoice_No || item.ReferenceNo || item.Grouptrip_id;
+
+//     // Find matching trip amount by GroupTripId
+//     const matchingTrip = groupres.tripAmounts.find(
+//       (trip) => trip.GroupTripId === billNo
+//     );
+
+//     return {
+//       BillNo: billNo,
+//       BillDate: item.Bill_Date || item.InvoiceDate || item.Billdate,
+//       Amount: item.Amount,
+//       netAmount: matchingTrip ? matchingTrip.netAmount : 0, // add netAmount if matched
+//       ...item,
+//     };
+//   });
+// };
 
       const processedIndividualBilling = processBillingData(individualBilling);
       const processedGroupBilling = processBillingData(groupBilling);
@@ -230,15 +276,52 @@ const useBillWiseReceipt = () => {
         ...processedGroupBilling,
         ...processedTransferList,
       ];
+combinedPendingBill?.forEach(pendingBill => {
+  const matchingGroup = groupres.find(group => group.GroupTripId?.toString() === pendingBill?.BillNo?.toString());
+
+  if (matchingGroup) {
+    pendingBill.netAmount = matchingGroup.netAmount;
+    pendingBill.toll = matchingGroup.toll;
+    pendingBill.parking = matchingGroup.parking;
+    pendingBill.permit = matchingGroup.permit
+  }
+});
+
+
 
       const invoice = combinedPendingBill.map((li) => li.BillNo);
       setInvoiceNo(invoice);
-      const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => ({
-        id: index + 1, // Assign a unique ID based on the array index
-        sno: index + 1, // Sequential SNO
-        ...item, // Include all other properties from the original item
-      }));
-      console.log(combinedPendingBillWithSnoAndId,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+      // const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => ({
+      //   id: index + 1, // Assign a unique ID based on the array index
+      //   sno: index + 1, // Sequential SNO
+      //   Amount : gstTax > 0 ? (parseInt(item.Amount) * gstTax /100) : item.Amount,
+      //   ...item, // Include all other properties from the original item
+      // }));
+
+ const gst = gstTax / 2;
+//  console.log(combinedPendingBill, "updated combinedPendingBill",gst);
+
+const combinedPendingBillWithSnoAndId = combinedPendingBill.map((item, index) => {
+  const amount = parseInt(item.netAmount) || 0;
+  const permit = parseInt(item.permit) || 0;
+  const parking = parseInt(item.parking) || 0;
+  const toll = parseInt(item.toll) || 0;
+
+  const cgstAmount = gstTax > 0 ? (amount * gst / 100) : 0;
+  const sgstAmount = gstTax > 0 ? (amount * gst / 100) : 0;
+  const totalGST = cgstAmount + sgstAmount + amount + permit + parking + toll;
+
+  return {
+    ...item,
+    id: index + 1,
+    sno: index + 1,
+    Amount: Math.round(totalGST),
+  };
+});
+
+
+
+      // console.log(combinedPendingBillWithSnoAndId,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",combinedPendingBill);
       
       if (combinedPendingBillWithSnoAndId.length === 0) {
         setError(true);
@@ -272,15 +355,16 @@ const useBillWiseReceipt = () => {
     if (balanceAmount === true) {
       if (selectionModel.length > 0) {
         const selectedID = selectionModel[selectionModel.length - 1]; // Get the last selected row
-        console.log(selectedID, "selected ID", balanceAmount);
+        // console.log(selectedID, "selected ID", balanceAmount);
 
         setSelectedRows([selectedID]); // Store only the last selected row
 
         const selectedData = pendingBillRows.filter((row) => row.id === selectedID); // Direct comparison
         const selectedInvoiceNo = selectedData.map(li => li.BillNo);
-        console.log(selectionModel,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk------------",selectedData);
+        // console.log(selectionModel,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk------------",selectedData);
 
         setSelectedBillRow(selectedData);
+        
         setInvoiceNo(selectedInvoiceNo);
       } else {
         setSelectedRows([]);
@@ -291,12 +375,19 @@ const useBillWiseReceipt = () => {
       setSelectedRows(selectionModel);
 
       const selectedIDs = new Set(selectionModel);
-      console.log(selectedIDs, "selected IDs", balanceAmount);
+      // console.log(selectedIDs, "selected IDs", balanceAmount);
 
       const selectedData = pendingBillRows.filter((row) => selectedIDs.has(row.id)); // Use `.has()` with Set
       const selectedInvoiceNo = selectedData.map(li => li.BillNo);
-      console.log(selectionModel,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk------------22222222222222222",selectedData);
-
+      const tripIds = selectedData
+      .map(row => row.Trip_id)              // get all Trip_id strings
+      .join(",")                            // join them into a single comma-separated string
+      .split(",")                           // split by comma
+      .map(id => id.trim())                 // clean up extra spaces if any
+      .filter(id => id);                    // remove any empty strings
+    
+    // console.log(tripIds, "final Trip_id array check");
+    setSelectedTripId(tripIds)
       setSelectedBillRow(selectedData);
       setInvoiceNo(selectedInvoiceNo);
     }
@@ -332,7 +423,7 @@ const useBillWiseReceipt = () => {
   // };
 
   const handleApplyBill = async () => {
-    console.log(selectedBillRow,"selectedbillrowwwwwwwwwwwwwwwwwwwwww");
+    // console.log(selectedBillRow,"selectedbillrowwwwwwwwwwwwwwwwwwwwww");
 
     if (selectedBillRow.length === 0 || selectedBillRow.length === undefined) {
       setError(true)
@@ -377,7 +468,6 @@ const useBillWiseReceipt = () => {
             balance: balance,
           };
         });
-console.log(updatedRows,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk11111111111111111111");
 
         setRows(updatedRows);
         const totalAmount = updatedRows.reduce(
@@ -504,8 +594,8 @@ console.log(updatedRows,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk1111111111111111111
     }
     const newTDS = Number(event.target.value) || 0; // Default to 0 if conversion fails
     // Calculate new totalAmount based on the new TDS value
-    const newTotalAmount =
-      (totals.totalAmount || 0) + (totals.tds || 0) - newTDS;
+    // const newTotalAmount =
+    //   (totals.totalAmount || 0) + (totals.tds || 0) - newTDS;
 
     const newCollectedAmount = (totals.collectedAmount || 0) + (totals.tds || 0) - newTDS
 
@@ -646,16 +736,15 @@ console.log(updatedRows,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk1111111111111111111
         //   combinedData.totalAmount,
       };
 
-      const BillNo = rows.map((li) => li.BillNo);
-console.log(formattedData,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkformatteddataaaaaaa",combinedData,invoiceNo);
+      // const BillNo = rows.map((li) => li.BillNo);
 
       try {
         // Post the formatted data
-        const postResponse = await axios.post(
+        await axios.post(
           `${apiUrl}/addBillAmountReceived`,
           formattedData
         );
-        console.log(postResponse.data, "response data");
+        // console.log(postResponse.data, "response data");
 
         await axios.post(`${apiUrl}/updateInvoiceStatus`, {
           invoiceNo: invoiceNo
@@ -664,6 +753,9 @@ console.log(formattedData,"checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkformatteddataaaaa
           collectedAmount: FullCollectedAmount || 0,
           bankname: combinedData.AccountDetails,
         });
+        await axios.post(`${apiUrl}/updateTripsheetForAmountReceived`,{
+          Trip_id : selectedTripId
+        })
         setSuccess(true);
         setSuccessMessage("Successfully Added");
 

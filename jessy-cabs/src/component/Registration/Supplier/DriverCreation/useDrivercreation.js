@@ -6,14 +6,12 @@ import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import Excel from 'exceljs';
-
-
-
+import encryption from '../../../dataEncrypt'
 
 
 const useDrivercreation = () => {
     const apiUrl = APIURL;
-    const create_atdata=dayjs().format("YYYY-MM-DD");
+    const create_atdata = dayjs().format("YYYY-MM-DD");
     // const user_id = localStorage.getItem('useridno');
     const [showPasswords, setShowPasswords] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -27,9 +25,9 @@ const useDrivercreation = () => {
     const [warning, setWarning] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage,setWarningMessage] = useState({});
+    const [warningMessage, setWarningMessage] = useState({});
     const [templateMessageData, setTemplateMessageData] = useState('');
-    const [infoMessage, setInfoMessage] = useState({});
+    const [infoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [searchText, setSearchText] = useState("")
     const [fromDate, setFromDate] = useState(dayjs())
@@ -39,23 +37,23 @@ const useDrivercreation = () => {
     const [checkbox, setCheckbox] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
     const [edit, setEdit] = useState(false)
-    const [cerendentialdata,setCredentialData]=useState();
-    const [cerendentialdata2,setCredentialData2]=useState();
+    const [cerendentialdata, setCredentialData] = useState();
+    const [cerendentialdata2, setCredentialData2] = useState();
     const [organistaionsendmail, setOrganisationSendEmail] = useState([])
-    const [datatrigger, setDatatrigger] = useState(false)
+    // const [ setDatatrigger] = useState(false)
     const [deletefile, setDeleteFile] = useState([])
-    const [deletedriverdate,setDeleteDriverdata]=useState(false)
+    const [deletedriverdate, setDeleteDriverdata] = useState(false)
     // const [profileimage,setProfileimage]=useState('')
     // console.log(profileimage,"imagedata")
     // venkat
 
     const [loading, setLoading] = useState(false)
-    const [isDButtonLoading,setisDbuttonLoading] = useState(false)
+    const [isDButtonLoading, setisDbuttonLoading] = useState(false)
 
 
 
 
-   
+
     const handleSelectAll = () => {
         if (selectAll) {
             setDeleteFile([]);
@@ -108,11 +106,12 @@ const useDrivercreation = () => {
         { field: "aadharno", headerName: "Aadhar Card No", width: 130 },
         {
             field: "licenseexpdate", headerName: "License Exp Date", width: 130,
-            valueFormatter: (params) =>params.value ? dayjs(params.value).format("DD/MM/YYYY") :'',
+            valueFormatter: (params) => params.value ? dayjs(params.value).format("DD/MM/YYYY") : '',
         },
-        { field: "badgeexpdate", headerName: "Badge Exp Date", width: 130,
-            valueFormatter: (params) =>params.value ? dayjs(params.value).format("DD/MM/YYYY") :'',
-         },
+        {
+            field: "badgeexpdate", headerName: "Badge Exp Date", width: 130,
+            valueFormatter: (params) => params.value ? dayjs(params.value).format("DD/MM/YYYY") : '',
+        },
 
         { field: "active", headerName: "Active", width: 160 },
     ];
@@ -124,7 +123,7 @@ const useDrivercreation = () => {
         stations: '',
         Mobileno: '',
         userpassword: '',
-        joiningdate:dayjs().format("YYYY-MM-DD"),
+        joiningdate: dayjs().format("YYYY-MM-DD"),
         active: "yes",
         address1: '',
         licenseno: '',
@@ -132,9 +131,9 @@ const useDrivercreation = () => {
         badgeno: '',
         badgeexpdate: '',
         aadharno: '',
-        Email:'',
-        Profile_image:null,
-        created_at:dayjs().format("YYYY-MM-DD")
+        Email: '',
+        Profile_image: null,
+        created_at: dayjs().format("YYYY-MM-DD")
     });
     const [licencepdf, setLicencepdf] = useState(null)
     const [file, setFile] = useState(null);
@@ -154,7 +153,7 @@ const useDrivercreation = () => {
         setSuccessMessage("Uploaded successfully");
     };
 
-    
+
 
     // const handleExcelDownload=async()=>{
     //     const workbook = new Excel.Workbook();
@@ -168,7 +167,7 @@ const useDrivercreation = () => {
     //         const headers = Object.keys(rows[0]);
     //         //         console.log(headers,"hed")
     //         const columnsExcel = headers.map(key => ({ key, header: key }));
-            
+
     //         worksheet.columns = columnsExcel;
 
     //         // updated the font for first row.
@@ -194,7 +193,7 @@ const useDrivercreation = () => {
     //         rows.forEach((singleData, index) => {
 
     //             console.log(singleData,'this is the data in driver excel')
-             
+
 
     //             worksheet.addRow(singleData);
 
@@ -242,400 +241,400 @@ const useDrivercreation = () => {
     //     }
 
     // }
-  // changes with date format
-//   const handleExcelDownload = async () => {
-//     const workbook = new Excel.Workbook();
-//     const workSheetName = 'Worksheet-1';
+    // changes with date format
+    //   const handleExcelDownload = async () => {
+    //     const workbook = new Excel.Workbook();
+    //     const workSheetName = 'Worksheet-1';
 
-//     try {
-//         const fileName = "Drivercreation Reports";
-//         const worksheet = workbook.addWorksheet(workSheetName);
-//         const headers = Object.keys(rows[0]);
-//         const columnsExcel = headers.map(key => ({ key, header: key }));
-//         worksheet.columns = columnsExcel;
+    //     try {
+    //         const fileName = "Drivercreation Reports";
+    //         const worksheet = workbook.addWorksheet(workSheetName);
+    //         const headers = Object.keys(rows[0]);
+    //         const columnsExcel = headers.map(key => ({ key, header: key }));
+    //         worksheet.columns = columnsExcel;
 
-//         // Style the header row
-//         worksheet.getRow(1).font = { bold: true };
-//         worksheet.getRow(1).eachCell((cell) => {
-//             cell.fill = {
-//                 type: 'pattern',
-//                 pattern: 'solid',
-//                 fgColor: { argb: '9BB0C1' }
-//             };
-//         });
-//         worksheet.getRow(1).height = 30;
-//         worksheet.columns.forEach((column) => {
-//             column.width = column.header.length + 5;
-//             column.alignment = { horizontal: 'center', vertical: 'middle' };
-//         });
+    //         // Style the header row
+    //         worksheet.getRow(1).font = { bold: true };
+    //         worksheet.getRow(1).eachCell((cell) => {
+    //             cell.fill = {
+    //                 type: 'pattern',
+    //                 pattern: 'solid',
+    //                 fgColor: { argb: '9BB0C1' }
+    //             };
+    //         });
+    //         worksheet.getRow(1).height = 30;
+    //         worksheet.columns.forEach((column) => {
+    //             column.width = column.header.length + 5;
+    //             column.alignment = { horizontal: 'center', vertical: 'middle' };
+    //         });
 
-//         // Transform rows data
-//         const transformedRows = rows.map(singleData => {
+    //         // Transform rows data
+    //         const transformedRows = rows.map(singleData => {
 
-//             console.log(rows,'drivers date')
-//             const transformedData = { ...singleData };
+    //             console.log(rows,'drivers date')
+    //             const transformedData = { ...singleData };
 
-//             const formatDate = (dateStr) => {
-//                 return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
-//             };
+    //             const formatDate = (dateStr) => {
+    //                 return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+    //             };
 
-//             transformedData.badgeexpdate = formatDate(transformedData.badgeexpdate);
-//             transformedData.created_at = formatDate(transformedData.created_at);
-//             transformedData.joiningdate = formatDate(transformedData.joiningdate);
-//             transformedData.licenseexpdate = formatDate(transformedData.licenseexpdate);
+    //             transformedData.badgeexpdate = formatDate(transformedData.badgeexpdate);
+    //             transformedData.created_at = formatDate(transformedData.created_at);
+    //             transformedData.joiningdate = formatDate(transformedData.joiningdate);
+    //             transformedData.licenseexpdate = formatDate(transformedData.licenseexpdate);
 
-//             return transformedData;
-//         });
+    //             return transformedData;
+    //         });
 
-//         transformedRows.forEach((singleData) => {
-//             worksheet.addRow(singleData);
-//             worksheet.columns.forEach((column) => {
-//                 const cellValue = singleData[column.key] || '';
-//                 const cellLength = cellValue.toString().length;
-//                 const currentColumnWidth = column.width || 0;
-//                 column.width = Math.max(currentColumnWidth, cellLength + 5);
-//             });
-//         });
+    //         transformedRows.forEach((singleData) => {
+    //             worksheet.addRow(singleData);
+    //             worksheet.columns.forEach((column) => {
+    //                 const cellValue = singleData[column.key] || '';
+    //                 const cellLength = cellValue.toString().length;
+    //                 const currentColumnWidth = column.width || 0;
+    //                 column.width = Math.max(currentColumnWidth, cellLength + 5);
+    //             });
+    //         });
 
-//         worksheet.eachRow({ includeEmpty: false }, (row) => {
-//             row._cells.forEach((singleCell) => {
-//                 const cellAddress = singleCell._address;
-//                 worksheet.getCell(cellAddress).border = {
-//                     top: { style: 'thin' },
-//                     left: { style: 'thin' },
-//                     bottom: { style: 'thin' },
-//                     right: { style: 'thin' },
-//                 };
-//             });
-//         });
+    //         worksheet.eachRow({ includeEmpty: false }, (row) => {
+    //             row._cells.forEach((singleCell) => {
+    //                 const cellAddress = singleCell._address;
+    //                 worksheet.getCell(cellAddress).border = {
+    //                     top: { style: 'thin' },
+    //                     left: { style: 'thin' },
+    //                     bottom: { style: 'thin' },
+    //                     right: { style: 'thin' },
+    //                 };
+    //             });
+    //         });
 
-//         const buf = await workbook.xlsx.writeBuffer();
-//         saveAs(new Blob([buf]), `${fileName}.xlsx`);
-//     } catch (error) {
-//         console.error('<<<ERRROR>>>', error);
-//         console.error('Something Went Wrong', error.message);
-//     } finally {
-//         workbook.removeWorksheet(workSheetName);
-//     }
-// };
+    //         const buf = await workbook.xlsx.writeBuffer();
+    //         saveAs(new Blob([buf]), `${fileName}.xlsx`);
+    //     } catch (error) {
+    //         console.error('<<<ERRROR>>>', error);
+    //         console.error('Something Went Wrong', error.message);
+    //     } finally {
+    //         workbook.removeWorksheet(workSheetName);
+    //     }
+    // };
 
-const handleExcelDownload = async () => {
-    const workbook = new Excel.Workbook();
-    const workSheetName = 'Worksheet-1';
+    const handleExcelDownload = async () => {
+        const workbook = new Excel.Workbook();
+        const workSheetName = 'Worksheet-1';
 
-    try {
-        const fileName = "Drivercreation Reports";
-        const worksheet = workbook.addWorksheet(workSheetName);
-        const headers = Object.keys(rows[0]);
-        const columnsExcel = headers.map(key => ({ key, header: key }));
-        worksheet.columns = columnsExcel;
+        try {
+            const fileName = "Drivercreation Reports";
+            const worksheet = workbook.addWorksheet(workSheetName);
+            const headers = Object.keys(rows[0]);
+            const columnsExcel = headers.map(key => ({ key, header: key }));
+            worksheet.columns = columnsExcel;
 
-        // Style the header row
-        worksheet.getRow(1).font = { bold: true };
-        worksheet.getRow(1).eachCell((cell) => {
-            cell.fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: '9BB0C1' }
-            };
+            // Style the header row
+            worksheet.getRow(1).font = { bold: true };
+            worksheet.getRow(1).eachCell((cell) => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '9BB0C1' }
+                };
+            });
+            worksheet.getRow(1).height = 30;
+            worksheet.columns.forEach((column) => {
+                column.width = column.header.length + 5;
+                // column.alignment = { horizontal: 'center', vertical: 'middle' };
+            });
+
+            // Transform rows data
+            const transformedRows = rows.map(singleData => {
+
+                // console.log(rows,'drivers date')
+                const transformedData = { ...singleData };
+
+                const formatDate = (dateStr) => {
+                    const formattedDate = dayjs(dateStr);
+                    return formattedDate.isValid() ? formattedDate.format('DD-MM-YYYY') : ""; // Check if valid date
+                };
+
+                transformedData.badgeexpdate = formatDate(transformedData.badgeexpdate);
+                transformedData.created_at = formatDate(transformedData.created_at);
+                transformedData.joiningdate = formatDate(transformedData.joiningdate);
+                transformedData.licenseexpdate = formatDate(transformedData.licenseexpdate);
+
+                return transformedData;
+            });
+
+            transformedRows.forEach((singleData) => {
+                worksheet.addRow(singleData);
+                worksheet.columns.forEach((column) => {
+                    const cellValue = singleData[column.key] || '';
+                    const cellLength = cellValue.toString().length;
+                    const currentColumnWidth = column.width || 0;
+                    column.width = Math.max(currentColumnWidth, cellLength + 5);
+                });
+            });
+
+            worksheet.eachRow({ includeEmpty: false }, (row) => {
+                row._cells.forEach((singleCell) => {
+                    const cellAddress = singleCell._address;
+                    worksheet.getCell(cellAddress).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                    const isHeader = row.number === 1;
+                    worksheet.getCell(cellAddress).alignment = {
+                        horizontal: isHeader ? 'center' : 'left',
+                        vertical: 'middle',
+                    };
+                });
+            });
+
+            const buf = await workbook.xlsx.writeBuffer();
+            saveAs(new Blob([buf]), `${fileName}.xlsx`);
+        } catch (error) {
+            console.error('<<<ERROR>>>', error);
+            console.error('Something Went Wrong', error.message);
+        } finally {
+            workbook.removeWorksheet(workSheetName);
+        }
+    };
+
+
+    // const handlePdfDownload = () => {
+    //         const pdf = new jsPDF({
+    //             orientation: "landscape",
+    //             unit: "mm",
+    //             format: "tabloid" // [width, height] in inches
+    //         });
+    //         pdf.setFontSize(10);
+    //         pdf.setFont('helvetica', 'normal');
+    //         pdf.text("Driver Details", 10, 10);
+    //          const header = Object.keys(rows[0]);
+
+    //         // Extracting body
+    //         const body = rows.map(row => Object.values(row));
+    //         // console.log(header.length,"len")
+    //         console.log(rows,"date in the driver customers")
+
+    //         let fontdata = 1;
+    //         if (header.length <= 13) {
+    //             fontdata = 16;
+    //         }
+    //         else if (header.length >= 14 && header.length <= 17) {
+    //             fontdata = 11;
+    //         }
+    //         else if (header.length >= 18 && header.length <= 20) {
+    //           fontdata = 10;
+    //       } else if (header.length >= 21 && header.length <= 23) {
+    //             fontdata = 9;
+    //         }
+    //         else if (header.length >= 24 && header.length <= 26) {
+    //             fontdata = 7;
+    //         }
+    //         else if (header.length >= 27 && header.length <= 30) {
+    //             fontdata = 6;
+    //         }
+    //         else if (header.length >= 31 && header.length <= 35) {
+    //             fontdata = 4;
+    //         }
+    //         else if (header.length >= 36 && header.length <= 40) {
+    //             fontdata = 4;
+    //         }
+    //         else if (header.length >= 41 && header.length <= 46) {
+    //             fontdata = 2;
+    //         }
+    //         console.log(fontdata,"data")
+
+    //         pdf.autoTable({
+    //             head: [header],
+    //             body: body,
+    //             startY: 20,
+
+    //             headStyles: {
+    //                 // fontSize: 5,
+    //                 fontSize: fontdata,
+    //                 cellPadding: 1.5, // Decrease padding in header
+
+    //                 minCellHeigh: 8,
+    //                 valign: 'middle',
+
+    //                 font: 'helvetica', // Set font type for body
+
+    //                 cellWidth: 'wrap',
+    //                 // cellWidth: 'auto'
+    //             },
+
+    //             bodyStyles: {
+    //                 // fontSize:4,
+    //                 // fontSize: fontdata-1
+    //                 fontSize: fontdata-1,
+    //                 valign: 'middle',
+    //                 //  cellWidth: 'wrap',
+    //                 cellWidth: 'auto'
+    //                 // Adjust the font size for the body
+
+    //             },
+    //             columnWidth: 'auto'
+
+    //       });
+    //         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
+    //         console.log(scaleFactor, "SCALE")
+
+    //         // Scale content
+    //         pdf.scale(scaleFactor, scaleFactor);
+    //         const pdfBlob = pdf.output('blob');
+    //         saveAs(pdfBlob, 'drivercreationReports.pdf');
+    //       };
+
+    // const handlePdfDownload = () => {
+    //     const pdf = new jsPDF({
+    //         orientation: "landscape",
+    //         unit: "mm",
+    //         format: "tabloid"
+    //     });
+
+    //     pdf.setFontSize(10);
+    //     pdf.setFont('helvetica', 'normal');
+    //     pdf.text("Driver Details", 10, 10);
+
+    //     const header = Object.keys(rows[0]);
+
+    //     // Preprocessing rows to handle empty keys and format dates
+    //     const transformedRows = rows.map(row => {
+    //         const transformDate = (dateStr) => {
+    //             return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
+    //         };
+
+    //         const transformedRow = {};
+    //         for (const key in row) {
+    //             if (row[key] === null || row[key] === '' || row[key] === undefined) {
+    //                 transformedRow[key] = null;
+    //             } else if (['badgeexpdate', 'created_at', 'joiningdate', 'licenseexpdate'].includes(key)) {
+    //                 transformedRow[key] = transformDate(row[key]);
+    //             } else {
+    //                 transformedRow[key] = row[key];
+    //             }
+    //         }
+    //         return transformedRow;
+    //     });
+
+    //     // Extracting body
+    //     const body = transformedRows.map(row => Object.values(row));
+
+    //     // Adjust font size based on the number of columns
+    //     let fontdata = 1;
+    //     if (header.length <= 13) fontdata = 16;
+    //     else if (header.length <= 17) fontdata = 11;
+    //     else if (header.length <= 20) fontdata = 10;
+    //     else if (header.length <= 23) fontdata = 9;
+    //     else if (header.length <= 26) fontdata = 7;
+    //     else if (header.length <= 30) fontdata = 6;
+    //     else if (header.length <= 35) fontdata = 4;
+    //     else fontdata = 2;
+
+    //     console.log(fontdata, "font size");
+
+    //     // Adding table to PDF
+    //     pdf.autoTable({
+    //         head: [header],
+    //         body: body,
+    //         startY: 20,
+    //         headStyles: {
+    //             fontSize: fontdata,
+    //             cellPadding: 1.5,
+    //             minCellHeight: 8,
+    //             valign: 'middle',
+    //             font: 'helvetica',
+    //             cellWidth: 'wrap',
+    //         },
+    //         bodyStyles: {
+    //             fontSize: fontdata - 1,
+    //             valign: 'middle',
+    //             cellWidth: 'auto',
+    //         },
+    //         columnWidth: 'auto',
+    //     });
+
+    //     // Save the PDF
+    //     const pdfBlob = pdf.output('blob');
+    //     saveAs(pdfBlob, 'drivercreationReports.pdf');
+    // };
+
+    const handlePdfDownload = () => {
+        const pdf = new jsPDF({
+            orientation: "landscape",
+            unit: "mm",
+            format: "tabloid"
         });
-        worksheet.getRow(1).height = 30;
-        worksheet.columns.forEach((column) => {
-            column.width = column.header.length + 5;
-            // column.alignment = { horizontal: 'center', vertical: 'middle' };
-        });
 
-        // Transform rows data
-        const transformedRows = rows.map(singleData => {
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text("Driver Details", 10, 10);
 
-            // console.log(rows,'drivers date')
-            const transformedData = { ...singleData };
+        const header = Object.keys(rows[0]);
 
-            const formatDate = (dateStr) => {
+        // Preprocessing rows to handle empty keys and format dates
+        const transformedRows = rows.map(row => {
+            const transformDate = (dateStr) => {
                 const formattedDate = dayjs(dateStr);
                 return formattedDate.isValid() ? formattedDate.format('DD-MM-YYYY') : ""; // Check if valid date
             };
 
-            transformedData.badgeexpdate = formatDate(transformedData.badgeexpdate);
-            transformedData.created_at = formatDate(transformedData.created_at);
-            transformedData.joiningdate = formatDate(transformedData.joiningdate);
-            transformedData.licenseexpdate = formatDate(transformedData.licenseexpdate);
-
-            return transformedData;
-        });
-
-        transformedRows.forEach((singleData) => {
-            worksheet.addRow(singleData);
-            worksheet.columns.forEach((column) => {
-                const cellValue = singleData[column.key] || '';
-                const cellLength = cellValue.toString().length;
-                const currentColumnWidth = column.width || 0;
-                column.width = Math.max(currentColumnWidth, cellLength + 5);
-            });
-        });
-
-        worksheet.eachRow({ includeEmpty: false }, (row) => {
-            row._cells.forEach((singleCell) => {
-                const cellAddress = singleCell._address;
-                worksheet.getCell(cellAddress).border = {
-                    top: { style: 'thin' },
-                    left: { style: 'thin' },
-                    bottom: { style: 'thin' },
-                    right: { style: 'thin' },
-                };
-                const isHeader = row.number === 1;
-                worksheet.getCell(cellAddress).alignment = {
-                    horizontal: isHeader ? 'center' : 'left',
-                    vertical: 'middle',
-                };
-            });
-        });
-
-        const buf = await workbook.xlsx.writeBuffer();
-        saveAs(new Blob([buf]), `${fileName}.xlsx`);
-    } catch (error) {
-        console.error('<<<ERROR>>>', error);
-        console.error('Something Went Wrong', error.message);
-    } finally {
-        workbook.removeWorksheet(workSheetName);
-    }
-};
-
-    
-// const handlePdfDownload = () => {
-//         const pdf = new jsPDF({
-//             orientation: "landscape",
-//             unit: "mm",
-//             format: "tabloid" // [width, height] in inches
-//         });
-//         pdf.setFontSize(10);
-//         pdf.setFont('helvetica', 'normal');
-//         pdf.text("Driver Details", 10, 10);
-//          const header = Object.keys(rows[0]);
-      
-//         // Extracting body
-//         const body = rows.map(row => Object.values(row));
-//         // console.log(header.length,"len")
-//         console.log(rows,"date in the driver customers")
-      
-//         let fontdata = 1;
-//         if (header.length <= 13) {
-//             fontdata = 16;
-//         }
-//         else if (header.length >= 14 && header.length <= 17) {
-//             fontdata = 11;
-//         }
-//         else if (header.length >= 18 && header.length <= 20) {
-//           fontdata = 10;
-//       } else if (header.length >= 21 && header.length <= 23) {
-//             fontdata = 9;
-//         }
-//         else if (header.length >= 24 && header.length <= 26) {
-//             fontdata = 7;
-//         }
-//         else if (header.length >= 27 && header.length <= 30) {
-//             fontdata = 6;
-//         }
-//         else if (header.length >= 31 && header.length <= 35) {
-//             fontdata = 4;
-//         }
-//         else if (header.length >= 36 && header.length <= 40) {
-//             fontdata = 4;
-//         }
-//         else if (header.length >= 41 && header.length <= 46) {
-//             fontdata = 2;
-//         }
-//         console.log(fontdata,"data")
-        
-//         pdf.autoTable({
-//             head: [header],
-//             body: body,
-//             startY: 20,
-      
-//             headStyles: {
-//                 // fontSize: 5,
-//                 fontSize: fontdata,
-//                 cellPadding: 1.5, // Decrease padding in header
-      
-//                 minCellHeigh: 8,
-//                 valign: 'middle',
-      
-//                 font: 'helvetica', // Set font type for body
-      
-//                 cellWidth: 'wrap',
-//                 // cellWidth: 'auto'
-//             },
-      
-//             bodyStyles: {
-//                 // fontSize:4,
-//                 // fontSize: fontdata-1
-//                 fontSize: fontdata-1,
-//                 valign: 'middle',
-//                 //  cellWidth: 'wrap',
-//                 cellWidth: 'auto'
-//                 // Adjust the font size for the body
-      
-//             },
-//             columnWidth: 'auto'
-      
-//       });
-//         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-//         console.log(scaleFactor, "SCALE")
-      
-//         // Scale content
-//         pdf.scale(scaleFactor, scaleFactor);
-//         const pdfBlob = pdf.output('blob');
-//         saveAs(pdfBlob, 'drivercreationReports.pdf');
-//       };
-
-// const handlePdfDownload = () => {
-//     const pdf = new jsPDF({
-//         orientation: "landscape",
-//         unit: "mm",
-//         format: "tabloid"
-//     });
-
-//     pdf.setFontSize(10);
-//     pdf.setFont('helvetica', 'normal');
-//     pdf.text("Driver Details", 10, 10);
-
-//     const header = Object.keys(rows[0]);
-
-//     // Preprocessing rows to handle empty keys and format dates
-//     const transformedRows = rows.map(row => {
-//         const transformDate = (dateStr) => {
-//             return dateStr ? dayjs(dateStr).format('DD-MM-YYYY') : null;
-//         };
-
-//         const transformedRow = {};
-//         for (const key in row) {
-//             if (row[key] === null || row[key] === '' || row[key] === undefined) {
-//                 transformedRow[key] = null;
-//             } else if (['badgeexpdate', 'created_at', 'joiningdate', 'licenseexpdate'].includes(key)) {
-//                 transformedRow[key] = transformDate(row[key]);
-//             } else {
-//                 transformedRow[key] = row[key];
-//             }
-//         }
-//         return transformedRow;
-//     });
-
-//     // Extracting body
-//     const body = transformedRows.map(row => Object.values(row));
-
-//     // Adjust font size based on the number of columns
-//     let fontdata = 1;
-//     if (header.length <= 13) fontdata = 16;
-//     else if (header.length <= 17) fontdata = 11;
-//     else if (header.length <= 20) fontdata = 10;
-//     else if (header.length <= 23) fontdata = 9;
-//     else if (header.length <= 26) fontdata = 7;
-//     else if (header.length <= 30) fontdata = 6;
-//     else if (header.length <= 35) fontdata = 4;
-//     else fontdata = 2;
-
-//     console.log(fontdata, "font size");
-
-//     // Adding table to PDF
-//     pdf.autoTable({
-//         head: [header],
-//         body: body,
-//         startY: 20,
-//         headStyles: {
-//             fontSize: fontdata,
-//             cellPadding: 1.5,
-//             minCellHeight: 8,
-//             valign: 'middle',
-//             font: 'helvetica',
-//             cellWidth: 'wrap',
-//         },
-//         bodyStyles: {
-//             fontSize: fontdata - 1,
-//             valign: 'middle',
-//             cellWidth: 'auto',
-//         },
-//         columnWidth: 'auto',
-//     });
-
-//     // Save the PDF
-//     const pdfBlob = pdf.output('blob');
-//     saveAs(pdfBlob, 'drivercreationReports.pdf');
-// };
-
-const handlePdfDownload = () => {
-    const pdf = new jsPDF({
-        orientation: "landscape",
-        unit: "mm",
-        format: "tabloid"
-    });
-
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text("Driver Details", 10, 10);
-
-    const header = Object.keys(rows[0]);
-
-    // Preprocessing rows to handle empty keys and format dates
-    const transformedRows = rows.map(row => {
-        const transformDate = (dateStr) => {
-            const formattedDate = dayjs(dateStr);
-            return formattedDate.isValid() ? formattedDate.format('DD-MM-YYYY') : ""; // Check if valid date
-        };
-
-        const transformedRow = {};
-        for (const key in row) {
-            if (row[key] === null || row[key] === '' || row[key] === undefined) {
-                transformedRow[key] = ""; // Empty string for null or undefined fields
-            } else if (['badgeexpdate', 'created_at', 'joiningdate', 'licenseexpdate'].includes(key)) {
-                transformedRow[key] = transformDate(row[key]);
-            } else {
-                transformedRow[key] = row[key];
+            const transformedRow = {};
+            for (const key in row) {
+                if (row[key] === null || row[key] === '' || row[key] === undefined) {
+                    transformedRow[key] = ""; // Empty string for null or undefined fields
+                } else if (['badgeexpdate', 'created_at', 'joiningdate', 'licenseexpdate'].includes(key)) {
+                    transformedRow[key] = transformDate(row[key]);
+                } else {
+                    transformedRow[key] = row[key];
+                }
             }
-        }
-        return transformedRow;
-    });
+            return transformedRow;
+        });
 
-    // Extracting body
-    const body = transformedRows.map(row => Object.values(row));
+        // Extracting body
+        const body = transformedRows.map(row => Object.values(row));
 
-    // Adjust font size based on the number of columns
-    let fontdata = 1;
-    if (header.length <= 13) fontdata = 16;
-    else if (header.length <= 17) fontdata = 11;
-    else if (header.length <= 20) fontdata = 10;
-    else if (header.length <= 23) fontdata = 9;
-    else if (header.length <= 26) fontdata = 7;
-    else if (header.length <= 30) fontdata = 6;
-    else if (header.length <= 35) fontdata = 4;
-    else fontdata = 2;
+        // Adjust font size based on the number of columns
+        let fontdata = 1;
+        if (header.length <= 13) fontdata = 16;
+        else if (header.length <= 17) fontdata = 11;
+        else if (header.length <= 20) fontdata = 10;
+        else if (header.length <= 23) fontdata = 9;
+        else if (header.length <= 26) fontdata = 7;
+        else if (header.length <= 30) fontdata = 6;
+        else if (header.length <= 35) fontdata = 4;
+        else fontdata = 2;
 
-    console.log(fontdata, "font size");
+        // console.log(fontdata, "font size");
 
-    // Adding table to PDF
-    pdf.autoTable({
-        head: [header],
-        body: body,
-        startY: 20,
-        headStyles: {
-            fontSize: fontdata,
-            cellPadding: 1.5,
-            minCellHeight: 8,
-            valign: 'middle',
-            font: 'helvetica',
-            cellWidth: 'wrap',
-        },
-        bodyStyles: {
-            fontSize: fontdata - 1,
-            valign: 'middle',
-            cellWidth: 'auto',
-        },
-        columnWidth: 'auto',
-    });
+        // Adding table to PDF
+        pdf.autoTable({
+            head: [header],
+            body: body,
+            startY: 20,
+            headStyles: {
+                fontSize: fontdata,
+                cellPadding: 1.5,
+                minCellHeight: 8,
+                valign: 'middle',
+                font: 'helvetica',
+                cellWidth: 'wrap',
+            },
+            bodyStyles: {
+                fontSize: fontdata - 1,
+                valign: 'middle',
+                cellWidth: 'auto',
+            },
+            columnWidth: 'auto',
+        });
 
-    // Save the PDF
-    const pdfBlob = pdf.output('blob');
-    saveAs(pdfBlob, 'drivercreationReports.pdf');
-};
+        // Save the PDF
+        const pdfBlob = pdf.output('blob');
+        saveAs(pdfBlob, 'drivercreationReports.pdf');
+    };
 
 
     // TABLE END
@@ -686,47 +685,51 @@ const handlePdfDownload = () => {
     };
 
 
-    const uniquedrivernameno=async(drivernamedata)=>{
-        if(drivernamedata){
+    const uniquedrivernameno = async (drivernamedata) => {
+        if (drivernamedata) {
+            const encryptDrivername = encryption(drivernamedata);
+            // console.log(encryptDrivername,"driver");
 
-            const response= await axios.get(`${apiUrl}/getcreduniquedrivername/${drivernamedata}`)
-            const responsedata=response.data;
-           
-            if(responsedata?.length >=1){
-                
+            const response = await axios.get(`${apiUrl}/getcreduniquedrivername/${encryptDrivername}`)
+            const responsedata = response.data;
+
+            if (responsedata?.length >= 1) {
+
                 setCredentialData(true)
                 // return true;
             }
-            else{
+            else {
                 setCredentialData(false)
                 // return false;
             }
-        } }
+        }
+    }
 
-        const uniquedriverusername=async(driverusernamedata)=>{
-            if(driverusernamedata){
-    
-                const response= await axios.get(`${apiUrl}/getcreduniqueusername/${driverusernamedata}`)
-                const responsedata=response.data;
-                
-                // console.log(response,"data")
-                // console.log(responsedata?.length,"reeee")
-               
-                if(responsedata?.length >=1){
-                    
-                    setCredentialData2(true)
-                    // return true;
-                }
-                else{
-                    setCredentialData2(false)
-                    // return false;
-                }
-            } }
+    const uniquedriverusername = async (driverusernamedata) => {
+        if (driverusernamedata) {
+            const encryptname = encryption(driverusernamedata);
+            const response = await axios.get(`${apiUrl}/getcreduniqueusername/${encryptname}`)
+            const responsedata = response.data;
 
-       const  handleChangecredentdrivername=(event)=>{
+            // console.log(response,"data")
+            // console.log(responsedata?.length,"reeee")
+
+            if (responsedata?.length >= 1) {
+
+                setCredentialData2(true)
+                // return true;
+            }
+            else {
+                setCredentialData2(false)
+                // return false;
+            }
+        }
+    }
+
+    const handleChangecredentdrivername = (event) => {
         const { name, value } = event.target;
-       
-        const data=uniquedrivernameno(value)
+
+        const data = uniquedrivernameno(value)
         console.log(data)
         setBook((prevBook) => ({
             ...prevBook,
@@ -737,12 +740,12 @@ const handlePdfDownload = () => {
             [name]: value,
         }));
 
-       }
+    }
 
-       const  handleChangecredentusername=(event)=>{
+    const handleChangecredentusername = (event) => {
         const { name, value } = event.target;
-       
-        const data=uniquedriverusername(value)
+
+        const data = uniquedriverusername(value)
         console.log(data)
         setBook((prevBook) => ({
             ...prevBook,
@@ -753,7 +756,7 @@ const handlePdfDownload = () => {
             [name]: value,
         }));
 
-       }
+    }
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
@@ -782,7 +785,7 @@ const handlePdfDownload = () => {
             badgeno: '',
             badgeexpdate: '',
             aadharno: '',
-            Email:''
+            Email: ''
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
@@ -797,7 +800,7 @@ const handlePdfDownload = () => {
             const formData = new FormData();
             formData.append("file", file);
             formData.append("created_at", create_atdata); // assuming create_atdata is defined elsewhere
-            console.log(file,"filee")
+            // console.log(file, "filee")
 
             try {
                 await axios.post(`${apiUrl}/driver-pdf/${driveruserid}`, formData);
@@ -817,7 +820,7 @@ const handlePdfDownload = () => {
             return;
         }
     };
-    
+
 
 
 
@@ -830,8 +833,8 @@ const handlePdfDownload = () => {
         if (licencepdf !== null) {
             const formData = new FormData();
             formData.append("file", licencepdf);
-            formData.append("created_at",create_atdata)
-            
+            formData.append("created_at", create_atdata)
+
             try {
                 await axios.post(`${apiUrl}/driver-licencepdf/${driveruserid}`, formData);
                 setFile(null);
@@ -846,18 +849,18 @@ const handlePdfDownload = () => {
         }
         setFile(null);
         setLicencepdf(null)
-        
+
     };
-    const handleFileUpload = (e,name) => {
-        if(name === "licencepdf"){
-        setLicencepdf(e.target.files[0]);
-        setSuccess(true);  // Assuming you have success state
-        setSuccessMessage("Uploaded successfully"); 
+    const handleFileUpload = (e, name) => {
+        if (name === "licencepdf") {
+            setLicencepdf(e.target.files[0]);
+            setSuccess(true);  // Assuming you have success state
+            setSuccessMessage("Uploaded successfully");
         }
-        else{
+        else {
             setFile(e.target.files[0]);
             setSuccess(true);  // Assuming you have success state
-        setSuccessMessage("Uploaded successfully"); 
+            setSuccessMessage("Uploaded successfully");
         }
 
         // If needed, update other states like book or selected customer data
@@ -869,7 +872,8 @@ const handlePdfDownload = () => {
     const [allFile, setAllFile] = useState([]);
 
     const showPdf = (showID) => {
-        axios.get(`${apiUrl}/pdf-view/${showID}`)
+        const encryptId = encryption(showID)
+        axios.get(`${apiUrl}/pdf-view/${encryptId}`)
             .then(res => {
                 if (res.data.length > 0) {
                     setAllFile(res.data);
@@ -881,11 +885,10 @@ const handlePdfDownload = () => {
             })
             .catch()
     }
-        
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleButtonClick = (params) => {
-        console.log(params, 'params');
+        // console.log(params, 'params');
         const { driverid } = params.row;
         if (!driverid) {
             setError(true);
@@ -899,18 +902,18 @@ const handlePdfDownload = () => {
     const handleCloseDialog = () => {
         setDialogOpen(false);
     };
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(`${apiUrl}/TemplateForDriverCreation`);
                 if (response.status === 200) {
-                    const userDataArray = await response.json();    
+                    const userDataArray = await response.json();
                     // console.log("Fetched data:", userDataArray);
-    
+
                     if (userDataArray.length > 0) {
                         setTemplateMessageData(userDataArray[0].TemplateMessageData); // Ensure key matches exactly
-                    } 
+                    }
                 } else {
                     console.log("Failed to fetch data, status:", response.status);
                 }
@@ -919,86 +922,86 @@ const handlePdfDownload = () => {
             }
         };
         fetchData();
-    }, [apiUrl],[templateMessageData]);
-    
+    }, [apiUrl]);
 
-//   useEffect(() => {
-//     const fetchData = asetLicencepdf(null)sync () => {
-//       try {
-//         const response = await fetch(`${apiUrl}/organizationdata`);
-//         if (response.status === 200) {
 
-//           const userDataArray = await response.json();
-//           if (userDataArray.length > 0) {
-//             setOrganisationSendEmail(userDataArray[0])
-//             setDatatrigger(!datatrigger)
+    //   useEffect(() => {
+    //     const fetchData = asetLicencepdf(null)sync () => {
+    //       try {
+    //         const response = await fetch(`${apiUrl}/organizationdata`);
+    //         if (response.status === 200) {
 
-//           } else {
-//             // setErrorMessage('User data not found.');
-//             // setError(true);
-//           }
-//         }
-//       }
-//       catch {
-//       }
-//     };
-//     fetchData();
-//   }, [apiUrl, datatrigger]);
-//   console.log(organistaionsendmail,"dataatatta")
+    //           const userDataArray = await response.json();
+    //           if (userDataArray.length > 0) {
+    //             setOrganisationSendEmail(userDataArray[0])
+    //             setDatatrigger(!datatrigger)
 
-useEffect(() => {
-    const fetchData = async () => {
-        try {
-            const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
-            if (response.status === 200) {
-                const userDataArray = await response.json();
-                  console.log(userDataArray,'userdata');
-                if (userDataArray.length > 0) {
-                    setOrganisationSendEmail(userDataArray[0])
-                    // setDatatrigger(!datatrigger)
-                } else {
-                    setErrorMessage('User data not found.');
-                    setError(true);
-                }   
+    //           } else {
+    //             // setErrorMessage('User data not found.');
+    //             // setError(true);
+    //           }
+    //         }
+    //       }
+    //       catch {
+    //       }
+    //     };
+    //     fetchData();
+    //   }, [apiUrl, datatrigger]);
+    //   console.log(organistaionsendmail,"dataatatta")
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/organisationdatafordriveremail`);
+                if (response.status === 200) {
+                    const userDataArray = await response.json();
+                    //   console.log(userDataArray,'userdata');
+                    if (userDataArray.length > 0) {
+                        setOrganisationSendEmail(userDataArray[0])
+                        // setDatatrigger(!datatrigger)
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }
+                }
             }
-        }
-        catch {
+            catch {
+            }
+        };
+        fetchData();
+    }, [apiUrl]);
+
+    const handlecheckmaildriver = async (lastBookingno) => {
+        try {
+            // Add templateMessageData to the dataToSend object
+            const dataToSend = {
+                userid: lastBookingno,
+                Drivername: book.drivername,
+                UserName: book.username,
+                password: book.userpassword,
+                Sendmailauth: organistaionsendmail.Sendmailauth,
+                Mailauthpass: organistaionsendmail.Mailauthpass,
+                Email: book.Email,
+                templateMessageData
+            };
+
+            // console.log("Sending data:", dataToSend); // For debugging purposes
+            await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
+            setSuccess(true);
+            setSuccessMessage("Mail Sent Successfully");
+        } catch (error) {
+            console.error("Error sending email:", error); // Added console log for debugging
+            setError(true);
+            setErrorMessage("An error occurred while sending mail");
         }
     };
-    fetchData();
-}, [apiUrl]);
 
-const handlecheckmaildriver = async (lastBookingno) => {
-    try {
-        // Add templateMessageData to the dataToSend object
-        const dataToSend = {
-            userid: lastBookingno,
-            Drivername: book.drivername,
-            UserName: book.username,
-            password: book.userpassword,
-            Sendmailauth: organistaionsendmail.Sendmailauth,
-            Mailauthpass: organistaionsendmail.Mailauthpass,
-            Email: book.Email,
-            templateMessageData
-        };
-
-        console.log("Sending data:", dataToSend); // For debugging purposes
-        await axios.post(`${apiUrl}/send-emaildriverdata`, dataToSend);
-        setSuccess(true);
-        setSuccessMessage("Mail Sent Successfully");
-    } catch (error) {
-        console.error("Error sending email:", error); // Added console log for debugging
-        setError(true);
-        setErrorMessage("An error occurred while sending mail");
-    }
-};
-
-        //  else {
-        //   setError(true);
-        //   setErrorMessage("Send mail checkbox is not checked. Email not sent.");
-        // }
+    //  else {
+    //   setError(true);
+    //   setErrorMessage("Send mail checkbox is not checked. Email not sent.");
+    // }
     //   };
-    
+
     const handleAdd = async () => {
         if (!book.stations && !book.drivername) {
             setWarning(true);
@@ -1021,7 +1024,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
             setWarningMessage("All fields are mandatory");
             return
         }
-       
+
         if (cerendentialdata === true) {
             setWarning(true);
             setWarningMessage(" Drivername Already Exists");
@@ -1037,13 +1040,12 @@ const handlecheckmaildriver = async (lastBookingno) => {
             setisDbuttonLoading(true)
             const formData = new FormData();
             for (const key in book) {
-                console.log(key,book[key])
+                // console.log(key,book[key])
                 formData.append(key, book[key]);
-              }
-               
+            }
+
 
             await axios.post(`${apiUrl}/drivercreation`, formData)
-            
             const response = await axios.get(`${apiUrl}/lastdrivergetid`);
             const lastdriveridno = response.data.driverid;
             licenceSubmit(lastdriveridno);
@@ -1063,9 +1065,9 @@ const handlecheckmaildriver = async (lastBookingno) => {
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
@@ -1089,8 +1091,10 @@ const handlecheckmaildriver = async (lastBookingno) => {
 
     const handleShowAll = async () => {
         try {
+            const encryptSearch = searchText ? encryption(searchText) : '';
+
             const response = await fetch(
-                `${apiUrl}/searchfordriver?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
+                `${apiUrl}/searchfordriver?searchText=${encryptSearch}&fromDate=${fromDate}&toDate=${toDate}`
             );
             const data = await response.json();
             if (data.length > 0) {
@@ -1106,16 +1110,16 @@ const handlecheckmaildriver = async (lastBookingno) => {
                 setError(true);
                 setErrorMessage("no data found");
             }
-        } 
+        }
         // catch {
         //     setError(true);
         //     setErrorMessage("Failed to Search Data");
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
@@ -1132,11 +1136,16 @@ const handlecheckmaildriver = async (lastBookingno) => {
     };
 
     const handleenterSearch = async (e) => {
+        if(searchText === "")return;
+        // console.log(searchText,"frontend");
+        
         if (e.key === "Enter") {
 
             try {
+                const encryptSearch = encryption(searchText);
+            
                 const response = await fetch(
-                    `${apiUrl}/searchfordriver?searchText=${searchText}`
+                    `${apiUrl}/searchfordriver?searchText=${encryptSearch}`
                 );
                 const data = await response.json();
                 if (data.length > 0) {
@@ -1158,30 +1167,33 @@ const handlecheckmaildriver = async (lastBookingno) => {
             }
         }
     };
+  
 
     const handleEdit = async () => {
-        try{
-        setEdit(true)
-        const data = selectedCustomerData.driverid
-        const formData = new FormData();
-        const {id,driverid,...restselected}=selectedCustomerData
-        for (const key in restselected) {
-            formData.append(key, restselected[key]);
-          }
+        try {
+            setEdit(true)
+            const data = selectedCustomerData.driverid
+            const formData = new FormData();
+            const { id, driverid, ...restselected } = selectedCustomerData
+            for (const key in restselected) {
+                formData.append(key, restselected[key]);
+            }
 
 
-        await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,formData);
-        // await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,updatedriver);
-        setSuccess(true);
-        setSuccessMessage('Successfully updated');
-        handleCancel();
-        addPdf(data);
-        licenceSubmit(data);
-        
-        // handlecheckmaildriver(data)
-        setRows([]);
-        setEdit(true)
-        handleList()
+            await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`, formData);
+            // console.log(formData,"updated the values");
+
+            // await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,updatedriver);
+            setSuccess(true);
+            setSuccessMessage('Successfully updated');
+            handleCancel();
+            addPdf(data);
+            licenceSubmit(data);
+
+            // handlecheckmaildriver(data)
+            setRows([]);
+            setEdit(true)
+            handleList()
         }
         // catch(err){
         //     setError(true);
@@ -1189,9 +1201,9 @@ const handlecheckmaildriver = async (lastBookingno) => {
         // }
         catch (error) {
             // console.error("Error occurredddddd:", error);
-         
+
             // Check if there's no response, indicating a network error
-            if (error.message ) {
+            if (error.message) {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
                 // console.log('Network error');
@@ -1205,64 +1217,70 @@ const handlecheckmaildriver = async (lastBookingno) => {
                 setErrorMessage("An unexpected error occurred: " + error.message);
             }
         }
-        
+
     };
 
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
-        
-            if (actionName === 'List') {
-                const response = await axios.get(`${apiUrl}/drivercreation`);
-                const data = response.data;
 
-                if (data.length > 0) {
-                    const rowsWithUniqueId = data.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setRows(rowsWithUniqueId);
-                    setSuccess(true);
-                    setSuccessMessage('Successfully listed');
-                    // handleList();
-                    // setRows([]);
-                } else {
-                    setRows([]);
-                    setError(true);
-                    setErrorMessage('No data found');
-                    // handleList();
-                    setRows([]);
-                }
-            }
+        if (actionName === 'List') {
+            const response = await axios.get(`${apiUrl}/drivercreation`);
+            const data = response.data;
 
-            else if (actionName === 'Cancel') {
-                handleCancel();
-                handleList();
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+                setSuccess(true);
+                setSuccessMessage('Successfully listed');
+                // handleList();
+                // setRows([]);
+            } else {
+                setRows([]);
+                setError(true);
+                setErrorMessage('No data found');
+                // handleList();
                 setRows([]);
             }
+        }
+        else if (actionName === 'Add') {
+            handleAdd()
 
-            else if (actionName === 'Delete') {
-                try{
+        }
+
+        else if (actionName === 'Cancel') {
+            handleCancel();
+            handleList();
+            setRows([]);
+        }
+
+        else if (actionName === 'Delete') {
+            try {
                 await axios.delete(`${apiUrl}/drivercreation/${selectedCustomerData?.driverid || userid}`);
+                // console.log(selectedCustomerData?.driverid,"checking ");
+
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage('Successfully Deleted');
                 handleCancel();
                 handleList();
                 setRows([]);
-                }
-                catch(err){
-                    setError(true);
-                    setErrorMessage("Check your Network Connection");
-                }
             }
-
-            else if (actionName === 'Edit') {
-                handleEdit()
-
+            catch (err) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
             }
-            
-        } 
-      
+        }
+
+        else if (actionName === 'Edit') {
+            handleEdit()
+
+        }
+
+    }
+
 
     //---------- popup------------------
     const hidePopup = () => {
@@ -1388,7 +1406,10 @@ const handlecheckmaildriver = async (lastBookingno) => {
 
             // Download each file
             for (const file of selectedFiles) {
-                const response = await axios.get(`${apiUrl}/public/driver_doc/` + file.fileName, {
+                // const response = await axios.get(`${apiUrl}/public/driver_doc/` + file.fileName, {
+                //     responseType: 'blob', // Important to get a binary response
+                // });
+                const response = await axios.get(`${apiUrl}/driver_doc/` + file.fileName, {
                     responseType: 'blob', // Important to get a binary response
                 });
 
@@ -1420,7 +1441,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
     //     try {
     //         const response = await axios.get(`${apiUrl}/getDriverDetails`);
     //         const data = response.data;
-          
+
     //             const rowsWithUniqueId = data.map((row, index) => ({
     //                 ...row,
     //                 id: index + 1,
@@ -1432,7 +1453,7 @@ const handlecheckmaildriver = async (lastBookingno) => {
     //             }else{
     //                 setLoading(false)
     //             }     
-           
+
     //     } catch (err) {
     //         console.log(err);
     //         setLoading(false)
@@ -1442,43 +1463,43 @@ const handlecheckmaildriver = async (lastBookingno) => {
     // }, [apiUrl]); // Add any dependencies needed inside this array
 
     const handleList = useCallback(async () => {
-        setLoading(true);  
-        setError(false);   
+        setLoading(true);
+        setError(false);
         setErrorMessage("");
-    
+
         try {
             const response = await axios.get(`${apiUrl}/getDriverDetails`);
             const data = response.data;
-    
+
             const rowsWithUniqueId = data.map((row, index) => ({
                 ...row,
                 id: index + 1,
             }));
-    
-            setRows(rowsWithUniqueId);  
-            setLoading(true); 
+
+            setRows(rowsWithUniqueId);
+            setLoading(true);
             if (data.length > 0) {
-                setLoading(false);  
+                setLoading(false);
             } else {
-                setLoading(false);  
+                setLoading(false);
             }
         } catch (err) {
             console.error(err);
-    
+
             // Handle network errors separately
             if (err.message === 'Network Error') {
                 setErrorMessage("Check network connection.");
             } else {
                 setErrorMessage("Failed to fetch data: " + (err.response?.data?.message || err.message));
             }
-            
-            setError(true);  
-            setLoading(false);  
+
+            setError(true);
+            setLoading(false);
         } finally {
-            setLoading(false);  
+            setLoading(false);
         }
     }, [apiUrl]);
-    
+
 
     useEffect(() => {
         handleList();
@@ -1581,9 +1602,9 @@ const handlecheckmaildriver = async (lastBookingno) => {
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, edit,
         handlePdfDownload,
         handleExcelDownload,
-        handleFileChange,handleFileUpload, handleChangecredentdrivername,handleChangecredentusername,cerendentialdata,cerendentialdata2,
-        loading,setLoading,isDButtonLoading,setisDbuttonLoading,deletedriverdate,setDeleteDriverdata
-        
+        handleFileChange, handleFileUpload, handleChangecredentdrivername, handleChangecredentusername, cerendentialdata, cerendentialdata2,
+        loading, setLoading, isDButtonLoading, setisDbuttonLoading, deletedriverdate, setDeleteDriverdata
+
         // venkat
     };
 };

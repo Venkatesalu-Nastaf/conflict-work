@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, {useContext } from "react";
 import "./Employe.css";
 import "jspdf-autotable";
 import dayjs from "dayjs";
@@ -18,7 +18,6 @@ import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DeleteConfirmationDialog from "../../../DeleteData/DeleteData";
-
 // ICONS
 import useEmployee from "./useEmployee";
 import { SiStatuspal } from "react-icons/si";
@@ -75,9 +74,9 @@ const Employe = () => {
   const apiUrl = APIURL;
   const {
     selectedCustomerData,
-    selectedCustomerId,
+    // selectedCustomerId,
     rows,
-    actionName,
+    // actionName,
     error,
     success,
     info,
@@ -116,7 +115,8 @@ const Employe = () => {
     deletefile,
     handlecheckbox,
     loading,
-    setLoading,deleteemployeedata,setDeleteEmployeedata,
+    // setLoading,
+    deleteemployeedata, setDeleteEmployeedata,
 
   } = useEmployee();
 
@@ -124,10 +124,10 @@ const Employe = () => {
 
   // permissions
   const { permissions } = useContext(PermissionContext)
-  const Employee_read = permissions[20]?.read;
-  const Employee_new = permissions[20]?.new;
-  const Employee_modify = permissions[20]?.modify;
-  const Employee_delete = permissions[20]?.delete;
+ const Employee_read = permissions[21]?.read;
+  const Employee_new = permissions[21]?.new;
+  const Employee_modify = permissions[21]?.modify;
+  const Employee_delete = permissions[21]?.delete;
 
   return (
     <div className="main-content-form Scroll-Style-hide">
@@ -238,23 +238,23 @@ const Employe = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-  <div className="icone">
-    <TransgenderRoundedIcon color="action" />
-  </div>
-  <TextField
-    select
-    size="small"
-    id="gender"
-    className="full-width"
-    label="Gender"
-    name="gender"
-    value={selectedCustomerData?.gender || book.gender || ''}
-    onChange={handleChange}
-  >
-    <MenuItem value="Male">Male</MenuItem>
-    <MenuItem value="Female">Female</MenuItem>
-  </TextField>
-</div>
+                <div className="icone">
+                  <TransgenderRoundedIcon color="action" />
+                </div>
+                <TextField
+                  select
+                  size="small"
+                  id="gender"
+                  className="full-width"
+                  label="Gender"
+                  name="gender"
+                  value={selectedCustomerData?.gender || book.gender || ''}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="Male">Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                </TextField>
+              </div>
               <div className="input">
                 <div className="icone">
                   <BloodtypeIcon color="action" />
@@ -283,7 +283,7 @@ const Employe = () => {
                   onChange={handleChange}
                   placeholder="Address"
                 />
-             
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -377,23 +377,23 @@ const Employe = () => {
               </div>
 
               <div className="input">
-              <div className="icone">
-                                  <SiStatuspal color="action" />
-                                </div>
-  <TextField
-    select
-    size="small"
-    id="empsts"
-    className="full-width"
-    label="Employee Status"
-    name="empsts"
-    value={selectedCustomerData?.empsts|| book.empsts || ''}
-    onChange={handleChange}
-  >
-    <MenuItem value="Temporary">Temporary</MenuItem>
-    <MenuItem value="Permanent">Permanent</MenuItem>
-  </TextField>
-</div>
+                <div className="icone">
+                  <SiStatuspal color="action" />
+                </div>
+                <TextField
+                  select
+                  size="small"
+                  id="empsts"
+                  className="full-width"
+                  label="Employee Status"
+                  name="empsts"
+                  value={selectedCustomerData?.empsts || book.empsts || ''}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="Temporary">Temporary</MenuItem>
+                  <MenuItem value="Permanent">Permanent</MenuItem>
+                </TextField>
+              </div>
               <div className="input-licence">
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
@@ -428,11 +428,11 @@ const Employe = () => {
                   )}
                 </div>
 
-               
+
               </div>
 
-              
-            
+
+
 
 
               <div className="input">
@@ -444,7 +444,7 @@ const Employe = () => {
               </div>
             </div>
 
-         
+
           </div>
         </div>
         <div className='alert-popup-main'>
@@ -510,7 +510,7 @@ const Employe = () => {
                 onClick={(event) => handleClick(event, "List")}
               />
             )}
-            {Employee_modify === 1 && isEditMode &&(
+            {Employee_modify === 1 && isEditMode && (
               <SpeedDialAction
                 key="edit"
                 icon={<ModeEditIcon />}
@@ -527,11 +527,11 @@ const Employe = () => {
               // />
 
               <SpeedDialAction
-              key="delete"
-              icon={<DeleteIcon />}
-              tooltipTitle="Delete"
-           onClick={() => setDeleteEmployeedata(true)}
-            />
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={() => setDeleteEmployeedata(true)}
+              />
             )}
             {Employee_new === 1 && !isEditMode && (
               <SpeedDialAction
@@ -549,7 +549,7 @@ const Employe = () => {
             />
           </StyledSpeedDial>
         </Box>
-      
+
 
 
 
@@ -604,12 +604,12 @@ const Employe = () => {
 
           </div>
 
-       {deleteemployeedata &&   <DeleteConfirmationDialog
-                open={deleteemployeedata}
-                onClose={() => setDeleteEmployeedata(false)}
-                onConfirm={handleClick}
-              />
-              }
+          {deleteemployeedata && <DeleteConfirmationDialog
+            open={deleteemployeedata}
+            onClose={() => setDeleteEmployeedata(false)}
+            onConfirm={handleClick}
+          />
+          }
 
 
           <div className="table-bookingCopy-Employe ">
@@ -646,26 +646,26 @@ const Employe = () => {
                   },
                 }}
               >
-                 {loading ? ( 
-                                <Box
-                                    sx={{
-                                        position: 'absolute', 
-                                        top: '50%',
-                                        left: '50%', 
-                                        transform: 'translate(-50%, -50%)', 
-                                    }}
-                                >
-                                    <CircularProgress />
-                                </Box>
-                            ) : (
-                <DataGrid
-                  className="Scroll-Style"
-                  rows={rows}
-                  columns={columns}
-                  onRowClick={handleRowClick}
-                  pageSize={5}
-                />
-                            )}
+                {loading ? (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  <DataGrid
+                    className="Scroll-Style"
+                    rows={rows}
+                    columns={columns}
+                    onRowClick={handleRowClick}
+                    pageSize={5}
+                  />
+                )}
               </Box>
             </div>
             <Dialog open={dialogOpen} onClose={handleCloseDialog} >
@@ -678,7 +678,14 @@ const Employe = () => {
                         onClick={(event) => {
                           handlecheckbox(img.fileName)
                         }} />
-                      <img src={`${apiUrl}/public/employee_doc/` + img.fileName} type="application/pdf" width="350" height="300" alt="" />
+                      
+                      {//old image path
+                      /* <img src={`${apiUrl}/public/employee_doc/` + img.fileName}  */}
+                      
+                      {/*new path */}
+                      <img src={`${apiUrl}/employee_doc/${img.fileName}`} 
+                      type="application/pdf"
+                       width="350" height="300" alt="" />
 
                     </div>
                   ))}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext} from 'react';
 import "./PackageRateEntery.css";
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
@@ -73,8 +73,12 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
     handleChange11,
     // datevalidity,
     handleShow,
-    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata, loading, setLoading, isbtnloading, setisbtnloading,
-    multipleSelect,setSelectedRowDelete,selectedrowdelete,deletepackaagerate,setDeletePackagerate
+    fieldSets, commonData, handleCancelUI, handleAddExtra, ratename, validitydata, loading,
+    //  setLoading,
+      isbtnloading, 
+    //   setisbtnloading,
+    // multipleSelect,
+     setSelectedRowDelete, selectedrowdelete, deletepackaagerate, setDeletePackagerate
 
   } = usePackagerateentry();
 
@@ -82,10 +86,10 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
   const startdate = dayjs(validitydata[0]?.starttime).format(" MMMM YYYY");
   const enddate = dayjs(validitydata[0]?.closetime).format(" MMMM YYYY");
   const { permissions } = useContext(PermissionContext)
-  const RateManagement_read = permissions[10]?.read;
-  const RateManagement_new = permissions[10]?.new;
-  const RateManagement_modify = permissions[10]?.modify;
-  const RateManagement_delete = permissions[10]?.delete;
+  const RateManagement_read = permissions[11]?.read;
+  const RateManagement_new = permissions[11]?.new;
+  const RateManagement_modify = permissions[11]?.modify;
+  const RateManagement_delete = permissions[11]?.delete;
 
   //--------------------------------------------------------------------
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -199,7 +203,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   />
 
                 </div>
-                <div className="input">
+                <div className="input stations">
                   <div className="icone">
                     <WarehouseIcon color="action" />
                   </div>
@@ -261,7 +265,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                     size="small"
                     id="Validity"
                     sx={{
-                      minWidth: { xs: 200, sm: 350 }, // Responsive minWidth
+                      minWidth: { xs: 200, sm: 350, }, // Responsive minWidth
 
                     }}
                     label="Validity"
@@ -272,7 +276,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                     variant="standard"
                   />
                 </div>
-                <div style={{ marginLeft: "10px" }}>
+                <div className="show-button">
                   <Button variant="contained" onClick={handleShow} >Show</Button>
                 </div>
               </div>
@@ -311,7 +315,7 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                       }
                       }
                     />
-                    {console.log(fieldSet?.duty === "Local" ? true : false, "Local", fieldSet?.duty)}
+                    {/* {console.log(fieldSet?.duty === "Local" ? true : false, "Local", fieldSet?.duty)} */}
                   </div>
                   <div className="input">
                     <TextField
@@ -527,13 +531,13 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
             </div>
           }
         </div>
-{deletepackaagerate && 
-        <DeleteConfirmationDialog
-                                open={deletepackaagerate}
-                                onClose={() => setDeletePackagerate(false)}
-                                onConfirm={handleClick}
-                              />
-}
+        {deletepackaagerate &&
+          <DeleteConfirmationDialog
+            open={deletepackaagerate}
+            onClose={() => setDeletePackagerate(false)}
+            onConfirm={handleClick}
+          />
+        }
         <Box className='common-speed-dail'>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
@@ -565,11 +569,11 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
               //   onClick={(event) => handleClick(event, "Delete")}
               // />
               <SpeedDialAction
-              key="delete"
-              icon={<DeleteIcon />}
-              tooltipTitle="Delete"
-              onClick={() => setDeletePackagerate(true)}
-            />
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={() => setDeletePackagerate(true)}
+              />
             )}
             <SpeedDialAction
               key="Cancel"
@@ -631,9 +635,9 @@ const PackageRateEntery = ({ vehileName, stationname }) => {
                   onRowClick={handleRowClick}
                   pageSize={5}
                   onRowSelectionModelChange={(newRowSelectionModel) => {
-                console.log(newRowSelectionModel,"model")
-                setSelectedRowDelete(newRowSelectionModel)
-                
+                    // console.log(newRowSelectionModel, "model")
+                    setSelectedRowDelete(newRowSelectionModel)
+
 
                   }}
                   checkboxSelection

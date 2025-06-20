@@ -52,7 +52,7 @@ import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import { PiCarSimpleFill } from "react-icons/pi";
+// import { PiCarSimpleFill } from "react-icons/pi";
 import { BsFillFuelPumpFill } from "react-icons/bs";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -100,22 +100,21 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-const deletestyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 300,
-  height: 100,
-  bgcolor: 'background.paper',
-  // border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-
+// const deletestyle = {
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   position: 'absolute',
+//   top: '50%',
+//   left: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   width: 300,
+//   height: 100,
+//   bgcolor: 'background.paper',
+//   // border: '2px solid #000',
+//   boxShadow: 24,
+//   p: 4,
+// };
 // export const vehicaleinfos = [
 //   {
 //     Option: "A/C",
@@ -197,7 +196,7 @@ const Vehicaleinfo = ({ stationName }) => {
     errorMessage,
     warningMessage,
     infoMessage,
-    handleRowClick,
+    // handleRowClick,
     handleRowClick1,
     book,
     handleClick,
@@ -239,7 +238,11 @@ const Vehicaleinfo = ({ stationName }) => {
     handleSelectAll,
     handleDocumentDownload,
     drivername,
-    handleAutocompleteChange, handleUploadFile, handleKeyEnter, handleenterSearch, rows1, handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
+    handleAutocompleteChange, handleUploadFile,
+    //  handleKeyEnter,
+     handleenterSearch,
+    //  rows1,
+     handleChangecredent, cerendentialdata, vehiclenames, setVehilcNames,
     loading, isVButonLoading,setDeletevehciledata,deletevehciledata
   } = useVehicleinfo();
   const { handleinputchnagevehicle, handleADDvehicledata, vechiclevalue, isOpenvehcile, setIsOpenvehicle, error1, errorMessage1, success1, successMessage1, hidePopup1,
@@ -294,20 +297,21 @@ const Vehicaleinfo = ({ stationName }) => {
 
   ];
 
-  const handleView = (row) => {
-    console.log('View row:', row);
-    // Add your view logic here
-  };
+  // const handleView = (row) => {
+  //   console.log('View row:', row);
+  //   // Add your view logic here
+  // };
 
-  const handleDelete = (row) => {
-    console.log('Delete row:', row);
-    // Add your delete logic here
-  };
+  // const handleDelete = (row) => {
+  //   console.log('Delete row:', row);
+  //   // Add your delete logic here
+  // };
   useEffect(() => {
     const fetchgetvehicleNames = async () => {
       try {
         const response = await axios.get(`${apiUrl}/getvehicledatauniquevehicleNames`);
         const data = response.data
+        // console.log(data, "checking vehicl")
         const names = data.map(res => res.VechicleNames)
         setVehilcNames(names)
       }
@@ -320,11 +324,11 @@ const Vehicaleinfo = ({ stationName }) => {
 
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
-  const Supllier_read = permissions[12]?.read;
-  const Supllier_new = permissions[12]?.new;
-  const Supllier_modify = permissions[12]?.modify;
-  const Supllier_delete = permissions[12]?.delete;
 
+  const Supllier_read = permissions[13]?.read;
+  const Supllier_new = permissions[13]?.new;
+  const Supllier_modify = permissions[13]?.modify;
+  const Supllier_delete = permissions[13]?.delete;
   const handleEditmodalClose = () => {
     setEditModal(false)
   }
@@ -398,7 +402,9 @@ const Vehicaleinfo = ({ stationName }) => {
                     getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleName || ''}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="Vehicle Name" name="vehicleName" onKeyDown={handleKeyEnter} inputRef={params.inputRef} />
+                        <TextField {...params} label="Vehicle Name" name="vehicleName" 
+                        // onKeyDown={handleKeyEnter}
+                         inputRef={params.inputRef} />
                       )
                     }
                     }
@@ -1095,7 +1101,7 @@ const Vehicaleinfo = ({ stationName }) => {
               </div>
             </div>
 
-            <div className="input-permit-no">
+            {/* <div className="input-permit-no">
             <div className="icone">
                     <AirportShuttleIcon color="action" />
                   </div>
@@ -1131,7 +1137,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 </Button>
                 <span class="rc-book-copy-tooltiptext">Upload RC-Book Copy</span>
               </div>
-            </div>
+            </div> */}
             <div className="input-permit-no">
               <div className='icone'>
                 <CalendarMonthIcon />
@@ -1322,7 +1328,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 key="list"
                 icon={<ChecklistIcon />}
                 tooltipTitle="List"
-                onClick={() => handleClick("List")}
+                onClick={(event) => handleClick(event,"List")}
               />
             )}
             {Supllier_modify === 1 && isEditMode && (
@@ -1330,7 +1336,7 @@ const Vehicaleinfo = ({ stationName }) => {
                 key="edit"
                 icon={<ModeEditIcon />}
                 tooltipTitle="Edit"
-                onClick={() => handleClick("Edit")}
+                onClick={(event) => handleClick(event,"Edit")}
               />
             )}
             {Supllier_delete === 1 && isEditMode && (
@@ -1361,14 +1367,14 @@ const Vehicaleinfo = ({ stationName }) => {
                 key="Add"
                 icon={<BookmarkAddedIcon />}
                 tooltipTitle="Add"
-                onClick={() => handleClick("Add")}
+                onClick={(event) => handleClick(event,"Add")}
               />
             )}
             <SpeedDialAction
               key="Cancel"
               icon={<CancelPresentationIcon />}
               tooltipTitle="Cancel"
-              onClick={() => handleClick("Cancel")}
+              onClick={(event) => handleClick(event,"Cancel")}
             />
           </StyledSpeedDial>
         </Box>
@@ -1567,8 +1573,14 @@ const Vehicaleinfo = ({ stationName }) => {
                 {Array.isArray(allFile) && allFile.map((img, index) => (
                   <div key={index} className='vehicle-info-dailog-box-btn-division'>
                     {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
-                      ? <img src={`${apiUrl}/public/vehicle_doc/` + img.fileName} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
-                      <embed src={`${apiUrl}/public/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />}
+                      ? 
+                      //old code
+                      // <img src={`${apiUrl}/public/vehicle_doc/` + img.fileName} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
+                      // <embed src={`${apiUrl}/public/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />
+                      //new path
+                      <img src={`${apiUrl}/vehicle_doc/` + img.fileName} alt='vehicle_docimage' type="application/pdf" width="100%" height="400px" /> :
+                      <embed src={`${apiUrl}/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />
+                      }
                     <Checkbox typeof='checked'
                       checked={deletefile.includes(img.fileName)}
                       onClick={(event) => {

@@ -1,0 +1,128 @@
+.Taxinvoicediv-vendor {
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+
+}
+
+.Refnotext-vendor {
+  font-size: 18px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  font-weight: 900;
+}
+
+.invoice-vendor {
+  margin-left: 5px;
+}
+
+.image-vendor {
+  height: 100px;
+  width: 110px;
+}
+
+.mobilediv-vendor {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid grey;
+  padding-bottom: 5px;
+}
+
+.vendorinvoicetext{
+  font-size: 21px;
+  font-weight: 645;
+  margin: 0px;
+}
+
+.vendorinvoicetextno{
+  font-size: 17px;
+  margin: 0px;
+}
+
+.organisationtext-vendor {
+  font-size: 17px;
+  margin: 0px;
+}
+.organisationtext-ref-vendor {
+  font-size: 17px;
+  margin: 0px;
+  text-align: right;
+}
+
+.Datediv-vendor {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 80px;
+  /* border-bottom: 1px solid grey; */
+  padding-bottom: 5px;
+}
+
+.Datetext-vendor {
+  margin-left: 5px;
+}
+
+.tableheadtext-vendor {
+  color: 'black';
+  font-weight:500;
+  padding: 10px;
+  font-size: 13.5px;
+}
+
+.tablebody {
+  min-height: 300px;
+  height: auto;
+}
+
+.tdata-vendor {
+  padding: 6.5px;
+  border-right: 1px solid gray;
+
+}
+
+.tabledata-ref-vendor {
+  font-size: 15px;
+  font-weight: 500;
+  border-bottom: 1px solid gray;
+}
+
+.table-ref-vendor,
+.table-ref-vendor th {
+  border: 1px solid gray;
+
+}
+
+.table-ref-vendor th {
+  border: 1px solid rgb(162, 161, 161) !important;
+  
+}
+
+.total-div-vendor{
+  display: flex;
+  justify-content: end;
+  gap: 30px;
+}
+
+.print-vendor {
+  width: 100px;
+  padding: 10px;
+  background-color: #1976d2;
+  color: white;
+  border: 0px;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.printdiv-vendor {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-top: 20px;
+  /* padding: 0px 50px 0px 20px; */
+  padding: 20px;
+}

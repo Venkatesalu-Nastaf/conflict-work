@@ -340,13 +340,15 @@ const useBooking = () => {
         if(name === "orderByMobileNo"){
           setBook((prevBook) => ({
             ...prevBook,
-            ["mobile"]: fieldValue,
+            // ["mobile"]: fieldValue,
+              mobile: fieldValue,
           }));
         }
         if(name === "orderByEmail"){
           setBook((prevBook) => ({
             ...prevBook,
-            ["orderbyemail"]: fieldValue,
+            // ["orderbyemail"]: fieldValue,
+               orderbyemail: fieldValue,
           }));
         
         }
@@ -799,6 +801,7 @@ const useBooking = () => {
       try {
         await axios.post(`${apiUrl}/bookingdatapdf/${lastbookid}`, formData)
         setFile(null)
+        getImageCount()
       }
       catch (err) {
         console.log(err)
@@ -816,7 +819,8 @@ const useBooking = () => {
       setFile(file)
       setNoChangeData((prevValues) => ({
         ...prevValues,
-        ["Attachimage"]:file,
+        // ["Attachimage"]:file,
+          "Attachimage":file,
       }));
 
       
@@ -826,12 +830,14 @@ const useBooking = () => {
     }
     e.target.value = null
   }
+  // console.log(nochangedata,"chnage")
   const [triggerCount, setTriggerCount] = useState(false)
 
 
     const getImageCount = async () => {
       try {
         if (!booking_id) return
+    
         const response = await axios.get(`${apiUrl}/booking-docPDFView/${booking_id}`)
         const count = response.data.files.length
 
@@ -853,7 +859,7 @@ const useBooking = () => {
     useEffect(()=>{
 
       getImageCount()
-  }, [file, triggerCount, apiUrl, booking_id,])
+  }, [triggerCount, apiUrl])
   
 
   // useEffect(() => {
@@ -1049,9 +1055,10 @@ const useBooking = () => {
 
 // Use useEffect to trigger the fetch function only when necessary
 useEffect(() => {
+  // console.log("hybriddata")
     fetchdatacustomerhybrid();
 }, [fetchdatacustomerhybrid]);
-console.log(sendEmail,"send",hybdridatabooking)
+// console.log(sendEmail,"send",hybdridatabooking)
 // console.log(selectetImg,"imgggg")
 // console.log(formData.vehiclemodule,selectedCustomerData.vehiclemodule,book.vehiclemodule,selectedCustomerdriver.vehiclemodule,"jss")
   const handleAdd = async () => {
@@ -1288,7 +1295,7 @@ console.log(sendEmail,"send",hybdridatabooking)
   }
   };
 
-  const handleEdit = async (userid) => {
+  const handleEdit = async () => {
 
     
 if (Object.keys(nochangedata).length === 0) {

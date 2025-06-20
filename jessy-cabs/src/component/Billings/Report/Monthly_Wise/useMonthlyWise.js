@@ -32,7 +32,7 @@ const useMonthlyWise = () => {
     // },
     { field: 'customer', headerName: 'Customer Name', width: 200 },
     { field: 'address', headerName: 'Address', width: 300 },
-    { field: 'totalAmount', headerName: 'Amount', width: 130 },
+    { field: 'finalAmount', headerName: 'Amount', width: 130 },
     { field: 'orderByEmail', headerName: 'Email', width: 180 },
     { field: 'customerType', headerName: 'CustomerType', width: 130 },
     // { field: 'customerId', headerName: 'CustomerID', width: 130 },
@@ -48,7 +48,7 @@ const useMonthlyWise = () => {
     //   width: 90,
     // },
     { field: 'customer', headerName: 'Customer Name', width: 180 },
-    { field: 'totalAmount', headerName: 'Amount', width: 130 },
+    { field: 'finalAmount', headerName: 'Amount', width: 130 },
         { field: 'address', headerName: 'Address', width: 300 },
     { field: 'orderByEmail', headerName: 'Email', width: 180 },
     { field: 'customerType', headerName: 'CustomerType', width: 130 },
@@ -79,55 +79,77 @@ const useMonthlyWise = () => {
         fromDate: fromDate,
         toDate: toDate
       })
-      console.log(response.data, "monthlyresponsedata");
-      const { customerDetails, transferList, individualBilling, groupBilling } = response.data;
-
-      // Create a map to store total amounts for each organization
-      const amountMap = new Map();
-
-      // Helper function to accumulate amounts
-      const accumulateAmount = (data) => {
-        data.forEach(({ Organization_name, Amount }) => {
-          if (Organization_name) {
-            amountMap.set(Organization_name, (amountMap.get(Organization_name) || 0) + parseInt(Amount));
-          }
-        });
-      };
-
-      // Aggregate amounts from all billing sources
-      accumulateAmount(transferList);
-      accumulateAmount(individualBilling);
-      accumulateAmount(groupBilling);
-
-      // Filter and merge customer details
-      const mergedCustomerDetails = customerDetails
-        .map(({ customerType, customer, orderByEmail, address }) => ({
-          customerType,
-          customer,
-          orderByEmail,
-          address: address,
-          totalAmount: amountMap.get(customer) || 0, // Assign total amount if available
-        }))
-        .filter(({ totalAmount }) => totalAmount > 0); // Return only matched customers
-
-      console.log(mergedCustomerDetails, "Final Merged Customer Details");
-    
-
-      if (mergedCustomerDetails.length > 0) {
-        const rowsWithUniqueId = mergedCustomerDetails.map((row, index) => ({
-          ...row,
-          id: index + 1,
-        }));
-        setRows(rowsWithUniqueId)
-        // setRows([])
-        setSuccess(true);
+      // console.log(response.data, "monthlyresponsedata");
+      // const { customerDetails, transferList, individualBilling, groupBilling } = response.data;
+      const customerDetails  = response.data;
+      if(customerDetails.length > 0){
+        //       const rowsWithUniqueId = customerDetails.map((row, index) => ({
+        //   ...row,
+        //   id: index + 1,
+        // }));
+        const rowsWithUniqueId = customerDetails.map((row, index) => ({
+    ...row,
+    id: index + 1,
+    finalAmount: row.gstTax !== 0 
+      ? Math.round(row.totalAmount + (row.totalAmount * row.gstTax / 100))
+      : row.totalAmount
+  })); 
+               setSuccess(true);
         setSuccessMessage("successfully listed")
+        setRows(rowsWithUniqueId)
       }
-      else {
-        setRows([]);
+      else{
+                setRows([]);
         setError(true);
         setErrorMessage("no data found")
       }
+      // setRows(customerDetails)
+      // Create a map to store total amounts for each organization
+      // const amountMap = new Map();
+
+      // // Helper function to accumulate amounts
+      // const accumulateAmount = (data) => {
+      //   data.forEach(({ Organization_name, Amount }) => {
+      //     if (Organization_name) {
+      //       amountMap.set(Organization_name, (amountMap.get(Organization_name) || 0) + parseInt(Amount));
+      //     }
+      //   });
+      // };
+
+      // // Aggregate amounts from all billing sources
+      // accumulateAmount(transferList);
+      // accumulateAmount(individualBilling);
+      // accumulateAmount(groupBilling);
+
+      // // Filter and merge customer details
+      // const mergedCustomerDetails = customerDetails
+      //   .map(({ customerType, customer, orderByEmail, address }) => ({
+      //     customerType,
+      //     customer,
+      //     orderByEmail,
+      //     address: address,
+      //     totalAmount: amountMap.get(customer) || 0, // Assign total amount if available
+      //   }))
+      //   .filter(({ totalAmount }) => totalAmount > 0); // Return only matched customers
+
+      // console.log(mergedCustomerDetails, "Final Merged Customer Details");
+    
+
+      // if (mergedCustomerDetails.length > 0) {
+      //   const rowsWithUniqueId = mergedCustomerDetails.map((row, index) => ({
+      //     ...row,
+      //     id: index + 1,
+      //   }));
+      //   setRows(rowsWithUniqueId)
+      //   // setRows([])
+      //   setSuccess(true);
+      //   setSuccessMessage("successfully listed")
+      // }
+      // else {
+      //   setRows([]);
+      //   setError(true);
+      //   setErrorMessage("no data found")
+      // }
     }
     // catch {
     //   setRows([]);
@@ -140,7 +162,7 @@ const useMonthlyWise = () => {
       // Check if there's no response, indicating a network error
       if (error.message) {
         setError(true);
-        console.log(error, "error Message");
+        // console.log(error, "error Message");
         setErrorMessage("Check your internet connection");
         // console.log('Network error');
       } else if (error.response) {
@@ -304,7 +326,7 @@ const useMonthlyWise = () => {
         });
       });
 
-      const totalKms = rows.reduce((sum, row) => sum + parseInt(row.totalAmount || 0, 10), 0);
+      const totalKms = rows.reduce((sum, row) => sum + parseInt(row.finalAmount || 0, 10), 0);
       const totalRow = worksheet.addRow({});
       totalRow.getCell(columndata.findIndex(col => col.header === 'Customer Name') + 1).value = 'TOTAL';
       totalRow.getCell(columndata.findIndex(col => col.header === 'Amount') + 1).value = totalKms;
@@ -399,10 +421,10 @@ const useMonthlyWise = () => {
       return columns.map(column => row[column.field]);
     });
 
-    const totalSum = rows.reduce((sum, row) => sum + row['totalAmount'], 0);
+    const totalSum = rows.reduce((sum, row) => sum + row['finalAmount'], 0);
 
     // Add the total row
-    const totalRow = columns.map(column => column.field === 'totalAmount' ? totalSum : (column.headerName === 'Customer Name' ? 'Total' : ''));
+    const totalRow = columns.map(column => column.field === 'finalAmount' ? totalSum : (column.headerName === 'Customer Name' ? 'Total' : ''));
     rowValues.push(totalRow);
 
     let fontdata = 1;

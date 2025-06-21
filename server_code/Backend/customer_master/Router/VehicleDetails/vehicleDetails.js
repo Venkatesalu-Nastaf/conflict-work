@@ -231,7 +231,7 @@ router.get('/getVehicleNamesList', (req, res) => {
       // console.error("Database query failed:", error);
       return res.status(500).json({ error: "Database query failed" });
     }
-    console.log(result,"vehicleresult");
+    console.log(result,"vehicleresults");
     
 
     return res.status(200).json(result);
